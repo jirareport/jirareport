@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/application">
+
+<th:block layout:fragment="content">
+    <div class="container-fluid">
+        <div class="page-header">
+            <h1>Filtro</h1>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Buscar</h3>
+        </div>
+        <form th:action="@{/projects/{id}/issues(id=${issueForm.projectId})}" th:method="POST" th:object="${issueForm}">
+            <div class="panel-body row">
+                <div class="form-group col-md-3">
+                    <label>Data Inicio</label>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control datepicker" th:field="*{startDate}" />
+                        <div class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </div>
+                    </div>
+                    <label th:errors="*{startDate}"></label>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Data Fim</label>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control datepicker" th:field="*{endDate}" />
+                        <div class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </div>
+                    </div>
+                    <label th:errors="*{endDate}"></label>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="text-right">
+                    <a th:href="@{/projects}" class="btn btn-default">Voltar</a>
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#list" data-toggle="tab">Listagem</a></li>
+        <li role="presentation"><a href="#leadtime" data-toggle="tab">LeadTime</a></li>
+        <li role="presentation"><a href="#issuesCount" data-toggle="tab">Contagem de histórias</a></li>
+    </ul>
+
+    <div class="panel panel-default bt-0">
+        <div class="panel-body">
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="list">
+                    <div class="panel panel-default table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>LeadTime</th>
+                                <th>Histórias</th>
+                                <th>Ações</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="issue : ${issues}">
+                                <td th:text="${issue.form.dates}"></td>
+                                <td th:text="${issue.leadTime}"></td>
+                                <td th:text="${issue.issuesCount}"></td>
+                                <td>
+                                    <a th:href="@{/projects/{id}/issues/details(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}"
+                                       data-method="DELETE" data-confirm="Tem certeza?" class="btn btn-xs btn-danger">Remover</a>
+                                    <a th:href="@{/projects/{id}/issues/details(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}" class="btn btn-xs btn-default">Detalhes</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="leadtime">
+                    <th:block
+                            th:if="${issueResultChart.leadtime.hasData}"
+                            th:include="components/chart/_bar :: chart('leadtime_chart', 'LeadTime', 'Mês', ${issueResultChart.leadtime})" />
+                    <span th:unless="${issueResultChart.leadtime.hasData}">Nenhum registro encontrado</span>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="issuesCount">
+                    <th:block
+                            th:if="${issueResultChart.issuesCount.hasData}"
+                            th:include="components/chart/_bar :: chart('issuesCount_chart', 'Histórias', 'Mês', ${issueResultChart.issuesCount})" />
+                    <span th:unless="${issueResultChart.issuesCount.hasData}">Nenhum registro encontrado</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</th:block>
+</html>

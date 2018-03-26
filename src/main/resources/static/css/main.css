@@ -1,0 +1,21 @@
+.form-control[readonly] {
+  background-color: #fff!important;
+  opacity: 1;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0
+}
+
+.logo a {
+    font-size: 25px;
+    font-weight: 600;
+}
+
+#side-menu li a {
+    color: #6b6b6b;
+}
+
+.bt-0 {
+  border-top: 0;
+}
