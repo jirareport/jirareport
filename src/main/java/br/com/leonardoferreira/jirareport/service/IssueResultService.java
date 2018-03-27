@@ -8,6 +8,7 @@ import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartVO;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueResultChartVO;
 import br.com.leonardoferreira.jirareport.exception.CreateIssueResultException;
+import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.repository.IssueResultRepository;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class IssueResultService extends AbstractService {
     public void create(IssueForm issueForm) throws CreateIssueResultException {
         log.info("Method=create, issueForm={}", issueForm);
 
-        if (issueResultRepository.exists(issueForm)) {
+        if (issueResultRepository.existsById(issueForm)) {
             log.error("Method=create, Msg=issueResult ja existente");
             throw new CreateIssueResultException("Registro já existente");
         }
@@ -86,11 +87,12 @@ public class IssueResultService extends AbstractService {
 
     public IssueResult findById(final IssueForm issueForm) {
         log.info("Method=findById, issueForm={}", issueForm);
-        return issueResultRepository.findOne(issueForm);
+        return issueResultRepository.findById(issueForm)
+                .orElseThrow(ResourceNotFound::new);
     }
 
     public void remove(final IssueForm issueForm) {
         log.info("Method=remove, issueForm={}", issueForm);
-        issueResultRepository.delete(issueForm);
+        issueResultRepository.deleteById(issueForm);
     }
 }

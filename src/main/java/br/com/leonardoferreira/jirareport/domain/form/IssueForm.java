@@ -4,8 +4,8 @@ import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 /**

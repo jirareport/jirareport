@@ -2,6 +2,7 @@ package br.com.leonardoferreira.jirareport.service;
 
 import br.com.leonardoferreira.jirareport.client.ProjectClient;
 import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,11 +37,12 @@ public class ProjectService extends AbstractService {
     }
 
     public void delete(Long id) {
-        projectRepository.delete(id);
+        projectRepository.deleteById(id);
     }
 
     public Project findById(Long id) {
-        return projectRepository.findOne(id);
+        return projectRepository.findById(id)
+                .orElseThrow(ResourceNotFound::new);
     }
 
     public void update(Project project) {
