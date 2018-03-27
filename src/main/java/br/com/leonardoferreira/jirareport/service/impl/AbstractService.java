@@ -1,4 +1,4 @@
-package br.com.leonardoferreira.jirareport.service;
+package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.vo.AccountVO;
@@ -17,4 +17,5 @@ public abstract class AbstractService {
     protected String currentToken() {
         return currentUser().getToken();
     }
+
 }

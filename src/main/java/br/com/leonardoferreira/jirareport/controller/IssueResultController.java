@@ -7,7 +7,6 @@ import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueResultChartVO;
 import br.com.leonardoferreira.jirareport.exception.CreateIssueResultException;
 import br.com.leonardoferreira.jirareport.service.IssueResultService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -25,8 +24,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class IssueResultController {
 
-    @Autowired
-    private IssueResultService issueResultService;
+    private final IssueResultService issueResultService;
+
+    public IssueResultController(IssueResultService issueResultService) {
+        this.issueResultService = issueResultService;
+    }
 
     @GetMapping("/projects/{projectId}/issues")
     public ModelAndView index(@PathVariable final Long projectId) {

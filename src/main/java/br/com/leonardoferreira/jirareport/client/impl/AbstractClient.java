@@ -1,11 +1,14 @@
-package br.com.leonardoferreira.jirareport.client.util;
+package br.com.leonardoferreira.jirareport.client.impl;
 
 import br.com.leonardoferreira.jirareport.client.interceptor.HeaderRequestInterceptor;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.TrustStrategy;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
@@ -17,9 +20,34 @@ import java.util.List;
 
 /**
  * @author leferreira
- * @since 8/8/17 12:58 PM
+ * @since 7/28/17 11:15 AM
  */
-public abstract class RestTemplateUtil {
+public class AbstractClient {
+
+    @Value("${jira.url}")
+    protected String baseUrl;
+
+    @Value("${jira.custom_fields.epic:}")
+    protected String epicField;
+
+    @Value("${jira.custom_fields.estimate:}")
+    protected String estimateField;
+
+    protected JsonParser jsonParser = new JsonParser();
+
+    protected String getDateAsString(JsonElement jsonElement) {
+        if (jsonElement == null || jsonElement.isJsonNull()) {
+            return null;
+        }
+        return jsonElement.getAsString().substring(0, 10);
+    }
+
+    protected String getAsStringSafe(JsonElement jsonElement) {
+        if (jsonElement == null || jsonElement.isJsonNull()) {
+            return null;
+        }
+        return jsonElement.getAsString();
+    }
 
     @SneakyThrows
     protected RestTemplate getRestTemplate() {
@@ -48,7 +76,7 @@ public abstract class RestTemplateUtil {
     }
 
     protected void setHeader(RestTemplate restTemplate, String token) {
-        List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
+        List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
         interceptors.add(new HeaderRequestInterceptor("cookie", token));
 
         restTemplate.setInterceptors(interceptors);
