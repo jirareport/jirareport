@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 11/21/17 4:34 PM
  */
 public interface IssueResultRepository extends MongoRepository<IssueResult, IssueForm> {

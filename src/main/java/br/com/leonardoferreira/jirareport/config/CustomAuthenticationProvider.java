@@ -14,7 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 11/14/17 3:30 PM
  */
 @Component

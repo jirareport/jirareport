@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 7/28/17 11:40 AM
  */
 @Component

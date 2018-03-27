@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 3/23/18 6:21 PM
  */
 @Repository

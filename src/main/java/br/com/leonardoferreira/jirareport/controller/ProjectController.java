@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 11/14/17 3:48 PM
  */
 @Controller

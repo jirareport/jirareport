@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 7/28/17 12:52 PM
  */
 @Component

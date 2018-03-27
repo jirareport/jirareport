@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 import java.util.List;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 7/28/17 12:50 PM
  */
 @Data

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 7/28/17 10:11 AM
  */
 @Component

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 11/16/17 12:46 PM
  */
 @Data

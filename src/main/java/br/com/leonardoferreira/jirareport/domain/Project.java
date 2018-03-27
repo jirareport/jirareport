@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 7/28/17 11:39 AM
  */
 @Data

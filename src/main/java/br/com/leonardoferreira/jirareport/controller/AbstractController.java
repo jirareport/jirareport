@@ -4,7 +4,7 @@ import br.com.leonardoferreira.jirareport.domain.vo.AccountVO;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 12/4/17 1:50 PM
  */
 public class AbstractController {

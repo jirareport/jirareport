@@ -8,7 +8,7 @@ import br.com.leonardoferreira.jirareport.service.AuthService;
 import org.springframework.stereotype.Service;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 7/28/17 10:14 AM
  */
 @Service

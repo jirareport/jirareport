@@ -5,7 +5,7 @@ import br.com.leonardoferreira.jirareport.domain.vo.AccountVO;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 11/14/17 3:53 PM
  */
 public abstract class AbstractService {

@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 7/28/17 12:50 PM
  */
 @Slf4j

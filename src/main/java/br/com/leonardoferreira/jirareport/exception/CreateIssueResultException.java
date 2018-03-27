@@ -1,7 +1,7 @@
 package br.com.leonardoferreira.jirareport.exception;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 11/23/17 10:44 AM
  */
 public class CreateIssueResultException extends Exception {

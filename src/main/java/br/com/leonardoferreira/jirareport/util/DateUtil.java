@@ -11,7 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 7/31/17 10:30 AM
  */
 public class DateUtil {

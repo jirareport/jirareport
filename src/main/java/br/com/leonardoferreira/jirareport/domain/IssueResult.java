@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import java.util.List;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 7/28/17 1:44 PM
  */
 @Data

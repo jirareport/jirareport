@@ -3,7 +3,7 @@ package br.com.leonardoferreira.jirareport.domain;
 import lombok.Data;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 7/28/17 1:03 PM
  */
 @Data

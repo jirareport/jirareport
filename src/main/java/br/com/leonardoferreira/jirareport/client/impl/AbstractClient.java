@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author leferreira
+ * @author lferreira
  * @since 7/28/17 11:15 AM
  */
 public class AbstractClient {
