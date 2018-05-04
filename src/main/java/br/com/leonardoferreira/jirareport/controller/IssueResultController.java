@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -92,4 +93,18 @@ public class IssueResultController {
         }
     }
 
+    @PutMapping("/projects/{projectId}/issues/details")
+    public ModelAndView update(@PathVariable final Long projectId,
+                               final IssueForm issueForm,
+                               final RedirectAttributes redirectAttributes) {
+        issueForm.setProjectId(projectId);
+        try {
+            issueResultService.update(issueForm);
+            redirectAttributes.addFlashAttribute("flashSuccess", "Registro atualizado com sucesso.");
+        } catch (CreateIssueResultException e) {
+            redirectAttributes.addFlashAttribute("flashError", "Falha ao atualizar registro.");
+        }
+
+        return new ModelAndView(String.format("redirect:/projects/%d/issues", projectId));
+    }
 }

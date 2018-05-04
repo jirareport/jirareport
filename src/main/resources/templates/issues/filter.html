@@ -76,6 +76,8 @@
                                 <td>
                                     <a th:href="@{/projects/{id}/issues/details(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}"
                                        data-method="DELETE" data-confirm="Tem certeza?" class="btn btn-xs btn-danger">Remover</a>
+                                    <a th:href="@{/projects/{id}/issues/details(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}"
+                                       data-method="PUT" class="btn btn-xs btn-default">Atualizar</a>
                                     <a th:href="@{/projects/{id}/issues/details(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}" class="btn btn-xs btn-default">Detalhes</a>
                                 </td>
                             </tr>

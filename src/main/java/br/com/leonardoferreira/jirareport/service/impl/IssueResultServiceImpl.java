@@ -105,4 +105,11 @@ public class IssueResultServiceImpl extends AbstractService implements IssueResu
         log.info("Method=remove, issueForm={}", issueForm);
         issueResultRepository.deleteById(issueForm);
     }
+
+    @Override
+    public void update(final IssueForm issueForm) throws CreateIssueResultException {
+        log.info("Method=update, issueForm={}", issueForm);
+        remove(issueForm);
+        create(issueForm);
+    }
 }

@@ -20,4 +20,6 @@ public interface IssueResultService {
     IssueResult findById(IssueForm issueForm);
 
     void remove(IssueForm issueForm);
+
+    void update(IssueForm issueForm) throws CreateIssueResultException;
 }

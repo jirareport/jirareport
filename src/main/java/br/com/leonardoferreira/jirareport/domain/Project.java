@@ -20,4 +20,11 @@ public class Project {
     private String startColumn;
 
     private String endColumn;
+
+    private String epicCF;
+
+    private String estimateCF;
+
+    private String systemCF;
+
 }

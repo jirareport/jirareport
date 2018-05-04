@@ -10,6 +10,7 @@ import br.com.leonardoferreira.jirareport.util.DateUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.util.Collections;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -73,6 +74,9 @@ public class IssueClientImpl extends AbstractClient implements IssueClient {
                         return null;
                     }
 
+                    String epicField = project.getEpicCF();
+                    String estimateField = project.getEstimateCF();
+
                     String epic = epicField.equals("") ? null : getAsStringSafe(fields.get(epicField));
                     String estimated = estimateField.equals("") ? null : (getAsStringSafe(fields.get(estimateField).isJsonNull() ?
                             null : fields.get(estimateField).getAsJsonObject().get("value")));
@@ -91,7 +95,7 @@ public class IssueClientImpl extends AbstractClient implements IssueClient {
                     issueVO.setStartDate(DateUtil.displayFormat(startDate));
                     issueVO.setEndDate(DateUtil.displayFormat(endDate));
                     issueVO.setLeadTime(leadTime);
-                    issueVO.setComponents(getComponents(fields));
+                    issueVO.setComponents(getComponents(fields, project));
                     issueVO.setEpic(epic);
                     issueVO.setEstimated(estimated);
                     issueVO.setSummary(fields.get("summary").getAsString());
@@ -169,15 +173,28 @@ public class IssueClientImpl extends AbstractClient implements IssueClient {
                 }).filter(Objects::nonNull).findFirst().orElse(null);
     }
 
-    private List<String> getComponents(JsonObject fields) {
-        JsonArray components = fields.getAsJsonArray("components");
-        if (components == null) {
+    private List<String> getComponents(final JsonObject fields, final Project project) {
+        final JsonElement jsonElement = fields.get(project.getSystemCF());
+        if (jsonElement == null || jsonElement.isJsonNull()) {
             return new ArrayList<>();
         }
 
-        return StreamSupport.stream(components.spliterator(), true)
-                .map(component -> component.getAsJsonObject().get("name").getAsString())
-                .collect(Collectors.toList());
+        if (jsonElement.isJsonArray()) {
+            JsonArray components = jsonElement.getAsJsonArray();
+            if (components == null) {
+                return new ArrayList<>();
+            }
+
+            return StreamSupport.stream(components.spliterator(), true)
+                    .map(component -> component.isJsonObject() ? component.getAsJsonObject().get("name").getAsString() : component.getAsString())
+                    .collect(Collectors.toList());
+        }
+
+        if (jsonElement.isJsonObject()) {
+            return Collections.singletonList(getAsStringSafe(jsonElement.getAsJsonObject().get("value")));
+        }
+
+        return Collections.singletonList(jsonElement.getAsString());
     }
 
 }

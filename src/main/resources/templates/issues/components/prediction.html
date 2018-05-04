@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="list(predictions)">
-    <div class="panel panel-default table-responsive">
+    <div class="panel panel-default table-responsive" th:unless="${#lists.isEmpty(predictions)}">
         <table class="table table-stripped">
             <thead>
             <tr>
@@ -17,5 +17,6 @@
             </tbody>
         </table>
     </div>
+    <span th:if="${#lists.isEmpty(predictions)}">Nenhum registro encontrado</span>
 </th:block>
 </html>

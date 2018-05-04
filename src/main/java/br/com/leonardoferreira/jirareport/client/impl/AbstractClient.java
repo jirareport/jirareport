@@ -27,12 +27,6 @@ public class AbstractClient {
     @Value("${jira.url}")
     protected String baseUrl;
 
-    @Value("${jira.custom_fields.epic:}")
-    protected String epicField;
-
-    @Value("${jira.custom_fields.estimate:}")
-    protected String estimateField;
-
     protected JsonParser jsonParser = new JsonParser();
 
     protected String getDateAsString(JsonElement jsonElement) {

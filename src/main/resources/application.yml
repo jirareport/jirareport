@@ -1,8 +1,5 @@
 jira:
-  url: jira.empresa.com
-  custom_fields:
-    epic: customfield_001
-    estimate: customfield_002
+  url:
 
 spring:
   data:
