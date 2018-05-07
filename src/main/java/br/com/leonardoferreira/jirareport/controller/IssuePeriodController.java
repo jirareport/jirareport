@@ -24,7 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @since 11/14/17 5:18 PM
  */
 @Controller
-@RequestMapping("/projects/{projectId}")
+@RequestMapping("/projects/{projectId}/issue-periods")
 public class IssuePeriodController {
 
     private final IssuePeriodService issuePeriodService;
@@ -33,38 +33,27 @@ public class IssuePeriodController {
         this.issuePeriodService = issuePeriodService;
     }
 
-    @GetMapping("/issues")
+    @GetMapping
     public ModelAndView index(@PathVariable final Long projectId) {
-        List<IssuePeriod> issues = issuePeriodService.findByProjectId(projectId);
-        IssuePeriodChartVO issuePeriodChart = issuePeriodService.getChartByIssues(issues);
+        List<IssuePeriod> issuePeriods = issuePeriodService.findByProjectId(projectId);
+        IssuePeriodChartVO issuePeriodChart = issuePeriodService.getChartByIssues(issuePeriods);
 
-        return new ModelAndView("issues/filter")
-                .addObject("issues", issues)
+        return new ModelAndView("issue-periods/index")
+                .addObject("issuePeriods", issuePeriods)
                 .addObject("issueForm", new IssueForm(projectId))
                 .addObject("issuePeriodChart", issuePeriodChart);
     }
 
-    @DeleteMapping("/issues")
-    public ModelAndView remove(@PathVariable final Long projectId,
-                               final IssueForm issueForm,
-                               final RedirectAttributes redirectAttributes) {
-        issueForm.setProjectId(projectId);
-        issuePeriodService.remove(issueForm);
-
-        redirectAttributes.addFlashAttribute("flashSuccess", "Registro removido com sucesso.");
-        return new ModelAndView(String.format("redirect:/projects/%d/issues", projectId));
-    }
-
-    @GetMapping("/issues/details")
+    @GetMapping("/details")
     public ModelAndView details(@PathVariable final Long projectId, final IssueForm issueForm) {
         issueForm.setProjectId(projectId);
-        IssuePeriod issue = issuePeriodService.findById(issueForm);
+        IssuePeriod issuePeriod = issuePeriodService.findById(issueForm);
 
-        return new ModelAndView("issues/index")
-                .addObject("issue", issue);
+        return new ModelAndView("issue-periods/details")
+                .addObject("issuePeriod", issuePeriod);
     }
 
-    @PostMapping("/issues")
+    @PostMapping
     public ModelAndView create(@PathVariable final Long projectId,
                                @Validated final IssueForm issueForm,
                                final BindingResult bindingResult,
@@ -72,9 +61,9 @@ public class IssuePeriodController {
         issueForm.setProjectId(projectId);
 
         if (bindingResult.hasErrors()) {
-            List<IssuePeriod> issues = issuePeriodService.findByProjectId(projectId);
-            return new ModelAndView("issues/filter")
-                    .addObject("issues", issues)
+            List<IssuePeriod> issuePeriods = issuePeriodService.findByProjectId(projectId);
+            return new ModelAndView("issue-periods/index")
+                    .addObject("issuePeriods", issuePeriods)
                     .addObject("issueForm", issueForm);
         }
 
@@ -82,20 +71,20 @@ public class IssuePeriodController {
             issuePeriodService.create(issueForm);
 
             redirectAttributes.addFlashAttribute("flashSuccess", "Registro inserido com sucesso");
-            return new ModelAndView(String.format("redirect:/projects/%d/issues", projectId));
+            return new ModelAndView(String.format("redirect:/projects/%d/issue-periods", projectId));
         } catch (CreateIssuePeriodException e) {
-            List<IssuePeriod> issues = issuePeriodService.findByProjectId(projectId);
-            IssuePeriodChartVO issuePeriodChart = issuePeriodService.getChartByIssues(issues);
+            List<IssuePeriod> issuePeriods = issuePeriodService.findByProjectId(projectId);
+            IssuePeriodChartVO issuePeriodChart = issuePeriodService.getChartByIssues(issuePeriods);
 
-            return new ModelAndView("issues/filter")
-                    .addObject("issues", issues)
+            return new ModelAndView("issue-periods/index")
+                    .addObject("issuePeriods", issuePeriods)
                     .addObject("issueForm", issueForm)
                     .addObject("issuePeriodChart", issuePeriodChart)
                     .addObject("flashError", e.getMessage());
         }
     }
 
-    @PutMapping("/issues")
+    @PutMapping
     public ModelAndView update(@PathVariable final Long projectId,
                                final IssueForm issueForm,
                                final RedirectAttributes redirectAttributes) {
@@ -107,6 +96,17 @@ public class IssuePeriodController {
             redirectAttributes.addFlashAttribute("flashError", "Falha ao atualizar registro.");
         }
 
-        return new ModelAndView(String.format("redirect:/projects/%d/issues", projectId));
+        return new ModelAndView(String.format("redirect:/projects/%d/issue-periods", projectId));
+    }
+
+    @DeleteMapping
+    public ModelAndView remove(@PathVariable final Long projectId,
+                               final IssueForm issueForm,
+                               final RedirectAttributes redirectAttributes) {
+        issueForm.setProjectId(projectId);
+        issuePeriodService.remove(issueForm);
+
+        redirectAttributes.addFlashAttribute("flashSuccess", "Registro removido com sucesso.");
+        return new ModelAndView(String.format("redirect:/projects/%d/issue-periods", projectId));
     }
 }

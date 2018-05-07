@@ -1,58 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layouts/application">
-
-<th:block layout:fragment="content">
-    <div class="container-fluid">
-        <div class="page-header">
-            <h1>Issues <small th:text="${issue.form.dates}"></small></h1>
-        </div>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="list(issues)">
+    <div class="panel panel-default table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>História</th>
+                <th>Data inicio</th>
+                <th>Data fim</th>
+                <th>Leadtime</th>
+                <th>Epic</th>
+                <th>Estimativa</th>
+                <th>Projeto</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="issue : ${issues}">
+                <tr data-toggle="collapse" th:attr="data-target=${'.' + issue.key}" class="accordion-toggle">
+                    <td><button class="btn btn-xs btn-default"><i class="fa fa-eye"></i></button></td>
+                    <td th:text="${issue.title}"></td>
+                    <td th:text="${issue.startDate}"></td>
+                    <td th:text="${issue.endDate}"></td>
+                    <td th:text="${issue.leadTime}"></td>
+                    <td><label class="label label-primary" th:if="issue.epic" th:text="${issue.epic}"></label></td>
+                    <td th:text="${issue.estimated}"></td>
+                    <td>
+                        <label class="label label-info" th:each="component : ${issue.components}" th:text="${component}"></label>
+                    </td>
+                </tr>
+                <tr class="accordian-body collapse" th:classappend="${issue.key}">
+                    <td colspan="8">
+                        <div class="accordian-body collapse panel panel-default table-responsive" th:classappend="${issue.key}">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Created</th>
+                                        <th>To</th>
+                                        <th>Cycle time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="changelog : ${issue.changelog}">
+                                        <td th:text="${changelog.created}"></td>
+                                        <td th:text="${changelog.to}"></td>
+                                        <td th:text="${changelog.cycleTime}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
     </div>
-
-    <div class="row">
-        <th:block th:include="components/card :: card(6, 'primary', 'fa-calendar', ${issue.leadTime}, 'Leadtime medio')" />
-        <th:block th:include="components/card :: card(6, 'green', 'fa-tasks', ${#lists.size(issue.issues)}, 'Histórias')" />
-    </div>
-
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#issues" data-toggle="tab">Issues</a></li>
-        <li role="presentation"><a href="#leadTimeHistogram" data-toggle="tab">Histograma de leadtime</a></li>
-        <li role="presentation"><a href="#estimatedChart" data-toggle="tab">Contagem de estimativa</a></li>
-        <li role="presentation"><a href="#leadTimeBySystem" data-toggle="tab">LeadTime por sistema</a></li>
-        <li role="presentation"><a href="#tasksBySystem" data-toggle="tab">Histórias por sistema</a></li>
-        <li role="presentation"><a href="#prediction" data-toggle="tab">Leadtime médio por tamanho de história</a></li>
-    </ul>
-
-    <div class="panel panel-default bt-0">
-        <div class="panel-body">
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="issues">
-                    <th:block th:include="issues/components/list :: list(${issue.issues})" />
-                </div>
-                <div role="tabpanel" class="tab-pane" id="leadTimeHistogram">
-                    <th:block th:include="issues/components/histogram :: chart(${issue.histogram})" />
-                </div>
-                <div role="tabpanel" class="tab-pane" id="estimatedChart">
-                    <th:block th:include="issues/components/estimated :: chart(${issue.estimated})" />
-                </div>
-                <div role="tabpanel" class="tab-pane" id="leadTimeBySystem">
-                    <th:block th:include="issues/components/leadTimeBySystem :: chart(${issue.leadTimeBySystem})" />
-                </div>
-                <div role="tabpanel" class="tab-pane" id="tasksBySystem">
-                    <th:block th:include="issues/components/tasksBySystem :: chart(${issue.tasksBySystem})" />
-                </div>
-                <div role="tabpanel" class="tab-pane" id="prediction">
-                    <th:block th:include="issues/components/prediction :: list(${issue.prediction})" />
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="text-right">
-        <a th:href="@{/projects/{id}/issues(id=${issue.form.projectId})}" class="btn btn-default">Voltar</a>
-    </div>
-
-
 </th:block>
 </html>

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LeadtimePrediction {
+public class LeadTimeBySize {
 
     private String size;
 

@@ -37,7 +37,7 @@ public class IssuePeriod {
 
     private ChartVO<String, Long> tasksBySystem;
 
-    private List<LeadtimePrediction> prediction;
+    private List<LeadTimeBySize> leadTimeBySize;
 
     public Integer getIssuesCount() {
         return issues.size();

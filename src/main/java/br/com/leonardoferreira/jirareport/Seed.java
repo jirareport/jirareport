@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 import br.com.leonardoferreira.jirareport.domain.Changelog;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
-import br.com.leonardoferreira.jirareport.domain.LeadtimePrediction;
+import br.com.leonardoferreira.jirareport.domain.LeadTimeBySize;
 import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartVO;
@@ -62,13 +62,13 @@ public class Seed implements CommandLineRunner {
         CompletableFuture<ChartVO<String, Long>> estimatedChart = chartService.estimatedChart(issuePeriod.getIssues());
         CompletableFuture<ChartVO<String, Double>> leadTimeBySystem = chartService.leadTimeBySystem(issuePeriod.getIssues());
         CompletableFuture<ChartVO<String, Long>> tasksBySystem = chartService.tasksBySystem(issuePeriod.getIssues());
-        CompletableFuture<List<LeadtimePrediction>> predictionChart = chartService.predictionChart(issuePeriod.getIssues());
+        CompletableFuture<List<LeadTimeBySize>> leadTimeBySize = chartService.leadTimeBySize(issuePeriod.getIssues());
 
         issuePeriod.setHistogram(histogram.get());
         issuePeriod.setEstimated(estimatedChart.get());
         issuePeriod.setLeadTimeBySystem(leadTimeBySystem.get());
         issuePeriod.setTasksBySystem(tasksBySystem.get());
-        issuePeriod.setPrediction(predictionChart.get());
+        issuePeriod.setLeadTimeBySize(leadTimeBySize.get());
 
         return issuePeriod;
     }

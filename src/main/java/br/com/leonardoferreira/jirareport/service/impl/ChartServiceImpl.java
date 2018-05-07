@@ -1,7 +1,7 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
-import br.com.leonardoferreira.jirareport.domain.LeadtimePrediction;
+import br.com.leonardoferreira.jirareport.domain.LeadTimeBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartVO;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -79,13 +78,13 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     @Async
     @Override
-    public CompletableFuture<List<LeadtimePrediction>> predictionChart(final List<Issue> issues) {
-        log.info("Method=predictionChart, issues={}", issues);
-        final List<LeadtimePrediction> collect = new ArrayList<>();
+    public CompletableFuture<List<LeadTimeBySize>> leadTimeBySize(final List<Issue> issues) {
+        log.info("Method=leadTimeBySize, issues={}", issues);
+        final List<LeadTimeBySize> collect = new ArrayList<>();
         issues.stream()
                 .filter(i -> i.getLeadTime() != null && i.getEstimated() != null)
                 .collect(Collectors.groupingBy(Issue::getEstimated, Collectors.averagingDouble(Issue::getLeadTime)))
-                .forEach((k, v) -> collect.add(new LeadtimePrediction(k, v)));
+                .forEach((k, v) -> collect.add(new LeadTimeBySize(k, v)));
 
         return CompletableFuture.completedFuture(collect);
     }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/application">
+
+<th:block layout:fragment="content">
+    <div class="container-fluid">
+        <div class="page-header">
+            <h1>Issues <small th:text="${issuePeriod.form.dates}"></small></h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <th:block th:include="components/card :: card(6, 'primary', 'fa-calendar', ${issuePeriod.leadTime}, 'Leadtime medio')" />
+        <th:block th:include="components/card :: card(6, 'green', 'fa-tasks', ${#lists.size(issuePeriod.issues)}, 'Histórias')" />
+    </div>
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#issues" data-toggle="tab">Issues</a></li>
+        <li role="presentation"><a href="#leadTimeHistogram" data-toggle="tab">Histograma de leadtime</a></li>
+        <li role="presentation"><a href="#estimatedChart" data-toggle="tab">Contagem de estimativa</a></li>
+        <li role="presentation"><a href="#leadTimeBySystem" data-toggle="tab">LeadTime por sistema</a></li>
+        <li role="presentation"><a href="#tasksBySystem" data-toggle="tab">Histórias por sistema</a></li>
+        <li role="presentation"><a href="#leadTimeBySize" data-toggle="tab">Leadtime médio por tamanho de história</a></li>
+    </ul>
+
+    <div class="panel panel-default bt-0">
+        <div class="panel-body">
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="issues">
+                    <th:block th:include="issues/index :: list(${issuePeriod.issues})" />
+                </div>
+                <div role="tabpanel" class="tab-pane" id="leadTimeHistogram">
+                    <th:block th:include="issue-periods/components/histogram :: chart(${issuePeriod.histogram})" />
+                </div>
+                <div role="tabpanel" class="tab-pane" id="estimatedChart">
+                    <th:block th:include="issue-periods/components/estimativeCount :: chart(${issuePeriod.estimated})" />
+                </div>
+                <div role="tabpanel" class="tab-pane" id="leadTimeBySystem">
+                    <th:block th:include="issue-periods/components/leadTimeBySystem :: chart(${issuePeriod.leadTimeBySystem})" />
+                </div>
+                <div role="tabpanel" class="tab-pane" id="tasksBySystem">
+                    <th:block th:include="issue-periods/components/tasksBySystem :: chart(${issuePeriod.tasksBySystem})" />
+                </div>
+                <div role="tabpanel" class="tab-pane" id="leadTimeBySize">
+                    <th:block th:include="issue-periods/components/leadTimeBySize :: list(${issuePeriod.leadTimeBySize})" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-right">
+        <a th:href="@{/projects/{id}/issue-periods(id=${issuePeriod.form.projectId})}" class="btn btn-default">Voltar</a>
+    </div>
+
+
+</th:block>
+</html>

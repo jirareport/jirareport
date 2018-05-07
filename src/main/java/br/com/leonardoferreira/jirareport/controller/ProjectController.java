@@ -59,6 +59,6 @@ public class ProjectController {
     @PutMapping
     public ModelAndView update(Project project) {
         projectService.update(project);
-        return new ModelAndView(String.format("redirect:/projects/%s/issues", project.getId()));
+        return new ModelAndView(String.format("redirect:/projects/%s/issue-periods", project.getId()));
     }
 }

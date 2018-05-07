@@ -6,15 +6,15 @@
 <th:block layout:fragment="content">
     <div class="container-fluid">
         <div class="page-header">
-            <h1>Filtro</h1>
+            <h1>Períodos</h1>
         </div>
     </div>
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3>Buscar</h3>
+            <h3>Novo</h3>
         </div>
-        <form th:action="@{/projects/{id}/issues(id=${issueForm.projectId})}" th:method="POST" th:object="${issueForm}">
+        <form th:action="@{/projects/{id}/issue-periods(id=${issueForm.projectId})}" th:method="POST" th:object="${issueForm}">
             <div class="panel-body row">
                 <div class="form-group col-md-3">
                     <label>Data Inicio</label>
@@ -69,16 +69,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="issue : ${issues}">
+                            <tr th:each="issue : ${issuePeriods}">
                                 <td th:text="${issue.form.dates}"></td>
                                 <td th:text="${issue.leadTime}"></td>
                                 <td th:text="${issue.issuesCount}"></td>
                                 <td>
-                                    <a th:href="@{/projects/{id}/issues(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}"
+                                    <a th:href="@{/projects/{id}/issue-periods(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}"
                                        data-method="DELETE" data-confirm="Tem certeza?" class="btn btn-xs btn-danger">Remover</a>
-                                    <a th:href="@{/projects/{id}/issues(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}"
+                                    <a th:href="@{/projects/{id}/issue-periods(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}"
                                        data-method="PUT" class="btn btn-xs btn-default">Atualizar</a>
-                                    <a th:href="@{/projects/{id}/issues/details(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}" class="btn btn-xs btn-default">Detalhes</a>
+                                    <a th:href="@{/projects/{id}/issue-periods/details(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}" class="btn btn-xs btn-default">Detalhes</a>
                                 </td>
                             </tr>
                             </tbody>
