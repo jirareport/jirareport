@@ -13,7 +13,7 @@ buildscript {
 apply plugin: "java"
 apply plugin: "idea"
 apply plugin: "org.springframework.boot"
-apply plugin: 'io.spring.dependency-management'
+apply plugin: "io.spring.dependency-management"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -23,11 +23,13 @@ compileTestJava.options.encoding = 'UTF-8'
 
 repositories {
     mavenCentral()
+    maven { url "https://repo.spring.io/milestone" }
 }
 
 ext {
     gsonVersion = "2.8.1"
     httpClientVersion = "4.5.1"
+    springCloudVersion = 'Finchley.RC1'
 }
 
 dependencies {
@@ -44,7 +46,16 @@ dependencies {
     compile("org.apache.httpcomponents:httpclient:${httpClientVersion}")
     compile("com.google.code.gson:gson:${gsonVersion}")
 
+    compile("org.springframework.cloud:spring-cloud-starter-openfeign")
+
     compileOnly("org.projectlombok:lombok")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
