@@ -2,11 +2,11 @@ package br.com.leonardoferreira.jirareport.controller;
 
 import java.util.List;
 
-import br.com.leonardoferreira.jirareport.domain.IssueResult;
+import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
-import br.com.leonardoferreira.jirareport.domain.vo.IssueResultChartVO;
-import br.com.leonardoferreira.jirareport.exception.CreateIssueResultException;
-import br.com.leonardoferreira.jirareport.service.IssueResultService;
+import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChartVO;
+import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
+import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -25,31 +25,31 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 @RequestMapping("/projects/{projectId}")
-public class IssueResultController {
+public class IssuePeriodController {
 
-    private final IssueResultService issueResultService;
+    private final IssuePeriodService issuePeriodService;
 
-    public IssueResultController(IssueResultService issueResultService) {
-        this.issueResultService = issueResultService;
+    public IssuePeriodController(IssuePeriodService issuePeriodService) {
+        this.issuePeriodService = issuePeriodService;
     }
 
     @GetMapping("/issues")
     public ModelAndView index(@PathVariable final Long projectId) {
-        List<IssueResult> issues = issueResultService.findByProjectId(projectId);
-        IssueResultChartVO issueResultChart = issueResultService.getChartByIssues(issues);
+        List<IssuePeriod> issues = issuePeriodService.findByProjectId(projectId);
+        IssuePeriodChartVO issuePeriodChart = issuePeriodService.getChartByIssues(issues);
 
         return new ModelAndView("issues/filter")
                 .addObject("issues", issues)
                 .addObject("issueForm", new IssueForm(projectId))
-                .addObject("issueResultChart", issueResultChart);
+                .addObject("issuePeriodChart", issuePeriodChart);
     }
 
-    @DeleteMapping("/issues/details")
+    @DeleteMapping("/issues")
     public ModelAndView remove(@PathVariable final Long projectId,
                                final IssueForm issueForm,
                                final RedirectAttributes redirectAttributes) {
         issueForm.setProjectId(projectId);
-        issueResultService.remove(issueForm);
+        issuePeriodService.remove(issueForm);
 
         redirectAttributes.addFlashAttribute("flashSuccess", "Registro removido com sucesso.");
         return new ModelAndView(String.format("redirect:/projects/%d/issues", projectId));
@@ -58,7 +58,7 @@ public class IssueResultController {
     @GetMapping("/issues/details")
     public ModelAndView details(@PathVariable final Long projectId, final IssueForm issueForm) {
         issueForm.setProjectId(projectId);
-        IssueResult issue = issueResultService.findById(issueForm);
+        IssuePeriod issue = issuePeriodService.findById(issueForm);
 
         return new ModelAndView("issues/index")
                 .addObject("issue", issue);
@@ -72,25 +72,25 @@ public class IssueResultController {
         issueForm.setProjectId(projectId);
 
         if (bindingResult.hasErrors()) {
-            List<IssueResult> issues = issueResultService.findByProjectId(projectId);
+            List<IssuePeriod> issues = issuePeriodService.findByProjectId(projectId);
             return new ModelAndView("issues/filter")
                     .addObject("issues", issues)
                     .addObject("issueForm", issueForm);
         }
 
         try {
-            issueResultService.create(issueForm);
+            issuePeriodService.create(issueForm);
 
             redirectAttributes.addFlashAttribute("flashSuccess", "Registro inserido com sucesso");
             return new ModelAndView(String.format("redirect:/projects/%d/issues", projectId));
-        } catch (CreateIssueResultException e) {
-            List<IssueResult> issues = issueResultService.findByProjectId(projectId);
-            IssueResultChartVO issueResultChart = issueResultService.getChartByIssues(issues);
+        } catch (CreateIssuePeriodException e) {
+            List<IssuePeriod> issues = issuePeriodService.findByProjectId(projectId);
+            IssuePeriodChartVO issuePeriodChart = issuePeriodService.getChartByIssues(issues);
 
             return new ModelAndView("issues/filter")
                     .addObject("issues", issues)
                     .addObject("issueForm", issueForm)
-                    .addObject("issueResultChart", issueResultChart)
+                    .addObject("issuePeriodChart", issuePeriodChart)
                     .addObject("flashError", e.getMessage());
         }
     }
@@ -101,9 +101,9 @@ public class IssueResultController {
                                final RedirectAttributes redirectAttributes) {
         issueForm.setProjectId(projectId);
         try {
-            issueResultService.update(issueForm);
+            issuePeriodService.update(issueForm);
             redirectAttributes.addFlashAttribute("flashSuccess", "Registro atualizado com sucesso.");
-        } catch (CreateIssueResultException e) {
+        } catch (CreateIssuePeriodException e) {
             redirectAttributes.addFlashAttribute("flashError", "Falha ao atualizar registro.");
         }
 

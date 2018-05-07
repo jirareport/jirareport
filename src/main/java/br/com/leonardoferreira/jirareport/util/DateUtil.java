@@ -1,6 +1,6 @@
 package br.com.leonardoferreira.jirareport.util;
 
-import br.com.leonardoferreira.jirareport.domain.IssueResult;
+import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import lombok.SneakyThrows;
 import org.springframework.util.StringUtils;
 
@@ -74,11 +74,11 @@ public class DateUtil {
         return split[2] + "-" + split[1] + "-" + split[0];
     }
 
-    public static int sort(final IssueResult issueResult, final IssueResult issueResult1) {
+    public static int sort(final IssuePeriod issuePeriod, final IssuePeriod issuePeriod1) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyyy");
         try {
-            Date d1 = sdf.parse(issueResult.getForm().getStartDate());
-            Date d2 = sdf.parse(issueResult1.getForm().getStartDate());
+            Date d1 = sdf.parse(issuePeriod.getForm().getStartDate());
+            Date d2 = sdf.parse(issuePeriod1.getForm().getStartDate());
 
             return d1.compareTo(d2);
         } catch (ParseException e) {

@@ -74,11 +74,11 @@
                                 <td th:text="${issue.leadTime}"></td>
                                 <td th:text="${issue.issuesCount}"></td>
                                 <td>
-                                    <a th:href="@{/projects/{id}/issues/details(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}"
+                                    <a th:href="@{/projects/{id}/issues(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}"
                                        data-method="DELETE" data-confirm="Tem certeza?" class="btn btn-xs btn-danger">Remover</a>
-                                    <a th:href="@{/projects/{id}/issues/details(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}"
+                                    <a th:href="@{/projects/{id}/issues(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}"
                                        data-method="PUT" class="btn btn-xs btn-default">Atualizar</a>
-                                    <a th:href="@{/projects/{id}/issues(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}" class="btn btn-xs btn-default">Detalhes</a>
+                                    <a th:href="@{/projects/{id}/issues/details(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}" class="btn btn-xs btn-default">Detalhes</a>
                                 </td>
                             </tr>
                             </tbody>
@@ -87,15 +87,15 @@
                 </div>
                 <div role="tabpanel" class="tab-pane" id="leadtime">
                     <th:block
-                            th:if="${issueResultChart.leadtime.hasData}"
-                            th:include="components/chart/_bar :: chart('leadtime_chart', 'LeadTime', 'Mês', ${issueResultChart.leadtime})" />
-                    <span th:unless="${issueResultChart.leadtime.hasData}">Nenhum registro encontrado</span>
+                            th:if="${issuePeriodChart.leadtime.hasData}"
+                            th:include="components/chart/_bar :: chart('leadtime_chart', 'LeadTime', 'Mês', ${issuePeriodChart.leadtime})" />
+                    <span th:unless="${issuePeriodChart.leadtime.hasData}">Nenhum registro encontrado</span>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="issuesCount">
                     <th:block
-                            th:if="${issueResultChart.issuesCount.hasData}"
-                            th:include="components/chart/_bar :: chart('issuesCount_chart', 'Histórias', 'Mês', ${issueResultChart.issuesCount})" />
-                    <span th:unless="${issueResultChart.issuesCount.hasData}">Nenhum registro encontrado</span>
+                            th:if="${issuePeriodChart.issuesCount.hasData}"
+                            th:include="components/chart/_bar :: chart('issuesCount_chart', 'Histórias', 'Mês', ${issuePeriodChart.issuesCount})" />
+                    <span th:unless="${issuePeriodChart.issuesCount.hasData}">Nenhum registro encontrado</span>
                 </div>
             </div>
         </div>

@@ -2,17 +2,17 @@ package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.client.IssueClient;
 import br.com.leonardoferreira.jirareport.domain.Issue;
-import br.com.leonardoferreira.jirareport.domain.IssueResult;
+import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.LeadtimePrediction;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartVO;
-import br.com.leonardoferreira.jirareport.domain.vo.IssueResultChartVO;
-import br.com.leonardoferreira.jirareport.exception.CreateIssueResultException;
+import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChartVO;
+import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.repository.IssueRepository;
-import br.com.leonardoferreira.jirareport.repository.IssueResultRepository;
+import br.com.leonardoferreira.jirareport.repository.IssuePeriodRepository;
 import br.com.leonardoferreira.jirareport.service.ChartService;
-import br.com.leonardoferreira.jirareport.service.IssueResultService;
+import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,31 +26,31 @@ import java.util.concurrent.CompletableFuture;
  */
 @Slf4j
 @Service
-public class IssueResultServiceImpl extends AbstractService implements IssueResultService {
+public class IssuePeriodServiceImpl extends AbstractService implements IssuePeriodService {
 
     private final IssueClient issueClient;
 
-    private final IssueResultRepository issueResultRepository;
+    private final IssuePeriodRepository issuePeriodRepository;
 
     private final ChartService chartService;
 
     private final IssueRepository issueRepository;
 
-    public IssueResultServiceImpl(IssueClient issueClient, IssueResultRepository issueResultRepository,
+    public IssuePeriodServiceImpl(IssueClient issueClient, IssuePeriodRepository issuePeriodRepository,
                                   ChartService chartService, IssueRepository issueRepository) {
         this.issueClient = issueClient;
-        this.issueResultRepository = issueResultRepository;
+        this.issuePeriodRepository = issuePeriodRepository;
         this.chartService = chartService;
         this.issueRepository = issueRepository;
     }
 
     @Override
-    public void create(IssueForm issueForm) throws CreateIssueResultException {
+    public void create(IssueForm issueForm) throws CreateIssuePeriodException {
         log.info("Method=create, issueForm={}", issueForm);
 
-        if (issueResultRepository.existsById(issueForm)) {
-            log.error("Method=create, Msg=issueResult ja existente");
-            throw new CreateIssueResultException("Registro já existente");
+        if (issuePeriodRepository.existsById(issueForm)) {
+            log.error("Method=create, Msg=issuePeriod ja existente");
+            throw new CreateIssuePeriodException("Registro já existente");
         }
 
         List<Issue> issues = issueClient.findAll(currentToken(), issueForm);
@@ -67,52 +67,52 @@ public class IssueResultServiceImpl extends AbstractService implements IssueResu
         CompletableFuture<List<LeadtimePrediction>> prediction = chartService.predictionChart(issues);
 
         try {
-            IssueResult issueResult = new IssueResult(issueForm, issues, avgLeadTime,
+            IssuePeriod issuePeriod = new IssuePeriod(issueForm, issues, avgLeadTime,
                     histogram.get(), estimated.get(), leadTimeBySystem.get(), tasksBySystem.get(), prediction.get());
-            issueResultRepository.save(issueResult);
+            issuePeriodRepository.save(issuePeriod);
         } catch (Exception e) {
             log.error("Method=create, Msg=erro ao gerar registro", e);
-            throw new CreateIssueResultException(e.getMessage());
+            throw new CreateIssuePeriodException(e.getMessage());
         }
     }
 
     @Override
-    public List<IssueResult> findByProjectId(final Long projectId) {
+    public List<IssuePeriod> findByProjectId(final Long projectId) {
         log.info("Method=findByProjectId, projectId={}", projectId);
 
-        List<IssueResult> issues = issueResultRepository.findByProjectId(projectId);
+        List<IssuePeriod> issues = issuePeriodRepository.findByProjectId(projectId);
         issues.sort(DateUtil::sort);
 
         return issues;
     }
 
     @Override
-    public IssueResultChartVO getChartByIssues(List<IssueResult> issues) {
+    public IssuePeriodChartVO getChartByIssues(List<IssuePeriod> issues) {
         log.info("Method=getChartByIssues, issues={}", issues);
 
-        IssueResultChartVO issueResultChartVO = new IssueResultChartVO();
+        IssuePeriodChartVO issuePeriodChartVO = new IssuePeriodChartVO();
         issues.stream()
-                .peek(issueResultChartVO::addLeadTime)
-                .forEach(issueResultChartVO::addIssuesCount);
+                .peek(issuePeriodChartVO::addLeadTime)
+                .forEach(issuePeriodChartVO::addIssuesCount);
 
-        return issueResultChartVO;
+        return issuePeriodChartVO;
     }
 
     @Override
-    public IssueResult findById(final IssueForm issueForm) {
+    public IssuePeriod findById(final IssueForm issueForm) {
         log.info("Method=findById, issueForm={}", issueForm);
-        return issueResultRepository.findById(issueForm)
+        return issuePeriodRepository.findById(issueForm)
                 .orElseThrow(ResourceNotFound::new);
     }
 
     @Override
     public void remove(final IssueForm issueForm) {
         log.info("Method=remove, issueForm={}", issueForm);
-        issueResultRepository.deleteById(issueForm);
+        issuePeriodRepository.deleteById(issueForm);
     }
 
     @Override
-    public void update(final IssueForm issueForm) throws CreateIssueResultException {
+    public void update(final IssueForm issueForm) throws CreateIssuePeriodException {
         log.info("Method=update, issueForm={}", issueForm);
         remove(issueForm);
         create(issueForm);

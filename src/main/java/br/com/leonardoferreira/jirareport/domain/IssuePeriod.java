@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class IssueResult {
+public class IssuePeriod {
 
     @Id
     @Indexed(unique = true)
