@@ -70,6 +70,9 @@ public class DateUtil {
     }
 
     public static String toENDate(final String startDate) {
+        if (startDate == null) {
+            return null;
+        }
         String[] split = startDate.split("/");
         return split[2] + "-" + split[1] + "-" + split[0];
     }
