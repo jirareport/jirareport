@@ -18,32 +18,6 @@ public class DateUtil {
 
     public static final String DEFAULT_FORMATTER = "yyyy-MM-dd";
 
-    @SneakyThrows
-    public static Long daysDiff(String startDate, String endDate) {
-        if (StringUtils.isEmpty(startDate) || StringUtils.isEmpty(endDate)) {
-            return null;
-        }
-
-        Calendar start = Calendar.getInstance();
-        start.setTime(new SimpleDateFormat(DEFAULT_FORMATTER).parse(startDate));
-        Calendar end = Calendar.getInstance();
-        end.setTime(new SimpleDateFormat(DEFAULT_FORMATTER).parse(endDate));
-        Long workingDays = 0L;
-        while (!start.after(end)) {
-            int day = start.get(Calendar.DAY_OF_WEEK);
-            if ((day != Calendar.SATURDAY) && (day != Calendar.SUNDAY) && !isHoliday(start)) {
-                workingDays++;
-            }
-            start.add(Calendar.DATE, 1);
-        }
-        return workingDays;
-    }
-
-    private static boolean isHoliday(Calendar day) {
-        String aux = new SimpleDateFormat(DEFAULT_FORMATTER).format(day.getTime());
-        return Arrays.asList("2017-06-15").contains(aux);
-    }
-
     public static String displayFormat(String date) {
         if (StringUtils.isEmpty(date)) {
             return null;

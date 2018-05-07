@@ -4,6 +4,7 @@ import br.com.leonardoferreira.jirareport.util.DateUtil;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
 
 /**

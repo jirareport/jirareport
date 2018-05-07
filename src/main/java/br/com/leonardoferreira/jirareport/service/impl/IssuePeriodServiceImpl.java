@@ -1,6 +1,5 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import br.com.leonardoferreira.jirareport.client.IssueClient;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.LeadTimeBySize;
@@ -13,6 +12,7 @@ import br.com.leonardoferreira.jirareport.repository.IssueRepository;
 import br.com.leonardoferreira.jirareport.repository.IssuePeriodRepository;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
+import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class IssuePeriodServiceImpl extends AbstractService implements IssuePeriodService {
 
-    private final IssueClient issueClient;
+    private final IssueService issueService;
 
     private final IssuePeriodRepository issuePeriodRepository;
 
@@ -36,9 +36,9 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
     private final IssueRepository issueRepository;
 
-    public IssuePeriodServiceImpl(IssueClient issueClient, IssuePeriodRepository issuePeriodRepository,
+    public IssuePeriodServiceImpl(IssueService issueService, IssuePeriodRepository issuePeriodRepository,
                                   ChartService chartService, IssueRepository issueRepository) {
-        this.issueClient = issueClient;
+        this.issueService = issueService;
         this.issuePeriodRepository = issuePeriodRepository;
         this.chartService = chartService;
         this.issueRepository = issueRepository;
@@ -53,7 +53,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
             throw new CreateIssuePeriodException("Registro já existente");
         }
 
-        List<Issue> issues = issueClient.findAll(currentToken(), issueForm);
+        List<Issue> issues = issueService.findAllInJira(issueForm);
         issueRepository.saveAll(issues);
         Double avgLeadTime = issues.parallelStream()
                 .filter(i -> i.getLeadTime() != null)

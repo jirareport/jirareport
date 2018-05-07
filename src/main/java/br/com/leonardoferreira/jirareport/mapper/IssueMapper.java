@@ -1,19 +1,24 @@
-package br.com.leonardoferreira.jirareport.client.impl;
+package br.com.leonardoferreira.jirareport.mapper;
 
-import br.com.leonardoferreira.jirareport.client.IssueClient;
+import static br.com.leonardoferreira.jirareport.util.DateUtil.DEFAULT_FORMATTER;
+
 import br.com.leonardoferreira.jirareport.domain.Changelog;
+import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.Project;
-import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
-import br.com.leonardoferreira.jirareport.service.ProjectService;
+import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
-import org.springframework.http.ResponseEntity;
+import lombok.SneakyThrows;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,36 +31,30 @@ import java.util.stream.StreamSupport;
  * @since 7/28/17 12:52 PM
  */
 @Component
-public class IssueClientImpl extends AbstractClient implements IssueClient {
+public class IssueMapper {
 
-    private final ProjectService projectService;
+    private JsonParser jsonParser = new JsonParser();
 
-    public IssueClientImpl(ProjectService projectService) {
-        this.projectService = projectService;
+    private final HolidayService holidayService;
+
+    public IssueMapper(final HolidayService holidayService) {
+        this.holidayService = holidayService;
     }
 
-    @Override
-    public List<Issue> findAll(String token, IssueForm issueForm) {
-        RestTemplate restTemplate = getRestTemplate(token);
-
-        final Project project = projectService.findById(issueForm.getProjectId());
-
-        String jql = createJQL(project, issueForm);
-
-        String url = baseUrl + "/rest/api/2/search?jql=" + jql + "&expand=changelog";
-
-        ResponseEntity<String> rawResponse = restTemplate.getForEntity(url, String.class);
-
-        JsonElement response = jsonParser.parse(rawResponse.getBody());
+    public List<Issue> parse(String rawText, Project project) {
+        JsonElement response = jsonParser.parse(rawText);
         JsonArray issues = response.getAsJsonObject()
                 .getAsJsonArray("issues");
+
+        final List<String> holidays = holidayService.findAll()
+                .stream().map(Holiday::getId).collect(Collectors.toList());
 
         return StreamSupport.stream(issues.spliterator(), true)
                 .map(issueRaw -> {
                     JsonObject issue = issueRaw.getAsJsonObject();
 
                     JsonObject fields = issue.get("fields").getAsJsonObject();
-                    List<Changelog> changelog = getChangelog(issue);
+                    List<Changelog> changelog = getChangelog(issue, holidays);
 
                     String startDate = null;
                     String endDate = null;
@@ -80,7 +79,7 @@ public class IssueClientImpl extends AbstractClient implements IssueClient {
                     String epic = epicField.equals("") ? null : getAsStringSafe(fields.get(epicField));
                     String estimated = estimateField.equals("") ? null : (getAsStringSafe(fields.get(estimateField).isJsonNull() ?
                             null : fields.get(estimateField).getAsJsonObject().get("value")));
-                    Long leadTime = DateUtil.daysDiff(startDate, endDate);
+                    Long leadTime = daysDiff(startDate, endDate, holidays);
 
                     Issue issueVO = new Issue();
                     issueVO.setKey(issue.get("key").getAsString());
@@ -107,17 +106,7 @@ public class IssueClientImpl extends AbstractClient implements IssueClient {
                 .collect(Collectors.toList());
     }
 
-    private String createJQL(Project project, IssueForm issueForm) {
-        StringBuilder jql = new StringBuilder();
-        jql.append("project = ").append(project.getId()).append(" ");
-        jql.append("AND STATUS CHANGED TO \"").append(project.getEndColumn()).append("\" DURING(\"");
-        jql.append(DateUtil.toENDate(issueForm.getStartDate())).append("\", \"");
-        jql.append(DateUtil.toENDate(issueForm.getEndDate())).append("\")");
-
-        return jql.toString();
-    }
-
-    private List<Changelog> getChangelog(JsonObject issue) {
+    private List<Changelog> getChangelog(JsonObject issue, List<String> holidays) {
         JsonArray histories = issue.getAsJsonObject("changelog").getAsJsonArray("histories");
 
         List<Changelog> collect = StreamSupport.stream(histories.spliterator(), true)
@@ -146,7 +135,7 @@ public class IssueClientImpl extends AbstractClient implements IssueClient {
             }
 
             Changelog next = collect.get(i + 1);
-            current.setCycleTime(DateUtil.daysDiff(current.getCreated(), next.getCreated()));
+            current.setCycleTime(daysDiff(current.getCreated(), next.getCreated(), holidays));
             current.setCreated(DateUtil.displayFormat(current.getCreated()));
         }
 
@@ -196,5 +185,46 @@ public class IssueClientImpl extends AbstractClient implements IssueClient {
 
         return Collections.singletonList(jsonElement.getAsString());
     }
+
+    private String getAsStringSafe(JsonElement jsonElement) {
+        if (jsonElement == null || jsonElement.isJsonNull()) {
+            return null;
+        }
+        return jsonElement.getAsString();
+    }
+
+    private String getDateAsString(JsonElement jsonElement) {
+        if (jsonElement == null || jsonElement.isJsonNull()) {
+            return null;
+        }
+        return jsonElement.getAsString().substring(0, 10);
+    }
+
+    @SneakyThrows
+    private Long daysDiff(String startDate, String endDate, List<String> holidays) {
+        if (StringUtils.isEmpty(startDate) || StringUtils.isEmpty(endDate)) {
+            return null;
+        }
+
+        Calendar start = Calendar.getInstance();
+        start.setTime(new SimpleDateFormat(DEFAULT_FORMATTER).parse(startDate));
+        Calendar end = Calendar.getInstance();
+        end.setTime(new SimpleDateFormat(DEFAULT_FORMATTER).parse(endDate));
+        Long workingDays = 0L;
+        while (!start.after(end)) {
+            int day = start.get(Calendar.DAY_OF_WEEK);
+            if ((day != Calendar.SATURDAY) && (day != Calendar.SUNDAY) && !isHoliday(start, holidays)) {
+                workingDays++;
+            }
+            start.add(Calendar.DATE, 1);
+        }
+        return workingDays;
+    }
+
+    private boolean isHoliday(Calendar day, List<String> holidays) {
+        String aux = new SimpleDateFormat(DEFAULT_FORMATTER).format(day.getTime());
+        return holidays.contains(aux);
+    }
+
 
 }

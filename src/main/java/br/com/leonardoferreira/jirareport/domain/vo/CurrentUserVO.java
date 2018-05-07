@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +14,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CurrentUserVO {
 
+    @JsonProperty("displayName")
     private String name;
 
+    @JsonProperty("emailAddress")
     private String email;
 
 }

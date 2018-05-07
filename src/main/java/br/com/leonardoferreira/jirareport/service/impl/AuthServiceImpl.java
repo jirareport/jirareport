@@ -4,6 +4,7 @@ import br.com.leonardoferreira.jirareport.client.AuthClient;
 import br.com.leonardoferreira.jirareport.domain.form.AccountForm;
 import br.com.leonardoferreira.jirareport.domain.vo.AccountVO;
 import br.com.leonardoferreira.jirareport.domain.vo.CurrentUserVO;
+import br.com.leonardoferreira.jirareport.domain.vo.SessionInfo;
 import br.com.leonardoferreira.jirareport.service.AuthService;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AccountVO login(AccountForm accountForm) {
-        String token = authClient.login(accountForm);
-        if (token == null) {
+        SessionInfo sessionInfo = authClient.login(accountForm);
+
+        if (sessionInfo == null || sessionInfo.getSession() == null) {
             return null;
         }
+
+        String token = sessionInfo.getSession().getName() + "=" + sessionInfo.getSession().getValue();
 
         CurrentUserVO currentUser = authClient.findCurrentUser(token);
 
