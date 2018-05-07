@@ -3,6 +3,7 @@ package br.com.leonardoferreira.jirareport.domain;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class Issue {
 
     @Id
+    @Indexed(unique = true)
     private String key;
 
     private String creator;

@@ -9,6 +9,7 @@ import br.com.leonardoferreira.jirareport.domain.vo.ChartVO;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueResultChartVO;
 import br.com.leonardoferreira.jirareport.exception.CreateIssueResultException;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
+import br.com.leonardoferreira.jirareport.repository.IssueRepository;
 import br.com.leonardoferreira.jirareport.repository.IssueResultRepository;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssueResultService;
@@ -33,11 +34,14 @@ public class IssueResultServiceImpl extends AbstractService implements IssueResu
 
     private final ChartService chartService;
 
+    private final IssueRepository issueRepository;
+
     public IssueResultServiceImpl(IssueClient issueClient, IssueResultRepository issueResultRepository,
-                                  ChartService chartService) {
+                                  ChartService chartService, IssueRepository issueRepository) {
         this.issueClient = issueClient;
         this.issueResultRepository = issueResultRepository;
         this.chartService = chartService;
+        this.issueRepository = issueRepository;
     }
 
     @Override
@@ -50,6 +54,7 @@ public class IssueResultServiceImpl extends AbstractService implements IssueResu
         }
 
         List<Issue> issues = issueClient.findAll(currentToken(), issueForm);
+        issueRepository.saveAll(issues);
         Double avgLeadTime = issues.parallelStream()
                 .filter(i -> i.getLeadTime() != null)
                 .mapToLong(Issue::getLeadTime)

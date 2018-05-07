@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class IssueResult {
     @Indexed(unique = true)
     private IssueForm form;
 
+    @DBRef
     private List<Issue> issues;
 
     private Double avgLeadTime;
