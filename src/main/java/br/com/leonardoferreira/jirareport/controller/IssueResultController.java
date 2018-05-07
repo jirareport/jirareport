@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @since 11/14/17 5:18 PM
  */
 @Controller
+@RequestMapping("/projects/{projectId}")
 public class IssueResultController {
 
     private final IssueResultService issueResultService;
@@ -31,7 +33,7 @@ public class IssueResultController {
         this.issueResultService = issueResultService;
     }
 
-    @GetMapping("/projects/{projectId}/issues")
+    @GetMapping("/issues")
     public ModelAndView index(@PathVariable final Long projectId) {
         List<IssueResult> issues = issueResultService.findByProjectId(projectId);
         IssueResultChartVO issueResultChart = issueResultService.getChartByIssues(issues);
@@ -42,7 +44,7 @@ public class IssueResultController {
                 .addObject("issueResultChart", issueResultChart);
     }
 
-    @DeleteMapping("/projects/{projectId}/issues/details")
+    @DeleteMapping("/issues/details")
     public ModelAndView remove(@PathVariable final Long projectId,
                                final IssueForm issueForm,
                                final RedirectAttributes redirectAttributes) {
@@ -53,7 +55,7 @@ public class IssueResultController {
         return new ModelAndView(String.format("redirect:/projects/%d/issues", projectId));
     }
 
-    @GetMapping("/projects/{projectId}/issues/details")
+    @GetMapping("/issues/details")
     public ModelAndView details(@PathVariable final Long projectId, final IssueForm issueForm) {
         issueForm.setProjectId(projectId);
         IssueResult issue = issueResultService.findById(issueForm);
@@ -62,7 +64,7 @@ public class IssueResultController {
                 .addObject("issue", issue);
     }
 
-    @PostMapping("/projects/{projectId}/issues")
+    @PostMapping("/issues")
     public ModelAndView create(@PathVariable final Long projectId,
                                @Validated final IssueForm issueForm,
                                final BindingResult bindingResult,
@@ -93,7 +95,7 @@ public class IssueResultController {
         }
     }
 
-    @PutMapping("/projects/{projectId}/issues/details")
+    @PutMapping("/issues")
     public ModelAndView update(@PathVariable final Long projectId,
                                final IssueForm issueForm,
                                final RedirectAttributes redirectAttributes) {
