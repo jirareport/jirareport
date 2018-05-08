@@ -1,6 +1,13 @@
 package br.com.leonardoferreira.jirareport.mapper;
 
-import static br.com.leonardoferreira.jirareport.util.DateUtil.DEFAULT_FORMATTER;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import br.com.leonardoferreira.jirareport.domain.Changelog;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
@@ -12,19 +19,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
 import lombok.SneakyThrows;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import static br.com.leonardoferreira.jirareport.util.DateUtil.DEFAULT_FORMATTER;
 
 /**
  * @author lferreira
