@@ -12,6 +12,10 @@
 
 <div class="container-fluid" style="margin-top: 100px;">
     <div class="col-md-4 col-md-offset-4">
+        <div class="alert alert-dismissable alert-danger" th:if="${param.error}">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            &nbsp; Usuário e/ou senha inválido(s)
+        </div>
         <div class="panel panel-default">
             <div class="panel-heading text-center">
                 <h3>Login</h3>

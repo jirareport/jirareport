@@ -29,11 +29,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String username = auth.getName();
         String password = auth.getCredentials().toString();
 
-        AccountVO login = authService.login(new AccountForm(username, password));
-        if (login != null) {
-            return new UsernamePasswordAuthenticationToken(login, null, Collections.emptyList());
-        } else {
-            throw new BadCredentialsException("External system authentication failed");
+        try {
+            AccountVO login = authService.login(new AccountForm(username, password));
+            if (login != null) {
+                return new UsernamePasswordAuthenticationToken(login, null, Collections.emptyList());
+            } else {
+                throw new BadCredentialsException("External system authentication failed");
+            }
+        } catch (Exception e) {
+            throw new BadCredentialsException(e.getMessage());
         }
     }
 

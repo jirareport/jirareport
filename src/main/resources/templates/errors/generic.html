@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/application">
+
+<th:block layout:fragment="content">
+    <div class="container-fluid">
+        <div class="page-header">
+            <h1>Ops...</h1>
+        </div>
+
+        <div class="jumbotron" style="word-wrap: break-word;">
+            <div th:utext="'Exception: ' + ${exception.message}"></div>
+            <ul>
+                <li th:each="ste : ${exception.stackTrace}" style="list-style: none">
+                    <span th:utext="${ste}"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</th:block>
+</html>
+
