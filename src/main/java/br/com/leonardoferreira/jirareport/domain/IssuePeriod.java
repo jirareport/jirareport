@@ -39,6 +39,8 @@ public class IssuePeriod {
 
     private List<LeadTimeBySize> leadTimeBySize;
 
+    private List<ColumnTimeAvg> columnTimeAvgs;
+
     public Integer getIssuesCount() {
         return issues.size();
     }

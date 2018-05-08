@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import br.com.leonardoferreira.jirareport.domain.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.LeadTimeBySize;
@@ -65,10 +66,12 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         CompletableFuture<ChartVO<String, Double>> leadTimeBySystem = chartService.leadTimeBySystem(issues);
         CompletableFuture<ChartVO<String, Long>> tasksBySystem = chartService.tasksBySystem(issues);
         CompletableFuture<List<LeadTimeBySize>> leadTimeBySize = chartService.leadTimeBySize(issues);
+        CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg = chartService.columnTimeAvg(issues);
 
         try {
             IssuePeriod issuePeriod = new IssuePeriod(issueForm, issues, avgLeadTime,
-                    histogram.get(), estimated.get(), leadTimeBySystem.get(), tasksBySystem.get(), leadTimeBySize.get());
+                    histogram.get(), estimated.get(), leadTimeBySystem.get(),
+                    tasksBySystem.get(), leadTimeBySize.get(), columnTimeAvg.get());
             issuePeriodRepository.save(issuePeriod);
         } catch (Exception e) {
             log.error("Method=create, Msg=erro ao gerar registro", e);

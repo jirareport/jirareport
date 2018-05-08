@@ -1,5 +1,7 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import br.com.leonardoferreira.jirareport.domain.Changelog;
+import br.com.leonardoferreira.jirareport.domain.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.LeadTimeBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartVO;
@@ -9,6 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -85,6 +88,22 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .filter(i -> i.getLeadTime() != null && i.getEstimated() != null)
                 .collect(Collectors.groupingBy(Issue::getEstimated, Collectors.averagingDouble(Issue::getLeadTime)))
                 .forEach((k, v) -> collect.add(new LeadTimeBySize(k, v)));
+
+        return CompletableFuture.completedFuture(collect);
+    }
+
+    @Async
+    @Override
+    public CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg(final List<Issue> issues) {
+        log.info("Method=columnTimeAvg, issues={}", issues);
+
+        List<ColumnTimeAvg> collect = new ArrayList<>();
+        issues.stream()
+                .map(Issue::getChangelog)
+                .flatMap(Collection::stream)
+                .filter(changelog -> changelog.getTo() != null && changelog.getCycleTime() != null)
+                .collect(Collectors.groupingBy(Changelog::getTo, Collectors.averagingDouble(Changelog::getCycleTime)))
+                .forEach((k, v)-> collect.add(new ColumnTimeAvg(k, v)));
 
         return CompletableFuture.completedFuture(collect);
     }

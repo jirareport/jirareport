@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import br.com.leonardoferreira.jirareport.domain.Changelog;
+import br.com.leonardoferreira.jirareport.domain.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.LeadTimeBySize;
@@ -63,12 +64,14 @@ public class Seed implements CommandLineRunner {
         CompletableFuture<ChartVO<String, Double>> leadTimeBySystem = chartService.leadTimeBySystem(issuePeriod.getIssues());
         CompletableFuture<ChartVO<String, Long>> tasksBySystem = chartService.tasksBySystem(issuePeriod.getIssues());
         CompletableFuture<List<LeadTimeBySize>> leadTimeBySize = chartService.leadTimeBySize(issuePeriod.getIssues());
+        CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg = chartService.columnTimeAvg(issuePeriod.getIssues());
 
         issuePeriod.setHistogram(histogram.get());
         issuePeriod.setEstimated(estimatedChart.get());
         issuePeriod.setLeadTimeBySystem(leadTimeBySystem.get());
         issuePeriod.setTasksBySystem(tasksBySystem.get());
         issuePeriod.setLeadTimeBySize(leadTimeBySize.get());
+        issuePeriod.setColumnTimeAvgs(columnTimeAvg.get());
 
         return issuePeriod;
     }

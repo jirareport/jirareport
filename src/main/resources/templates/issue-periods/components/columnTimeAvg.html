@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="list(columnTimeAvgs)">
+    <div class="panel panel-default table-responsive" th:unless="${#lists.isEmpty(columnTimeAvgs)}">
+        <table class="table table-stripped">
+            <thead>
+            <tr>
+                <th>Coluna</th>
+                <th>LeadTime médio</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="columnTimeAvg : ${columnTimeAvgs}">
+                <td th:text="${columnTimeAvg.columnName}"></td>
+                <td th:text="${columnTimeAvg.leadTime}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <span th:if="${#lists.isEmpty(columnTimeAvgs)}">Nenhum registro encontrado</span>
+</th:block>
+</html>
+
