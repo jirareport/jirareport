@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    $('.nav-tabs').scrollingTabs();
+
     $('.search-input').hideseek({
        highlight: true,
        nodata: 'Nenhum registro encontrado.',
