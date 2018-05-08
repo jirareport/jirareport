@@ -1,5 +1,7 @@
 $(document).ready(function() {
-    $('.nav-tabs').scrollingTabs();
+    $('.nav-tabs').scrollingTabs({
+        disableScrollArrowsOnFullyScrolled: true
+    });
 
     $('.search-input').hideseek({
        highlight: true,
