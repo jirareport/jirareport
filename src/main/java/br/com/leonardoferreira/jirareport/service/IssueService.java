@@ -1,7 +1,8 @@
 package br.com.leonardoferreira.jirareport.service;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssueForm;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
+
 import java.util.List;
 
 /**
@@ -10,6 +11,6 @@ import java.util.List;
  */
 public interface IssueService {
 
-    List<Issue> findAllInJira(IssueForm issueForm);
+    List<Issue> findAllInJira(IssuePeriodId issuePeriodId);
 
 }

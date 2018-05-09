@@ -3,7 +3,7 @@ package br.com.leonardoferreira.jirareport.controller;
 import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssueForm;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChartVO;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
@@ -40,14 +40,14 @@ public class IssuePeriodController extends AbstractController {
 
         return new ModelAndView("issue-periods/index")
                 .addObject("issuePeriods", issuePeriods)
-                .addObject("issueForm", new IssueForm(projectId))
+                .addObject("issuePeriodId", new IssuePeriodId(projectId))
                 .addObject("issuePeriodChart", issuePeriodChart);
     }
 
     @GetMapping("/details")
-    public ModelAndView details(@PathVariable final Long projectId, final IssueForm issueForm) {
-        issueForm.setProjectId(projectId);
-        IssuePeriod issuePeriod = issuePeriodService.findById(issueForm);
+    public ModelAndView details(@PathVariable final Long projectId, final IssuePeriodId issuePeriodId) {
+        issuePeriodId.setProjectId(projectId);
+        IssuePeriod issuePeriod = issuePeriodService.findById(issuePeriodId);
 
         return new ModelAndView("issue-periods/details")
                 .addObject("issuePeriod", issuePeriod);
@@ -55,20 +55,20 @@ public class IssuePeriodController extends AbstractController {
 
     @PostMapping
     public ModelAndView create(@PathVariable final Long projectId,
-                               @Validated final IssueForm issueForm,
+                               @Validated final IssuePeriodId issuePeriodId,
                                final BindingResult bindingResult,
                                final RedirectAttributes redirectAttributes) {
-        issueForm.setProjectId(projectId);
+        issuePeriodId.setProjectId(projectId);
 
         if (bindingResult.hasErrors()) {
             List<IssuePeriod> issuePeriods = issuePeriodService.findByProjectId(projectId);
             return new ModelAndView("issue-periods/index")
                     .addObject("issuePeriods", issuePeriods)
-                    .addObject("issueForm", issueForm);
+                    .addObject("issuePeriodId", issuePeriodId);
         }
 
         try {
-            issuePeriodService.create(issueForm);
+            issuePeriodService.create(issuePeriodId);
 
             redirectAttributes.addFlashAttribute("flashSuccess", "Registro inserido com sucesso");
             return new ModelAndView(String.format("redirect:/projects/%d/issue-periods", projectId));
@@ -78,7 +78,7 @@ public class IssuePeriodController extends AbstractController {
 
             return new ModelAndView("issue-periods/index")
                     .addObject("issuePeriods", issuePeriods)
-                    .addObject("issueForm", issueForm)
+                    .addObject("issuePeriodId", issuePeriodId)
                     .addObject("issuePeriodChart", issuePeriodChart)
                     .addObject("flashError", e.getMessage());
         }
@@ -86,11 +86,11 @@ public class IssuePeriodController extends AbstractController {
 
     @PutMapping
     public ModelAndView update(@PathVariable final Long projectId,
-                               final IssueForm issueForm,
+                               final IssuePeriodId issuePeriodId,
                                final RedirectAttributes redirectAttributes) {
-        issueForm.setProjectId(projectId);
+        issuePeriodId.setProjectId(projectId);
         try {
-            issuePeriodService.update(issueForm);
+            issuePeriodService.update(issuePeriodId);
             redirectAttributes.addFlashAttribute("flashSuccess", "Registro atualizado com sucesso.");
         } catch (CreateIssuePeriodException e) {
             redirectAttributes.addFlashAttribute("flashError", "Falha ao atualizar registro.");
@@ -101,10 +101,10 @@ public class IssuePeriodController extends AbstractController {
 
     @DeleteMapping
     public ModelAndView remove(@PathVariable final Long projectId,
-                               final IssueForm issueForm,
+                               final IssuePeriodId issuePeriodId,
                                final RedirectAttributes redirectAttributes) {
-        issueForm.setProjectId(projectId);
-        issuePeriodService.remove(issueForm);
+        issuePeriodId.setProjectId(projectId);
+        issuePeriodService.remove(issuePeriodId);
 
         redirectAttributes.addFlashAttribute("flashSuccess", "Registro removido com sucesso.");
         return new ModelAndView(String.format("redirect:/projects/%d/issue-periods", projectId));

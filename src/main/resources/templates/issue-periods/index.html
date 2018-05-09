@@ -14,7 +14,7 @@
         <div class="panel-heading">
             <h3>Novo</h3>
         </div>
-        <form th:action="@{/projects/{id}/issue-periods(id=${issueForm.projectId})}" th:method="POST" th:object="${issueForm}">
+        <form th:action="@{/projects/{id}/issue-periods(id=${issuePeriodId.projectId})}" th:method="POST" th:object="${issuePeriodId}">
             <div class="panel-body row">
                 <div class="form-group col-md-3">
                     <label>Data Inicio</label>

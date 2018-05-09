@@ -14,7 +14,7 @@ import javax.persistence.Transient;
 
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssueForm;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,7 +35,7 @@ public class IssuePeriod extends BaseEntity {
     private static final long serialVersionUID = 7188140641247774389L;
 
     @EmbeddedId
-    private IssueForm form;
+    private IssuePeriodId form;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(

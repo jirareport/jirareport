@@ -1,7 +1,7 @@
 package br.com.leonardoferreira.jirareport.service;
 
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssueForm;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChartVO;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 
@@ -12,16 +12,16 @@ import java.util.List;
  */
 public interface IssuePeriodService {
 
-    void create(IssueForm issueForm) throws CreateIssuePeriodException;
+    void create(IssuePeriodId issuePeriodId) throws CreateIssuePeriodException;
 
     List<IssuePeriod> findByProjectId(Long projectId);
 
     IssuePeriodChartVO getChartByIssues(List<IssuePeriod> issues);
 
-    IssuePeriod findById(IssueForm issueForm);
+    IssuePeriod findById(IssuePeriodId issuePeriodId);
 
-    void remove(IssueForm issueForm);
+    void remove(IssuePeriodId issuePeriodId);
 
-    void update(IssueForm issueForm) throws CreateIssuePeriodException;
+    void update(IssuePeriodId issuePeriodId) throws CreateIssuePeriodException;
 
 }

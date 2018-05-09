@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-public class IssueForm implements Serializable {
+public class IssuePeriodId implements Serializable {
 
     @NotEmpty(message = "Data inicial não pode ser vazia.")
     private String startDate;
@@ -27,7 +27,7 @@ public class IssueForm implements Serializable {
 
     private Long projectId;
 
-    public IssueForm(final Long projectId) {
+    public IssuePeriodId(final Long projectId) {
         this.projectId = projectId;
     }
 

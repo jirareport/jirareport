@@ -4,7 +4,7 @@ import br.com.leonardoferreira.jirareport.client.IssueClient;
 import br.com.leonardoferreira.jirareport.mapper.IssueMapper;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.Project;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssueForm;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
@@ -33,20 +33,20 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     }
 
     @Override
-    public List<Issue> findAllInJira(final IssueForm issueForm) {
-        final Project project = projectService.findById(issueForm.getProjectId());
+    public List<Issue> findAllInJira(final IssuePeriodId issuePeriodId) {
+        final Project project = projectService.findById(issuePeriodId.getProjectId());
 
-        String issues = issueClient.findAll(currentToken(), buildJQL(issueForm, project));
+        String issues = issueClient.findAll(currentToken(), buildJQL(issuePeriodId, project));
 
         return issueMapper.parse(issues, project);
     }
 
-    private String buildJQL(final IssueForm issueForm, final Project project) {
+    private String buildJQL(final IssuePeriodId issuePeriodId, final Project project) {
         StringBuilder jql = new StringBuilder();
         jql.append("project = ").append(project.getId()).append(" ");
         jql.append("AND STATUS CHANGED TO \"").append(project.getEndColumn()).append("\" DURING(\"");
-        jql.append(DateUtil.toENDate(issueForm.getStartDate())).append("\", \"");
-        jql.append(DateUtil.toENDate(issueForm.getEndDate())).append("\")");
+        jql.append(DateUtil.toENDate(issuePeriodId.getStartDate())).append("\", \"");
+        jql.append(DateUtil.toENDate(issuePeriodId.getEndDate())).append("\")");
 
         return jql.toString();
     }

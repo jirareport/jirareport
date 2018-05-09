@@ -3,8 +3,8 @@ package br.com.leonardoferreira.jirareport.service.impl;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChartVO;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
@@ -46,15 +46,15 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     }
 
     @Override
-    public void create(IssueForm issueForm) throws CreateIssuePeriodException {
-        log.info("Method=create, issueForm={}", issueForm);
+    public void create(IssuePeriodId issuePeriodId) throws CreateIssuePeriodException {
+        log.info("Method=create, issuePeriodId={}", issuePeriodId);
 
-        if (issuePeriodRepository.existsById(issueForm)) {
+        if (issuePeriodRepository.existsById(issuePeriodId)) {
             log.error("Method=create, Msg=issuePeriod ja existente");
             throw new CreateIssuePeriodException("Registro já existente");
         }
 
-        List<Issue> issues = issueService.findAllInJira(issueForm);
+        List<Issue> issues = issueService.findAllInJira(issuePeriodId);
         issueRepository.saveAll(issues);
         Double avgLeadTime = issues.parallelStream()
                 .filter(i -> i.getLeadTime() != null)
@@ -69,7 +69,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg = chartService.columnTimeAvg(issues);
 
         try {
-            IssuePeriod issuePeriod = new IssuePeriod(issueForm, issues, avgLeadTime,
+            IssuePeriod issuePeriod = new IssuePeriod(issuePeriodId, issues, avgLeadTime,
                     histogram.get(), estimated.get(), leadTimeBySystem.get(),
                     tasksBySystem.get(), leadTimeBySize.get(), columnTimeAvg.get());
             issuePeriodRepository.save(issuePeriod);
@@ -102,22 +102,22 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     }
 
     @Override
-    public IssuePeriod findById(final IssueForm issueForm) {
-        log.info("Method=findById, issueForm={}", issueForm);
-        return issuePeriodRepository.findById(issueForm)
+    public IssuePeriod findById(final IssuePeriodId issuePeriodId) {
+        log.info("Method=findById, issuePeriodId={}", issuePeriodId);
+        return issuePeriodRepository.findById(issuePeriodId)
                 .orElseThrow(ResourceNotFound::new);
     }
 
     @Override
-    public void remove(final IssueForm issueForm) {
-        log.info("Method=remove, issueForm={}", issueForm);
-        issuePeriodRepository.deleteById(issueForm);
+    public void remove(final IssuePeriodId issuePeriodId) {
+        log.info("Method=remove, issuePeriodId={}", issuePeriodId);
+        issuePeriodRepository.deleteById(issuePeriodId);
     }
 
     @Override
-    public void update(final IssueForm issueForm) throws CreateIssuePeriodException {
-        log.info("Method=update, issueForm={}", issueForm);
-        remove(issueForm);
-        create(issueForm);
+    public void update(final IssuePeriodId issuePeriodId) throws CreateIssuePeriodException {
+        log.info("Method=update, issuePeriodId={}", issuePeriodId);
+        remove(issuePeriodId);
+        create(issuePeriodId);
     }
 }

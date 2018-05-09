@@ -12,9 +12,9 @@ import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
 import br.com.leonardoferreira.jirareport.domain.Project;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.repository.IssueRepository;
 import br.com.leonardoferreira.jirareport.repository.IssuePeriodRepository;
@@ -55,7 +55,7 @@ public class Seed implements CommandLineRunner {
     @SneakyThrows
     private IssuePeriod buildIssuePeriod(List<Issue> issues) {
         IssuePeriod issuePeriod = new IssuePeriod();
-        issuePeriod.setForm(new IssueForm("01/01/2018", "10/01/2018", 1L));
+        issuePeriod.setForm(new IssuePeriodId("01/01/2018", "10/01/2018", 1L));
         issuePeriod.setIssues(issues);
         issuePeriod.setAvgLeadTime(5D);
 
