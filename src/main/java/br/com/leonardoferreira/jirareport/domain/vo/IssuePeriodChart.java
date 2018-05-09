@@ -11,13 +11,13 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class IssuePeriodChartVO {
+public class IssuePeriodChart {
 
     private Chart<String, String> leadtime;
 
     private Chart<String, Integer> issuesCount;
 
-    public IssuePeriodChartVO() {
+    public IssuePeriodChart() {
         leadtime = new Chart<>();
         issuesCount = new Chart<>();
     }

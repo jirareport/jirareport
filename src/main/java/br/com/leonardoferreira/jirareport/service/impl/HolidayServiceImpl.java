@@ -7,6 +7,8 @@ import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Delayed;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -37,15 +39,15 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     }
 
     @Override
-    public void delete(final String id) {
+    public void delete(final Long id) {
         log.info("Method=delete, id={}", id);
-        holidayRepository.deleteById(Objects.requireNonNull(DateUtil.displayFormat(id)));
+        holidayRepository.deleteById(id);
     }
 
     @Override
-    public Holiday findById(final String id) {
+    public Holiday findById(final Long id) {
         log.info("Method=findById, id={}", id);
-        return holidayRepository.findById(Objects.requireNonNull(DateUtil.displayFormat(id)))
+        return holidayRepository.findById(id)
                 .orElseThrow(ResourceNotFound::new);
     }
 

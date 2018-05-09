@@ -13,9 +13,9 @@ public interface HolidayService {
 
     void create(Holiday holiday);
 
-    void delete(String id);
+    void delete(Long id);
 
-    Holiday findById(String id);
+    Holiday findById(Long id);
 
     void update(Holiday holiday);
 }

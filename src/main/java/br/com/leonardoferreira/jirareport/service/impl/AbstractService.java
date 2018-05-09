@@ -1,7 +1,6 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import br.com.leonardoferreira.jirareport.domain.Project;
-import br.com.leonardoferreira.jirareport.domain.vo.AccountVO;
+import br.com.leonardoferreira.jirareport.domain.vo.Account;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
@@ -10,8 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public abstract class AbstractService {
 
-    protected AccountVO currentUser() {
-        return (AccountVO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    protected Account currentUser() {
+        return (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     protected String currentToken() {

@@ -46,7 +46,7 @@ public class IssueMapper {
                 .getAsJsonArray("issues");
 
         final List<String> holidays = holidayService.findAll()
-                .stream().map(Holiday::getId).collect(Collectors.toList());
+                .stream().map(Holiday::getEnDate).collect(Collectors.toList());
 
         return StreamSupport.stream(issues.spliterator(), true)
                 .map(issueRaw -> {

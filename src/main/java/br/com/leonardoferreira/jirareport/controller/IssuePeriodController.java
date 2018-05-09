@@ -4,7 +4,7 @@ import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
-import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChartVO;
+import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import org.springframework.stereotype.Controller;
@@ -36,7 +36,7 @@ public class IssuePeriodController extends AbstractController {
     @GetMapping
     public ModelAndView index(@PathVariable final Long projectId) {
         List<IssuePeriod> issuePeriods = issuePeriodService.findByProjectId(projectId);
-        IssuePeriodChartVO issuePeriodChart = issuePeriodService.getChartByIssues(issuePeriods);
+        IssuePeriodChart issuePeriodChart = issuePeriodService.getChartByIssues(issuePeriods);
 
         return new ModelAndView("issue-periods/index")
                 .addObject("issuePeriods", issuePeriods)
@@ -74,7 +74,7 @@ public class IssuePeriodController extends AbstractController {
             return new ModelAndView(String.format("redirect:/projects/%d/issue-periods", projectId));
         } catch (CreateIssuePeriodException e) {
             List<IssuePeriod> issuePeriods = issuePeriodService.findByProjectId(projectId);
-            IssuePeriodChartVO issuePeriodChart = issuePeriodService.getChartByIssues(issuePeriods);
+            IssuePeriodChart issuePeriodChart = issuePeriodService.getChartByIssues(issuePeriods);
 
             return new ModelAndView("issue-periods/index")
                     .addObject("issuePeriods", issuePeriods)

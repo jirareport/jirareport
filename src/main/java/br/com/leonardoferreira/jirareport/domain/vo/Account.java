@@ -7,10 +7,10 @@ import lombok.Data;
  * @since 7/28/17 11:02 AM
  */
 @Data
-public class AccountVO {
+public class Account {
 
     private String token;
 
-    private CurrentUserVO currentUser;
+    private CurrentUser currentUser;
 
 }

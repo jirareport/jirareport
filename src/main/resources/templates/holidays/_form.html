@@ -5,6 +5,8 @@
 
 <th:block th:fragment="form(method)">
     <form th:action="@{/holidays}" th:method="${method}" th:object="${holiday}">
+        <input type="hidden" th:field="*{id}" th:value="${holiday.id}"/>
+
         <div class="form-group">
             <label>Data</label>
             <div class="input-group">

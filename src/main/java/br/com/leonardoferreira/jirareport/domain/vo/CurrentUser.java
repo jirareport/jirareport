@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CurrentUserVO {
+public class CurrentUser {
 
     @JsonProperty("displayName")
     private String name;

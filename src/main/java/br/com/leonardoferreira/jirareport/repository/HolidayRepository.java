@@ -7,6 +7,6 @@ import org.springframework.data.repository.CrudRepository;
  * @author s2it_leferreira
  * @since 5/7/18 6:51 PM
  */
-public interface HolidayRepository extends CrudRepository<Holiday, String> {
+public interface HolidayRepository extends CrudRepository<Holiday, Long> {
 
 }

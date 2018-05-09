@@ -2,7 +2,7 @@ package br.com.leonardoferreira.jirareport.service;
 
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
-import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChartVO;
+import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public interface IssuePeriodService {
 
     List<IssuePeriod> findByProjectId(Long projectId);
 
-    IssuePeriodChartVO getChartByIssues(List<IssuePeriod> issues);
+    IssuePeriodChart getChartByIssues(List<IssuePeriod> issues);
 
     IssuePeriod findById(IssuePeriodId issuePeriodId);
 

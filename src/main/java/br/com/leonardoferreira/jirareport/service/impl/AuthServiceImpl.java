@@ -1,9 +1,9 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.client.AuthClient;
-import br.com.leonardoferreira.jirareport.domain.form.AccountForm;
-import br.com.leonardoferreira.jirareport.domain.vo.AccountVO;
-import br.com.leonardoferreira.jirareport.domain.vo.CurrentUserVO;
+import br.com.leonardoferreira.jirareport.domain.form.LoginForm;
+import br.com.leonardoferreira.jirareport.domain.vo.Account;
+import br.com.leonardoferreira.jirareport.domain.vo.CurrentUser;
 import br.com.leonardoferreira.jirareport.domain.vo.SessionInfo;
 import br.com.leonardoferreira.jirareport.service.AuthService;
 import org.springframework.stereotype.Service;
@@ -22,8 +22,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AccountVO login(AccountForm accountForm) {
-        SessionInfo sessionInfo = authClient.login(accountForm);
+    public Account login(LoginForm loginForm) {
+        SessionInfo sessionInfo = authClient.login(loginForm);
 
         if (sessionInfo == null || sessionInfo.getSession() == null) {
             return null;
@@ -31,13 +31,13 @@ public class AuthServiceImpl implements AuthService {
 
         String token = sessionInfo.getSession().getName() + "=" + sessionInfo.getSession().getValue();
 
-        CurrentUserVO currentUser = authClient.findCurrentUser(token);
+        CurrentUser currentUser = authClient.findCurrentUser(token);
 
-        AccountVO accountVO = new AccountVO();
-        accountVO.setToken(token);
-        accountVO.setCurrentUser(currentUser);
+        Account account = new Account();
+        account.setToken(token);
+        account.setCurrentUser(currentUser);
 
-        return accountVO;
+        return account;
     }
 
 }

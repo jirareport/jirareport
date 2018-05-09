@@ -2,8 +2,8 @@ package br.com.leonardoferreira.jirareport.config;
 
 import java.util.Collections;
 
-import br.com.leonardoferreira.jirareport.domain.form.AccountForm;
-import br.com.leonardoferreira.jirareport.domain.vo.AccountVO;
+import br.com.leonardoferreira.jirareport.domain.form.LoginForm;
+import br.com.leonardoferreira.jirareport.domain.vo.Account;
 import br.com.leonardoferreira.jirareport.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -30,7 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = auth.getCredentials().toString();
 
         try {
-            AccountVO login = authService.login(new AccountForm(username, password));
+            Account login = authService.login(new LoginForm(username, password));
             if (login != null) {
                 return new UsernamePasswordAuthenticationToken(login, null, Collections.emptyList());
             } else {

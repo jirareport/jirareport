@@ -1,6 +1,6 @@
 package br.com.leonardoferreira.jirareport.controller;
 
-import br.com.leonardoferreira.jirareport.domain.vo.AccountVO;
+import br.com.leonardoferreira.jirareport.domain.vo.Account;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
@@ -9,10 +9,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public class AbstractController {
 
-    protected AccountVO currentUser() {
+    protected Account currentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof AccountVO) {
-            return (AccountVO) principal;
+        if (principal instanceof Account) {
+            return (Account) principal;
         } else {
             return null;
         }

@@ -1,7 +1,7 @@
 package br.com.leonardoferreira.jirareport.client;
 
-import br.com.leonardoferreira.jirareport.domain.form.AccountForm;
-import br.com.leonardoferreira.jirareport.domain.vo.CurrentUserVO;
+import br.com.leonardoferreira.jirareport.domain.form.LoginForm;
+import br.com.leonardoferreira.jirareport.domain.vo.CurrentUser;
 import br.com.leonardoferreira.jirareport.domain.vo.SessionInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface AuthClient {
 
     @GetMapping("/rest/auth/1/session")
-    SessionInfo login(@RequestBody AccountForm accountForm);
+    SessionInfo login(@RequestBody LoginForm loginForm);
 
     @GetMapping("/rest/api/2/myself")
-    CurrentUserVO findCurrentUser(@RequestHeader("cookie") String token);
+    CurrentUser findCurrentUser(@RequestHeader("cookie") String token);
 
 }

@@ -59,7 +59,7 @@ public class HolidayController extends AbstractController {
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView delete(@PathVariable final String id, final RedirectAttributes redirectAttributes) {
+    public ModelAndView delete(@PathVariable final Long id, final RedirectAttributes redirectAttributes) {
         holidayService.delete(id);
 
         redirectAttributes.addFlashAttribute("flashSuccess", "Registro removido com sucesso");
@@ -67,7 +67,7 @@ public class HolidayController extends AbstractController {
     }
 
     @GetMapping("/edit/{id}")
-    public ModelAndView update(@PathVariable final String id)  {
+    public ModelAndView update(@PathVariable final Long id)  {
         Holiday holiday = holidayService.findById(id);
         return new ModelAndView("holidays/edit")
                 .addObject("holiday", holiday);

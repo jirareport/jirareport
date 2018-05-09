@@ -6,7 +6,7 @@ import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
-import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChartVO;
+import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.repository.IssueRepository;
@@ -90,15 +90,15 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     }
 
     @Override
-    public IssuePeriodChartVO getChartByIssues(List<IssuePeriod> issues) {
+    public IssuePeriodChart getChartByIssues(List<IssuePeriod> issues) {
         log.info("Method=getChartByIssues, issues={}", issues);
 
-        IssuePeriodChartVO issuePeriodChartVO = new IssuePeriodChartVO();
+        IssuePeriodChart issuePeriodChart = new IssuePeriodChart();
         issues.stream()
-                .peek(issuePeriodChartVO::addLeadTime)
-                .forEach(issuePeriodChartVO::addIssuesCount);
+                .peek(issuePeriodChart::addLeadTime)
+                .forEach(issuePeriodChart::addIssuesCount);
 
-        return issuePeriodChartVO;
+        return issuePeriodChart;
     }
 
     @Override
