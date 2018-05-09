@@ -1,17 +1,23 @@
 package br.com.leonardoferreira.jirareport.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 import lombok.Data;
-import org.springframework.data.annotation.Id;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author lferreira
  * @since 7/28/17 11:39 AM
  */
 @Data
-public class Project {
+@Entity
+@EqualsAndHashCode(callSuper = true)
+public class Project extends BaseEntity {
+    private static final long serialVersionUID = -7981771761592933325L;
 
     @Id
-    private Integer id;
+    private Long id;
 
     private String name;
 

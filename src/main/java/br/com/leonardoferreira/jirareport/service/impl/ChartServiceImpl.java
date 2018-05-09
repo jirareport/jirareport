@@ -1,10 +1,10 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import br.com.leonardoferreira.jirareport.domain.Changelog;
-import br.com.leonardoferreira.jirareport.domain.ColumnTimeAvg;
+import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
+import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.Issue;
-import br.com.leonardoferreira.jirareport.domain.LeadTimeBySize;
-import br.com.leonardoferreira.jirareport.domain.vo.ChartVO;
+import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
+import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -27,7 +27,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     @Async
     @Override
-    public CompletableFuture<ChartVO<Long, Long>> issueHistogram(final List<Issue> issues) {
+    public CompletableFuture<Chart<Long, Long>> issueHistogram(final List<Issue> issues) {
         log.info("Method=issueHistogram, issues={}", issues);
 
         Map<Long, Long> collect = issues.stream()
@@ -40,43 +40,43 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
             collect.putIfAbsent(i, 0L);
         }
 
-        return CompletableFuture.completedFuture(new ChartVO<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+        return CompletableFuture.completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
     }
 
     @Async
     @Override
-    public CompletableFuture<ChartVO<String, Long>> estimatedChart(final List<Issue> issues) {
+    public CompletableFuture<Chart<String, Long>> estimatedChart(final List<Issue> issues) {
         log.info("Method=estimatedChart, issues={}", issues);
 
         Map<String, Long> collect = issues.stream()
                 .filter(i -> i.getEstimated() != null)
                 .collect(Collectors.groupingBy(Issue::getEstimated, Collectors.counting()));
 
-        return CompletableFuture.completedFuture(new ChartVO<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+        return CompletableFuture.completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
     }
 
     @Async
     @Override
-    public CompletableFuture<ChartVO<String, Double>> leadTimeBySystem(final List<Issue> issues) {
+    public CompletableFuture<Chart<String, Double>> leadTimeBySystem(final List<Issue> issues) {
         log.info("Method=leadTimeBySystem, issues={}", issues);
 
         Map<String, Double> collect = issues.stream()
                 .filter(i -> !i.getComponents().isEmpty() && i.getLeadTime() != null)
                 .collect(Collectors.groupingBy(Issue::getComponentsStr, Collectors.averagingLong(Issue::getLeadTime)));
 
-        return CompletableFuture.completedFuture(new ChartVO<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+        return CompletableFuture.completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
     }
 
     @Async
     @Override
-    public CompletableFuture<ChartVO<String, Long>> tasksBySystem(final List<Issue> issues) {
+    public CompletableFuture<Chart<String, Long>> tasksBySystem(final List<Issue> issues) {
         log.info("Method=tasksBySystem, issues={}", issues);
 
         Map<String, Long> collect = issues.stream()
                 .filter(i -> !i.getComponents().isEmpty())
                 .collect(Collectors.groupingBy(Issue::getComponentsStr, Collectors.counting()));
 
-        return CompletableFuture.completedFuture(new ChartVO<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+        return CompletableFuture.completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
     }
 
     @Async

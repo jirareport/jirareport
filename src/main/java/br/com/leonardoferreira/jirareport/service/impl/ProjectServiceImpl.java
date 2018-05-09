@@ -30,7 +30,7 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
     @Override
     public List<Project> findAll() {
         log.info("Method=findAll");
-        return projectRepository.findAll();
+        return (List<Project>) projectRepository.findAll();
     }
 
     @Override

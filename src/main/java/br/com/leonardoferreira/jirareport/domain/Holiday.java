@@ -1,18 +1,26 @@
 package br.com.leonardoferreira.jirareport.domain;
 
+import java.io.Serializable;
+
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.annotation.Id;
 
 /**
  * @author s2it_leferreira
  * @since 5/7/18 6:49 PM
  */
 @Data
-public class Holiday {
+@Entity
+@EqualsAndHashCode(callSuper = true)
+public class Holiday extends BaseEntity {
+    private static final long serialVersionUID = 18640912961216513L;
 
     @Id
     @NotEmpty(message = "A data deve ser informada.")
@@ -22,6 +30,7 @@ public class Holiday {
     @NotEmpty(message = "A descrição deve ser informada.")
     private String description;
 
+    @Transient
     public String getId() {
         return DateUtil.toENDate(date);
     }

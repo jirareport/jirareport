@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import br.com.leonardoferreira.jirareport.domain.Changelog;
+import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.Project;

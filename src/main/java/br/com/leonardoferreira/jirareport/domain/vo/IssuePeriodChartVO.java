@@ -1,6 +1,7 @@
 package br.com.leonardoferreira.jirareport.domain.vo;
 
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
+import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -12,13 +13,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class IssuePeriodChartVO {
 
-    private ChartVO<String, String> leadtime;
+    private Chart<String, String> leadtime;
 
-    private ChartVO<String, Integer> issuesCount;
+    private Chart<String, Integer> issuesCount;
 
     public IssuePeriodChartVO() {
-        leadtime = new ChartVO<>();
-        issuesCount = new ChartVO<>();
+        leadtime = new Chart<>();
+        issuesCount = new Chart<>();
     }
 
     public void addLeadTime(IssuePeriod issuePeriod) {

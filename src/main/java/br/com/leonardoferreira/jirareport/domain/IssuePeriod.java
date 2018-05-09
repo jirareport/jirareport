@@ -1,50 +1,88 @@
 package br.com.leonardoferreira.jirareport.domain;
 
-import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
-import br.com.leonardoferreira.jirareport.domain.vo.ChartVO;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
+
+import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
+import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssueForm;
+import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-
-import java.util.List;
+import org.hibernate.annotations.Type;
 
 /**
  * @author lferreira
  * @since 7/28/17 1:44 PM
  */
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class IssuePeriod {
+@EqualsAndHashCode(callSuper = true)
+public class IssuePeriod extends BaseEntity {
+    private static final long serialVersionUID = 7188140641247774389L;
 
-    @Id
-    @Indexed(unique = true)
+    @EmbeddedId
     private IssueForm form;
 
-    @DBRef
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "issue_period_issue",
+            joinColumns = {
+                    @JoinColumn(name = "issue_period_project_id"),
+                    @JoinColumn(name = "issue_period_start_date"),
+                    @JoinColumn(name = "issue_period_end_date")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "issue_id")
+            }
+    )
     private List<Issue> issues;
 
     private Double avgLeadTime;
 
-    private ChartVO<Long, Long> histogram;
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private Chart<Long, Long> histogram;
 
-    private ChartVO<String, Long> estimated;
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private Chart<String, Long> estimated;
 
-    private ChartVO<String, Double> leadTimeBySystem;
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private Chart<String, Double> leadTimeBySystem;
 
-    private ChartVO<String, Long> tasksBySystem;
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private Chart<String, Long> tasksBySystem;
 
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
     private List<LeadTimeBySize> leadTimeBySize;
 
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
     private List<ColumnTimeAvg> columnTimeAvgs;
 
+    @Transient
     public Integer getIssuesCount() {
         return issues.size();
     }
 
+    @Transient
     public String getLeadTime() {
         return String.format("%.2f", avgLeadTime);
     }

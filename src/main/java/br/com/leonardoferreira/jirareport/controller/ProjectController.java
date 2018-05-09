@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 @RequestMapping("/projects")
-public class ProjectController {
+public class ProjectController extends AbstractController {
 
     private final ProjectService projectService;
 

@@ -1,9 +1,5 @@
 package br.com.leonardoferreira.jirareport.client;
 
-import br.com.leonardoferreira.jirareport.domain.Issue;
-import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
-
-import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;

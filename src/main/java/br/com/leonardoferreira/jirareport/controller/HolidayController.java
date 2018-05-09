@@ -22,7 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 @RequestMapping("holidays")
-public class HolidayController {
+public class HolidayController extends AbstractController {
 
     private final HolidayService holidayService;
 

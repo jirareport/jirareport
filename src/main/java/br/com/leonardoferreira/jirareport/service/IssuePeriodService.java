@@ -1,7 +1,7 @@
 package br.com.leonardoferreira.jirareport.service;
 
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
-import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChartVO;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 

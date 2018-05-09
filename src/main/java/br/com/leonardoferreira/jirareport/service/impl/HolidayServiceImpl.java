@@ -27,7 +27,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     @Override
     public List<Holiday> findAll() {
         log.info("Method=findAll");
-        return holidayRepository.findAll();
+        return (List<Holiday>) holidayRepository.findAll();
     }
 
     @Override

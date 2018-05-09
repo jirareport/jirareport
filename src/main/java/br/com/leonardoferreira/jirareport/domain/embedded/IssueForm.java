@@ -1,10 +1,11 @@
-package br.com.leonardoferreira.jirareport.domain.form;
+package br.com.leonardoferreira.jirareport.domain.embedded;
 
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
@@ -13,6 +14,7 @@ import java.io.Serializable;
  * @since 8/1/17 12:43 PM
  */
 @Data
+@Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
 public class IssueForm implements Serializable {

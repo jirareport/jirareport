@@ -1,4 +1,6 @@
-package br.com.leonardoferreira.jirareport.domain;
+package br.com.leonardoferreira.jirareport.domain.embedded;
+
+import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +13,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LeadTimeBySize {
+public class LeadTimeBySize implements Serializable {
+    private static final long serialVersionUID = 2418710552243783777L;
 
     private String size;
 

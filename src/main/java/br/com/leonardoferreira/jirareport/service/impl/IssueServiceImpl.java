@@ -4,7 +4,7 @@ import br.com.leonardoferreira.jirareport.client.IssueClient;
 import br.com.leonardoferreira.jirareport.mapper.IssueMapper;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.Project;
-import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssueForm;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;

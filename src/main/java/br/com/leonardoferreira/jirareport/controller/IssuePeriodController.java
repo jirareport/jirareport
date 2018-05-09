@@ -3,7 +3,7 @@ package br.com.leonardoferreira.jirareport.controller;
 import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
-import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChartVO;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
@@ -25,7 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 @RequestMapping("/projects/{projectId}/issue-periods")
-public class IssuePeriodController {
+public class IssuePeriodController extends AbstractController {
 
     private final IssuePeriodService issuePeriodService;
 

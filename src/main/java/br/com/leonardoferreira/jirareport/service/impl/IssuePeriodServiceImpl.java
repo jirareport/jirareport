@@ -1,11 +1,11 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import br.com.leonardoferreira.jirareport.domain.ColumnTimeAvg;
+import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
-import br.com.leonardoferreira.jirareport.domain.LeadTimeBySize;
-import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
-import br.com.leonardoferreira.jirareport.domain.vo.ChartVO;
+import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssueForm;
+import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChartVO;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
@@ -61,10 +61,10 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
                 .mapToLong(Issue::getLeadTime)
                 .average().orElse(0D);
 
-        CompletableFuture<ChartVO<Long, Long>> histogram = chartService.issueHistogram(issues);
-        CompletableFuture<ChartVO<String, Long>> estimated = chartService.estimatedChart(issues);
-        CompletableFuture<ChartVO<String, Double>> leadTimeBySystem = chartService.leadTimeBySystem(issues);
-        CompletableFuture<ChartVO<String, Long>> tasksBySystem = chartService.tasksBySystem(issues);
+        CompletableFuture<Chart<Long, Long>> histogram = chartService.issueHistogram(issues);
+        CompletableFuture<Chart<String, Long>> estimated = chartService.estimatedChart(issues);
+        CompletableFuture<Chart<String, Double>> leadTimeBySystem = chartService.leadTimeBySystem(issues);
+        CompletableFuture<Chart<String, Long>> tasksBySystem = chartService.tasksBySystem(issues);
         CompletableFuture<List<LeadTimeBySize>> leadTimeBySize = chartService.leadTimeBySize(issues);
         CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg = chartService.columnTimeAvg(issues);
 
@@ -83,7 +83,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     public List<IssuePeriod> findByProjectId(final Long projectId) {
         log.info("Method=findByProjectId, projectId={}", projectId);
 
-        List<IssuePeriod> issues = issuePeriodRepository.findByProjectId(projectId);
+        List<IssuePeriod> issues = issuePeriodRepository.findByFormProjectId(projectId);
         issues.sort(DateUtil::sort);
 
         return issues;

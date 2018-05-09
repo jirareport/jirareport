@@ -8,14 +8,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import br.com.leonardoferreira.jirareport.domain.Changelog;
-import br.com.leonardoferreira.jirareport.domain.ColumnTimeAvg;
+import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
+import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
-import br.com.leonardoferreira.jirareport.domain.LeadTimeBySize;
+import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
 import br.com.leonardoferreira.jirareport.domain.Project;
-import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
-import br.com.leonardoferreira.jirareport.domain.vo.ChartVO;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssueForm;
+import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.repository.IssueRepository;
 import br.com.leonardoferreira.jirareport.repository.IssuePeriodRepository;
 import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
@@ -59,10 +59,10 @@ public class Seed implements CommandLineRunner {
         issuePeriod.setIssues(issues);
         issuePeriod.setAvgLeadTime(5D);
 
-        CompletableFuture<ChartVO<Long, Long>> histogram = chartService.issueHistogram(issuePeriod.getIssues());
-        CompletableFuture<ChartVO<String, Long>> estimatedChart = chartService.estimatedChart(issuePeriod.getIssues());
-        CompletableFuture<ChartVO<String, Double>> leadTimeBySystem = chartService.leadTimeBySystem(issuePeriod.getIssues());
-        CompletableFuture<ChartVO<String, Long>> tasksBySystem = chartService.tasksBySystem(issuePeriod.getIssues());
+        CompletableFuture<Chart<Long, Long>> histogram = chartService.issueHistogram(issuePeriod.getIssues());
+        CompletableFuture<Chart<String, Long>> estimatedChart = chartService.estimatedChart(issuePeriod.getIssues());
+        CompletableFuture<Chart<String, Double>> leadTimeBySystem = chartService.leadTimeBySystem(issuePeriod.getIssues());
+        CompletableFuture<Chart<String, Long>> tasksBySystem = chartService.tasksBySystem(issuePeriod.getIssues());
         CompletableFuture<List<LeadTimeBySize>> leadTimeBySize = chartService.leadTimeBySize(issuePeriod.getIssues());
         CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg = chartService.columnTimeAvg(issuePeriod.getIssues());
 
@@ -125,7 +125,7 @@ public class Seed implements CommandLineRunner {
     private Project buildProject() {
         Project project = new Project();
 
-        project.setId(1);
+        project.setId(1L);
         project.setName("Project Mock");
         project.setStartColumn("StartColumn");
         project.setEndColumn("EndColumn");
