@@ -18,6 +18,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IssuePeriodId implements Serializable {
+    private static final long serialVersionUID = -6443572350367677008L;
 
     @NotEmpty(message = "Data inicial não pode ser vazia.")
     private String startDate;

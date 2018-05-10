@@ -83,6 +83,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     @Override
     public CompletableFuture<List<LeadTimeBySize>> leadTimeBySize(final List<Issue> issues) {
         log.info("Method=leadTimeBySize, issues={}", issues);
+
         final List<LeadTimeBySize> collect = new ArrayList<>();
         issues.stream()
                 .filter(i -> i.getLeadTime() != null && i.getEstimated() != null)

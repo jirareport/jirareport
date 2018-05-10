@@ -24,6 +24,6 @@ public interface ChartService {
 
     CompletableFuture<List<LeadTimeBySize>> leadTimeBySize(List<Issue> issues);
 
-    @Async
     CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg(List<Issue> issues);
+
 }
