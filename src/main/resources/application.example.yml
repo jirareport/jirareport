@@ -1,0 +1,20 @@
+jira:
+    url: https://jira.url/jira
+
+spring:
+  application:
+    name: jirareport
+  datasource:
+    url: jdbc:postgresql://localhost:5432/jirareport
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true

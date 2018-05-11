@@ -28,3 +28,5 @@ nbdist/
 node_modules
 
 data
+
+src/main/resources/application.yml
