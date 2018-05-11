@@ -29,7 +29,7 @@
         <div class="panel-body">
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="issues">
-                    <th:block th:include="issues/index :: list(${issuePeriod.issues})" />
+                    <th:block th:include="issues/components/index :: list(${issuePeriod.issues})" />
                 </div>
                 <div role="tabpanel" class="tab-pane" id="leadTimeHistogram">
                     <th:block th:include="issue-periods/components/histogram :: chart(${issuePeriod.histogram})" />

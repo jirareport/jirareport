@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -41,12 +42,12 @@ public class IssuePeriod extends BaseEntity {
     @JoinTable(
             name = "issue_period_issue",
             joinColumns = {
-                    @JoinColumn(name = "issue_period_project_id"),
-                    @JoinColumn(name = "issue_period_start_date"),
-                    @JoinColumn(name = "issue_period_end_date")
+                    @JoinColumn(name = "end_date"),
+                    @JoinColumn(name = "project_id"),
+                    @JoinColumn(name = "start_date")
             },
             inverseJoinColumns = {
-                    @JoinColumn(name = "issue_id")
+                    @JoinColumn(name = "issue_key")
             }
     )
     private List<Issue> issues;

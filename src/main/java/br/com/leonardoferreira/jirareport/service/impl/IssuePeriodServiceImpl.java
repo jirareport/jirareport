@@ -1,15 +1,17 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
+import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
+import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
-import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
-import br.com.leonardoferreira.jirareport.repository.IssueRepository;
 import br.com.leonardoferreira.jirareport.repository.IssuePeriodRepository;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
@@ -17,9 +19,6 @@ import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * @author lferreira
@@ -35,14 +34,11 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
     private final ChartService chartService;
 
-    private final IssueRepository issueRepository;
-
     public IssuePeriodServiceImpl(IssueService issueService, IssuePeriodRepository issuePeriodRepository,
-                                  ChartService chartService, IssueRepository issueRepository) {
+                                  ChartService chartService) {
         this.issueService = issueService;
         this.issuePeriodRepository = issuePeriodRepository;
         this.chartService = chartService;
-        this.issueRepository = issueRepository;
     }
 
     @Override
@@ -55,7 +51,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         }
 
         List<Issue> issues = issueService.findAllInJira(issuePeriodId);
-        issueRepository.saveAll(issues);
+        issueService.saveAll(issues);
         Double avgLeadTime = issues.parallelStream()
                 .filter(i -> i.getLeadTime() != null)
                 .mapToLong(Issue::getLeadTime)

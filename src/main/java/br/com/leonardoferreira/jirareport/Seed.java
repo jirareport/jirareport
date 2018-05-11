@@ -89,7 +89,7 @@ public class Seed implements CommandLineRunner {
             issue.setStartDate(LocalDate.of(2018, 01, i).format(dateTimeFormatter));
             issue.setEndDate(LocalDate.of(2018, 01, i + 5).format(dateTimeFormatter));
             issue.setLeadTime(5L);
-            issue.setComponents(Collections.singletonList("System Mock"));
+            issue.setComponents(Collections.singletonList(i % 2 == 0 ? "System Mock" : "Other System"));
             issue.setEpic("Epic Mock");
             issue.setSummary("Mock description");
             issue.setChangelog(buildChangeLog());

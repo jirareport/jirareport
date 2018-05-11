@@ -1,59 +1,69 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<th:block th:fragment="list(issues)">
-    <div class="panel panel-default table-responsive">
-        <table class="table">
-            <thead>
-            <tr>
-                <th></th>
-                <th>História</th>
-                <th>Data inicio</th>
-                <th>Data fim</th>
-                <th>Leadtime</th>
-                <th>Epic</th>
-                <th>Estimativa</th>
-                <th>Projeto</th>
-            </tr>
-            </thead>
-            <tbody>
-            <th:block th:each="issue : ${issues}">
-                <tr data-toggle="collapse" th:attr="data-target=${'.' + issue.key}" class="accordion-toggle">
-                    <td><button class="btn btn-xs btn-default"><i class="fa fa-eye"></i></button></td>
-                    <td th:text="${issue.title}"></td>
-                    <td th:text="${issue.startDate}"></td>
-                    <td th:text="${issue.endDate}"></td>
-                    <td th:text="${issue.leadTime}"></td>
-                    <td><label class="label label-primary" th:if="issue.epic" th:text="${issue.epic}"></label></td>
-                    <td th:text="${issue.estimated}"></td>
-                    <td>
-                        <label class="label label-info" th:each="component : ${issue.components}" th:text="${component}"></label>
-                    </td>
-                </tr>
-                <tr class="accordian-body collapse" th:classappend="${issue.key}">
-                    <td colspan="8">
-                        <div class="accordian-body collapse panel panel-default table-responsive" th:classappend="${issue.key}">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Created</th>
-                                        <th>To</th>
-                                        <th>Cycle time</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="changelog : ${issue.changelog}">
-                                        <td th:text="${changelog.created}"></td>
-                                        <td th:text="${changelog.to}"></td>
-                                        <td th:text="${changelog.cycleTime}"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </td>
-                </tr>
-            </th:block>
-            </tbody>
-        </table>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/application">
+
+<th:block layout:fragment="content">
+    <div class="container-fluid">
+        <div class="page-header">
+            <h1>Issues</h1>
+        </div>
     </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Filtro</h3>
+        </div>
+        <form th:action="@{/projects/{id}/issues(id=${projectId})}" th:object="${issueForm}">
+            <div class="panel-body row">
+                <div class="form-group col-md-6">
+                    <label>Data Inicio</label>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control datepicker" th:field="*{startDate}" />
+                        <div class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </div>
+                    </div>
+                    <label th:errors="*{startDate}"></label>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Data Fim</label>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control datepicker" th:field="*{endDate}" />
+                        <div class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </div>
+                    </div>
+                    <label th:errors="*{endDate}"></label>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label>Keys</label>
+                    <input type="text" class="form-control" th:field="*{keys}" />
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label>Sistemas</label>
+                    <input type="text" class="form-control" th:field="*{systems}" />
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label>Tamanho de história</label>
+                    <input type="text" class="form-control" th:field="*{taskSize}" />
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="text-right">
+                    <a th:href="@{/projects}" class="btn btn-default">Voltar</a>
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <th:block th:include="issues/components/index :: list(${issues})" />
+
 </th:block>
 </html>

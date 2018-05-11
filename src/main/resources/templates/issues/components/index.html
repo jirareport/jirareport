@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="list(issues)">
+    <div class="panel panel-default table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>História</th>
+                <th>Data inicio</th>
+                <th>Data fim</th>
+                <th>Leadtime</th>
+                <th>Epic</th>
+                <th>Estimativa</th>
+                <th>Projeto</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="issue : ${issues}">
+                <tr data-toggle="collapse" th:attr="data-target=${'.' + issue.key}" class="accordion-toggle">
+                    <td><button class="btn btn-xs btn-default"><i class="fa fa-eye"></i></button></td>
+                    <td th:text="${issue.title}"></td>
+                    <td th:text="${issue.startDate}"></td>
+                    <td th:text="${issue.endDate}"></td>
+                    <td th:text="${issue.leadTime}"></td>
+                    <td><label class="label label-primary" th:if="issue.epic" th:text="${issue.epic}"></label></td>
+                    <td th:text="${issue.estimated}"></td>
+                    <td>
+                        <label class="label label-info" th:each="component : ${issue.components}" th:text="${component}"></label>
+                    </td>
+                </tr>
+                <tr class="accordian-body collapse" th:classappend="${issue.key}">
+                    <td colspan="8">
+                        <div class="accordian-body collapse panel panel-default table-responsive" th:classappend="${issue.key}">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Created</th>
+                                        <th>To</th>
+                                        <th>Cycle time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="changelog : ${issue.changelog}">
+                                        <td th:text="${changelog.created}"></td>
+                                        <td th:text="${changelog.to}"></td>
+                                        <td th:text="${changelog.cycleTime}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+</th:block>
+</html>
