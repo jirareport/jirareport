@@ -28,6 +28,8 @@ public class IssueForm {
 
     private List<String> taskSize = new ArrayList<>();
 
-    private String epic;
+    private List<String> epics = new ArrayList<>();
+
+    private List<String> issueTypes = new ArrayList<>();
 
 }

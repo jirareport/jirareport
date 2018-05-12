@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.thymeleaf.util.StringUtils;
 
 @Slf4j
@@ -40,24 +41,29 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
 
         sb.append(" AND to_date(issue.end_date, 'DD/MM/YYYY') BETWEEN :startDate and :endDate ");
 
-        if (issueForm.getKeys() != null && !issueForm.getKeys().isEmpty()) {
+        if (!CollectionUtils.isEmpty(issueForm.getKeys())) {
             sb.append(" AND issue.key not in (:keys) ");
             params.put("keys", issueForm.getKeys());
         }
 
-        if (issueForm.getTaskSize() != null && !issueForm.getTaskSize().isEmpty()) {
+        if (!CollectionUtils.isEmpty(issueForm.getTaskSize())) {
             sb.append(" AND issue.estimated in (:taskSize) ");
             params.put("taskSize", issueForm.getTaskSize());
         }
 
-        if (issueForm.getSystems() != null && !issueForm.getSystems().isEmpty()) {
+        if (!CollectionUtils.isEmpty(issueForm.getSystems())) {
             sb.append(" AND issue.system in (:systems) ");
             params.put("systems", issueForm.getSystems());
         }
 
-        if (!StringUtils.isEmpty(issueForm.getEpic())) {
-            sb.append(" AND issue.epic = :epic ");
-            params.put("epic", issueForm.getEpic());
+        if (!CollectionUtils.isEmpty(issueForm.getEpics())) {
+            sb.append(" AND issue.epic in (:epics) ");
+            params.put("epics", issueForm.getEpics());
+        }
+
+        if (!CollectionUtils.isEmpty(issueForm.getIssueTypes())) {
+            sb.append(" AND issue.issue_type in (:issueTypes) ");
+            params.put("issueTypes", issueForm.getIssueTypes());
         }
 
         params.put("projectId", projectId);

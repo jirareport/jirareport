@@ -22,4 +22,9 @@ public interface IssueRepository extends CrudRepository<Issue, String>, IssueCus
             + " inner join issue_period_issue on issue_period_issue.issue_key = issue.key "
             + " where issue_period_issue.project_id = :projectId and issue.epic is not null", nativeQuery = true)
     List<String> findAllEpicsByProjectId(Long projectId);
+
+    @Query(value = "select distinct issue.issue_type from issue"
+            + " inner join issue_period_issue on issue_period_issue.issue_key = issue.key "
+            + " where issue_period_issue.project_id = :projectId and issue.issue_type is not null", nativeQuery = true)
+    List<String> findAllIssueTypesByProjectId(Long projectId);
 }

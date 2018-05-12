@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="form-group col-md-4">
-                    <label>Sistemas</label>
+                    <label>Sistema</label>
                     <div>
                         <select class="selectpicker" multiple="" th:field="*{systems}" data-width="100%">
                             <option th:each="system : ${sandBoxFilter.systems}" th:value="${system}" th:text="${system}"></option>
@@ -69,8 +69,17 @@
                 <div class="form-group col-md-4">
                     <label>Épico</label>
                     <div>
-                        <select class="selectpicker" multiple="" th:field="*{epic}" data-width="100%">
+                        <select class="selectpicker" multiple="" th:field="*{epics}" data-width="100%">
                             <option th:each="epic : ${sandBoxFilter.epics}" th:value="${epic}" th:text="${epic}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label>Issue Types</label>
+                    <div>
+                        <select class="selectpicker" multiple="" th:field="*{issueTypes}" data-width="100%">
+                            <option th:each="issueType : ${sandBoxFilter.issueTypes}" th:value="${issueType}" th:text="${issueType}"></option>
                         </select>
                     </div>
                 </div>

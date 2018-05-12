@@ -104,6 +104,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
                 .collect(Collectors.toList()));
         sandBoxFilter.setSystems(issueRepository.findAllSystemsByProjectId(projectId));
         sandBoxFilter.setEpics(issueRepository.findAllEpicsByProjectId(projectId));
+        sandBoxFilter.setIssueTypes(issueRepository.findAllIssueTypesByProjectId(projectId));
 
         return sandBoxFilter;
     }

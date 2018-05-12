@@ -18,4 +18,6 @@ public class SandBoxFilter {
 
     private List<String> epics;
 
+    private List<String> issueTypes;
+
 }
