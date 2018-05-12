@@ -2,9 +2,11 @@ package br.com.leonardoferreira.jirareport.domain;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
@@ -26,6 +28,8 @@ public class Issue extends BaseEntity {
 
     @Id
     private String key;
+
+    private String issueType;
 
     private String creator;
 
@@ -50,6 +54,9 @@ public class Issue extends BaseEntity {
     private List<Changelog> changelog;
 
     private String estimated;
+
+    @ManyToMany(mappedBy = "issues", cascade = CascadeType.ALL)
+    private List<IssuePeriod> issuePeriods;
 
     @Transient
     public String getTitle() {

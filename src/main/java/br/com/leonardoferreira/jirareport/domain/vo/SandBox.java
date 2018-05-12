@@ -1,6 +1,7 @@
 package br.com.leonardoferreira.jirareport.domain.vo;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ import lombok.Data;
 @Data
 public class SandBox {
 
-    private List<Issue> issues;
+    private List<Issue> issues = new ArrayList<>();
 
     private ChartAggregator chartAggregator;
 

@@ -40,19 +40,41 @@
                 </div>
 
                 <div class="form-group col-md-4">
-                    <label>Keys</label>
-                    <input type="text" class="form-control" th:field="*{keys}" />
+                    <label>Keys excluidas</label>
+                    <div>
+                        <select class="selectpicker" multiple="" th:field="*{keys}" data-width="100%" id="select-keys">
+                            <option th:each="key : ${sandBoxFilter.keys}" th:value="${key}" th:text="${key}"></option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group col-md-4">
                     <label>Sistemas</label>
-                    <input type="text" class="form-control" th:field="*{systems}" />
+                    <div>
+                        <select class="selectpicker" multiple="" th:field="*{systems}" data-width="100%">
+                            <option th:each="system : ${sandBoxFilter.systems}" th:value="${system}" th:text="${system}"></option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group col-md-4">
                     <label>Tamanho de história</label>
-                    <input type="text" class="form-control" th:field="*{taskSize}" />
+                    <div>
+                        <select class="selectpicker" multiple="" th:field="*{taskSize}" data-width="100%">
+                            <option th:each="estimative : ${sandBoxFilter.estimatives}" th:value="${estimative}" th:text="${estimative}"></option>
+                        </select>
+                    </div>
                 </div>
+
+                <div class="form-group col-md-4">
+                    <label>Épico</label>
+                    <div>
+                        <select class="selectpicker" multiple="" th:field="*{epic}" data-width="100%">
+                            <option th:each="epic : ${sandBoxFilter.epics}" th:value="${epic}" th:text="${epic}"></option>
+                        </select>
+                    </div>
+                </div>
+
             </div>
             <div class="panel-footer">
                 <div class="text-right">
@@ -63,8 +85,7 @@
         </form>
     </div>
 
-
-    <th:block th:if="${sandBox.issues}">
+    <th:block th:if="${sandBox.issues != null} and ${!#lists.isEmpty(sandBox.issues)}">
         <div class="row">
             <th:block th:include="components/card :: card(6, 'primary', 'fa-calendar', ${sandBox.leadTime}, 'Leadtime medio')" />
             <th:block th:include="components/card :: card(6, 'green', 'fa-tasks', ${#lists.size(sandBox.issues)}, 'Histórias')" />
@@ -108,7 +129,7 @@
             </div>
         </div>
     </th:block>
-    <th:block th:unless="${sandBox.issues}">
+    <th:block th:if="${sandBox.issues == null} or ${#lists.isEmpty(sandBox.issues)}">
         <div class="jumbotron text-center">
             <h4>Nenhum registro encontrado</h4>
         </div>

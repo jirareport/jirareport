@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 @Slf4j
 @Repository
@@ -40,7 +41,7 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         sb.append(" AND to_date(issue.end_date, 'DD/MM/YYYY') BETWEEN :startDate and :endDate ");
 
         if (issueForm.getKeys() != null && !issueForm.getKeys().isEmpty()) {
-            sb.append(" AND issue.key in (:keys) ");
+            sb.append(" AND issue.key not in (:keys) ");
             params.put("keys", issueForm.getKeys());
         }
 
@@ -54,11 +55,17 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
             params.put("systems", issueForm.getSystems());
         }
 
+        if (!StringUtils.isEmpty(issueForm.getEpic())) {
+            sb.append(" AND issue.epic = :epic ");
+            params.put("epic", issueForm.getEpic());
+        }
+
         params.put("projectId", projectId);
         params.put("startDate", issueForm.getStartDate());
         params.put("endDate", issueForm.getEndDate());
 
         sb.append(" group by issue.key ");
+        sb.append(" order by issue.key ");
 
         Query nativeQuery = entityManager.createNativeQuery(sb.toString(), Issue.class);
         params.forEach(nativeQuery::setParameter);

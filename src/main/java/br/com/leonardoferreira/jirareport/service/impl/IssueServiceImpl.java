@@ -7,6 +7,7 @@ import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBox;
+import br.com.leonardoferreira.jirareport.domain.vo.SandBoxFilter;
 import br.com.leonardoferreira.jirareport.mapper.IssueMapper;
 import br.com.leonardoferreira.jirareport.repository.IssueRepository;
 import br.com.leonardoferreira.jirareport.service.ChartService;
@@ -14,6 +15,8 @@ import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,6 +89,21 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     public void saveAll(final List<Issue> issues) {
         log.info("Method=saveAll, issues={}", issues);
         issueRepository.saveAll(issues);
+    }
+
+    @Override
+    public SandBoxFilter findSandBoxFilters(final Long projectId, final SandBox sandBox, final IssueForm issueForm) {
+        final SandBoxFilter sandBoxFilter = new SandBoxFilter();
+
+        sandBoxFilter.setEstimatives(issueRepository.findAllEstimativesByProjectId(projectId));
+        sandBoxFilter.setKeys(Stream.concat(sandBox.getIssues().stream().map(Issue::getKey), issueForm.getKeys().stream())
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList()));
+        sandBoxFilter.setSystems(issueRepository.findAllSystemsByProjectId(projectId));
+        sandBoxFilter.setEpics(issueRepository.findAllEpicsByProjectId(projectId));
+
+        return sandBoxFilter;
     }
 
     private String buildJQL(final IssuePeriodId issuePeriodId, final Project project) {

@@ -87,6 +87,7 @@ public class IssueMapper {
                         issueVO.setCreator(creator.get("displayName").getAsString());
                     }
 
+                    issueVO.setIssueType(getAsStringSafe(fields.getAsJsonObject("issuetype").get("name")));
                     issueVO.setCreated(fields.get("created").getAsString());
                     issueVO.setUpdated(fields.get("updated").getAsString());
                     issueVO.setStartDate(DateUtil.displayFormat(startDate));
