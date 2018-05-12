@@ -23,6 +23,8 @@
         <li role="presentation"><a href="#tasksBySystem" data-toggle="tab">Histórias por sistema</a></li>
         <li role="presentation"><a href="#leadTimeBySize" data-toggle="tab">Leadtime médio por tamanho de história</a></li>
         <li role="presentation"><a href="#columnTimeAvg" data-toggle="tab">Média de tempo por coluna</a></li>
+        <li role="presentation"><a href="#leadTimeByType" data-toggle="tab">LeadTime por tipo</a></li>
+        <li role="presentation"><a href="#tasksByType" data-toggle="tab">Histórias por tipo</a></li>
     </ul>
 
     <div class="panel panel-default bt-0">
@@ -48,6 +50,12 @@
                 </div>
                 <div role="tabpanel" class="tab-pane" id="columnTimeAvg">
                     <th:block th:include="issue-periods/components/columnTimeAvg :: list(${issuePeriod.columnTimeAvgs})" />
+                </div>
+                <div role="tabpanel" class="tab-pane" id="leadTimeByType">
+                    <th:block th:include="issue-periods/components/leadTimeByType :: chart(${issuePeriod.leadTimeByType})" />
+                </div>
+                <div role="tabpanel" class="tab-pane" id="tasksByType">
+                    <th:block th:include="issue-periods/components/tasksByType :: chart(${issuePeriod.tasksByType})" />
                 </div>
             </div>
         </div>

@@ -27,5 +27,11 @@ public interface ChartService {
 
     CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg(List<Issue> issues);
 
+    @Async
+    CompletableFuture<Chart<String, Double>> leadTimeByType(List<Issue> issues);
+
+    @Async
+    CompletableFuture<Chart<String, Long>> tasksByType(List<Issue> issues);
+
     ChartAggregator buildAllCharts(List<Issue> issues);
 }

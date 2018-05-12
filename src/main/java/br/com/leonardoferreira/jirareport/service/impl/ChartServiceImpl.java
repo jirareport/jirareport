@@ -116,6 +116,28 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         return CompletableFuture.completedFuture(collect);
     }
 
+    @Async
+    @Override
+    public CompletableFuture<Chart<String, Double>> leadTimeByType(final List<Issue> issues) {
+        log.info("Method=leadTimeByType, issues={}", issues);
+
+        Map<String, Double> collect = issues.stream()
+                .filter(i -> !StringUtils.isEmpty(i.getIssueType()) && i.getLeadTime() != null)
+                .collect(Collectors.groupingBy(Issue::getIssueType, Collectors.averagingLong(Issue::getLeadTime)));
+
+        return CompletableFuture.completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+    }
+
+    @Async
+    @Override
+    public CompletableFuture<Chart<String, Long>> tasksByType(final List<Issue> issues) {
+        Map<String, Long> collect = issues.stream()
+                .filter(i -> !StringUtils.isEmpty(i.getIssueType()))
+                .collect(Collectors.groupingBy(Issue::getIssueType, Collectors.counting()));
+
+        return CompletableFuture.completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+    }
+
     @Override
     @SneakyThrows
     public ChartAggregator buildAllCharts(final List<Issue> issues) {
@@ -125,8 +147,10 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         CompletableFuture<Chart<String, Long>> tasksBySystem = chartService.tasksBySystem(issues);
         CompletableFuture<List<LeadTimeBySize>> leadTimeBySize = chartService.leadTimeBySize(issues);
         CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg = chartService.columnTimeAvg(issues);
+        CompletableFuture<Chart<String, Double>> leadTimeByType = chartService.leadTimeByType(issues);
+        CompletableFuture<Chart<String, Long>> tasksByType = chartService.tasksByType(issues);
 
         return new ChartAggregator(histogram.get(), estimated.get(), leadTimeBySystem.get(), tasksBySystem.get(),
-                leadTimeBySize.get(), columnTimeAvg.get());
+                leadTimeBySize.get(), columnTimeAvg.get(), leadTimeByType.get(), tasksByType.get());
     }
 }
