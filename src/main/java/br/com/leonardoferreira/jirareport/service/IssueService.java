@@ -4,6 +4,7 @@ import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 
+import br.com.leonardoferreira.jirareport.domain.vo.SandBox;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ public interface IssueService {
 
     List<Issue> findAllInJira(IssuePeriodId issuePeriodId);
 
-    List<Issue> findByExample(Long projectId, IssueForm issueForm);
+    SandBox findByExample(Long projectId, IssueForm issueForm);
 
     void saveAll(List<Issue> issues);
 }

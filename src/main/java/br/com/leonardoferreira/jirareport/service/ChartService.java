@@ -4,6 +4,7 @@ import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
+import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.List;
@@ -26,4 +27,5 @@ public interface ChartService {
 
     CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg(List<Issue> issues);
 
+    ChartAggregator buildAllCharts(List<Issue> issues);
 }

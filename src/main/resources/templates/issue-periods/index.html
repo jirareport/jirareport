@@ -70,15 +70,15 @@
                             </thead>
                             <tbody>
                             <tr th:each="issue : ${issuePeriods}">
-                                <td th:text="${issue.form.dates}"></td>
+                                <td th:text="${issue.id.dates}"></td>
                                 <td th:text="${issue.leadTime}"></td>
                                 <td th:text="${issue.issuesCount}"></td>
                                 <td>
-                                    <a th:href="@{/projects/{id}/issue-periods(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}"
+                                    <a th:href="@{/projects/{id}/issue-periods(id=${issue.id.projectId},startDate=${issue.id.startDate},endDate=${issue.id.endDate})}"
                                        data-method="DELETE" data-confirm="Tem certeza?" class="btn btn-xs btn-danger">Remover</a>
-                                    <a th:href="@{/projects/{id}/issue-periods(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}"
+                                    <a th:href="@{/projects/{id}/issue-periods(id=${issue.id.projectId},startDate=${issue.id.startDate},endDate=${issue.id.endDate})}"
                                        data-method="PUT" class="btn btn-xs btn-default">Atualizar</a>
-                                    <a th:href="@{/projects/{id}/issue-periods/details(id=${issue.form.projectId},startDate=${issue.form.startDate},endDate=${issue.form.endDate})}" class="btn btn-xs btn-default">Detalhes</a>
+                                    <a th:href="@{/projects/{id}/issue-periods/details(id=${issue.id.projectId},startDate=${issue.id.startDate},endDate=${issue.id.endDate})}" class="btn btn-xs btn-default">Detalhes</a>
                                 </td>
                             </tr>
                             </tbody>

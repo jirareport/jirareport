@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.domain;
 
+import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -7,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -36,7 +36,7 @@ public class IssuePeriod extends BaseEntity {
     private static final long serialVersionUID = 7188140641247774389L;
 
     @EmbeddedId
-    private IssuePeriodId form;
+    private IssuePeriodId id;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
@@ -77,6 +77,19 @@ public class IssuePeriod extends BaseEntity {
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private List<ColumnTimeAvg> columnTimeAvgs;
+
+    public IssuePeriod(IssuePeriodId id, List<Issue> issues, Double avgLeadTime, ChartAggregator chartAggregator) {
+        this.id = id;
+        this.issues = issues;
+        this.avgLeadTime = avgLeadTime;
+
+        this.histogram = chartAggregator.getHistogram();
+        this.estimated = chartAggregator.getEstimated();
+        this.leadTimeBySystem = chartAggregator.getLeadTimeBySystem();
+        this.tasksBySystem = chartAggregator.getTasksBySystem();
+        this.leadTimeBySize = chartAggregator.getLeadTimeBySize();
+        this.columnTimeAvgs = chartAggregator.getColumnTimeAvg();
+    }
 
     @Transient
     public Integer getIssuesCount() {

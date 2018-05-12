@@ -50,8 +50,8 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         }
 
         if (issueForm.getSystems() != null && !issueForm.getSystems().isEmpty()) {
-            sb.append(" AND issue.components <@ :systems\\:\\:jsonb ");
-            params.put("systems", new ObjectMapper().writeValueAsString(issueForm.getSystems()));
+            sb.append(" AND issue.system in (:systems) ");
+            params.put("systems", issueForm.getSystems());
         }
 
         params.put("projectId", projectId);

@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface IssuePeriodRepository extends CrudRepository<IssuePeriod, IssuePeriodId> {
 
-    List<IssuePeriod> findByFormProjectId(Long projectId);
+    List<IssuePeriod> findByIdProjectId(Long projectId);
 
 }

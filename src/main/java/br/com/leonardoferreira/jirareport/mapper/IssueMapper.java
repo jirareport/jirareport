@@ -1,7 +1,6 @@
 package br.com.leonardoferreira.jirareport.mapper;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -93,7 +92,7 @@ public class IssueMapper {
                     issueVO.setStartDate(DateUtil.displayFormat(startDate));
                     issueVO.setEndDate(DateUtil.displayFormat(endDate));
                     issueVO.setLeadTime(leadTime);
-                    issueVO.setComponents(getComponents(fields, project));
+                    issueVO.setSystem(getSystem(fields, project));
                     issueVO.setEpic(epic);
                     issueVO.setEstimated(estimated);
                     issueVO.setSummary(fields.get("summary").getAsString());
@@ -161,28 +160,28 @@ public class IssueMapper {
                 }).filter(Objects::nonNull).findFirst().orElse(null);
     }
 
-    private List<String> getComponents(final JsonObject fields, final Project project) {
+    private String getSystem(final JsonObject fields, final Project project) {
         final JsonElement jsonElement = fields.get(project.getSystemCF());
         if (jsonElement == null || jsonElement.isJsonNull()) {
-            return new ArrayList<>();
+            return null;
         }
 
         if (jsonElement.isJsonArray()) {
             JsonArray components = jsonElement.getAsJsonArray();
             if (components == null) {
-                return new ArrayList<>();
+                return null;
             }
 
             return StreamSupport.stream(components.spliterator(), true)
                     .map(component -> component.isJsonObject() ? component.getAsJsonObject().get("name").getAsString() : component.getAsString())
-                    .collect(Collectors.toList());
+                    .findFirst().orElse(null);
         }
 
         if (jsonElement.isJsonObject()) {
-            return Collections.singletonList(getAsStringSafe(jsonElement.getAsJsonObject().get("value")));
+            return getAsStringSafe(jsonElement.getAsJsonObject().get("value"));
         }
 
-        return Collections.singletonList(jsonElement.getAsString());
+        return jsonElement.getAsString();
     }
 
     private String getAsStringSafe(JsonElement jsonElement) {

@@ -1,14 +1,11 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
-import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
-import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
-import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
@@ -57,17 +54,10 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
                 .mapToLong(Issue::getLeadTime)
                 .average().orElse(0D);
 
-        CompletableFuture<Chart<Long, Long>> histogram = chartService.issueHistogram(issues);
-        CompletableFuture<Chart<String, Long>> estimated = chartService.estimatedChart(issues);
-        CompletableFuture<Chart<String, Double>> leadTimeBySystem = chartService.leadTimeBySystem(issues);
-        CompletableFuture<Chart<String, Long>> tasksBySystem = chartService.tasksBySystem(issues);
-        CompletableFuture<List<LeadTimeBySize>> leadTimeBySize = chartService.leadTimeBySize(issues);
-        CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg = chartService.columnTimeAvg(issues);
+        final ChartAggregator chartAggregator = chartService.buildAllCharts(issues);
 
         try {
-            IssuePeriod issuePeriod = new IssuePeriod(issuePeriodId, issues, avgLeadTime,
-                    histogram.get(), estimated.get(), leadTimeBySystem.get(),
-                    tasksBySystem.get(), leadTimeBySize.get(), columnTimeAvg.get());
+            IssuePeriod issuePeriod = new IssuePeriod(issuePeriodId, issues, avgLeadTime, chartAggregator);
             issuePeriodRepository.save(issuePeriod);
         } catch (Exception e) {
             log.error("Method=create, Msg=erro ao gerar registro", e);
@@ -79,7 +69,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     public List<IssuePeriod> findByProjectId(final Long projectId) {
         log.info("Method=findByProjectId, projectId={}", projectId);
 
-        List<IssuePeriod> issues = issuePeriodRepository.findByFormProjectId(projectId);
+        List<IssuePeriod> issues = issuePeriodRepository.findByIdProjectId(projectId);
         issues.sort(DateUtil::sort);
 
         return issues;

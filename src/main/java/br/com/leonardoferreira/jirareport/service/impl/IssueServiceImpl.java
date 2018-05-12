@@ -1,22 +1,22 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.client.IssueClient;
-import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
-import br.com.leonardoferreira.jirareport.mapper.IssueMapper;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
+import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
+import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
+import br.com.leonardoferreira.jirareport.domain.vo.SandBox;
+import br.com.leonardoferreira.jirareport.mapper.IssueMapper;
 import br.com.leonardoferreira.jirareport.repository.IssueRepository;
+import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
-
-import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 /**
  * @author s2it_leferreira
@@ -34,12 +34,16 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
 
     private final IssueRepository issueRepository;
 
+    private final ChartService chartService;
+
     public IssueServiceImpl(final IssueClient issueClient, final ProjectService projectService,
-                            final IssueMapper issueMapper, final IssueRepository issueRepository) {
+                            final IssueMapper issueMapper, final IssueRepository issueRepository,
+                            final ChartService chartService) {
         this.issueClient = issueClient;
         this.projectService = projectService;
         this.issueMapper = issueMapper;
         this.issueRepository = issueRepository;
+        this.chartService = chartService;
     }
 
     @Override
@@ -54,16 +58,27 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Issue> findByExample(final Long projectId, final IssueForm issueForm) {
+    public SandBox findByExample(final Long projectId, final IssueForm issueForm) {
         log.info("Method=findByExample, projectId={}, issueForm={}", projectId, issueForm);
-        List<Issue> issues;
-        if (issueForm.getStartDate() != null && issueForm.getEndDate() != null) {
-            issues = issueRepository.findByExample(projectId, issueForm);
-        } else {
-            issues = Collections.emptyList();
+
+        if (issueForm.getStartDate() == null || issueForm.getEndDate() == null) {
+            return new SandBox();
         }
 
-        return issues;
+        List<Issue> issues = issueRepository.findByExample(projectId, issueForm);
+        final ChartAggregator chartAggregator = chartService.buildAllCharts(issues);
+
+        Double avgLeadTime = issues.parallelStream()
+                .filter(i -> i.getLeadTime() != null)
+                .mapToLong(Issue::getLeadTime)
+                .average().orElse(0D);
+
+        final SandBox sandBox = new SandBox();
+        sandBox.setIssues(issues);
+        sandBox.setChartAggregator(chartAggregator);
+        sandBox.setAvgLeadTime(avgLeadTime);
+
+        return sandBox;
     }
 
     @Override

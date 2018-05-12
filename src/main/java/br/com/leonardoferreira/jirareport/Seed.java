@@ -55,7 +55,7 @@ public class Seed implements CommandLineRunner {
     @SneakyThrows
     private IssuePeriod buildIssuePeriod(List<Issue> issues) {
         IssuePeriod issuePeriod = new IssuePeriod();
-        issuePeriod.setForm(new IssuePeriodId("01/01/2018", "10/01/2018", 1L));
+        issuePeriod.setId(new IssuePeriodId("01/01/2018", "10/01/2018", 1L));
         issuePeriod.setIssues(issues);
         issuePeriod.setAvgLeadTime(5D);
 
@@ -89,7 +89,7 @@ public class Seed implements CommandLineRunner {
             issue.setStartDate(LocalDate.of(2018, 01, i).format(dateTimeFormatter));
             issue.setEndDate(LocalDate.of(2018, 01, i + 5).format(dateTimeFormatter));
             issue.setLeadTime(5L);
-            issue.setComponents(Collections.singletonList(i % 2 == 0 ? "System Mock" : "Other System"));
+            issue.setSystem(i % 2 == 0 ? "System Mock" : "Other System");
             issue.setEpic("Epic Mock");
             issue.setSummary("Mock description");
             issue.setChangelog(buildChangeLog());

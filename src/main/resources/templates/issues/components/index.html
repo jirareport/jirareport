@@ -9,10 +9,10 @@
                 <th>História</th>
                 <th>Data inicio</th>
                 <th>Data fim</th>
-                <th>Leadtime</th>
-                <th>Epic</th>
+                <th>LeadTime</th>
+                <th>Epico</th>
                 <th>Estimativa</th>
-                <th>Projeto</th>
+                <th>Sistema</th>
             </tr>
             </thead>
             <tbody>
@@ -25,9 +25,7 @@
                     <td th:text="${issue.leadTime}"></td>
                     <td><label class="label label-primary" th:if="issue.epic" th:text="${issue.epic}"></label></td>
                     <td th:text="${issue.estimated}"></td>
-                    <td>
-                        <label class="label label-info" th:each="component : ${issue.components}" th:text="${component}"></label>
-                    </td>
+                    <td th:text="${issue.system}"></td>
                 </tr>
                 <tr class="accordian-body collapse" th:classappend="${issue.key}">
                     <td colspan="8">
@@ -35,9 +33,9 @@
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Created</th>
-                                        <th>To</th>
-                                        <th>Cycle time</th>
+                                        <th>Data</th>
+                                        <th>Coluna</th>
+                                        <th>LeadTime</th>
                                     </tr>
                                 </thead>
                                 <tbody>

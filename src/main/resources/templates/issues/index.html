@@ -57,13 +57,62 @@
             <div class="panel-footer">
                 <div class="text-right">
                     <a th:href="@{/projects}" class="btn btn-default">Voltar</a>
-                    <button type="submit" class="btn btn-success">Salvar</button>
+                    <button type="submit" class="btn btn-success">Filtrar</button>
                 </div>
             </div>
         </form>
     </div>
 
-    <th:block th:include="issues/components/index :: list(${issues})" />
+
+    <th:block th:if="${sandBox.issues}">
+        <div class="row">
+            <th:block th:include="components/card :: card(6, 'primary', 'fa-calendar', ${sandBox.leadTime}, 'Leadtime medio')" />
+            <th:block th:include="components/card :: card(6, 'green', 'fa-tasks', ${#lists.size(sandBox.issues)}, 'Histórias')" />
+        </div>
+
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#issues" data-toggle="tab">Issues</a></li>
+            <li role="presentation"><a href="#leadTimeHistogram" data-toggle="tab">Histograma de leadtime</a></li>
+            <li role="presentation"><a href="#estimatedChart" data-toggle="tab">Contagem de estimativa</a></li>
+            <li role="presentation"><a href="#leadTimeBySystem" data-toggle="tab">LeadTime por sistema</a></li>
+            <li role="presentation"><a href="#tasksBySystem" data-toggle="tab">Histórias por sistema</a></li>
+            <li role="presentation"><a href="#leadTimeBySize" data-toggle="tab">Leadtime médio por tamanho de história</a></li>
+            <li role="presentation"><a href="#columnTimeAvg" data-toggle="tab">Média de tempo por coluna</a></li>
+        </ul>
+
+        <div class="panel panel-default bt-0">
+            <div class="panel-body">
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="issues">
+                        <th:block th:include="issues/components/index :: list(${sandBox.issues})" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="leadTimeHistogram">
+                        <th:block th:include="issue-periods/components/histogram :: chart(${sandBox.chartAggregator.histogram})" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="estimatedChart">
+                        <th:block th:include="issue-periods/components/estimativeCount :: chart(${sandBox.chartAggregator.estimated})" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="leadTimeBySystem">
+                        <th:block th:include="issue-periods/components/leadTimeBySystem :: chart(${sandBox.chartAggregator.leadTimeBySystem})" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tasksBySystem">
+                        <th:block th:include="issue-periods/components/tasksBySystem :: chart(${sandBox.chartAggregator.tasksBySystem})" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="leadTimeBySize">
+                        <th:block th:include="issue-periods/components/leadTimeBySize :: list(${sandBox.chartAggregator.leadTimeBySize})" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="columnTimeAvg">
+                        <th:block th:include="issue-periods/components/columnTimeAvg :: list(${sandBox.chartAggregator.columnTimeAvg})" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+    <th:block th:unless="${sandBox.issues}">
+        <div class="jumbotron text-center">
+            <h4>Nenhum registro encontrado</h4>
+        </div>
+    </th:block>
 
 </th:block>
 </html>

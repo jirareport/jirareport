@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.controller;
 
+import br.com.leonardoferreira.jirareport.domain.vo.SandBox;
 import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
@@ -23,11 +24,11 @@ public class IssueController {
 
     @GetMapping
     public ModelAndView index(@PathVariable final Long projectId, final IssueForm issueForm) {
-        List<Issue> issues = issueService.findByExample(projectId, issueForm);
+        SandBox sandBox = issueService.findByExample(projectId, issueForm);
 
         return new ModelAndView("issues/index")
                 .addObject("issueForm", issueForm)
                 .addObject("projectId", projectId)
-                .addObject("issues", issues);
+                .addObject("sandBox", sandBox);
     }
 }

@@ -39,9 +39,7 @@ public class Issue extends BaseEntity {
 
     private Long leadTime;
 
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    private List<String> components;
+    private String system;
 
     private String epic;
 
@@ -56,11 +54,6 @@ public class Issue extends BaseEntity {
     @Transient
     public String getTitle() {
         return String.format("%s %s", key, summary);
-    }
-
-    @Transient
-    public String getComponentsStr() {
-        return String.join(", ", components);
     }
 
 }
