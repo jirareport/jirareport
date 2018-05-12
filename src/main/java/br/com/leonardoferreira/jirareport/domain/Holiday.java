@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
@@ -32,6 +33,9 @@ public class Holiday extends BaseEntity {
 
     @NotEmpty(message = "A descrição deve ser informada.")
     private String description;
+
+    @ManyToOne
+    private Project project;
 
     @Transient
     public String getEnDate() {
