@@ -1,28 +1,27 @@
 package br.com.leonardoferreira.jirareport.mapper;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import static br.com.leonardoferreira.jirareport.util.DateUtil.DEFAULT_FORMATTER;
 
-import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import static br.com.leonardoferreira.jirareport.util.DateUtil.DEFAULT_FORMATTER;
 
 /**
  * @author lferreira
@@ -47,6 +46,9 @@ public class IssueMapper {
         final List<String> holidays = holidayService.findAll()
                 .stream().map(Holiday::getEnDate).collect(Collectors.toList());
 
+        Set<String> startcolumns = project.getStartColumns();
+        Set<String> endcolumns = project.getEndColumns();
+
         return StreamSupport.stream(issues.spliterator(), true)
                 .map(issueRaw -> {
                     JsonObject issue = issueRaw.getAsJsonObject();
@@ -58,11 +60,11 @@ public class IssueMapper {
                     String endDate = null;
 
                     for (Changelog cl : changelog) {
-                        if (cl.getTo().equalsIgnoreCase(project.getStartColumn())) {
+                        if (startDate == null && startcolumns.contains(cl.getTo().toUpperCase())) {
                             startDate = DateUtil.toENDate(cl.getCreated());
                         }
 
-                        if (cl.getTo().equalsIgnoreCase(project.getEndColumn())) {
+                        if (endDate == null && endcolumns.contains(cl.getTo().toUpperCase())) {
                             endDate = DateUtil.toENDate(cl.getCreated());
                         }
                     }
@@ -75,8 +77,10 @@ public class IssueMapper {
                     String estimateField = project.getEstimateCF();
 
                     String epic = epicField.equals("") ? null : getAsStringSafe(fields.get(epicField));
-                    String estimated = estimateField.equals("") ? null : (getAsStringSafe(fields.get(estimateField).isJsonNull() ?
-                            null : fields.get(estimateField).getAsJsonObject().get("value")));
+                    String estimated = estimateField.equals("") ?
+                            null :
+                            (getAsStringSafe(fields.get(estimateField).isJsonNull() ?
+                                    null : fields.get(estimateField).getAsJsonObject().get("value")));
                     Long leadTime = daysDiff(startDate, endDate, holidays);
 
                     Issue issueVO = new Issue();
@@ -173,7 +177,9 @@ public class IssueMapper {
             }
 
             return StreamSupport.stream(components.spliterator(), true)
-                    .map(component -> component.isJsonObject() ? component.getAsJsonObject().get("name").getAsString() : component.getAsString())
+                    .map(component -> component.isJsonObject() ?
+                            component.getAsJsonObject().get("name").getAsString() :
+                            component.getAsString())
                     .findFirst().orElse(null);
         }
 
@@ -223,6 +229,5 @@ public class IssueMapper {
         String aux = new SimpleDateFormat(DEFAULT_FORMATTER).format(day.getTime());
         return holidays.contains(aux);
     }
-
 
 }

@@ -1,9 +1,6 @@
 package br.com.leonardoferreira.jirareport.domain;
 
-import java.io.Serializable;
-
 import br.com.leonardoferreira.jirareport.util.DateUtil;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +19,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 public class Holiday extends BaseEntity {
+
     private static final long serialVersionUID = 18640912961216513L;
 
     @Id

@@ -1,8 +1,11 @@
 package br.com.leonardoferreira.jirareport.domain;
 
+import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
+import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
+import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -11,12 +14,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Transient;
-
-import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
-import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
-import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,11 +32,13 @@ import org.hibernate.annotations.Type;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class IssuePeriod extends BaseEntity {
+
     private static final long serialVersionUID = 7188140641247774389L;
 
     @EmbeddedId
     private IssuePeriodId id;
 
+    @OrderBy("key asc")
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "issue_period_issue",
