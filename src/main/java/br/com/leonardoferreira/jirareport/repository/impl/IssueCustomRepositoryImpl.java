@@ -58,6 +58,8 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         params.put("startDate", issueForm.getStartDate());
         params.put("endDate", issueForm.getEndDate());
 
+        sb.append(" group by issue.key ");
+
         Query nativeQuery = entityManager.createNativeQuery(sb.toString(), Issue.class);
         params.forEach(nativeQuery::setParameter);
 
