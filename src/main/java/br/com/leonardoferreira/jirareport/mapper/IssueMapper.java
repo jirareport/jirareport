@@ -43,7 +43,7 @@ public class IssueMapper {
         JsonArray issues = response.getAsJsonObject()
                 .getAsJsonArray("issues");
 
-        final List<String> holidays = holidayService.findAll()
+        final List<String> holidays = holidayService.findByProject(project.getId())
                 .stream().map(Holiday::getEnDate).collect(Collectors.toList());
 
         Set<String> startcolumns = project.getStartColumns();

@@ -1,9 +1,10 @@
 package br.com.leonardoferreira.jirareport.controller;
 
 import br.com.leonardoferreira.jirareport.domain.Holiday;
+import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
+import br.com.leonardoferreira.jirareport.service.ProjectService;
 import java.util.List;
-import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -21,71 +22,84 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @since 5/7/18 6:53 PM
  */
 @Controller
-@RequestMapping("holidays")
+@RequestMapping("/projects/{projectId}/holidays")
 public class HolidayController extends AbstractController {
 
     private final HolidayService holidayService;
 
-    public HolidayController(final HolidayService holidayService) {
+    private final ProjectService projectService;
+
+    public HolidayController(final HolidayService holidayService,
+            final ProjectService projectService) {
         this.holidayService = holidayService;
+        this.projectService = projectService;
     }
 
     @GetMapping
-    public ModelAndView index() {
-        final List<Holiday> holidays = holidayService.findAll();
+    public ModelAndView index(@PathVariable final Long projectId) {
+        final List<Holiday> holidays = holidayService.findByProject(projectId);
+        final Project project = projectService.findById(projectId);
         return new ModelAndView("holidays/index")
-                .addObject("holidays", holidays);
+                .addObject("holidays", holidays)
+                .addObject("project", project);
     }
 
     @GetMapping("/new")
-    public ModelAndView create() {
+    public ModelAndView create(@PathVariable final Long projectId) {
         return new ModelAndView("holidays/new")
-                .addObject("holiday", new Holiday());
+                .addObject("holiday", new Holiday())
+                .addObject("projectId", projectId);
     }
 
     @PostMapping
-    public ModelAndView create(@Validated final Holiday holiday,
-                               final BindingResult bindingResult,
-                               final RedirectAttributes redirectAttributes) {
+    public ModelAndView create(@PathVariable final Long projectId,
+            @Validated final Holiday holiday,
+            final BindingResult bindingResult,
+            final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("holidays/new")
-                    .addObject("holiday", holiday);
+                    .addObject("holiday", holiday)
+                    .addObject("projectId", projectId);
         }
 
-        holidayService.create(holiday);
+        holidayService.create(projectId, holiday);
 
         redirectAttributes.addFlashAttribute("flashSuccess", "Registro inserido com sucesso");
-        return new ModelAndView("redirect:/holidays");
+        return new ModelAndView("redirect:/projects/" + projectId + "/holidays");
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView delete(@PathVariable final Long id, final RedirectAttributes redirectAttributes) {
+    public ModelAndView delete(@PathVariable final Long projectId,
+            @PathVariable final Long id, final RedirectAttributes redirectAttributes) {
         holidayService.delete(id);
 
         redirectAttributes.addFlashAttribute("flashSuccess", "Registro removido com sucesso");
-        return new ModelAndView("redirect:/holidays");
+        return new ModelAndView("redirect:/projects/" + projectId + "/holidays");
     }
 
     @GetMapping("/edit/{id}")
-    public ModelAndView update(@PathVariable final Long id)  {
+    public ModelAndView update(@PathVariable final Long projectId, @PathVariable final Long id) {
         Holiday holiday = holidayService.findById(id);
         return new ModelAndView("holidays/edit")
-                .addObject("holiday", holiday);
+                .addObject("holiday", holiday)
+                .addObject("projectId", projectId);
     }
 
     @PutMapping
-    public ModelAndView update(@Validated final Holiday holiday,
-                               final BindingResult bindingResult,
-                               final RedirectAttributes redirectAttributes) {
+    public ModelAndView update(@PathVariable final Long projectId,
+            @Validated final Holiday holiday,
+            final BindingResult bindingResult,
+            final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("holidays/edit")
-                    .addObject("holiday", holiday);
-        }
+                    .addObject("holiday", holiday)
+                    .addObject("projectId", projectId);
+            }
 
-        holidayService.update(holiday);
+        holidayService.update(projectId, holiday);
 
         redirectAttributes.addFlashAttribute("flashSuccess", "Registro atualizado com sucesso");
-        return new ModelAndView("redirect:/holidays");
+        return new ModelAndView("redirect:/projects/" + projectId + "/holidays");
     }
 
 }

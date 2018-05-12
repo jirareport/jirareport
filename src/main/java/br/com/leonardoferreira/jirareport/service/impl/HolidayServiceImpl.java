@@ -1,14 +1,13 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.domain.Holiday;
+import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
+import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
-import br.com.leonardoferreira.jirareport.util.DateUtil;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.Delayed;
-
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +20,12 @@ import org.springframework.stereotype.Service;
 public class HolidayServiceImpl extends AbstractService implements HolidayService {
 
     private final HolidayRepository holidayRepository;
+    private final ProjectRepository projectRepository;
 
-    public HolidayServiceImpl(final HolidayRepository holidayRepository) {
+    public HolidayServiceImpl(final HolidayRepository holidayRepository,
+            final ProjectRepository projectRepository) {
         this.holidayRepository = holidayRepository;
+        this.projectRepository = projectRepository;
     }
 
     @Override
@@ -33,8 +35,17 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     }
 
     @Override
-    public void create(Holiday holiday) {
+    public List<Holiday> findByProject(Long projectId) {
+        log.info("Method=findByProject");
+        return (List<Holiday>) holidayRepository.findByProjectId(projectId);
+    }
+
+
+    @Override
+    public void create(Long projectId, Holiday holiday) {
         log.info("Method=create, holiday={}", holiday);
+        final Optional<Project> project = projectRepository.findById(projectId);
+        holiday.setProject(project.orElseThrow(()-> new IllegalArgumentException("Projeto obrigatorio")));
         holidayRepository.save(holiday);
     }
 
@@ -52,8 +63,10 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     }
 
     @Override
-    public void update(final Holiday holiday) {
+    public void update(Long projectId, final Holiday holiday) {
         log.info("Method=update, holiday={}", holiday);
+        final Optional<Project> project = projectRepository.findById(projectId);
+        holiday.setProject(project.orElseThrow(()-> new IllegalArgumentException("Projeto obrigatorio")));
         holidayRepository.save(holiday);
     }
 }

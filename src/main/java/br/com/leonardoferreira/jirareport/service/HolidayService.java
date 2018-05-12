@@ -11,11 +11,13 @@ public interface HolidayService {
 
     List<Holiday> findAll();
 
-    void create(Holiday holiday);
+    List<Holiday> findByProject(Long projectId);
+
+    void create(Long projectId, Holiday holiday);
 
     void delete(Long id);
 
     Holiday findById(Long id);
 
-    void update(Holiday holiday);
+    void update(Long projectId, Holiday holiday);
 }
