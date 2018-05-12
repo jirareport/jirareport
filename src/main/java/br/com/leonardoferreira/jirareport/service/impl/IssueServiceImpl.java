@@ -14,12 +14,14 @@ import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author s2it_leferreira
@@ -109,7 +111,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     private String buildJQL(final IssuePeriodId issuePeriodId, final Project project) {
         StringBuilder jql = new StringBuilder();
         jql.append("project = ").append(project.getId()).append(" ");
-        if (project.getIgnoreIssueType() == null && !project.getIgnoreIssueType().isEmpty()) {
+        if (!CollectionUtils.isEmpty(project.getIgnoreIssueType())) {
             jql.append(" AND issuetype not in (");
             jql.append(String.join(",", project.getIgnoreIssueType()
                     .stream()
