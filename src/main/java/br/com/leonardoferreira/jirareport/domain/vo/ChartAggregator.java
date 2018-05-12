@@ -25,7 +25,7 @@ public class ChartAggregator {
 
     private Chart<String, Long> tasksBySystem;
 
-    private List<LeadTimeBySize> leadTimeBySize;
+    private Chart<String, Double> leadTimeBySize;
 
     private List<ColumnTimeAvg> columnTimeAvg;
 

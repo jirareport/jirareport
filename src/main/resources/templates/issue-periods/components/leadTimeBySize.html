@@ -1,22 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<th:block th:fragment="list(leadTimeBySize)">
-    <div class="panel panel-default table-responsive" th:unless="${#lists.isEmpty(leadTimeBySize)}">
-        <table class="table table-stripped">
-            <thead>
-            <tr>
-                <th>Tamanho</th>
-                <th>LeadTime médio</th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr th:each="item : ${leadTimeBySize}">
-                    <td th:text="${item.size}"></td>
-                    <td th:text="${item.leadtime}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <span th:if="${#lists.isEmpty(leadTimeBySize)}">Nenhum registro encontrado</span>
+<th:block th:fragment="chart(chartData)">
+    <th:block
+            th:if="${chartData.hasData}"
+            th:include="components/chart/_bar :: chart('lead_time_by_size', 'LeadTime', 'Tamanho de história', ${chartData})" />
+    <span th:unless="${chartData.hasData}">Nenhum registro encontrado</span>
 </th:block>
 </html>
+

@@ -73,7 +73,7 @@ public class IssuePeriod extends BaseEntity {
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    private List<LeadTimeBySize> leadTimeBySize;
+    private Chart<String, Double> leadTimeBySize;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")

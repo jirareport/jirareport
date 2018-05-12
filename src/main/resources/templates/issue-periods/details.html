@@ -46,7 +46,7 @@
                     <th:block th:include="issue-periods/components/tasksBySystem :: chart(${issuePeriod.tasksBySystem})" />
                 </div>
                 <div role="tabpanel" class="tab-pane" id="leadTimeBySize">
-                    <th:block th:include="issue-periods/components/leadTimeBySize :: list(${issuePeriod.leadTimeBySize})" />
+                    <th:block th:include="issue-periods/components/leadTimeBySize :: chart(${issuePeriod.leadTimeBySize})" />
                 </div>
                 <div role="tabpanel" class="tab-pane" id="columnTimeAvg">
                     <th:block th:include="issue-periods/components/columnTimeAvg :: list(${issuePeriod.columnTimeAvgs})" />

@@ -23,7 +23,7 @@ public interface ChartService {
 
     CompletableFuture<Chart<String, Long>> tasksBySystem(List<Issue> issues);
 
-    CompletableFuture<List<LeadTimeBySize>> leadTimeBySize(List<Issue> issues);
+    CompletableFuture<Chart<String, Double>> leadTimeBySize(List<Issue> issues);
 
     CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg(List<Issue> issues);
 

@@ -63,7 +63,7 @@ public class Seed implements CommandLineRunner {
         CompletableFuture<Chart<String, Long>> estimatedChart = chartService.estimatedChart(issuePeriod.getIssues());
         CompletableFuture<Chart<String, Double>> leadTimeBySystem = chartService.leadTimeBySystem(issuePeriod.getIssues());
         CompletableFuture<Chart<String, Long>> tasksBySystem = chartService.tasksBySystem(issuePeriod.getIssues());
-        CompletableFuture<List<LeadTimeBySize>> leadTimeBySize = chartService.leadTimeBySize(issuePeriod.getIssues());
+        CompletableFuture<Chart<String, Double>> leadTimeBySize = chartService.leadTimeBySize(issuePeriod.getIssues());
         CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg = chartService.columnTimeAvg(issuePeriod.getIssues());
 
         issuePeriod.setHistogram(histogram.get());

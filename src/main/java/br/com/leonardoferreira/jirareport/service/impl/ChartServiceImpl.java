@@ -88,16 +88,14 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     @Async
     @Override
-    public CompletableFuture<List<LeadTimeBySize>> leadTimeBySize(final List<Issue> issues) {
+    public CompletableFuture<Chart<String, Double>> leadTimeBySize(final List<Issue> issues) {
         log.info("Method=leadTimeBySize, issues={}", issues);
 
-        final List<LeadTimeBySize> collect = new ArrayList<>();
-        issues.stream()
-                .filter(i -> i.getLeadTime() != null && i.getEstimated() != null)
-                .collect(Collectors.groupingBy(Issue::getEstimated, Collectors.averagingDouble(Issue::getLeadTime)))
-                .forEach((k, v) -> collect.add(new LeadTimeBySize(k, v)));
+        Map<String, Double> collect = issues.stream()
+                .filter(i -> !StringUtils.isEmpty(i.getEstimated()) && i.getLeadTime() != null)
+                .collect(Collectors.groupingBy(Issue::getEstimated, Collectors.averagingLong(Issue::getLeadTime)));
 
-        return CompletableFuture.completedFuture(collect);
+        return CompletableFuture.completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
     }
 
     @Async
@@ -145,7 +143,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         CompletableFuture<Chart<String, Long>> estimated = chartService.estimatedChart(issues);
         CompletableFuture<Chart<String, Double>> leadTimeBySystem = chartService.leadTimeBySystem(issues);
         CompletableFuture<Chart<String, Long>> tasksBySystem = chartService.tasksBySystem(issues);
-        CompletableFuture<List<LeadTimeBySize>> leadTimeBySize = chartService.leadTimeBySize(issues);
+        CompletableFuture<Chart<String, Double>> leadTimeBySize = chartService.leadTimeBySize(issues);
         CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg = chartService.columnTimeAvg(issues);
         CompletableFuture<Chart<String, Double>> leadTimeByType = chartService.leadTimeByType(issues);
         CompletableFuture<Chart<String, Long>> tasksByType = chartService.tasksByType(issues);
