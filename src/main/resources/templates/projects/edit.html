@@ -18,28 +18,40 @@
             </div>
 
             <div class="form-group">
-                <label>startColumn</label>
+                <label>Coluna inicial</label>
                 <input type="text" th:field="*{startColumn}" class="form-control" />
             </div>
 
             <div class="form-group">
-                <label>endColumn</label>
+                <label>Coluna final</label>
                 <input type="text" th:field="*{endColumn}" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Fluxo ordenado de colunas</label>
+                <input type="text" th:field="*{fluxColumn}" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Tipos de issues à serem ignorados</label>
+                <input type="text" th:field="*{ignoreIssueType}" class="form-control" />
             </div>
 
             <div class="form-group">
-                <label>epicCF</label>
+                <label>Campo de Épico</label>
                 <input type="text" th:field="*{epicCF}" class="form-control" />
             </div>
 
             <div class="form-group">
-                <label>estimateCF</label>
+                <label>Campo de tamanho/estimativa</label>
                 <input type="text" th:field="*{estimateCF}" class="form-control" />
             </div>
 
             <div class="form-group">
-                <label>systemCF</label>
+                <label>Campo de Sistemas</label>
                 <input type="text" th:field="*{systemCF}" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Campo de Projeto</label>
+                <input type="text" th:field="*{projectCF}" class="form-control" />
             </div>
 
             <div class="text-right">

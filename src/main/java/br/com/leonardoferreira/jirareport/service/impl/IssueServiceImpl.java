@@ -40,8 +40,8 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     private final ChartService chartService;
 
     public IssueServiceImpl(final IssueClient issueClient, final ProjectService projectService,
-                            final IssueMapper issueMapper, final IssueRepository issueRepository,
-                            final ChartService chartService) {
+            final IssueMapper issueMapper, final IssueRepository issueRepository,
+            final ChartService chartService) {
         this.issueClient = issueClient;
         this.projectService = projectService;
         this.issueMapper = issueMapper;
@@ -109,9 +109,23 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     private String buildJQL(final IssuePeriodId issuePeriodId, final Project project) {
         StringBuilder jql = new StringBuilder();
         jql.append("project = ").append(project.getId()).append(" ");
-        jql.append("AND STATUS CHANGED TO \"").append(project.getEndColumn()).append("\" DURING(\"");
+        if (project.getIgnoreIssueType() == null && !project.getIgnoreIssueType().isEmpty()) {
+            jql.append(" AND issuetype not in (");
+            jql.append(String.join(",", project.getIgnoreIssueType()
+                    .stream()
+                    .map(i -> "'" + i + "'")
+                    .collect(Collectors.toList()))).append(" ) ");
+        }
+        jql.append("AND (STATUS CHANGED TO \"").append(project.getEndColumn()).append("\" DURING(\"");
         jql.append(DateUtil.toENDate(issuePeriodId.getStartDate())).append("\", \"");
         jql.append(DateUtil.toENDate(issuePeriodId.getEndDate())).append("\")");
+        jql.append("OR ( Resolved >= ");
+        jql.append(DateUtil.toENDate(issuePeriodId.getStartDate()));
+        jql.append(" AND Resolved <= ");
+        jql.append(DateUtil.toENDate(issuePeriodId.getEndDate()));
+        jql.append(" AND NOT STATUS CHANGED TO \"").append(project.getEndColumn()).append("\" ");
+        jql.append("   )");
+        jql.append(")");
 
         return jql.toString();
     }
