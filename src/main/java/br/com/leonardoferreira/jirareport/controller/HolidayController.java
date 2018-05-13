@@ -2,7 +2,6 @@ package br.com.leonardoferreira.jirareport.controller;
 
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Project;
-import br.com.leonardoferreira.jirareport.domain.vo.HolidayVO;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import org.springframework.stereotype.Controller;
@@ -18,8 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author s2it_leferreira
@@ -84,10 +81,10 @@ public class HolidayController extends AbstractController {
     @PostMapping("/import")
     public ModelAndView importFromAPI(@PathVariable final Long projectId, final RedirectAttributes redirectAttributes) {
 
-        if (!holidayService.createImported(projectId)) {
-            redirectAttributes.addFlashAttribute("flashError", "Feriados ja importados");
-        } else {
+        if (holidayService.createImported(projectId)) {
             redirectAttributes.addFlashAttribute("flashSuccess", "Registros importados com sucesso");
+        } else {
+            redirectAttributes.addFlashAttribute("flashError", "Feriados ja importados");
         }
 
         return new ModelAndView("redirect:/projects/" + projectId + "/holidays");

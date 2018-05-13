@@ -78,7 +78,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     }
 
     @Override
-    public Boolean createImported(Long projectId) {
+    public Boolean createImported(final Long projectId) {
         List<Holiday> holidaysByProject = findByProject(projectId);
         Set<String> holidayAlreadyRegistered = holidaysByProject.stream()
                 .map(Holiday::getDate)
