@@ -98,7 +98,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         return issuePeriodChart;
     }
 
-    private IssueCountBySize buildIssueCountBySize(List<IssuePeriod> issuePeriods) {
+    private IssueCountBySize buildIssueCountBySize(final List<IssuePeriod> issuePeriods) {
         long start = System.currentTimeMillis();
 
         List<String> sizes = new ArrayList<>();
@@ -139,7 +139,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         issueCountBySize.setDatasources(datasources);
 
         long end = System.currentTimeMillis();
-        log.info("Method=buildIssueCountBySize, ms={}", end-start);
+        log.info("Method=buildIssueCountBySize, ms={}", end - start);
         return issueCountBySize;
     }
 
