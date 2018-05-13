@@ -27,7 +27,8 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
 
     private final ProjectRepository projectRepository;
 
-    public ProjectServiceImpl(ProjectClient projectClient, ProjectRepository projectRepository) {
+    public ProjectServiceImpl(final ProjectClient projectClient,
+                              final ProjectRepository projectRepository) {
         this.projectClient = projectClient;
         this.projectRepository = projectRepository;
     }
@@ -51,20 +52,20 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(final Long id) {
         log.info("Method=delete, id={}", id);
         projectRepository.deleteById(id);
     }
 
     @Override
-    public Project findById(Long id) {
+    public Project findById(final Long id) {
         log.info("Method=findById, id={}", id);
         return projectRepository.findById(id)
                 .orElseThrow(ResourceNotFound::new);
     }
 
     @Override
-    public void update(Project project) {
+    public void update(final Project project) {
         log.info("Method=project, project={}", project);
         projectRepository.save(project);
     }

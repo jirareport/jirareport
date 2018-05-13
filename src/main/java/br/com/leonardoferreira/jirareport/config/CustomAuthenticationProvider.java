@@ -10,7 +10,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,25 +23,24 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private AuthService authService;
 
     @Override
-    public Authentication authenticate(Authentication auth)
-            throws AuthenticationException {
+    public Authentication authenticate(final Authentication auth) {
         String username = auth.getName();
         String password = auth.getCredentials().toString();
 
         try {
             Account login = authService.login(new LoginForm(username, password));
-            if (login != null) {
-                return new UsernamePasswordAuthenticationToken(login, null, Collections.emptyList());
-            } else {
+            if (login == null) {
                 throw new BadCredentialsException("External system authentication failed");
             }
+
+            return new UsernamePasswordAuthenticationToken(login, null, Collections.emptyList());
         } catch (Exception e) {
-            throw new BadCredentialsException(e.getMessage());
+            throw new BadCredentialsException(e.getMessage(), e);
         }
     }
 
     @Override
-    public boolean supports(Class<?> auth) {
+    public boolean supports(final Class<?> auth) {
         return auth.equals(UsernamePasswordAuthenticationToken.class);
     }
 }
