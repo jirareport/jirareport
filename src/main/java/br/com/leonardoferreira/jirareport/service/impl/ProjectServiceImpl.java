@@ -2,13 +2,18 @@ package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.client.ProjectClient;
 import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.domain.vo.Statuses;
+import br.com.leonardoferreira.jirareport.domain.vo.StatusesProject;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author lferreira
@@ -62,5 +67,16 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
     public void update(Project project) {
         log.info("Method=project, project={}", project);
         projectRepository.save(project);
+    }
+
+    @Override
+    public Set<String> findStatusFromProjectInJira(final Project project) {
+        List<StatusesProject> listStatusesProject = projectClient.findStatusFromProject(currentToken(), project.getId());
+
+        return listStatusesProject.stream()
+                .map(StatusesProject::getStatuses)
+                .flatMap(Collection::stream)
+                .map(Statuses::getName)
+                .collect(Collectors.toSet());
     }
 }

@@ -53,7 +53,7 @@ public class ProjectController extends AbstractController {
     public ModelAndView update(@PathVariable Long id) {
         Project project = projectService.findById(id);
         return new ModelAndView("projects/edit")
-                .addObject("project", project);
+                .addObject("project", project).addObject("suggestedStatus", projectService.findStatusFromProjectInJira(project));
     }
 
     @PutMapping

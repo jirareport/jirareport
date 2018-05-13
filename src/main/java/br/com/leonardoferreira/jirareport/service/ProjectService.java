@@ -3,6 +3,7 @@ package br.com.leonardoferreira.jirareport.service;
 import br.com.leonardoferreira.jirareport.domain.Project;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by lferreira on 3/26/18
@@ -19,4 +20,6 @@ public interface ProjectService {
     Project findById(Long id);
 
     void update(Project project);
+
+    Set<String> findStatusFromProjectInJira(Project project);
 }
