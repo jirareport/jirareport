@@ -62,7 +62,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
             issuePeriodRepository.save(issuePeriod);
         } catch (Exception e) {
             log.error("Method=create, Msg=erro ao gerar registro", e);
-            throw new CreateIssuePeriodException(e.getMessage());
+            throw new CreateIssuePeriodException(e.getMessage(), e);
         }
     }
 

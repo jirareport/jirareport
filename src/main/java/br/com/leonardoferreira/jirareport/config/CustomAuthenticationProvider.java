@@ -29,13 +29,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         try {
             Account login = authService.login(new LoginForm(username, password));
-            if (login != null) {
-                return new UsernamePasswordAuthenticationToken(login, null, Collections.emptyList());
-            } else {
+            if (login == null) {
                 throw new BadCredentialsException("External system authentication failed");
             }
+
+            return new UsernamePasswordAuthenticationToken(login, null, Collections.emptyList());
         } catch (Exception e) {
-            throw new BadCredentialsException(e.getMessage());
+            throw new BadCredentialsException(e.getMessage(), e);
         }
     }
 

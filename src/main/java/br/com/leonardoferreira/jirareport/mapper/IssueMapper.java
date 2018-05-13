@@ -32,12 +32,13 @@ import org.springframework.util.StringUtils;
 @Component
 public class IssueMapper {
 
-    private JsonParser jsonParser = new JsonParser();
+    private final JsonParser jsonParser;
 
     private final HolidayService holidayService;
 
     public IssueMapper(final HolidayService holidayService) {
         this.holidayService = holidayService;
+        this.jsonParser = new JsonParser();
     }
 
     public List<Issue> parse(final String rawText, final Project project) {
@@ -62,11 +63,11 @@ public class IssueMapper {
                     String endDate = null;
 
                     for (Changelog cl : changelog) {
-                        if (startDate == null && startcolumns.contains(cl.getTo().toUpperCase())) {
+                        if (startDate == null && startcolumns.contains(cl.getTo())) {
                             startDate = DateUtil.toENDate(cl.getCreated());
                         }
 
-                        if (endDate == null && endcolumns.contains(cl.getTo().toUpperCase())) {
+                        if (endDate == null && endcolumns.contains(cl.getTo())) {
                             endDate = DateUtil.toENDate(cl.getCreated());
                         }
                     }
@@ -78,7 +79,7 @@ public class IssueMapper {
                     String epicField = project.getEpicCF();
                     String estimateField = project.getEstimateCF();
 
-                    String epic = epicField.equals("") ? null : getAsStringSafe(fields.get(epicField));
+                    String epic = StringUtils.isEmpty(epicField) ? null : getAsStringSafe(fields.get(epicField));
                     String estimated = null;
                     if (!StringUtils.isEmpty(estimateField) && !fields.get(estimateField).isJsonNull()) {
                         estimated = getAsStringSafe(fields.get(estimateField).getAsJsonObject().get("value"));
@@ -119,16 +120,16 @@ public class IssueMapper {
                 .map(historyRaw -> {
                     JsonObject history = historyRaw.getAsJsonObject();
                     JsonObject item = getItem(history);
-                    if (item != null) {
-                        Changelog changelog = new Changelog();
-                        changelog.setCreated(getDateAsString(history.get("created")));
-                        changelog.setFrom(getAsStringSafe(item.get("from")));
-                        changelog.setTo(getAsStringSafe(item.get("to")));
-
-                        return changelog;
-                    } else {
+                    if (item == null) {
                         return null;
                     }
+
+                    Changelog changelog = new Changelog();
+                    changelog.setCreated(getDateAsString(history.get("created")));
+                    changelog.setFrom(getAsStringSafe(item.get("from")));
+                    changelog.setTo(getAsStringSafe(item.get("to")));
+
+                    return changelog;
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
@@ -215,9 +216,9 @@ public class IssueMapper {
         }
 
         Calendar start = Calendar.getInstance();
-        start.setTime(new SimpleDateFormat(DEFAULT_FORMATTER).parse(startDate));
+        start.setTime(new SimpleDateFormat(DEFAULT_FORMATTER, DateUtil.LOCALE_BR).parse(startDate));
         Calendar end = Calendar.getInstance();
-        end.setTime(new SimpleDateFormat(DEFAULT_FORMATTER).parse(endDate));
+        end.setTime(new SimpleDateFormat(DEFAULT_FORMATTER, DateUtil.LOCALE_BR).parse(endDate));
         Long workingDays = 0L;
         while (!start.after(end)) {
             int day = start.get(Calendar.DAY_OF_WEEK);
@@ -230,7 +231,7 @@ public class IssueMapper {
     }
 
     private boolean isHoliday(final Calendar day, final List<String> holidays) {
-        String aux = new SimpleDateFormat(DEFAULT_FORMATTER).format(day.getTime());
+        String aux = new SimpleDateFormat(DEFAULT_FORMATTER, DateUtil.LOCALE_BR).format(day.getTime());
         return holidays.contains(aux);
     }
 
