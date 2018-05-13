@@ -4,12 +4,14 @@ Work in progress
 
 # Setup
 
-```bash
-# FE dependencies
+## Front End
 
+```bash
 $ npm install
 $ ./node_modules/gulp/bin/gulp.js
-
-# mongo
-$ docker-compose up
 ```
+
+## Database & Jira URL
+
+copy `src/main/resources/application.example.yml` to `src/main/resources/appplication.yml` 
+change `jira.url`, `spring.datasource.username`, `spring.datasource.password`
