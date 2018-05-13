@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 /**
  * @author s2it_leferreira
  * @since 5/7/18 6:52 PM
@@ -78,6 +80,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     }
 
     @Override
+    @Transactional
     public Boolean createImported(final Long projectId) {
         List<Holiday> holidaysByProject = findByProject(projectId);
         Set<String> holidayAlreadyRegistered = holidaysByProject.stream()
