@@ -1,18 +1,15 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
+import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
@@ -40,15 +37,16 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
     private final ChartService chartService;
 
-    public IssuePeriodServiceImpl(IssueService issueService, IssuePeriodRepository issuePeriodRepository,
-                                  ChartService chartService) {
+    public IssuePeriodServiceImpl(final IssueService issueService,
+                                  final IssuePeriodRepository issuePeriodRepository,
+                                  final ChartService chartService) {
         this.issueService = issueService;
         this.issuePeriodRepository = issuePeriodRepository;
         this.chartService = chartService;
     }
 
     @Override
-    public void create(IssuePeriodId issuePeriodId) throws CreateIssuePeriodException {
+    public void create(final IssuePeriodId issuePeriodId) throws CreateIssuePeriodException {
         log.info("Method=create, issuePeriodId={}", issuePeriodId);
 
         if (issuePeriodRepository.existsById(issuePeriodId)) {
@@ -70,7 +68,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
             issuePeriodRepository.save(issuePeriod);
         } catch (Exception e) {
             log.error("Method=create, Msg=erro ao gerar registro", e);
-            throw new CreateIssuePeriodException(e.getMessage());
+            throw new CreateIssuePeriodException(e.getMessage(), e);
         }
     }
 
@@ -85,7 +83,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     }
 
     @Override
-    public IssuePeriodChart getChartByIssues(List<IssuePeriod> issuePeriods) {
+    public IssuePeriodChart getChartByIssues(final List<IssuePeriod> issuePeriods) {
         log.info("Method=getChartByIssues, issuePeriods={}", issuePeriods);
 
         IssuePeriodChart issuePeriodChart = new IssuePeriodChart();

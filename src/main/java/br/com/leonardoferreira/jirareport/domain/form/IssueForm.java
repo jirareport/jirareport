@@ -1,7 +1,5 @@
 package br.com.leonardoferreira.jirareport.domain.form;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

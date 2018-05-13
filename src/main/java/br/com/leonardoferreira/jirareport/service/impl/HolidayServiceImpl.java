@@ -29,14 +29,14 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     }
 
     @Override
-    public List<Holiday> findByProject(Long projectId) {
+    public List<Holiday> findByProject(final Long projectId) {
         log.info("Method=findByProject");
         return (List<Holiday>) holidayRepository.findByProjectId(projectId);
     }
 
 
     @Override
-    public void create(Long projectId, Holiday holiday) {
+    public void create(final Long projectId, final Holiday holiday) {
         log.info("Method=create, holiday={}", holiday);
         final Optional<Project> project = projectRepository.findById(projectId);
         holiday.setProject(project.orElseThrow(()-> new IllegalArgumentException("Projeto obrigatorio")));
@@ -57,7 +57,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     }
 
     @Override
-    public void update(Long projectId, final Holiday holiday) {
+    public void update(final Long projectId, final Holiday holiday) {
         log.info("Method=update, holiday={}", holiday);
         final Optional<Project> project = projectRepository.findById(projectId);
         holiday.setProject(project.orElseThrow(()-> new IllegalArgumentException("Projeto obrigatorio")));
