@@ -29,7 +29,7 @@ public class IssuePeriodController extends AbstractController {
 
     private final IssuePeriodService issuePeriodService;
 
-    public IssuePeriodController(IssuePeriodService issuePeriodService) {
+    public IssuePeriodController(final IssuePeriodService issuePeriodService) {
         this.issuePeriodService = issuePeriodService;
     }
 

@@ -17,12 +17,12 @@ public class AuthServiceImpl implements AuthService {
 
     private final AuthClient authClient;
 
-    public AuthServiceImpl(AuthClient authClient) {
+    public AuthServiceImpl(final AuthClient authClient) {
         this.authClient = authClient;
     }
 
     @Override
-    public Account login(LoginForm loginForm) {
+    public Account login(final LoginForm loginForm) {
         SessionInfo sessionInfo = authClient.login(loginForm);
 
         if (sessionInfo == null || sessionInfo.getSession() == null) {

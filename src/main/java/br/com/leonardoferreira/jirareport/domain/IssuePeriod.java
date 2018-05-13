@@ -3,7 +3,6 @@ package br.com.leonardoferreira.jirareport.domain;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
-import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import java.util.List;
 import javax.persistence.CascadeType;

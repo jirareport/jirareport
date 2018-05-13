@@ -12,11 +12,14 @@ import java.util.Date;
  * @author lferreira
  * @since 7/31/17 10:30 AM
  */
-public class DateUtil {
+public final class DateUtil {
 
     public static final String DEFAULT_FORMATTER = "yyyy-MM-dd";
 
-    public static String displayFormat(String date) {
+    private DateUtil() {
+    }
+
+    public static String displayFormat(final String date) {
         if (StringUtils.isEmpty(date)) {
             return null;
         }

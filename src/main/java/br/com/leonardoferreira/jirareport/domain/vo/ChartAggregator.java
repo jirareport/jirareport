@@ -2,7 +2,6 @@ package br.com.leonardoferreira.jirareport.domain.vo;
 
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
-import br.com.leonardoferreira.jirareport.domain.embedded.LeadTimeBySize;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;

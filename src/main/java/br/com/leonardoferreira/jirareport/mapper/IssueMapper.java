@@ -12,6 +12,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -38,7 +40,7 @@ public class IssueMapper {
         this.holidayService = holidayService;
     }
 
-    public List<Issue> parse(String rawText, Project project) {
+    public List<Issue> parse(final String rawText, final Project project) {
         JsonElement response = jsonParser.parse(rawText);
         JsonArray issues = response.getAsJsonObject()
                 .getAsJsonArray("issues");
@@ -77,10 +79,11 @@ public class IssueMapper {
                     String estimateField = project.getEstimateCF();
 
                     String epic = epicField.equals("") ? null : getAsStringSafe(fields.get(epicField));
-                    String estimated = estimateField.equals("") ?
-                            null :
-                            (getAsStringSafe(fields.get(estimateField).isJsonNull() ?
-                                    null : fields.get(estimateField).getAsJsonObject().get("value")));
+                    String estimated = null;
+                    if (!StringUtils.isEmpty(estimateField) && !fields.get(estimateField).isJsonNull()) {
+                        estimated = getAsStringSafe(fields.get(estimateField).getAsJsonObject().get("value"));
+                    }
+
                     Long leadTime = daysDiff(startDate, endDate, holidays);
 
                     Issue issueVO = new Issue();
@@ -109,7 +112,7 @@ public class IssueMapper {
                 .collect(Collectors.toList());
     }
 
-    private List<Changelog> getChangelog(JsonObject issue, List<String> holidays) {
+    private List<Changelog> getChangelog(final JsonObject issue, final List<String> holidays) {
         JsonArray histories = issue.getAsJsonObject("changelog").getAsJsonArray("histories");
 
         List<Changelog> collect = StreamSupport.stream(histories.spliterator(), true)
@@ -145,7 +148,7 @@ public class IssueMapper {
         return collect;
     }
 
-    private JsonObject getItem(JsonObject history) {
+    private JsonObject getItem(final JsonObject history) {
         JsonArray items = history.getAsJsonArray("items");
 
         return StreamSupport.stream(items.spliterator(), true)
@@ -178,9 +181,9 @@ public class IssueMapper {
             }
 
             return StreamSupport.stream(components.spliterator(), true)
-                    .map(component -> component.isJsonObject() ?
-                            component.getAsJsonObject().get("name").getAsString() :
-                            component.getAsString())
+                    .map(component -> component.isJsonObject()
+                            ? component.getAsJsonObject().get("name").getAsString()
+                            : component.getAsString())
                     .findFirst().orElse(null);
         }
 
@@ -191,14 +194,14 @@ public class IssueMapper {
         return jsonElement.getAsString();
     }
 
-    private String getAsStringSafe(JsonElement jsonElement) {
+    private String getAsStringSafe(final JsonElement jsonElement) {
         if (jsonElement == null || jsonElement.isJsonNull()) {
             return null;
         }
         return jsonElement.getAsString();
     }
 
-    private String getDateAsString(JsonElement jsonElement) {
+    private String getDateAsString(final JsonElement jsonElement) {
         if (jsonElement == null || jsonElement.isJsonNull()) {
             return null;
         }
@@ -206,7 +209,7 @@ public class IssueMapper {
     }
 
     @SneakyThrows
-    private Long daysDiff(String startDate, String endDate, List<String> holidays) {
+    private Long daysDiff(final String startDate, final String endDate, final List<String> holidays) {
         if (StringUtils.isEmpty(startDate) || StringUtils.isEmpty(endDate)) {
             return null;
         }
@@ -226,7 +229,7 @@ public class IssueMapper {
         return workingDays;
     }
 
-    private boolean isHoliday(Calendar day, List<String> holidays) {
+    private boolean isHoliday(final Calendar day, final List<String> holidays) {
         String aux = new SimpleDateFormat(DEFAULT_FORMATTER).format(day.getTime());
         return holidays.contains(aux);
     }

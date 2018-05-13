@@ -22,7 +22,7 @@ public class IssuePeriodChart {
         issuesCount = new Chart<>();
     }
 
-    public void addLeadTime(IssuePeriod issuePeriod) {
+    public void addLeadTime(final IssuePeriod issuePeriod) {
         leadtime.add(issuePeriod.getId().getDates(), issuePeriod.getLeadTime());
     }
 
