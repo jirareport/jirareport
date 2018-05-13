@@ -55,8 +55,9 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     public void create(final Long projectId, final Holiday holiday) {
         log.info("Method=create, holiday={}", holiday);
 
-        final Optional<Project> project = projectRepository.findById(projectId);
-        holiday.setProject(project.orElseThrow(() -> new IllegalArgumentException("Projeto obrigatorio")));
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(ResourceNotFound::new);
+        holiday.setProject(project);
         holidayRepository.save(holiday);
     }
 
