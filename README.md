@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/LeonardoFerreiraa/jirareport.svg?branch=master)](https://travis-ci.org/LeonardoFerreiraa/jirareport)
+
 # Jiratório
 
 Work in progress
