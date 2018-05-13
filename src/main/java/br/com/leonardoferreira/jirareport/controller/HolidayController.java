@@ -82,9 +82,9 @@ public class HolidayController extends AbstractController {
     public ModelAndView importFromAPI(@PathVariable final Long projectId, final RedirectAttributes redirectAttributes) {
 
         if (holidayService.createImported(projectId)) {
-            redirectAttributes.addFlashAttribute("flashSuccess", "Registros importados com sucesso");
+            redirectAttributes.addFlashAttribute("flashSuccess", "Registros importados com sucesso.");
         } else {
-            redirectAttributes.addFlashAttribute("flashError", "Feriados ja importados");
+            redirectAttributes.addFlashAttribute("flashError", "Feriados já importados.");
         }
 
         return new ModelAndView("redirect:/projects/" + projectId + "/holidays");

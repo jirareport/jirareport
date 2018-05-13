@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = "2.0.0.RELEASE"
+        springBootVersion = "2.0.2.RELEASE"
     }
     repositories {
         mavenCentral()
@@ -20,8 +20,8 @@ apply plugin: "pmd"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-compileJava.options.encoding = 'UTF-8'
-compileTestJava.options.encoding = 'UTF-8'
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
 
 repositories {
     mavenCentral()
@@ -31,7 +31,9 @@ repositories {
 ext {
     gsonVersion = "2.8.1"
     httpClientVersion = "4.5.1"
-    springCloudVersion = 'Finchley.RC1'
+    springCloudVersion = "Finchley.RC1"
+    hibernateTypesVersion = "2.2.0"
+    mapstructVersion = "1.2.0.Final"
 }
 
 dependencies {
@@ -50,11 +52,14 @@ dependencies {
 
     compile("org.springframework.cloud:spring-cloud-starter-openfeign")
 
-    compileOnly("org.projectlombok:lombok")
-
     runtime("org.postgresql:postgresql")
 
-    compile 'com.vladmihalcea:hibernate-types-52:2.2.0'
+    compile("com.vladmihalcea:hibernate-types-52:${hibernateTypesVersion}")
+
+    compile("org.mapstruct:mapstruct-jdk8:${mapstructVersion}")
+    compile("org.mapstruct:mapstruct-processor:${mapstructVersion}")
+
+    compileOnly("org.projectlombok:lombok")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }

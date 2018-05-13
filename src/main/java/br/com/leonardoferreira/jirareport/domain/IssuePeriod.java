@@ -29,7 +29,7 @@ import org.hibernate.annotations.Type;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class IssuePeriod extends BaseEntity {
 
     private static final long serialVersionUID = 7188140641247774389L;

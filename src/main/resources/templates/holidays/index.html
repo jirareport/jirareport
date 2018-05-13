@@ -33,9 +33,9 @@
                     <td th:text="${holiday.date}"></td>
                     <td th:text="${holiday.description}"></td>
                     <td>
-                        <a th:href="@{/holidays/{id}(id=${holiday.id})}"
+                        <a th:href="@{/projects/{projectId}/holidays/{id}(projectId=${projectId},id=${holiday.id})}"
                            data-method="DELETE" data-confirm="Tem certeza?" class="btn btn-xs btn-danger">Remover</a>
-                        <a th:href="@{/holidays/edit/{id}(id=${holiday.id})}" class="btn btn-xs btn-primary">Alterar</a>
+                        <a th:href="@{/projects/{projectId}/holidays/edit/{id}(projectId=${projectId}, id=${holiday.id})}" class="btn btn-xs btn-primary">Alterar</a>
                     </td>
                 </tr>
                 </tbody>
