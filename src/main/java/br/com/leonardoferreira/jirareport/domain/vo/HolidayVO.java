@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -14,6 +15,8 @@ public class HolidayVO {
     private String link;
     private String type;
     private String description;
-    private String type_code;
+
+    @JsonProperty("type_code")
+    private String typeCode;
 
 }

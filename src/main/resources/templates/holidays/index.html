@@ -13,7 +13,7 @@
             <a th:href="@{/projects/{projectId}/holidays/new(projectId=${project.id})}" class="btn btn-primary">Novo
                 Feriado</a>
 
-            <a th:href="@{/projects/{projectId}/holidays/import(projectId=${project.id})}" class="btn btn-primary">Importar
+            <a data-method="POST" th:href="@{/projects/{projectId}/holidays/import(projectId=${project.id})}" class="btn btn-primary">Importar
                 Feriados</a>
         </div>
 
