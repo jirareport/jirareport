@@ -1,11 +1,19 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
+import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
@@ -16,6 +24,7 @@ import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * @author lferreira
@@ -76,15 +85,64 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     }
 
     @Override
-    public IssuePeriodChart getChartByIssues(List<IssuePeriod> issues) {
-        log.info("Method=getChartByIssues, issues={}", issues);
+    public IssuePeriodChart getChartByIssues(List<IssuePeriod> issuePeriods) {
+        log.info("Method=getChartByIssues, issuePeriods={}", issuePeriods);
 
         IssuePeriodChart issuePeriodChart = new IssuePeriodChart();
-        issues.stream()
+        issuePeriods.stream()
                 .peek(issuePeriodChart::addLeadTime)
                 .forEach(issuePeriodChart::addIssuesCount);
 
+        IssueCountBySize issueCountBySize = buildIssueCountBySize(issuePeriods);
+
+        issuePeriodChart.setIssueCountBySize(issueCountBySize);
+
         return issuePeriodChart;
+    }
+
+    private IssueCountBySize buildIssueCountBySize(List<IssuePeriod> issuePeriods) {
+        long start = System.currentTimeMillis();
+
+        List<String> sizes = new ArrayList<>();
+        Map<String, Map<String, Long>> idEstimative = new HashMap<>();
+        for (IssuePeriod issuePeriod : issuePeriods) {
+            Map<String, Long> collect = issuePeriod.getIssues().stream()
+                    .filter(i -> !StringUtils.isEmpty(i.getEstimated()))
+                    .peek(i -> sizes.add(i.getEstimated()))
+                    .collect(Collectors.groupingBy(Issue::getEstimated, Collectors.counting()));
+            idEstimative.put(issuePeriod.getId().getDates(), collect);
+        }
+
+        idEstimative.forEach((k, v) -> {
+            for (String size : sizes) {
+                if (!v.containsKey(size)) {
+                    v.put(size, 0L);
+                }
+            }
+        });
+
+        Map<String, List<Long>> datasources = new HashMap<>();
+        for (Map<String, Long> stringLongMap : idEstimative.values()) {
+            stringLongMap.forEach((k, v) -> {
+                if (datasources.containsKey(k)) {
+                    List<Long> longs = datasources.get(k);
+                    longs.add(v);
+                    datasources.put(k, longs);
+                } else {
+                    ArrayList<Long> value = new ArrayList<>();
+                    value.add(v);
+                    datasources.put(k, value);
+                }
+            });
+        }
+
+        IssueCountBySize issueCountBySize = new IssueCountBySize();
+        issueCountBySize.setLabels(idEstimative.keySet());
+        issueCountBySize.setDatasources(datasources);
+
+        long end = System.currentTimeMillis();
+        log.info("Method=buildIssueCountBySize, ms={}", end-start);
+        return issueCountBySize;
     }
 
     @Override

@@ -97,6 +97,23 @@ public class Seed implements CommandLineRunner {
             issues.add(issue);
         }
 
+        for (int i = 11; i < 16; i++) {
+            Issue issue = new Issue();
+            issue.setKey("MOCK-" + i);
+            issue.setCreator("Mock Creator");
+            issue.setCreated("26/12/1995");
+            issue.setUpdated("26/12/1995");
+            issue.setStartDate(LocalDate.of(2018, 01, i).format(dateTimeFormatter));
+            issue.setEndDate(LocalDate.of(2018, 01, i + 5).format(dateTimeFormatter));
+            issue.setLeadTime(5L);
+            issue.setSystem(i % 2 == 0 ? "System Mock" : "Other System");
+            issue.setEpic("Epic Mock");
+            issue.setSummary("Mock description");
+            issue.setChangelog(buildChangeLog());
+            issue.setEstimated("G");
+            issues.add(issue);
+        }
+
         return issues;
     }
 

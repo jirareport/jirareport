@@ -52,6 +52,7 @@
         <li role="presentation" class="active"><a href="#list" data-toggle="tab">Listagem</a></li>
         <li role="presentation"><a href="#leadtime" data-toggle="tab">LeadTime</a></li>
         <li role="presentation"><a href="#issuesCount" data-toggle="tab">Contagem de histórias</a></li>
+        <li role="presentation"><a href="#issueCountBySize" data-toggle="tab">Contagem de histórias por estimativa</a></li>
     </ul>
 
     <div class="panel panel-default bt-0">
@@ -96,6 +97,9 @@
                             th:if="${issuePeriodChart.issuesCount.hasData}"
                             th:include="components/chart/_bar :: chart('issuesCount_chart', 'Histórias', 'Mês', ${issuePeriodChart.issuesCount})" />
                     <span th:unless="${issuePeriodChart.issuesCount.hasData}">Nenhum registro encontrado</span>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="issueCountBySize">
+                    <th:block th:include="issue-periods/issueCountBySize :: chart(${issuePeriodChart.issueCountBySize})" />
                 </div>
             </div>
         </div>
