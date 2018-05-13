@@ -8,8 +8,12 @@ import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
 import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +30,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     private final HolidayClient holidayClient;
 
     public HolidayServiceImpl(final HolidayRepository holidayRepository,
-                              final ProjectRepository projectRepository, HolidayClient holidayClient) {
+                              final ProjectRepository projectRepository, final HolidayClient holidayClient) {
         this.holidayRepository = holidayRepository;
         this.projectRepository = projectRepository;
         this.holidayClient = holidayClient;
@@ -43,7 +47,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     public void create(final Long projectId, final Holiday holiday) {
         log.info("Method=create, holiday={}", holiday);
         final Optional<Project> project = projectRepository.findById(projectId);
-        holiday.setProject(project.orElseThrow(()-> new IllegalArgumentException("Projeto obrigatorio")));
+        holiday.setProject(project.orElseThrow(() -> new IllegalArgumentException("Projeto obrigatorio")));
         holidayRepository.save(holiday);
     }
 
@@ -64,12 +68,33 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     public void update(final Long projectId, final Holiday holiday) {
         log.info("Method=update, holiday={}", holiday);
         final Optional<Project> project = projectRepository.findById(projectId);
-        holiday.setProject(project.orElseThrow(()-> new IllegalArgumentException("Projeto obrigatorio")));
+        holiday.setProject(project.orElseThrow(() -> new IllegalArgumentException("Projeto obrigatorio")));
         holidayRepository.save(holiday);
     }
 
     @Override
-    public List<HolidayVO> findAllHolidaysInCity(String year, String state, String city) {
+    public List<HolidayVO> findAllHolidaysInCity(final String year, final String state, final String city) {
         return holidayClient.findAllHolidaysInCity(year, state, city);
+    }
+
+    @Override
+    public Boolean createImported(Long projectId) {
+        List<Holiday> holidaysByProject = findByProject(projectId);
+        Set<String> holidayAlreadyRegistered = holidaysByProject.stream()
+                .map(Holiday::getDate)
+                .collect(Collectors.toSet());
+
+        List<HolidayVO> allHolidaysInCity = findAllHolidaysInCity("2018", "SP", "ARARAQUARA");
+        List<HolidayVO> onlyNewHolidays = allHolidaysInCity.stream()
+                .filter(e -> !holidayAlreadyRegistered.contains(e.getDate()))
+                .collect(Collectors.toList());
+
+        if (onlyNewHolidays.isEmpty()) {
+            return false;
+        } else {
+            onlyNewHolidays.forEach(holidayVO -> create(projectId,
+                    Holiday.builder().date(holidayVO.getDate()).description(holidayVO.getName()).build()));
+            return true;
+        }
     }
 }

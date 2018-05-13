@@ -1,17 +1,10 @@
 package br.com.leonardoferreira.jirareport.controller;
 
-import br.com.leonardoferreira.jirareport.builder.HolidayBuilder;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.vo.HolidayVO;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +16,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author s2it_leferreira
@@ -84,23 +81,12 @@ public class HolidayController extends AbstractController {
         return new ModelAndView("redirect:/projects/" + projectId + "/holidays");
     }
 
-    @GetMapping("/import")
+    @PostMapping("/import")
     public ModelAndView importFromAPI(@PathVariable final Long projectId, final RedirectAttributes redirectAttributes) {
 
-        List<Holiday> holidaysByProject = holidayService.findByProject(projectId);
-        Set<String> holidayAlreadyRegistered = holidaysByProject.stream()
-                .map(Holiday::getDate)
-                .collect(Collectors.toSet());
-
-        List<HolidayVO> allHolidaysInCity = holidayService.findAllHolidaysInCity("2018", "SP", "ARARAQUARA");
-        List<HolidayVO> onlyNewHolidays = allHolidaysInCity.stream()
-                .filter(e -> !holidayAlreadyRegistered.contains(e.getDate()))
-                .collect(Collectors.toList());
-
-        if (onlyNewHolidays.isEmpty()) {
+        if (!holidayService.createImported(projectId)) {
             redirectAttributes.addFlashAttribute("flashError", "Feriados ja importados");
         } else {
-            onlyNewHolidays.forEach(holidayVO -> holidayService.create(projectId, HolidayBuilder.builderVoToEntity(holidayVO)));
             redirectAttributes.addFlashAttribute("flashSuccess", "Registros importados com sucesso");
         }
 

@@ -2,7 +2,8 @@ jira:
     url: https://jira.url/jira
 
 holiday:
-  url: https://api.calendario.com.br/?json=true&token=anVsaW8uZmFsYm8ucmpAZ21haWwuY29tJmhhc2g9Mzg3MzA5NTI=&
+  url: https://api.calendario.com.br/?json=true&token=
+  token: seuToken
 
 spring:
   application:

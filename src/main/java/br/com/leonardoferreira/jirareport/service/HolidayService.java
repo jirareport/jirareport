@@ -22,4 +22,6 @@ public interface HolidayService {
     void update(Long projectId, Holiday holiday);
 
     List<HolidayVO> findAllHolidaysInCity(String year, String state, String city);
+
+    Boolean createImported(Long projectId);
 }
