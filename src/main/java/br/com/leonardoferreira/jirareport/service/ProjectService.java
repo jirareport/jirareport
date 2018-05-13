@@ -19,4 +19,6 @@ public interface ProjectService {
     Project findById(Long id);
 
     void update(Project project);
+
+    List<String> getStatusesFromProjectInJira(Project project);
 }

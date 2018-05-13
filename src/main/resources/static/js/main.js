@@ -82,6 +82,15 @@ $(document).ready(function() {
         form.submit();
         return false;
     });
+
+     $(function() {
+        $('#fluxColumn_select a').click(function() {
+            var value = $(this).text().trim();
+            var input = $('#fluxColumn');
+            input.val(input.val() + value + ', ');
+            return false;
+        });
+    });
 })
 
 function randomColor() {
