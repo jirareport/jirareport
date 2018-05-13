@@ -1,6 +1,8 @@
 package br.com.leonardoferreira.jirareport.service;
 
 import br.com.leonardoferreira.jirareport.domain.Holiday;
+import br.com.leonardoferreira.jirareport.domain.vo.HolidayVO;
+
 import java.util.List;
 
 /**
@@ -18,4 +20,6 @@ public interface HolidayService {
     Holiday findById(Long id);
 
     void update(Long projectId, Holiday holiday);
+
+    List<HolidayVO> findAllHolidaysInCity(String year, String state, String city);
 }

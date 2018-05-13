@@ -1,10 +1,17 @@
 package br.com.leonardoferreira.jirareport.controller;
 
+import br.com.leonardoferreira.jirareport.builder.HolidayBuilder;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.domain.vo.HolidayVO;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
+
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -30,7 +37,7 @@ public class HolidayController extends AbstractController {
     private final ProjectService projectService;
 
     public HolidayController(final HolidayService holidayService,
-            final ProjectService projectService) {
+                             final ProjectService projectService) {
         this.holidayService = holidayService;
         this.projectService = projectService;
     }
@@ -53,9 +60,9 @@ public class HolidayController extends AbstractController {
 
     @PostMapping
     public ModelAndView create(@PathVariable final Long projectId,
-            @Validated final Holiday holiday,
-            final BindingResult bindingResult,
-            final RedirectAttributes redirectAttributes) {
+                               @Validated final Holiday holiday,
+                               final BindingResult bindingResult,
+                               final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("holidays/new")
                     .addObject("holiday", holiday)
@@ -70,10 +77,33 @@ public class HolidayController extends AbstractController {
 
     @DeleteMapping("/{id}")
     public ModelAndView delete(@PathVariable final Long projectId,
-            @PathVariable final Long id, final RedirectAttributes redirectAttributes) {
+                               @PathVariable final Long id, final RedirectAttributes redirectAttributes) {
         holidayService.delete(id);
 
         redirectAttributes.addFlashAttribute("flashSuccess", "Registro removido com sucesso");
+        return new ModelAndView("redirect:/projects/" + projectId + "/holidays");
+    }
+
+    @GetMapping("/import")
+    public ModelAndView importFromAPI(@PathVariable final Long projectId, final RedirectAttributes redirectAttributes) {
+
+        List<Holiday> holidaysByProject = holidayService.findByProject(projectId);
+        Set<String> holidayAlreadyRegistered = holidaysByProject.stream()
+                .map(Holiday::getDate)
+                .collect(Collectors.toSet());
+
+        List<HolidayVO> allHolidaysInCity = holidayService.findAllHolidaysInCity("2018", "SP", "ARARAQUARA");
+        List<HolidayVO> onlyNewHolidays = allHolidaysInCity.stream()
+                .filter(e -> !holidayAlreadyRegistered.contains(e.getDate()))
+                .collect(Collectors.toList());
+
+        if (onlyNewHolidays.isEmpty()) {
+            redirectAttributes.addFlashAttribute("flashError", "Feriados ja importados");
+        } else {
+            onlyNewHolidays.forEach(holidayVO -> holidayService.create(projectId, HolidayBuilder.builderVoToEntity(holidayVO)));
+            redirectAttributes.addFlashAttribute("flashSuccess", "Registros importados com sucesso");
+        }
+
         return new ModelAndView("redirect:/projects/" + projectId + "/holidays");
     }
 
@@ -87,14 +117,14 @@ public class HolidayController extends AbstractController {
 
     @PutMapping
     public ModelAndView update(@PathVariable final Long projectId,
-            @Validated final Holiday holiday,
-            final BindingResult bindingResult,
-            final RedirectAttributes redirectAttributes) {
+                               @Validated final Holiday holiday,
+                               final BindingResult bindingResult,
+                               final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("holidays/edit")
                     .addObject("holiday", holiday)
                     .addObject("projectId", projectId);
-            }
+        }
 
         holidayService.update(projectId, holiday);
 

@@ -1,7 +1,9 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import br.com.leonardoferreira.jirareport.client.HolidayClient;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.domain.vo.HolidayVO;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
 import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
@@ -21,11 +23,13 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
 
     private final HolidayRepository holidayRepository;
     private final ProjectRepository projectRepository;
+    private final HolidayClient holidayClient;
 
     public HolidayServiceImpl(final HolidayRepository holidayRepository,
-            final ProjectRepository projectRepository) {
+                              final ProjectRepository projectRepository, HolidayClient holidayClient) {
         this.holidayRepository = holidayRepository;
         this.projectRepository = projectRepository;
+        this.holidayClient = holidayClient;
     }
 
     @Override
@@ -62,5 +66,10 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
         final Optional<Project> project = projectRepository.findById(projectId);
         holiday.setProject(project.orElseThrow(()-> new IllegalArgumentException("Projeto obrigatorio")));
         holidayRepository.save(holiday);
+    }
+
+    @Override
+    public List<HolidayVO> findAllHolidaysInCity(String year, String state, String city) {
+        return holidayClient.findAllHolidaysInCity(year, state, city);
     }
 }
