@@ -21,7 +21,7 @@ public class ProjectController extends AbstractController {
 
     private final ProjectService projectService;
 
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(final ProjectService projectService) {
         this.projectService = projectService;
     }
 
@@ -38,26 +38,26 @@ public class ProjectController extends AbstractController {
     }
 
     @PostMapping
-    public ModelAndView create(Project project) {
+    public ModelAndView create(final Project project) {
         projectService.create(project);
         return new ModelAndView(String.format("redirect:/projects/%s/edit", project.getId()));
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView delete(@PathVariable Long id) {
+    public ModelAndView delete(@PathVariable final Long id) {
         projectService.delete(id);
         return new ModelAndView("redirect:/projects");
     }
 
     @GetMapping("/{id}/edit")
-    public ModelAndView update(@PathVariable Long id) {
+    public ModelAndView update(@PathVariable final Long id) {
         Project project = projectService.findById(id);
         return new ModelAndView("projects/edit")
                 .addObject("project", project).addObject("suggestedStatus", projectService.findStatusFromProjectInJira(project));
     }
 
     @PutMapping
-    public ModelAndView update(Project project) {
+    public ModelAndView update(final Project project) {
         projectService.update(project);
         return new ModelAndView(String.format("redirect:/projects/%s/issue-periods", project.getId()));
     }

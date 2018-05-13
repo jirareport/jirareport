@@ -1,8 +1,6 @@
 package br.com.leonardoferreira.jirareport.domain.vo;
 
-import java.time.LocalDateTime;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * @author s2it_leferreira
