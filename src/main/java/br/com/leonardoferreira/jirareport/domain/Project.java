@@ -17,7 +17,7 @@ import org.hibernate.annotations.Type;
  */
 @Data
 @Entity
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = "id", callSuper = false)
 public class Project extends BaseEntity {
 
     private static final long serialVersionUID = -7981771761592933325L;

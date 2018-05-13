@@ -22,7 +22,7 @@ import org.hibernate.annotations.Type;
 @Data
 @Entity
 @ToString(of = "key")
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class Issue extends BaseEntity {
     private static final long serialVersionUID = -1084659211505084402L;
 

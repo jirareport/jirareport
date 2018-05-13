@@ -1,7 +1,8 @@
 package br.com.leonardoferreira.jirareport.service;
 
-import br.com.leonardoferreira.jirareport.domain.Holiday;
 import java.util.List;
+
+import br.com.leonardoferreira.jirareport.domain.Holiday;
 
 /**
  * @author s2it_leferreira
@@ -18,4 +19,6 @@ public interface HolidayService {
     Holiday findById(Long id);
 
     void update(Long projectId, Holiday holiday);
+
+    boolean createImported(Long projectId);
 }
