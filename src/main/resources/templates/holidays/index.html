@@ -30,7 +30,7 @@
                 </thead>
                 <tbody class="search-list-name">
                 <tr th:each="holiday : ${holidays}">
-                    <td th:text="${holiday.date}"></td>
+                    <td th:text="${#temporals.format(holiday.date, 'dd/MM/yyyy')}"></td>
                     <td th:text="${holiday.description}"></td>
                     <td>
                         <a th:href="@{/projects/{projectId}/holidays/{id}(projectId=${projectId},id=${holiday.id})}"

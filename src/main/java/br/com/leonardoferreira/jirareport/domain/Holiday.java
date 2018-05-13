@@ -1,5 +1,8 @@
 package br.com.leonardoferreira.jirareport.domain;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,11 +12,12 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotNull;
 
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * @author s2it_leferreira
@@ -22,7 +26,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @EqualsAndHashCode(of = {"date", "project"}, callSuper = false)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "date", "project_id" }))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"date", "project_id"}))
 public class Holiday extends BaseEntity {
 
     private static final long serialVersionUID = 18640912961216513L;
@@ -31,9 +35,9 @@ public class Holiday extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "A data deve ser informada.")
-    @Pattern(regexp = "[0-9]{2}/[0-9]{2}/[0-9]{4}", message = "Deve ser uma data valida.")
-    private String date;
+    @NotNull(message = "A data deve ser informada.")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate date;
 
     @NotEmpty(message = "A descrição deve ser informada.")
     private String description;
@@ -43,7 +47,7 @@ public class Holiday extends BaseEntity {
 
     @Transient
     public String getEnDate() {
-        return DateUtil.toENDate(date);
+        return date == null ? null : date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd", DateUtil.LOCALE_BR));
     }
 
 }

@@ -15,7 +15,8 @@ public interface HolidayMapper {
     @Mappings({
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "description", source = "holidayVO.name"),
-            @Mapping(target = "project.id", source = "projectId")
+            @Mapping(target = "project.id", source = "projectId"),
+            @Mapping(target = "date", source = "holidayVO.date", dateFormat = "dd/MM/yyyy")
     })
     Holiday fromVO(HolidayVO holidayVO, Long projectId);
 
