@@ -6,8 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
-
 /**
  * @author lferreira
  * @since 11/14/17 3:48 PM
@@ -50,7 +48,7 @@ public class ProjectController extends AbstractController {
     public ModelAndView update(@PathVariable Long id) {
         Project project = projectService.findById(id);
         return new ModelAndView("projects/edit")
-                .addObject("project", project).addObject("suggestedStatus", projectService.getStatusesFromProjectInJira(project));
+                .addObject("project", project).addObject("suggestedStatus", projectService.findStatusFromProjectInJira(project));
     }
 
     @PutMapping

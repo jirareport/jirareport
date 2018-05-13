@@ -6,16 +6,10 @@ import br.com.leonardoferreira.jirareport.domain.vo.StatusesProject;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -73,16 +67,11 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
     }
 
     @Override
-    public List<String> getStatusesFromProjectInJira(final Project project) {
-        String rawText = projectClient.getStatusesFromProject(currentToken(), project.getId());
-
-        JsonElement response = new JsonParser().parse(rawText);
-        Type collectionType = new TypeToken<Collection<StatusesProject>>() {
-        }.getType();
-        List<StatusesProject> object = new Gson().fromJson(response, collectionType);
+    public List<String> findStatusFromProjectInJira(final Project project) {
+        List<StatusesProject> listStatusesProject = projectClient.findStatusFromProject(currentToken(), project.getId());
 
         List<String> status = new ArrayList<>();
-        object.forEach(statusesProject -> statusesProject.getStatuses().forEach(statuses -> {
+        listStatusesProject.forEach(statusesProject -> statusesProject.getStatuses().forEach(statuses -> {
             if (!status.contains(statuses.getName())) {
                 status.add(statuses.getName());
             }

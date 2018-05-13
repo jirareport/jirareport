@@ -1,6 +1,7 @@
 package br.com.leonardoferreira.jirareport.service;
 
 import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.domain.vo.StatusesProject;
 
 import java.util.List;
 
@@ -20,5 +21,5 @@ public interface ProjectService {
 
     void update(Project project);
 
-    List<String> getStatusesFromProjectInJira(Project project);
+    List<String> findStatusFromProjectInJira(Project project);
 }
