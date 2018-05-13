@@ -10,14 +10,12 @@ import javax.persistence.Query;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.repository.IssueCustomRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.thymeleaf.util.StringUtils;
 
 @Slf4j
 @Repository
@@ -35,34 +33,34 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         Map<String, Object> params = new HashMap<>();
 
         StringBuilder sb = new StringBuilder();
-        sb.append(" select issue.* from issue ");
-        sb.append(" inner join issue_period_issue on issue_period_issue.issue_key = issue.key ");
-        sb.append(" where issue_period_issue.project_id = :projectId");
+        sb.append(" SELECT issue.* FROM issue ");
+        sb.append(" INNER JOIN issue_period_issue ON issue_period_issue.issue_key = issue.key ");
+        sb.append(" WHERE issue_period_issue.project_id = :projectId");
 
-        sb.append(" AND to_date(issue.end_date, 'DD/MM/YYYY') BETWEEN :startDate and :endDate ");
+        sb.append(" AND to_date(issue.end_date, 'DD/MM/YYYY') BETWEEN :startDate AND :endDate ");
 
         if (!CollectionUtils.isEmpty(issueForm.getKeys())) {
-            sb.append(" AND issue.key not in (:keys) ");
+            sb.append(" AND issue.key NOT IN (:keys) ");
             params.put("keys", issueForm.getKeys());
         }
 
         if (!CollectionUtils.isEmpty(issueForm.getTaskSize())) {
-            sb.append(" AND issue.estimated in (:taskSize) ");
+            sb.append(" AND issue.estimated IN (:taskSize) ");
             params.put("taskSize", issueForm.getTaskSize());
         }
 
         if (!CollectionUtils.isEmpty(issueForm.getSystems())) {
-            sb.append(" AND issue.system in (:systems) ");
+            sb.append(" AND issue.system IN (:systems) ");
             params.put("systems", issueForm.getSystems());
         }
 
         if (!CollectionUtils.isEmpty(issueForm.getEpics())) {
-            sb.append(" AND issue.epic in (:epics) ");
+            sb.append(" AND issue.epic IN (:epics) ");
             params.put("epics", issueForm.getEpics());
         }
 
         if (!CollectionUtils.isEmpty(issueForm.getIssueTypes())) {
-            sb.append(" AND issue.issue_type in (:issueTypes) ");
+            sb.append(" AND issue.issue_type IN (:issueTypes) ");
             params.put("issueTypes", issueForm.getIssueTypes());
         }
 
@@ -70,8 +68,8 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         params.put("startDate", issueForm.getStartDate());
         params.put("endDate", issueForm.getEndDate());
 
-        sb.append(" group by issue.key ");
-        sb.append(" order by issue.key ");
+        sb.append(" GROUP BY issue.key ");
+        sb.append(" ORDER BY issue.key ");
 
         Query nativeQuery = entityManager.createNativeQuery(sb.toString(), Issue.class);
         params.forEach(nativeQuery::setParameter);

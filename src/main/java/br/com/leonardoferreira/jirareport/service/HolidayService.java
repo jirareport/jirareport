@@ -9,8 +9,6 @@ import java.util.List;
  */
 public interface HolidayService {
 
-    List<Holiday> findAll();
-
     List<Holiday> findByProject(Long projectId);
 
     void create(Long projectId, Holiday holiday);
