@@ -1,14 +1,17 @@
 package br.com.leonardoferreira.jirareport.domain;
 
-import br.com.leonardoferreira.jirareport.util.DateUtil;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+
+import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,7 +21,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @Entity
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = {"date", "project"}, callSuper = false)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "date", "project_id" }))
 public class Holiday extends BaseEntity {
 
     private static final long serialVersionUID = 18640912961216513L;
