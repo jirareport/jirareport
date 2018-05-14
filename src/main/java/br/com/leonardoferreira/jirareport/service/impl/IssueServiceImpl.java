@@ -1,9 +1,5 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import br.com.leonardoferreira.jirareport.client.IssueClient;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.Project;
@@ -18,6 +14,9 @@ import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,10 +93,11 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         final SandBoxFilter sandBoxFilter = new SandBoxFilter();
 
         sandBoxFilter.setEstimatives(issueRepository.findAllEstimativesByProjectId(projectId));
-        sandBoxFilter.setKeys(Stream.concat(sandBox.getIssues().stream().map(Issue::getKey), issueForm.getKeys().stream())
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList()));
+        sandBoxFilter
+                .setKeys(Stream.concat(sandBox.getIssues().stream().map(Issue::getKey), issueForm.getKeys().stream())
+                        .distinct()
+                        .sorted()
+                        .collect(Collectors.toList()));
         sandBoxFilter.setSystems(issueRepository.findAllSystemsByProjectId(projectId));
         sandBoxFilter.setEpics(issueRepository.findAllEpicsByProjectId(projectId));
         sandBoxFilter.setIssueTypes(issueRepository.findAllIssueTypesByProjectId(projectId));
@@ -115,14 +115,14 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
                     .map(i -> "'" + i + "'")
                     .collect(Collectors.toList()))).append(" ) ");
         }
-        jql.append("AND (STATUS CHANGED TO \"").append(project.getEndColumn()).append("\" DURING(\"");
-        jql.append(DateUtil.toENDate(issuePeriodId.getStartDate())).append("\", \"");
-        jql.append(DateUtil.toENDate(issuePeriodId.getEndDate())).append("\")");
+        jql.append("AND (STATUS CHANGED TO '").append(project.getEndColumn()).append("' DURING('");
+        jql.append(DateUtil.toENDate(issuePeriodId.getStartDate())).append("', '");
+        jql.append(DateUtil.toENDate(issuePeriodId.getEndDate())).append(" 23:59')");
         jql.append("OR ( Resolved >= ");
         jql.append(DateUtil.toENDate(issuePeriodId.getStartDate()));
-        jql.append(" AND Resolved <= ");
-        jql.append(DateUtil.toENDate(issuePeriodId.getEndDate()));
-        jql.append(" AND NOT STATUS CHANGED TO \"").append(project.getEndColumn()).append("\" ");
+        jql.append(" AND Resolved <= '");
+        jql.append(DateUtil.toENDate(issuePeriodId.getEndDate())).append(" 23:59'");
+        jql.append(" AND NOT STATUS CHANGED TO '").append(project.getEndColumn()).append("' ");
         jql.append("   )");
         jql.append(")");
 

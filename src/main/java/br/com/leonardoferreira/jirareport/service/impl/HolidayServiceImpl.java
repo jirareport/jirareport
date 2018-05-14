@@ -1,9 +1,5 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import br.com.leonardoferreira.jirareport.client.HolidayClient;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Project;
@@ -13,6 +9,9 @@ import br.com.leonardoferreira.jirareport.mapper.HolidayMapper;
 import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
 import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -43,9 +42,8 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     @Transactional(readOnly = true)
     public List<Holiday> findByProject(final Long projectId) {
         log.info("Method=findByProject");
-        return holidayRepository.findByProjectId(projectId);
+        return holidayRepository.findByProjectIdOrderByDate(projectId);
     }
-
 
     @Override
     @Transactional

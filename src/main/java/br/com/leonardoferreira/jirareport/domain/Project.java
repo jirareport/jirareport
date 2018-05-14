@@ -3,6 +3,7 @@ package br.com.leonardoferreira.jirareport.domain;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -48,6 +49,19 @@ public class Project extends BaseEntity {
     private String systemCF;
 
     private String projectCF;
+
+    public void setStartColumn(final String startColumn) {
+        this.startColumn = startColumn == null ? null : startColumn.toUpperCase();
+    }
+
+    public void setEndColumn(final String endColumn) {
+        this.endColumn = endColumn == null ? null : endColumn.toUpperCase();
+    }
+
+    public void setFluxColumn(final List<String> fluxColumn) {
+        this.fluxColumn =
+                fluxColumn == null ? null : fluxColumn.stream().map(String::toUpperCase).collect(Collectors.toList());
+    }
 
     @Transient
     public Set<String> getStartColumns() {

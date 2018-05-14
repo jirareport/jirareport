@@ -9,5 +9,6 @@ import org.springframework.data.repository.CrudRepository;
  * @since 5/7/18 6:51 PM
  */
 public interface HolidayRepository extends CrudRepository<Holiday, Long> {
-    List<Holiday> findByProjectId(Long id);
+
+    List<Holiday> findByProjectIdOrderByDate(Long id);
 }
