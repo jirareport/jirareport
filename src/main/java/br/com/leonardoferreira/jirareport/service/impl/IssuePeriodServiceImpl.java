@@ -125,16 +125,16 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         long start = System.currentTimeMillis();
 
         List<String> sizes = new ArrayList<>();
-        Map<String, Map<String, Long>> idEstimative = new HashMap<>();
+        Map<String, Map<String, Long>> periodsSize = new HashMap<>();
         for (IssuePeriod issuePeriod : issuePeriods) {
             Map<String, Long> collect = issuePeriod.getIssues().stream()
                     .filter(i -> !StringUtils.isEmpty(i.getEstimated()))
                     .peek(i -> sizes.add(i.getEstimated()))
                     .collect(Collectors.groupingBy(Issue::getEstimated, Collectors.counting()));
-            idEstimative.put(issuePeriod.getId().getDates(), collect);
+            periodsSize.put(issuePeriod.getId().getDates(), collect);
         }
 
-        idEstimative.forEach((k, v) -> {
+        periodsSize.forEach((k, v) -> {
             for (String size : sizes) {
                 if (!v.containsKey(size)) {
                     v.put(size, 0L);
@@ -143,8 +143,8 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         });
 
         Map<String, List<Long>> datasources = new HashMap<>();
-        for (Map<String, Long> stringLongMap : idEstimative.values()) {
-            stringLongMap.forEach((k, v) -> {
+        for (Map<String, Long> periodSize : periodsSize.values()) {
+            periodSize.forEach((k, v) -> {
                 if (datasources.containsKey(k)) {
                     List<Long> longs = datasources.get(k);
                     longs.add(v);
@@ -158,7 +158,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         }
 
         IssueCountBySize issueCountBySize = new IssueCountBySize();
-        issueCountBySize.setLabels(idEstimative.keySet());
+        issueCountBySize.setLabels(periodsSize.keySet());
         issueCountBySize.setDatasources(datasources);
 
         long end = System.currentTimeMillis();
