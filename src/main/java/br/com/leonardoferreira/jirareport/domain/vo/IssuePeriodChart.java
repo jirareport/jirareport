@@ -17,6 +17,8 @@ public class IssuePeriodChart {
 
     private Chart<String, Integer> issuesCount;
 
+    private IssueCountBySize issueCountBySize;
+
     public IssuePeriodChart() {
         leadtime = new Chart<>();
         issuesCount = new Chart<>();

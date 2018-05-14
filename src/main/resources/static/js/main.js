@@ -14,6 +14,45 @@ $(document).ready(function() {
         language: 'pt-BR'
     });
 
+    $('*[data-chart-multi-dataset]').each(function() {
+        var datasources = $(this).data('datasources');
+        var labels = $(this).data('labels')
+        var id = $(this).attr("id");
+        var datasets = [];
+
+        for (var key in datasources) {
+            datasets.push({
+                label: key,
+                data: datasources[key],
+                backgroundColor: randomColor()
+            });
+        }
+
+        new Chart(document.getElementById(id), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+           options: {
+                scales: {
+                    yAxes: [{
+                        stacked: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }],
+                    xAxes: [{
+                        stacked: true,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        })
+    });
+
     $('*[data-chart]').each(function() {
         var id = $(this).attr("id");
         var type = $(this).data('chart')
