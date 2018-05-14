@@ -43,6 +43,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     private ChartService chartService;
 
     @Override
+    @Transactional
     public void create(final IssuePeriodId issuePeriodId) throws CreateIssuePeriodException {
         log.info("Method=create, issuePeriodId={}", issuePeriodId);
 
@@ -70,6 +71,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<IssuePeriod> findByProjectId(final Long projectId) {
         log.info("Method=findByProjectId, projectId={}", projectId);
 
@@ -80,6 +82,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     }
 
     @Override
+    @Transactional
     public IssuePeriodChart getChartByIssues(final List<IssuePeriod> issuePeriods) {
         log.info("Method=getChartByIssues, issuePeriods={}", issuePeriods);
 
@@ -93,6 +96,29 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         issuePeriodChart.setIssueCountBySize(issueCountBySize);
 
         return issuePeriodChart;
+    }
+
+    @Override
+    @Transactional
+    public IssuePeriod findById(final IssuePeriodId issuePeriodId) {
+        log.info("Method=findById, issuePeriodId={}", issuePeriodId);
+        return issuePeriodRepository.findById(issuePeriodId)
+                .orElseThrow(ResourceNotFound::new);
+    }
+
+    @Override
+    @Transactional
+    public void remove(final IssuePeriodId issuePeriodId) {
+        log.info("Method=remove, issuePeriodId={}", issuePeriodId);
+        issuePeriodRepository.deleteById(issuePeriodId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = CreateIssuePeriodException.class)
+    public void update(final IssuePeriodId issuePeriodId) throws CreateIssuePeriodException {
+        log.info("Method=update, issuePeriodId={}", issuePeriodId);
+        remove(issuePeriodId);
+        create(issuePeriodId);
     }
 
     private IssueCountBySize buildIssueCountBySize(final List<IssuePeriod> issuePeriods) {
@@ -138,26 +164,5 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         long end = System.currentTimeMillis();
         log.info("Method=buildIssueCountBySize, ms={}", end - start);
         return issueCountBySize;
-    }
-
-    @Override
-    public IssuePeriod findById(final IssuePeriodId issuePeriodId) {
-        log.info("Method=findById, issuePeriodId={}", issuePeriodId);
-        return issuePeriodRepository.findById(issuePeriodId)
-                .orElseThrow(ResourceNotFound::new);
-    }
-
-    @Override
-    public void remove(final IssuePeriodId issuePeriodId) {
-        log.info("Method=remove, issuePeriodId={}", issuePeriodId);
-        issuePeriodRepository.deleteById(issuePeriodId);
-    }
-
-    @Override
-    @Transactional(rollbackFor = CreateIssuePeriodException.class)
-    public void update(final IssuePeriodId issuePeriodId) throws CreateIssuePeriodException {
-        log.info("Method=update, issuePeriodId={}", issuePeriodId);
-        remove(issuePeriodId);
-        create(issuePeriodId);
     }
 }
