@@ -1,6 +1,7 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
+
 import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
@@ -15,7 +16,9 @@ import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author lferreira
@@ -25,19 +28,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class IssuePeriodServiceImpl extends AbstractService implements IssuePeriodService {
 
-    private final IssueService issueService;
+    @Autowired
+    private IssueService issueService;
 
-    private final IssuePeriodRepository issuePeriodRepository;
+    @Autowired
+    private IssuePeriodRepository issuePeriodRepository;
 
-    private final ChartService chartService;
-
-    public IssuePeriodServiceImpl(final IssueService issueService,
-                                  final IssuePeriodRepository issuePeriodRepository,
-                                  final ChartService chartService) {
-        this.issueService = issueService;
-        this.issuePeriodRepository = issuePeriodRepository;
-        this.chartService = chartService;
-    }
+    @Autowired
+    private ChartService chartService;
 
     @Override
     public void create(final IssuePeriodId issuePeriodId) throws CreateIssuePeriodException {
@@ -102,6 +100,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     }
 
     @Override
+    @Transactional(rollbackFor = CreateIssuePeriodException.class)
     public void update(final IssuePeriodId issuePeriodId) throws CreateIssuePeriodException {
         log.info("Method=update, issuePeriodId={}", issuePeriodId);
         remove(issuePeriodId);

@@ -20,7 +20,7 @@ import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * @author s2it_leferreira
+ * @author lferreira
  * @since 5/7/18 6:49 PM
  */
 @Data

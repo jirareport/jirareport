@@ -5,7 +5,7 @@ import java.util.List;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 
 /**
- * @author s2it_leferreira
+ * @author lferreira
  * @since 5/7/18 6:52 PM
  */
 public interface HolidayService {

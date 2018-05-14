@@ -7,6 +7,7 @@ import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -27,11 +28,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/projects/{projectId}/issue-periods")
 public class IssuePeriodController extends AbstractController {
 
-    private final IssuePeriodService issuePeriodService;
-
-    public IssuePeriodController(final IssuePeriodService issuePeriodService) {
-        this.issuePeriodService = issuePeriodService;
-    }
+    @Autowired
+    private IssuePeriodService issuePeriodService;
 
     @GetMapping
     public ModelAndView index(@PathVariable final Long projectId) {

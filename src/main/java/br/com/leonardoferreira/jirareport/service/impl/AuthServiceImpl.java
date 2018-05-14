@@ -6,6 +6,7 @@ import br.com.leonardoferreira.jirareport.domain.vo.Account;
 import br.com.leonardoferreira.jirareport.domain.vo.CurrentUser;
 import br.com.leonardoferreira.jirareport.domain.vo.SessionInfo;
 import br.com.leonardoferreira.jirareport.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,11 +16,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final AuthClient authClient;
-
-    public AuthServiceImpl(final AuthClient authClient) {
-        this.authClient = authClient;
-    }
+    @Autowired
+    private AuthClient authClient;
 
     @Override
     public Account login(final LoginForm loginForm) {
