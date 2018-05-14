@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.domain;
 
+import br.com.leonardoferreira.jirareport.util.DateUtil;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -51,11 +52,11 @@ public class Project extends BaseEntity {
     private String projectCF;
 
     public void setStartColumn(final String startColumn) {
-        this.startColumn = startColumn == null ? null : startColumn.toUpperCase();
+        this.startColumn = startColumn == null ? null : startColumn.toUpperCase(DateUtil.LOCALE_BR);
     }
 
     public void setEndColumn(final String endColumn) {
-        this.endColumn = endColumn == null ? null : endColumn.toUpperCase();
+        this.endColumn = endColumn == null ? null : endColumn.toUpperCase(DateUtil.LOCALE_BR);
     }
 
     public void setFluxColumn(final List<String> fluxColumn) {
