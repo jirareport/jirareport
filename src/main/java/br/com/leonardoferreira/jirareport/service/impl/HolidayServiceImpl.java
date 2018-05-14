@@ -14,32 +14,30 @@ import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
 import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @author s2it_leferreira
+ * @author lferreira
  * @since 5/7/18 6:52 PM
  */
 @Slf4j
 @Service
 public class HolidayServiceImpl extends AbstractService implements HolidayService {
 
-    private final HolidayRepository holidayRepository;
-    private final ProjectRepository projectRepository;
-    private final HolidayClient holidayClient;
-    private final HolidayMapper holidayMapper;
+    @Autowired
+    private HolidayRepository holidayRepository;
 
-    public HolidayServiceImpl(final HolidayRepository holidayRepository,
-                              final ProjectRepository projectRepository,
-                              final HolidayClient holidayClient,
-                              final HolidayMapper holidayMapper) {
-        this.holidayRepository = holidayRepository;
-        this.projectRepository = projectRepository;
-        this.holidayClient = holidayClient;
-        this.holidayMapper = holidayMapper;
-    }
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private HolidayClient holidayClient;
+
+    @Autowired
+    private HolidayMapper holidayMapper;
 
     @Override
     @Transactional(readOnly = true)

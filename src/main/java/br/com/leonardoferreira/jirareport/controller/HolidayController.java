@@ -1,9 +1,12 @@
 package br.com.leonardoferreira.jirareport.controller;
 
+import java.util.List;
+
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -16,25 +19,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-
 /**
- * @author s2it_leferreira
+ * @author lferreira
  * @since 5/7/18 6:53 PM
  */
 @Controller
 @RequestMapping("/projects/{projectId}/holidays")
 public class HolidayController extends AbstractController {
 
-    private final HolidayService holidayService;
+    @Autowired
+    private HolidayService holidayService;
 
-    private final ProjectService projectService;
-
-    public HolidayController(final HolidayService holidayService,
-                             final ProjectService projectService) {
-        this.holidayService = holidayService;
-        this.projectService = projectService;
-    }
+    @Autowired
+    private ProjectService projectService;
 
     @GetMapping
     public ModelAndView index(@PathVariable final Long projectId) {

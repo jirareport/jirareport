@@ -2,6 +2,7 @@ package br.com.leonardoferreira.jirareport.controller;
 
 import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/projects")
 public class ProjectController extends AbstractController {
 
-    private final ProjectService projectService;
-
-    public ProjectController(final ProjectService projectService) {
-        this.projectService = projectService;
-    }
+    @Autowired
+    private ProjectService projectService;
 
     @GetMapping
     public ModelAndView index() {

@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.Data;
 
 /**
- * @author s2it_leferreira
+ * @author lferreira
  * @since 5/12/18 3:47 PM
  */
 @Data

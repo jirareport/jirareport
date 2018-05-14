@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author s2it_leferreira
+ * @author lferreira
  * @since 5/11/18 12:33 PM
  */
 @Data

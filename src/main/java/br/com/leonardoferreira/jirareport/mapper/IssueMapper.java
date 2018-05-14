@@ -1,6 +1,12 @@
 package br.com.leonardoferreira.jirareport.mapper;
 
-import static br.com.leonardoferreira.jirareport.util.DateUtil.DEFAULT_FORMATTER;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
@@ -12,18 +18,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import static br.com.leonardoferreira.jirareport.util.DateUtil.DEFAULT_FORMATTER;
 
 /**
  * @author lferreira
@@ -32,14 +32,10 @@ import org.springframework.util.StringUtils;
 @Component
 public class IssueMapper {
 
-    private final JsonParser jsonParser;
+    @Autowired
+    private HolidayService holidayService;
 
-    private final HolidayService holidayService;
-
-    public IssueMapper(final HolidayService holidayService) {
-        this.holidayService = holidayService;
-        this.jsonParser = new JsonParser();
-    }
+    private final JsonParser jsonParser = new JsonParser();
 
     public List<Issue> parse(final String rawText, final Project project) {
         JsonElement response = jsonParser.parse(rawText);

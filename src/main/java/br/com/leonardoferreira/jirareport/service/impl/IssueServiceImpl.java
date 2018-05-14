@@ -19,37 +19,33 @@ import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 /**
- * @author s2it_leferreira
+ * @author lferreira
  * @since 5/7/18 8:01 PM
  */
 @Slf4j
 @Service
 public class IssueServiceImpl extends AbstractService implements IssueService {
 
-    private final IssueClient issueClient;
+    @Autowired
+    private IssueClient issueClient;
 
-    private final ProjectService projectService;
+    @Autowired
+    private ProjectService projectService;
 
-    private final IssueMapper issueMapper;
+    @Autowired
+    private IssueMapper issueMapper;
 
-    private final IssueRepository issueRepository;
+    @Autowired
+    private IssueRepository issueRepository;
 
-    private final ChartService chartService;
-
-    public IssueServiceImpl(final IssueClient issueClient, final ProjectService projectService,
-            final IssueMapper issueMapper, final IssueRepository issueRepository,
-            final ChartService chartService) {
-        this.issueClient = issueClient;
-        this.projectService = projectService;
-        this.issueMapper = issueMapper;
-        this.issueRepository = issueRepository;
-        this.chartService = chartService;
-    }
+    @Autowired
+    private ChartService chartService;
 
     @Override
     @Transactional(readOnly = true)

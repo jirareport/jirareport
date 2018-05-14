@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Data;
 
 /**
- * @author s2it_leferreira
+ * @author lferreira
  * @since 5/11/18 4:25 PM
  */
 @Data
