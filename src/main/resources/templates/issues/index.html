@@ -116,31 +116,31 @@
             <div class="panel-body">
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="issues">
-                        <th:block th:include="issues/components/index :: list(${sandBox.issues})" />
+                        <th:block th:include="issues/components/list :: list(${sandBox.issues})" />
                     </div>
                     <div role="tabpanel" class="tab-pane" id="leadTimeHistogram">
-                        <th:block th:include="issue-periods/components/histogram :: chart(${sandBox.chartAggregator.histogram})" />
+                        <th:block th:include="charts/histogram :: chart(${sandBox.chartAggregator.histogram})" />
                     </div>
                     <div role="tabpanel" class="tab-pane" id="estimatedChart">
-                        <th:block th:include="issue-periods/components/estimativeCount :: chart(${sandBox.chartAggregator.estimated})" />
+                        <th:block th:include="charts/estimativeCount :: chart(${sandBox.chartAggregator.estimated})" />
                     </div>
                     <div role="tabpanel" class="tab-pane" id="leadTimeBySystem">
-                        <th:block th:include="issue-periods/components/leadTimeBySystem :: chart(${sandBox.chartAggregator.leadTimeBySystem})" />
+                        <th:block th:include="charts/leadTimeBySystem :: chart(${sandBox.chartAggregator.leadTimeBySystem})" />
                     </div>
                     <div role="tabpanel" class="tab-pane" id="tasksBySystem">
-                        <th:block th:include="issue-periods/components/tasksBySystem :: chart(${sandBox.chartAggregator.tasksBySystem})" />
+                        <th:block th:include="charts/tasksBySystem :: chart(${sandBox.chartAggregator.tasksBySystem})" />
                     </div>
                     <div role="tabpanel" class="tab-pane" id="leadTimeBySize">
-                        <th:block th:include="issue-periods/components/leadTimeBySize :: chart(${sandBox.chartAggregator.leadTimeBySize})" />
+                        <th:block th:include="charts/leadTimeBySize :: chart(${sandBox.chartAggregator.leadTimeBySize})" />
                     </div>
                     <div role="tabpanel" class="tab-pane" id="columnTimeAvg">
-                        <th:block th:include="issue-periods/components/columnTimeAvg :: list(${sandBox.chartAggregator.columnTimeAvg})" />
+                        <th:block th:include="charts/columnTimeAvg :: list(${sandBox.chartAggregator.columnTimeAvg})" />
                     </div>
                     <div role="tabpanel" class="tab-pane" id="leadTimeByType">
-                        <th:block th:include="issue-periods/components/leadTimeByType :: chart(${sandBox.chartAggregator.leadTimeByType})" />
+                        <th:block th:include="charts/leadTimeByType :: chart(${sandBox.chartAggregator.leadTimeByType})" />
                     </div>
                     <div role="tabpanel" class="tab-pane" id="tasksByType">
-                        <th:block th:include="issue-periods/components/tasksByType :: chart(${sandBox.chartAggregator.tasksByType})" />
+                        <th:block th:include="charts/tasksByType :: chart(${sandBox.chartAggregator.tasksByType})" />
                     </div>
                 </div>
             </div>

@@ -3,7 +3,7 @@
 <th:block th:fragment="chart(chartData)">
     <th:block
             th:if="${chartData.hasData}"
-            th:include="components/chart/_doughnut :: chart('tasks_by_type', 'Hist�rias', 'Issue Type', ${chartData})" />
+            th:include="components/chart/_bar :: chart('issuesCount_chart', 'Histórias', 'Mês', ${chartData}, true)" />
     <span th:unless="${chartData.hasData}">Nenhum registro encontrado</span>
 </th:block>
 </html>
