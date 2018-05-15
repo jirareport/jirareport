@@ -1,24 +1,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
-<nav class="navbar navbar-default" role="navigation" style="margin-bottom: 0">
-    <div class="navbar-header">
-        <div class="logo">
-            <a class="navbar-brand" href="#"><i class="fa fa-file-text-o fa-spin fa-fw"></i> Jiratório</a>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header logo">
+            <a class="navbar-brand" th:href="@{/}"><i class="fa fa-file-text-o fa-spin fa-fw"></i> Jiratório</a>
         </div>
+        <ul class="nav navbar-nav">
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-user fa-fw"></i>
+                    <th:block th:text="${#authentication.principal.currentUser.name}"/>
+                    <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+                </ul>
+            </li>
+        </ul>
     </div>
-
-    <ul class="nav navbar-top-links navbar-right">
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="fa fa-user fa-fw"></i>
-                <th:block th:text="${#authentication.principal.currentUser.name}"/>
-                <i class="fa fa-caret-down"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-user">
-                <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
-            </ul>
-        </li>
-    </ul>
 </nav>
 
 </html>

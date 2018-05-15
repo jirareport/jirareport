@@ -9,6 +9,7 @@ $(document).ready(function() {
        ignore_accents: true,
        attribute: 'data-values'
     });
+
     $('.datepicker').datepicker({
         format: 'dd/mm/yyyy',
         language: 'pt-BR'
@@ -122,13 +123,11 @@ $(document).ready(function() {
         return false;
     });
 
-     $(function() {
-        $('#fluxColumn_select a').click(function() {
-            var value = $(this).text().trim();
-            var input = $('#fluxColumn');
-            input.val(input.val() + value + ', ');
-            return false;
-        });
+    $('#fluxColumn_select a').click(function() {
+        var value = $(this).text().trim();
+        var input = $('#fluxColumn');
+        input.val(input.val() + value + ', ');
+        return false;
     });
 })
 
