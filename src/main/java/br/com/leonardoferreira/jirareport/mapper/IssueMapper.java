@@ -85,7 +85,7 @@ public class IssueMapper {
                     Issue issueVO = new Issue();
                     issueVO.setKey(issue.get("key").getAsString());
 
-                    JsonObject creator = issue.getAsJsonObject("creator");
+                    JsonObject creator = fields.getAsJsonObject("creator");
                     if (creator != null) {
                         issueVO.setCreator(creator.get("displayName").getAsString());
                     }
