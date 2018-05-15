@@ -20,3 +20,12 @@ h1, h2, h3, h4, h5, h6 {
 .bt-0 {
   border-top: 0;
 }
+
+.panel-green {
+    background-color: #5cb85c;
+    color: white;
+}
+
+.huge {
+    font-size: 40px;
+}

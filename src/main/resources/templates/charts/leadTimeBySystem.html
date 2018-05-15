@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="chart(chartData)">
     <th:block
-            th:if="${chartData.hasData}"
+            th:if="${chartData?.hasData}"
             th:include="components/chart/_doughnut :: chart('lead_time_by_system', 'LeadTime', 'Sistema', ${chartData})" />
-    <span th:unless="${chartData.hasData}">Nenhum registro encontrado</span>
+    <span th:unless="${chartData?.hasData}">Nenhum registro encontrado</span>
 </th:block>
 </html>

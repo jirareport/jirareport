@@ -61,6 +61,7 @@ $(document).ready(function() {
         var label = $(this).data('chart-label')
         var dataChart = $(this).data('chart-data')
         var title = $(this).data('chart-title')
+        var beginAtZero = $(this).data('begin-at-zero')
 
         var options = {};
         var data = {
@@ -73,8 +74,8 @@ $(document).ready(function() {
 
         if (type == 'bar') {
             options.scales = {
-                xAxes: [{ gridLines: { display: true }, scaleLabel: { display: true, labelString: title } }],
-                yAxes: [{ gridLines: { display: true }, scaleLabel: { display: true, labelString: label } }]
+                xAxes: [{ gridLines: { display: true }, scaleLabel: { display: true, labelString: title }, ticks: { beginAtZero: beginAtZero } }],
+                yAxes: [{ gridLines: { display: true }, scaleLabel: { display: true, labelString: label }, ticks: { beginAtZero: beginAtZero } }]
             }
             data.datasets[0].backgroundColor = randomColor();
         } else if (type == 'doughnut') {
