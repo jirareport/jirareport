@@ -29,7 +29,7 @@
                 </tr>
                 </thead>
                 <tbody class="search-list-name">
-                <tr th:each="holiday : ${holidays}">
+                <tr th:each="holiday : ${holidays.content}">
                     <td th:text="${#temporals.format(holiday.date, 'dd/MM/yyyy')}"></td>
                     <td th:text="${holiday.description}"></td>
                     <td>
@@ -40,6 +40,10 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="text-right">
+            <th:block th:include="fragments/_pagination :: pagination(${holidays})" />
         </div>
     </div>
 </th:block>

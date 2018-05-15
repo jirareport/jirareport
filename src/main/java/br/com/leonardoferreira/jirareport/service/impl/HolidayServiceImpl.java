@@ -9,12 +9,16 @@ import br.com.leonardoferreira.jirareport.mapper.HolidayMapper;
 import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
 import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,9 +44,16 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
 
     @Override
     @Transactional(readOnly = true)
+    public Page<Holiday> findByProject(final Long projectId, final Pageable pageable) {
+        log.info("Method=findByProject, projectId={}", projectId);
+        return holidayRepository.findAllByProjectId(projectId, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Holiday> findByProject(final Long projectId) {
-        log.info("Method=findByProject");
-        return holidayRepository.findByProjectIdOrderByDate(projectId);
+        log.info("Method=findByProject, projectId={}", projectId);
+        return holidayRepository.findAllByProjectId(projectId);
     }
 
     @Override
@@ -90,7 +101,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     public boolean createImported(final Long projectId) {
         log.info("Method=createImported, projectId={}", projectId);
 
-        List<Holiday> holidaysByProject = findByProject(projectId);
+        List<Holiday> holidaysByProject = holidayRepository.findAllByProjectId(projectId);
         List<HolidayVO> allHolidaysVOInCity = holidayClient.findAllHolidaysInCity("2018", "SP", "ARARAQUARA");
         List<Holiday> allHolidaysInCity = holidayMapper.fromVOS(allHolidaysVOInCity, projectId);
 
