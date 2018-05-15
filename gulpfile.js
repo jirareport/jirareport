@@ -22,7 +22,6 @@ const options = {
     css: [
       "./node_modules/bootstrap/dist/css/bootstrap.min.css",
       "./node_modules/font-awesome/css/font-awesome.min.css",
-      // "./node_modules/startbootstrap-sb-admin-2/dist/css/sb-admin-2.min.css",
       "./node_modules/metismenu/dist/metisMenu.min.css",
       "./node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css",
       "./node_modules/jquery-bootstrap-scrolling-tabs/dist/jquery.scrolling-tabs.min.css",
@@ -32,7 +31,6 @@ const options = {
       "./node_modules/jquery/dist/jquery.min.js",
       "./node_modules/bootstrap/dist/js/bootstrap.min.js",
       "./node_modules/metismenu/dist/metisMenu.min.js",
-      // "./node_modules/startbootstrap-sb-admin-2/dist/js/sb-admin-2.min.js",
       "./node_modules/hideseek/jquery.hideseek.min.js",
       "./node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
       "./node_modules/bootstrap-datepicker/dist/locales/bootstrap-datepicker.pt-BR.min.js",
