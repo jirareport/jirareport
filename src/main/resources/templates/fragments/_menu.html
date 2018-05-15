@@ -1,12 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+
+<nav class="navbar navbar-default" role="navigation" style="margin-bottom: 0">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
         <div class="logo">
             <a class="navbar-brand" href="#"><i class="fa fa-file-text-o fa-spin fa-fw"></i> Jiratório</a>
         </div>
@@ -24,18 +19,6 @@
             </ul>
         </li>
     </ul>
-
-    <div class="navbar-default sidebar" role="navigation">
-        <div class="sidebar-nav navbar-collapse">
-            <ul class="nav in" id="side-menu">
-                <li>
-                    <a th:href="@{/projects}">
-                        <i class="fa fa-book"></i> Projetos
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
 </nav>
 
 </html>
