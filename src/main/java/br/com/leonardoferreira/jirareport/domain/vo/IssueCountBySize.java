@@ -22,4 +22,8 @@ public class IssueCountBySize {
     public String getDatasourcesAsJson() throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(datasources);
     }
+
+    public boolean getHasData() {
+        return labels != null && !labels.isEmpty();
+    }
 }

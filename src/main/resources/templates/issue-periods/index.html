@@ -86,20 +86,15 @@
                         </table>
                     </div>
                 </div>
+
                 <div role="tabpanel" class="tab-pane" id="leadtime">
-                    <th:block
-                            th:if="${issuePeriodChart.leadtime.hasData}"
-                            th:include="components/chart/_bar :: chart('leadtime_chart', 'LeadTime', 'Mês', ${issuePeriodChart.leadtime})" />
-                    <span th:unless="${issuePeriodChart.leadtime.hasData}">Nenhum registro encontrado</span>
+                    <th:block th:include="issue-periods/components/leadTimeChart :: chart(${issuePeriodChart.leadtime})" />
                 </div>
                 <div role="tabpanel" class="tab-pane" id="issuesCount">
-                    <th:block
-                            th:if="${issuePeriodChart.issuesCount.hasData}"
-                            th:include="components/chart/_bar :: chart('issuesCount_chart', 'Histórias', 'Mês', ${issuePeriodChart.issuesCount})" />
-                    <span th:unless="${issuePeriodChart.issuesCount.hasData}">Nenhum registro encontrado</span>
+                    <th:block th:include="issue-periods/components/issueCountChart :: chart(${issuePeriodChart.issuesCount})" />
                 </div>
                 <div role="tabpanel" class="tab-pane" id="issueCountBySize">
-                    <th:block th:include="issue-periods/issueCountBySize :: chart(${issuePeriodChart.issueCountBySize})" />
+                    <th:block th:include="issue-periods/components/issueCountBySize :: chart(${issuePeriodChart.issueCountBySize})" />
                 </div>
             </div>
         </div>
