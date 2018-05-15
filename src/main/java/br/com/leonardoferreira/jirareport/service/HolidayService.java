@@ -3,6 +3,8 @@ package br.com.leonardoferreira.jirareport.service;
 import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.Holiday;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author lferreira
@@ -10,7 +12,9 @@ import br.com.leonardoferreira.jirareport.domain.Holiday;
  */
 public interface HolidayService {
 
-    List<Holiday> findByProject(Long projectId);
+    Page<Holiday> findByProject(Long projectId, Pageable pageable);
+
+    List<Holiday> findByProject(Long id);
 
     void create(Long projectId, Holiday holiday);
 
@@ -21,4 +25,5 @@ public interface HolidayService {
     void update(Long projectId, Holiday holiday);
 
     boolean createImported(Long projectId);
+
 }

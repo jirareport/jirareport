@@ -7,6 +7,10 @@ import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -34,8 +38,9 @@ public class HolidayController extends AbstractController {
     private ProjectService projectService;
 
     @GetMapping
-    public ModelAndView index(@PathVariable final Long projectId) {
-        final List<Holiday> holidays = holidayService.findByProject(projectId);
+    public ModelAndView index(@PathVariable final Long projectId,
+                              @PageableDefault(sort = "date") final Pageable pageable) {
+        final Page<Holiday> holidays = holidayService.findByProject(projectId, pageable);
         final Project project = projectService.findById(projectId);
         return new ModelAndView("holidays/index")
                 .addObject("holidays", holidays)
