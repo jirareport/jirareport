@@ -1,11 +1,13 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.client.ProjectClient;
+import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.vo.Statuses;
 import br.com.leonardoferreira.jirareport.domain.vo.StatusesProject;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
+import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,9 +29,12 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
 
     private final ProjectRepository projectRepository;
 
-    public ProjectServiceImpl(ProjectClient projectClient, ProjectRepository projectRepository) {
+    private final HolidayService holidayService;
+
+    public ProjectServiceImpl(ProjectClient projectClient, ProjectRepository projectRepository, HolidayService holidayService) {
         this.projectClient = projectClient;
         this.projectRepository = projectRepository;
+        this.holidayService = holidayService;
     }
 
     @Override
@@ -53,6 +58,12 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
     @Override
     public void delete(Long id) {
         log.info("Method=delete, id={}", id);
+
+        List<Holiday> holidays = holidayService.findByProject(id);
+        if(!holidays.isEmpty()){
+            holidays.forEach(holiday -> holidayService.delete(holiday.getId()));
+        }
+
         projectRepository.deleteById(id);
     }
 

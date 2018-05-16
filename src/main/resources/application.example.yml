@@ -1,6 +1,10 @@
 jira:
     url: https://jira.url/jira
 
+holiday:
+  url: https://api.calendario.com.br/?json=true&token=
+  token: seuToken
+
 spring:
   application:
     name: jirareport

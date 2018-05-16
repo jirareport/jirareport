@@ -83,6 +83,14 @@ $(document).ready(function() {
         return false;
     });
 
+    $('#datepickerStartDate').click(function (event) {
+        $("#startDate").datepicker().focus();
+    });
+
+    $('#datepickerEndDate').click(function (event) {
+        $("#endDate").datepicker().focus();
+    });
+
      $(function() {
         $('#fluxColumn_select a').click(function() {
             var value = $(this).text().trim();

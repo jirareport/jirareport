@@ -22,7 +22,7 @@
                     <div class="input-group">
                         <input type="text" class="form-control datepicker" th:field="*{startDate}" />
                         <div class="input-group-addon">
-                            <span class="fa fa-calendar"></span>
+                            <span class="fa fa-calendar" id="datepickerStartDate"></span>
                         </div>
                     </div>
                     <label th:errors="*{startDate}"></label>
@@ -33,7 +33,7 @@
                     <div class="input-group">
                         <input type="text" class="form-control datepicker" th:field="*{endDate}" />
                         <div class="input-group-addon">
-                            <span class="fa fa-calendar"></span>
+                            <span class="fa fa-calendar" id="datepickerEndDate"></span>
                         </div>
                     </div>
                     <label th:errors="*{endDate}"></label>

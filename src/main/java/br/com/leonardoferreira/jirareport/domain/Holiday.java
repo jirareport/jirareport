@@ -1,6 +1,9 @@
 package br.com.leonardoferreira.jirareport.domain;
 
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,8 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * @author s2it_leferreira
