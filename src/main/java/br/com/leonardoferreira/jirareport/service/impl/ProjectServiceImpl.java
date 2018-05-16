@@ -33,7 +33,7 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
     private ProjectRepository projectRepository;
 
     @Autowired
-    private final HolidayService holidayService;
+    private HolidayService holidayService;
 
     @Override
     public List<Project> findAll() {
