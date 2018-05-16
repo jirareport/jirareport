@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 /**
- * @author lferreira
+ * @author s2it_leferreira
  * @since 5/7/18 6:53 PM
  */
 @Controller
@@ -32,7 +35,13 @@ public class HolidayController extends AbstractController {
     private HolidayService holidayService;
 
     @Autowired
-    private ProjectService projectService;
+    private final ProjectService projectService;
+
+    public HolidayController(final HolidayService holidayService,
+                             final ProjectService projectService) {
+        this.holidayService = holidayService;
+        this.projectService = projectService;
+    }
 
     @GetMapping
     public ModelAndView index(@PathVariable final Long projectId,
@@ -41,6 +50,7 @@ public class HolidayController extends AbstractController {
         final Project project = projectService.findById(projectId);
         return new ModelAndView("holidays/index")
                 .addObject("holidays", holidays)
+                .addObject("states", holidayService.findAllStatesOfBrazil().getGeonames())
                 .addObject("project", project);
     }
 
@@ -77,13 +87,13 @@ public class HolidayController extends AbstractController {
         return new ModelAndView("redirect:/projects/" + projectId + "/holidays");
     }
 
-    @PostMapping("/import")
-    public ModelAndView importFromAPI(@PathVariable final Long projectId, final RedirectAttributes redirectAttributes) {
+  @PostMapping("/import")
+    public ModelAndView importFromAPI(@PathVariable final Long projectId, final @RequestParam("selectCity") String city, final RedirectAttributes redirectAttributes) {
 
-        if (holidayService.createImported(projectId)) {
-            redirectAttributes.addFlashAttribute("flashSuccess", "Registros importados com sucesso.");
+        if (holidayService.createImported(projectId, city)) {
+            redirectAttributes.addFlashAttribute("flashSuccess", "Registros importados com sucesso");
         } else {
-            redirectAttributes.addFlashAttribute("flashError", "Feriados já importados.");
+            redirectAttributes.addFlashAttribute("flashError", "Feriados ja importados");
         }
 
         return new ModelAndView("redirect:/projects/" + projectId + "/holidays");
