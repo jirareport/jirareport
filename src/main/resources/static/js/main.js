@@ -124,12 +124,21 @@ $(document).ready(function() {
         return false;
     });
 
-    $('#fluxColumn_select a').click(function() {
+    $('*[data-column-suggest]').click(function() {
         var value = $(this).text().trim();
-        var input = $('#fluxColumn');
-        input.val(input.val() + value + ', ');
-        return false;
-    });
+        var input = $('#' + $(this).data('column-suggest'));
+        var prefix = $(this).data('column-suggest-prefix') || '';
+        var unique = $(this).data('column-suggest-unique') || false;
+        var oldValue = input.val();
+
+        if  (unique) {
+            input.val(value);
+        } else {
+            input.val(oldValue + (oldValue ? prefix : '') + value);
+        }
+
+       return false;
+   });
 })
 
 function randomColor() {
