@@ -1,15 +1,13 @@
 package br.com.leonardoferreira.jirareport.repository.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.repository.IssueCustomRepository;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +60,11 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         if (!CollectionUtils.isEmpty(issueForm.getIssueTypes())) {
             sb.append(" AND issue.issue_type IN (:issueTypes) ");
             params.put("issueTypes", issueForm.getIssueTypes());
+        }
+
+        if (!CollectionUtils.isEmpty(issueForm.getProjects())) {
+            sb.append(" AND issue.project IN (:projects) ");
+            params.put("projects", issueForm.getProjects());
         }
 
         params.put("projectId", projectId);

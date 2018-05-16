@@ -86,8 +86,16 @@ public class IssuePeriod extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private Chart<String, Long> tasksByType;
 
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private Chart<String, Double> leadTimeByProject;
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private Chart<String, Long> tasksByProject;
+
     public IssuePeriod(final IssuePeriodId id, final List<Issue> issues,
-                       final Double avgLeadTime, final ChartAggregator chartAggregator) {
+            final Double avgLeadTime, final ChartAggregator chartAggregator) {
         this.id = id;
         this.issues = issues;
         this.avgLeadTime = avgLeadTime;
@@ -100,6 +108,8 @@ public class IssuePeriod extends BaseEntity {
         this.columnTimeAvgs = chartAggregator.getColumnTimeAvg();
         this.leadTimeByType = chartAggregator.getLeadTimeByType();
         this.tasksByType = chartAggregator.getTasksByType();
+        this.leadTimeByProject = chartAggregator.getLeadTimeByProject();
+        this.tasksByProject = chartAggregator.getTasksByProject();
     }
 
     @Transient

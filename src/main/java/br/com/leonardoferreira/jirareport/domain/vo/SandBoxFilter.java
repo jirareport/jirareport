@@ -20,4 +20,5 @@ public class SandBoxFilter {
 
     private List<String> issueTypes;
 
+    private List<String> projects;
 }

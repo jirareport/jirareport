@@ -14,13 +14,16 @@
                 <th>Epico</th>
                 <th>Estimativa</th>
                 <th>Sistema</th>
+                <th>Projeto</th>
                 <th>Criador</th>
             </tr>
             </thead>
             <tbody>
             <th:block th:each="issue : ${issues}">
                 <tr data-toggle="collapse" th:attr="data-target=${'.' + issue.key}" class="accordion-toggle">
-                    <td><button class="btn btn-xs btn-default"><i class="fa fa-eye"></i></button></td>
+                    <td>
+                        <button class="btn btn-xs btn-default"><i class="fa fa-eye"></i></button>
+                    </td>
                     <td th:text="${issue.title}"></td>
                     <td th:text="${issue.issueType}"></td>
                     <td th:text="${issue.startDate}"></td>
@@ -29,25 +32,27 @@
                     <td th:text="${issue.epic}"></td>
                     <td th:text="${issue.estimated}"></td>
                     <td th:text="${issue.system}"></td>
+                    <td th:text="${issue.project}"></td>
                     <td th:text="${issue.creator}"></td>
                 </tr>
                 <tr class="accordian-body collapse" th:classappend="${issue.key}">
                     <td colspan="10">
-                        <div class="accordian-body collapse panel panel-default table-responsive" th:classappend="${issue.key}">
+                        <div class="accordian-body collapse panel panel-default table-responsive"
+                             th:classappend="${issue.key}">
                             <table class="table table-bordered table-striped">
                                 <thead>
-                                    <tr>
-                                        <th>Data</th>
-                                        <th>Coluna</th>
-                                        <th>LeadTime</th>
-                                    </tr>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Coluna</th>
+                                    <th>LeadTime</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="changelog : ${issue.changelog}">
-                                        <td th:text="${changelog.created}"></td>
-                                        <td th:text="${changelog.to}"></td>
-                                        <td th:text="${changelog.cycleTime}"></td>
-                                    </tr>
+                                <tr th:each="changelog : ${issue.changelog}">
+                                    <td th:text="${changelog.created}"></td>
+                                    <td th:text="${changelog.to}"></td>
+                                    <td th:text="${changelog.cycleTime}"></td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>

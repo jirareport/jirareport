@@ -32,4 +32,7 @@ public class ChartAggregator {
 
     private Chart<String, Long> tasksByType;
 
+    private Chart<String, Double> leadTimeByProject;
+
+    private Chart<String, Long> tasksByProject;
 }

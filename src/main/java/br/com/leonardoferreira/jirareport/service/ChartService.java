@@ -1,12 +1,11 @@
 package br.com.leonardoferreira.jirareport.service;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Created by lferreira on 3/26/18
@@ -28,6 +27,10 @@ public interface ChartService {
     CompletableFuture<Chart<String, Double>> leadTimeByType(List<Issue> issues);
 
     CompletableFuture<Chart<String, Long>> tasksByType(List<Issue> issues);
+
+    CompletableFuture<Chart<String, Double>> leadTimeByProject(List<Issue> issues);
+
+    CompletableFuture<Chart<String, Long>> tasksByProject(List<Issue> issues);
 
     ChartAggregator buildAllCharts(List<Issue> issues);
 }

@@ -1,18 +1,17 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.service.ChartService;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,8 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
             collect.putIfAbsent(i, 0L);
         }
 
-        return CompletableFuture.completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+        return CompletableFuture
+                .completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
     }
 
     @Async
@@ -58,7 +58,8 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .filter(i -> i.getEstimated() != null)
                 .collect(Collectors.groupingBy(Issue::getEstimated, Collectors.counting()));
 
-        return CompletableFuture.completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+        return CompletableFuture
+                .completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
     }
 
     @Async
@@ -70,7 +71,8 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .filter(i -> !StringUtils.isEmpty(i.getSystem()) && i.getLeadTime() != null)
                 .collect(Collectors.groupingBy(Issue::getSystem, Collectors.averagingLong(Issue::getLeadTime)));
 
-        return CompletableFuture.completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+        return CompletableFuture
+                .completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
     }
 
     @Async
@@ -82,7 +84,8 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .filter(i -> !StringUtils.isEmpty(i.getSystem()))
                 .collect(Collectors.groupingBy(Issue::getSystem, Collectors.counting()));
 
-        return CompletableFuture.completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+        return CompletableFuture
+                .completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
     }
 
     @Async
@@ -94,7 +97,8 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .filter(i -> !StringUtils.isEmpty(i.getEstimated()) && i.getLeadTime() != null)
                 .collect(Collectors.groupingBy(Issue::getEstimated, Collectors.averagingLong(Issue::getLeadTime)));
 
-        return CompletableFuture.completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+        return CompletableFuture
+                .completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
     }
 
     @Async
@@ -108,7 +112,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .flatMap(Collection::stream)
                 .filter(changelog -> changelog.getTo() != null && changelog.getCycleTime() != null)
                 .collect(Collectors.groupingBy(Changelog::getTo, Collectors.averagingDouble(Changelog::getCycleTime)))
-                .forEach((k, v)-> collect.add(new ColumnTimeAvg(k, v)));
+                .forEach((k, v) -> collect.add(new ColumnTimeAvg(k, v)));
 
         return CompletableFuture.completedFuture(collect);
     }
@@ -122,17 +126,45 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .filter(i -> !StringUtils.isEmpty(i.getIssueType()) && i.getLeadTime() != null)
                 .collect(Collectors.groupingBy(Issue::getIssueType, Collectors.averagingLong(Issue::getLeadTime)));
 
-        return CompletableFuture.completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+        return CompletableFuture
+                .completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
     }
 
     @Async
     @Override
     public CompletableFuture<Chart<String, Long>> tasksByType(final List<Issue> issues) {
+        log.info("Method=tasksByType, issues={}", issues);
         Map<String, Long> collect = issues.stream()
                 .filter(i -> !StringUtils.isEmpty(i.getIssueType()))
                 .collect(Collectors.groupingBy(Issue::getIssueType, Collectors.counting()));
 
-        return CompletableFuture.completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+        return CompletableFuture
+                .completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+    }
+
+    @Async
+    @Override
+    public CompletableFuture<Chart<String, Double>> leadTimeByProject(final List<Issue> issues) {
+        log.info("Method=leadTimeByProject, issues={}", issues);
+
+        Map<String, Double> collect = issues.stream()
+                .filter(i -> !StringUtils.isEmpty(i.getProject()) && i.getLeadTime() != null)
+                .collect(Collectors.groupingBy(Issue::getProject, Collectors.averagingLong(Issue::getLeadTime)));
+
+        return CompletableFuture
+                .completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
+    }
+
+    @Async
+    @Override
+    public CompletableFuture<Chart<String, Long>> tasksByProject(final List<Issue> issues) {
+        log.info("Method=tasksByProject, issues={}", issues);
+        Map<String, Long> collect = issues.stream()
+                .filter(i -> !StringUtils.isEmpty(i.getProject()))
+                .collect(Collectors.groupingBy(Issue::getProject, Collectors.counting()));
+
+        return CompletableFuture
+                .completedFuture(new Chart<>(new ArrayList<>(collect.keySet()), new ArrayList<>(collect.values())));
     }
 
     @Override
@@ -146,8 +178,11 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg = chartService.columnTimeAvg(issues);
         CompletableFuture<Chart<String, Double>> leadTimeByType = chartService.leadTimeByType(issues);
         CompletableFuture<Chart<String, Long>> tasksByType = chartService.tasksByType(issues);
+        CompletableFuture<Chart<String, Double>> leadTimeByProject = chartService.leadTimeByProject(issues);
+        CompletableFuture<Chart<String, Long>> tasksByProject = chartService.tasksByProject(issues);
 
         return new ChartAggregator(histogram.get(), estimated.get(), leadTimeBySystem.get(), tasksBySystem.get(),
-                leadTimeBySize.get(), columnTimeAvg.get(), leadTimeByType.get(), tasksByType.get());
+                leadTimeBySize.get(), columnTimeAvg.get(), leadTimeByType.get(), tasksByType.get(),
+                leadTimeByProject.get(), tasksByProject.get());
     }
 }
