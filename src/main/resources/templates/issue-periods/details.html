@@ -6,13 +6,17 @@
 <th:block layout:fragment="content">
     <div class="container-fluid">
         <div class="page-header">
-            <h1>Issues <small th:text="${issuePeriod.id.dates}"></small></h1>
+            <h1>Issues
+                <small th:text="${issuePeriod.id.dates}"></small>
+            </h1>
         </div>
     </div>
 
     <div class="row">
-        <th:block th:include="components/card :: card(6, 'primary', 'fa-calendar', ${issuePeriod.leadTime}, 'Leadtime medio')" />
-        <th:block th:include="components/card :: card(6, 'green', 'fa-tasks', ${#lists.size(issuePeriod.issues)}, 'Histórias')" />
+        <th:block
+                th:include="components/card :: card(6, 'primary', 'fa-calendar', ${issuePeriod.leadTime}, 'Leadtime medio')"/>
+        <th:block
+                th:include="components/card :: card(6, 'green', 'fa-tasks', ${#lists.size(issuePeriod.issues)}, 'Histórias')"/>
     </div>
 
     <ul class="nav nav-tabs" role="tablist">
@@ -21,41 +25,50 @@
         <li role="presentation"><a href="#estimatedChart" data-toggle="tab">Contagem de estimativa</a></li>
         <li role="presentation"><a href="#leadTimeBySystem" data-toggle="tab">LeadTime por sistema</a></li>
         <li role="presentation"><a href="#tasksBySystem" data-toggle="tab">Histórias por sistema</a></li>
-        <li role="presentation"><a href="#leadTimeBySize" data-toggle="tab">Leadtime médio por tamanho de história</a></li>
+        <li role="presentation"><a href="#leadTimeBySize" data-toggle="tab">Leadtime médio por tamanho de história</a>
+        </li>
         <li role="presentation"><a href="#columnTimeAvg" data-toggle="tab">Média de tempo por coluna</a></li>
         <li role="presentation"><a href="#leadTimeByType" data-toggle="tab">LeadTime por tipo</a></li>
         <li role="presentation"><a href="#tasksByType" data-toggle="tab">Histórias por tipo</a></li>
+        <li role="presentation"><a href="#leadTimeByProject" data-toggle="tab">LeadTime por projeto</a></li>
+        <li role="presentation"><a href="#tasksByProject" data-toggle="tab">Histórias por projeto</a></li>
     </ul>
 
     <div class="panel panel-default bt-0">
         <div class="panel-body">
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="issues">
-                    <th:block th:include="issues/components/list :: list(${issuePeriod.issues})" />
+                    <th:block th:include="issues/components/list :: list(${issuePeriod.issues})"/>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="leadTimeHistogram">
-                    <th:block th:include="charts/histogram :: chart(${issuePeriod.histogram})" />
+                    <th:block th:include="charts/histogram :: chart(${issuePeriod.histogram})"/>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="estimatedChart">
-                    <th:block th:include="charts/estimativeCount :: chart(${issuePeriod.estimated})" />
+                    <th:block th:include="charts/estimativeCount :: chart(${issuePeriod.estimated})"/>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="leadTimeBySystem">
-                    <th:block th:include="charts/leadTimeBySystem :: chart(${issuePeriod.leadTimeBySystem})" />
+                    <th:block th:include="charts/leadTimeBySystem :: chart(${issuePeriod.leadTimeBySystem})"/>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="tasksBySystem">
-                    <th:block th:include="charts/tasksBySystem :: chart(${issuePeriod.tasksBySystem})" />
+                    <th:block th:include="charts/tasksBySystem :: chart(${issuePeriod.tasksBySystem})"/>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="leadTimeBySize">
-                    <th:block th:include="charts/leadTimeBySize :: chart(${issuePeriod.leadTimeBySize})" />
+                    <th:block th:include="charts/leadTimeBySize :: chart(${issuePeriod.leadTimeBySize})"/>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="columnTimeAvg">
-                    <th:block th:include="charts/columnTimeAvg :: list(${issuePeriod.columnTimeAvgs})" />
+                    <th:block th:include="charts/columnTimeAvg :: list(${issuePeriod.columnTimeAvgs})"/>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="leadTimeByType">
-                    <th:block th:include="charts/leadTimeByType :: chart(${issuePeriod.leadTimeByType})" />
+                    <th:block th:include="charts/leadTimeByType :: chart(${issuePeriod.leadTimeByType})"/>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="tasksByType">
-                    <th:block th:include="charts/tasksByType :: chart(${issuePeriod.tasksByType})" />
+                    <th:block th:include="charts/tasksByType :: chart(${issuePeriod.tasksByType})"/>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="leadTimeByProject">
+                    <th:block th:include="charts/leadTimeByProject :: chart(${issuePeriod.leadTimeByProject})"/>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="tasksByProject">
+                    <th:block th:include="charts/tasksByProject :: chart(${issuePeriod.tasksByProject})"/>
                 </div>
             </div>
         </div>

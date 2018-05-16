@@ -84,6 +84,15 @@
                     </div>
                 </div>
 
+                <div class="form-group col-md-4">
+                    <label>Projetos</label>
+                    <div>
+                        <select class="selectpicker" multiple="" th:field="*{projects}" data-width="100%">
+                            <option th:each="project : ${sandBoxFilter.projects}" th:value="${project}" th:text="${project}"></option>
+                        </select>
+                    </div>
+                </div>
+
             </div>
             <div class="panel-footer">
                 <div class="text-right">
@@ -110,6 +119,8 @@
             <li role="presentation"><a href="#columnTimeAvg" data-toggle="tab">Média de tempo por coluna</a></li>
             <li role="presentation"><a href="#leadTimeByType" data-toggle="tab">LeadTime por tipo</a></li>
             <li role="presentation"><a href="#tasksByType" data-toggle="tab">Histórias por tipo</a></li>
+            <li role="presentation"><a href="#leadTimeByProject" data-toggle="tab">LeadTime por projeto</a></li>
+            <li role="presentation"><a href="#tasksByProject" data-toggle="tab">Histórias por projeto</a></li>
         </ul>
 
         <div class="panel panel-default bt-0">
@@ -141,6 +152,12 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="tasksByType">
                         <th:block th:include="charts/tasksByType :: chart(${sandBox.chartAggregator.tasksByType})" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="leadTimeByProject">
+                        <th:block th:include="charts/leadTimeByProject :: chart(${sandBox.chartAggregator.leadTimeByProject})" />
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tasksByProject">
+                        <th:block th:include="charts/tasksByProject :: chart(${sandBox.chartAggregator.tasksByProject})" />
                     </div>
                 </div>
             </div>

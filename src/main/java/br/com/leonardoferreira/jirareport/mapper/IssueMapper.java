@@ -96,9 +96,10 @@ public class IssueMapper {
                     issueVO.setStartDate(DateUtil.displayFormat(startDate));
                     issueVO.setEndDate(DateUtil.displayFormat(endDate));
                     issueVO.setLeadTime(leadTime);
-                    issueVO.setSystem(getSystem(fields, project));
+                    issueVO.setSystem(getElement(fields, project.getSystemCF()));
                     issueVO.setEpic(epic);
                     issueVO.setEstimated(estimated);
+                    issueVO.setProject(getElement(fields, project.getProjectCF()));
                     issueVO.setSummary(fields.get("summary").getAsString());
                     issueVO.setChangelog(changelog);
 
@@ -164,8 +165,11 @@ public class IssueMapper {
                 }).filter(Objects::nonNull).findFirst().orElse(null);
     }
 
-    private String getSystem(final JsonObject fields, final Project project) {
-        final JsonElement jsonElement = fields.get(project.getSystemCF());
+    private String getElement(final JsonObject fields, final String cf) {
+        if (StringUtils.isEmpty(cf)) {
+            return null;
+        }
+        final JsonElement jsonElement = fields.get(cf);
         if (jsonElement == null || jsonElement.isJsonNull()) {
             return null;
         }

@@ -58,6 +58,8 @@ public class Issue extends BaseEntity {
     @ManyToMany(mappedBy = "issues", cascade = CascadeType.ALL)
     private List<IssuePeriod> issuePeriods;
 
+    private String project;
+
     @Transient
     public String getTitle() {
         return String.format("%s %s", key, summary);

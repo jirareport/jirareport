@@ -14,7 +14,6 @@ public interface IssueRepository extends CrudRepository<Issue, String>, IssueCus
             + " AND issue.estimated IS NOT NULL", nativeQuery = true)
     List<String> findAllEstimativesByProjectId(@Param("projectId") Long projectId);
 
-
     @Query(value = "SELECT DISTINCT issue.system FROM issue "
             + " INNER JOIN issue_period_issue ON issue_period_issue.issue_key = issue.key "
             + " WHERE issue_period_issue.project_id = :projectId "
@@ -32,4 +31,10 @@ public interface IssueRepository extends CrudRepository<Issue, String>, IssueCus
             + " WHERE issue_period_issue.project_id = :projectId "
             + " AND issue.issue_type IS NOT NULL", nativeQuery = true)
     List<String> findAllIssueTypesByProjectId(Long projectId);
+
+    @Query(value = "SELECT DISTINCT issue.project FROM issue "
+            + " INNER JOIN issue_period_issue ON issue_period_issue.issue_key = issue.key "
+            + " WHERE issue_period_issue.project_id = :projectId "
+            + " AND issue.project IS NOT NULL", nativeQuery = true)
+    List<String> findAllIssueProjectsByProjectId(Long projectId);
 }

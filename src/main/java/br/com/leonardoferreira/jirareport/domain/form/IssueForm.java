@@ -30,4 +30,6 @@ public class IssueForm {
 
     private List<String> issueTypes = new ArrayList<>();
 
+    private List<String> projects = new ArrayList<>();
+
 }
