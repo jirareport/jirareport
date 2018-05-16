@@ -8,15 +8,7 @@ import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.mapper.HolidayMapper;
 import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
 import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
-import br.com.leonardoferreira.jirareport.service.GeoNamesService;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
-
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import br.com.leonardoferreira.jirareport.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +17,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author lferreira
@@ -45,9 +42,6 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
 
     @Autowired
     private HolidayMapper holidayMapper;
-
-    @Autowired
-    private GeoNamesService geoNamesService;
 
     @Override
     @Transactional(readOnly = true)
@@ -105,7 +99,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
 
     @Override
     @Transactional
-    public boolean createImported(final Long projectId, final String city){
+    public boolean createImported(final Long projectId, final String city) {
         log.info("Method=createImported, projectId={}", projectId);
 
 
@@ -118,7 +112,9 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
 
         List<Holiday> holidaysByProject = holidayRepository.findAllByProjectId(projectId);
 
-        List<HolidayVO> allHolidaysVOInCity = holidayClient.findAllHolidaysInCity(new Integer(Calendar.getInstance().get(Calendar.YEAR)).toString(), state, cityRuled);
+        List<HolidayVO> allHolidaysVOInCity = holidayClient.findAllHolidaysInCity(
+                new Integer(Calendar.getInstance().get(Calendar.YEAR)).toString(), state, cityRuled);
+
         List<Holiday> allHolidaysInCity = holidayMapper.fromVOS(allHolidaysVOInCity, projectId);
 
         if (holidaysByProject.containsAll(allHolidaysInCity)) {

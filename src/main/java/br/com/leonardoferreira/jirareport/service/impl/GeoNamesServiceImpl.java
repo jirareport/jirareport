@@ -20,7 +20,7 @@ public class GeoNamesServiceImpl implements GeoNamesService {
     }
 
     @Override
-    public GeoNamesWrapperVO findAllCitiesByState(String geonameIdState) {
+    public GeoNamesWrapperVO findAllCitiesByState(final String geonameIdState) {
         return geoNamesClient.findAllChildrenByGeonameId(geonameIdState);
     }
 

@@ -17,7 +17,7 @@ public class GeoNamesRestController {
     private GeoNamesClient geoNamesClient;
 
     @GetMapping("/findAllCitiesByState/{stateId}")
-    public ResponseEntity<GeoNamesWrapperVO> findAllCitiesByState(@PathVariable String stateId) {
+    public ResponseEntity<GeoNamesWrapperVO> findAllCitiesByState(@PathVariable final String stateId) {
         GeoNamesWrapperVO allChildrenByGeonameId = geoNamesClient.findAllChildrenByGeonameId(stateId);
         return ResponseEntity.ok(allChildrenByGeonameId);
     }

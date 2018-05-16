@@ -84,7 +84,8 @@ public class HolidayController extends AbstractController {
     }
 
     @PostMapping("/import")
-    public ModelAndView importFromAPI(@PathVariable final Long projectId, final @RequestParam("selectCity") String city, final RedirectAttributes redirectAttributes) {
+    public ModelAndView importFromAPI(@PathVariable final Long projectId,
+                                      @RequestParam("selectCity") final String city, final RedirectAttributes redirectAttributes) {
 
         if (holidayService.createImported(projectId, city)) {
             redirectAttributes.addFlashAttribute("flashSuccess", "Registros importados com sucesso");
