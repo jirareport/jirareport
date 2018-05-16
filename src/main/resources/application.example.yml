@@ -5,6 +5,9 @@ holiday:
   url: https://api.calendario.com.br/?json=true&token=
   token: seuToken
 
+geonames:
+  url: http://www.geonames.org/childrenJSON
+
 spring:
   application:
     name: jirareport

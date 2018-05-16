@@ -24,6 +24,6 @@ public interface HolidayService {
 
     void update(Long projectId, Holiday holiday);
 
-    boolean createImported(Long projectId);
+    boolean createImported(Long projectId, String city);
 
 }
