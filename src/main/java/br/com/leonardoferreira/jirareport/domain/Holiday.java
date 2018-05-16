@@ -12,11 +12,16 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+
+import lombok.Builder;
 import javax.validation.constraints.NotNull;
 
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -27,6 +32,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @EqualsAndHashCode(of = {"date", "project"}, callSuper = false)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"date", "project_id"}))
+@EqualsAndHashCode(callSuper = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Holiday extends BaseEntity {
 
     private static final long serialVersionUID = 18640912961216513L;

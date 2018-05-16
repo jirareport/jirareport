@@ -6,11 +6,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import br.com.leonardoferreira.jirareport.client.ProjectClient;
+import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.vo.Statuses;
 import br.com.leonardoferreira.jirareport.domain.vo.StatusesProject;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
+import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private HolidayService holidayService;
 
     @Override
     public List<Project> findAll() {
@@ -51,6 +56,12 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
     @Override
     public void delete(final Long id) {
         log.info("Method=delete, id={}", id);
+
+        List<Holiday> holidays = holidayService.findByProject(id);
+        if(!holidays.isEmpty()){
+            holidays.forEach(holiday -> holidayService.delete(holiday.getId()));
+        }
+
         projectRepository.deleteById(id);
     }
 
