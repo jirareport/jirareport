@@ -83,3 +83,11 @@ pmd {
             "java-design"
     ]
 }
+
+task buildGulp(type: Exec) {
+    commandLine './node_modules/gulp/bin/gulp.js'
+}
+
+bootRun {
+    dependsOn buildGulp
+}

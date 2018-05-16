@@ -19,20 +19,33 @@
 
             <div class="form-group">
                 <label>Coluna inicial</label>
-                <input type="text" th:field="*{startColumn}" class="form-control"/>
+                <input type="text" th:field="*{startColumn}" class="form-control" id="input-startColumn" data-column-suggest-unique="true"/>
+            </div>
+
+            <div class="form-group btn-group btn-group-sm">
+                <a href="#" th:each="status : ${suggestedStatus}" class="btn btn-default" data-column-suggest="input-startColumn" data-column-suggest-unique="true">
+                    <span th:text="${status}"></span>
+                </a>
             </div>
 
             <div class="form-group">
                 <label>Coluna final</label>
-                <input type="text" th:field="*{endColumn}" class="form-control"/>
+                <input type="text" th:field="*{endColumn}" class="form-control" id="input-endColumn"/>
             </div>
+
+            <div class="form-group btn-group btn-group-sm">
+                <a href="#" th:each="status : ${suggestedStatus}" class="btn btn-default" data-column-suggest="input-endColumn">
+                    <span th:text="${status}"></span>
+                </a>
+            </div>
+
             <div class="form-group">
                 <label>Fluxo ordenado de colunas</label>
                 <input type="text" id="fluxColumn" th:field="*{fluxColumn}" class="form-control"/>
             </div>
 
-            <div id="fluxColumn_select" class="form-group btn-group btn-group-sm">
-                <a href="#" th:each="status : ${suggestedStatus}" class="btn btn-default">
+            <div class="form-group btn-group btn-group-sm">
+                <a href="#" th:each="status : ${suggestedStatus}" class="btn btn-default" data-column-suggest="fluxColumn" data-column-suggest-prefix=", ">
                     <span th:text="${status}"></span>
                 </a>
             </div>
