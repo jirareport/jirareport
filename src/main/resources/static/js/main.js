@@ -83,6 +83,34 @@ $(document).ready(function() {
         return false;
     });
 
+    $("#selectState").change(function(){
+        var stateId = $(this).val();
+        $.ajax({
+            type: 'GET',
+            url: "/holidays/findAllCitiesByState/"+stateId,
+            dataType: 'json',
+            data: '',
+            success: function(data){
+                console.log(data);
+                console.log(data.geonames.length);
+
+                var slctSubcat=$('#selectCity'), option="";
+                slctSubcat.empty();
+
+                for(var i=0; i<data.geonames.length; i++){
+                    console.log(data.geonames[i]);
+                    option = option + "<option value='"+data.geonames[i].toponymName +"-"+data.geonames[i].adminCodes1.ISO3166_2+ "'>"+data.geonames[i].toponymName + "</option>";
+                }
+                slctSubcat.append(option);
+                slctSubcat.selectpicker("refresh");
+            },
+            error:function(){
+                alert("error");
+            }
+
+        });
+    });
+
      $(function() {
         $('#fluxColumn_select a').click(function() {
             var value = $(this).text().trim();

@@ -1,23 +1,25 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import br.com.leonardoferreira.jirareport.client.GeoNamesClient;
 import br.com.leonardoferreira.jirareport.client.HolidayClient;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.domain.vo.GeoNamesWrapperVO;
 import br.com.leonardoferreira.jirareport.domain.vo.HolidayVO;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
 import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import br.com.leonardoferreira.jirareport.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author s2it_leferreira
@@ -30,12 +32,14 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     private final HolidayRepository holidayRepository;
     private final ProjectRepository projectRepository;
     private final HolidayClient holidayClient;
+    private final GeoNamesClient geoNamesClient;
 
     public HolidayServiceImpl(final HolidayRepository holidayRepository,
-                              final ProjectRepository projectRepository, final HolidayClient holidayClient) {
+                              final ProjectRepository projectRepository, final HolidayClient holidayClient, GeoNamesClient geoNamesClient) {
         this.holidayRepository = holidayRepository;
         this.projectRepository = projectRepository;
         this.holidayClient = holidayClient;
+        this.geoNamesClient = geoNamesClient;
     }
 
     @Override
@@ -81,13 +85,18 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
 
     @Override
     @Transactional
-    public Boolean createImported(final Long projectId) {
+    public Boolean createImported(final Long projectId, final String city) {
+
+        String[] split = city.split("-");
+        String state = split[1];
+        String cityRuled = StringUtil.applyRulesForHolidaysService(split[0]);
+
         List<Holiday> holidaysByProject = findByProject(projectId);
         Set<String> holidayAlreadyRegistered = holidaysByProject.stream()
                 .map(Holiday::getDate)
                 .collect(Collectors.toSet());
 
-        List<HolidayVO> allHolidaysInCity = findAllHolidaysInCity("2018", "SP", "ARARAQUARA");
+        List<HolidayVO> allHolidaysInCity = findAllHolidaysInCity(new Integer(Calendar.getInstance().get(Calendar.YEAR)).toString(), state, cityRuled);
         List<HolidayVO> onlyNewHolidays = allHolidaysInCity.stream()
                 .filter(e -> !holidayAlreadyRegistered.contains(e.getDate()))
                 .collect(Collectors.toList());
@@ -99,5 +108,15 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
                     Holiday.builder().date(holidayVO.getDate()).description(holidayVO.getName()).build()));
             return true;
         }
+    }
+
+    @Override
+    public GeoNamesWrapperVO findAllStatesOfBrazil() {
+        return geoNamesClient.findAllChildrenByGeonameId("3469034");
+    }
+
+    @Override
+    public GeoNamesWrapperVO findAllCitiesByState(String geonameIdState) {
+        return geoNamesClient.findAllChildrenByGeonameId(geonameIdState);
     }
 }

@@ -4,6 +4,9 @@
       layout:decorator="layouts/application">
 
 <th:block layout:fragment="content">
+
+    <div th:replace="holidays/components/modal:: modalHoliday"></div>
+
     <div class="container-fluid">
         <div class="page-header">
             <h1 th:text="'Feriados - ' + ${project.name}"></h1>
@@ -13,7 +16,7 @@
             <a th:href="@{/projects/{projectId}/holidays/new(projectId=${project.id})}" class="btn btn-primary">Novo
                 Feriado</a>
 
-            <a data-method="POST" th:href="@{/projects/{projectId}/holidays/import(projectId=${project.id})}" class="btn btn-primary">Importar
+            <a data-toggle="modal" data-target="#modalHoliday" class="btn btn-primary">Importar
                 Feriados</a>
         </div>
 

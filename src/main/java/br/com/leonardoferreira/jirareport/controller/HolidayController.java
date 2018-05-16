@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -42,6 +43,7 @@ public class HolidayController extends AbstractController {
         final Project project = projectService.findById(projectId);
         return new ModelAndView("holidays/index")
                 .addObject("holidays", holidays)
+                .addObject("states", holidayService.findAllStatesOfBrazil().getGeonames())
                 .addObject("project", project);
     }
 
@@ -79,9 +81,9 @@ public class HolidayController extends AbstractController {
     }
 
     @PostMapping("/import")
-    public ModelAndView importFromAPI(@PathVariable final Long projectId, final RedirectAttributes redirectAttributes) {
+    public ModelAndView importFromAPI(@PathVariable final Long projectId, final @RequestParam("selectCity") String city, final RedirectAttributes redirectAttributes) {
 
-        if (holidayService.createImported(projectId)) {
+        if (holidayService.createImported(projectId, city)) {
             redirectAttributes.addFlashAttribute("flashSuccess", "Registros importados com sucesso");
         } else {
             redirectAttributes.addFlashAttribute("flashError", "Feriados ja importados");

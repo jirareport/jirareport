@@ -1,6 +1,7 @@
 package br.com.leonardoferreira.jirareport.service;
 
 import br.com.leonardoferreira.jirareport.domain.Holiday;
+import br.com.leonardoferreira.jirareport.domain.vo.GeoNamesWrapperVO;
 import br.com.leonardoferreira.jirareport.domain.vo.HolidayVO;
 
 import java.util.List;
@@ -23,5 +24,9 @@ public interface HolidayService {
 
     List<HolidayVO> findAllHolidaysInCity(String year, String state, String city);
 
-    Boolean createImported(Long projectId);
+    Boolean createImported(Long projectId, String city);
+
+    GeoNamesWrapperVO findAllStatesOfBrazil();
+
+    GeoNamesWrapperVO findAllCitiesByState(String geonameIdState);
 }
