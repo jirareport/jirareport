@@ -133,6 +133,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     @Async
     @Override
     public CompletableFuture<Chart<String, Long>> tasksByType(final List<Issue> issues) {
+        log.info("Method=tasksByType, issues={}", issues);
         Map<String, Long> collect = issues.stream()
                 .filter(i -> !StringUtils.isEmpty(i.getIssueType()))
                 .collect(Collectors.groupingBy(Issue::getIssueType, Collectors.counting()));
@@ -157,6 +158,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     @Async
     @Override
     public CompletableFuture<Chart<String, Long>> tasksByProject(final List<Issue> issues) {
+        log.info("Method=tasksByProject, issues={}", issues);
         Map<String, Long> collect = issues.stream()
                 .filter(i -> !StringUtils.isEmpty(i.getProject()))
                 .collect(Collectors.groupingBy(Issue::getProject, Collectors.counting()));
