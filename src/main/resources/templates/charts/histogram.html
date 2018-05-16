@@ -3,7 +3,18 @@
 <th:block th:fragment="chart(chartData)">
     <th:block
             th:if="${chartData?.hasData}"
-            th:include="components/chart/_bar :: chart('issue_histogram', 'LeadTime', 'Histórias', ${chartData}, false)" />
+            th:include="components/chart/_bar :: chart('issue_histogram', 'LeadTime', 'Histórias', ${chartData}, false)"/>
     <span th:unless="${chartData?.hasData}">Nenhum registro encontrado</span>
+    <div style="margin-left:50px;" th:if="${histogram != null}">
+        <div class="form-group col-md-3">
+            <label>Mediana:</label> <span th:text="${histogram.median}"/>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Percentil 75:</label> <span th:text="${histogram.percentile75}"/>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Percentil 90:</label> <span th:text="${histogram.percentile90}"/>
+        </div>
+    </div>
 </th:block>
 </html>

@@ -6,6 +6,7 @@ import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
+import br.com.leonardoferreira.jirareport.domain.vo.HistogramVO;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBox;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBoxFilter;
 import br.com.leonardoferreira.jirareport.mapper.IssueMapper;
@@ -14,6 +15,8 @@ import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -104,6 +107,22 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         sandBoxFilter.setProjects(issueRepository.findAllIssueProjectsByProjectId(projectId));
 
         return sandBoxFilter;
+    }
+
+    @Override
+    public HistogramVO getHistogramData(final List<Issue> issues) {
+        if (issues == null || issues.size() < 10) {
+            return null;
+        }
+        issues.sort((a, b) -> a.getLeadTime().compareTo(b.getLeadTime()));
+        int median = new BigDecimal((double) issues.size() / 2).setScale(0, RoundingMode.CEILING).intValue();
+        int percentile75 = new BigDecimal((double) issues.size() * 75 / 100).setScale(0, RoundingMode.CEILING)
+                .intValue();
+        int percentile90 = new BigDecimal((double) issues.size() * 90 / 100).setScale(0, RoundingMode.CEILING)
+                .intValue();
+
+        return new HistogramVO(issues.get(median - 1).getLeadTime(), issues.get(percentile75 - 1).getLeadTime(),
+                issues.get(percentile90 - 1).getLeadTime());
     }
 
     private String buildJQL(final IssuePeriodId issuePeriodId, final Project project) {
