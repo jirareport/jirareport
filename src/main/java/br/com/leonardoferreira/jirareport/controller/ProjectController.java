@@ -1,5 +1,7 @@
 package br.com.leonardoferreira.jirareport.controller;
 
+import java.util.Set;
+
 import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +52,10 @@ public class ProjectController extends AbstractController {
     @GetMapping("/{id}/edit")
     public ModelAndView update(@PathVariable final Long id) {
         Project project = projectService.findById(id);
+        Set<String> statusFromProjectInJira = projectService.findStatusFromProjectInJira(project);
         return new ModelAndView("projects/edit")
-                .addObject("project", project).addObject("suggestedStatus", projectService.findStatusFromProjectInJira(project));
+                .addObject("project", project)
+                .addObject("suggestedStatus", statusFromProjectInJira);
     }
 
     @PutMapping

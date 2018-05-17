@@ -1,11 +1,5 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
@@ -19,11 +13,16 @@ import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 /**
  * @author lferreira
@@ -124,14 +123,13 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     private IssueCountBySize buildIssueCountBySize(final List<IssuePeriod> issuePeriods) {
         long start = System.currentTimeMillis();
 
-        List<String> sizes = new ArrayList<>();
+        Set<String> sizes = new HashSet<>();
         Map<String, Map<String, Long>> periodsSize = new HashMap<>();
         for (IssuePeriod issuePeriod : issuePeriods) {
-            Map<String, Long> collect = issuePeriod.getIssues().stream()
-                    .filter(i -> !StringUtils.isEmpty(i.getEstimated()))
-                    .peek(i -> sizes.add(i.getEstimated()))
-                    .collect(Collectors.groupingBy(Issue::getEstimated, Collectors.counting()));
-            periodsSize.put(issuePeriod.getId().getDates(), collect);
+            Map<String, Long> estimated = issuePeriod.getEstimated().getData();
+            sizes.addAll(issuePeriod.getEstimated().getData().keySet());
+
+            periodsSize.put(issuePeriod.getId().getDates(), estimated);
         }
 
         periodsSize.forEach((k, v) -> {

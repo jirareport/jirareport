@@ -19,7 +19,7 @@
 
             <div class="form-group">
                 <label>Coluna inicial</label>
-                <input type="text" th:field="*{startColumn}" class="form-control" id="input-startColumn" data-column-suggest-unique="true"/>
+                <input type="text" th:field="*{startColumn}" class="form-control" id="input-startColumn"/>
             </div>
 
             <div class="form-group btn-group btn-group-sm">
@@ -34,7 +34,7 @@
             </div>
 
             <div class="form-group btn-group btn-group-sm">
-                <a href="#" th:each="status : ${suggestedStatus}" class="btn btn-default" data-column-suggest="input-endColumn">
+                <a href="#" th:each="status : ${suggestedStatus}" class="btn btn-default" data-column-suggest="input-endColumn" data-column-suggest-unique="true">
                     <span th:text="${status}"></span>
                 </a>
             </div>
