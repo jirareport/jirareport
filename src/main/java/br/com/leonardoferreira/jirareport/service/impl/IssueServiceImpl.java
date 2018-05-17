@@ -6,6 +6,7 @@ import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
+import br.com.leonardoferreira.jirareport.domain.vo.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBox;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBoxFilter;
 import br.com.leonardoferreira.jirareport.mapper.IssueMapper;
@@ -14,6 +15,8 @@ import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -104,6 +107,26 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         sandBoxFilter.setProjects(issueRepository.findAllIssueProjectsByProjectId(projectId));
 
         return sandBoxFilter;
+    }
+
+    @Override
+    public Histogram calcHistogramData(final List<Issue> issues) {
+        if (issues == null || issues.size() < 10) {
+            return null;
+        }
+        final int totalElements = issues.size();
+        issues.sort((a, b) -> a.getLeadTime().compareTo(b.getLeadTime()));
+        int median = calculateCeilingPercentage(totalElements, 50);
+        int percentile75 = calculateCeilingPercentage(totalElements, 75);
+        int percentile90 = calculateCeilingPercentage(totalElements, 90);
+
+        return new Histogram(issues.get(median - 1).getLeadTime(), issues.get(percentile75 - 1).getLeadTime(),
+                issues.get(percentile90 - 1).getLeadTime());
+    }
+
+    private int calculateCeilingPercentage(final int totalElements, final int percentage) {
+        return new BigDecimal((double) totalElements * percentage / 100).setScale(0, RoundingMode.CEILING)
+                .intValue();
     }
 
     private String buildJQL(final IssuePeriodId issuePeriodId, final Project project) {
