@@ -51,7 +51,7 @@ public class IssuePeriodController extends AbstractController {
     public ModelAndView details(@PathVariable final Long projectId, final IssuePeriodId issuePeriodId) {
         issuePeriodId.setProjectId(projectId);
         IssuePeriod issuePeriod = issuePeriodService.findById(issuePeriodId);
-        HistogramVO histogramData = issueService.getHistogramData(issuePeriod.getIssues());
+        HistogramVO histogramData = issueService.findHistogramData(issuePeriod.getIssues());
 
         return new ModelAndView("issue-periods/details")
                 .addObject("issuePeriod", issuePeriod)

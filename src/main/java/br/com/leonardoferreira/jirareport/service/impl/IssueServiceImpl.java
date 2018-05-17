@@ -110,19 +110,23 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     }
 
     @Override
-    public HistogramVO getHistogramData(final List<Issue> issues) {
+    public HistogramVO findHistogramData(final List<Issue> issues) {
         if (issues == null || issues.size() < 10) {
             return null;
         }
+        final int totalElements = issues.size();
         issues.sort((a, b) -> a.getLeadTime().compareTo(b.getLeadTime()));
-        int median = new BigDecimal((double) issues.size() / 2).setScale(0, RoundingMode.CEILING).intValue();
-        int percentile75 = new BigDecimal((double) issues.size() * 75 / 100).setScale(0, RoundingMode.CEILING)
-                .intValue();
-        int percentile90 = new BigDecimal((double) issues.size() * 90 / 100).setScale(0, RoundingMode.CEILING)
-                .intValue();
+        int median = calculateCeilingPercentage(totalElements, 50);
+        int percentile75 = calculateCeilingPercentage(totalElements, 75);;
+        int percentile90 = calculateCeilingPercentage(totalElements, 90);;
 
         return new HistogramVO(issues.get(median - 1).getLeadTime(), issues.get(percentile75 - 1).getLeadTime(),
                 issues.get(percentile90 - 1).getLeadTime());
+    }
+
+    private int calculateCeilingPercentage(final int totalElements, final int percentage) {
+        return new BigDecimal((double) totalElements * percentage / 100).setScale(0, RoundingMode.CEILING)
+                .intValue();
     }
 
     private String buildJQL(final IssuePeriodId issuePeriodId, final Project project) {
