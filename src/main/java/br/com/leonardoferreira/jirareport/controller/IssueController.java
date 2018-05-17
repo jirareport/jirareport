@@ -23,7 +23,7 @@ public class IssueController {
     public ModelAndView index(@PathVariable final Long projectId, final IssueForm issueForm) {
         SandBox sandBox = issueService.findByExample(projectId, issueForm);
         SandBoxFilter sandBoxFilter = issueService.findSandBoxFilters(projectId, sandBox, issueForm);
-        HistogramVO histogramData = issueService.findHistogramData(sandBox.getIssues());
+        HistogramVO histogramData = issueService.calcHistogramData(sandBox.getIssues());
 
         return new ModelAndView("issues/index")
                 .addObject("issueForm", issueForm)

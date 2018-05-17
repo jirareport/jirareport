@@ -23,5 +23,5 @@ public interface IssueService {
 
     SandBoxFilter findSandBoxFilters(Long projectId, SandBox sandBox, IssueForm issueForm);
 
-    HistogramVO findHistogramData(List<Issue> issues);
+    HistogramVO calcHistogramData(List<Issue> issues);
 }

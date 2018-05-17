@@ -110,15 +110,15 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     }
 
     @Override
-    public HistogramVO findHistogramData(final List<Issue> issues) {
+    public HistogramVO calcHistogramData(final List<Issue> issues) {
         if (issues == null || issues.size() < 10) {
             return null;
         }
         final int totalElements = issues.size();
         issues.sort((a, b) -> a.getLeadTime().compareTo(b.getLeadTime()));
         int median = calculateCeilingPercentage(totalElements, 50);
-        int percentile75 = calculateCeilingPercentage(totalElements, 75);;
-        int percentile90 = calculateCeilingPercentage(totalElements, 90);;
+        int percentile75 = calculateCeilingPercentage(totalElements, 75);
+        int percentile90 = calculateCeilingPercentage(totalElements, 90);
 
         return new HistogramVO(issues.get(median - 1).getLeadTime(), issues.get(percentile75 - 1).getLeadTime(),
                 issues.get(percentile90 - 1).getLeadTime());
