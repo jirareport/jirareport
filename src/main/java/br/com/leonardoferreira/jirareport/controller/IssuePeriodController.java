@@ -1,6 +1,6 @@
 package br.com.leonardoferreira.jirareport.controller;
 
-import br.com.leonardoferreira.jirareport.domain.vo.HistogramVO;
+import br.com.leonardoferreira.jirareport.domain.vo.Histogram;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import java.util.List;
 
@@ -51,7 +51,7 @@ public class IssuePeriodController extends AbstractController {
     public ModelAndView details(@PathVariable final Long projectId, final IssuePeriodId issuePeriodId) {
         issuePeriodId.setProjectId(projectId);
         IssuePeriod issuePeriod = issuePeriodService.findById(issuePeriodId);
-        HistogramVO histogramData = issueService.calcHistogramData(issuePeriod.getIssues());
+        Histogram histogramData = issueService.calcHistogramData(issuePeriod.getIssues());
 
         return new ModelAndView("issue-periods/details")
                 .addObject("issuePeriod", issuePeriod)

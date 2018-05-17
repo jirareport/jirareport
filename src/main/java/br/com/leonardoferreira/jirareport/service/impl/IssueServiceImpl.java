@@ -6,7 +6,7 @@ import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
-import br.com.leonardoferreira.jirareport.domain.vo.HistogramVO;
+import br.com.leonardoferreira.jirareport.domain.vo.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBox;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBoxFilter;
 import br.com.leonardoferreira.jirareport.mapper.IssueMapper;
@@ -110,7 +110,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     }
 
     @Override
-    public HistogramVO calcHistogramData(final List<Issue> issues) {
+    public Histogram calcHistogramData(final List<Issue> issues) {
         if (issues == null || issues.size() < 10) {
             return null;
         }
@@ -120,7 +120,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         int percentile75 = calculateCeilingPercentage(totalElements, 75);
         int percentile90 = calculateCeilingPercentage(totalElements, 90);
 
-        return new HistogramVO(issues.get(median - 1).getLeadTime(), issues.get(percentile75 - 1).getLeadTime(),
+        return new Histogram(issues.get(median - 1).getLeadTime(), issues.get(percentile75 - 1).getLeadTime(),
                 issues.get(percentile90 - 1).getLeadTime());
     }
 

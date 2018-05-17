@@ -4,7 +4,7 @@ import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 
-import br.com.leonardoferreira.jirareport.domain.vo.HistogramVO;
+import br.com.leonardoferreira.jirareport.domain.vo.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBox;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBoxFilter;
 import java.util.List;
@@ -23,5 +23,5 @@ public interface IssueService {
 
     SandBoxFilter findSandBoxFilters(Long projectId, SandBox sandBox, IssueForm issueForm);
 
-    HistogramVO calcHistogramData(List<Issue> issues);
+    Histogram calcHistogramData(List<Issue> issues);
 }

@@ -1,7 +1,7 @@
 package br.com.leonardoferreira.jirareport.controller;
 
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
-import br.com.leonardoferreira.jirareport.domain.vo.HistogramVO;
+import br.com.leonardoferreira.jirareport.domain.vo.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBox;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBoxFilter;
 import br.com.leonardoferreira.jirareport.service.IssueService;
@@ -23,7 +23,7 @@ public class IssueController {
     public ModelAndView index(@PathVariable final Long projectId, final IssueForm issueForm) {
         SandBox sandBox = issueService.findByExample(projectId, issueForm);
         SandBoxFilter sandBoxFilter = issueService.findSandBoxFilters(projectId, sandBox, issueForm);
-        HistogramVO histogramData = issueService.calcHistogramData(sandBox.getIssues());
+        Histogram histogramData = issueService.calcHistogramData(sandBox.getIssues());
 
         return new ModelAndView("issues/index")
                 .addObject("issueForm", issueForm)
