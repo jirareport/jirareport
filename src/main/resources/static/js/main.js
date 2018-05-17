@@ -15,6 +15,8 @@ $(document).ready(function() {
         language: 'pt-BR'
     });
 
+    $('.input-group-addon').click(function() { $(this).prev().focus() });
+
     $('*[data-chart-multi-dataset]').each(function() {
         var datasources = $(this).data('datasources');
         var labels = $(this).data('labels')
