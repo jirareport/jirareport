@@ -45,6 +45,12 @@ public class Issue extends BaseEntity {
 
     private String project;
 
+    private String startDate;
+
+    private String endDate;
+
+    private Long leadTime;
+
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private List<Changelog> changelog;

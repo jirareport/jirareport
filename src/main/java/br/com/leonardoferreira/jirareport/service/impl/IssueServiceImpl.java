@@ -142,14 +142,16 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
                     .map(i -> "'" + i + "'")
                     .collect(Collectors.toList()))).append(" ) ");
         }
-//        jql.append("AND (STATUS CHANGED TO '").append(project.getEndColumn()).append("' DURING('");
-//        jql.append(DateUtil.toENDate(issuePeriodId.getStartDate())).append("', '");
-//        jql.append(DateUtil.toENDate(issuePeriodId.getEndDate())).append(" 23:59')");
-        jql.append("AND Resolved >= ");
+        jql.append("AND (STATUS CHANGED TO '").append(project.getEndColumn()).append("' DURING('");
+        jql.append(DateUtil.toENDate(issuePeriodId.getStartDate())).append("', '");
+        jql.append(DateUtil.toENDate(issuePeriodId.getEndDate())).append(" 23:59')");
+        jql.append("OR ( Resolved >= ");
         jql.append(DateUtil.toENDate(issuePeriodId.getStartDate()));
         jql.append(" AND Resolved <= '");
         jql.append(DateUtil.toENDate(issuePeriodId.getEndDate())).append(" 23:59'");
-//        jql.append(" AND NOT STATUS CHANGED TO '").append(project.getEndColumn()).append("' ");
+        jql.append(" AND NOT STATUS CHANGED TO '").append(project.getEndColumn()).append("' ");
+        jql.append("   )");
+        jql.append(")");
 
         return jql.toString();
     }
