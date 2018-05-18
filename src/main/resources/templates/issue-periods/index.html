@@ -52,7 +52,7 @@
         <li role="presentation" class="active"><a href="#list" data-toggle="tab">Listagem</a></li>
         <li role="presentation"><a href="#leadtime" data-toggle="tab">LeadTime</a></li>
         <li role="presentation"><a href="#issuesCount" data-toggle="tab">Contagem de histórias</a></li>
-        <li role="presentation"><a href="#issueCountBySize" data-toggle="tab">Contagem de histórias por estimativa</a></li>
+        <li th:unless="${#strings.isEmpty(project.estimateCF)}" role="presentation"><a href="#issueCountBySize" data-toggle="tab">Contagem de histórias por estimativa</a></li>
     </ul>
 
     <div class="panel panel-default bt-0">
@@ -93,7 +93,7 @@
                 <div role="tabpanel" class="tab-pane" id="issuesCount">
                     <th:block th:include="issue-periods/components/issueCountChart :: chart(${issuePeriodChart.issuesCount})" />
                 </div>
-                <div role="tabpanel" class="tab-pane" id="issueCountBySize">
+                <div th:unless="${#strings.isEmpty(project.estimateCF)}" role="tabpanel" class="tab-pane" id="issueCountBySize">
                     <th:block th:include="issue-periods/components/issueCountBySize :: chart(${issuePeriodChart.issueCountBySize})" />
                 </div>
             </div>

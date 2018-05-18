@@ -12,6 +12,7 @@ import javax.persistence.Transient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Type;
+import org.thymeleaf.util.StringUtils;
 
 /**
  * @author lferreira
@@ -28,8 +29,6 @@ public class Project extends BaseEntity {
     private Long id;
 
     private String name;
-
-    // Avaliar colocar em outro objeto ProjectConfig
 
     private String startColumn;
 
@@ -95,6 +94,14 @@ public class Project extends BaseEntity {
             }
         }
         return endColumns;
+    }
+
+    @Transient
+    public int getColSizeHidden() {
+        return (StringUtils.isEmpty(epicCF) ? 1 : 0)
+                + (StringUtils.isEmpty(estimateCF) ? 1 : 0)
+                + (StringUtils.isEmpty(systemCF) ? 1 : 0)
+                + (StringUtils.isEmpty(projectCF) ? 1 : 0);
     }
 
 }
