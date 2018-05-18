@@ -1,14 +1,15 @@
 package br.com.leonardoferreira.jirareport.controller;
 
-import br.com.leonardoferreira.jirareport.domain.vo.Histogram;
-import br.com.leonardoferreira.jirareport.service.IssueService;
-import java.util.List;
-
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
+import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
+import br.com.leonardoferreira.jirareport.domain.vo.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
+import br.com.leonardoferreira.jirareport.service.IssueService;
+import br.com.leonardoferreira.jirareport.service.ProjectService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -36,15 +37,20 @@ public class IssuePeriodController extends AbstractController {
     @Autowired
     private IssueService issueService;
 
+    @Autowired
+    private ProjectService projectService;
+
     @GetMapping
     public ModelAndView index(@PathVariable final Long projectId) {
         List<IssuePeriod> issuePeriods = issuePeriodService.findByProjectId(projectId);
         IssuePeriodChart issuePeriodChart = issuePeriodService.getChartByIssues(issuePeriods);
+        Project project = projectService.findById(projectId);
 
         return new ModelAndView("issue-periods/index")
                 .addObject("issuePeriods", issuePeriods)
                 .addObject("issuePeriodId", new IssuePeriodId(projectId))
-                .addObject("issuePeriodChart", issuePeriodChart);
+                .addObject("issuePeriodChart", issuePeriodChart)
+                .addObject("project", project);
     }
 
     @GetMapping("/details")
@@ -52,17 +58,18 @@ public class IssuePeriodController extends AbstractController {
         issuePeriodId.setProjectId(projectId);
         IssuePeriod issuePeriod = issuePeriodService.findById(issuePeriodId);
         Histogram histogramData = issueService.calcHistogramData(issuePeriod.getIssues());
-
+        Project project = projectService.findById(projectId);
         return new ModelAndView("issue-periods/details")
                 .addObject("issuePeriod", issuePeriod)
-                .addObject("histogram", histogramData);
+                .addObject("histogram", histogramData)
+                .addObject("project", project);
     }
 
     @PostMapping
     public ModelAndView create(@PathVariable final Long projectId,
-                               @Validated final IssuePeriodId issuePeriodId,
-                               final BindingResult bindingResult,
-                               final RedirectAttributes redirectAttributes) {
+            @Validated final IssuePeriodId issuePeriodId,
+            final BindingResult bindingResult,
+            final RedirectAttributes redirectAttributes) {
         issuePeriodId.setProjectId(projectId);
 
         if (bindingResult.hasErrors()) {
@@ -91,8 +98,8 @@ public class IssuePeriodController extends AbstractController {
 
     @PutMapping
     public ModelAndView update(@PathVariable final Long projectId,
-                               final IssuePeriodId issuePeriodId,
-                               final RedirectAttributes redirectAttributes) {
+            final IssuePeriodId issuePeriodId,
+            final RedirectAttributes redirectAttributes) {
         issuePeriodId.setProjectId(projectId);
         try {
             issuePeriodService.update(issuePeriodId);
@@ -106,8 +113,8 @@ public class IssuePeriodController extends AbstractController {
 
     @DeleteMapping
     public ModelAndView remove(@PathVariable final Long projectId,
-                               final IssuePeriodId issuePeriodId,
-                               final RedirectAttributes redirectAttributes) {
+            final IssuePeriodId issuePeriodId,
+            final RedirectAttributes redirectAttributes) {
         issuePeriodId.setProjectId(projectId);
         issuePeriodService.remove(issuePeriodId);
 
