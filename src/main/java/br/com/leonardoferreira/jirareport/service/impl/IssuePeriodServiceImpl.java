@@ -52,7 +52,8 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         }
 
         List<Issue> issues = issueService.findAllInJira(issuePeriodId);
-        issueService.saveAll(issues);
+
+
         Double avgLeadTime = issues.parallelStream()
                 .filter(i -> i.getLeadTime() != null)
                 .mapToLong(Issue::getLeadTime)

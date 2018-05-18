@@ -68,8 +68,8 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
     }
 
     @Override
-    public Set<String> findStatusFromProjectInJira(final Project project) {
-        List<StatusesProject> listStatusesProject = projectClient.findStatusFromProject(currentToken(), project.getId());
+    public Set<String> findStatusFromProjectInJira(final Long projectId) {
+        List<StatusesProject> listStatusesProject = projectClient.findStatusFromProject(currentToken(), projectId);
 
         return listStatusesProject.stream()
                 .map(StatusesProject::getStatuses)

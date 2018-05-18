@@ -2,6 +2,7 @@ package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.client.IssueClient;
 import br.com.leonardoferreira.jirareport.domain.Issue;
+import br.com.leonardoferreira.jirareport.domain.LeadTime;
 import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
@@ -13,6 +14,7 @@ import br.com.leonardoferreira.jirareport.mapper.IssueMapper;
 import br.com.leonardoferreira.jirareport.repository.IssueRepository;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
+import br.com.leonardoferreira.jirareport.service.LeadTimeService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import java.math.BigDecimal;
@@ -49,14 +51,22 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     @Autowired
     private ChartService chartService;
 
+    @Autowired
+    private LeadTimeService leadTimeService;
+
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Issue> findAllInJira(final IssuePeriodId issuePeriodId) {
         final Project project = projectService.findById(issuePeriodId.getProjectId());
 
-        String issues = issueClient.findAll(currentToken(), buildJQL(issuePeriodId, project));
+        String issuesStr = issueClient.findAll(currentToken(), buildJQL(issuePeriodId, project));
 
-        return issueMapper.parse(issues, project);
+        List<Issue> issues = issueMapper.parse(issuesStr, project);
+        issueRepository.saveAll(issues);
+
+        leadTimeService.createLeadTimes(issues, project.getId());
+
+        return issues;
     }
 
     @Override
@@ -82,13 +92,6 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         sandBox.setAvgLeadTime(avgLeadTime);
 
         return sandBox;
-    }
-
-    @Override
-    @Transactional
-    public void saveAll(final List<Issue> issues) {
-        log.info("Method=saveAll, issues={}", issues);
-        issueRepository.saveAll(issues);
     }
 
     @Override
@@ -139,16 +142,14 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
                     .map(i -> "'" + i + "'")
                     .collect(Collectors.toList()))).append(" ) ");
         }
-        jql.append("AND (STATUS CHANGED TO '").append(project.getEndColumn()).append("' DURING('");
-        jql.append(DateUtil.toENDate(issuePeriodId.getStartDate())).append("', '");
-        jql.append(DateUtil.toENDate(issuePeriodId.getEndDate())).append(" 23:59')");
-        jql.append("OR ( Resolved >= ");
+//        jql.append("AND (STATUS CHANGED TO '").append(project.getEndColumn()).append("' DURING('");
+//        jql.append(DateUtil.toENDate(issuePeriodId.getStartDate())).append("', '");
+//        jql.append(DateUtil.toENDate(issuePeriodId.getEndDate())).append(" 23:59')");
+        jql.append("AND Resolved >= ");
         jql.append(DateUtil.toENDate(issuePeriodId.getStartDate()));
         jql.append(" AND Resolved <= '");
         jql.append(DateUtil.toENDate(issuePeriodId.getEndDate())).append(" 23:59'");
-        jql.append(" AND NOT STATUS CHANGED TO '").append(project.getEndColumn()).append("' ");
-        jql.append("   )");
-        jql.append(")");
+//        jql.append(" AND NOT STATUS CHANGED TO '").append(project.getEndColumn()).append("' ");
 
         return jql.toString();
     }

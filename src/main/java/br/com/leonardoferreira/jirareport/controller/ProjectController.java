@@ -52,7 +52,7 @@ public class ProjectController extends AbstractController {
     @GetMapping("/{id}/edit")
     public ModelAndView update(@PathVariable final Long id) {
         Project project = projectService.findById(id);
-        Set<String> statusFromProjectInJira = projectService.findStatusFromProjectInJira(project);
+        Set<String> statusFromProjectInJira = projectService.findStatusFromProjectInJira(id);
         return new ModelAndView("projects/edit")
                 .addObject("project", project)
                 .addObject("suggestedStatus", statusFromProjectInJira);

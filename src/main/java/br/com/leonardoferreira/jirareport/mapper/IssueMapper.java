@@ -44,9 +44,6 @@ public class IssueMapper {
         final List<String> holidays = holidayService.findByProject(project.getId())
                 .stream().map(Holiday::getEnDate).collect(Collectors.toList());
 
-        Set<String> startcolumns = project.getStartColumns();
-        Set<String> endcolumns = project.getEndColumns();
-
         return StreamSupport.stream(issues.spliterator(), true)
                 .map(issueRaw -> {
                     JsonObject issue = issueRaw.getAsJsonObject();
@@ -54,22 +51,22 @@ public class IssueMapper {
                     JsonObject fields = issue.get("fields").getAsJsonObject();
                     List<Changelog> changelog = getChangelog(issue, holidays);
 
-                    String startDate = null;
-                    String endDate = null;
-
-                    for (Changelog cl : changelog) {
-                        if (startDate == null && startcolumns.contains(cl.getTo())) {
-                            startDate = DateUtil.toENDate(cl.getCreated());
-                        }
-
-                        if (endDate == null && endcolumns.contains(cl.getTo())) {
-                            endDate = DateUtil.toENDate(cl.getCreated());
-                        }
-                    }
-
-                    if (startDate == null || endDate == null) {
-                        return null;
-                    }
+//                    String startDate = null;
+//                    String endDate = null;
+//
+//                    for (Changelog cl : changelog) {
+//                        if (startDate == null && startcolumns.contains(cl.getTo())) {
+//                            startDate = DateUtil.toENDate(cl.getCreated());
+//                        }
+//
+//                        if (endDate == null && endcolumns.contains(cl.getTo())) {
+//                            endDate = DateUtil.toENDate(cl.getCreated());
+//                        }
+//                    }
+//
+//                    if (startDate == null || endDate == null) {
+//                        return null;
+//                    }
 
                     String epicField = project.getEpicCF();
                     String estimateField = project.getEstimateCF();
@@ -80,7 +77,7 @@ public class IssueMapper {
                         estimated = getAsStringSafe(fields.get(estimateField).getAsJsonObject().get("value"));
                     }
 
-                    Long leadTime = daysDiff(startDate, endDate, holidays);
+//                    Long leadTime = daysDiff(startDate, endDate, holidays);
 
                     Issue issueVO = new Issue();
                     issueVO.setKey(issue.get("key").getAsString());
@@ -91,11 +88,9 @@ public class IssueMapper {
                     }
 
                     issueVO.setIssueType(getAsStringSafe(fields.getAsJsonObject("issuetype").get("name")));
-                    issueVO.setCreated(fields.get("created").getAsString());
-                    issueVO.setUpdated(fields.get("updated").getAsString());
-                    issueVO.setStartDate(DateUtil.displayFormat(startDate));
-                    issueVO.setEndDate(DateUtil.displayFormat(endDate));
-                    issueVO.setLeadTime(leadTime);
+//                    issueVO.setStartDate(DateUtil.displayFormat(startDate));
+//                    issueVO.setEndDate(DateUtil.displayFormat(endDate));
+//                    issueVO.setLeadTime(leadTime);
                     issueVO.setSystem(getElement(fields, project.getSystemCF()));
                     issueVO.setEpic(epic);
                     issueVO.setEstimated(estimated);
@@ -105,7 +100,6 @@ public class IssueMapper {
 
                     return issueVO;
                 })
-                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
@@ -209,7 +203,7 @@ public class IssueMapper {
     }
 
     @SneakyThrows
-    private Long daysDiff(final String startDate, final String endDate, final List<String> holidays) {
+    public Long daysDiff(final String startDate, final String endDate, final List<String> holidays) {
         if (StringUtils.isEmpty(startDate) || StringUtils.isEmpty(endDate)) {
             return null;
         }

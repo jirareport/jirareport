@@ -19,8 +19,6 @@ public interface IssueService {
 
     SandBox findByExample(Long projectId, IssueForm issueForm);
 
-    void saveAll(List<Issue> issues);
-
     SandBoxFilter findSandBoxFilters(Long projectId, SandBox sandBox, IssueForm issueForm);
 
     Histogram calcHistogramData(List<Issue> issues);
