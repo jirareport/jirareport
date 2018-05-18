@@ -44,8 +44,8 @@ public class IssueMapper {
         final List<String> holidays = holidayService.findByProject(project.getId())
                 .stream().map(Holiday::getEnDate).collect(Collectors.toList());
 
-        Set<String> startcolumns = project.getStartColumns();
-        Set<String> endcolumns = project.getEndColumns();
+        Set<String> startColumns = project.getStartColumns();
+        Set<String> endColumns = project.getEndColumns();
 
         return StreamSupport.stream(issues.spliterator(), true)
                 .map(issueRaw -> {
@@ -54,15 +54,17 @@ public class IssueMapper {
                     JsonObject fields = issue.get("fields").getAsJsonObject();
                     List<Changelog> changelog = getChangelog(issue, holidays);
 
-                    String startDate = null;
+                    String created = getDateAsString(fields.get("created"));
+
+                    String startDate = "BACKLOG".equals(project.getStartColumn()) ? created : null;
                     String endDate = null;
 
                     for (Changelog cl : changelog) {
-                        if (startDate == null && startcolumns.contains(cl.getTo())) {
+                        if (startDate == null && startColumns.contains(cl.getTo())) {
                             startDate = DateUtil.toENDate(cl.getCreated());
                         }
 
-                        if (endDate == null && endcolumns.contains(cl.getTo())) {
+                        if (endDate == null && endColumns.contains(cl.getTo())) {
                             endDate = DateUtil.toENDate(cl.getCreated());
                         }
                     }
@@ -80,7 +82,7 @@ public class IssueMapper {
                         estimated = getAsStringSafe(fields.get(estimateField).getAsJsonObject().get("value"));
                     }
 
-                    Long leadTime = daysDiff(startDate, endDate, holidays);
+                    Long leadTime = DateUtil.daysDiff(startDate, endDate, holidays);
 
                     Issue issueVO = new Issue();
                     issueVO.setKey(issue.get("key").getAsString());
@@ -91,6 +93,7 @@ public class IssueMapper {
                     }
 
                     issueVO.setIssueType(getAsStringSafe(fields.getAsJsonObject("issuetype").get("name")));
+                    issueVO.setCreated(DateUtil.displayFormat(created));
                     issueVO.setStartDate(DateUtil.displayFormat(startDate));
                     issueVO.setEndDate(DateUtil.displayFormat(endDate));
                     issueVO.setLeadTime(leadTime);
@@ -103,6 +106,7 @@ public class IssueMapper {
 
                     return issueVO;
                 })
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
@@ -135,7 +139,7 @@ public class IssueMapper {
             }
 
             Changelog next = collect.get(i + 1);
-            current.setCycleTime(daysDiff(current.getCreated(), next.getCreated(), holidays));
+            current.setCycleTime(DateUtil.daysDiff(current.getCreated(), next.getCreated(), holidays));
             current.setCreated(DateUtil.displayFormat(current.getCreated()));
         }
 
@@ -203,32 +207,6 @@ public class IssueMapper {
             return null;
         }
         return jsonElement.getAsString().substring(0, 10);
-    }
-
-    @SneakyThrows
-    public Long daysDiff(final String startDate, final String endDate, final List<String> holidays) {
-        if (StringUtils.isEmpty(startDate) || StringUtils.isEmpty(endDate)) {
-            return null;
-        }
-
-        Calendar start = Calendar.getInstance();
-        start.setTime(new SimpleDateFormat(DEFAULT_FORMATTER, DateUtil.LOCALE_BR).parse(startDate));
-        Calendar end = Calendar.getInstance();
-        end.setTime(new SimpleDateFormat(DEFAULT_FORMATTER, DateUtil.LOCALE_BR).parse(endDate));
-        Long workingDays = 0L;
-        while (!start.after(end)) {
-            int day = start.get(Calendar.DAY_OF_WEEK);
-            if ((day != Calendar.SATURDAY) && (day != Calendar.SUNDAY) && !isHoliday(start, holidays)) {
-                workingDays++;
-            }
-            start.add(Calendar.DATE, 1);
-        }
-        return workingDays;
-    }
-
-    private boolean isHoliday(final Calendar day, final List<String> holidays) {
-        String aux = new SimpleDateFormat(DEFAULT_FORMATTER, DateUtil.LOCALE_BR).format(day.getTime());
-        return holidays.contains(aux);
     }
 
 }

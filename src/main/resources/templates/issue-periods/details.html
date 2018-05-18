@@ -16,30 +16,30 @@
         <th:block
                 th:include="components/card :: card(6, 'primary', 'fa-calendar', ${issuePeriod.leadTime}, 'Leadtime medio')"/>
         <th:block
-                th:include="components/card :: card(6, 'green', 'fa-tasks', ${#lists.size(issuePeriod.issues)}, 'Histórias')"/>
+                th:include="components/card :: card(6, 'green', 'fa-tasks', ${#lists.size(issues)}, 'Histórias')"/>
     </div>
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active"><a href="#issues" data-toggle="tab">Issues</a></li>
         <li role="presentation"><a href="#leadTimeHistogram" data-toggle="tab">Histograma de leadtime</a></li>
         <li th:unless="${#strings.isEmpty(project.estimateCF)}" role="presentation"><a href="#estimatedChart" data-toggle="tab">Contagem de estimativa</a></li>
-        <li th:unless="${#strings.isEmpty(project.systemCF)}" role="presentation"><a href="#leadTimeBySystem" data-toggle="tab">LeadTime por sistema</a></li>
+        <li th:unless="${#strings.isEmpty(project.systemCF)}" role="presentation"><a href="#leadTimeBySystem" data-toggle="tab">Lead time por sistema</a></li>
         <li th:unless="${#strings.isEmpty(project.systemCF)}" role="presentation"><a href="#tasksBySystem" data-toggle="tab">Histórias por sistema</a></li>
-        <li th:unless="${#strings.isEmpty(project.estimateCF)}" role="presentation"><a href="#leadTimeBySize" data-toggle="tab">Leadtime médio por tamanho de história</a>
+        <li th:unless="${#strings.isEmpty(project.estimateCF)}" role="presentation"><a href="#leadTimeBySize" data-toggle="tab">Lead time médio por tamanho de história</a>
         </li>
         <li role="presentation"><a href="#columnTimeAvg" data-toggle="tab">Média de tempo por coluna</a></li>
-        <li role="presentation"><a href="#leadTimeByType" data-toggle="tab">LeadTime por tipo</a></li>
+        <li role="presentation"><a href="#leadTimeByType" data-toggle="tab">Lead time por tipo</a></li>
         <li role="presentation"><a href="#tasksByType" data-toggle="tab">Histórias por tipo</a></li>
-        <li th:unless="${#strings.isEmpty(project.projectCF)}" role="presentation"><a href="#leadTimeByProject" data-toggle="tab">LeadTime por
-            projeto</a></li>
+        <li th:unless="${#strings.isEmpty(project.projectCF)}" role="presentation"><a href="#leadTimeByProject" data-toggle="tab">Lead time por projeto</a></li>
         <li th:unless="${#strings.isEmpty(project.projectCF)}" role="presentation"><a href="#tasksByProject" data-toggle="tab">Histórias por
             projeto</a></li>
+        <li role="presentation"><a href="#leadTimes" data-toggle="tab">Lead Times</a></li>
     </ul>
 
     <div class="panel panel-default bt-0">
         <div class="panel-body">
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="issues">
-                    <th:block th:include="issues/components/list :: list(${issuePeriod.issues})"/>
+                    <th:block th:include="issues/components/list :: list(${issues})"/>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="leadTimeHistogram">
                     <th:block th:include="charts/histogram :: chart(${issuePeriod.histogram})"/>
@@ -70,6 +70,9 @@
                 </div>
                 <div th:unless="${#strings.isEmpty(project.projectCF)}" role="tabpanel" class="tab-pane" id="tasksByProject">
                     <th:block th:include="charts/tasksByProject :: chart(${issuePeriod.tasksByProject})"/>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="leadTimes">
+                    <th:block th:include="charts/leadTimes :: chart(${leadTimeCompareChart})"/>
                 </div>
             </div>
         </div>

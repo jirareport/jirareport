@@ -2,6 +2,7 @@ package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.client.IssueClient;
 import br.com.leonardoferreira.jirareport.domain.Issue;
+import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.LeadTime;
 import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
@@ -125,6 +126,12 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
 
         return new Histogram(issues.get(median - 1).getLeadTime(), issues.get(percentile75 - 1).getLeadTime(),
                 issues.get(percentile90 - 1).getLeadTime());
+    }
+
+    @Override
+    public List<Issue> findByIssuePeriodId(final IssuePeriodId issuePeriodId) {
+        log.info("Method=findByIssuePeriodId, issuePeriodId={}", issuePeriodId);
+        return issueRepository.findByIssuePeriodId(issuePeriodId.getProjectId(), issuePeriodId.getStartDate(), issuePeriodId.getEndDate());
     }
 
     private int calculateCeilingPercentage(final int totalElements, final int percentage) {

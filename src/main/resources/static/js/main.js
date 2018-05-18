@@ -21,13 +21,20 @@ $(document).ready(function() {
         var datasources = $(this).data('datasources');
         var labels = $(this).data('labels')
         var id = $(this).attr("id");
+        var stacked = $(this).data('stacked');
         var datasets = [];
 
         for (var key in datasources) {
+        var colorRgb = randomColorRGB();
+            var backgroundColor = colorRgb;
+            var solidRgb = colorRgb.replace('rgba', 'rgb').split(',')
+            var borderColor = solidRgb[0] + "," + solidRgb[1] + "," + solidRgb[2] + ")";
             datasets.push({
                 label: key,
                 data: datasources[key],
-                backgroundColor: randomColor()
+                backgroundColor: backgroundColor,
+                borderColor: borderColor,
+                borderWidth: 1
             });
         }
 
@@ -40,13 +47,13 @@ $(document).ready(function() {
            options: {
                 scales: {
                     yAxes: [{
-                        stacked: true,
+                        stacked: stacked,
                         ticks: {
                             beginAtZero: true
                         }
                     }],
                     xAxes: [{
-                        stacked: true,
+                        stacked: stacked,
                         ticks: {
                             beginAtZero: true
                         }
@@ -79,7 +86,11 @@ $(document).ready(function() {
                 xAxes: [{ gridLines: { display: true }, scaleLabel: { display: true, labelString: title }, ticks: { beginAtZero: beginAtZero } }],
                 yAxes: [{ gridLines: { display: true }, scaleLabel: { display: true, labelString: label }, ticks: { beginAtZero: beginAtZero } }]
             }
-            data.datasets[0].backgroundColor = randomColor();
+            var colorRgb = randomColorRGB();
+            data.datasets[0].backgroundColor = colorRgb;
+            var solidRgb = colorRgb.replace('rgba', 'rgb').split(',')
+            data.datasets[0].borderColor = solidRgb[0] + "," + solidRgb[1] + "," + solidRgb[2] + ")";
+            data.datasets[0].borderWidth = 1;
         } else if (type == 'doughnut') {
             data.datasets[0].backgroundColor = [];
             for (var i = 0; i < dataChart.length; i++) {
@@ -146,4 +157,9 @@ $(document).ready(function() {
 function randomColor() {
     return '#'+(function lol(m,s,c){return s[m.floor(m.random() * s.length)] +
       (c && lol(m,s,c-1));})(Math,'0123456789ABCDEF',4)
+}
+
+function randomColorRGB() {
+    var o = Math.round, r = Math.random, s = 255;
+    return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ', 0.2)';
 }

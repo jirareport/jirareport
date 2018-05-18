@@ -19,6 +19,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 
 /**
@@ -29,6 +31,7 @@ import org.hibernate.annotations.Type;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = { "issues" })
 @EqualsAndHashCode(callSuper = false)
 public class IssuePeriod extends BaseEntity {
 
@@ -38,7 +41,7 @@ public class IssuePeriod extends BaseEntity {
     private IssuePeriodId id;
 
     @OrderBy("key asc")
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "issue_period_issue",
             joinColumns = {
@@ -94,6 +97,12 @@ public class IssuePeriod extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private Chart<String, Long> tasksByProject;
 
+    @Formula("( select count(1) from issue_period_issue ipi "
+            + " where ipi.project_id = project_id "
+            + " and ipi.start_date = start_date"
+            + " and ipi.end_date = end_date )")
+    private Integer issuesCount;
+
     public IssuePeriod(final IssuePeriodId id, final List<Issue> issues,
             final Double avgLeadTime, final ChartAggregator chartAggregator) {
         this.id = id;
@@ -110,11 +119,6 @@ public class IssuePeriod extends BaseEntity {
         this.tasksByType = chartAggregator.getTasksByType();
         this.leadTimeByProject = chartAggregator.getLeadTimeByProject();
         this.tasksByProject = chartAggregator.getTasksByProject();
-    }
-
-    @Transient
-    public Integer getIssuesCount() {
-        return issues.size();
     }
 
     @Transient

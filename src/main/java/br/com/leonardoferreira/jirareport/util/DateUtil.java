@@ -1,6 +1,8 @@
 package br.com.leonardoferreira.jirareport.util;
 
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
+import java.util.List;
+import lombok.SneakyThrows;
 import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
@@ -65,5 +67,40 @@ public final class DateUtil {
         } catch (ParseException e) {
             return 0;
         }
+    }
+
+    @SneakyThrows
+    public static Long daysDiff(final String startDate, final String endDate, final List<String> holidays) {
+        if (StringUtils.isEmpty(startDate) || StringUtils.isEmpty(endDate)) {
+            return null;
+        }
+
+        Calendar start = Calendar.getInstance();
+        start.setTime(new SimpleDateFormat(DEFAULT_FORMATTER, DateUtil.LOCALE_BR).parse(startDate));
+        Calendar end = Calendar.getInstance();
+        end.setTime(new SimpleDateFormat(DEFAULT_FORMATTER, DateUtil.LOCALE_BR).parse(endDate));
+        Long workingDays = 0L;
+        while (!start.after(end)) {
+            int day = start.get(Calendar.DAY_OF_WEEK);
+            if ((day != Calendar.SATURDAY) && (day != Calendar.SUNDAY) && !isHoliday(start, holidays)) {
+                workingDays++;
+            }
+            start.add(Calendar.DATE, 1);
+        }
+        return workingDays;
+    }
+
+    private static boolean isHoliday(final Calendar day, final List<String> holidays) {
+        String aux = new SimpleDateFormat(DEFAULT_FORMATTER, DateUtil.LOCALE_BR).format(day.getTime());
+        return holidays.contains(aux);
+    }
+
+    public static String toENDateFromDisplayDate(final String date) {
+        if (StringUtils.isEmpty(date)) {
+            return null;
+        }
+
+        final String[] split = date.split("/");
+        return split[2] + "-" + split[1] + "-" + split[0];
     }
 }

@@ -1,6 +1,7 @@
 package br.com.leonardoferreira.jirareport.service;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
+import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 
@@ -22,4 +23,6 @@ public interface IssueService {
     SandBoxFilter findSandBoxFilters(Long projectId, SandBox sandBox, IssueForm issueForm);
 
     Histogram calcHistogramData(List<Issue> issues);
+
+    List<Issue> findByIssuePeriodId(IssuePeriodId issuePeriodId);
 }

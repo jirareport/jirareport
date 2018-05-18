@@ -1,11 +1,14 @@
 package br.com.leonardoferreira.jirareport.controller;
 
+import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.vo.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
+import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
+import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
@@ -40,6 +43,9 @@ public class IssuePeriodController extends AbstractController {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private ChartService chartService;
+
     @GetMapping
     public ModelAndView index(@PathVariable final Long projectId) {
         List<IssuePeriod> issuePeriods = issuePeriodService.findByProjectId(projectId);
@@ -57,12 +63,17 @@ public class IssuePeriodController extends AbstractController {
     public ModelAndView details(@PathVariable final Long projectId, final IssuePeriodId issuePeriodId) {
         issuePeriodId.setProjectId(projectId);
         IssuePeriod issuePeriod = issuePeriodService.findById(issuePeriodId);
-        Histogram histogramData = issueService.calcHistogramData(issuePeriod.getIssues());
+        List<Issue> issues = issueService.findByIssuePeriodId(issuePeriod.getId());
+        Histogram histogramData = issueService.calcHistogramData(issues);
         Project project = projectService.findById(projectId);
+        final LeadTimeCompareChart leadTimeCompareChart = chartService.calcLeadTimeCompare(issues);
+
         return new ModelAndView("issue-periods/details")
                 .addObject("issuePeriod", issuePeriod)
                 .addObject("histogram", histogramData)
-                .addObject("project", project);
+                .addObject("issues", issues)
+                .addObject("project", project)
+                .addObject("leadTimeCompareChart", leadTimeCompareChart);
     }
 
     @PostMapping

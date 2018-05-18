@@ -31,4 +31,5 @@ public class IssuePeriodChart {
     public void addIssuesCount(final IssuePeriod issuePeriod) {
         issuesCount.add(issuePeriod.getId().getDates(), issuePeriod.getIssuesCount());
     }
+
 }

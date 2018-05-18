@@ -7,13 +7,15 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author lferreira on 17/05/18
  */
 @Data
 @Entity
-public class LeadTime {
+@EqualsAndHashCode(callSuper = false)
+public class LeadTime extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

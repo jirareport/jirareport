@@ -1,17 +1,21 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
+import br.com.leonardoferreira.jirareport.domain.LeadTime;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
+import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import javax.validation.constraints.NotEmpty;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,5 +179,20 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         return new ChartAggregator(histogram.get(), estimated.get(), leadTimeBySystem.get(), tasksBySystem.get(),
                 leadTimeBySize.get(), columnTimeAvg.get(), leadTimeByType.get(), tasksByType.get(),
                 leadTimeByProject.get(), tasksByProject.get());
+    }
+
+    @Async
+    @Override
+    public LeadTimeCompareChart calcLeadTimeCompare(final List<Issue> issues) {
+        final LeadTimeCompareChart chart = new LeadTimeCompareChart();
+        for (Issue issue : issues) {
+            final Map<String, Long> collect = new HashMap<>();
+            for (LeadTime leadTime : issue.getLeadTimes()) {
+                collect.put(leadTime.getLeadTimeConfig().getName(), leadTime.getLeadTime());
+            }
+            chart.add(issue.getKey(), collect);
+        }
+
+        return chart;
     }
 }

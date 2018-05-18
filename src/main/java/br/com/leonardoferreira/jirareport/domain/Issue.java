@@ -51,6 +51,8 @@ public class Issue extends BaseEntity {
 
     private Long leadTime;
 
+    private String created;
+
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private List<Changelog> changelog;
@@ -58,27 +60,12 @@ public class Issue extends BaseEntity {
     @ManyToMany(mappedBy = "issues", cascade = CascadeType.ALL)
     private List<IssuePeriod> issuePeriods;
 
-    @OneToMany(mappedBy = "issue", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<LeadTime> leadTimes;
 
     @Transient
     public String getTitle() {
         return String.format("%s %s", key, summary);
-    }
-
-    @Transient
-    public String getStartDate() {
-        return leadTimes.get(0).getStartDate();
-    }
-
-    @Transient
-    public String getEndDate() {
-        return leadTimes.get(0).getEndDate();
-    }
-
-    @Transient
-    public Long getLeadTime() {
-        return leadTimes.get(0).getLeadTime();
     }
 
 }
