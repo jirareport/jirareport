@@ -114,8 +114,8 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         issues.stream()
                 .map(Issue::getChangelog)
                 .flatMap(Collection::stream)
-                .filter(changelog -> changelog.getTo() != null && changelog.getCycleTime() != null)
-                .collect(Collectors.groupingBy(Changelog::getTo, Collectors.averagingDouble(Changelog::getCycleTime)))
+                .filter(changelog -> changelog.getTo() != null && changelog.getLeadTime() != null)
+                .collect(Collectors.groupingBy(Changelog::getTo, Collectors.averagingDouble(Changelog::getLeadTime)))
                 .forEach((k, v) -> collect.add(new ColumnTimeAvg(k, v)));
 
         return CompletableFuture.completedFuture(collect);

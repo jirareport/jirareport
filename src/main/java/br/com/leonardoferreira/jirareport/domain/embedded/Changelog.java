@@ -18,5 +18,5 @@ public class Changelog implements Serializable {
 
     private String to;
 
-    private Long cycleTime;
+    private Long leadTime;
 }

@@ -135,7 +135,7 @@ public class IssueMapper {
             }
 
             Changelog next = collect.get(i + 1);
-            current.setCycleTime(DateUtil.daysDiff(current.getCreated(), next.getCreated(), holidays));
+            current.setLeadTime(DateUtil.daysDiff(current.getCreated(), next.getCreated(), holidays));
             current.setCreated(DateUtil.displayFormat(current.getCreated()));
         }
 
