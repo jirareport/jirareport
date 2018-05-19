@@ -34,6 +34,7 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         StringBuilder sb = new StringBuilder();
         sb.append(" SELECT issue.* FROM issue ");
         sb.append(" INNER JOIN issue_period_issue ON issue_period_issue.issue_key = issue.key ");
+        sb.append(" LEFT JOIN lead_time lt on lt.issue_key = issue.key ");
         sb.append(" WHERE issue_period_issue.project_id = :projectId");
 
         sb.append(" AND to_date(issue.end_date, 'DD/MM/YYYY') BETWEEN :startDate AND :endDate ");

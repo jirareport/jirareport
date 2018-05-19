@@ -66,7 +66,7 @@ public class IssuePeriodController extends AbstractController {
         List<Issue> issues = issueService.findByIssuePeriodId(issuePeriod.getId());
         Histogram histogramData = issueService.calcHistogramData(issues);
         Project project = projectService.findById(projectId);
-        final LeadTimeCompareChart leadTimeCompareChart = chartService.calcLeadTimeCompare(issues);
+        LeadTimeCompareChart leadTimeCompareChart = chartService.calcLeadTimeCompare(issues);
 
         return new ModelAndView("issue-periods/details")
                 .addObject("issuePeriod", issuePeriod)

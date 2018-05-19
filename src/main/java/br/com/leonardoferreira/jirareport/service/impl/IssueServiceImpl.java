@@ -169,6 +169,10 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     }
 
     private List<String> findAllKeys(final SandBox sandBox, final IssueForm issueForm) {
+        if (sandBox.getIssues() == null) {
+            return null;
+        }
+
         return Stream.concat(sandBox.getIssues().stream().map(Issue::getKey), issueForm.getKeys().stream())
                 .distinct().sorted().collect(Collectors.toList());
     }
