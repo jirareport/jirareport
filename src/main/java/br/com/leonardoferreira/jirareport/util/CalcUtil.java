@@ -3,10 +3,9 @@ package br.com.leonardoferreira.jirareport.util;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import javax.persistence.Transient;
 
 /**
- * @author s2it_leferreira
+ * @author lferreira
  * @since 5/18/18 6:43 PM
  */
 public final class CalcUtil {

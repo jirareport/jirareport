@@ -11,7 +11,7 @@ import java.util.Set;
 import lombok.Data;
 
 /**
- * @author s2it_leferreira
+ * @author lferreira
  * @since 5/18/18 8:09 PM
  */
 @Data

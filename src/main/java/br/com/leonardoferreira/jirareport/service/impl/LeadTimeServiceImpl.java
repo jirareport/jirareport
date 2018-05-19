@@ -1,5 +1,9 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.LeadTime;
@@ -10,9 +14,6 @@ import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.service.LeadTimeConfigService;
 import br.com.leonardoferreira.jirareport.service.LeadTimeService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,7 @@ public class LeadTimeServiceImpl implements LeadTimeService {
                                   final Issue issue,
                                   final List<String> holidays) {
 
-        String startDate = "BACKLOG".equals(leadTimeConfig.getStartColumn()) ? DateUtil.toENDateFromDisplayDate(issue.getCreated()): null;
+        String startDate = "BACKLOG".equals(leadTimeConfig.getStartColumn()) ? DateUtil.toENDateFromDisplayDate(issue.getCreated()) : null;
         String endDate = null;
 
         Set<String> startColumns = leadTimeConfig.getStartColumns();
