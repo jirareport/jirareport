@@ -88,6 +88,6 @@ task buildGulp(type: Exec) {
     commandLine './node_modules/gulp/bin/gulp.js'
 }
 
-bootRun{
+bootRun {
     dependsOn buildGulp
 }

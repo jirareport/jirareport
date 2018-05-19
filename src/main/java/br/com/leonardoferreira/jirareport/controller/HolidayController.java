@@ -2,6 +2,7 @@ package br.com.leonardoferreira.jirareport.controller;
 
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.service.GeoNamesService;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-
 /**
- * @author s2it_leferreira
+ * @author lferreira
  * @since 5/7/18 6:53 PM
  */
 @Controller
@@ -35,13 +34,10 @@ public class HolidayController extends AbstractController {
     private HolidayService holidayService;
 
     @Autowired
-    private final ProjectService projectService;
+    private ProjectService projectService;
 
-    public HolidayController(final HolidayService holidayService,
-                             final ProjectService projectService) {
-        this.holidayService = holidayService;
-        this.projectService = projectService;
-    }
+    @Autowired
+    private GeoNamesService geoNamesService;
 
     @GetMapping
     public ModelAndView index(@PathVariable final Long projectId,
@@ -50,7 +46,7 @@ public class HolidayController extends AbstractController {
         final Project project = projectService.findById(projectId);
         return new ModelAndView("holidays/index")
                 .addObject("holidays", holidays)
-                .addObject("states", holidayService.findAllStatesOfBrazil().getGeonames())
+                .addObject("states", geoNamesService.findAllStatesOfBrazil().getGeonames())
                 .addObject("project", project);
     }
 
@@ -87,8 +83,9 @@ public class HolidayController extends AbstractController {
         return new ModelAndView("redirect:/projects/" + projectId + "/holidays");
     }
 
-  @PostMapping("/import")
-    public ModelAndView importFromAPI(@PathVariable final Long projectId, final @RequestParam("selectCity") String city, final RedirectAttributes redirectAttributes) {
+    @PostMapping("/import")
+    public ModelAndView importFromAPI(@PathVariable final Long projectId,
+                                      @RequestParam("selectCity") final String city, final RedirectAttributes redirectAttributes) {
 
         if (holidayService.createImported(projectId, city)) {
             redirectAttributes.addFlashAttribute("flashSuccess", "Registros importados com sucesso");

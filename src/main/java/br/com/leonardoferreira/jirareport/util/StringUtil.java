@@ -2,13 +2,16 @@ package br.com.leonardoferreira.jirareport.util;
 
 import java.text.Normalizer;
 
-public class StringUtil {
+public final class StringUtil {
 
-    public static String applyRulesForHolidaysService(String text){
-        return removeAccents(text).toUpperCase().replace(" ", "_");
+    private StringUtil() {
     }
 
-    public static String removeAccents(String str) {
+    public static String applyRulesForHolidaysService(final String text) {
+        return removeAccents(text).toUpperCase(DateUtil.LOCALE_BR).replace(" ", "_");
+    }
+
+    public static String removeAccents(final String str) {
         return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
     }
 

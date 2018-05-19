@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * @author s2it_jsilveira
+ * @author jsilveira
  */
 @Data
 public class StatusesProject {

@@ -1,13 +1,15 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import br.com.leonardoferreira.jirareport.client.HolidayClient;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.domain.vo.HolidayVO;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
+import br.com.leonardoferreira.jirareport.mapper.HolidayMapper;
 import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
 import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
-import java.util.List;
-import java.util.Optional;
+import br.com.leonardoferreira.jirareport.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,15 +18,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
- * @author s2it_leferreira
+ * @author lferreira
  * @since 5/7/18 6:52 PM
  */
 @Slf4j
@@ -32,22 +32,29 @@ import java.util.stream.Collectors;
 public class HolidayServiceImpl extends AbstractService implements HolidayService {
 
     @Autowired
-    private final HolidayRepository holidayRepository;
+    private HolidayRepository holidayRepository;
 
     @Autowired
-    private final ProjectRepository projectRepository;
+    private ProjectRepository projectRepository;
 
     @Autowired
-    private final HolidayClient holidayClient;
+    private HolidayClient holidayClient;
 
     @Autowired
-    private final GeoNamesClient geoNamesClient;
+    private HolidayMapper holidayMapper;
 
     @Override
     @Transactional(readOnly = true)
     public Page<Holiday> findByProject(final Long projectId, final Pageable pageable) {
         log.info("Method=findByProject, projectId={}", projectId);
         return holidayRepository.findAllByProjectId(projectId, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Holiday> findByProject(final Long projectId) {
+        log.info("Method=findByProject, projectId={}", projectId);
+        return holidayRepository.findAllByProjectId(projectId);
     }
 
     @Override
@@ -91,44 +98,39 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     }
 
     @Override
-    public List<HolidayVO> findAllHolidaysInCity(final String year, final String state, final String city) {
-        return holidayClient.findAllHolidaysInCity(year, state, city);
-    }
-
-    @Override
     @Transactional
-    public Boolean createImported(final Long projectId, final String city) {
+    public boolean createImported(final Long projectId, final String city) {
+        log.info("Method=createImported, projectId={}", projectId);
+
 
         String[] split = city.split("-");
         String state = split[1];
         String cityRuled = StringUtil.applyRulesForHolidaysService(split[0]);
 
-        List<Holiday> holidaysByProject = findByProject(projectId);
-        Set<String> holidayAlreadyRegistered = holidaysByProject.stream()
-                .map(Holiday::getDate)
-                .collect(Collectors.toSet());
+        state = "SP";
+        cityRuled = "ARARAQUARA";
 
-        List<HolidayVO> allHolidaysInCity = findAllHolidaysInCity(new Integer(Calendar.getInstance().get(Calendar.YEAR)).toString(), state, cityRuled);
-        List<HolidayVO> onlyNewHolidays = allHolidaysInCity.stream()
-                .filter(e -> !holidayAlreadyRegistered.contains(e.getDate()))
-                .collect(Collectors.toList());
+        List<Holiday> holidaysByProject = holidayRepository.findAllByProjectId(projectId);
 
-        if (onlyNewHolidays.isEmpty()) {
+        List<HolidayVO> allHolidaysVOInCity = holidayClient.findAllHolidaysInCity(
+                new Integer(Calendar.getInstance().get(Calendar.YEAR)).toString(), state, cityRuled);
+
+        List<Holiday> allHolidaysInCity = holidayMapper.fromVOS(allHolidaysVOInCity, projectId);
+
+        if (holidaysByProject.containsAll(allHolidaysInCity)) {
             return false;
-        } else {
-            onlyNewHolidays.forEach(holidayVO -> create(projectId,
-                    Holiday.builder().date(holidayVO.getDate()).description(holidayVO.getName()).build()));
-            return true;
         }
-    }
 
-    @Override
-    public GeoNamesWrapperVO findAllStatesOfBrazil() {
-        return geoNamesClient.findAllChildrenByGeonameId("3469034");
-    }
+        Set<Holiday> holidays = new HashSet<>(holidaysByProject);
+        holidays.addAll(allHolidaysInCity);
 
-    @Override
-    public GeoNamesWrapperVO findAllCitiesByState(String geonameIdState) {
-        return geoNamesClient.findAllChildrenByGeonameId(geonameIdState);
+        try {
+            holidayRepository.saveAll(holidays);
+        } catch (DataIntegrityViolationException e) {
+            log.error("Method=createImported, e={}", e.getMessage(), e);
+            return false;
+        }
+
+        return true;
     }
 }

@@ -9,5 +9,5 @@ public class GeoNamesWrapperVO {
 
     private String totalResultsCount;
     private List<GeoNames> geonames;
-    
+
 }

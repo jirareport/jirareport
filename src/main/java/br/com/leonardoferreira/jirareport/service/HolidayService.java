@@ -1,18 +1,20 @@
 package br.com.leonardoferreira.jirareport.service;
 
-import br.com.leonardoferreira.jirareport.domain.Holiday;
-import br.com.leonardoferreira.jirareport.domain.vo.GeoNamesWrapperVO;
-import br.com.leonardoferreira.jirareport.domain.vo.HolidayVO;
-
 import java.util.List;
 
+import br.com.leonardoferreira.jirareport.domain.Holiday;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 /**
- * @author s2it_leferreira
+ * @author lferreira
  * @since 5/7/18 6:52 PM
  */
 public interface HolidayService {
 
-    List<Holiday> findByProject(Long projectId);
+    Page<Holiday> findByProject(Long projectId, Pageable pageable);
+
+    List<Holiday> findByProject(Long id);
 
     void create(Long projectId, Holiday holiday);
 
@@ -22,11 +24,6 @@ public interface HolidayService {
 
     void update(Long projectId, Holiday holiday);
 
-    List<HolidayVO> findAllHolidaysInCity(String year, String state, String city);
+    boolean createImported(Long projectId, String city);
 
-    Boolean createImported(Long projectId, String city);
-
-    GeoNamesWrapperVO findAllStatesOfBrazil();
-
-    GeoNamesWrapperVO findAllCitiesByState(String geonameIdState);
 }
