@@ -129,7 +129,7 @@
             <li role="presentation"><a href="#tasksByType" data-toggle="tab">Histórias por tipo</a></li>
             <li th:unless="${#strings.isEmpty(project.ProjectCF)}" role="presentation"><a href="#leadTimeByProject" data-toggle="tab">Lead time por projeto</a></li>
             <li th:unless="${#strings.isEmpty(project.ProjectCF)}" role="presentation"><a href="#tasksByProject" data-toggle="tab">Histórias por projeto</a></li>
-            <li role="presentation"><a href="#leadTimes" data-toggle="tab">Lead times</a></li>
+            <li th:unless="${#lists.isEmpty(project.leadTimeConfigs)}" role="presentation"><a href="#leadTimes" data-toggle="tab">Lead times</a></li>
         </ul>
 
         <div class="panel panel-default bt-0">
@@ -168,7 +168,7 @@
                     <div th:unless="${#strings.isEmpty(project.ProjectCF)}" role="tabpanel" class="tab-pane" id="tasksByProject">
                         <th:block th:include="charts/tasksByProject :: chart(${sandBox.chartAggregator.tasksByProject})"/>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="leadTimes">
+                    <div th:unless="${#lists.isEmpty(project.leadTimeConfigs)}" role="tabpanel" class="tab-pane" id="leadTimes">
                         <th:block th:include="charts/leadTimes :: chart(${leadTimeCompareChart})"/>
                     </div>
                 </div>

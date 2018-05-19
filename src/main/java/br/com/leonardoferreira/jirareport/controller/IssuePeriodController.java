@@ -1,18 +1,20 @@
 package br.com.leonardoferreira.jirareport.controller;
 
+import java.util.List;
+
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.vo.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
+import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodList;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -48,8 +50,9 @@ public class IssuePeriodController extends AbstractController {
 
     @GetMapping
     public ModelAndView index(@PathVariable final Long projectId) {
-        List<IssuePeriod> issuePeriods = issuePeriodService.findByProjectId(projectId);
-        IssuePeriodChart issuePeriodChart = issuePeriodService.getChartByIssues(issuePeriods);
+        IssuePeriodList issuePeriodList = issuePeriodService.findIssuePeriodsAndCharts(projectId);
+        List<IssuePeriod> issuePeriods = issuePeriodList.getIssuePeriods();
+        IssuePeriodChart issuePeriodChart = issuePeriodList.getIssuePeriodChart();
         Project project = projectService.findById(projectId);
 
         return new ModelAndView("issue-periods/index")
@@ -66,7 +69,7 @@ public class IssuePeriodController extends AbstractController {
         List<Issue> issues = issueService.findByIssuePeriodId(issuePeriod.getId());
         Histogram histogramData = issueService.calcHistogramData(issues);
         Project project = projectService.findById(projectId);
-        LeadTimeCompareChart leadTimeCompareChart = chartService.calcLeadTimeCompare(issues);
+        LeadTimeCompareChart<Long> leadTimeCompareChart = chartService.calcLeadTimeCompare(issues);
 
         return new ModelAndView("issue-periods/details")
                 .addObject("issuePeriod", issuePeriod)

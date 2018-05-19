@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import br.com.leonardoferreira.jirareport.util.CalcUtil;
@@ -51,6 +54,9 @@ public class Project extends BaseEntity {
     private String systemCF;
 
     private String projectCF;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<LeadTimeConfig> leadTimeConfigs;
 
     public void setStartColumn(final String startColumn) {
         this.startColumn = startColumn == null ? null : startColumn.toUpperCase(DateUtil.LOCALE_BR);

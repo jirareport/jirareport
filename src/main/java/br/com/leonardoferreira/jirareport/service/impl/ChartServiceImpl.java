@@ -10,6 +10,8 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.NotEmpty;
+
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.LeadTime;
@@ -199,12 +201,11 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .build();
     }
 
-    @Async
     @Override
-    public LeadTimeCompareChart calcLeadTimeCompare(final List<Issue> issues) {
+    public LeadTimeCompareChart<Long> calcLeadTimeCompare(final List<Issue> issues) {
         log.info("Method=calcLeadTimeCompare, issues={}", issues);
 
-        final LeadTimeCompareChart chart = new LeadTimeCompareChart();
+        final LeadTimeCompareChart<Long> chart = new LeadTimeCompareChart<>();
         for (Issue issue : issues) {
             final Map<String, Long> collect = new HashMap<>();
             for (LeadTime leadTime : issue.getLeadTimes()) {
@@ -214,6 +215,25 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         }
 
         return chart;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public LeadTimeCompareChart<Double> calcLeadTimeCompareByPeriod(final List<IssuePeriod> issuePeriods) {
+        log.info("Method=calcLeadTimeCompareByPeriod, issuePeriods={}", issuePeriods);
+        LeadTimeCompareChart<Double> leadTimeCompareChart = new LeadTimeCompareChart<>();
+
+        for (IssuePeriod issuePeriod : issuePeriods) {
+            Map<String, Double> collect = issuePeriod.getIssues()
+                    .stream()
+                    .map(Issue::getLeadTimes)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.groupingBy(i -> i.getLeadTimeConfig().getName(),
+                            Collectors.averagingDouble(LeadTime::getLeadTime)));
+            leadTimeCompareChart.add(issuePeriod.getId().getDates(), collect);
+        }
+
+        return leadTimeCompareChart;
     }
 
     @Override

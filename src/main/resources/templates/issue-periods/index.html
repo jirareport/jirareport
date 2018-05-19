@@ -53,6 +53,7 @@
         <li role="presentation"><a href="#leadtime" data-toggle="tab">LeadTime</a></li>
         <li role="presentation"><a href="#issuesCount" data-toggle="tab">Contagem de histórias</a></li>
         <li th:unless="${#strings.isEmpty(project.estimateCF)}" role="presentation"><a href="#issueCountBySize" data-toggle="tab">Contagem de histórias por estimativa</a></li>
+        <li th:unless="${#lists.isEmpty(project.leadTimeConfigs)}" role="presentation"><a href="#leadTimes" data-toggle="tab">Lead times</a></li>
     </ul>
 
     <div class="panel panel-default bt-0">
@@ -96,11 +97,11 @@
                 <div th:unless="${#strings.isEmpty(project.estimateCF)}" role="tabpanel" class="tab-pane" id="issueCountBySize">
                     <th:block th:include="issue-periods/components/issueCountBySize :: chart(${issuePeriodChart.issueCountBySize})" />
                 </div>
+                <div th:unless="${#lists.isEmpty(project.leadTimeConfigs)}" role="tabpanel" class="tab-pane" id="leadTimes">
+                    <th:block th:include="charts/leadTimes :: chart(${issuePeriodChart.leadTimeCompareChart})" />
+                </div>
             </div>
         </div>
     </div>
-
-
-
 </th:block>
 </html>

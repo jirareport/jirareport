@@ -8,6 +8,8 @@ import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
+import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodList;
+import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.repository.IssuePeriodRepository;
@@ -70,10 +72,10 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     public List<IssuePeriod> findByProjectId(final Long projectId) {
         log.info("Method=findByProjectId, projectId={}", projectId);
 
-        List<IssuePeriod> issues = issuePeriodRepository.findByIdProjectId(projectId);
-        issues.sort(DateUtil::sort);
+        List<IssuePeriod> issuePeriods = issuePeriodRepository.findByIdProjectId(projectId);
+        issuePeriods.sort(DateUtil::sort);
 
-        return issues;
+        return issuePeriods;
     }
 
     @Override
@@ -88,6 +90,9 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
         IssueCountBySize issueCountBySize = chartService.buildIssueCountBySize(issuePeriods);
         issuePeriodChart.setIssueCountBySize(issueCountBySize);
+
+        LeadTimeCompareChart<Double> leadTimeCompareChart = chartService.calcLeadTimeCompareByPeriod(issuePeriods);
+        issuePeriodChart.setLeadTimeCompareChart(leadTimeCompareChart);
 
         return issuePeriodChart;
     }
@@ -118,4 +123,15 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         create(issuePeriodId);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public IssuePeriodList findIssuePeriodsAndCharts(final Long projectId) {
+        List<IssuePeriod> issuePeriods = findByProjectId(projectId);
+        IssuePeriodChart issuePeriodChart = getChartByIssues(issuePeriods);
+
+        return IssuePeriodList.builder()
+                .issuePeriods(issuePeriods)
+                .issuePeriodChart(issuePeriodChart)
+                .build();
+    }
 }

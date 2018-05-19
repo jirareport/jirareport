@@ -35,7 +35,7 @@ public class IssueController extends AbstractController {
         SandBoxFilter sandBoxFilter = issueService.findSandBoxFilters(projectId, sandBox, issueForm);
         Histogram histogramData = issueService.calcHistogramData(sandBox.getIssues());
         Project project = projectService.findById(projectId);
-        LeadTimeCompareChart leadTimeCompareChart = chartService.calcLeadTimeCompare(sandBox.getIssues());
+        LeadTimeCompareChart<Long> leadTimeCompareChart = chartService.calcLeadTimeCompare(sandBox.getIssues());
 
         return new ModelAndView("issues/index")
                 .addObject("issueForm", issueForm)

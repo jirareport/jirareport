@@ -19,6 +19,8 @@ public class IssuePeriodChart {
 
     private IssueCountBySize issueCountBySize;
 
+    private LeadTimeCompareChart<Double> leadTimeCompareChart;
+
     public IssuePeriodChart() {
         leadtime = new Chart<>();
         issuesCount = new Chart<>();

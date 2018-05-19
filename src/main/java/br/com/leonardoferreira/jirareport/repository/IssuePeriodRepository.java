@@ -1,11 +1,11 @@
 package br.com.leonardoferreira.jirareport.repository;
 
+import java.util.List;
+
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * @author lferreira
