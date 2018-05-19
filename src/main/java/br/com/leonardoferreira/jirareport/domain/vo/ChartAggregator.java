@@ -4,6 +4,7 @@ import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
  * @since 5/11/18 12:33 PM
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChartAggregator {

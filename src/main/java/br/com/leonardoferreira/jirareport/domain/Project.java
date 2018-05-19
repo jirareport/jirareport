@@ -1,14 +1,18 @@
 package br.com.leonardoferreira.jirareport.domain;
 
-import br.com.leonardoferreira.jirareport.util.DateUtil;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+
+import br.com.leonardoferreira.jirareport.util.CalcUtil;
+import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Type;
@@ -50,6 +54,9 @@ public class Project extends BaseEntity {
 
     private String projectCF;
 
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<LeadTimeConfig> leadTimeConfigs;
+
     public void setStartColumn(final String startColumn) {
         this.startColumn = startColumn == null ? null : startColumn.toUpperCase(DateUtil.LOCALE_BR);
     }
@@ -65,35 +72,12 @@ public class Project extends BaseEntity {
 
     @Transient
     public Set<String> getStartColumns() {
-        Set<String> startColumns = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
-        if (startColumn == null) {
-            return startColumns;
-        }
-        startColumns.add(startColumn);
-        if (fluxColumn != null && !fluxColumn.isEmpty() && endColumn != null) {
-            int start = fluxColumn.indexOf(startColumn);
-            int end = fluxColumn.indexOf(endColumn);
-            if (start >= 0 && end >= 0 && start < end) {
-                startColumns.addAll(fluxColumn.subList(start + 1, end + 1));
-            }
-        }
-        return startColumns;
+        return CalcUtil.calcStartColumns(startColumn, endColumn, fluxColumn);
     }
 
     @Transient
     public Set<String> getEndColumns() {
-        Set<String> endColumns = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
-        if (endColumn == null) {
-            return endColumns;
-        }
-        endColumns.add(endColumn);
-        if (fluxColumn != null && !fluxColumn.isEmpty()) {
-            int start = fluxColumn.indexOf(endColumn);
-            if (start >= 0 && start < fluxColumn.size() - 1) {
-                endColumns.addAll(fluxColumn.subList(start + 1, fluxColumn.size()));
-            }
-        }
-        return endColumns;
+        return CalcUtil.calcEndColumns(endColumn, fluxColumn);
     }
 
     @Transient

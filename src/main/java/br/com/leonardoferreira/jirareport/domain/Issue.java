@@ -5,8 +5,10 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
@@ -33,9 +35,15 @@ public class Issue extends BaseEntity {
 
     private String creator;
 
-    private String created;
+    private String system;
 
-    private String updated;
+    private String epic;
+
+    private String summary;
+
+    private String estimated;
+
+    private String project;
 
     private String startDate;
 
@@ -43,22 +51,17 @@ public class Issue extends BaseEntity {
 
     private Long leadTime;
 
-    private String system;
-
-    private String epic;
-
-    private String summary;
+    private String created;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private List<Changelog> changelog;
 
-    private String estimated;
-
     @ManyToMany(mappedBy = "issues", cascade = CascadeType.ALL)
     private List<IssuePeriod> issuePeriods;
 
-    private String project;
+    @OneToMany(mappedBy = "issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<LeadTime> leadTimes;
 
     @Transient
     public String getTitle() {

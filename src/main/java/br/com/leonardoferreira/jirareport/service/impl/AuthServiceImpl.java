@@ -6,6 +6,7 @@ import br.com.leonardoferreira.jirareport.domain.vo.Account;
 import br.com.leonardoferreira.jirareport.domain.vo.CurrentUser;
 import br.com.leonardoferreira.jirareport.domain.vo.SessionInfo;
 import br.com.leonardoferreira.jirareport.service.AuthService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
  * @author lferreira
  * @since 7/28/17 10:14 AM
  */
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -21,6 +23,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Account login(final LoginForm loginForm) {
+        log.info("Method=login, loginForm={}", loginForm);
+
         SessionInfo sessionInfo = authClient.login(loginForm);
 
         if (sessionInfo == null || sessionInfo.getSession() == null) {

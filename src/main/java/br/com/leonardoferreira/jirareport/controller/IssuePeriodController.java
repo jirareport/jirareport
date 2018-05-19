@@ -1,15 +1,20 @@
 package br.com.leonardoferreira.jirareport.controller;
 
+import java.util.List;
+
+import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.vo.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
+import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodList;
+import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
+import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -40,10 +45,14 @@ public class IssuePeriodController extends AbstractController {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private ChartService chartService;
+
     @GetMapping
     public ModelAndView index(@PathVariable final Long projectId) {
-        List<IssuePeriod> issuePeriods = issuePeriodService.findByProjectId(projectId);
-        IssuePeriodChart issuePeriodChart = issuePeriodService.getChartByIssues(issuePeriods);
+        IssuePeriodList issuePeriodList = issuePeriodService.findIssuePeriodsAndCharts(projectId);
+        List<IssuePeriod> issuePeriods = issuePeriodList.getIssuePeriods();
+        IssuePeriodChart issuePeriodChart = issuePeriodList.getIssuePeriodChart();
         Project project = projectService.findById(projectId);
 
         return new ModelAndView("issue-periods/index")
@@ -57,12 +66,17 @@ public class IssuePeriodController extends AbstractController {
     public ModelAndView details(@PathVariable final Long projectId, final IssuePeriodId issuePeriodId) {
         issuePeriodId.setProjectId(projectId);
         IssuePeriod issuePeriod = issuePeriodService.findById(issuePeriodId);
-        Histogram histogramData = issueService.calcHistogramData(issuePeriod.getIssues());
+        List<Issue> issues = issueService.findByIssuePeriodId(issuePeriod.getId());
+        Histogram histogramData = issueService.calcHistogramData(issues);
         Project project = projectService.findById(projectId);
+        LeadTimeCompareChart<Long> leadTimeCompareChart = chartService.calcLeadTimeCompare(issues);
+
         return new ModelAndView("issue-periods/details")
                 .addObject("issuePeriod", issuePeriod)
                 .addObject("histogram", histogramData)
-                .addObject("project", project);
+                .addObject("issues", issues)
+                .addObject("project", project)
+                .addObject("leadTimeCompareChart", leadTimeCompareChart);
     }
 
     @PostMapping
@@ -82,7 +96,7 @@ public class IssuePeriodController extends AbstractController {
         try {
             issuePeriodService.create(issuePeriodId);
 
-            redirectAttributes.addFlashAttribute("flashSuccess", "Registro inserido com sucesso");
+            addFlashSuccess(redirectAttributes, "Registro inserido com sucesso.");
             return new ModelAndView(String.format("redirect:/projects/%d/issue-periods", projectId));
         } catch (CreateIssuePeriodException e) {
             List<IssuePeriod> issuePeriods = issuePeriodService.findByProjectId(projectId);
@@ -103,9 +117,9 @@ public class IssuePeriodController extends AbstractController {
         issuePeriodId.setProjectId(projectId);
         try {
             issuePeriodService.update(issuePeriodId);
-            redirectAttributes.addFlashAttribute("flashSuccess", "Registro atualizado com sucesso.");
+            addFlashSuccess(redirectAttributes, "Registro atualizado com sucesso.");
         } catch (CreateIssuePeriodException e) {
-            redirectAttributes.addFlashAttribute("flashError", "Falha ao atualizar registro.");
+            addFlashError(redirectAttributes, "Falha ao atualizar registro.");
         }
 
         return new ModelAndView(String.format("redirect:/projects/%d/issue-periods", projectId));
@@ -118,7 +132,7 @@ public class IssuePeriodController extends AbstractController {
         issuePeriodId.setProjectId(projectId);
         issuePeriodService.remove(issuePeriodId);
 
-        redirectAttributes.addFlashAttribute("flashSuccess", "Registro removido com sucesso.");
+        addFlashSuccess(redirectAttributes, "Registro removido com sucesso.");
         return new ModelAndView(String.format("redirect:/projects/%d/issue-periods", projectId));
     }
 }

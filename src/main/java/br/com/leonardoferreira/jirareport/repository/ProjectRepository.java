@@ -1,6 +1,9 @@
 package br.com.leonardoferreira.jirareport.repository;
 
+import java.util.Optional;
+
 import br.com.leonardoferreira.jirareport.domain.Project;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +14,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProjectRepository extends CrudRepository<Project, Long> {
 
+    @EntityGraph(attributePaths = { "leadTimeConfigs" }, type = EntityGraph.EntityGraphType.LOAD)
+    Optional<Project> findById(Long id);
 }

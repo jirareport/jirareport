@@ -1,5 +1,12 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import br.com.leonardoferreira.jirareport.client.IssueClient;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.Project;
@@ -13,13 +20,9 @@ import br.com.leonardoferreira.jirareport.mapper.IssueMapper;
 import br.com.leonardoferreira.jirareport.repository.IssueRepository;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
+import br.com.leonardoferreira.jirareport.service.LeadTimeService;
 import br.com.leonardoferreira.jirareport.service.ProjectService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,14 +52,24 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     @Autowired
     private ChartService chartService;
 
+    @Autowired
+    private LeadTimeService leadTimeService;
+
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<Issue> findAllInJira(final IssuePeriodId issuePeriodId) {
+        log.info("Method=findAllInJira, issuePeriodId={}", issuePeriodId);
+
         final Project project = projectService.findById(issuePeriodId.getProjectId());
 
-        String issues = issueClient.findAll(currentToken(), buildJQL(issuePeriodId, project));
+        String issuesStr = issueClient.findAll(currentToken(), buildJQL(issuePeriodId, project));
 
-        return issueMapper.parse(issues, project);
+        List<Issue> issues = issueMapper.parse(issuesStr, project);
+        issueRepository.saveAll(issues);
+
+        leadTimeService.createLeadTimes(issues, project.getId());
+
+        return issues;
     }
 
     @Override
@@ -76,60 +89,62 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
                 .mapToLong(Issue::getLeadTime)
                 .average().orElse(0D);
 
-        final SandBox sandBox = new SandBox();
-        sandBox.setIssues(issues);
-        sandBox.setChartAggregator(chartAggregator);
-        sandBox.setAvgLeadTime(avgLeadTime);
-
-        return sandBox;
+        return SandBox.builder()
+                .issues(issues)
+                .chartAggregator(chartAggregator)
+                .avgLeadTime(avgLeadTime)
+                .build();
     }
 
     @Override
-    @Transactional
-    public void saveAll(final List<Issue> issues) {
-        log.info("Method=saveAll, issues={}", issues);
-        issueRepository.saveAll(issues);
-    }
-
-    @Override
+    @Transactional(readOnly = true)
     public SandBoxFilter findSandBoxFilters(final Long projectId, final SandBox sandBox, final IssueForm issueForm) {
-        final SandBoxFilter sandBoxFilter = new SandBoxFilter();
+        log.info("Method=findSandBoxFilters, projectId={}, sandBox={}, issueForm={}", projectId, sandBox, issueForm);
 
-        sandBoxFilter.setEstimatives(issueRepository.findAllEstimativesByProjectId(projectId));
-        sandBoxFilter
-                .setKeys(Stream.concat(sandBox.getIssues().stream().map(Issue::getKey), issueForm.getKeys().stream())
-                        .distinct()
-                        .sorted()
-                        .collect(Collectors.toList()));
-        sandBoxFilter.setSystems(issueRepository.findAllSystemsByProjectId(projectId));
-        sandBoxFilter.setEpics(issueRepository.findAllEpicsByProjectId(projectId));
-        sandBoxFilter.setIssueTypes(issueRepository.findAllIssueTypesByProjectId(projectId));
-        sandBoxFilter.setProjects(issueRepository.findAllIssueProjectsByProjectId(projectId));
-
-        return sandBoxFilter;
+        return SandBoxFilter.builder()
+                .estimatives(issueRepository.findAllEstimativesByProjectId(projectId))
+                .keys(findAllKeys(sandBox, issueForm))
+                .systems(issueRepository.findAllSystemsByProjectId(projectId))
+                .epics(issueRepository.findAllEpicsByProjectId(projectId))
+                .issueTypes(issueRepository.findAllIssueTypesByProjectId(projectId))
+                .projects(issueRepository.findAllIssueProjectsByProjectId(projectId))
+                .build();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Histogram calcHistogramData(final List<Issue> issues) {
+        log.info("Method=calcHistogramData, issues={}", issues);
+
         if (issues == null || issues.size() < 10) {
             return null;
         }
-        final int totalElements = issues.size();
-        issues.sort((a, b) -> a.getLeadTime().compareTo(b.getLeadTime()));
+
+        issues.sort(Comparator.comparing(Issue::getLeadTime));
+
+        int totalElements = issues.size();
         int median = calculateCeilingPercentage(totalElements, 50);
         int percentile75 = calculateCeilingPercentage(totalElements, 75);
         int percentile90 = calculateCeilingPercentage(totalElements, 90);
 
-        return new Histogram(issues.get(median - 1).getLeadTime(), issues.get(percentile75 - 1).getLeadTime(),
-                issues.get(percentile90 - 1).getLeadTime());
+        return Histogram.builder()
+                .median(issues.get(median - 1).getLeadTime())
+                .percentile75(issues.get(percentile75 - 1).getLeadTime())
+                .percentile90(issues.get(percentile90 - 1).getLeadTime())
+                .build();
     }
 
-    private int calculateCeilingPercentage(final int totalElements, final int percentage) {
-        return new BigDecimal((double) totalElements * percentage / 100).setScale(0, RoundingMode.CEILING)
-                .intValue();
+    @Override
+    @Transactional(readOnly = true)
+    public List<Issue> findByIssuePeriodId(final IssuePeriodId issuePeriodId) {
+        log.info("Method=findByIssuePeriodId, issuePeriodId={}", issuePeriodId);
+
+        return issueRepository.findByIssuePeriodId(issuePeriodId.getProjectId(), issuePeriodId.getStartDate(), issuePeriodId.getEndDate());
     }
 
     private String buildJQL(final IssuePeriodId issuePeriodId, final Project project) {
+        log.info("Method=buildJQL, issuePeriodId={}, project={}", issuePeriodId, project);
+
         StringBuilder jql = new StringBuilder();
         jql.append("project = ").append(project.getId()).append(" ");
         if (!CollectionUtils.isEmpty(project.getIgnoreIssueType())) {
@@ -151,5 +166,15 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         jql.append(")");
 
         return jql.toString();
+    }
+
+    private List<String> findAllKeys(final SandBox sandBox, final IssueForm issueForm) {
+        return Stream.concat(sandBox.getIssues().stream().map(Issue::getKey), issueForm.getKeys().stream())
+                .distinct().sorted().collect(Collectors.toList());
+    }
+
+    private int calculateCeilingPercentage(final int totalElements, final int percentage) {
+        return new BigDecimal((double) totalElements * percentage / 100).setScale(0, RoundingMode.CEILING)
+                .intValue();
     }
 }

@@ -37,8 +37,10 @@
                 </tr>
                 <tr class="accordian-body collapse" th:classappend="${issue.key}">
                     <td th:attr="colspan=${11 - project.colSizeHidden}">
-                        <div class="accordian-body collapse panel panel-default table-responsive"
-                             th:classappend="${issue.key}">
+
+                        <br/><h4 class="text-center">Lead time por coluna</h4><br/>
+
+                        <div class="accordian-body collapse panel panel-default table-responsive" th:classappend="${issue.key}">
                             <table class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
@@ -51,7 +53,35 @@
                                 <tr th:each="changelog : ${issue.changelog}">
                                     <td th:text="${changelog.created}"></td>
                                     <td th:text="${changelog.to}"></td>
-                                    <td th:text="${changelog.cycleTime}"></td>
+                                    <td th:text="${changelog.leadTime}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="accordian-body collapse" th:classappend="${issue.key}" th:unless="${#lists.isEmpty(issue.leadTimes)}">
+                    <td th:attr="colspan=${11 - project.colSizeHidden}">
+                        <br/>
+                        <h4 class="text-center">Outros lead times</h4>
+                        <br/>
+
+                        <div class="accordian-body collapse panel panel-default table-responsive" th:classappend="${issue.key}">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Coluna inicial</th>
+                                    <th>Coluna final</th>
+                                    <th>LeadTime</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="leadTime : ${issue.leadTimes}">
+                                    <td th:text="${leadTime.leadTimeConfig.name}"></td>
+                                    <td th:text="${leadTime.leadTimeConfig.startColumn}"></td>
+                                    <td th:text="${leadTime.leadTimeConfig.endColumn}"></td>
+                                    <td th:text="${leadTime.leadTime}"></td>
                                 </tr>
                                 </tbody>
                             </table>

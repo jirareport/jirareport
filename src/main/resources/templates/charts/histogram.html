@@ -5,14 +5,15 @@
             th:if="${chartData?.hasData}"
             th:include="components/chart/_bar :: chart('issue_histogram', 'LeadTime', 'Histórias', ${chartData}, false)"/>
     <span th:unless="${chartData?.hasData}">Nenhum registro encontrado</span>
-    <div style="margin-left:50px;" th:if="${histogram != null}">
-        <div class="form-group col-md-3">
+    <div th:if="${histogram != null}" class="text-center" style="font-size: 20px">
+        <br/>
+        <div class="col-md-4">
             <label>Mediana:</label> <span th:text="${histogram.median}"/>
         </div>
-        <div class="form-group col-md-3">
+        <div class="col-md-4">
             <label>Percentil 75:</label> <span th:text="${histogram.percentile75}"/>
         </div>
-        <div class="form-group col-md-3">
+        <div class="col-md-4">
             <label>Percentil 90:</label> <span th:text="${histogram.percentile90}"/>
         </div>
     </div>

@@ -46,6 +46,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     @Transactional(readOnly = true)
     public Page<Holiday> findByProject(final Long projectId, final Pageable pageable) {
         log.info("Method=findByProject, projectId={}", projectId);
+
         return holidayRepository.findAllByProjectId(projectId, pageable);
     }
 
@@ -53,6 +54,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     @Transactional(readOnly = true)
     public List<Holiday> findByProject(final Long projectId) {
         log.info("Method=findByProject, projectId={}", projectId);
+
         return holidayRepository.findAllByProjectId(projectId);
     }
 

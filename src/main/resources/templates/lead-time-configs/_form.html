@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/application">
+
+<th:block th:fragment="form(method)">
+    <form th:action="@{/projects/{projectId}/lead-time-configs(projectId=${projectId})}" th:method="${method}"
+          th:object="${leadTimeConfig}">
+        <input type="hidden" th:field="*{id}" th:value="${leadTimeConfig.id}"/>
+
+        <div class="form-group">
+            <label>Nome</label>
+            <input type="text" th:field="*{name}" class="form-control"/>
+            <label th:errors="*{name}"></label>
+        </div>
+
+        <div class="form-group">
+            <label>Coluna inicial</label>
+            <input type="text" th:field="*{startColumn}" class="form-control" id="input-startColumn"/>
+            <label th:errors="*{startColumn}"></label>
+        </div>
+
+        <div class="form-group btn-group btn-group-sm">
+            <a href="#" th:each="status : ${suggestedStatus}" class="btn btn-default" data-column-suggest="input-startColumn" data-column-suggest-unique="true">
+                <span th:text="${status}"></span>
+            </a>
+        </div>
+
+        <div class="form-group">
+            <label>Coluna final</label>
+            <input type="text" th:field="*{endColumn}" class="form-control" id="input-endColumn"/>
+            <label th:errors="*{endColumn}"></label>
+        </div>
+
+        <div class="form-group btn-group btn-group-sm">
+            <a href="#" th:each="status : ${suggestedStatus}" class="btn btn-default" data-column-suggest="input-endColumn" data-column-suggest-unique="true">
+                <span th:text="${status}"></span>
+            </a>
+        </div>
+
+        <div class="text-right">
+            <a th:href="@{/projects/{projectId}/lead-time-configs(projectId=${projectId})}" class="btn btn-default">Voltar</a>
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </form>
+</th:block>
+</html>

@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.controller;
 
+import java.util.List;
 import java.util.Set;
 
 import br.com.leonardoferreira.jirareport.domain.Project;
@@ -27,32 +28,39 @@ public class ProjectController extends AbstractController {
 
     @GetMapping
     public ModelAndView index() {
+        List<Project> projects = projectService.findAll();
+
         return new ModelAndView("projects/index")
-                .addObject("projects", projectService.findAll());
+                .addObject("projects", projects);
     }
 
     @GetMapping("/new")
     public ModelAndView create() {
+        List<Project> projects = projectService.findAllInJira();
+
         return new ModelAndView("projects/new")
-                .addObject("projects", projectService.findAllInJira());
+                .addObject("projects", projects);
     }
 
     @PostMapping
     public ModelAndView create(final Project project) {
         projectService.create(project);
+
         return new ModelAndView(String.format("redirect:/projects/%s/edit", project.getId()));
     }
 
     @DeleteMapping("/{id}")
     public ModelAndView delete(@PathVariable final Long id) {
         projectService.delete(id);
+
         return new ModelAndView("redirect:/projects");
     }
 
     @GetMapping("/{id}/edit")
     public ModelAndView update(@PathVariable final Long id) {
         Project project = projectService.findById(id);
-        Set<String> statusFromProjectInJira = projectService.findStatusFromProjectInJira(project);
+        Set<String> statusFromProjectInJira = projectService.findStatusFromProjectInJira(id);
+
         return new ModelAndView("projects/edit")
                 .addObject("project", project)
                 .addObject("suggestedStatus", statusFromProjectInJira);
@@ -61,6 +69,7 @@ public class ProjectController extends AbstractController {
     @PutMapping
     public ModelAndView update(final Project project) {
         projectService.update(project);
+
         return new ModelAndView(String.format("redirect:/projects/%s/issue-periods", project.getId()));
     }
 }

@@ -21,5 +21,5 @@ public interface ProjectService {
 
     void update(Project project);
 
-    Set<String> findStatusFromProjectInJira(Project project);
+    Set<String> findStatusFromProjectInJira(Long projectId);
 }

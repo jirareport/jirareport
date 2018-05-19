@@ -1,11 +1,15 @@
 package br.com.leonardoferreira.jirareport.service;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import br.com.leonardoferreira.jirareport.domain.Issue;
+import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
+import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 
 /**
  * Created by lferreira on 3/26/18
@@ -33,4 +37,10 @@ public interface ChartService {
     CompletableFuture<Chart<String, Long>> tasksByProject(List<Issue> issues);
 
     ChartAggregator buildAllCharts(List<Issue> issues);
+
+    LeadTimeCompareChart<Long> calcLeadTimeCompare(List<Issue> issues);
+
+    LeadTimeCompareChart<Double> calcLeadTimeCompareByPeriod(List<IssuePeriod> issuePeriods);
+
+    IssueCountBySize buildIssueCountBySize(List<IssuePeriod> issuePeriods);
 }

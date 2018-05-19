@@ -28,7 +28,7 @@
                     <th>Ações</th>
                 </tr>
                 </thead>
-                <tbody class="search-list-name">
+                <tbody>
                 <tr th:each="holiday : ${holidays.content}">
                     <td th:text="${#temporals.format(holiday.date, 'dd/MM/yyyy')}"></td>
                     <td th:text="${holiday.description}"></td>
