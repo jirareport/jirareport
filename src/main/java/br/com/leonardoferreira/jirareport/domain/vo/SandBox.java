@@ -1,9 +1,8 @@
 package br.com.leonardoferreira.jirareport.domain.vo;
 
-import br.com.leonardoferreira.jirareport.domain.Issue;
-import java.util.ArrayList;
 import java.util.List;
 
+import br.com.leonardoferreira.jirareport.domain.Issue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SandBox {
 
-    private List<Issue> issues = new ArrayList<>();
+    private List<Issue> issues;
 
     private ChartAggregator chartAggregator;
 
