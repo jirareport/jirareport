@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.repository.impl;
 
+import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.repository.IssueCustomRepository;
@@ -24,6 +25,7 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
 
     @Override
     @SneakyThrows
+    @ExecutionTime
     @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     public List<Issue> findByExample(final Long projectId, final IssueForm issueForm) {

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.LeadTime;
@@ -37,6 +38,7 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
 
     @Override
     @Transactional
+    @ExecutionTime
     public void createLeadTimes(final List<Issue> issues, final Long projectId) {
         log.info("Method=createLeadTimes, issues={}, projectId={}", issues, projectId);
 
@@ -51,6 +53,7 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
     }
 
     @Transactional
+    @ExecutionTime
     private LeadTime calcLeadTime(final LeadTimeConfig leadTimeConfig,
                                   final Issue issue,
                                   final List<String> holidays) {
