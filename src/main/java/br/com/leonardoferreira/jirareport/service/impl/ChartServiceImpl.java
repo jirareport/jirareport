@@ -3,17 +3,21 @@ package br.com.leonardoferreira.jirareport.service.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
+import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.LeadTime;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
+import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import lombok.SneakyThrows;
@@ -21,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
 /**
@@ -132,6 +137,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     @Override
     public CompletableFuture<Chart<String, Long>> tasksByType(final List<Issue> issues) {
         log.info("Method=tasksByType, issues={}", issues);
+
         Map<String, Long> collect = issues.stream()
                 .filter(i -> !StringUtils.isEmpty(i.getIssueType()))
                 .collect(Collectors.groupingBy(Issue::getIssueType, Collectors.counting()));
@@ -155,6 +161,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     @Override
     public CompletableFuture<Chart<String, Long>> tasksByProject(final List<Issue> issues) {
         log.info("Method=tasksByProject, issues={}", issues);
+
         Map<String, Long> collect = issues.stream()
                 .filter(i -> !StringUtils.isEmpty(i.getProject()))
                 .collect(Collectors.groupingBy(Issue::getProject, Collectors.counting()));
@@ -165,6 +172,8 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     @Override
     @SneakyThrows
     public ChartAggregator buildAllCharts(final List<Issue> issues) {
+        log.info("Method=buildAllCharts, issues={}", issues);
+
         CompletableFuture<Chart<Long, Long>> histogram = chartService.issueHistogram(issues);
         CompletableFuture<Chart<String, Long>> estimated = chartService.estimatedChart(issues);
         CompletableFuture<Chart<String, Double>> leadTimeBySystem = chartService.leadTimeBySystem(issues);
@@ -176,14 +185,25 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         CompletableFuture<Chart<String, Double>> leadTimeByProject = chartService.leadTimeByProject(issues);
         CompletableFuture<Chart<String, Long>> tasksByProject = chartService.tasksByProject(issues);
 
-        return new ChartAggregator(histogram.get(), estimated.get(), leadTimeBySystem.get(), tasksBySystem.get(),
-                leadTimeBySize.get(), columnTimeAvg.get(), leadTimeByType.get(), tasksByType.get(),
-                leadTimeByProject.get(), tasksByProject.get());
+        return ChartAggregator.builder()
+                .histogram(histogram.get())
+                .estimated(estimated.get())
+                .leadTimeBySystem(leadTimeBySystem.get())
+                .tasksBySystem(tasksBySystem.get())
+                .leadTimeBySize(leadTimeBySize.get())
+                .columnTimeAvg(columnTimeAvg.get())
+                .leadTimeByType(leadTimeByType.get())
+                .tasksByType(tasksByType.get())
+                .leadTimeByProject(leadTimeByProject.get())
+                .tasksByProject(tasksByProject.get())
+                .build();
     }
 
     @Async
     @Override
     public LeadTimeCompareChart calcLeadTimeCompare(final List<Issue> issues) {
+        log.info("Method=calcLeadTimeCompare, issues={}", issues);
+
         final LeadTimeCompareChart chart = new LeadTimeCompareChart();
         for (Issue issue : issues) {
             final Map<String, Long> collect = new HashMap<>();
@@ -195,4 +215,48 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
         return chart;
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public IssueCountBySize buildIssueCountBySize(final List<IssuePeriod> issuePeriods) {
+        log.info("Method=buildIssueCountBySize, issuePeriods={}", issuePeriods);
+
+        Set<String> sizes = new HashSet<>();
+        Map<String, Map<String, Long>> periodsSize = new HashMap<>();
+        for (IssuePeriod issuePeriod : issuePeriods) {
+            Map<String, Long> estimated = issuePeriod.getEstimated().getData();
+            sizes.addAll(issuePeriod.getEstimated().getData().keySet());
+
+            periodsSize.put(issuePeriod.getId().getDates(), estimated);
+        }
+
+        periodsSize.forEach((k, v) -> {
+            for (String size : sizes) {
+                if (!v.containsKey(size)) {
+                    v.put(size, 0L);
+                }
+            }
+        });
+
+        Map<String, List<Long>> datasources = new HashMap<>();
+        for (Map<String, Long> periodSize : periodsSize.values()) {
+            periodSize.forEach((k, v) -> {
+                if (datasources.containsKey(k)) {
+                    List<Long> longs = datasources.get(k);
+                    longs.add(v);
+                    datasources.put(k, longs);
+                } else {
+                    ArrayList<Long> value = new ArrayList<>();
+                    value.add(v);
+                    datasources.put(k, value);
+                }
+            });
+        }
+
+        return IssueCountBySize.builder()
+                .labels(periodsSize.keySet())
+                .datasources(datasources)
+                .build();
+    }
+
 }

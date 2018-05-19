@@ -1,13 +1,16 @@
 package br.com.leonardoferreira.jirareport.service;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
+import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
+import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by lferreira on 3/26/18
@@ -38,4 +41,7 @@ public interface ChartService {
 
     @Async
     LeadTimeCompareChart calcLeadTimeCompare(List<Issue> issues);
+
+    @Transactional(readOnly = true)
+    IssueCountBySize buildIssueCountBySize(List<IssuePeriod> issuePeriods);
 }

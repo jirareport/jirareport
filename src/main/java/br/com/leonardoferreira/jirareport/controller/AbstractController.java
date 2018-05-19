@@ -2,6 +2,7 @@ package br.com.leonardoferreira.jirareport.controller;
 
 import br.com.leonardoferreira.jirareport.domain.vo.Account;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * @author lferreira
@@ -20,6 +21,14 @@ public class AbstractController {
 
     protected boolean authenticated() {
         return currentUser() != null;
+    }
+
+    protected void addFlashSuccess(final RedirectAttributes redirectAttributes, final String msg) {
+        redirectAttributes.addFlashAttribute("flashSuccess", msg);
+    }
+
+    protected void addFlashError(final RedirectAttributes redirectAttributes, final String msg) {
+        redirectAttributes.addFlashAttribute("flashError", msg);
     }
 
 }

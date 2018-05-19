@@ -93,7 +93,7 @@ public class IssuePeriodController extends AbstractController {
         try {
             issuePeriodService.create(issuePeriodId);
 
-            redirectAttributes.addFlashAttribute("flashSuccess", "Registro inserido com sucesso");
+            addFlashSuccess(redirectAttributes, "Registro inserido com sucesso.");
             return new ModelAndView(String.format("redirect:/projects/%d/issue-periods", projectId));
         } catch (CreateIssuePeriodException e) {
             List<IssuePeriod> issuePeriods = issuePeriodService.findByProjectId(projectId);
@@ -114,9 +114,9 @@ public class IssuePeriodController extends AbstractController {
         issuePeriodId.setProjectId(projectId);
         try {
             issuePeriodService.update(issuePeriodId);
-            redirectAttributes.addFlashAttribute("flashSuccess", "Registro atualizado com sucesso.");
+            addFlashSuccess(redirectAttributes, "Registro atualizado com sucesso.");
         } catch (CreateIssuePeriodException e) {
-            redirectAttributes.addFlashAttribute("flashError", "Falha ao atualizar registro.");
+            addFlashError(redirectAttributes, "Falha ao atualizar registro.");
         }
 
         return new ModelAndView(String.format("redirect:/projects/%d/issue-periods", projectId));
@@ -129,7 +129,7 @@ public class IssuePeriodController extends AbstractController {
         issuePeriodId.setProjectId(projectId);
         issuePeriodService.remove(issuePeriodId);
 
-        redirectAttributes.addFlashAttribute("flashSuccess", "Registro removido com sucesso.");
+        addFlashSuccess(redirectAttributes, "Registro removido com sucesso.");
         return new ModelAndView(String.format("redirect:/projects/%d/issue-periods", projectId));
     }
 }

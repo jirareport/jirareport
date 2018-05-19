@@ -5,6 +5,7 @@ import java.util.Collections;
 import br.com.leonardoferreira.jirareport.domain.form.LoginForm;
 import br.com.leonardoferreira.jirareport.domain.vo.Account;
 import br.com.leonardoferreira.jirareport.service.AuthService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
  * @author lferreira
  * @since 11/14/17 3:30 PM
  */
+@Slf4j
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
@@ -24,17 +26,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(final Authentication auth) {
-        String username = auth.getName();
-        String password = auth.getCredentials().toString();
-
         try {
-            Account login = authService.login(new LoginForm(username, password));
+            Account login = authService.login(new LoginForm(auth.getName(), auth.getCredentials().toString()));
             if (login == null) {
                 throw new BadCredentialsException("External system authentication failed");
             }
 
             return new UsernamePasswordAuthenticationToken(login, null, Collections.emptyList());
         } catch (Exception e) {
+            log.error("Method=authenticate, E={}", e.getMessage(), e);
             throw new BadCredentialsException(e.getMessage(), e);
         }
     }

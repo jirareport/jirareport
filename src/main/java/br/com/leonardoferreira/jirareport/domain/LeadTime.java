@@ -6,16 +6,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * @author lferreira on 17/05/18
  */
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class LeadTime extends BaseEntity {
+    private static final long serialVersionUID = 2918615471478687270L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

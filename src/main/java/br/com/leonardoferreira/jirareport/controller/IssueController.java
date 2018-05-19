@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/projects/{projectId}/issues")
-public class IssueController {
+public class IssueController extends AbstractController {
 
     @Autowired
     private IssueService issueService;

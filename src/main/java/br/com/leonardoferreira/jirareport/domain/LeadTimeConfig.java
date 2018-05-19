@@ -20,7 +20,8 @@ import lombok.EqualsAndHashCode;
 @Entity
 @EqualsAndHashCode(callSuper = false)
 public class LeadTimeConfig extends BaseEntity {
-
+    private static final long serialVersionUID = -1181175426509346889L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,7 +45,7 @@ public class LeadTimeConfig extends BaseEntity {
 
     @Transient
     public Set<String> getEndColumns() {
-        return CalcUtil.calcEndColumns(startColumn, endColumn, project.getFluxColumn());
+        return CalcUtil.calcEndColumns(endColumn, project.getFluxColumn());
     }
 
     public void setStartColumn(final String startColumn) {

@@ -39,6 +39,7 @@ public class HolidayController extends AbstractController {
                               @PageableDefault(sort = "date") final Pageable pageable) {
         final Page<Holiday> holidays = holidayService.findByProject(projectId, pageable);
         final Project project = projectService.findById(projectId);
+
         return new ModelAndView("holidays/index")
                 .addObject("holidays", holidays)
                 .addObject("project", project);
@@ -64,8 +65,8 @@ public class HolidayController extends AbstractController {
 
         holidayService.create(projectId, holiday);
 
-        redirectAttributes.addFlashAttribute("flashSuccess", "Registro inserido com sucesso");
-        return new ModelAndView("redirect:/projects/" + projectId + "/holidays");
+        addFlashSuccess(redirectAttributes, "Registro inserido com sucesso");
+        return new ModelAndView(String.format("redirect:/projects/%s/holidays", projectId));
     }
 
     @DeleteMapping("/{id}")
@@ -73,25 +74,26 @@ public class HolidayController extends AbstractController {
                                @PathVariable final Long id, final RedirectAttributes redirectAttributes) {
         holidayService.delete(id);
 
-        redirectAttributes.addFlashAttribute("flashSuccess", "Registro removido com sucesso");
-        return new ModelAndView("redirect:/projects/" + projectId + "/holidays");
+        addFlashSuccess(redirectAttributes, "Registro removido com sucesso");
+        return new ModelAndView(String.format("redirect:/projects/%s/holidays", projectId));
     }
 
     @PostMapping("/import")
     public ModelAndView importFromAPI(@PathVariable final Long projectId, final RedirectAttributes redirectAttributes) {
 
         if (holidayService.createImported(projectId)) {
-            redirectAttributes.addFlashAttribute("flashSuccess", "Registros importados com sucesso.");
+            addFlashSuccess(redirectAttributes, "Registros importados com sucesso.");
         } else {
-            redirectAttributes.addFlashAttribute("flashError", "Feriados já importados.");
+            addFlashError(redirectAttributes, "Feriados já importados.");
         }
 
-        return new ModelAndView("redirect:/projects/" + projectId + "/holidays");
+        return new ModelAndView(String.format("redirect:/projects/%s/holidays", projectId));
     }
 
     @GetMapping("/edit/{id}")
     public ModelAndView update(@PathVariable final Long projectId, @PathVariable final Long id) {
         Holiday holiday = holidayService.findById(id);
+
         return new ModelAndView("holidays/edit")
                 .addObject("holiday", holiday)
                 .addObject("projectId", projectId);
@@ -110,8 +112,8 @@ public class HolidayController extends AbstractController {
 
         holidayService.update(projectId, holiday);
 
-        redirectAttributes.addFlashAttribute("flashSuccess", "Registro atualizado com sucesso");
-        return new ModelAndView("redirect:/projects/" + projectId + "/holidays");
+        addFlashSuccess(redirectAttributes, "Registro atualizado com sucesso.");
+        return new ModelAndView(String.format("redirect:/projects/%s/holidays", projectId));
     }
 
 }

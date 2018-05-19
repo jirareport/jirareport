@@ -28,6 +28,7 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
     @Transactional(readOnly = true)
     public List<Issue> findByExample(final Long projectId, final IssueForm issueForm) {
         log.info("Method=findByExample, projectId={}, issueForm={}", projectId, issueForm);
+        
         Map<String, Object> params = new HashMap<>();
 
         StringBuilder sb = new StringBuilder();

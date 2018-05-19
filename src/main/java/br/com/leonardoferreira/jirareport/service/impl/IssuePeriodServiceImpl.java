@@ -1,5 +1,7 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import java.util.List;
+
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
@@ -13,12 +15,6 @@ import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,7 +49,6 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
         List<Issue> issues = issueService.findAllInJira(issuePeriodId);
 
-
         Double avgLeadTime = issues.parallelStream()
                 .filter(i -> i.getLeadTime() != null)
                 .mapToLong(Issue::getLeadTime)
@@ -82,7 +77,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public IssuePeriodChart getChartByIssues(final List<IssuePeriod> issuePeriods) {
         log.info("Method=getChartByIssues, issuePeriods={}", issuePeriods);
 
@@ -91,17 +86,17 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
                 .peek(issuePeriodChart::addLeadTime)
                 .forEach(issuePeriodChart::addIssuesCount);
 
-        IssueCountBySize issueCountBySize = buildIssueCountBySize(issuePeriods);
-
+        IssueCountBySize issueCountBySize = chartService.buildIssueCountBySize(issuePeriods);
         issuePeriodChart.setIssueCountBySize(issueCountBySize);
 
         return issuePeriodChart;
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public IssuePeriod findById(final IssuePeriodId issuePeriodId) {
         log.info("Method=findById, issuePeriodId={}", issuePeriodId);
+
         return issuePeriodRepository.findById(issuePeriodId)
                 .orElseThrow(ResourceNotFound::new);
     }
@@ -110,6 +105,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     @Transactional
     public void remove(final IssuePeriodId issuePeriodId) {
         log.info("Method=remove, issuePeriodId={}", issuePeriodId);
+
         issuePeriodRepository.deleteById(issuePeriodId);
     }
 
@@ -117,51 +113,9 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     @Transactional(rollbackFor = CreateIssuePeriodException.class)
     public void update(final IssuePeriodId issuePeriodId) throws CreateIssuePeriodException {
         log.info("Method=update, issuePeriodId={}", issuePeriodId);
+
         remove(issuePeriodId);
         create(issuePeriodId);
     }
 
-    private IssueCountBySize buildIssueCountBySize(final List<IssuePeriod> issuePeriods) {
-        long start = System.currentTimeMillis();
-
-        Set<String> sizes = new HashSet<>();
-        Map<String, Map<String, Long>> periodsSize = new HashMap<>();
-        for (IssuePeriod issuePeriod : issuePeriods) {
-            Map<String, Long> estimated = issuePeriod.getEstimated().getData();
-            sizes.addAll(issuePeriod.getEstimated().getData().keySet());
-
-            periodsSize.put(issuePeriod.getId().getDates(), estimated);
-        }
-
-        periodsSize.forEach((k, v) -> {
-            for (String size : sizes) {
-                if (!v.containsKey(size)) {
-                    v.put(size, 0L);
-                }
-            }
-        });
-
-        Map<String, List<Long>> datasources = new HashMap<>();
-        for (Map<String, Long> periodSize : periodsSize.values()) {
-            periodSize.forEach((k, v) -> {
-                if (datasources.containsKey(k)) {
-                    List<Long> longs = datasources.get(k);
-                    longs.add(v);
-                    datasources.put(k, longs);
-                } else {
-                    ArrayList<Long> value = new ArrayList<>();
-                    value.add(v);
-                    datasources.put(k, value);
-                }
-            });
-        }
-
-        IssueCountBySize issueCountBySize = new IssueCountBySize();
-        issueCountBySize.setLabels(periodsSize.keySet());
-        issueCountBySize.setDatasources(datasources);
-
-        long end = System.currentTimeMillis();
-        log.info("Method=buildIssueCountBySize, ms={}", end - start);
-        return issueCountBySize;
-    }
 }

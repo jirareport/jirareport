@@ -72,7 +72,7 @@ public class Project extends BaseEntity {
 
     @Transient
     public Set<String> getEndColumns() {
-        return CalcUtil.calcEndColumns(startColumn, endColumn, fluxColumn);
+        return CalcUtil.calcEndColumns(endColumn, fluxColumn);
     }
 
     @Transient

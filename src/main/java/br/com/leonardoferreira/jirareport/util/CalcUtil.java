@@ -32,8 +32,7 @@ public final class CalcUtil {
         return startColumns;
     }
 
-    public static Set<String> calcEndColumns(final String startColumn,
-                                             final String endColumn,
+    public static Set<String> calcEndColumns(final String endColumn,
                                              final List<String> fluxColumn) {
         Set<String> endColumns = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
         if (endColumn == null) {

@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface LeadTimeRepository extends CrudRepository<LeadTime, Long> {
+
 }

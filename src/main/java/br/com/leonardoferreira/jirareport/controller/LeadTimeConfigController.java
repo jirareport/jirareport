@@ -24,7 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 @RequestMapping("/projects/{projectId}/lead-time-configs")
-public class LeadTimeConfigController {
+public class LeadTimeConfigController extends AbstractController {
 
     @Autowired
     private LeadTimeConfigService leadTimeConfigService;
@@ -35,6 +35,7 @@ public class LeadTimeConfigController {
     @GetMapping
     public ModelAndView index(@PathVariable final Long projectId) {
         List<LeadTimeConfig> leadTimeConfigs = leadTimeConfigService.findAllByProjectId(projectId);
+
         return new ModelAndView("lead-time-configs/index")
                 .addObject("projectId", projectId)
                 .addObject("leadTimeConfigs", leadTimeConfigs);
@@ -42,7 +43,7 @@ public class LeadTimeConfigController {
 
     @GetMapping("/new")
     public ModelAndView create(@PathVariable final Long projectId) {
-            Set<String> suggestedStatus = projectService.findStatusFromProjectInJira(projectId);
+        Set<String> suggestedStatus = projectService.findStatusFromProjectInJira(projectId);
 
         return new ModelAndView("lead-time-configs/new")
                 .addObject("leadTimeConfig", new LeadTimeConfig())
@@ -64,7 +65,7 @@ public class LeadTimeConfigController {
 
         leadTimeConfigService.create(projectId, leadTimeConfig);
 
-        redirectAttributes.addFlashAttribute("flashSuccess", "Registro inserido com sucesso.");
+        addFlashSuccess(redirectAttributes, "Registro inserido com sucesso.");
         return new ModelAndView(String.format("redirect:/projects/%s/lead-time-configs", projectId));
     }
 
@@ -94,7 +95,7 @@ public class LeadTimeConfigController {
 
         leadTimeConfigService.update(projectId, leadTimeConfig);
 
-        redirectAttributes.addFlashAttribute("flashSuccess", "Registro atualizado com sucesso.");
+        addFlashSuccess(redirectAttributes, "Registro atualizado com sucesso.");
         return new ModelAndView(String.format("redirect:/projects/%s/lead-time-configs", projectId));
     }
 
@@ -104,7 +105,7 @@ public class LeadTimeConfigController {
                                final RedirectAttributes redirectAttributes) {
         leadTimeConfigService.deleteByProjectAndId(projectId, id);
 
-        redirectAttributes.addFlashAttribute("flashSuccess", "Registro removido com sucesso.");
+        addFlashSuccess(redirectAttributes, "Registro removido com sucesso.");
         return new ModelAndView(String.format("redirect:/projects/%s/lead-time-configs", projectId));
     }
 

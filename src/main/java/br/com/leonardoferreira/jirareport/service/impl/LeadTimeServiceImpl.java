@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Slf4j
 @Service
-public class LeadTimeServiceImpl implements LeadTimeService {
+public class LeadTimeServiceImpl extends AbstractService implements LeadTimeService {
 
     @Autowired
     private LeadTimeConfigService leadTimeConfigService;
@@ -38,22 +38,23 @@ public class LeadTimeServiceImpl implements LeadTimeService {
     @Override
     @Transactional
     public void createLeadTimes(final List<Issue> issues, final Long projectId) {
-        List<LeadTimeConfig> leadTimeConfigs = leadTimeConfigService.findAllByProjectId(projectId);
-        final List<String> holidays = holidayService.findByProject(projectId)
-                .stream().map(Holiday::getEnDate).collect(Collectors.toList());
+        log.info("Method=createLeadTimes, issues={}, projectId={}", issues, projectId);
 
-        issues.forEach(issue -> {
-            issue.setLeadTimes(leadTimeConfigs.stream()
-                    .map(leadTimeConfig ->
-                            calcLeadTime(leadTimeConfig, issue, holidays)
-                    ).collect(Collectors.toList()));
-        });
+        List<LeadTimeConfig> leadTimeConfigs = leadTimeConfigService.findAllByProjectId(projectId);
+        final List<String> holidays = holidayService.findByProject(projectId).stream()
+                .map(Holiday::getEnDate).collect(Collectors.toList());
+
+        issues.forEach(issue ->
+                issue.setLeadTimes(leadTimeConfigs.stream()
+                        .map(leadTimeConfig -> calcLeadTime(leadTimeConfig, issue, holidays))
+                        .collect(Collectors.toList())));
     }
 
     @Transactional
     private LeadTime calcLeadTime(final LeadTimeConfig leadTimeConfig,
                                   final Issue issue,
                                   final List<String> holidays) {
+        log.info("Method=calcLeadTime, leadTimeConfig={}, issue={}, holidays={}", leadTimeConfig, issue, holidays);
 
         String startDate = "BACKLOG".equals(leadTimeConfig.getStartColumn()) ? DateUtil.toENDateFromDisplayDate(issue.getCreated()) : null;
         String endDate = null;
@@ -71,20 +72,18 @@ public class LeadTimeServiceImpl implements LeadTimeService {
             }
         }
 
-        Long leadTimeN = 0L;
+        Long leadTime = 0L;
         if (startDate != null && endDate != null) {
-            leadTimeN = DateUtil.daysDiff(startDate, endDate, holidays);
+            leadTime = DateUtil.daysDiff(startDate, endDate, holidays);
         }
 
-        LeadTime leadTime = new LeadTime();
-        leadTime.setLeadTimeConfig(leadTimeConfig);
-        leadTime.setIssue(issue);
-        leadTime.setLeadTime(leadTimeN);
-        leadTime.setStartDate(DateUtil.displayFormat(startDate));
-        leadTime.setEndDate(DateUtil.displayFormat(endDate));
+        return leadTimeRepository.save(LeadTime.builder()
+                .leadTimeConfig(leadTimeConfig)
+                .issue(issue)
+                .leadTime(leadTime)
+                .startDate(DateUtil.displayFormat(startDate))
+                .endDate(DateUtil.displayFormat(endDate))
+                .build());
 
-        leadTimeRepository.save(leadTime);
-
-        return leadTime;
     }
 }

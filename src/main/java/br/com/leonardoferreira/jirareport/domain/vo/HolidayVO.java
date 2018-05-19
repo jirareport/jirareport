@@ -11,9 +11,13 @@ import lombok.Data;
 public class HolidayVO {
 
     private String date;
+
     private String name;
+
     private String link;
+
     private String type;
+
     private String description;
 
     @JsonProperty("type_code")
