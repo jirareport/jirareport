@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.Project;
@@ -32,6 +33,7 @@ public class IssueMapper {
 
     private final JsonParser jsonParser = new JsonParser();
 
+    @ExecutionTime
     public List<Issue> parse(final String rawText, final Project project) {
         JsonElement response = jsonParser.parse(rawText);
         JsonArray issues = response.getAsJsonObject()

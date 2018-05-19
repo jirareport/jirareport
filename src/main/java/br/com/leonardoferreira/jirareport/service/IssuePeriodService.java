@@ -17,7 +17,7 @@ public interface IssuePeriodService {
 
     List<IssuePeriod> findByProjectId(Long projectId);
 
-    IssuePeriodChart getChartByIssues(List<IssuePeriod> issues);
+    IssuePeriodChart buildCharts(List<IssuePeriod> issues);
 
     IssuePeriod findById(IssuePeriodId issuePeriodId);
 

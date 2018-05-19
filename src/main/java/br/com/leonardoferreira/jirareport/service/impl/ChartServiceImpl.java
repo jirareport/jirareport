@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.LeadTime;
@@ -41,6 +42,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     @Async
     @Override
+    @ExecutionTime
     public CompletableFuture<Chart<Long, Long>> issueHistogram(final List<Issue> issues) {
         log.info("Method=issueHistogram, issues={}", issues);
 
@@ -59,6 +61,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     @Async
     @Override
+    @ExecutionTime
     public CompletableFuture<Chart<String, Long>> estimatedChart(final List<Issue> issues) {
         log.info("Method=estimatedChart, issues={}", issues);
 
@@ -71,6 +74,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     @Async
     @Override
+    @ExecutionTime
     public CompletableFuture<Chart<String, Double>> leadTimeBySystem(final List<Issue> issues) {
         log.info("Method=leadTimeBySystem, issues={}", issues);
 
@@ -83,6 +87,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     @Async
     @Override
+    @ExecutionTime
     public CompletableFuture<Chart<String, Long>> tasksBySystem(final List<Issue> issues) {
         log.info("Method=tasksBySystem, issues={}", issues);
 
@@ -95,6 +100,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     @Async
     @Override
+    @ExecutionTime
     public CompletableFuture<Chart<String, Double>> leadTimeBySize(final List<Issue> issues) {
         log.info("Method=leadTimeBySize, issues={}", issues);
 
@@ -107,6 +113,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     @Async
     @Override
+    @ExecutionTime
     public CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg(final List<Issue> issues) {
         log.info("Method=columnTimeAvg, issues={}", issues);
 
@@ -123,6 +130,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     @Async
     @Override
+    @ExecutionTime
     public CompletableFuture<Chart<String, Double>> leadTimeByType(final List<Issue> issues) {
         log.info("Method=leadTimeByType, issues={}", issues);
 
@@ -135,6 +143,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     @Async
     @Override
+    @ExecutionTime
     public CompletableFuture<Chart<String, Long>> tasksByType(final List<Issue> issues) {
         log.info("Method=tasksByType, issues={}", issues);
 
@@ -147,6 +156,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     @Async
     @Override
+    @ExecutionTime
     public CompletableFuture<Chart<String, Double>> leadTimeByProject(final List<Issue> issues) {
         log.info("Method=leadTimeByProject, issues={}", issues);
 
@@ -159,6 +169,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     @Async
     @Override
+    @ExecutionTime
     public CompletableFuture<Chart<String, Long>> tasksByProject(final List<Issue> issues) {
         log.info("Method=tasksByProject, issues={}", issues);
 
@@ -171,6 +182,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     @Override
     @SneakyThrows
+    @ExecutionTime
     public ChartAggregator buildAllCharts(final List<Issue> issues) {
         log.info("Method=buildAllCharts, issues={}", issues);
 
@@ -200,6 +212,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     }
 
     @Override
+    @ExecutionTime
     public LeadTimeCompareChart<Long> calcLeadTimeCompare(final List<Issue> issues) {
         log.info("Method=calcLeadTimeCompare, issues={}", issues);
 
@@ -216,6 +229,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     }
 
     @Override
+    @ExecutionTime
     @Transactional(readOnly = true)
     public LeadTimeCompareChart<Double> calcLeadTimeCompareByPeriod(final List<IssuePeriod> issuePeriods) {
         log.info("Method=calcLeadTimeCompareByPeriod, issuePeriods={}", issuePeriods);
@@ -235,6 +249,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     }
 
     @Override
+    @ExecutionTime
     @Transactional(readOnly = true)
     public IssueCountBySize buildIssueCountBySize(final List<IssuePeriod> issuePeriods) {
         log.info("Method=buildIssueCountBySize, issuePeriods={}", issuePeriods);

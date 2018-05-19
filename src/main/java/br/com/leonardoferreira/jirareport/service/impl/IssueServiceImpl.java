@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.client.IssueClient;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.Project;
@@ -56,6 +57,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     private LeadTimeService leadTimeService;
 
     @Override
+    @ExecutionTime
     @Transactional
     public List<Issue> findAllInJira(final IssuePeriodId issuePeriodId) {
         log.info("Method=findAllInJira, issuePeriodId={}", issuePeriodId);
@@ -73,6 +75,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     }
 
     @Override
+    @ExecutionTime
     @Transactional(readOnly = true)
     public SandBox findByExample(final Long projectId, final IssueForm issueForm) {
         log.info("Method=findByExample, projectId={}, issueForm={}", projectId, issueForm);
@@ -97,6 +100,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     }
 
     @Override
+    @ExecutionTime
     @Transactional(readOnly = true)
     public SandBoxFilter findSandBoxFilters(final Long projectId, final SandBox sandBox, final IssueForm issueForm) {
         log.info("Method=findSandBoxFilters, projectId={}, sandBox={}, issueForm={}", projectId, sandBox, issueForm);
@@ -112,6 +116,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     }
 
     @Override
+    @ExecutionTime
     @Transactional(readOnly = true)
     public Histogram calcHistogramData(final List<Issue> issues) {
         log.info("Method=calcHistogramData, issues={}", issues);

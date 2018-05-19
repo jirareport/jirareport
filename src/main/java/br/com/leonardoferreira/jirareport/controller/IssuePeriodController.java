@@ -100,7 +100,7 @@ public class IssuePeriodController extends AbstractController {
             return new ModelAndView(String.format("redirect:/projects/%d/issue-periods", projectId));
         } catch (CreateIssuePeriodException e) {
             List<IssuePeriod> issuePeriods = issuePeriodService.findByProjectId(projectId);
-            IssuePeriodChart issuePeriodChart = issuePeriodService.getChartByIssues(issuePeriods);
+            IssuePeriodChart issuePeriodChart = issuePeriodService.buildCharts(issuePeriods);
 
             return new ModelAndView("issue-periods/index")
                     .addObject("issuePeriods", issuePeriods)

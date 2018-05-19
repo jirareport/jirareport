@@ -80,8 +80,8 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
     @Override
     @Transactional(readOnly = true)
-    public IssuePeriodChart getChartByIssues(final List<IssuePeriod> issuePeriods) {
-        log.info("Method=getChartByIssues, issuePeriods={}", issuePeriods);
+    public IssuePeriodChart buildCharts(final List<IssuePeriod> issuePeriods) {
+        log.info("Method=buildCharts, issuePeriods={}", issuePeriods);
 
         IssuePeriodChart issuePeriodChart = new IssuePeriodChart();
         issuePeriods.stream()
@@ -127,7 +127,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     @Transactional(readOnly = true)
     public IssuePeriodList findIssuePeriodsAndCharts(final Long projectId) {
         List<IssuePeriod> issuePeriods = findByProjectId(projectId);
-        IssuePeriodChart issuePeriodChart = getChartByIssues(issuePeriods);
+        IssuePeriodChart issuePeriodChart = buildCharts(issuePeriods);
 
         return IssuePeriodList.builder()
                 .issuePeriods(issuePeriods)
