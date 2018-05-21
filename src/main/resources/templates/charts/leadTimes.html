@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="chart(chartData)">
-    <canvas id="issueCountBySizeChart" width="400" height="150"
+    <canvas id="leadTimesChart" width="400" height="150"
             th:attr="data-datasources=${chartData.datasourcesAsJson}, data-labels=${chartData.labelsAsJson}"
             data-chart-multi-dataset="" data-stacked="false"
             th:if="${chartData.hasData}"></canvas>
