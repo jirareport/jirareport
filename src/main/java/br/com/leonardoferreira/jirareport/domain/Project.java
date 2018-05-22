@@ -15,6 +15,7 @@ import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.springframework.util.StringUtils;
 
@@ -24,6 +25,7 @@ import org.springframework.util.StringUtils;
  */
 @Data
 @Entity
+@ToString(exclude = { "leadTimeConfigs" })
 @EqualsAndHashCode(of = "id", callSuper = false)
 public class Project extends BaseEntity {
 

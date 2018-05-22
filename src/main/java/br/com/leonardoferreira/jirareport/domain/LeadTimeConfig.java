@@ -12,12 +12,14 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * @author lferreira on 17/05/18
  */
 @Data
 @Entity
+@ToString(exclude = { "project" })
 @EqualsAndHashCode(callSuper = false)
 public class LeadTimeConfig extends BaseEntity {
     private static final long serialVersionUID = -1181175426509346889L;
