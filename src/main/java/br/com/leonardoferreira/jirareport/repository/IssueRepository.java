@@ -39,11 +39,12 @@ public interface IssueRepository extends CrudRepository<Issue, String>, IssueCus
             + " AND issue.project IS NOT NULL", nativeQuery = true)
     List<String> findAllIssueProjectsByProjectId(Long projectId);
 
-    @Query("SELECT i FROM Issue i "
+    @Query("SELECT DISTINCT i FROM Issue i "
             + " JOIN i.issuePeriods ip "
+            + " JOIN FETCH i.leadTimes leadTimes "
+            + " JOIN FETCH leadTimes.leadTimeConfig "
             + " WHERE ip.id.projectId = :projectId "
             + " AND ip.id.startDate = :startDate "
-            + " AND ip.id.endDate = :endDate "
-            + " GROUP BY i.key")
+            + " AND ip.id.endDate = :endDate ")
     List<Issue> findByIssuePeriodId(Long projectId, String startDate, String endDate);
 }

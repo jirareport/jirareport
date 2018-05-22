@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IssuePeriodRepository extends CrudRepository<IssuePeriod, IssuePeriodId> {
 
+    @EntityGraph(attributePaths = { "issues" }, type = EntityGraph.EntityGraphType.LOAD)
     List<IssuePeriod> findByIdProjectId(Long projectId);
 
 }
