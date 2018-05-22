@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -255,7 +256,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=buildIssueCountBySize, issuePeriods={}", issuePeriods);
 
         Set<String> sizes = new HashSet<>();
-        Map<String, Map<String, Long>> periodsSize = new HashMap<>();
+        Map<String, Map<String, Long>> periodsSize = new LinkedHashMap<>();
         for (IssuePeriod issuePeriod : issuePeriods) {
             Map<String, Long> estimated = issuePeriod.getEstimated().getData();
             sizes.addAll(issuePeriod.getEstimated().getData().keySet());
@@ -271,7 +272,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
             }
         });
 
-        Map<String, List<Long>> datasources = new HashMap<>();
+        Map<String, List<Long>> datasources = new LinkedHashMap<>();
         for (Map<String, Long> periodSize : periodsSize.values()) {
             periodSize.forEach((k, v) -> {
                 if (datasources.containsKey(k)) {

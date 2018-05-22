@@ -1,7 +1,7 @@
 package br.com.leonardoferreira.jirareport.domain;
 
+import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
-
-import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -60,7 +58,7 @@ public class Issue extends BaseEntity {
     @ManyToMany(mappedBy = "issues", cascade = CascadeType.ALL)
     private List<IssuePeriod> issuePeriods;
 
-    @OneToMany(mappedBy = "issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<LeadTime> leadTimes;
 
     @Transient

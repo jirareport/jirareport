@@ -34,11 +34,13 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         Map<String, Object> params = new HashMap<>();
 
         StringBuilder sb = new StringBuilder();
-        sb.append(" SELECT issue.* FROM issue ");
-        sb.append(" INNER JOIN issue_period_issue ON issue_period_issue.issue_key = issue.key ");
-        sb.append(" WHERE issue_period_issue.project_id = :projectId");
+        sb.append(" SELECT DISTINCT issue FROM Issue issue ");
+        sb.append(" JOIN FETCH issue.leadTimes leadTimes ");
+        sb.append(" JOIN FETCH leadTimes.leadTimeConfig ");
+        sb.append(" JOIN issue.issuePeriods issuePeriods ");
+        sb.append(" WHERE issuePeriods.id.projectId = :projectId ");
 
-        sb.append(" AND to_date(issue.end_date, 'DD/MM/YYYY') BETWEEN :startDate AND :endDate ");
+        sb.append(" AND TO_DATE(issue.endDate, 'DD/MM/YYYY') BETWEEN :startDate AND :endDate ");
 
         if (!CollectionUtils.isEmpty(issueForm.getKeys())) {
             sb.append(" AND issue.key NOT IN (:keys) ");
@@ -61,7 +63,7 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         }
 
         if (!CollectionUtils.isEmpty(issueForm.getIssueTypes())) {
-            sb.append(" AND issue.issue_type IN (:issueTypes) ");
+            sb.append(" AND issue.issueType IN (:issueTypes) ");
             params.put("issueTypes", issueForm.getIssueTypes());
         }
 
@@ -74,10 +76,9 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         params.put("startDate", issueForm.getStartDate());
         params.put("endDate", issueForm.getEndDate());
 
-        sb.append(" GROUP BY issue.key ");
         sb.append(" ORDER BY issue.key ");
 
-        Query nativeQuery = entityManager.createNativeQuery(sb.toString(), Issue.class);
+        Query nativeQuery = entityManager.createQuery(sb.toString(), Issue.class);
         params.forEach(nativeQuery::setParameter);
 
         return nativeQuery.getResultList();

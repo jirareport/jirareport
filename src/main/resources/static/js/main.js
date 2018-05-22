@@ -58,8 +58,9 @@ $(document).ready(function() {
                             beginAtZero: true
                         }
                     }]
-                }
-            }
+                },
+                plugins: { datalabels: { display: false } }
+           }
         })
     });
 
@@ -73,6 +74,7 @@ $(document).ready(function() {
         var beginAtZero = $(this).data('begin-at-zero')
 
         var options = {};
+
         var data = {
             labels: labels,
             datasets: [{
@@ -82,27 +84,36 @@ $(document).ready(function() {
         }
 
         if (type == 'bar') {
+            options.plugins = { datalabels: { display: false } }
             options.scales = {
                 xAxes: [{ gridLines: { display: true }, scaleLabel: { display: true, labelString: title }, ticks: { beginAtZero: beginAtZero } }],
                 yAxes: [{ gridLines: { display: true }, scaleLabel: { display: true, labelString: label }, ticks: { beginAtZero: beginAtZero } }]
             }
+
             var colorRgb = randomColorRGB();
-            data.datasets[0].backgroundColor = colorRgb;
             var solidRgb = colorRgb.replace('rgba', 'rgb').split(',')
-            data.datasets[0].borderColor = solidRgb[0] + "," + solidRgb[1] + "," + solidRgb[2] + ")";
+            var borderColor = solidRgb[0] + "," + solidRgb[1] + "," + solidRgb[2] + ")";
+
+            data.datasets[0].backgroundColor = colorRgb;
+            data.datasets[0].borderColor = borderColor;
             data.datasets[0].borderWidth = 1;
         } else if (type == 'doughnut') {
+            options.plugins = {
+                datalabels: {
+                    color: '#FFF',
+                    font: {
+                        weight: 'bold'
+                    },
+                    display: function(ctx) {
+                        return ctx.dataset.data[ctx.dataIndex] > 0
+                    }
+
+                }
+            }
+
             data.datasets[0].backgroundColor = [];
             for (var i = 0; i < dataChart.length; i++) {
                 data.datasets[0].backgroundColor.push(randomColor());
-            }
-
-            options.pieceLabel = {
-              render: 'value',
-              fontSize: 14,
-              fontStyle: 'bold',
-              fontColor: '#fff',
-              fontFamily: '"Lucida Console", Monaco, monospace'
             }
         }
 
