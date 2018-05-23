@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(exclude = "issue", callSuper = false)
 public class LeadTime extends BaseEntity {
     private static final long serialVersionUID = 2918615471478687270L;
 

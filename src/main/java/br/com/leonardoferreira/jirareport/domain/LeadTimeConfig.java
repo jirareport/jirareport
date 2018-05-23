@@ -20,7 +20,7 @@ import lombok.ToString;
 @Data
 @Entity
 @ToString(exclude = { "project" })
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(exclude = "project", callSuper = false)
 public class LeadTimeConfig extends BaseEntity {
     private static final long serialVersionUID = -1181175426509346889L;
     

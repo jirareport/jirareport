@@ -2,6 +2,7 @@ package br.com.leonardoferreira.jirareport.domain;
 
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -59,7 +60,7 @@ public class Issue extends BaseEntity {
     private List<IssuePeriod> issuePeriods;
 
     @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<LeadTime> leadTimes;
+    private Set<LeadTime> leadTimes;
 
     @Transient
     public String getTitle() {

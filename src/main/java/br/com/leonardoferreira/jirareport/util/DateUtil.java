@@ -1,15 +1,14 @@
 package br.com.leonardoferreira.jirareport.util;
 
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Locale;
 import lombok.SneakyThrows;
 import org.springframework.util.StringUtils;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * @author lferreira
@@ -17,9 +16,9 @@ import java.util.Locale;
  */
 public final class DateUtil {
 
-    public static final String DEFAULT_FORMATTER = "yyyy-MM-dd";
-
     public static final Locale LOCALE_BR = new Locale("pt", "BR");
+
+    private static final String DEFAULT_FORMATTER = "yyyy-MM-dd";
 
     private DateUtil() {
     }
@@ -34,19 +33,17 @@ public final class DateUtil {
     }
 
     public static String firstMonthDay() {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.DAY_OF_MONTH, 1);
-
-        return new SimpleDateFormat("dd/MM/yyyy", LOCALE_BR).format(c.getTime());
+        return LocalDate.now()
+                .withDayOfMonth(1)
+                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     public static String lastMonthDay() {
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.MONTH, 1);
-        c.set(Calendar.DAY_OF_MONTH, 1);
-        c.add(Calendar.DATE, -1);
-
-        return new SimpleDateFormat("dd/MM/yyyy", LOCALE_BR).format(c.getTime());
+        return LocalDate.now()
+                .plus(1, ChronoUnit.MONTHS)
+                .withDayOfMonth(1)
+                .minus(1, ChronoUnit.DAYS)
+                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     public static String toENDate(final String startDate) {
@@ -58,15 +55,9 @@ public final class DateUtil {
     }
 
     public static int sort(final IssuePeriod issuePeriod, final IssuePeriod issuePeriod1) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyyy", LOCALE_BR);
-        try {
-            Date d1 = sdf.parse(issuePeriod.getId().getStartDate());
-            Date d2 = sdf.parse(issuePeriod1.getId().getStartDate());
-
-            return d1.compareTo(d2);
-        } catch (ParseException e) {
-            return 0;
-        }
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return LocalDate.parse(issuePeriod.getId().getStartDate(), formatter)
+                .compareTo(LocalDate.parse(issuePeriod1.getId().getStartDate(), formatter));
     }
 
     @SneakyThrows
@@ -75,24 +66,22 @@ public final class DateUtil {
             return null;
         }
 
-        Calendar start = Calendar.getInstance();
-        start.setTime(new SimpleDateFormat(DEFAULT_FORMATTER, DateUtil.LOCALE_BR).parse(startDate));
-        Calendar end = Calendar.getInstance();
-        end.setTime(new SimpleDateFormat(DEFAULT_FORMATTER, DateUtil.LOCALE_BR).parse(endDate));
+        LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ofPattern(DEFAULT_FORMATTER));
+        LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ofPattern(DEFAULT_FORMATTER));
+
         Long workingDays = 0L;
-        while (!start.after(end)) {
-            int day = start.get(Calendar.DAY_OF_WEEK);
-            if ((day != Calendar.SATURDAY) && (day != Calendar.SUNDAY) && !isHoliday(start, holidays)) {
+        while (!start.isAfter(end)) {
+            DayOfWeek day = start.getDayOfWeek();
+            if (!DayOfWeek.SATURDAY.equals(day) && !DayOfWeek.SUNDAY.equals(day) && !isHoliday(start, holidays)) {
                 workingDays++;
             }
-            start.add(Calendar.DATE, 1);
+            start = start.plusDays(1);
         }
         return workingDays;
     }
 
-    private static boolean isHoliday(final Calendar day, final List<String> holidays) {
-        String aux = new SimpleDateFormat(DEFAULT_FORMATTER, DateUtil.LOCALE_BR).format(day.getTime());
-        return holidays.contains(aux);
+    private static boolean isHoliday(final LocalDate day, final List<String> holidays) {
+        return holidays.contains(day.format(DateTimeFormatter.ofPattern(DEFAULT_FORMATTER)));
     }
 
     public static String toENDateFromDisplayDate(final String date) {
@@ -103,4 +92,5 @@ public final class DateUtil {
         final String[] split = date.split("/");
         return split[2] + "-" + split[1] + "-" + split[0];
     }
+
 }

@@ -49,7 +49,7 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
         issues.forEach(issue ->
                 issue.setLeadTimes(leadTimeConfigs.stream()
                         .map(leadTimeConfig -> calcLeadTime(leadTimeConfig, issue, holidays))
-                        .collect(Collectors.toList())));
+                        .collect(Collectors.toSet())));
     }
 
     @Transactional
