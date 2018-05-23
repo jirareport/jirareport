@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.service;
 
+import br.com.leonardoferreira.jirareport.domain.Project;
 import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
@@ -17,7 +18,7 @@ public interface IssuePeriodService {
 
     List<IssuePeriod> findByProjectId(Long projectId);
 
-    IssuePeriodChart buildCharts(List<IssuePeriod> issues);
+    IssuePeriodChart buildCharts(List<IssuePeriod> issues, Project project);
 
     IssuePeriod findById(IssuePeriodId issuePeriodId);
 

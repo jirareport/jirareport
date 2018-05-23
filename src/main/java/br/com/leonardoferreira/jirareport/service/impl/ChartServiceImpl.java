@@ -1,5 +1,7 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import br.com.leonardoferreira.jirareport.domain.LeadTimeConfig;
+import br.com.leonardoferreira.jirareport.domain.Project;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -232,7 +235,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     @Override
     @ExecutionTime
     @Transactional(readOnly = true)
-    public LeadTimeCompareChart<Double> calcLeadTimeCompareByPeriod(final List<IssuePeriod> issuePeriods) {
+    public LeadTimeCompareChart<Double> calcLeadTimeCompareByPeriod(final List<IssuePeriod> issuePeriods, final Project project) {
         log.info("Method=calcLeadTimeCompareByPeriod, issuePeriods={}", issuePeriods);
         LeadTimeCompareChart<Double> leadTimeCompareChart = new LeadTimeCompareChart<>();
 
@@ -243,7 +246,16 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                     .flatMap(Collection::stream)
                     .collect(Collectors.groupingBy(i -> i.getLeadTimeConfig().getName(),
                             Collectors.averagingDouble(LeadTime::getLeadTime)));
-            leadTimeCompareChart.add(issuePeriod.getId().getDates(), collect);
+
+            if (collect.size() < project.getLeadTimeConfigs().size()) {
+                for (LeadTimeConfig leadTimeConfig : project.getLeadTimeConfigs()) {
+                    if (!collect.containsKey(leadTimeConfig.getName())) {
+                        collect.put(leadTimeConfig.getName(), 0D);
+                    }
+                }
+            }
+
+            leadTimeCompareChart.add(issuePeriod.getId().getDates(), new TreeMap<>(collect));
         }
 
         return leadTimeCompareChart;

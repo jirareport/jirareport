@@ -99,13 +99,16 @@ public class IssuePeriodController extends AbstractController {
             addFlashSuccess(redirectAttributes, "Registro inserido com sucesso.");
             return new ModelAndView(String.format("redirect:/projects/%d/issue-periods", projectId));
         } catch (CreateIssuePeriodException e) {
-            List<IssuePeriod> issuePeriods = issuePeriodService.findByProjectId(projectId);
-            IssuePeriodChart issuePeriodChart = issuePeriodService.buildCharts(issuePeriods);
+            IssuePeriodList issuePeriodList = issuePeriodService.findIssuePeriodsAndCharts(projectId);
+            List<IssuePeriod> issuePeriods = issuePeriodList.getIssuePeriods();
+            IssuePeriodChart issuePeriodChart = issuePeriodList.getIssuePeriodChart();
+            Project project = projectService.findById(projectId);
 
             return new ModelAndView("issue-periods/index")
                     .addObject("issuePeriods", issuePeriods)
-                    .addObject("issuePeriodId", issuePeriodId)
+                    .addObject("issuePeriodId", new IssuePeriodId(projectId))
                     .addObject("issuePeriodChart", issuePeriodChart)
+                    .addObject("project", project)
                     .addObject("flashError", e.getMessage());
         }
     }

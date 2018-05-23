@@ -1,5 +1,7 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.service.ProjectService;
 import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
@@ -38,6 +40,9 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
     @Autowired
     private ChartService chartService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @Override
     @Transactional
@@ -80,7 +85,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
     @Override
     @Transactional(readOnly = true)
-    public IssuePeriodChart buildCharts(final List<IssuePeriod> issuePeriods) {
+    public IssuePeriodChart buildCharts(final List<IssuePeriod> issuePeriods, final Project project) {
         log.info("Method=buildCharts, issuePeriods={}", issuePeriods);
 
         IssuePeriodChart issuePeriodChart = new IssuePeriodChart();
@@ -91,7 +96,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         IssueCountBySize issueCountBySize = chartService.buildIssueCountBySize(issuePeriods);
         issuePeriodChart.setIssueCountBySize(issueCountBySize);
 
-        LeadTimeCompareChart<Double> leadTimeCompareChart = chartService.calcLeadTimeCompareByPeriod(issuePeriods);
+        LeadTimeCompareChart<Double> leadTimeCompareChart = chartService.calcLeadTimeCompareByPeriod(issuePeriods, project);
         issuePeriodChart.setLeadTimeCompareChart(leadTimeCompareChart);
 
         return issuePeriodChart;
@@ -126,8 +131,9 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     @Override
     @Transactional(readOnly = true)
     public IssuePeriodList findIssuePeriodsAndCharts(final Long projectId) {
+        Project project = projectService.findById(projectId);
         List<IssuePeriod> issuePeriods = findByProjectId(projectId);
-        IssuePeriodChart issuePeriodChart = buildCharts(issuePeriods);
+        IssuePeriodChart issuePeriodChart = buildCharts(issuePeriods, project);
 
         return IssuePeriodList.builder()
                 .issuePeriods(issuePeriods)

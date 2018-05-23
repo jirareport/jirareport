@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.service;
 
+import br.com.leonardoferreira.jirareport.domain.Project;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -40,7 +41,7 @@ public interface ChartService {
 
     LeadTimeCompareChart<Long> calcLeadTimeCompare(List<Issue> issues);
 
-    LeadTimeCompareChart<Double> calcLeadTimeCompareByPeriod(List<IssuePeriod> issuePeriods);
+    LeadTimeCompareChart<Double> calcLeadTimeCompareByPeriod(List<IssuePeriod> issuePeriods, Project project);
 
     IssueCountBySize buildIssueCountBySize(List<IssuePeriod> issuePeriods);
 }
