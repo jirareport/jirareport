@@ -35,8 +35,8 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
 
         StringBuilder sb = new StringBuilder();
         sb.append(" SELECT DISTINCT issue FROM Issue issue ");
-        sb.append(" JOIN FETCH issue.leadTimes leadTimes ");
-        sb.append(" JOIN FETCH leadTimes.leadTimeConfig ");
+        sb.append(" LEFT JOIN FETCH issue.leadTimes leadTimes ");
+        sb.append(" LEFT JOIN FETCH leadTimes.leadTimeConfig ");
         sb.append(" JOIN issue.issuePeriods issuePeriods ");
         sb.append(" WHERE issuePeriods.id.projectId = :projectId ");
 

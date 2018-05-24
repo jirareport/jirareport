@@ -41,8 +41,8 @@ public interface IssueRepository extends CrudRepository<Issue, String>, IssueCus
 
     @Query("SELECT DISTINCT i FROM Issue i "
             + " JOIN i.issuePeriods ip "
-            + " JOIN FETCH i.leadTimes leadTimes "
-            + " JOIN FETCH leadTimes.leadTimeConfig "
+            + " LEFT JOIN FETCH i.leadTimes leadTimes "
+            + " LEFT JOIN FETCH leadTimes.leadTimeConfig "
             + " WHERE ip.id.projectId = :projectId "
             + " AND ip.id.startDate = :startDate "
             + " AND ip.id.endDate = :endDate ")
