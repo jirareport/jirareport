@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.beans.Transient;
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +21,7 @@ public class Chart<L, V> implements Serializable {
     private Map<L, V> data;
 
     public Chart() {
-        data = new HashMap<>();
+        data = new LinkedHashMap<>();
     }
 
     @Transient

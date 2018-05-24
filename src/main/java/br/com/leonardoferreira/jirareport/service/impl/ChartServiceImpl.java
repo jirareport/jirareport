@@ -1,7 +1,18 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
+import br.com.leonardoferreira.jirareport.domain.Issue;
+import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
+import br.com.leonardoferreira.jirareport.domain.LeadTime;
 import br.com.leonardoferreira.jirareport.domain.LeadTimeConfig;
 import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
+import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
+import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
+import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
+import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
+import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
+import br.com.leonardoferreira.jirareport.service.ChartService;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,21 +21,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-
-import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
-import br.com.leonardoferreira.jirareport.domain.Issue;
-import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
-import br.com.leonardoferreira.jirareport.domain.LeadTime;
-import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
-import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
-import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
-import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
-import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
-import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
-import br.com.leonardoferreira.jirareport.service.ChartService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -255,7 +253,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 }
             }
 
-            leadTimeCompareChart.add(issuePeriod.getId().getDates(), new TreeMap<>(collect));
+            leadTimeCompareChart.add(issuePeriod.getId().getDates(), collect);
         }
 
         return leadTimeCompareChart;
