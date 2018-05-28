@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/LeonardoFerreiraa/jirareport.svg?branch=master)](https://travis-ci.org/LeonardoFerreiraa/jirareport)
+[![Build Status](https://travis-ci.org/jirareport/jirareport.svg?branch=master)](https://travis-ci.org/LeonardoFerreiraa/jirareport)
 
 # Jiratório
 
