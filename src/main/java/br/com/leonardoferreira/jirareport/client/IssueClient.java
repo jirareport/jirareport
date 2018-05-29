@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface IssueClient {
 
     @GetMapping("/rest/api/2/search?expand=changelog")
-    String findAll(@RequestHeader("cookie") String token, @RequestParam("jql") String jql);
+    String findAll(@RequestHeader("Authorization") String token, @RequestParam("jql") String jql);
 
 }
