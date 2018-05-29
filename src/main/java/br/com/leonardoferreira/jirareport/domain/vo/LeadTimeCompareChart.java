@@ -15,12 +15,12 @@ import lombok.Data;
  * @since 5/18/18 8:09 PM
  */
 @Data
-public class LeadTimeCompareChart<T> implements Serializable {
+public class LeadTimeCompareChart implements Serializable {
     private static final long serialVersionUID = -1501002922104599319L;
 
     private List<String> labels;
 
-    private Map<String, List<T>> datasources;
+    private Map<String, List<Double>> datasources;
 
     public LeadTimeCompareChart() {
         this.labels = new ArrayList<>();
@@ -39,16 +39,16 @@ public class LeadTimeCompareChart<T> implements Serializable {
         return labels != null && !labels.isEmpty();
     }
 
-    public void add(final String key, final Map<String, T> collect) {
+    public void add(final String key, final Map<String, Double> collect) {
         labels.add(key);
         collect.forEach((k, v) -> {
             if (datasources.containsKey(k)) {
-                final List<T> data = datasources.get(k);
+                final List<Double> data = datasources.get(k);
                 data.add(v);
 
                 datasources.put(k, data);
             } else {
-                List<T> data = new ArrayList<>();
+                List<Double> data = new ArrayList<>();
                 data.add(v);
 
                 datasources.put(k, data);

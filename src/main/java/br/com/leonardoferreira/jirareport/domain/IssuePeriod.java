@@ -1,10 +1,7 @@
 package br.com.leonardoferreira.jirareport.domain;
 
-import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
-import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
-import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -15,6 +12,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
+
+import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
+import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
+import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,7 +42,7 @@ public class IssuePeriod extends BaseEntity {
     private IssuePeriodId id;
 
     @OrderBy("key asc")
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinTable(
             name = "issue_period_issue",
             joinColumns = {
@@ -97,29 +98,15 @@ public class IssuePeriod extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private Chart<String, Long> tasksByProject;
 
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private Chart<String, Double> leadTimeCompareChart;
+
     @Formula("( select count(1) from issue_period_issue ipi "
             + " where ipi.project_id = project_id "
             + " and ipi.start_date = start_date"
             + " and ipi.end_date = end_date )")
     private Integer issuesCount;
-
-    public IssuePeriod(final IssuePeriodId id, final List<Issue> issues,
-            final Double avgLeadTime, final ChartAggregator chartAggregator) {
-        this.id = id;
-        this.issues = issues;
-        this.avgLeadTime = avgLeadTime;
-
-        this.histogram = chartAggregator.getHistogram();
-        this.estimated = chartAggregator.getEstimated();
-        this.leadTimeBySystem = chartAggregator.getLeadTimeBySystem();
-        this.tasksBySystem = chartAggregator.getTasksBySystem();
-        this.leadTimeBySize = chartAggregator.getLeadTimeBySize();
-        this.columnTimeAvgs = chartAggregator.getColumnTimeAvg();
-        this.leadTimeByType = chartAggregator.getLeadTimeByType();
-        this.tasksByType = chartAggregator.getTasksByType();
-        this.leadTimeByProject = chartAggregator.getLeadTimeByProject();
-        this.tasksByProject = chartAggregator.getTasksByProject();
-    }
 
     @Transient
     public String getLeadTime() {

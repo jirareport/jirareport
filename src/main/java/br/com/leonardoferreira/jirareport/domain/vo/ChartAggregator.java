@@ -37,4 +37,8 @@ public class ChartAggregator {
     private Chart<String, Double> leadTimeByProject;
 
     private Chart<String, Long> tasksByProject;
+
+    private Chart<String, Double> leadTimeCompareChart;
+
+
 }

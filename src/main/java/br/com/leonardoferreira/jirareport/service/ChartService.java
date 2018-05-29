@@ -39,9 +39,9 @@ public interface ChartService {
 
     ChartAggregator buildAllCharts(List<Issue> issues);
 
-    LeadTimeCompareChart<Long> calcLeadTimeCompare(List<Issue> issues);
+    CompletableFuture<Chart<String, Double>> calcLeadTimeCompare(List<Issue> issues);
 
-    LeadTimeCompareChart<Double> calcLeadTimeCompareByPeriod(List<IssuePeriod> issuePeriods, Project project);
+    LeadTimeCompareChart calcLeadTimeCompareByPeriod(List<IssuePeriod> issuePeriods, Project project);
 
     IssueCountBySize buildIssueCountBySize(List<IssuePeriod> issuePeriods);
 }

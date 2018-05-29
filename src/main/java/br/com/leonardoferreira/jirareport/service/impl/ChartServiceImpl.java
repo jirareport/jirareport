@@ -1,5 +1,15 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
 import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
@@ -13,16 +23,6 @@ import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import br.com.leonardoferreira.jirareport.service.ChartService;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -198,6 +198,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         CompletableFuture<Chart<String, Long>> tasksByType = chartService.tasksByType(issues);
         CompletableFuture<Chart<String, Double>> leadTimeByProject = chartService.leadTimeByProject(issues);
         CompletableFuture<Chart<String, Long>> tasksByProject = chartService.tasksByProject(issues);
+        CompletableFuture<Chart<String, Double>> leadTimeCompareChart = chartService.calcLeadTimeCompare(issues);
 
         return ChartAggregator.builder()
                 .histogram(histogram.get())
@@ -210,32 +211,31 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .tasksByType(tasksByType.get())
                 .leadTimeByProject(leadTimeByProject.get())
                 .tasksByProject(tasksByProject.get())
+                .leadTimeCompareChart(leadTimeCompareChart.get())
                 .build();
     }
 
+    @Async
     @Override
     @ExecutionTime
-    public LeadTimeCompareChart<Long> calcLeadTimeCompare(final List<Issue> issues) {
+    public CompletableFuture<Chart<String, Double>> calcLeadTimeCompare(final List<Issue> issues) {
         log.info("Method=calcLeadTimeCompare, issues={}", issues);
 
-        final LeadTimeCompareChart<Long> chart = new LeadTimeCompareChart<>();
-        for (Issue issue : issues) {
-            final Map<String, Long> collect = new HashMap<>();
-            for (LeadTime leadTime : issue.getLeadTimes()) {
-                collect.put(leadTime.getLeadTimeConfig().getName(), leadTime.getLeadTime());
-            }
-            chart.add(issue.getKey(), collect);
-        }
+        Map<String, Double> collect = issues.stream()
+                .map(Issue::getLeadTimes)
+                .flatMap(Collection::stream)
+                .collect(Collectors.groupingBy(i -> i.getLeadTimeConfig().getName(),
+                        Collectors.averagingDouble(LeadTime::getLeadTime)));
 
-        return chart;
+        return CompletableFuture.completedFuture(new Chart<>(collect));
     }
 
     @Override
     @ExecutionTime
     @Transactional(readOnly = true)
-    public LeadTimeCompareChart<Double> calcLeadTimeCompareByPeriod(final List<IssuePeriod> issuePeriods, final Project project) {
+    public LeadTimeCompareChart calcLeadTimeCompareByPeriod(final List<IssuePeriod> issuePeriods, final Project project) {
         log.info("Method=calcLeadTimeCompareByPeriod, issuePeriods={}", issuePeriods);
-        LeadTimeCompareChart<Double> leadTimeCompareChart = new LeadTimeCompareChart<>();
+        LeadTimeCompareChart leadTimeCompareChart = new LeadTimeCompareChart();
 
         for (IssuePeriod issuePeriod : issuePeriods) {
             Map<String, Double> collect = issuePeriod.getIssues()
