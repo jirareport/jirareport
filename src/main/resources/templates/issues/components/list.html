@@ -1,96 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="list(issues)">
-    <div class="panel panel-default table-responsive">
-        <table class="table">
-            <thead>
+    <table class="table" data-toggle="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th data-field="task" data-sortable="true" data-sort-name="_task_data" data-sorter="sortByTask">História
+            </th>
+            <th data-field="issueType" data-sortable="true">Issue Type</th>
+            <th data-field="startDate" data-sortable="true" data-sorter="sortByDate">Data inicio</th>
+            <th data-field="endDate" data-sortable="true" data-sorter="sortByDate">Data fim</th>
+            <th data-field="leadTime" data-sortable="true">LeadTime</th>
+            <th data-field="epic" data-sortable="true" th:unless="${#strings.isEmpty(project.epicCF)}">Epico</th>
+            <th data-field="estimate" data-sortable="true" th:unless="${#strings.isEmpty(project.estimateCF)}">
+                Estimativa
+            </th>
+            <th data-field="system" data-sortable="true" th:unless="${#strings.isEmpty(project.systemCF)}">Sistema</th>
+            <th data-field="project" data-sortable="true" th:unless="${#strings.isEmpty(project.projectCF)}">Projeto
+            </th>
+            <th data-field="creator" data-sortable="true">Criador</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="issue : ${issues}">
             <tr>
-                <th></th>
-                <th>História</th>
-                <th>Issue Type</th>
-                <th>Data inicio</th>
-                <th>Data fim</th>
-                <th>LeadTime</th>
-                <th th:unless="${#strings.isEmpty(project.epicCF)}">Epico</th>
-                <th th:unless="${#strings.isEmpty(project.estimateCF)}">Estimativa</th>
-                <th th:unless="${#strings.isEmpty(project.systemCF)}">Sistema</th>
-                <th th:unless="${#strings.isEmpty(project.projectCF)}">Projeto</th>
-                <th>Criador</th>
+                <td class="text-center">
+                    <button class="btn btn-xs btn-default" data-toggle="modal" th:attr="data-target=${'#' + issue.key}" title="Lead Times"><i class="fa fa-eye"></i></button>
+                </td>
+                <td th:text="${issue.title}" th:attr="data-task=${issue.key}"></td>
+                <td th:text="${issue.issueType}"></td>
+                <td th:text="${issue.startDate}"></td>
+                <td th:text="${issue.endDate}"></td>
+                <td th:text="${issue.leadTime}"></td>
+                <td th:unless="${#strings.isEmpty(project.epicCF)}" th:text="${issue.epic}"></td>
+                <td th:unless="${#strings.isEmpty(project.estimateCF)}" th:text="${issue.estimated}"></td>
+                <td th:unless="${#strings.isEmpty(project.systemCF)}" th:text="${issue.system}"></td>
+                <td th:unless="${#strings.isEmpty(project.projectCF)}" th:text="${issue.project}"></td>
+                <td th:text="${issue.creator}"></td>
             </tr>
-            </thead>
-            <tbody>
-            <th:block th:each="issue : ${issues}">
-                <tr data-toggle="collapse" th:attr="data-target=${'.' + issue.key}" class="accordion-toggle">
-                    <td>
-                        <button class="btn btn-xs btn-default"><i class="fa fa-eye"></i></button>
-                    </td>
-                    <td th:text="${issue.title}"></td>
-                    <td th:text="${issue.issueType}"></td>
-                    <td th:text="${issue.startDate}"></td>
-                    <td th:text="${issue.endDate}"></td>
-                    <td th:text="${issue.leadTime}"></td>
-                    <td th:unless="${#strings.isEmpty(project.epicCF)}" th:text="${issue.epic}"></td>
-                    <td th:unless="${#strings.isEmpty(project.estimateCF)}" th:text="${issue.estimated}"></td>
-                    <td th:unless="${#strings.isEmpty(project.systemCF)}" th:text="${issue.system}"></td>
-                    <td th:unless="${#strings.isEmpty(project.projectCF)}" th:text="${issue.project}"></td>
-                    <td th:text="${issue.creator}"></td>
-                </tr>
-                <tr class="accordian-body collapse" th:classappend="${issue.key}">
-                    <td th:attr="colspan=${11 - project.colSizeHidden}">
-
-                        <br/><h4 class="text-center">Lead time por coluna</h4><br/>
-
-                        <div class="accordian-body collapse panel panel-default table-responsive" th:classappend="${issue.key}">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Data</th>
-                                    <th>Coluna</th>
-                                    <th>LeadTime</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="changelog : ${issue.changelog}">
-                                    <td th:text="${changelog.created}"></td>
-                                    <td th:text="${changelog.to}"></td>
-                                    <td th:text="${changelog.leadTime}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="accordian-body collapse" th:classappend="${issue.key}" th:unless="${#lists.isEmpty(issue.leadTimes)}">
-                    <td th:attr="colspan=${11 - project.colSizeHidden}">
-                        <br/>
-                        <h4 class="text-center">Outros lead times</h4>
-                        <br/>
-
-                        <div class="accordian-body collapse panel panel-default table-responsive" th:classappend="${issue.key}">
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Coluna inicial</th>
-                                    <th>Coluna final</th>
-                                    <th>LeadTime</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="leadTime : ${issue.leadTimes}">
-                                    <td th:text="${leadTime.leadTimeConfig.name}"></td>
-                                    <td th:text="${leadTime.leadTimeConfig.startColumn}"></td>
-                                    <td th:text="${leadTime.leadTimeConfig.endColumn}"></td>
-                                    <td th:text="${leadTime.leadTime}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </td>
-                </tr>
-            </th:block>
-            </tbody>
-        </table>
-    </div>
+        </th:block>
+        </tbody>
+    </table>
+    <th:block th:each="issue : ${issues}" th:include="issues/components/leadtime_modal :: modal(${issue}, ${project})"/>
 </th:block>
 </html>

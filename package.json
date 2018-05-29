@@ -5,6 +5,7 @@
     "bootstrap": "^3.3.7",
     "bootstrap-datepicker": "^1.7.1",
     "bootstrap-select": "^1.13.1",
+    "bootstrap-table": "^1.12.1",
     "chart.js": "^2.7.1",
     "chartjs-plugin-datalabels": "^0.3.0",
     "font-awesome": "^4.7.0",
