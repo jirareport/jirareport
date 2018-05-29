@@ -16,10 +16,10 @@ import java.util.List;
 public interface ProjectClient {
 
     @GetMapping("/rest/api/2/project")
-    List<Project> findAll(@RequestHeader("cookie") String token);
+    List<Project> findAll(@RequestHeader("Authorization") String token);
 
     @GetMapping("/rest/api/2/project/{projectId}/statuses")
-    List<ProjectStatusList> findStatusFromProject(@RequestHeader("cookie") String token,
+    List<ProjectStatusList> findStatusFromProject(@RequestHeader("Authorization") String token,
                                                   @PathVariable("projectId") Long projectId);
 
 }
