@@ -169,7 +169,7 @@
                         <th:block th:include="charts/tasksByProject :: chart(${sandBox.chartAggregator.tasksByProject})"/>
                     </div>
                     <div th:unless="${#lists.isEmpty(project.leadTimeConfigs)}" role="tabpanel" class="tab-pane" id="leadTimes">
-                        <th:block th:include="charts/leadTimes :: chart(${leadTimeCompareChart})"/>
+                        <th:block th:include="charts/issueLeadTimes :: chart(${sandBox.chartAggregator.leadTimeCompareChart})"/>
                     </div>
                 </div>
             </div>

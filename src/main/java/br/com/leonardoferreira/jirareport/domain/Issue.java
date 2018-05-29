@@ -56,7 +56,7 @@ public class Issue extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private List<Changelog> changelog;
 
-    @ManyToMany(mappedBy = "issues", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "issues", cascade = CascadeType.DETACH)
     private List<IssuePeriod> issuePeriods;
 
     @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

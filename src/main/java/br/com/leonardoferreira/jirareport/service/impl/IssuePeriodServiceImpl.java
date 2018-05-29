@@ -1,11 +1,10 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import br.com.leonardoferreira.jirareport.domain.Project;
-import br.com.leonardoferreira.jirareport.service.ProjectService;
 import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
+import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
@@ -14,10 +13,12 @@ import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodList;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
+import br.com.leonardoferreira.jirareport.mapper.IssuePeriodMapper;
 import br.com.leonardoferreira.jirareport.repository.IssuePeriodRepository;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
+import br.com.leonardoferreira.jirareport.service.ProjectService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,9 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private IssuePeriodMapper issuePeriodMapper;
+
     @Override
     @Transactional
     public void create(final IssuePeriodId issuePeriodId) throws CreateIssuePeriodException {
@@ -64,7 +68,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         final ChartAggregator chartAggregator = chartService.buildAllCharts(issues);
 
         try {
-            IssuePeriod issuePeriod = new IssuePeriod(issuePeriodId, issues, avgLeadTime, chartAggregator);
+            IssuePeriod issuePeriod = issuePeriodMapper.fromJiraData(issuePeriodId, issues, avgLeadTime, chartAggregator);
             issuePeriodRepository.save(issuePeriod);
         } catch (Exception e) {
             log.error("Method=create, Msg=erro ao gerar registro", e);
@@ -89,14 +93,15 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         log.info("Method=buildCharts, issuePeriods={}", issuePeriods);
 
         IssuePeriodChart issuePeriodChart = new IssuePeriodChart();
-        issuePeriods.stream()
-                .peek(issuePeriodChart::addLeadTime)
-                .forEach(issuePeriodChart::addIssuesCount);
+        for (IssuePeriod issuePeriod : issuePeriods) {
+            issuePeriodChart.addLeadTime(issuePeriod);
+            issuePeriodChart.addIssuesCount(issuePeriod);
+        }
 
         IssueCountBySize issueCountBySize = chartService.buildIssueCountBySize(issuePeriods);
         issuePeriodChart.setIssueCountBySize(issueCountBySize);
 
-        LeadTimeCompareChart<Double> leadTimeCompareChart = chartService.calcLeadTimeCompareByPeriod(issuePeriods, project);
+        LeadTimeCompareChart leadTimeCompareChart = chartService.calcLeadTimeCompareByPeriod(issuePeriods, project);
         issuePeriodChart.setLeadTimeCompareChart(leadTimeCompareChart);
 
         return issuePeriodChart;
