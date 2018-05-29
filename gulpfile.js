@@ -25,7 +25,8 @@ const options = {
       "./node_modules/metismenu/dist/metisMenu.min.css",
       "./node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css",
       "./node_modules/jquery-bootstrap-scrolling-tabs/dist/jquery.scrolling-tabs.min.css",
-      "./node_modules/bootstrap-select/dist/css/bootstrap-select.min.css"
+      "./node_modules/bootstrap-select/dist/css/bootstrap-select.min.css",
+      "./node_modules/bootstrap-table/dist/bootstrap-table.min.css"
     ],
     js: [
       "./node_modules/jquery/dist/jquery.min.js",
@@ -37,7 +38,8 @@ const options = {
       "./node_modules/chart.js/dist/Chart.min.js",
       "./node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js",
       "./node_modules/jquery-bootstrap-scrolling-tabs/dist/jquery.scrolling-tabs.min.js",
-      "./node_modules/bootstrap-select/dist/js/bootstrap-select.min.js"
+      "./node_modules/bootstrap-select/dist/js/bootstrap-select.min.js",
+      "./node_modules/bootstrap-table/dist/bootstrap-table.min.js"
     ],
     fonts: [
       "./node_modules/font-awesome/fonts/*",

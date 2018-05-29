@@ -1,23 +1,20 @@
 package br.com.leonardoferreira.jirareport.domain;
 
+import br.com.leonardoferreira.jirareport.util.CalcUtil;
+import br.com.leonardoferreira.jirareport.util.DateUtil;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
-
-import br.com.leonardoferreira.jirareport.util.CalcUtil;
-import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
-import org.springframework.util.StringUtils;
 
 /**
  * @author lferreira
@@ -80,14 +77,6 @@ public class Project extends BaseEntity {
     @Transient
     public Set<String> getEndColumns() {
         return CalcUtil.calcEndColumns(endColumn, fluxColumn);
-    }
-
-    @Transient
-    public int getColSizeHidden() {
-        return (StringUtils.isEmpty(epicCF) ? 1 : 0)
-                + (StringUtils.isEmpty(estimateCF) ? 1 : 0)
-                + (StringUtils.isEmpty(systemCF) ? 1 : 0)
-                + (StringUtils.isEmpty(projectCF) ? 1 : 0);
     }
 
 }
