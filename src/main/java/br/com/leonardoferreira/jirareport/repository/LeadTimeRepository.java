@@ -1,6 +1,7 @@
 package br.com.leonardoferreira.jirareport.repository;
 
 import br.com.leonardoferreira.jirareport.domain.LeadTime;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,4 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LeadTimeRepository extends CrudRepository<LeadTime, Long> {
 
+    @Modifying
+    void deleteByIssueKey(String issueKey);
 }

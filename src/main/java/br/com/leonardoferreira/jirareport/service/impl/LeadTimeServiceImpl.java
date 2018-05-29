@@ -46,10 +46,12 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
         final List<String> holidays = holidayService.findByProject(projectId).stream()
                 .map(Holiday::getEnDate).collect(Collectors.toList());
 
-        issues.forEach(issue ->
-                issue.setLeadTimes(leadTimeConfigs.stream()
-                        .map(leadTimeConfig -> calcLeadTime(leadTimeConfig, issue, holidays))
-                        .collect(Collectors.toSet())));
+        issues.forEach(issue -> {
+            leadTimeRepository.deleteByIssueKey(issue.getKey());
+            issue.setLeadTimes(leadTimeConfigs.stream()
+                    .map(leadTimeConfig -> calcLeadTime(leadTimeConfig, issue, holidays))
+                    .collect(Collectors.toSet()));
+        });
     }
 
     @Transactional
