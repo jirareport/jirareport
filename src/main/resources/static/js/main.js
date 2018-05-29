@@ -102,12 +102,15 @@ $(document).ready(function() {
                 datalabels: {
                     color: '#FFF',
                     font: {
-                        weight: 'bold'
+                        weight: 'bold',
+                        size: 20
                     },
                     display: function(ctx) {
                         return ctx.dataset.data[ctx.dataIndex] > 0
+                    },
+                    formatter: function(value, ctx) {
+                        return value.toFixed(2);
                     }
-
                 }
             }
 
