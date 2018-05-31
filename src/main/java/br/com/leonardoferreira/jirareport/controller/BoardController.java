@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Set;
 
 import br.com.leonardoferreira.jirareport.domain.Board;
+import br.com.leonardoferreira.jirareport.domain.form.BoardForm;
 import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
 import br.com.leonardoferreira.jirareport.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,11 +31,12 @@ public class BoardController extends AbstractController {
     private BoardService boardService;
 
     @GetMapping
-    public ModelAndView index() {
-        List<Board> boards = boardService.findAll();
+    public ModelAndView index(final Pageable pageable, final Board board) {
+        Page<Board> boards = boardService.findAll(pageable, board);
 
         return new ModelAndView("boards/index")
-                .addObject("boards", boards);
+                .addObject("boards", boards)
+                .addObject("board", board);
     }
 
     @GetMapping("/new")
@@ -59,16 +63,16 @@ public class BoardController extends AbstractController {
 
     @GetMapping("/{id}/edit")
     public ModelAndView update(@PathVariable final Long id) {
-        Board board = boardService.findById(id);
+        BoardForm boardForm = boardService.findToUpdate(id);
         Set<String> statusFromProjectInJira = boardService.findStatusFromBoardInJira(id);
 
         return new ModelAndView("boards/edit")
-                .addObject("board", board)
+                .addObject("boardForm", boardForm)
                 .addObject("suggestedStatus", statusFromProjectInJira);
     }
 
     @PutMapping
-    public ModelAndView update(final Board board) {
+    public ModelAndView update(final BoardForm board) {
         boardService.update(board);
 
         return new ModelAndView(String.format("redirect:/boards/%s/issue-periods", board.getId()));

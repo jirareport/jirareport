@@ -7,11 +7,12 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
+import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
-import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
+import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -42,8 +43,8 @@ public class IssueMapper {
         final List<String> holidays = holidayService.findByBoard(board.getId())
                 .stream().map(Holiday::getEnDate).collect(Collectors.toList());
 
-        Set<String> startColumns = board.getStartColumns();
-        Set<String> endColumns = board.getEndColumns();
+        Set<String> startColumns = CalcUtil.calcStartColumns(board);
+        Set<String> endColumns = CalcUtil.calcEndColumns(board);
 
         return StreamSupport.stream(issues.spliterator(), true)
                 .map(issueRaw -> {

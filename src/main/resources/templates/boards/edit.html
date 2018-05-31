@@ -10,9 +10,9 @@
             <h1>Boards</h1>
         </div>
 
-        <form th:action="@{/boards}" th:method="PUT" th:object="${board}">
-            <input type="hidden" th:field="*{id}" th:value="${board.id}"/>
-            <input type="hidden" th:field="*{externalId}" th:value="${board.externalId}"/>
+        <form th:action="@{/boards}" th:method="PUT" th:object="${boardForm}">
+            <input type="hidden" th:field="*{id}" th:value="${boardForm.id}"/>
+
             <div class="form-group">
                 <label>Nome</label>
                 <input type="text" th:field="*{name}" class="form-control"/>

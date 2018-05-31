@@ -13,10 +13,14 @@ import org.mapstruct.Mappings;
 public interface HolidayMapper {
 
     @Mappings({
-            @Mapping(target = "id", ignore = true),
-            @Mapping(target = "description", source = "holidayVO.name"),
-            @Mapping(target = "board.id", source = "boardId"),
-            @Mapping(target = "date", source = "holidayVO.date", dateFormat = "dd/MM/yyyy")
+            @Mapping(target = "id",              ignore = true),
+            @Mapping(target = "description",     source = "holidayVO.name"),
+            @Mapping(target = "board.id",        source = "boardId"),
+            @Mapping(target = "date",            source = "holidayVO.date", dateFormat = "dd/MM/yyyy"),
+            @Mapping(target = "owner",           ignore = true),
+            @Mapping(target = "lastEditor",      ignore = true),
+            @Mapping(target = "createdAt",       ignore = true),
+            @Mapping(target = "updatedAt",       ignore = true)
     })
     Holiday fromVO(HolidayVO holidayVO, Long boardId);
 

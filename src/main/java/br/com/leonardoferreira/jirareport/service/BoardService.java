@@ -1,17 +1,20 @@
 package br.com.leonardoferreira.jirareport.service;
 
-import br.com.leonardoferreira.jirareport.domain.Board;
-import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
-
 import java.util.List;
 import java.util.Set;
+
+import br.com.leonardoferreira.jirareport.domain.Board;
+import br.com.leonardoferreira.jirareport.domain.form.BoardForm;
+import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Created by lferreira on 3/26/18
  */
 public interface BoardService {
 
-    List<Board> findAll();
+    Page<Board> findAll(Pageable pageable, Board board);
 
     List<JiraProject> findAllInJira();
 
@@ -21,9 +24,11 @@ public interface BoardService {
 
     Board findById(Long id);
 
-    void update(Board board);
+    void update(BoardForm board);
 
     Set<String> findStatusFromBoardInJira(Board board);
 
     Set<String> findStatusFromBoardInJira(Long boardId);
+
+    BoardForm findToUpdate(Long id);
 }

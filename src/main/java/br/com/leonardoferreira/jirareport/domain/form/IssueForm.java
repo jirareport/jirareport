@@ -5,12 +5,15 @@ import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 public class IssueForm {
 
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date startDate;
 
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date endDate;
 
     private List<String> keys = new ArrayList<>();

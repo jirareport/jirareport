@@ -1,10 +1,7 @@
 package br.com.leonardoferreira.jirareport.domain;
 
-import br.com.leonardoferreira.jirareport.util.CalcUtil;
-import br.com.leonardoferreira.jirareport.util.DateUtil;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -61,27 +58,7 @@ public class Board extends BaseEntity {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<LeadTimeConfig> leadTimeConfigs;
 
-    public void setStartColumn(final String startColumn) {
-        this.startColumn = startColumn == null ? null : startColumn.toUpperCase(DateUtil.LOCALE_BR);
-    }
-
-    public void setEndColumn(final String endColumn) {
-        this.endColumn = endColumn == null ? null : endColumn.toUpperCase(DateUtil.LOCALE_BR);
-    }
-
-    public void setFluxColumn(final List<String> fluxColumn) {
-        this.fluxColumn =
-                fluxColumn == null ? null : fluxColumn.stream().map(String::toUpperCase).collect(Collectors.toList());
-    }
-
-    @Transient
-    public Set<String> getStartColumns() {
-        return CalcUtil.calcStartColumns(startColumn, endColumn, fluxColumn);
-    }
-
-    @Transient
-    public Set<String> getEndColumns() {
-        return CalcUtil.calcEndColumns(endColumn, fluxColumn);
-    }
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Holiday> holidays;
 
 }

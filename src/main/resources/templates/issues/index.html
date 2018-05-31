@@ -42,7 +42,7 @@
                 <div class="form-group col-md-4">
                     <label>Keys excluidas</label>
                     <div>
-                        <select class="selectpicker" multiple="" th:field="*{keys}" data-width="100%" id="select-keys">
+                        <select class="selectpicker" multiple="" th:field="*{keys}" data-width="100%" id="select-keys" data-live-search="true">
                             <option th:each="key : ${sandBoxFilter.keys}" th:value="${key}" th:text="${key}"></option>
                         </select>
                     </div>

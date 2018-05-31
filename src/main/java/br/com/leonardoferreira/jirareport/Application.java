@@ -1,17 +1,23 @@
 package br.com.leonardoferreira.jirareport;
 
+import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
 
+import br.com.leonardoferreira.jirareport.domain.vo.Account;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+@EnableJpaAuditing
 @EnableFeignClients
 @SpringBootApplication
 @EnableAspectJAutoProxy
@@ -30,6 +36,14 @@ public class Application {
     public Function<String, String> currentUrlWithoutParam() {
         return param -> ServletUriComponentsBuilder
                 .fromCurrentRequest().replaceQueryParam(param).toUriString();
+    }
+
+    @Bean
+    public AuditorAware<String> auditorAware() {
+        return () -> {
+            Account principal = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return Optional.ofNullable(principal.getUsername());
+        };
     }
 
 }
