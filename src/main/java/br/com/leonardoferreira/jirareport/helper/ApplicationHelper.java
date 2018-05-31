@@ -7,10 +7,6 @@ import br.com.leonardoferreira.jirareport.domain.Issue;
  */
 public class ApplicationHelper {
 
-    public String hello() {
-        return "Hello world";
-    }
-
     public String issueTitle(final Issue issue) {
         return String.format("%s %s", issue.getKey(), issue.getSummary());
     }
