@@ -68,7 +68,8 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         final ChartAggregator chartAggregator = chartService.buildAllCharts(issues);
 
         try {
-            IssuePeriod issuePeriod = issuePeriodMapper.fromJiraData(issuePeriodId, issues, avgLeadTime, chartAggregator);
+            IssuePeriod issuePeriod = issuePeriodMapper.fromJiraData(issuePeriodId, issues,
+                    avgLeadTime, chartAggregator, issues.size());
             issuePeriodRepository.save(issuePeriod);
         } catch (Exception e) {
             log.error("Method=create, Msg=erro ao gerar registro", e);

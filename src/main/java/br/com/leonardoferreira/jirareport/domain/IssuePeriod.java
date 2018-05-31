@@ -103,10 +103,6 @@ public class IssuePeriod extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private Chart<String, Double> leadTimeCompareChart;
 
-    @Formula("( select count(1) from issue_period_issue ipi "
-            + " where ipi.board_id = board_id "
-            + " and ipi.start_date = start_date"
-            + " and ipi.end_date = end_date )")
     private Integer issuesCount;
 
     @Transient
