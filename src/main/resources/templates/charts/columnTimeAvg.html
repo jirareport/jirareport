@@ -12,7 +12,7 @@
             <tbody>
             <tr th:each="columnTimeAvg : ${columnTimeAvgs}">
                 <td th:text="${columnTimeAvg.columnName}"></td>
-                <td th:text="${columnTimeAvg.leadTime}"></td>
+                <td th:text="${#applicationHelper.fmtLeadTime(columnTimeAvg.avgTime)}"></td>
             </tr>
             </tbody>
         </table>

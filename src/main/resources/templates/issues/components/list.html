@@ -27,7 +27,7 @@
                 <td class="text-center">
                     <button class="btn btn-xs btn-default" data-toggle="modal" th:attr="data-target=${'#' + issue.key}" title="Lead Times"><i class="fa fa-eye"></i></button>
                 </td>
-                <td th:text="${issue.title}" th:attr="data-task=${issue.key}"></td>
+                <td th:text="${#applicationHelper.issueTitle(issue)}" th:attr="data-task=${issue.key}"></td>
                 <td th:text="${issue.issueType}"></td>
                 <td th:text="${issue.startDate}"></td>
                 <td th:text="${issue.endDate}"></td>

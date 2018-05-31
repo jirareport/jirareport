@@ -1,6 +1,5 @@
 package br.com.leonardoferreira.jirareport.domain.embedded;
 
-import java.beans.Transient;
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
@@ -17,8 +16,4 @@ public class ColumnTimeAvg implements Serializable {
 
     private Double avgTime;
 
-    @Transient
-    public String getLeadTime() {
-        return String.format("%.2f", avgTime);
-    }
 }

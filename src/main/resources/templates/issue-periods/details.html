@@ -14,7 +14,7 @@
 
     <div class="row">
         <th:block
-                th:include="components/card :: card(6, 'primary', 'fa-calendar', ${issuePeriod.leadTime}, 'Leadtime medio')"/>
+                th:include="components/card :: card(6, 'primary', 'fa-calendar', ${#applicationHelper.fmtLeadTime(issuePeriod.avgLeadTime)}, 'Leadtime medio')"/>
         <th:block
                 th:include="components/card :: card(6, 'green', 'fa-tasks', ${#lists.size(issues)}, 'Histórias')"/>
     </div>

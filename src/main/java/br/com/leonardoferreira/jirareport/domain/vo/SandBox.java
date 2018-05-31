@@ -27,8 +27,4 @@ public class SandBox {
         this.issues = new ArrayList<>();
     }
 
-    public String getLeadTime() {
-        return String.format("%.2f", avgLeadTime);
-    }
-
 }

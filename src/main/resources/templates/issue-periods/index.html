@@ -71,16 +71,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="issue : ${issuePeriods}">
-                                <td th:text="${issue.id.dates}"></td>
-                                <td th:text="${issue.leadTime}"></td>
-                                <td th:text="${issue.issuesCount}"></td>
+                            <tr th:each="issuePeriod : ${issuePeriods}">
+                                <td th:text="${issuePeriod.id.dates}"></td>
+                                <td th:text="${#applicationHelper.fmtLeadTime(issuePeriod.avgLeadTime)}"></td>
+                                <td th:text="${issuePeriod.issuesCount}"></td>
                                 <td>
-                                    <a th:href="@{/boards/{id}/issue-periods(id=${issue.id.boardId},startDate=${issue.id.startDate},endDate=${issue.id.endDate})}"
+                                    <a th:href="@{/boards/{id}/issue-periods(id=${issuePeriod.id.boardId},startDate=${issuePeriod.id.startDate},endDate=${issuePeriod.id.endDate})}"
                                        data-method="DELETE" data-confirm="Tem certeza?" class="btn btn-xs btn-danger">Remover</a>
-                                    <a th:href="@{/boards/{id}/issue-periods(id=${issue.id.boardId},startDate=${issue.id.startDate},endDate=${issue.id.endDate})}"
+                                    <a th:href="@{/boards/{id}/issue-periods(id=${issuePeriod.id.boardId},startDate=${issuePeriod.id.startDate},endDate=${issuePeriod.id.endDate})}"
                                        data-method="PUT" class="btn btn-xs btn-default">Atualizar</a>
-                                    <a th:href="@{/boards/{id}/issue-periods/details(id=${issue.id.boardId},startDate=${issue.id.startDate},endDate=${issue.id.endDate})}" class="btn btn-xs btn-default">Detalhes</a>
+                                    <a th:href="@{/boards/{id}/issue-periods/details(id=${issuePeriod.id.boardId},startDate=${issuePeriod.id.startDate},endDate=${issuePeriod.id.endDate})}" class="btn btn-xs btn-default">Detalhes</a>
                                 </td>
                             </tr>
                             </tbody>

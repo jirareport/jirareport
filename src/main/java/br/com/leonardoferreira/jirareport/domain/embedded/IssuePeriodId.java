@@ -46,10 +46,6 @@ public class IssuePeriodId implements Serializable {
         return endDate;
     }
 
-    public String getId() {
-        return String.format("%d [%s - %s]", boardId, startDate, endDate);
-    }
-
     public String getDates() {
         return String.format("[%s - %s]", startDate, endDate);
     }

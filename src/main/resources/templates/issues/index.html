@@ -111,7 +111,7 @@
     <th:block th:if="${sandBox.issues != null} and ${!#lists.isEmpty(sandBox.issues)}">
         <div class="row">
             <th:block
-                    th:include="components/card :: card(6, 'primary', 'fa-calendar', ${sandBox.leadTime}, 'Lead time médio')"/>
+                    th:include="components/card :: card(6, 'primary', 'fa-calendar', ${#applicationHelper.fmtLeadTime(sandBox.avgLeadTime)}, 'Lead time médio')"/>
             <th:block
                     th:include="components/card :: card(6, 'green', 'fa-tasks', ${#lists.size(sandBox.issues)}, 'Histórias')"/>
         </div>

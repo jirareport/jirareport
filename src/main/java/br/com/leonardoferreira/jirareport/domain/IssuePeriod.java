@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OrderBy;
-import javax.persistence.Transient;
 
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
@@ -22,7 +21,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 
 /**
@@ -105,8 +103,4 @@ public class IssuePeriod extends BaseEntity {
 
     private Integer issuesCount;
 
-    @Transient
-    public String getLeadTime() {
-        return String.format("%.2f", avgLeadTime);
-    }
 }
