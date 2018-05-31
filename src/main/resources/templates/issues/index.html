@@ -14,7 +14,7 @@
         <div class="panel-heading">
             <h3>Filtro</h3>
         </div>
-        <form th:action="@{/projects/{id}/issues(id=${project.id})}" th:object="${issueForm}">
+        <form th:action="@{/boards/{id}/issues(id=${board.id})}" th:object="${issueForm}">
             <div class="panel-body row">
                 <div class="form-group col-md-6">
                     <label>Data Inicio</label>
@@ -48,7 +48,7 @@
                     </div>
                 </div>
 
-                <div th:unless="${#strings.isEmpty(project.systemCF)}" class="form-group col-md-4">
+                <div th:unless="${#strings.isEmpty(board.systemCF)}" class="form-group col-md-4">
                     <label>Sistema</label>
                     <div>
                         <select class="selectpicker" multiple="" th:field="*{systems}" data-width="100%">
@@ -58,7 +58,7 @@
                     </div>
                 </div>
 
-                <div th:unless="${#strings.isEmpty(project.estimateCF)}" class="form-group col-md-4">
+                <div th:unless="${#strings.isEmpty(board.estimateCF)}" class="form-group col-md-4">
                     <label>Tamanho de história</label>
                     <div>
                         <select class="selectpicker" multiple="" th:field="*{taskSize}" data-width="100%">
@@ -68,7 +68,7 @@
                     </div>
                 </div>
 
-                <div th:unless="${#strings.isEmpty(project.epicCF)}" class="form-group col-md-4">
+                <div th:unless="${#strings.isEmpty(board.epicCF)}" class="form-group col-md-4">
                     <label>Épico</label>
                     <div>
                         <select class="selectpicker" multiple="" th:field="*{epics}" data-width="100%">
@@ -88,12 +88,12 @@
                     </div>
                 </div>
 
-                <div th:unless="${#strings.isEmpty(project.projectCF)}" class="form-group col-md-4">
+                <div th:unless="${#strings.isEmpty(board.projectCF)}" class="form-group col-md-4">
                     <label>Projetos</label>
                     <div>
-                        <select class="selectpicker" multiple="" th:field="*{projects}" data-width="100%">
-                            <option th:each="project : ${sandBoxFilter.projects}" th:value="${project}"
-                                    th:text="${project}"></option>
+                        <select class="selectpicker" multiple="" th:field="*{boards}" data-width="100%">
+                            <option th:each="board : ${sandBoxFilter.boards}" th:value="${board}"
+                                    th:text="${board}"></option>
                         </select>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
             </div>
             <div class="panel-footer">
                 <div class="text-right">
-                    <a th:href="@{/projects}" class="btn btn-default">Voltar</a>
+                    <a th:href="@{/boards}" class="btn btn-default">Voltar</a>
                     <button type="submit" class="btn btn-success">Filtrar</button>
                 </div>
             </div>
@@ -119,17 +119,17 @@
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#issues" data-toggle="tab">Issues</a></li>
             <li role="presentation"><a href="#leadTimeHistogram" data-toggle="tab">Histograma de lead time</a></li>
-            <li th:unless="${#strings.isEmpty(project.estimateCF)}" role="presentation"><a href="#estimatedChart" data-toggle="tab">Contagem de estimativa</a></li>
-            <li th:unless="${#strings.isEmpty(project.systemCF)}" role="presentation"><a href="#leadTimeBySystem" data-toggle="tab">Lead time por sistema</a></li>
-            <li th:unless="${#strings.isEmpty(project.systemCF)}" role="presentation"><a href="#tasksBySystem" data-toggle="tab">Histórias por sistema</a></li>
-            <li th:unless="${#strings.isEmpty(project.estimateCF)}" role="presentation"><a href="#leadTimeBySize" data-toggle="tab">Lead time médio por tamanho de
+            <li th:unless="${#strings.isEmpty(board.estimateCF)}" role="presentation"><a href="#estimatedChart" data-toggle="tab">Contagem de estimativa</a></li>
+            <li th:unless="${#strings.isEmpty(board.systemCF)}" role="presentation"><a href="#leadTimeBySystem" data-toggle="tab">Lead time por sistema</a></li>
+            <li th:unless="${#strings.isEmpty(board.systemCF)}" role="presentation"><a href="#tasksBySystem" data-toggle="tab">Histórias por sistema</a></li>
+            <li th:unless="${#strings.isEmpty(board.estimateCF)}" role="presentation"><a href="#leadTimeBySize" data-toggle="tab">Lead time médio por tamanho de
                 história</a></li>
             <li role="presentation"><a href="#columnTimeAvg" data-toggle="tab">Média de tempo por coluna</a></li>
             <li role="presentation"><a href="#leadTimeByType" data-toggle="tab">LeadTime por tipo</a></li>
             <li role="presentation"><a href="#tasksByType" data-toggle="tab">Histórias por tipo</a></li>
-            <li th:unless="${#strings.isEmpty(project.ProjectCF)}" role="presentation"><a href="#leadTimeByProject" data-toggle="tab">Lead time por projeto</a></li>
-            <li th:unless="${#strings.isEmpty(project.ProjectCF)}" role="presentation"><a href="#tasksByProject" data-toggle="tab">Histórias por projeto</a></li>
-            <li th:unless="${#lists.isEmpty(project.leadTimeConfigs)}" role="presentation"><a href="#leadTimes" data-toggle="tab">Lead times</a></li>
+            <li th:unless="${#strings.isEmpty(board.ProjectCF)}" role="presentation"><a href="#leadTimeByProject" data-toggle="tab">Lead time por projeto</a></li>
+            <li th:unless="${#strings.isEmpty(board.ProjectCF)}" role="presentation"><a href="#tasksByProject" data-toggle="tab">Histórias por projeto</a></li>
+            <li th:unless="${#lists.isEmpty(board.leadTimeConfigs)}" role="presentation"><a href="#leadTimes" data-toggle="tab">Lead times</a></li>
         </ul>
 
         <div class="panel panel-default bt-0">
@@ -141,16 +141,16 @@
                     <div role="tabpanel" class="tab-pane" id="leadTimeHistogram">
                         <th:block th:include="charts/histogram :: chart(${sandBox.chartAggregator.histogram})"/>
                     </div>
-                    <div th:unless="${#strings.isEmpty(project.estimateCF)}" role="tabpanel" class="tab-pane" id="estimatedChart">
+                    <div th:unless="${#strings.isEmpty(board.estimateCF)}" role="tabpanel" class="tab-pane" id="estimatedChart">
                         <th:block th:include="charts/estimativeCount :: chart(${sandBox.chartAggregator.estimated})"/>
                     </div>
-                    <div th:unless="${#strings.isEmpty(project.systemCF)}" role="tabpanel" class="tab-pane" id="leadTimeBySystem">
+                    <div th:unless="${#strings.isEmpty(board.systemCF)}" role="tabpanel" class="tab-pane" id="leadTimeBySystem">
                         <th:block th:include="charts/leadTimeBySystem :: chart(${sandBox.chartAggregator.leadTimeBySystem})"/>
                     </div>
-                    <div th:unless="${#strings.isEmpty(project.systemCF)}" role="tabpanel" class="tab-pane" id="tasksBySystem">
+                    <div th:unless="${#strings.isEmpty(board.systemCF)}" role="tabpanel" class="tab-pane" id="tasksBySystem">
                         <th:block th:include="charts/tasksBySystem :: chart(${sandBox.chartAggregator.tasksBySystem})"/>
                     </div>
-                    <div th:unless="${#strings.isEmpty(project.estimateCF)}" role="tabpanel" class="tab-pane" id="leadTimeBySize">
+                    <div th:unless="${#strings.isEmpty(board.estimateCF)}" role="tabpanel" class="tab-pane" id="leadTimeBySize">
                         <th:block th:include="charts/leadTimeBySize :: chart(${sandBox.chartAggregator.leadTimeBySize})"/>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="columnTimeAvg">
@@ -162,13 +162,13 @@
                     <div role="tabpanel" class="tab-pane" id="tasksByType">
                         <th:block th:include="charts/tasksByType :: chart(${sandBox.chartAggregator.tasksByType})"/>
                     </div>
-                    <div th:unless="${#strings.isEmpty(project.ProjectCF)}" role="tabpanel" class="tab-pane" id="leadTimeByProject">
+                    <div th:unless="${#strings.isEmpty(board.ProjectCF)}" role="tabpanel" class="tab-pane" id="leadTimeByProject">
                         <th:block th:include="charts/leadTimeByProject :: chart(${sandBox.chartAggregator.leadTimeByProject})"/>
                     </div>
-                    <div th:unless="${#strings.isEmpty(project.ProjectCF)}" role="tabpanel" class="tab-pane" id="tasksByProject">
+                    <div th:unless="${#strings.isEmpty(board.ProjectCF)}" role="tabpanel" class="tab-pane" id="tasksByProject">
                         <th:block th:include="charts/tasksByProject :: chart(${sandBox.chartAggregator.tasksByProject})"/>
                     </div>
-                    <div th:unless="${#lists.isEmpty(project.leadTimeConfigs)}" role="tabpanel" class="tab-pane" id="leadTimes">
+                    <div th:unless="${#lists.isEmpty(board.leadTimeConfigs)}" role="tabpanel" class="tab-pane" id="leadTimes">
                         <th:block th:include="charts/issueLeadTimes :: chart(${sandBox.chartAggregator.leadTimeCompareChart})"/>
                     </div>
                 </div>

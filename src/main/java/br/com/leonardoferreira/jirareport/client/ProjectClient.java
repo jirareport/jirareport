@@ -1,7 +1,8 @@
 package br.com.leonardoferreira.jirareport.client;
 
-import br.com.leonardoferreira.jirareport.domain.Project;
-import br.com.leonardoferreira.jirareport.domain.vo.ProjectStatusList;
+import br.com.leonardoferreira.jirareport.domain.Board;
+import br.com.leonardoferreira.jirareport.domain.vo.BoardStatusList;
+import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,10 +17,10 @@ import java.util.List;
 public interface ProjectClient {
 
     @GetMapping("/rest/api/2/project")
-    List<Project> findAll(@RequestHeader("Authorization") String token);
+    List<JiraProject> findAll(@RequestHeader("Authorization") String token);
 
     @GetMapping("/rest/api/2/project/{projectId}/statuses")
-    List<ProjectStatusList> findStatusFromProject(@RequestHeader("Authorization") String token,
-                                                  @PathVariable("projectId") Long projectId);
+    List<BoardStatusList> findStatusFromProject(@RequestHeader("Authorization") String token,
+                                                @PathVariable("projectId") Long projectId);
 
 }

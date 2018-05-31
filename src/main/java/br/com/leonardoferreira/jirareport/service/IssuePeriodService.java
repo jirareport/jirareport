@@ -1,6 +1,6 @@
 package br.com.leonardoferreira.jirareport.service;
 
-import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.domain.Board;
 import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
@@ -16,9 +16,9 @@ public interface IssuePeriodService {
 
     void create(IssuePeriodId issuePeriodId) throws CreateIssuePeriodException;
 
-    List<IssuePeriod> findByProjectId(Long projectId);
+    List<IssuePeriod> findByBoardId(Long boardId);
 
-    IssuePeriodChart buildCharts(List<IssuePeriod> issues, Project project);
+    IssuePeriodChart buildCharts(List<IssuePeriod> issues, Board board);
 
     IssuePeriod findById(IssuePeriodId issuePeriodId);
 
@@ -26,6 +26,6 @@ public interface IssuePeriodService {
 
     void update(IssuePeriodId issuePeriodId) throws CreateIssuePeriodException;
 
-    IssuePeriodList findIssuePeriodsAndCharts(Long projectId);
+    IssuePeriodList findIssuePeriodsAndCharts(Long boardId);
 
 }

@@ -25,8 +25,8 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Data
 @Entity
-@EqualsAndHashCode(of = {"date", "project"}, callSuper = false)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"date", "project_id"}))
+@EqualsAndHashCode(of = {"date", "board"}, callSuper = false)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"date", "board_id"}))
 public class Holiday extends BaseEntity {
 
     private static final long serialVersionUID = 18640912961216513L;
@@ -43,7 +43,7 @@ public class Holiday extends BaseEntity {
     private String description;
 
     @ManyToOne
-    private Project project;
+    private Board board;
 
     @Transient
     public String getEnDate() {

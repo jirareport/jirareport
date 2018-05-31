@@ -16,6 +16,6 @@ import org.springframework.stereotype.Repository;
 public interface IssuePeriodRepository extends CrudRepository<IssuePeriod, IssuePeriodId> {
 
     @EntityGraph(attributePaths = { "issues", "issues.leadTimes", "issues.leadTimes.leadTimeConfig" }, type = EntityGraph.EntityGraphType.LOAD)
-    List<IssuePeriod> findByIdProjectId(Long projectId);
+    List<IssuePeriod> findByIdBoardId(Long boardId);
 
 }

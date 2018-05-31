@@ -17,9 +17,9 @@ public interface IssueService {
 
     List<Issue> findAllInJira(IssuePeriodId issuePeriodId);
 
-    SandBox findByExample(Long projectId, IssueForm issueForm);
+    SandBox findByExample(Long boardId, IssueForm issueForm);
 
-    SandBoxFilter findSandBoxFilters(Long projectId, SandBox sandBox, IssueForm issueForm);
+    SandBoxFilter findSandBoxFilters(Long boardId, SandBox sandBox, IssueForm issueForm);
 
     Histogram calcHistogramData(List<Issue> issues);
 

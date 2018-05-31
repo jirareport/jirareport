@@ -4,7 +4,7 @@
       layout:decorator="layouts/application">
 
 <th:block th:fragment="form(method)">
-    <form th:action="@{/projects/{projectId}/lead-time-configs(projectId=${projectId})}" th:method="${method}"
+    <form th:action="@{/boards/{boardId}/lead-time-configs(boardId=${boardId})}" th:method="${method}"
           th:object="${leadTimeConfig}">
         <input type="hidden" th:field="*{id}" th:value="${leadTimeConfig.id}"/>
 
@@ -39,7 +39,7 @@
         </div>
 
         <div class="text-right">
-            <a th:href="@{/projects/{projectId}/lead-time-configs(projectId=${projectId})}" class="btn btn-default">Voltar</a>
+            <a th:href="@{/boards/{boardId}/lead-time-configs(boardId=${boardId})}" class="btn btn-default">Voltar</a>
             <button type="submit" class="btn btn-success">Salvar</button>
         </div>
     </form>

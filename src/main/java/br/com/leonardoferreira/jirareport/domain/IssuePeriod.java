@@ -40,14 +40,13 @@ public class IssuePeriod extends BaseEntity {
 
     @EmbeddedId
     private IssuePeriodId id;
-
     @OrderBy("key asc")
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinTable(
             name = "issue_period_issue",
             joinColumns = {
+                    @JoinColumn(name = "board_id"),
                     @JoinColumn(name = "end_date"),
-                    @JoinColumn(name = "project_id"),
                     @JoinColumn(name = "start_date")
             },
             inverseJoinColumns = {
@@ -55,6 +54,7 @@ public class IssuePeriod extends BaseEntity {
             }
     )
     private List<Issue> issues;
+
 
     private Double avgLeadTime;
 
@@ -103,7 +103,7 @@ public class IssuePeriod extends BaseEntity {
     private Chart<String, Double> leadTimeCompareChart;
 
     @Formula("( select count(1) from issue_period_issue ipi "
-            + " where ipi.project_id = project_id "
+            + " where ipi.board_id = board_id "
             + " and ipi.start_date = start_date"
             + " and ipi.end_date = end_date )")
     private Integer issuesCount;

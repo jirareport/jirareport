@@ -9,6 +9,6 @@ import br.com.leonardoferreira.jirareport.domain.Issue;
  */
 public interface LeadTimeService {
 
-    void createLeadTimes(List<Issue> issues, Long projectId);
+    void createLeadTimes(List<Issue> issues, Long boardId);
 
 }

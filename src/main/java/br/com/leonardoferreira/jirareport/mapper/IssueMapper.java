@@ -9,7 +9,7 @@ import java.util.stream.StreamSupport;
 import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
-import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
@@ -34,16 +34,16 @@ public class IssueMapper {
     private final JsonParser jsonParser = new JsonParser();
 
     @ExecutionTime
-    public List<Issue> parse(final String rawText, final Project project) {
+    public List<Issue> parse(final String rawText, final Board board) {
         JsonElement response = jsonParser.parse(rawText);
         JsonArray issues = response.getAsJsonObject()
                 .getAsJsonArray("issues");
 
-        final List<String> holidays = holidayService.findByProject(project.getId())
+        final List<String> holidays = holidayService.findByBoard(board.getId())
                 .stream().map(Holiday::getEnDate).collect(Collectors.toList());
 
-        Set<String> startColumns = project.getStartColumns();
-        Set<String> endColumns = project.getEndColumns();
+        Set<String> startColumns = board.getStartColumns();
+        Set<String> endColumns = board.getEndColumns();
 
         return StreamSupport.stream(issues.spliterator(), true)
                 .map(issueRaw -> {
@@ -54,7 +54,7 @@ public class IssueMapper {
 
                     String created = getDateAsString(fields.get("created"));
 
-                    String startDate = "BACKLOG".equals(project.getStartColumn()) ? created : null;
+                    String startDate = "BACKLOG".equals(board.getStartColumn()) ? created : null;
                     String endDate = null;
 
                     for (Changelog cl : changelog) {
@@ -71,8 +71,8 @@ public class IssueMapper {
                         return null;
                     }
 
-                    String epicField = project.getEpicCF();
-                    String estimateField = project.getEstimateCF();
+                    String epicField = board.getEpicCF();
+                    String estimateField = board.getEstimateCF();
 
                     String epic = StringUtils.isEmpty(epicField) ? null : getAsStringSafe(fields.get(epicField));
                     String estimated = null;
@@ -95,10 +95,10 @@ public class IssueMapper {
                     issueVO.setStartDate(DateUtil.displayFormat(startDate));
                     issueVO.setEndDate(DateUtil.displayFormat(endDate));
                     issueVO.setLeadTime(leadTime);
-                    issueVO.setSystem(getElement(fields, project.getSystemCF()));
+                    issueVO.setSystem(getElement(fields, board.getSystemCF()));
                     issueVO.setEpic(epic);
                     issueVO.setEstimated(estimated);
-                    issueVO.setProject(getElement(fields, project.getProjectCF()));
+                    issueVO.setProject(getElement(fields, board.getProjectCF()));
                     issueVO.setSummary(fields.get("summary").getAsString());
                     issueVO.setChangelog(changelog);
 

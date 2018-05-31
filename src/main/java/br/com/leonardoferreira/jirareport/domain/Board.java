@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
@@ -24,12 +26,15 @@ import org.hibernate.annotations.Type;
 @Entity
 @ToString(exclude = { "leadTimeConfigs" })
 @EqualsAndHashCode(of = "id", callSuper = false)
-public class Project extends BaseEntity {
+public class Board extends BaseEntity {
 
     private static final long serialVersionUID = -7981771761592933325L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private Long externalId;
 
     private String name;
 
@@ -53,7 +58,7 @@ public class Project extends BaseEntity {
 
     private String projectCF;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<LeadTimeConfig> leadTimeConfigs;
 
     public void setStartColumn(final String startColumn) {

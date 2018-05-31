@@ -6,7 +6,7 @@ import lombok.Data;
  * @author s2it_jsilveira
  */
 @Data
-public class ProjectStatus {
+public class BoardStatus {
 
     private String self;
 

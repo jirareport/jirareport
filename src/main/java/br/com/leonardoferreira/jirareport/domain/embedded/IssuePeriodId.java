@@ -26,10 +26,10 @@ public class IssuePeriodId implements Serializable {
     @NotEmpty(message = "Data final não pode ser vazia.")
     private String endDate;
 
-    private Long projectId;
+    private Long boardId;
 
-    public IssuePeriodId(final Long projectId) {
-        this.projectId = projectId;
+    public IssuePeriodId(final Long boardId) {
+        this.boardId = boardId;
     }
 
     public String getStartDate() {
@@ -47,7 +47,7 @@ public class IssuePeriodId implements Serializable {
     }
 
     public String getId() {
-        return String.format("%d [%s - %s]", projectId, startDate, endDate);
+        return String.format("%d [%s - %s]", boardId, startDate, endDate);
     }
 
     public String getDates() {

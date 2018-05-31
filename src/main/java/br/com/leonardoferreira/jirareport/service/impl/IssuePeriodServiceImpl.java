@@ -4,7 +4,7 @@ import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
-import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
@@ -18,7 +18,7 @@ import br.com.leonardoferreira.jirareport.repository.IssuePeriodRepository;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
-import br.com.leonardoferreira.jirareport.service.ProjectService;
+import br.com.leonardoferreira.jirareport.service.BoardService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     private ChartService chartService;
 
     @Autowired
-    private ProjectService projectService;
+    private BoardService boardService;
 
     @Autowired
     private IssuePeriodMapper issuePeriodMapper;
@@ -78,10 +78,10 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
     @Override
     @Transactional(readOnly = true)
-    public List<IssuePeriod> findByProjectId(final Long projectId) {
-        log.info("Method=findByProjectId, projectId={}", projectId);
+    public List<IssuePeriod> findByBoardId(final Long boardId) {
+        log.info("Method=findByBoardId, boardId={}", boardId);
 
-        List<IssuePeriod> issuePeriods = issuePeriodRepository.findByIdProjectId(projectId);
+        List<IssuePeriod> issuePeriods = issuePeriodRepository.findByIdBoardId(boardId);
         issuePeriods.sort(DateUtil::sort);
 
         return issuePeriods;
@@ -89,7 +89,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
     @Override
     @Transactional(readOnly = true)
-    public IssuePeriodChart buildCharts(final List<IssuePeriod> issuePeriods, final Project project) {
+    public IssuePeriodChart buildCharts(final List<IssuePeriod> issuePeriods, final Board board) {
         log.info("Method=buildCharts, issuePeriods={}", issuePeriods);
 
         IssuePeriodChart issuePeriodChart = new IssuePeriodChart();
@@ -101,7 +101,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         IssueCountBySize issueCountBySize = chartService.buildIssueCountBySize(issuePeriods);
         issuePeriodChart.setIssueCountBySize(issueCountBySize);
 
-        LeadTimeCompareChart leadTimeCompareChart = chartService.calcLeadTimeCompareByPeriod(issuePeriods, project);
+        LeadTimeCompareChart leadTimeCompareChart = chartService.calcLeadTimeCompareByPeriod(issuePeriods, board);
         issuePeriodChart.setLeadTimeCompareChart(leadTimeCompareChart);
 
         return issuePeriodChart;
@@ -135,10 +135,10 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
     @Override
     @Transactional(readOnly = true)
-    public IssuePeriodList findIssuePeriodsAndCharts(final Long projectId) {
-        Project project = projectService.findById(projectId);
-        List<IssuePeriod> issuePeriods = findByProjectId(projectId);
-        IssuePeriodChart issuePeriodChart = buildCharts(issuePeriods, project);
+    public IssuePeriodList findIssuePeriodsAndCharts(final Long boardId) {
+        Board board = boardService.findById(boardId);
+        List<IssuePeriod> issuePeriods = findByBoardId(boardId);
+        IssuePeriodChart issuePeriodChart = buildCharts(issuePeriods, board);
 
         return IssuePeriodList.builder()
                 .issuePeriods(issuePeriods)

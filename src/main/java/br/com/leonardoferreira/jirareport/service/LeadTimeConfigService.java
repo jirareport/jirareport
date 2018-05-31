@@ -9,13 +9,13 @@ import br.com.leonardoferreira.jirareport.domain.LeadTimeConfig;
  */
 public interface LeadTimeConfigService {
 
-    List<LeadTimeConfig> findAllByProjectId(Long projectId);
+    List<LeadTimeConfig> findAllByBoardId(Long boardId);
 
-    void create(Long projectId, LeadTimeConfig leadTimeConfig);
+    void create(Long boardId, LeadTimeConfig leadTimeConfig);
 
-    LeadTimeConfig findByProjectAndId(Long projectId, Long id);
+    LeadTimeConfig findByBoardAndId(Long boardId, Long id);
 
-    void update(Long projectId, LeadTimeConfig leadTimeConfig);
+    void update(Long boardId, LeadTimeConfig leadTimeConfig);
 
-    void deleteByProjectAndId(Long projectId, Long id);
+    void deleteByBoardAndId(Long boardId, Long id);
 }

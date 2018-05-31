@@ -6,7 +6,7 @@
 <th:block layout:fragment="content">
     <div class="container-fluid">
         <div class="page-header">
-            <h1>Projetos</h1>
+            <h1>Boards</h1>
         </div>
 
         <div class="panel panel-default">
@@ -21,7 +21,7 @@
             </div>
             <div class="panel-footer">
                 <div class="text-right">
-                    <a th:href="@{/projects/new}" class="btn btn-default">Novo projeto</a>
+                    <a th:href="@{/boards/new}" class="btn btn-default">Novo board</a>
                 </div>
             </div>
         </div>
@@ -36,16 +36,16 @@
                     </tr>
                 </thead>
                 <tbody class="search-list-name">
-                    <tr th:each="project : ${projects}" th:attr="data-values=${project.name}">
-                        <td th:text="${project.id}"></td>
-                        <td th:text="${project.name}"></td>
+                    <tr th:each="board : ${boards}" th:attr="data-values=${board.name}">
+                        <td th:text="${board.id}"></td>
+                        <td th:text="${board.name}"></td>
                         <td>
-                            <a th:href="@{/projects/{id}(id=${project.id})}" data-method="DELETE" data-confirm="Tem certeza?" class="btn btn-xs btn-danger">Remover</a>
-                            <a th:href="@{/projects/{id}/edit(id=${project.id})}" class="btn btn-xs btn-default">Configurações</a>
-                            <a th:href="@{/projects/{id}/holidays(id=${project.id})}" class="btn btn-xs btn-default">Feriados</a>
-                            <a th:href="@{/projects/{id}/lead-time-configs(id=${project.id})}" class="btn btn-xs btn-default">Configurações de lead time</a>
-                            <a th:href="@{/projects/{id}/issue-periods(id=${project.id})}" class="btn btn-xs btn-default">Periodos</a>
-                            <a th:href="@{/projects/{id}/issues(id=${project.id})}" class="btn btn-xs btn-default">Issues</a>
+                            <a th:href="@{/boards/{id}(id=${board.id})}" data-method="DELETE" data-confirm="Tem certeza?" class="btn btn-xs btn-danger">Remover</a>
+                            <a th:href="@{/boards/{id}/edit(id=${board.id})}" class="btn btn-xs btn-default">Configurações</a>
+                            <a th:href="@{/boards/{id}/holidays(id=${board.id})}" class="btn btn-xs btn-default">Feriados</a>
+                            <a th:href="@{/boards/{id}/lead-time-configs(id=${board.id})}" class="btn btn-xs btn-default">Configurações de lead time</a>
+                            <a th:href="@{/boards/{id}/issue-periods(id=${board.id})}" class="btn btn-xs btn-default">Periodos</a>
+                            <a th:href="@{/boards/{id}/issues(id=${board.id})}" class="btn btn-xs btn-default">Issues</a>
                         </td>
                     </tr>
                 </tbody>

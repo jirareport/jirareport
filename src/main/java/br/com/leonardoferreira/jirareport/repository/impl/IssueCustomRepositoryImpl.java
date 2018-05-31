@@ -28,8 +28,8 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
     @ExecutionTime
     @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
-    public List<Issue> findByExample(final Long projectId, final IssueForm issueForm) {
-        log.info("Method=findByExample, projectId={}, issueForm={}", projectId, issueForm);
+    public List<Issue> findByExample(final Long boardId, final IssueForm issueForm) {
+        log.info("Method=findByExample, boardId={}, issueForm={}", boardId, issueForm);
         
         Map<String, Object> params = new HashMap<>();
 
@@ -38,7 +38,7 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         sb.append(" LEFT JOIN FETCH issue.leadTimes leadTimes ");
         sb.append(" LEFT JOIN FETCH leadTimes.leadTimeConfig ");
         sb.append(" JOIN issue.issuePeriods issuePeriods ");
-        sb.append(" WHERE issuePeriods.id.projectId = :projectId ");
+        sb.append(" WHERE issuePeriods.id.boardId = :boardId ");
 
         sb.append(" AND TO_DATE(issue.endDate, 'DD/MM/YYYY') BETWEEN :startDate AND :endDate ");
 
@@ -72,7 +72,7 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
             params.put("projects", issueForm.getProjects());
         }
 
-        params.put("projectId", projectId);
+        params.put("boardId", boardId);
         params.put("startDate", issueForm.getStartDate());
         params.put("endDate", issueForm.getEndDate());
 

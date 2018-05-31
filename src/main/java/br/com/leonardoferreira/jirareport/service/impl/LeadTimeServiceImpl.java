@@ -39,11 +39,11 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
     @Override
     @Transactional
     @ExecutionTime
-    public void createLeadTimes(final List<Issue> issues, final Long projectId) {
-        log.info("Method=createLeadTimes, issues={}, projectId={}", issues, projectId);
+    public void createLeadTimes(final List<Issue> issues, final Long boardId) {
+        log.info("Method=createLeadTimes, issues={}, boardId={}", issues, boardId);
 
-        List<LeadTimeConfig> leadTimeConfigs = leadTimeConfigService.findAllByProjectId(projectId);
-        final List<String> holidays = holidayService.findByProject(projectId).stream()
+        List<LeadTimeConfig> leadTimeConfigs = leadTimeConfigService.findAllByBoardId(boardId);
+        final List<String> holidays = holidayService.findByBoard(boardId).stream()
                 .map(Holiday::getEnDate).collect(Collectors.toList());
 
         issues.forEach(issue -> {

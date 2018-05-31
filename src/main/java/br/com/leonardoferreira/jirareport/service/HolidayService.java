@@ -12,18 +12,18 @@ import org.springframework.data.domain.Pageable;
  */
 public interface HolidayService {
 
-    Page<Holiday> findByProject(Long projectId, Pageable pageable);
+    Page<Holiday> findByBoard(Long boardId, Pageable pageable);
 
-    List<Holiday> findByProject(Long id);
+    List<Holiday> findByBoard(Long id);
 
-    void create(Long projectId, Holiday holiday);
+    void create(Long boardId, Holiday holiday);
 
     void delete(Long id);
 
     Holiday findById(Long id);
 
-    void update(Long projectId, Holiday holiday);
+    void update(Long boardId, Holiday holiday);
 
-    boolean createImported(Long projectId);
+    boolean createImported(Long boardId);
 
 }

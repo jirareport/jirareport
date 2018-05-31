@@ -15,7 +15,7 @@ import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.LeadTime;
 import br.com.leonardoferreira.jirareport.domain.LeadTimeConfig;
-import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
@@ -233,7 +233,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     @Override
     @ExecutionTime
     @Transactional(readOnly = true)
-    public LeadTimeCompareChart calcLeadTimeCompareByPeriod(final List<IssuePeriod> issuePeriods, final Project project) {
+    public LeadTimeCompareChart calcLeadTimeCompareByPeriod(final List<IssuePeriod> issuePeriods, final Board board) {
         log.info("Method=calcLeadTimeCompareByPeriod, issuePeriods={}", issuePeriods);
         LeadTimeCompareChart leadTimeCompareChart = new LeadTimeCompareChart();
 
@@ -245,8 +245,8 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                     .collect(Collectors.groupingBy(i -> i.getLeadTimeConfig().getName(),
                             Collectors.averagingDouble(LeadTime::getLeadTime)));
 
-            if (collect.size() < project.getLeadTimeConfigs().size()) {
-                for (LeadTimeConfig leadTimeConfig : project.getLeadTimeConfigs()) {
+            if (collect.size() < board.getLeadTimeConfigs().size()) {
+                for (LeadTimeConfig leadTimeConfig : board.getLeadTimeConfigs()) {
                     if (!collect.containsKey(leadTimeConfig.getName())) {
                         collect.put(leadTimeConfig.getName(), 0D);
                     }

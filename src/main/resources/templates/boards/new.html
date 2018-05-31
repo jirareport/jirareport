@@ -6,7 +6,7 @@
 <th:block layout:fragment="content">
     <div class="container-fluid">
         <div class="page-header">
-            <h1>Projetos</h1>
+            <h1>Boards</h1>
         </div>
 
         <div class="panel panel-default">
@@ -21,7 +21,7 @@
             </div>
             <div class="panel-footer">
                 <div class="text-right">
-                    <a th:href="@{/projects}" class="btn btn-default">Voltar</a>
+                    <a th:href="@{/boards}" class="btn btn-default">Voltar</a>
                 </div>
             </div>
         </div>
@@ -40,8 +40,8 @@
                     <td th:text="${project.id}"></td>
                     <td th:text="${project.name}"></td>
                     <td>
-                        <form th:action="@{/projects/}" th:method="POST" th:object="${project}" style="display: inherit">
-                            <input type="hidden" th:value="${project.id}" name="id" />
+                        <form th:action="@{/boards/}" th:method="POST" th:object="${board}" style="display: inherit">
+                            <input type="hidden" th:value="${project.id}" name="externalId" />
                             <input type="hidden" th:value="${project.name}" name="name" />
                             <button type="submit" class="btn btn-link">Salvar</button>
                         </form>
