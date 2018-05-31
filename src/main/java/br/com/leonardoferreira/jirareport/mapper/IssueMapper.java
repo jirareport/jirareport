@@ -102,6 +102,7 @@ public class IssueMapper {
                     issueVO.setProject(getElement(fields, board.getProjectCF()));
                     issueVO.setSummary(fields.get("summary").getAsString());
                     issueVO.setChangelog(changelog);
+                    issueVO.setBoard(board);
 
                     return issueVO;
                 })

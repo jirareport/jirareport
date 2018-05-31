@@ -46,16 +46,19 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
         final List<String> holidays = holidayService.findByBoard(boardId).stream()
                 .map(Holiday::getEnDate).collect(Collectors.toList());
 
-        issues.forEach(issue -> {
-            leadTimeRepository.deleteByIssueKey(issue.getKey());
-            issue.setLeadTimes(leadTimeConfigs.stream()
-                    .map(leadTimeConfig -> calcLeadTime(leadTimeConfig, issue, holidays))
-                    .collect(Collectors.toSet()));
-        });
+        issues.forEach(issue -> issue.setLeadTimes(leadTimeConfigs.stream()
+                .map(leadTimeConfig -> calcLeadTime(leadTimeConfig, issue, holidays))
+                .collect(Collectors.toSet())));
     }
 
+    @Override
     @Transactional
     @ExecutionTime
+    public void deleteByIssueKeys(final List<String> keys) {
+        log.info("Method=deleteByIssueKeys, keys={}", keys);
+        keys.forEach(leadTimeRepository::deleteByIssueKey);
+    }
+
     private LeadTime calcLeadTime(final LeadTimeConfig leadTimeConfig,
                                   final Issue issue,
                                   final List<String> holidays) {

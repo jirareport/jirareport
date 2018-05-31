@@ -61,4 +61,7 @@ public class Board extends BaseEntity {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Holiday> holidays;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Issue> issues;
+
 }

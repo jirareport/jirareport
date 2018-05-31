@@ -13,4 +13,5 @@ public interface LeadTimeRepository extends CrudRepository<LeadTime, Long> {
 
     @Modifying
     void deleteByIssueKey(String issueKey);
+
 }

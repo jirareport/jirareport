@@ -7,8 +7,11 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
@@ -29,6 +32,9 @@ public class Issue extends BaseEntity {
     private static final long serialVersionUID = -1084659211505084402L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String key;
 
     private String issueType;
@@ -62,5 +68,8 @@ public class Issue extends BaseEntity {
 
     @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<LeadTime> leadTimes;
+
+    @ManyToOne
+    private Board board;
 
 }

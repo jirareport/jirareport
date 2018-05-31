@@ -20,6 +20,7 @@ public interface BoardMapper {
             @Mapping(target = "externalId",      ignore = true),
             @Mapping(target = "leadTimeConfigs", ignore = true),
             @Mapping(target = "holidays",        ignore = true),
+            @Mapping(target = "issues",          ignore = true),
             @Mapping(target = "owner",           ignore = true),
             @Mapping(target = "lastEditor",      ignore = true),
             @Mapping(target = "createdAt",       ignore = true),
