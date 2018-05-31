@@ -6,13 +6,12 @@ import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
-import br.com.leonardoferreira.jirareport.domain.vo.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodList;
 import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
+import br.com.leonardoferreira.jirareport.service.BoardService;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
-import br.com.leonardoferreira.jirareport.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -62,12 +61,10 @@ public class IssuePeriodController extends AbstractController {
         issuePeriodId.setBoardId(boardId);
         IssuePeriod issuePeriod = issuePeriodService.findById(issuePeriodId);
         List<Issue> issues = issueService.findByIssuePeriodId(issuePeriod.getId());
-        Histogram histogramData = issueService.calcHistogramData(issues);
         Board board = boardService.findById(boardId);
 
         return new ModelAndView("issue-periods/details")
                 .addObject("issuePeriod", issuePeriod)
-                .addObject("histogram", histogramData)
                 .addObject("issues", issues)
                 .addObject("board", board);
     }

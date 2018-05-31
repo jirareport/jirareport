@@ -15,6 +15,7 @@ import javax.persistence.Transient;
 
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
+import br.com.leonardoferreira.jirareport.domain.embedded.Histogram;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,6 +41,7 @@ public class IssuePeriod extends BaseEntity {
 
     @EmbeddedId
     private IssuePeriodId id;
+
     @OrderBy("key asc")
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinTable(
@@ -55,12 +57,11 @@ public class IssuePeriod extends BaseEntity {
     )
     private List<Issue> issues;
 
-
     private Double avgLeadTime;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    private Chart<Long, Long> histogram;
+    private Histogram histogram;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")

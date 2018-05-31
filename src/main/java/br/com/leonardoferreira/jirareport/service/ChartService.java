@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.service;
 
+import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.domain.Board;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -8,16 +9,18 @@ import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
+import br.com.leonardoferreira.jirareport.domain.embedded.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by lferreira on 3/26/18
  */
 public interface ChartService {
 
-    CompletableFuture<Chart<Long, Long>> issueHistogram(List<Issue> issues);
+    CompletableFuture<Histogram> issueHistogram(List<Issue> issues);
 
     CompletableFuture<Chart<String, Long>> estimatedChart(List<Issue> issues);
 
@@ -44,4 +47,5 @@ public interface ChartService {
     LeadTimeCompareChart calcLeadTimeCompareByPeriod(List<IssuePeriod> issuePeriods, Board board);
 
     IssueCountBySize buildIssueCountBySize(List<IssuePeriod> issuePeriods);
+
 }

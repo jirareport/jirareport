@@ -1,8 +1,10 @@
 package br.com.leonardoferreira.jirareport.domain.vo;
 
+import java.util.List;
+
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
-import java.util.List;
+import br.com.leonardoferreira.jirareport.domain.embedded.Histogram;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChartAggregator {
 
-    private Chart<Long, Long> histogram;
+    private Histogram histogram;
 
     private Chart<String, Long> estimated;
 

@@ -1,28 +1,24 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.client.IssueClient;
-import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.Board;
+import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
-import br.com.leonardoferreira.jirareport.domain.vo.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBox;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBoxFilter;
 import br.com.leonardoferreira.jirareport.mapper.IssueMapper;
 import br.com.leonardoferreira.jirareport.repository.IssueRepository;
+import br.com.leonardoferreira.jirareport.service.BoardService;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.LeadTimeService;
-import br.com.leonardoferreira.jirareport.service.BoardService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,29 +111,6 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
                 .build();
     }
 
-    @Override
-    @ExecutionTime
-    @Transactional(readOnly = true)
-    public Histogram calcHistogramData(final List<Issue> issues) {
-        log.info("Method=calcHistogramData, issues={}", issues);
-
-        if (issues == null || issues.size() < 10) {
-            return null;
-        }
-
-        issues.sort(Comparator.comparing(Issue::getLeadTime));
-
-        int totalElements = issues.size();
-        int median = calculateCeilingPercentage(totalElements, 50);
-        int percentile75 = calculateCeilingPercentage(totalElements, 75);
-        int percentile90 = calculateCeilingPercentage(totalElements, 90);
-
-        return Histogram.builder()
-                .median(issues.get(median - 1).getLeadTime())
-                .percentile75(issues.get(percentile75 - 1).getLeadTime())
-                .percentile90(issues.get(percentile90 - 1).getLeadTime())
-                .build();
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -178,8 +151,4 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
                 .distinct().sorted().collect(Collectors.toList());
     }
 
-    private int calculateCeilingPercentage(final int totalElements, final int percentage) {
-        return new BigDecimal((double) totalElements * percentage / 100).setScale(0, RoundingMode.CEILING)
-                .intValue();
-    }
 }
