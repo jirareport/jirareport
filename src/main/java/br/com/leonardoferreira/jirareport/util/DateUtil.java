@@ -3,10 +3,8 @@ package br.com.leonardoferreira.jirareport.util;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -77,7 +75,7 @@ public final class DateUtil {
         return holidays.contains(day.format(DateTimeFormatter.ofPattern(DEFAULT_FORMATTER)));
     }
 
-    public static LocalDateTime parseFromJira(String date) {
+    public static LocalDateTime parseFromJira(final String date) {
         if (date == null) {
             return null;
         }

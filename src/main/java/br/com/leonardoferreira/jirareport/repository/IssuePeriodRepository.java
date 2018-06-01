@@ -18,5 +18,5 @@ public interface IssuePeriodRepository extends CrudRepository<IssuePeriod, Long>
     @EntityGraph(attributePaths = { "issues", "issues.leadTimes", "issues.leadTimes.leadTimeConfig" }, type = EntityGraph.EntityGraphType.LOAD)
     List<IssuePeriod> findByBoardId(Long boardId);
 
-    void deleteByStartDateAndEndDateAndBoardId(LocalDate startDate, LocalDate endDate, Long boardId);
+    IssuePeriod findByStartDateAndEndDateAndBoardId(LocalDate startDate, LocalDate endDate, Long boardId);
 }

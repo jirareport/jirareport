@@ -1,7 +1,6 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,7 +18,6 @@ import br.com.leonardoferreira.jirareport.service.LeadTimeService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,17 +47,12 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
         final List<String> holidays = holidayService.findByBoard(boardId).stream()
                 .map(Holiday::getEnDate).collect(Collectors.toList());
 
-        issues.forEach(issue -> issue.setLeadTimes(leadTimeConfigs.stream()
-                .map(leadTimeConfig -> calcLeadTime(leadTimeConfig, issue, holidays))
-                .collect(Collectors.toSet())));
-    }
-
-    @Override
-    @Transactional
-    @ExecutionTime
-    public void deleteByIssueKeys(final List<String> keys) {
-        log.info("Method=deleteByIssueKeys, keys={}", keys);
-        keys.forEach(leadTimeRepository::deleteByIssueKey);
+        issues.forEach(issue -> {
+            leadTimeRepository.deleteByIssueId(issue.getId());
+            issue.setLeadTimes(leadTimeConfigs.stream()
+                    .map(leadTimeConfig -> calcLeadTime(leadTimeConfig, issue, holidays))
+                    .collect(Collectors.toSet()));
+        });
     }
 
     private LeadTime calcLeadTime(final LeadTimeConfig leadTimeConfig,
@@ -84,7 +77,7 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
         }
 
         if (startDate == null && "BACKLOG".equals(leadTimeConfig.getStartColumn())) {
-             startDate = issue.getCreated();
+            startDate = issue.getCreated();
         }
 
         Long leadTime = 0L;

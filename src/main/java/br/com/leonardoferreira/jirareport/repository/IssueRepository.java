@@ -1,11 +1,8 @@
 package br.com.leonardoferreira.jirareport.repository;
 
-import br.com.leonardoferreira.jirareport.domain.Issue;
-
-import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.data.jpa.repository.EntityGraph;
+import br.com.leonardoferreira.jirareport.domain.Issue;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

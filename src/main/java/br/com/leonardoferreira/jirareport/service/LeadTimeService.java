@@ -11,5 +11,4 @@ public interface LeadTimeService {
 
     void createLeadTimes(List<Issue> issues, Long boardId);
 
-    void deleteByIssueKeys(List<String> keys);
 }

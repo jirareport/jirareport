@@ -2,7 +2,6 @@ package br.com.leonardoferreira.jirareport.domain.form;
 
 import java.time.LocalDate;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import br.com.leonardoferreira.jirareport.util.DateUtil;

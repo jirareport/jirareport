@@ -52,8 +52,11 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     public void create(final IssuePeriodForm issuePeriodForm, final Long boardId) {
         log.info("Method=create, issuePeriodForm={}", issuePeriodForm);
 
-        issuePeriodRepository.deleteByStartDateAndEndDateAndBoardId(issuePeriodForm.getStartDate(),
+        IssuePeriod oldIssuePeriod = issuePeriodRepository.findByStartDateAndEndDateAndBoardId(issuePeriodForm.getStartDate(),
                 issuePeriodForm.getEndDate(), boardId);
+        if (oldIssuePeriod != null) {
+            issuePeriodRepository.delete(oldIssuePeriod);
+        }
 
         List<Issue> issues = issueService.findAllInJira(issuePeriodForm, boardId);
 

@@ -65,8 +65,9 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         List<Issue> issues = issueMapper.parse(issuesStr, board);
         List<String> keys = issues.stream().map(Issue::getKey).collect(Collectors.toList());
 
-        leadTimeService.deleteByIssueKeys(keys);
-        issueRepository.deleteByKeysAndBoardId(keys, boardId);
+        if (!CollectionUtils.isEmpty(keys)) {
+            issueRepository.deleteByKeysAndBoardId(keys, boardId);
+        }
 
         issueRepository.saveAll(issues);
         leadTimeService.createLeadTimes(issues, board.getId());
