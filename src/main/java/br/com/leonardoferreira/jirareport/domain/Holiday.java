@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -25,6 +26,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Data
 @Entity
+@ToString(exclude = "board")
 @EqualsAndHashCode(of = {"date", "board"}, callSuper = false)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"date", "board_id"}))
 public class Holiday extends BaseEntity {

@@ -61,6 +61,8 @@ dependencies {
 
     compileOnly("org.projectlombok:lombok")
 
+    compile("org.flywaydb:flyway-core:5.0.7")
+
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
@@ -90,4 +92,19 @@ task buildGulp(type: Exec) {
 
 bootRun {
     dependsOn buildGulp
+}
+
+/**
+ * example:
+ * ./gradlew createMigration -Pmigration=setup_database
+ */
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter;
+task createMigration() {
+    doLast {
+        def timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"))
+        System.out.println("$projectDir")
+        def file = new File("$projectDir/src/main/resources/db/migration/V${timestamp}__${migration}.sql")
+        file.createNewFile();
+    }
 }

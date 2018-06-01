@@ -21,7 +21,7 @@ import org.hibernate.annotations.Type;
  */
 @Data
 @Entity
-@ToString(exclude = { "leadTimeConfigs" })
+@ToString(exclude = { "leadTimeConfigs", "holidays", "issues" })
 @EqualsAndHashCode(of = "id", callSuper = false)
 public class Board extends BaseEntity {
 
