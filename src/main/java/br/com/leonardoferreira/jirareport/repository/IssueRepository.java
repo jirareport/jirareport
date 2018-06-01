@@ -1,8 +1,11 @@
 package br.com.leonardoferreira.jirareport.repository;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
+
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -40,10 +43,8 @@ public interface IssueRepository extends CrudRepository<Issue, Long>, IssueCusto
             + " JOIN i.issuePeriods ip "
             + " LEFT JOIN FETCH i.leadTimes leadTimes "
             + " LEFT JOIN FETCH leadTimes.leadTimeConfig "
-            + " WHERE ip.id.boardId = :boardId "
-            + " AND ip.id.startDate = :startDate "
-            + " AND ip.id.endDate = :endDate ")
-    List<Issue> findByIssuePeriodId(Long boardId, String startDate, String endDate);
+            + " WHERE ip.id = :issuePeriodId")
+    List<Issue> findByIssuePeriodId(Long issuePeriodId);
 
     @Modifying
     @Query("DELETE FROM Issue i WHERE i.key IN (:keys) and i.board.id = :boardId")

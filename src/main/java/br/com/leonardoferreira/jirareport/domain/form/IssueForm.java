@@ -1,20 +1,17 @@
 package br.com.leonardoferreira.jirareport.domain.form;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 public class IssueForm {
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date startDate;
+    private LocalDate startDate;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date endDate;
+    private LocalDate endDate;
 
     private List<String> keys = new ArrayList<>();
 

@@ -1,6 +1,7 @@
 package br.com.leonardoferreira.jirareport.domain.embedded;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import lombok.Data;
 
@@ -12,7 +13,7 @@ import lombok.Data;
 public class Changelog implements Serializable {
     private static final long serialVersionUID = 6432821107545516780L;
 
-    private String created;
+    private LocalDateTime created;
 
     private String from;
 

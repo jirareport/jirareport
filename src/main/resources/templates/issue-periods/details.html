@@ -7,7 +7,7 @@
     <div class="container-fluid">
         <div class="page-header">
             <h1>Issues
-                <small th:text="${issuePeriod.id.dates}"></small>
+                <small th:text="${issuePeriod.dates}"></small>
             </h1>
         </div>
     </div>
@@ -79,7 +79,7 @@
     </div>
 
     <div class="text-right">
-        <a th:href="@{/boards/{id}/issue-periods(id=${issuePeriod.id.boardId})}" class="btn btn-default">Voltar</a>
+        <a th:href="@{/boards/{id}/issue-periods(id=${issuePeriod.boardId})}" class="btn btn-default">Voltar</a>
     </div>
 
 

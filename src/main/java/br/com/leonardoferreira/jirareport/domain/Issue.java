@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.domain;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -51,13 +52,13 @@ public class Issue extends BaseEntity {
 
     private String project;
 
-    private String startDate;
+    private LocalDateTime startDate;
 
-    private String endDate;
+    private LocalDateTime endDate;
 
     private Long leadTime;
 
-    private String created;
+    private LocalDateTime created;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")

@@ -8,8 +8,8 @@ import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.client.IssueClient;
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Issue;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
+import br.com.leonardoferreira.jirareport.domain.form.IssuePeriodForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBox;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBoxFilter;
@@ -55,18 +55,18 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     @Override
     @ExecutionTime
     @Transactional
-    public List<Issue> findAllInJira(final IssuePeriodId issuePeriodId) {
-        log.info("Method=findAllInJira, issuePeriodId={}", issuePeriodId);
+    public List<Issue> findAllInJira(final IssuePeriodForm issuePeriodForm, final Long boardId) {
+        log.info("Method=findAllInJira, issuePeriodForm={}", issuePeriodForm);
 
-        final Board board = boardService.findById(issuePeriodId.getBoardId());
+        final Board board = boardService.findById(boardId);
 
-        String issuesStr = issueClient.findAll(currentToken(), buildJQL(issuePeriodId, board));
+        String issuesStr = issueClient.findAll(currentToken(), buildJQL(issuePeriodForm, board));
 
         List<Issue> issues = issueMapper.parse(issuesStr, board);
         List<String> keys = issues.stream().map(Issue::getKey).collect(Collectors.toList());
 
         leadTimeService.deleteByIssueKeys(keys);
-        issueRepository.deleteByKeysAndBoardId(keys, issuePeriodId.getBoardId());
+        issueRepository.deleteByKeysAndBoardId(keys, boardId);
 
         issueRepository.saveAll(issues);
         leadTimeService.createLeadTimes(issues, board.getId());
@@ -118,14 +118,14 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Issue> findByIssuePeriodId(final IssuePeriodId issuePeriodId) {
+    public List<Issue> findByIssuePeriodId(final Long issuePeriodId) {
         log.info("Method=findByIssuePeriodId, issuePeriodId={}", issuePeriodId);
 
-        return issueRepository.findByIssuePeriodId(issuePeriodId.getBoardId(), issuePeriodId.getStartDate(), issuePeriodId.getEndDate());
+        return issueRepository.findByIssuePeriodId(issuePeriodId);
     }
 
-    private String buildJQL(final IssuePeriodId issuePeriodId, final Board board) {
-        log.info("Method=buildJQL, issuePeriodId={}, board={}", issuePeriodId, board);
+    private String buildJQL(final IssuePeriodForm issuePeriodForm, final Board board) {
+        log.info("Method=buildJQL, issuePeriodForm={}, board={}", issuePeriodForm, board);
 
         StringBuilder jql = new StringBuilder();
         jql.append("project = ").append(board.getExternalId()).append(" ");
@@ -137,12 +137,12 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
                     .collect(Collectors.toList()))).append(" ) ");
         }
         jql.append("AND (STATUS CHANGED TO '").append(board.getEndColumn()).append("' DURING('");
-        jql.append(DateUtil.toENDate(issuePeriodId.getStartDate())).append("', '");
-        jql.append(DateUtil.toENDate(issuePeriodId.getEndDate())).append(" 23:59')");
+        jql.append(DateUtil.toENDate(issuePeriodForm.getStartDate())).append("', '");
+        jql.append(DateUtil.toENDate(issuePeriodForm.getEndDate())).append(" 23:59')");
         jql.append("OR ( Resolved >= ");
-        jql.append(DateUtil.toENDate(issuePeriodId.getStartDate()));
+        jql.append(DateUtil.toENDate(issuePeriodForm.getStartDate()));
         jql.append(" AND Resolved <= '");
-        jql.append(DateUtil.toENDate(issuePeriodId.getEndDate())).append(" 23:59'");
+        jql.append(DateUtil.toENDate(issuePeriodForm.getEndDate())).append(" 23:59'");
         jql.append(" AND NOT STATUS CHANGED TO '").append(board.getEndColumn()).append("' ");
         jql.append("   )");
         jql.append(")");

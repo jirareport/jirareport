@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.mapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -53,19 +54,23 @@ public class IssueMapper {
                     JsonObject fields = issue.get("fields").getAsJsonObject();
                     List<Changelog> changelog = getChangelog(issue, holidays);
 
-                    String created = getDateAsString(fields.get("created"));
+                    LocalDateTime created = DateUtil.parseFromJira(fields.get("created").getAsString());
 
-                    String startDate = "BACKLOG".equals(board.getStartColumn()) ? created : null;
-                    String endDate = null;
+                    LocalDateTime startDate = null;
+                    LocalDateTime endDate = null;
 
                     for (Changelog cl : changelog) {
                         if (startDate == null && startColumns.contains(cl.getTo())) {
-                            startDate = DateUtil.toENDate(cl.getCreated());
+                            startDate = cl.getCreated();
                         }
 
                         if (endDate == null && endColumns.contains(cl.getTo())) {
-                            endDate = DateUtil.toENDate(cl.getCreated());
+                            endDate = cl.getCreated();
                         }
+                    }
+
+                    if (startDate == null && "BACKLOG".equals(board.getStartColumn())) {
+                         startDate = created;
                     }
 
                     if (startDate == null || endDate == null) {
@@ -92,9 +97,9 @@ public class IssueMapper {
                     }
 
                     issueVO.setIssueType(getAsStringSafe(fields.getAsJsonObject("issuetype").get("name")));
-                    issueVO.setCreated(DateUtil.displayFormat(created));
-                    issueVO.setStartDate(DateUtil.displayFormat(startDate));
-                    issueVO.setEndDate(DateUtil.displayFormat(endDate));
+                    issueVO.setCreated(created);
+                    issueVO.setStartDate(startDate);
+                    issueVO.setEndDate(endDate);
                     issueVO.setLeadTime(leadTime);
                     issueVO.setSystem(getElement(fields, board.getSystemCF()));
                     issueVO.setEpic(epic);
@@ -122,7 +127,7 @@ public class IssueMapper {
                     }
 
                     Changelog changelog = new Changelog();
-                    changelog.setCreated(getDateAsString(history.get("created")));
+                    changelog.setCreated(DateUtil.parseFromJira(history.get("created").getAsString()));
                     changelog.setFrom(getAsStringSafe(item.get("from")));
                     changelog.setTo(getAsStringSafe(item.get("to")));
 
@@ -134,13 +139,13 @@ public class IssueMapper {
         for (int i = 0; i < collect.size(); i++) {
             Changelog current = collect.get(i);
             if (i + 1 == collect.size()) {
-                current.setCreated(DateUtil.displayFormat(current.getCreated()));
+                current.setCreated(current.getCreated());
                 break;
             }
 
             Changelog next = collect.get(i + 1);
             current.setLeadTime(DateUtil.daysDiff(current.getCreated(), next.getCreated(), holidays));
-            current.setCreated(DateUtil.displayFormat(current.getCreated()));
+            current.setCreated(current.getCreated());
         }
 
         return collect;
@@ -200,13 +205,6 @@ public class IssueMapper {
             return null;
         }
         return jsonElement.getAsString();
-    }
-
-    private String getDateAsString(final JsonElement jsonElement) {
-        if (jsonElement == null || jsonElement.isJsonNull()) {
-            return null;
-        }
-        return jsonElement.getAsString().substring(0, 10);
     }
 
 }

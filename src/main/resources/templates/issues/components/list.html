@@ -29,8 +29,8 @@
                 </td>
                 <td th:text="${#applicationHelper.issueTitle(issue)}" th:attr="data-task=${issue.key}"></td>
                 <td th:text="${issue.issueType}"></td>
-                <td th:text="${issue.startDate}"></td>
-                <td th:text="${issue.endDate}"></td>
+                <td th:text="${#temporals.format(issue.startDate, 'dd/MM/yyyy')}"></td>
+                <td th:text="${#temporals.format(issue.endDate, 'dd/MM/yyyy')}"></td>
                 <td th:text="${issue.leadTime}"></td>
                 <td th:unless="${#strings.isEmpty(board.epicCF)}" th:text="${issue.epic}"></td>
                 <td th:unless="${#strings.isEmpty(board.estimateCF)}" th:text="${issue.estimated}"></td>

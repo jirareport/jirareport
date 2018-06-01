@@ -14,7 +14,7 @@
         <div class="panel-heading">
             <h3>Novo</h3>
         </div>
-        <form th:action="@{/boards/{id}/issue-periods(id=${issuePeriodId.boardId})}" th:method="POST" th:object="${issuePeriodId}">
+        <form th:action="@{/boards/{id}/issue-periods(id=${board.id})}" th:method="POST" th:object="${issuePeriodForm}">
             <div class="panel-body row">
                 <div class="form-group col-md-3">
                     <label>Data Inicio</label>
@@ -72,15 +72,15 @@
                             </thead>
                             <tbody>
                             <tr th:each="issuePeriod : ${issuePeriods}">
-                                <td th:text="${issuePeriod.id.dates}"></td>
+                                <td th:text="${issuePeriod.dates}"></td>
                                 <td th:text="${#applicationHelper.fmtLeadTime(issuePeriod.avgLeadTime)}"></td>
                                 <td th:text="${issuePeriod.issuesCount}"></td>
                                 <td>
-                                    <a th:href="@{/boards/{id}/issue-periods(id=${issuePeriod.id.boardId},startDate=${issuePeriod.id.startDate},endDate=${issuePeriod.id.endDate})}"
+                                    <a th:href="@{/boards/{boardId}/issue-periods/{issuePeriodId}(boardId=${board.id},issuPeriodId=${issuePeriod.id})}"
                                        data-method="DELETE" data-confirm="Tem certeza?" class="btn btn-xs btn-danger">Remover</a>
-                                    <a th:href="@{/boards/{id}/issue-periods(id=${issuePeriod.id.boardId},startDate=${issuePeriod.id.startDate},endDate=${issuePeriod.id.endDate})}"
+                                    <a th:href="@{/boards/{boardId}/issue-periods/{issuePeriodId}(boardId=${board.id},issuePeriodId=${issuePeriod.id})}"
                                        data-method="PUT" class="btn btn-xs btn-default">Atualizar</a>
-                                    <a th:href="@{/boards/{id}/issue-periods/details(id=${issuePeriod.id.boardId},startDate=${issuePeriod.id.startDate},endDate=${issuePeriod.id.endDate})}" class="btn btn-xs btn-default">Detalhes</a>
+                                    <a th:href="@{/boards/{boardId}/issue-periods/{issuePeriodId}/details(boardId=${board.id},issuePeriodId=${issuePeriod.id})}" class="btn btn-xs btn-default">Detalhes</a>
                                 </td>
                             </tr>
                             </tbody>

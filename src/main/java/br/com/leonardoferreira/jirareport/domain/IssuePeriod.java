@@ -1,12 +1,16 @@
 package br.com.leonardoferreira.jirareport.domain;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -15,7 +19,7 @@ import javax.persistence.OrderBy;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.embedded.Histogram;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
+import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,20 +41,25 @@ public class IssuePeriod extends BaseEntity {
 
     private static final long serialVersionUID = 7188140641247774389L;
 
-    @EmbeddedId
-    private IssuePeriodId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private LocalDate startDate;
+
+    private LocalDate endDate;
+
+    private Long boardId;
 
     @OrderBy("key asc")
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinTable(
             name = "issue_period_issue",
             joinColumns = {
-                    @JoinColumn(name = "board_id"),
-                    @JoinColumn(name = "end_date"),
-                    @JoinColumn(name = "start_date")
+                    @JoinColumn(name = "issue_period_id"),
             },
             inverseJoinColumns = {
-                    @JoinColumn(name = "issue_key")
+                    @JoinColumn(name = "issue_id")
             }
     )
     private List<Issue> issues;
@@ -103,4 +112,8 @@ public class IssuePeriod extends BaseEntity {
 
     private Integer issuesCount;
 
+    public String getDates() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return String.format("[%s - %s]", startDate.format(formatter), endDate.format(formatter));
+    }
 }

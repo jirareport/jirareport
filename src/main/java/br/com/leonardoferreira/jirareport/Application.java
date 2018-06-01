@@ -1,5 +1,9 @@
 package br.com.leonardoferreira.jirareport;
 
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -13,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.format.Formatter;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -43,6 +48,21 @@ public class Application {
         return () -> {
             Account principal = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             return Optional.ofNullable(principal.getUsername());
+        };
+    }
+
+    @Bean
+    public Formatter<LocalDate> localDateFormatter() {
+        return new Formatter<LocalDate>() {
+            @Override
+            public LocalDate parse(final String text, final Locale locale) throws ParseException {
+                return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            }
+
+            @Override
+            public String print(final LocalDate object, final Locale locale) {
+                return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(object);
+            }
         };
     }
 

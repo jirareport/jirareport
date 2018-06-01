@@ -5,10 +5,9 @@ import java.util.List;
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
+import br.com.leonardoferreira.jirareport.domain.form.IssuePeriodForm;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodList;
-import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.service.BoardService;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
@@ -51,14 +50,15 @@ public class IssuePeriodController extends AbstractController {
 
         return new ModelAndView("issue-periods/index")
                 .addObject("issuePeriods", issuePeriods)
-                .addObject("issuePeriodId", new IssuePeriodId(boardId))
                 .addObject("issuePeriodChart", issuePeriodChart)
+                .addObject("issuePeriodForm", new IssuePeriodForm())
                 .addObject("board", board);
     }
 
-    @GetMapping("/details")
-    public ModelAndView details(@PathVariable final Long boardId, final IssuePeriodId issuePeriodId) {
-        issuePeriodId.setBoardId(boardId);
+    @GetMapping("/{issuePeriodId}/details")
+    public ModelAndView details(@PathVariable final Long boardId,
+                                @PathVariable final Long issuePeriodId) {
+
         IssuePeriod issuePeriod = issuePeriodService.findById(issuePeriodId);
         List<Issue> issues = issueService.findByIssuePeriodId(issuePeriod.getId());
         Board board = boardService.findById(boardId);
@@ -71,58 +71,44 @@ public class IssuePeriodController extends AbstractController {
 
     @PostMapping
     public ModelAndView create(@PathVariable final Long boardId,
-            @Validated final IssuePeriodId issuePeriodId,
+            @Validated final IssuePeriodForm issuePeriodForm,
             final BindingResult bindingResult,
             final RedirectAttributes redirectAttributes) {
-        issuePeriodId.setBoardId(boardId);
 
         if (bindingResult.hasErrors()) {
-            List<IssuePeriod> issuePeriods = issuePeriodService.findByBoardId(boardId);
-            return new ModelAndView("issue-periods/index")
-                    .addObject("issuePeriods", issuePeriods)
-                    .addObject("issuePeriodId", issuePeriodId);
-        }
-
-        try {
-            issuePeriodService.create(issuePeriodId);
-
-            addFlashSuccess(redirectAttributes, "Registro inserido com sucesso.");
-            return new ModelAndView(String.format("redirect:/boards/%d/issue-periods", boardId));
-        } catch (CreateIssuePeriodException e) {
+            Board board = boardService.findById(boardId);
             IssuePeriodList issuePeriodList = issuePeriodService.findIssuePeriodsAndCharts(boardId);
             List<IssuePeriod> issuePeriods = issuePeriodList.getIssuePeriods();
             IssuePeriodChart issuePeriodChart = issuePeriodList.getIssuePeriodChart();
-            Board board = boardService.findById(boardId);
 
             return new ModelAndView("issue-periods/index")
                     .addObject("issuePeriods", issuePeriods)
-                    .addObject("issuePeriodId", new IssuePeriodId(boardId))
+                    .addObject("issuePeriodForm", issuePeriodForm)
                     .addObject("issuePeriodChart", issuePeriodChart)
-                    .addObject("board", board)
-                    .addObject("flashError", e.getMessage());
+                    .addObject("board", board);
         }
+
+        issuePeriodService.create(issuePeriodForm, boardId);
+
+        addFlashSuccess(redirectAttributes, "Registro inserido com sucesso.");
+        return new ModelAndView(String.format("redirect:/boards/%d/issue-periods", boardId));
     }
 
-    @PutMapping
+    @PutMapping("/{issuePeriodId}")
     public ModelAndView update(@PathVariable final Long boardId,
-            final IssuePeriodId issuePeriodId,
+            @PathVariable final Long issuePeriodId,
             final RedirectAttributes redirectAttributes) {
-        issuePeriodId.setBoardId(boardId);
-        try {
-            issuePeriodService.update(issuePeriodId);
-            addFlashSuccess(redirectAttributes, "Registro atualizado com sucesso.");
-        } catch (CreateIssuePeriodException e) {
-            addFlashError(redirectAttributes, "Falha ao atualizar registro.");
-        }
+
+        issuePeriodService.update(issuePeriodId);
+        addFlashSuccess(redirectAttributes, "Registro atualizado com sucesso.");
 
         return new ModelAndView(String.format("redirect:/boards/%d/issue-periods", boardId));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{issuePeriodId}")
     public ModelAndView remove(@PathVariable final Long boardId,
-            final IssuePeriodId issuePeriodId,
+            @PathVariable final Long issuePeriodId,
             final RedirectAttributes redirectAttributes) {
-        issuePeriodId.setBoardId(boardId);
         issuePeriodService.remove(issuePeriodId);
 
         addFlashSuccess(redirectAttributes, "Registro removido com sucesso.");

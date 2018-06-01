@@ -4,7 +4,7 @@ import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
+import br.com.leonardoferreira.jirareport.domain.form.IssuePeriodForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,7 +17,10 @@ import org.mapstruct.Mappings;
 public interface IssuePeriodMapper {
 
     @Mappings({
-            @Mapping(target = "id",                   source = "issuePeriodId"),
+            @Mapping(target = "id",                   ignore = true),
+            @Mapping(target = "startDate",            source = "issuePeriodForm.startDate"),
+            @Mapping(target = "endDate",              source = "issuePeriodForm.endDate"),
+            @Mapping(target = "boardId",              source = "boardId"),
             @Mapping(target = "issues",               source = "issues"),
             @Mapping(target = "avgLeadTime",          source = "avgLeadTime"),
             @Mapping(target = "histogram",            source = "chartAggregator.histogram"),
@@ -37,7 +40,7 @@ public interface IssuePeriodMapper {
             @Mapping(target = "createdAt",            ignore = true),
             @Mapping(target = "updatedAt",            ignore = true)
     })
-    IssuePeriod fromJiraData(IssuePeriodId issuePeriodId, List<Issue> issues,
+    IssuePeriod fromJiraData(IssuePeriodForm issuePeriodForm, List<Issue> issues,
                              Double avgLeadTime, ChartAggregator chartAggregator,
-                             Integer issueCount);
+                             Integer issueCount, Long boardId);
 }

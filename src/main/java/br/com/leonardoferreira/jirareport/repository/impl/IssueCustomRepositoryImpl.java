@@ -4,6 +4,8 @@ import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.repository.IssueCustomRepository;
+
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +41,7 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         sb.append(" LEFT JOIN FETCH leadTimes.leadTimeConfig ");
         sb.append(" WHERE issue.board.id = :boardId ");
 
-        sb.append(" AND TO_DATE(issue.endDate, 'DD/MM/YYYY') BETWEEN :startDate AND :endDate ");
+        sb.append(" AND issue.endDate BETWEEN :startDate AND :endDate ");
 
         if (!CollectionUtils.isEmpty(issueForm.getKeys())) {
             sb.append(" AND issue.key NOT IN (:keys) ");
@@ -72,8 +74,8 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         }
 
         params.put("boardId", boardId);
-        params.put("startDate", issueForm.getStartDate());
-        params.put("endDate", issueForm.getEndDate());
+        params.put("startDate", issueForm.getStartDate().atStartOfDay());
+        params.put("endDate", issueForm.getEndDate().atTime(LocalTime.of(23, 59, 59)));
 
         sb.append(" ORDER BY issue.key ");
 

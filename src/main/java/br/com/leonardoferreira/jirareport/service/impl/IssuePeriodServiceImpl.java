@@ -5,13 +5,12 @@ import java.util.List;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.Board;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
+import br.com.leonardoferreira.jirareport.domain.form.IssuePeriodForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodList;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
-import br.com.leonardoferreira.jirareport.exception.CreateIssuePeriodException;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.mapper.IssuePeriodMapper;
 import br.com.leonardoferreira.jirareport.repository.IssuePeriodRepository;
@@ -50,15 +49,13 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
     @Override
     @Transactional
-    public void create(final IssuePeriodId issuePeriodId) throws CreateIssuePeriodException {
-        log.info("Method=create, issuePeriodId={}", issuePeriodId);
+    public void create(final IssuePeriodForm issuePeriodForm, final Long boardId) {
+        log.info("Method=create, issuePeriodForm={}", issuePeriodForm);
 
-        if (issuePeriodRepository.existsById(issuePeriodId)) {
-            log.error("Method=create, Msg=issuePeriod ja existente");
-            throw new CreateIssuePeriodException("Registro já existente");
-        }
+        issuePeriodRepository.deleteByStartDateAndEndDateAndBoardId(issuePeriodForm.getStartDate(),
+                issuePeriodForm.getEndDate(), boardId);
 
-        List<Issue> issues = issueService.findAllInJira(issuePeriodId);
+        List<Issue> issues = issueService.findAllInJira(issuePeriodForm, boardId);
 
         Double avgLeadTime = issues.parallelStream()
                 .filter(i -> i.getLeadTime() != null)
@@ -67,14 +64,10 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
         final ChartAggregator chartAggregator = chartService.buildAllCharts(issues);
 
-        try {
-            IssuePeriod issuePeriod = issuePeriodMapper.fromJiraData(issuePeriodId, issues,
-                    avgLeadTime, chartAggregator, issues.size());
-            issuePeriodRepository.save(issuePeriod);
-        } catch (Exception e) {
-            log.error("Method=create, Msg=erro ao gerar registro", e);
-            throw new CreateIssuePeriodException(e.getMessage(), e);
-        }
+        IssuePeriod issuePeriod = issuePeriodMapper.fromJiraData(issuePeriodForm, issues,
+                avgLeadTime, chartAggregator, issues.size(), boardId);
+
+        issuePeriodRepository.save(issuePeriod);
     }
 
     @Override
@@ -82,7 +75,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     public List<IssuePeriod> findByBoardId(final Long boardId) {
         log.info("Method=findByBoardId, boardId={}", boardId);
 
-        List<IssuePeriod> issuePeriods = issuePeriodRepository.findByIdBoardId(boardId);
+        List<IssuePeriod> issuePeriods = issuePeriodRepository.findByBoardId(boardId);
         issuePeriods.sort(DateUtil::sort);
 
         return issuePeriods;
@@ -110,28 +103,30 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
     @Override
     @Transactional(readOnly = true)
-    public IssuePeriod findById(final IssuePeriodId issuePeriodId) {
-        log.info("Method=findById, issuePeriodId={}", issuePeriodId);
+    public IssuePeriod findById(final Long id) {
+        log.info("Method=findById, id={}", id);
 
-        return issuePeriodRepository.findById(issuePeriodId)
+        return issuePeriodRepository.findById(id)
                 .orElseThrow(ResourceNotFound::new);
     }
 
     @Override
     @Transactional
-    public void remove(final IssuePeriodId issuePeriodId) {
-        log.info("Method=remove, issuePeriodId={}", issuePeriodId);
+    public void remove(final Long id) {
+        log.info("Method=remove, id={}", id);
 
-        issuePeriodRepository.deleteById(issuePeriodId);
+        issuePeriodRepository.deleteById(id);
     }
 
     @Override
-    @Transactional(rollbackFor = CreateIssuePeriodException.class)
-    public void update(final IssuePeriodId issuePeriodId) throws CreateIssuePeriodException {
+    public void update(final Long issuePeriodId) {
         log.info("Method=update, issuePeriodId={}", issuePeriodId);
 
+        IssuePeriod issuePeriod = findById(issuePeriodId);
+        IssuePeriodForm issuePeriodForm = new IssuePeriodForm(issuePeriod.getStartDate(), issuePeriod.getEndDate());
+
         remove(issuePeriodId);
-        create(issuePeriodId);
+        create(issuePeriodForm, issuePeriod.getBoardId());
     }
 
     @Override

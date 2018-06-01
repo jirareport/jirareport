@@ -23,7 +23,7 @@
                         </thead>
                         <tbody>
                         <tr th:each="changelog : ${issue.changelog}">
-                            <td th:text="${changelog.created}"></td>
+                            <td th:text="${#temporals.format(changelog.created, 'dd/MM/yyyy')}"></td>
                             <td th:text="${changelog.to}"></td>
                             <td th:text="${changelog.leadTime}"></td>
                         </tr>

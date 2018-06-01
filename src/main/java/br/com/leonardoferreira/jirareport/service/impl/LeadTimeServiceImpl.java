@@ -1,5 +1,7 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,6 +19,7 @@ import br.com.leonardoferreira.jirareport.service.LeadTimeService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,20 +67,24 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
                                   final List<String> holidays) {
         log.info("Method=calcLeadTime, leadTimeConfig={}, issue={}, holidays={}", leadTimeConfig, issue, holidays);
 
-        String startDate = "BACKLOG".equals(leadTimeConfig.getStartColumn()) ? DateUtil.toENDateFromDisplayDate(issue.getCreated()) : null;
-        String endDate = null;
+        LocalDateTime startDate = null;
+        LocalDateTime endDate = null;
 
         Set<String> startColumns = leadTimeConfig.getStartColumns();
         Set<String> endColumns = leadTimeConfig.getEndColumns();
 
         for (Changelog cl : issue.getChangelog()) {
             if (startDate == null && startColumns.contains(cl.getTo())) {
-                startDate = DateUtil.toENDate(cl.getCreated());
+                startDate = cl.getCreated();
             }
 
             if (endDate == null && endColumns.contains(cl.getTo())) {
-                endDate = DateUtil.toENDate(cl.getCreated());
+                endDate = cl.getCreated();
             }
+        }
+
+        if (startDate == null && "BACKLOG".equals(leadTimeConfig.getStartColumn())) {
+             startDate = issue.getCreated();
         }
 
         Long leadTime = 0L;
@@ -89,8 +96,8 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
                 .leadTimeConfig(leadTimeConfig)
                 .issue(issue)
                 .leadTime(leadTime)
-                .startDate(DateUtil.displayFormat(startDate))
-                .endDate(DateUtil.displayFormat(endDate))
+                .startDate(startDate)
+                .endDate(endDate)
                 .build());
 
     }

@@ -274,7 +274,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 }
             }
 
-            leadTimeCompareChart.add(issuePeriod.getId().getDates(), collect);
+            leadTimeCompareChart.add(issuePeriod.getDates(), collect);
         }
 
         return leadTimeCompareChart;
@@ -292,7 +292,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
             Map<String, Long> estimated = issuePeriod.getEstimated().getData();
             sizes.addAll(issuePeriod.getEstimated().getData().keySet());
 
-            periodsSize.put(issuePeriod.getId().getDates(), estimated);
+            periodsSize.put(issuePeriod.getDates(), estimated);
         }
 
         periodsSize.forEach((k, v) -> {
