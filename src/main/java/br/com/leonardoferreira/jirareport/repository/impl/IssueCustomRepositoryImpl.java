@@ -4,6 +4,8 @@ import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.repository.IssueCustomRepository;
+
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +30,8 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
     @ExecutionTime
     @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
-    public List<Issue> findByExample(final Long projectId, final IssueForm issueForm) {
-        log.info("Method=findByExample, projectId={}, issueForm={}", projectId, issueForm);
+    public List<Issue> findByExample(final Long boardId, final IssueForm issueForm) {
+        log.info("Method=findByExample, boardId={}, issueForm={}", boardId, issueForm);
         
         Map<String, Object> params = new HashMap<>();
 
@@ -37,10 +39,9 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         sb.append(" SELECT DISTINCT issue FROM Issue issue ");
         sb.append(" LEFT JOIN FETCH issue.leadTimes leadTimes ");
         sb.append(" LEFT JOIN FETCH leadTimes.leadTimeConfig ");
-        sb.append(" JOIN issue.issuePeriods issuePeriods ");
-        sb.append(" WHERE issuePeriods.id.projectId = :projectId ");
+        sb.append(" WHERE issue.board.id = :boardId ");
 
-        sb.append(" AND TO_DATE(issue.endDate, 'DD/MM/YYYY') BETWEEN :startDate AND :endDate ");
+        sb.append(" AND issue.endDate BETWEEN :startDate AND :endDate ");
 
         if (!CollectionUtils.isEmpty(issueForm.getKeys())) {
             sb.append(" AND issue.key NOT IN (:keys) ");
@@ -72,9 +73,9 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
             params.put("projects", issueForm.getProjects());
         }
 
-        params.put("projectId", projectId);
-        params.put("startDate", issueForm.getStartDate());
-        params.put("endDate", issueForm.getEndDate());
+        params.put("boardId", boardId);
+        params.put("startDate", issueForm.getStartDate().atStartOfDay());
+        params.put("endDate", issueForm.getEndDate().atTime(LocalTime.of(23, 59, 59)));
 
         sb.append(" ORDER BY issue.key ");
 

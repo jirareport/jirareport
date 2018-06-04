@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Account {
 
+    private String username;
+
     private String token;
 
     private CurrentUser currentUser;

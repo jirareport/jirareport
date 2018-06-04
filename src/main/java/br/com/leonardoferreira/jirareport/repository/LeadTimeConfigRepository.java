@@ -12,10 +12,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LeadTimeConfigRepository extends CrudRepository<LeadTimeConfig, Long> {
 
-    List<LeadTimeConfig> findByProjectId(Long projectId);
+    List<LeadTimeConfig> findByBoardId(Long boardId);
 
-    LeadTimeConfig findByIdAndProjectId(Long id, Long projectId);
+    LeadTimeConfig findByIdAndBoardId(Long id, Long boardId);
 
-    void deleteByIdAndProjectId(Long id, Long projectId);
+    void deleteByIdAndBoardId(Long id, Long boardId);
 
 }

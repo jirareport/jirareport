@@ -31,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
         CurrentUser currentUser = authClient.findCurrentUser(token);
 
         return Account.builder()
+                .username(loginForm.getUsername())
                 .token(token)
                 .currentUser(currentUser)
                 .build();

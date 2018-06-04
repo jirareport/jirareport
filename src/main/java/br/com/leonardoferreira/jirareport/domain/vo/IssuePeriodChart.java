@@ -27,11 +27,11 @@ public class IssuePeriodChart {
     }
 
     public void addLeadTime(final IssuePeriod issuePeriod) {
-        leadtime.add(issuePeriod.getId().getDates(), issuePeriod.getLeadTime());
+        leadtime.add(issuePeriod.getDates(), String.format("%.2f", issuePeriod.getAvgLeadTime()));
     }
 
     public void addIssuesCount(final IssuePeriod issuePeriod) {
-        issuesCount.add(issuePeriod.getId().getDates(), issuePeriod.getIssuesCount());
+        issuesCount.add(issuePeriod.getDates(), issuePeriod.getIssuesCount());
     }
 
 }

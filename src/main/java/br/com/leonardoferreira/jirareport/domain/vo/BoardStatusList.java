@@ -8,7 +8,7 @@ import java.util.List;
  * @author s2it_jsilveira
  */
 @Data
-public class ProjectStatusList {
+public class BoardStatusList {
 
     private String self;
 
@@ -18,6 +18,6 @@ public class ProjectStatusList {
 
     private String subtask;
 
-    private List<ProjectStatus> statuses;
+    private List<BoardStatus> statuses;
 
 }

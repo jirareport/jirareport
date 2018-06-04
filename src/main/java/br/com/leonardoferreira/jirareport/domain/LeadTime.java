@@ -1,5 +1,7 @@
 package br.com.leonardoferreira.jirareport.domain;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,8 +38,8 @@ public class LeadTime extends BaseEntity {
 
     private Long leadTime;
 
-    private String startDate;
+    private LocalDateTime startDate;
 
-    private String endDate;
+    private LocalDateTime endDate;
 
 }

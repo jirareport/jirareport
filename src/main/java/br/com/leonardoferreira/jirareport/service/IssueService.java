@@ -3,9 +3,8 @@ package br.com.leonardoferreira.jirareport.service;
 import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
-import br.com.leonardoferreira.jirareport.domain.embedded.IssuePeriodId;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
-import br.com.leonardoferreira.jirareport.domain.vo.Histogram;
+import br.com.leonardoferreira.jirareport.domain.form.IssuePeriodForm;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBox;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBoxFilter;
 
@@ -15,13 +14,11 @@ import br.com.leonardoferreira.jirareport.domain.vo.SandBoxFilter;
  */
 public interface IssueService {
 
-    List<Issue> findAllInJira(IssuePeriodId issuePeriodId);
+    List<Issue> findAllInJira(IssuePeriodForm issuePeriodId, Long boardId);
 
-    SandBox findByExample(Long projectId, IssueForm issueForm);
+    SandBox findByExample(Long boardId, IssueForm issueForm);
 
-    SandBoxFilter findSandBoxFilters(Long projectId, SandBox sandBox, IssueForm issueForm);
+    SandBoxFilter findSandBoxFilters(Long boardId, SandBox sandBox, IssueForm issueForm);
 
-    Histogram calcHistogramData(List<Issue> issues);
-
-    List<Issue> findByIssuePeriodId(IssuePeriodId issuePeriodId);
+    List<Issue> findByIssuePeriodId(Long issuePeriodId);
 }

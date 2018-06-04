@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,42 +40,44 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
     @Override
     @Transactional
     @ExecutionTime
-    public void createLeadTimes(final List<Issue> issues, final Long projectId) {
-        log.info("Method=createLeadTimes, issues={}, projectId={}", issues, projectId);
+    public void createLeadTimes(final List<Issue> issues, final Long boardId) {
+        log.info("Method=createLeadTimes, issues={}, boardId={}", issues, boardId);
 
-        List<LeadTimeConfig> leadTimeConfigs = leadTimeConfigService.findAllByProjectId(projectId);
-        final List<String> holidays = holidayService.findByProject(projectId).stream()
+        List<LeadTimeConfig> leadTimeConfigs = leadTimeConfigService.findAllByBoardId(boardId);
+        final List<String> holidays = holidayService.findByBoard(boardId).stream()
                 .map(Holiday::getEnDate).collect(Collectors.toList());
 
         issues.forEach(issue -> {
-            leadTimeRepository.deleteByIssueKey(issue.getKey());
+            leadTimeRepository.deleteByIssueId(issue.getId());
             issue.setLeadTimes(leadTimeConfigs.stream()
                     .map(leadTimeConfig -> calcLeadTime(leadTimeConfig, issue, holidays))
                     .collect(Collectors.toSet()));
         });
     }
 
-    @Transactional
-    @ExecutionTime
     private LeadTime calcLeadTime(final LeadTimeConfig leadTimeConfig,
                                   final Issue issue,
                                   final List<String> holidays) {
         log.info("Method=calcLeadTime, leadTimeConfig={}, issue={}, holidays={}", leadTimeConfig, issue, holidays);
 
-        String startDate = "BACKLOG".equals(leadTimeConfig.getStartColumn()) ? DateUtil.toENDateFromDisplayDate(issue.getCreated()) : null;
-        String endDate = null;
+        LocalDateTime startDate = null;
+        LocalDateTime endDate = null;
 
         Set<String> startColumns = leadTimeConfig.getStartColumns();
         Set<String> endColumns = leadTimeConfig.getEndColumns();
 
         for (Changelog cl : issue.getChangelog()) {
             if (startDate == null && startColumns.contains(cl.getTo())) {
-                startDate = DateUtil.toENDate(cl.getCreated());
+                startDate = cl.getCreated();
             }
 
             if (endDate == null && endColumns.contains(cl.getTo())) {
-                endDate = DateUtil.toENDate(cl.getCreated());
+                endDate = cl.getCreated();
             }
+        }
+
+        if (startDate == null && "BACKLOG".equals(leadTimeConfig.getStartColumn())) {
+            startDate = issue.getCreated();
         }
 
         Long leadTime = 0L;
@@ -86,8 +89,8 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
                 .leadTimeConfig(leadTimeConfig)
                 .issue(issue)
                 .leadTime(leadTime)
-                .startDate(DateUtil.displayFormat(startDate))
-                .endDate(DateUtil.displayFormat(endDate))
+                .startDate(startDate)
+                .endDate(endDate)
                 .build());
 
     }

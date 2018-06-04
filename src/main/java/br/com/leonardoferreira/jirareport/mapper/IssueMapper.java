@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.mapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -7,11 +8,12 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
+import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
-import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
+import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -34,16 +36,16 @@ public class IssueMapper {
     private final JsonParser jsonParser = new JsonParser();
 
     @ExecutionTime
-    public List<Issue> parse(final String rawText, final Project project) {
+    public List<Issue> parse(final String rawText, final Board board) {
         JsonElement response = jsonParser.parse(rawText);
         JsonArray issues = response.getAsJsonObject()
                 .getAsJsonArray("issues");
 
-        final List<String> holidays = holidayService.findByProject(project.getId())
+        final List<String> holidays = holidayService.findByBoard(board.getId())
                 .stream().map(Holiday::getEnDate).collect(Collectors.toList());
 
-        Set<String> startColumns = project.getStartColumns();
-        Set<String> endColumns = project.getEndColumns();
+        Set<String> startColumns = CalcUtil.calcStartColumns(board);
+        Set<String> endColumns = CalcUtil.calcEndColumns(board);
 
         return StreamSupport.stream(issues.spliterator(), true)
                 .map(issueRaw -> {
@@ -52,27 +54,31 @@ public class IssueMapper {
                     JsonObject fields = issue.get("fields").getAsJsonObject();
                     List<Changelog> changelog = getChangelog(issue, holidays);
 
-                    String created = getDateAsString(fields.get("created"));
+                    LocalDateTime created = DateUtil.parseFromJira(fields.get("created").getAsString());
 
-                    String startDate = "BACKLOG".equals(project.getStartColumn()) ? created : null;
-                    String endDate = null;
+                    LocalDateTime startDate = null;
+                    LocalDateTime endDate = null;
 
                     for (Changelog cl : changelog) {
                         if (startDate == null && startColumns.contains(cl.getTo())) {
-                            startDate = DateUtil.toENDate(cl.getCreated());
+                            startDate = cl.getCreated();
                         }
 
                         if (endDate == null && endColumns.contains(cl.getTo())) {
-                            endDate = DateUtil.toENDate(cl.getCreated());
+                            endDate = cl.getCreated();
                         }
+                    }
+
+                    if (startDate == null && "BACKLOG".equals(board.getStartColumn())) {
+                         startDate = created;
                     }
 
                     if (startDate == null || endDate == null) {
                         return null;
                     }
 
-                    String epicField = project.getEpicCF();
-                    String estimateField = project.getEstimateCF();
+                    String epicField = board.getEpicCF();
+                    String estimateField = board.getEstimateCF();
 
                     String epic = StringUtils.isEmpty(epicField) ? null : getAsStringSafe(fields.get(epicField));
                     String estimated = null;
@@ -91,16 +97,17 @@ public class IssueMapper {
                     }
 
                     issueVO.setIssueType(getAsStringSafe(fields.getAsJsonObject("issuetype").get("name")));
-                    issueVO.setCreated(DateUtil.displayFormat(created));
-                    issueVO.setStartDate(DateUtil.displayFormat(startDate));
-                    issueVO.setEndDate(DateUtil.displayFormat(endDate));
+                    issueVO.setCreated(created);
+                    issueVO.setStartDate(startDate);
+                    issueVO.setEndDate(endDate);
                     issueVO.setLeadTime(leadTime);
-                    issueVO.setSystem(getElement(fields, project.getSystemCF()));
+                    issueVO.setSystem(getElement(fields, board.getSystemCF()));
                     issueVO.setEpic(epic);
                     issueVO.setEstimated(estimated);
-                    issueVO.setProject(getElement(fields, project.getProjectCF()));
+                    issueVO.setProject(getElement(fields, board.getProjectCF()));
                     issueVO.setSummary(fields.get("summary").getAsString());
                     issueVO.setChangelog(changelog);
+                    issueVO.setBoard(board);
 
                     return issueVO;
                 })
@@ -120,7 +127,7 @@ public class IssueMapper {
                     }
 
                     Changelog changelog = new Changelog();
-                    changelog.setCreated(getDateAsString(history.get("created")));
+                    changelog.setCreated(DateUtil.parseFromJira(history.get("created").getAsString()));
                     changelog.setFrom(getAsStringSafe(item.get("from")));
                     changelog.setTo(getAsStringSafe(item.get("to")));
 
@@ -132,13 +139,13 @@ public class IssueMapper {
         for (int i = 0; i < collect.size(); i++) {
             Changelog current = collect.get(i);
             if (i + 1 == collect.size()) {
-                current.setCreated(DateUtil.displayFormat(current.getCreated()));
+                current.setCreated(current.getCreated());
                 break;
             }
 
             Changelog next = collect.get(i + 1);
             current.setLeadTime(DateUtil.daysDiff(current.getCreated(), next.getCreated(), holidays));
-            current.setCreated(DateUtil.displayFormat(current.getCreated()));
+            current.setCreated(current.getCreated());
         }
 
         return collect;
@@ -198,13 +205,6 @@ public class IssueMapper {
             return null;
         }
         return jsonElement.getAsString();
-    }
-
-    private String getDateAsString(final JsonElement jsonElement) {
-        if (jsonElement == null || jsonElement.isJsonNull()) {
-            return null;
-        }
-        return jsonElement.getAsString().substring(0, 10);
     }
 
 }

@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface IssueCustomRepository {
 
-    List<Issue> findByExample(Long projectId, IssueForm issueForm);
+    List<Issue> findByExample(Long boardId, IssueForm issueForm);
 
 }

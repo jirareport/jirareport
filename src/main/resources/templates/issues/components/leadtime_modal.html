@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<th:block th:fragment="modal(issue, project)">
+<th:block th:fragment="modal(issue, board)">
 
     <div class="modal fade" th:id="${issue.key}" role="dialog">
         <div class="modal-dialog modal-lg">
@@ -23,14 +23,14 @@
                         </thead>
                         <tbody>
                         <tr th:each="changelog : ${issue.changelog}">
-                            <td th:text="${changelog.created}"></td>
+                            <td th:text="${#temporals.format(changelog.created, 'dd/MM/yyyy')}"></td>
                             <td th:text="${changelog.to}"></td>
                             <td th:text="${changelog.leadTime}"></td>
                         </tr>
                         </tbody>
                     </table>
 
-                    <th:block th:unless="${#lists.isEmpty(project.leadTimeConfigs)}">
+                    <th:block th:unless="${#lists.isEmpty(board.leadTimeConfigs)}">
                         <br/>
 
                         <h3 class="page-header" style="margin-top: 0">Outros lead times</h3>

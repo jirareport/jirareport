@@ -22,3 +22,7 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+  flyway:
+    enabled: true
+    out-of-order: true
+    ignore-missing-migrations: true

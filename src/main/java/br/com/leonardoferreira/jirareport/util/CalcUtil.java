@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import br.com.leonardoferreira.jirareport.domain.Board;
+
 /**
  * @author lferreira
  * @since 5/18/18 6:43 PM
@@ -12,6 +14,8 @@ public final class CalcUtil {
 
     private CalcUtil() {
     }
+
+
 
     public static Set<String> calcStartColumns(final String startColumn,
                                         final String endColumn,
@@ -46,5 +50,13 @@ public final class CalcUtil {
             }
         }
         return endColumns;
+    }
+
+    public static Set<String> calcStartColumns(final Board board) {
+        return CalcUtil.calcStartColumns(board.getStartColumn(), board.getEndColumn(), board.getFluxColumn());
+    }
+
+    public static Set<String> calcEndColumns(final Board board) {
+        return CalcUtil.calcEndColumns(board.getEndColumn(), board.getFluxColumn());
     }
 }

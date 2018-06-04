@@ -13,16 +13,20 @@ import org.mapstruct.Mappings;
 public interface HolidayMapper {
 
     @Mappings({
-            @Mapping(target = "id", ignore = true),
-            @Mapping(target = "description", source = "holidayVO.name"),
-            @Mapping(target = "project.id", source = "projectId"),
-            @Mapping(target = "date", source = "holidayVO.date", dateFormat = "dd/MM/yyyy")
+            @Mapping(target = "id",              ignore = true),
+            @Mapping(target = "description",     source = "holidayVO.name"),
+            @Mapping(target = "board.id",        source = "boardId"),
+            @Mapping(target = "date",            source = "holidayVO.date", dateFormat = "dd/MM/yyyy"),
+            @Mapping(target = "owner",           ignore = true),
+            @Mapping(target = "lastEditor",      ignore = true),
+            @Mapping(target = "createdAt",       ignore = true),
+            @Mapping(target = "updatedAt",       ignore = true)
     })
-    Holiday fromVO(HolidayVO holidayVO, Long projectId);
+    Holiday fromVO(HolidayVO holidayVO, Long boardId);
 
-    default List<Holiday> fromVOS(List<HolidayVO> holidayVOS, Long projectId) {
+    default List<Holiday> fromVOS(List<HolidayVO> holidayVOS, Long boardId) {
         return holidayVOS.stream()
-                .map(holidayVO -> fromVO(holidayVO, projectId))
+                .map(holidayVO -> fromVO(holidayVO, boardId))
                 .collect(Collectors.toList());
     }
 }

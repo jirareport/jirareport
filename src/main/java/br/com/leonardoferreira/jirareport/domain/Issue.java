@@ -1,16 +1,21 @@
 package br.com.leonardoferreira.jirareport.domain;
 
-import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+
+import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -28,6 +33,9 @@ public class Issue extends BaseEntity {
     private static final long serialVersionUID = -1084659211505084402L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String key;
 
     private String issueType;
@@ -44,13 +52,13 @@ public class Issue extends BaseEntity {
 
     private String project;
 
-    private String startDate;
+    private LocalDateTime startDate;
 
-    private String endDate;
+    private LocalDateTime endDate;
 
     private Long leadTime;
 
-    private String created;
+    private LocalDateTime created;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -62,9 +70,7 @@ public class Issue extends BaseEntity {
     @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<LeadTime> leadTimes;
 
-    @Transient
-    public String getTitle() {
-        return String.format("%s %s", key, summary);
-    }
+    @ManyToOne
+    private Board board;
 
 }

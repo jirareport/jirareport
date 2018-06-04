@@ -2,11 +2,11 @@ package br.com.leonardoferreira.jirareport.service.impl;
 
 import java.util.List;
 
+import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.LeadTimeConfig;
-import br.com.leonardoferreira.jirareport.domain.Project;
 import br.com.leonardoferreira.jirareport.repository.LeadTimeConfigRepository;
 import br.com.leonardoferreira.jirareport.service.LeadTimeConfigService;
-import br.com.leonardoferreira.jirareport.service.ProjectService;
+import br.com.leonardoferreira.jirareport.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,51 +23,51 @@ public class LeadTimeConfigServiceImpl extends AbstractService implements LeadTi
     private LeadTimeConfigRepository leadTimeConfigRepository;
 
     @Autowired
-    private ProjectService projectService;
+    private BoardService boardService;
 
     @Override
     @Transactional(readOnly = true)
-    public List<LeadTimeConfig> findAllByProjectId(final Long projectId) {
-        log.info("Method=findAllByProjectId, projectId={}", projectId);
+    public List<LeadTimeConfig> findAllByBoardId(final Long boardId) {
+        log.info("Method=findAllByBoardId, boardId={}", boardId);
 
-        return leadTimeConfigRepository.findByProjectId(projectId);
+        return leadTimeConfigRepository.findByBoardId(boardId);
     }
 
     @Override
     @Transactional
-    public void create(final Long projectId, final LeadTimeConfig leadTimeConfig) {
-        log.info("Method=create, projectId={}, leadTimeConfig={}", projectId, leadTimeConfig);
+    public void create(final Long boardId, final LeadTimeConfig leadTimeConfig) {
+        log.info("Method=create, boardId={}, leadTimeConfig={}", boardId, leadTimeConfig);
 
-        Project project = projectService.findById(projectId);
-        leadTimeConfig.setProject(project);
+        Board board = boardService.findById(boardId);
+        leadTimeConfig.setBoard(board);
 
         leadTimeConfigRepository.save(leadTimeConfig);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public LeadTimeConfig findByProjectAndId(final Long projectId, final Long id) {
-        log.info("Method=findByProjectAndId, projectId={}, id={}", projectId, id);
+    public LeadTimeConfig findByBoardAndId(final Long boardId, final Long id) {
+        log.info("Method=findByBoardAndId, boardId={}, id={}", boardId, id);
 
-        return leadTimeConfigRepository.findByIdAndProjectId(id, projectId);
+        return leadTimeConfigRepository.findByIdAndBoardId(id, boardId);
     }
 
     @Override
     @Transactional
-    public void update(final Long projectId, final LeadTimeConfig leadTimeConfig) {
-        log.info("Method=update, projectId={}, leadTimeConfig={}", projectId, leadTimeConfig);
+    public void update(final Long boardId, final LeadTimeConfig leadTimeConfig) {
+        log.info("Method=update, boardId={}, leadTimeConfig={}", boardId, leadTimeConfig);
 
-        Project project = projectService.findById(projectId);
-        leadTimeConfig.setProject(project);
+        Board board = boardService.findById(boardId);
+        leadTimeConfig.setBoard(board);
 
         leadTimeConfigRepository.save(leadTimeConfig);
     }
 
     @Override
     @Transactional
-    public void deleteByProjectAndId(final Long projectId, final Long id) {
-        log.info("Method=deleteByProjectAndId, projectId={}, id={}", projectId, id);
+    public void deleteByBoardAndId(final Long boardId, final Long id) {
+        log.info("Method=deleteByBoardAndId, boardId={}, id={}", boardId, id);
 
-        leadTimeConfigRepository.deleteByIdAndProjectId(id, projectId);
+        leadTimeConfigRepository.deleteByIdAndBoardId(id, boardId);
     }
 }

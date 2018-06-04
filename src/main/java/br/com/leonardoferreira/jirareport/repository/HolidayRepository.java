@@ -15,8 +15,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HolidayRepository extends CrudRepository<Holiday, Long> {
 
-    List<Holiday> findAllByProjectId(Long id);
+    List<Holiday> findAllByBoardId(Long id);
 
-    Page<Holiday> findAllByProjectId(Long id, Pageable pageable);
+    Page<Holiday> findAllByBoardId(Long id, Pageable pageable);
 
 }

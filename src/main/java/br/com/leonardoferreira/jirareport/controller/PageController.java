@@ -18,7 +18,7 @@ public class PageController extends AbstractController {
     @GetMapping("/")
     public String index() {
         if (authenticated()) {
-            return "redirect:/projects";
+            return "redirect:/boards";
         } else {
             return "home";
         }

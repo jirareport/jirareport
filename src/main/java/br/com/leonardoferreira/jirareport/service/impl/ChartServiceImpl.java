@@ -1,7 +1,10 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,10 +18,11 @@ import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.LeadTime;
 import br.com.leonardoferreira.jirareport.domain.LeadTimeConfig;
-import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
+import br.com.leonardoferreira.jirareport.domain.embedded.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
@@ -45,20 +49,37 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     @Async
     @Override
     @ExecutionTime
-    public CompletableFuture<Chart<Long, Long>> issueHistogram(final List<Issue> issues) {
+    public CompletableFuture<Histogram> issueHistogram(final List<Issue> issues) {
         log.info("Method=issueHistogram, issues={}", issues);
 
-        Map<Long, Long> collect = issues.stream()
-                .filter(i -> i.getLeadTime() != null)
-                .collect(Collectors.groupingBy(Issue::getLeadTime, Collectors.counting()));
+        issues.sort(Comparator.comparing(Issue::getLeadTime));
 
-        Long max = collect.keySet().stream().max(Long::compare).orElse(1L);
 
-        for (long i = 1; i < max; i++) {
-            collect.putIfAbsent(i, 0L);
+        Long median = null;
+        Long percentile75 = null;
+        Long percentile90 = null;
+
+        if (issues.size() >= 10) {
+            int totalElements = issues.size();
+            int medianIndex = calculateCeilingPercentage(totalElements, 50);
+            int percentile75Index = calculateCeilingPercentage(totalElements, 75);
+            int percentile90Index = calculateCeilingPercentage(totalElements, 90);
+
+            median = issues.get(medianIndex - 1).getLeadTime();
+            percentile75 = issues.get(percentile75Index - 1).getLeadTime();
+            percentile90 = issues.get(percentile90Index - 1).getLeadTime();
         }
 
-        return CompletableFuture.completedFuture(new Chart<>(collect));
+        Chart<Long, Long> chart = histogramChart(issues);
+
+        Histogram histogram = Histogram.builder()
+                .chart(chart)
+                .median(median)
+                .percentile75(percentile75)
+                .percentile90(percentile90)
+                .build();
+
+        return CompletableFuture.completedFuture(histogram);
     }
 
     @Async
@@ -188,7 +209,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     public ChartAggregator buildAllCharts(final List<Issue> issues) {
         log.info("Method=buildAllCharts, issues={}", issues);
 
-        CompletableFuture<Chart<Long, Long>> histogram = chartService.issueHistogram(issues);
+        CompletableFuture<Histogram> histogram = chartService.issueHistogram(issues);
         CompletableFuture<Chart<String, Long>> estimated = chartService.estimatedChart(issues);
         CompletableFuture<Chart<String, Double>> leadTimeBySystem = chartService.leadTimeBySystem(issues);
         CompletableFuture<Chart<String, Long>> tasksBySystem = chartService.tasksBySystem(issues);
@@ -233,7 +254,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     @Override
     @ExecutionTime
     @Transactional(readOnly = true)
-    public LeadTimeCompareChart calcLeadTimeCompareByPeriod(final List<IssuePeriod> issuePeriods, final Project project) {
+    public LeadTimeCompareChart calcLeadTimeCompareByPeriod(final List<IssuePeriod> issuePeriods, final Board board) {
         log.info("Method=calcLeadTimeCompareByPeriod, issuePeriods={}", issuePeriods);
         LeadTimeCompareChart leadTimeCompareChart = new LeadTimeCompareChart();
 
@@ -245,15 +266,15 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                     .collect(Collectors.groupingBy(i -> i.getLeadTimeConfig().getName(),
                             Collectors.averagingDouble(LeadTime::getLeadTime)));
 
-            if (collect.size() < project.getLeadTimeConfigs().size()) {
-                for (LeadTimeConfig leadTimeConfig : project.getLeadTimeConfigs()) {
+            if (collect.size() < board.getLeadTimeConfigs().size()) {
+                for (LeadTimeConfig leadTimeConfig : board.getLeadTimeConfigs()) {
                     if (!collect.containsKey(leadTimeConfig.getName())) {
                         collect.put(leadTimeConfig.getName(), 0D);
                     }
                 }
             }
 
-            leadTimeCompareChart.add(issuePeriod.getId().getDates(), collect);
+            leadTimeCompareChart.add(issuePeriod.getDates(), collect);
         }
 
         return leadTimeCompareChart;
@@ -271,7 +292,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
             Map<String, Long> estimated = issuePeriod.getEstimated().getData();
             sizes.addAll(issuePeriod.getEstimated().getData().keySet());
 
-            periodsSize.put(issuePeriod.getId().getDates(), estimated);
+            periodsSize.put(issuePeriod.getDates(), estimated);
         }
 
         periodsSize.forEach((k, v) -> {
@@ -303,4 +324,22 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .build();
     }
 
+    private int calculateCeilingPercentage(final int totalElements, final int percentage) {
+        return new BigDecimal((double) totalElements * percentage / 100).setScale(0, RoundingMode.CEILING)
+                .intValue();
+    }
+
+    private Chart<Long, Long> histogramChart(final List<Issue> issues) {
+        Map<Long, Long> collect = issues.stream()
+                .filter(i -> i.getLeadTime() != null)
+                .collect(Collectors.groupingBy(Issue::getLeadTime, Collectors.counting()));
+
+        Long max = collect.keySet().stream().max(Long::compare).orElse(1L);
+
+        for (long i = 1; i < max; i++) {
+            collect.putIfAbsent(i, 0L);
+        }
+
+        return new Chart<>(collect);
+    }
 }

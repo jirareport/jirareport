@@ -2,12 +2,12 @@ package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.client.HolidayClient;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
-import br.com.leonardoferreira.jirareport.domain.Project;
+import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.vo.HolidayVO;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.mapper.HolidayMapper;
 import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
-import br.com.leonardoferreira.jirareport.repository.ProjectRepository;
+import br.com.leonardoferreira.jirareport.repository.BoardRepository;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 
 import java.util.HashSet;
@@ -34,7 +34,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     private HolidayRepository holidayRepository;
 
     @Autowired
-    private ProjectRepository projectRepository;
+    private BoardRepository boardRepository;
 
     @Autowired
     private HolidayClient holidayClient;
@@ -44,28 +44,28 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Holiday> findByProject(final Long projectId, final Pageable pageable) {
-        log.info("Method=findByProject, projectId={}", projectId);
+    public Page<Holiday> findByBoard(final Long boardId, final Pageable pageable) {
+        log.info("Method=findByBoard, boardId={}", boardId);
 
-        return holidayRepository.findAllByProjectId(projectId, pageable);
+        return holidayRepository.findAllByBoardId(boardId, pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Holiday> findByProject(final Long projectId) {
-        log.info("Method=findByProject, projectId={}", projectId);
+    public List<Holiday> findByBoard(final Long boardId) {
+        log.info("Method=findByBoard, boardId={}", boardId);
 
-        return holidayRepository.findAllByProjectId(projectId);
+        return holidayRepository.findAllByBoardId(boardId);
     }
 
     @Override
     @Transactional
-    public void create(final Long projectId, final Holiday holiday) {
+    public void create(final Long boardId, final Holiday holiday) {
         log.info("Method=create, holiday={}", holiday);
 
-        Project project = projectRepository.findById(projectId)
+        Board board = boardRepository.findById(boardId)
                 .orElseThrow(ResourceNotFound::new);
-        holiday.setProject(project);
+        holiday.setBoard(board);
         holidayRepository.save(holiday);
     }
 
@@ -88,30 +88,30 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
 
     @Override
     @Transactional
-    public void update(final Long projectId, final Holiday holiday) {
+    public void update(final Long boardId, final Holiday holiday) {
         log.info("Method=update, holiday={}", holiday);
 
-        final Project project = projectRepository.findById(projectId)
+        final Board board = boardRepository.findById(boardId)
                 .orElseThrow(ResourceNotFound::new);
 
-        holiday.setProject(project);
+        holiday.setBoard(board);
         holidayRepository.save(holiday);
     }
 
     @Override
     @Transactional
-    public boolean createImported(final Long projectId) {
-        log.info("Method=createImported, projectId={}", projectId);
+    public boolean createImported(final Long boardId) {
+        log.info("Method=createImported, boardId={}", boardId);
 
-        List<Holiday> holidaysByProject = holidayRepository.findAllByProjectId(projectId);
+        List<Holiday> holidaysByBoard = holidayRepository.findAllByBoardId(boardId);
         List<HolidayVO> allHolidaysVOInCity = holidayClient.findAllHolidaysInCity("2018", "SP", "ARARAQUARA");
-        List<Holiday> allHolidaysInCity = holidayMapper.fromVOS(allHolidaysVOInCity, projectId);
+        List<Holiday> allHolidaysInCity = holidayMapper.fromVOS(allHolidaysVOInCity, boardId);
 
-        if (holidaysByProject.containsAll(allHolidaysInCity)) {
+        if (holidaysByBoard.containsAll(allHolidaysInCity)) {
             return false;
         }
 
-        Set<Holiday> holidays = new HashSet<>(holidaysByProject);
+        Set<Holiday> holidays = new HashSet<>(holidaysByBoard);
         holidays.addAll(allHolidaysInCity);
 
         try {
