@@ -91,9 +91,9 @@
                 <div th:unless="${#strings.isEmpty(board.projectCF)}" class="form-group col-md-4">
                     <label>Projetos</label>
                     <div>
-                        <select class="selectpicker" multiple="" th:field="*{boards}" data-width="100%">
-                            <option th:each="board : ${sandBoxFilter.boards}" th:value="${board}"
-                                    th:text="${board}"></option>
+                        <select class="selectpicker" multiple="" th:field="*{projects}" data-width="100%">
+                            <option th:each="project : ${sandBoxFilter.projects}" th:value="${project}"
+                                    th:text="${project}"></option>
                         </select>
                     </div>
                 </div>
