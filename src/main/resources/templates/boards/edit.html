@@ -66,7 +66,7 @@
                 <label>Campo de Épico</label>
                 <select class="selectpicker" th:field="*{epicCF}" data-width="100%" data-live-search="true">
                     <option value="">Selecione</option>
-                    <option th:each="jiraField : ${jiraFields}" th:value="${jiraField.id}" th:text="${jiraField.name}"></option>
+                    <option th:each="jiraField : ${jiraFields}" th:value="${jiraField.id}">[[${jiraField.name}]] ([[${jiraField.id}]])</option>
                 </select>
             </div>
 
@@ -74,7 +74,7 @@
                 <label>Campo de tamanho/estimativa</label>
                 <select class="selectpicker" th:fiel    d="*{estimateCF}" data-width="100%" data-live-search="true">
                     <option value="">Selecione</option>
-                    <option th:each="jiraField : ${jiraFields}" th:value="${jiraField.id}" th:text="${jiraField.name}"></option>
+                    <option th:each="jiraField : ${jiraFields}" th:value="${jiraField.id}">[[${jiraField.name}]] ([[${jiraField.id}]])</option>
                 </select>
             </div>
 
@@ -82,7 +82,7 @@
                 <label>Campo de Sistemas</label>
                 <select class="selectpicker" th:field="*{systemCF}" data-width="100%" data-live-search="true">
                     <option value="">Selecione</option>
-                    <option th:each="jiraField : ${jiraFields}" th:value="${jiraField.id}" th:text="${jiraField.name}"></option>
+                    <option th:each="jiraField : ${jiraFields}" th:value="${jiraField.id}">[[${jiraField.name}]] ([[${jiraField.id}]])</option>
                 </select>
             </div>
 
