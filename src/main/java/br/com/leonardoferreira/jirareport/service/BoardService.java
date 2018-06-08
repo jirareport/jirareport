@@ -16,7 +16,7 @@ public interface BoardService {
 
     Page<Board> findAll(Pageable pageable, Board board);
 
-    List<JiraProject> findAllInJira();
+    List<JiraProject> findAllJiraProject();
 
     void create(Board board);
 
@@ -31,4 +31,7 @@ public interface BoardService {
     Set<String> findStatusFromBoardInJira(Long boardId);
 
     BoardForm findToUpdate(Long id);
+
+    List<String> findAllOwners();
+
 }

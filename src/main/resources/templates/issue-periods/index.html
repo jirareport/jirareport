@@ -6,7 +6,7 @@
 <th:block layout:fragment="content">
     <div class="container-fluid">
         <div class="page-header">
-            <h1>Períodos</h1>
+            <h1>Períodos <small th:text="${board.name}"></small></h1>
         </div>
     </div>
 
@@ -42,7 +42,7 @@
             <div class="panel-footer">
                 <div class="text-right">
                     <a th:href="@{/boards}" class="btn btn-default">Voltar</a>
-                    <button type="submit" class="btn btn-success">Salvar</button>
+                    <button type="submit" class="btn btn-success" data-loader>Salvar</button>
                 </div>
             </div>
         </form>
@@ -79,7 +79,7 @@
                                     <a th:href="@{/boards/{boardId}/issue-periods/{issuePeriodId}(boardId=${board.id},issuePeriodId=${issuePeriod.id})}"
                                        data-method="DELETE" data-confirm="Tem certeza?" class="btn btn-xs btn-danger">Remover</a>
                                     <a th:href="@{/boards/{boardId}/issue-periods/{issuePeriodId}(boardId=${board.id},issuePeriodId=${issuePeriod.id})}"
-                                       data-method="PUT" class="btn btn-xs btn-default">Atualizar</a>
+                                       data-method="PUT" class="btn btn-xs btn-default" data-loader>Atualizar</a>
                                     <a th:href="@{/boards/{boardId}/issue-periods/{issuePeriodId}/details(boardId=${board.id},issuePeriodId=${issuePeriod.id})}" class="btn btn-xs btn-default">Detalhes</a>
                                 </td>
                             </tr>

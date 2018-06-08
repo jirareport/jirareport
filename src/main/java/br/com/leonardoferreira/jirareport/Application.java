@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 import br.com.leonardoferreira.jirareport.domain.vo.Account;
+import brave.sampler.Sampler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -66,4 +67,8 @@ public class Application {
         };
     }
 
+    @Bean
+    public Sampler sampler() {
+        return Sampler.ALWAYS_SAMPLE;
+    }
 }

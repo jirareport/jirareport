@@ -7,7 +7,7 @@
 
     <div class="container-fluid">
         <div class="page-header">
-            <h1>Boards</h1>
+            <h1>Alterar Board <small th:text="${boardForm.name}"></small></h1>
         </div>
 
         <form th:action="@{/boards}" th:method="PUT" th:object="${boardForm}">
@@ -53,26 +53,45 @@
 
             <div class="form-group">
                 <label>Tipos de issues à serem ignorados</label>
-                <input type="text" th:field="*{ignoreIssueType}" class="form-control"/>
+                <input type="text" th:field="*{ignoreIssueType}" class="form-control" id="input-ignoreIssueType"/>
+            </div>
+
+            <div class="form-group btn-group btn-group-sm">
+                <a href="#" th:each="issueType : ${boardForm.jiraProject.issueTypes}" class="btn btn-default" data-column-suggest="input-ignoreIssueType" data-column-suggest-prefix=", ">
+                    <span th:text="${issueType.name}"></span>
+                </a>
             </div>
 
             <div class="form-group">
                 <label>Campo de Épico</label>
-                <input type="text" th:field="*{epicCF}" class="form-control"/>
+                <select class="selectpicker" th:field="*{epicCF}" data-width="100%" data-live-search="true">
+                    <option value="">Selecione</option>
+                    <option th:each="jiraField : ${jiraFields}" th:value="${jiraField.id}" th:text="${jiraField.name}"></option>
+                </select>
             </div>
 
             <div class="form-group">
                 <label>Campo de tamanho/estimativa</label>
-                <input type="text" th:field="*{estimateCF}" class="form-control"/>
+                <select class="selectpicker" th:fiel    d="*{estimateCF}" data-width="100%" data-live-search="true">
+                    <option value="">Selecione</option>
+                    <option th:each="jiraField : ${jiraFields}" th:value="${jiraField.id}" th:text="${jiraField.name}"></option>
+                </select>
             </div>
 
             <div class="form-group">
                 <label>Campo de Sistemas</label>
-                <input type="text" th:field="*{systemCF}" class="form-control"/>
+                <select class="selectpicker" th:field="*{systemCF}" data-width="100%" data-live-search="true">
+                    <option value="">Selecione</option>
+                    <option th:each="jiraField : ${jiraFields}" th:value="${jiraField.id}" th:text="${jiraField.name}"></option>
+                </select>
             </div>
+
             <div class="form-group">
                 <label>Campo de Projeto</label>
-                <input type="text" th:field="*{projectCF}" class="form-control"/>
+                <select class="selectpicker" th:field="*{projectCF}" data-width="100%" data-live-search="true">
+                    <option value="">Selecione</option>
+                    <option th:each="jiraField : ${jiraFields}" th:value="${jiraField.id}" th:text="${jiraField.name}"></option>
+                </select>
             </div>
 
             <div class="text-right">

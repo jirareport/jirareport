@@ -51,6 +51,7 @@ dependencies {
     compile("com.google.code.gson:gson:${gsonVersion}")
 
     compile("org.springframework.cloud:spring-cloud-starter-openfeign")
+    compile("org.springframework.cloud:spring-cloud-starter-sleuth")
 
     runtime("org.postgresql:postgresql")
 
