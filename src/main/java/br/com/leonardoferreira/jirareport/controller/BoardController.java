@@ -5,8 +5,10 @@ import java.util.Set;
 
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.form.BoardForm;
+import br.com.leonardoferreira.jirareport.domain.vo.JiraField;
 import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
 import br.com.leonardoferreira.jirareport.service.BoardService;
+import br.com.leonardoferreira.jirareport.service.FieldService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * @author lferreira
@@ -30,18 +33,23 @@ public class BoardController extends AbstractController {
     @Autowired
     private BoardService boardService;
 
+    @Autowired
+    private FieldService fieldService;
+
     @GetMapping
     public ModelAndView index(final Pageable pageable, final Board board) {
         Page<Board> boards = boardService.findAll(pageable, board);
+        List<String> owners = boardService.findAllOwners();
 
         return new ModelAndView("boards/index")
                 .addObject("boards", boards)
-                .addObject("board", board);
+                .addObject("board", board)
+                .addObject("owners", owners);
     }
 
     @GetMapping("/new")
     public ModelAndView create() {
-        List<JiraProject> projects = boardService.findAllInJira();
+        List<JiraProject> projects = boardService.findAllJiraProject();
 
         return new ModelAndView("boards/new")
                 .addObject("projects", projects);
@@ -65,16 +73,20 @@ public class BoardController extends AbstractController {
     public ModelAndView update(@PathVariable final Long id) {
         BoardForm boardForm = boardService.findToUpdate(id);
         Set<String> statusFromProjectInJira = boardService.findStatusFromBoardInJira(id);
+        List<JiraField> jiraFields = fieldService.findAllJiraFields();
 
         return new ModelAndView("boards/edit")
                 .addObject("boardForm", boardForm)
-                .addObject("suggestedStatus", statusFromProjectInJira);
+                .addObject("suggestedStatus", statusFromProjectInJira)
+                .addObject("jiraFields", jiraFields);
+
     }
 
     @PutMapping
-    public ModelAndView update(final BoardForm board) {
+    public ModelAndView update(final BoardForm board, final RedirectAttributes redirectAttributes) {
         boardService.update(board);
 
-        return new ModelAndView(String.format("redirect:/boards/%s/issue-periods", board.getId()));
+        addFlashSuccess(redirectAttributes, "Alterações salvas com sucesso.");
+        return new ModelAndView("redirect:/boards");
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.client.ProjectClient;
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.form.BoardForm;
@@ -51,6 +52,10 @@ public class BoardServiceImpl extends AbstractService implements BoardService {
             board.setOwner(currentUser().getUsername());
         }
 
+        if ("all".equals(board.getOwner())) {
+            board.setOwner(null);
+        }
+
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains())
                 .withMatcher("owner", ExampleMatcher.GenericPropertyMatchers.exact())
@@ -64,8 +69,8 @@ public class BoardServiceImpl extends AbstractService implements BoardService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<JiraProject> findAllInJira() {
-        log.info("Method=findAllInJira");
+    public List<JiraProject> findAllJiraProject() {
+        log.info("Method=findAllJiraProject");
 
         return projectClient.findAll(currentToken());
     }
@@ -132,6 +137,16 @@ public class BoardServiceImpl extends AbstractService implements BoardService {
         log.info("Method=findToUpdate, id={}", id);
 
         Board board = findById(id);
-        return boardMapper.toForm(board);
+        JiraProject jiraProject = projectClient.findById(currentToken(), board.getExternalId());
+
+        return boardMapper.toForm(board, jiraProject);
+    }
+
+    @Override
+    @ExecutionTime
+    @Transactional(readOnly = true)
+    public List<String> findAllOwners() {
+        log.info("Method=findAllOwners");
+        return boardRepository.findAllOwners();
     }
 }

@@ -36,9 +36,10 @@ public class LeadTimeConfigController extends AbstractController {
     @GetMapping
     public ModelAndView index(@PathVariable final Long boardId) {
         List<LeadTimeConfig> leadTimeConfigs = leadTimeConfigService.findAllByBoardId(boardId);
+        Board board = boardService.findById(boardId);
 
         return new ModelAndView("lead-time-configs/index")
-                .addObject("boardId", boardId)
+                .addObject("board", board)
                 .addObject("leadTimeConfigs", leadTimeConfigs);
     }
 

@@ -22,4 +22,7 @@ public interface ProjectClient {
     List<BoardStatusList> findStatusFromProject(@RequestHeader("Authorization") String token,
                                                 @PathVariable("projectId") Long projectId);
 
+    @GetMapping("/rest/api/2/project/{projectId}")
+    JiraProject findById(@RequestHeader("Authorization") String token,
+                         @PathVariable("projectId") Long projectId);
 }

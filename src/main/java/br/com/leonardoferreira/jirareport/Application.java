@@ -10,8 +10,10 @@ import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 import br.com.leonardoferreira.jirareport.domain.vo.Account;
+import brave.sampler.Sampler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -22,6 +24,7 @@ import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+@EnableCaching
 @EnableJpaAuditing
 @EnableFeignClients
 @SpringBootApplication
@@ -66,4 +69,8 @@ public class Application {
         };
     }
 
+    @Bean
+    public Sampler sampler() {
+        return Sampler.ALWAYS_SAMPLE;
+    }
 }

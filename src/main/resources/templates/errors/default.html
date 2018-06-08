@@ -8,14 +8,10 @@
         <div class="page-header">
             <h1>Ops...</h1>
         </div>
-
-        <div class="jumbotron" style="word-wrap: break-word;">
-            <div th:utext="'Exception: ' + ${exception.message}"></div>
-            <ul>
-                <li th:each="ste : ${exception.stackTrace}" style="list-style: none">
-                    <span th:utext="${ste}"></span>
-                </li>
-            </ul>
+        <div class="jumbotron">
+            <h2>Ocorreu um erro interno, por favor tente novamente mais tarde.</h2>
+            <br/>
+            <h2>Para nos ajudar a corrigir o erro envie "[[${trace}]]" para um administrador.</h2>
         </div>
     </div>
 </th:block>

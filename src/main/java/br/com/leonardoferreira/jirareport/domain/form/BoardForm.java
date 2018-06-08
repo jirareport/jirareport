@@ -3,6 +3,7 @@ package br.com.leonardoferreira.jirareport.domain.form;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.Data;
 import lombok.ToString;
@@ -33,6 +34,8 @@ public class BoardForm {
     private String systemCF;
 
     private String projectCF;
+
+    private JiraProject jiraProject;
 
     public void setStartColumn(final String startColumn) {
         this.startColumn = startColumn == null ? null : startColumn.toUpperCase(DateUtil.LOCALE_BR);

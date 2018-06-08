@@ -6,11 +6,11 @@
 <th:block layout:fragment="content">
     <div class="container-fluid">
         <div class="page-header">
-            <h1>Configuração de lead times</h1>
+            <h1>Configuração de lead times <small th:text="${board.name}"></small></h1>
         </div>
 
         <div class="text-right">
-            <a th:href="@{/boards/{boardId}/lead-time-configs/new(boardId=${boardId})}" class="btn btn-primary">Nova configuração de lead lime</a>
+            <a th:href="@{/boards/{boardId}/lead-time-configs/new(boardId=${board.id})}" class="btn btn-primary">Nova configuração de lead lime</a>
         </div>
 
         <br/> <br/>
@@ -31,9 +31,9 @@
                     <td th:text="${leadTimeConfig.startColumn}"></td>
                     <td th:text="${leadTimeConfig.endColumn}"></td>
                     <td>
-                        <a th:href="@{/boards/{boardId}/lead-time-configs/{id}(boardId=${boardId},id=${leadTimeConfig.id})}"
+                        <a th:href="@{/boards/{boardId}/lead-time-configs/{id}(boardId=${board.id},id=${leadTimeConfig.id})}"
                            data-method="DELETE" data-confirm="Tem certeza?" class="btn btn-xs btn-danger">Remover</a>
-                        <a th:href="@{/boards/{boardId}/lead-time-configs/edit/{id}(boardId=${boardId}, id=${leadTimeConfig.id})}" class="btn btn-xs btn-primary">Alterar</a>
+                        <a th:href="@{/boards/{boardId}/lead-time-configs/edit/{id}(boardId=${board.id}, id=${leadTimeConfig.id})}" class="btn btn-xs btn-primary">Alterar</a>
                     </td>
                 </tr>
                 </tbody>

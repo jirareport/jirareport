@@ -22,7 +22,12 @@
 
                     <div class="form-group col-md-6">
                         <label>Dono</label>
-                        <input type="text" class="form-control"  th:field="*{owner}"/>
+                        <div>
+                            <select class="selectpicker" th:field="*{owner}" data-width="100%" id="select-owner" data-live-search="true">
+                                <option value="all">Todos</option>
+                                <option th:each="owner : ${owners}" th:value="${owner}" th:text="${owner}"></option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="panel-footer">
@@ -53,7 +58,7 @@
                             <a th:href="@{/boards/{id}/holidays(id=${board.id})}" class="btn btn-xs btn-default">Feriados</a>
                             <a th:href="@{/boards/{id}/lead-time-configs(id=${board.id})}" class="btn btn-xs btn-default">Configurações de lead time</a>
                             <a th:href="@{/boards/{id}/issue-periods(id=${board.id})}" class="btn btn-xs btn-default">Periodos</a>
-                            <a th:href="@{/boards/{id}/issues(id=${board.id})}" class="btn btn-xs btn-default">Issues</a>
+                            <a th:href="@{/boards/{id}/issues(id=${board.id})}" class="btn btn-xs btn-default">SandBox</a>
                         </td>
                     </tr>
                 </tbody>

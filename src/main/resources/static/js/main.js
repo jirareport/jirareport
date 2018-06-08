@@ -166,6 +166,10 @@ $(document).ready(function() {
 
        return false;
    });
+
+   $('*[data-loader]').click(function() {
+        $('#loader').fadeIn()
+   });
 })
 
 function randomColor() {
