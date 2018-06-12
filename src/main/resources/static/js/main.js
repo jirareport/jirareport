@@ -170,6 +170,14 @@ $(document).ready(function() {
    $('*[data-loader]').click(function() {
         $('#loader').fadeIn()
    });
+
+    $("#advancedConfigs").on("hide.bs.collapse", function(){
+       $("#advancedConfigsIcon").attr("class", "fa fa-chevron-right");
+    });
+
+    $("#advancedConfigs").on("show.bs.collapse", function(){
+      $("#advancedConfigsIcon").attr("class", "fa fa-chevron-down");
+    });
 })
 
 function randomColor() {

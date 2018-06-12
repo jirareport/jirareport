@@ -54,6 +54,27 @@
                             </tbody>
                         </table>
                     </th:block>
+
+                    <th:block th:if="${#bools.isTrue(board.calcDueDate)}">
+                        <br/>
+                        <h3 class="page-header" style="margin-top: 0">Atualização de estimativas</h3>
+
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>Data de atualização</th>
+                                <th>DueDate</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="dueDate : ${issue.dueDateHistory}">
+                                <td th:text="${#temporals.format(dueDate.created, 'dd/MM/yyyy')}"></td>
+                                <td th:text="${#temporals.format(dueDate.dueDate, 'dd/MM/yyyy')}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </th:block>
                 </div>
             </div>
         </div>

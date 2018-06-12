@@ -1,24 +1,34 @@
 package br.com.leonardoferreira.jirareport.mapper;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
 import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
+import br.com.leonardoferreira.jirareport.domain.embedded.DueDateHistory;
+import br.com.leonardoferreira.jirareport.domain.vo.changelog.JiraChangelog;
+import br.com.leonardoferreira.jirareport.domain.vo.changelog.JiraChangelogHistory;
+import br.com.leonardoferreira.jirareport.domain.vo.changelog.JiraChangelogItem;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -33,13 +43,15 @@ public class IssueMapper {
     @Autowired
     private HolidayService holidayService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     private final JsonParser jsonParser = new JsonParser();
 
     @ExecutionTime
     public List<Issue> parse(final String rawText, final Board board) {
         JsonElement response = jsonParser.parse(rawText);
-        JsonArray issues = response.getAsJsonObject()
-                .getAsJsonArray("issues");
+        JsonArray issues = response.getAsJsonObject().getAsJsonArray("issues");
 
         final List<String> holidays = holidayService.findByBoard(board.getId())
                 .stream().map(Holiday::getEnDate).collect(Collectors.toList());
@@ -52,7 +64,9 @@ public class IssueMapper {
                     JsonObject issue = issueRaw.getAsJsonObject();
 
                     JsonObject fields = issue.get("fields").getAsJsonObject();
-                    List<Changelog> changelog = getChangelog(issue, holidays);
+
+                    List<JiraChangelogItem> changelogItems = extractChangelogItems(issue);
+                    List<Changelog> changelog = parseChangelog(changelogItems, holidays);
 
                     LocalDateTime created = DateUtil.parseFromJira(fields.get("created").getAsString());
 
@@ -70,70 +84,78 @@ public class IssueMapper {
                     }
 
                     if (startDate == null && "BACKLOG".equals(board.getStartColumn())) {
-                         startDate = created;
+                        startDate = created;
                     }
 
                     if (startDate == null || endDate == null) {
                         return null;
                     }
 
-                    String epicField = board.getEpicCF();
-                    String estimateField = board.getEstimateCF();
-
-                    String epic = StringUtils.isEmpty(epicField) ? null : getAsStringSafe(fields.get(epicField));
-                    String estimated = null;
-                    if (!StringUtils.isEmpty(estimateField) && !fields.get(estimateField).isJsonNull()) {
-                        estimated = getAsStringSafe(fields.get(estimateField).getAsJsonObject().get("value"));
-                    }
-
                     Long leadTime = DateUtil.daysDiff(startDate, endDate, holidays);
 
-                    Issue issueVO = new Issue();
-                    issueVO.setKey(issue.get("key").getAsString());
-
+                    String author = null;
                     JsonObject creator = fields.getAsJsonObject("creator");
                     if (creator != null) {
-                        issueVO.setCreator(creator.get("displayName").getAsString());
+                        author = creator.get("displayName").getAsString();
                     }
 
-                    issueVO.setIssueType(getAsStringSafe(fields.getAsJsonObject("issuetype").get("name")));
-                    issueVO.setCreated(created);
-                    issueVO.setStartDate(startDate);
-                    issueVO.setEndDate(endDate);
-                    issueVO.setLeadTime(leadTime);
-                    issueVO.setSystem(getElement(fields, board.getSystemCF()));
-                    issueVO.setEpic(epic);
-                    issueVO.setEstimated(estimated);
-                    issueVO.setProject(getElement(fields, board.getProjectCF()));
-                    issueVO.setSummary(fields.get("summary").getAsString());
-                    issueVO.setChangelog(changelog);
-                    issueVO.setBoard(board);
+                    Long differenceFirstAndLastDueDate = null;
+                    List<DueDateHistory> dueDateHistory = null;
 
-                    return issueVO;
+                    if (Boolean.TRUE.equals(board.getCalcDueDate())) {
+                        dueDateHistory = parseDueDateHistory(changelogItems);
+                        if (!dueDateHistory.isEmpty()) {
+                            LocalDate firstDueDate = dueDateHistory.get(0).getDueDate();
+                            LocalDate finalDueDate = dueDateHistory.get(dueDateHistory.size() - 1).getDueDate();
+
+                            differenceFirstAndLastDueDate = ChronoUnit.DAYS.between(firstDueDate, finalDueDate);
+                        }
+                    }
+
+                    return Issue.builder()
+                            .creator(author)
+                            .key(getAsStringSafe(issue.get("key")))
+                            .issueType(getAsStringSafe(fields.getAsJsonObject("issuetype").get("name")))
+                            .created(created)
+                            .startDate(startDate)
+                            .endDate(endDate)
+                            .leadTime(leadTime)
+                            .system(parseElement(fields, board.getSystemCF()))
+                            .epic(parseElement(fields, board.getEpicCF()))
+                            .estimated(parseElement(fields, board.getEstimateCF()))
+                            .project(parseElement(fields, board.getProjectCF()))
+                            .summary(fields.get("summary").getAsString())
+                            .changelog(changelog)
+                            .board(board)
+                            .differenceFirstAndLastDueDate(differenceFirstAndLastDueDate)
+                            .dueDateHistory(dueDateHistory)
+                            .build();
+
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
-    private List<Changelog> getChangelog(final JsonObject issue, final List<String> holidays) {
-        JsonArray histories = issue.getAsJsonObject("changelog").getAsJsonArray("histories");
 
-        List<Changelog> collect = StreamSupport.stream(histories.spliterator(), true)
-                .map(historyRaw -> {
-                    JsonObject history = historyRaw.getAsJsonObject();
-                    JsonObject item = getItem(history);
-                    if (item == null) {
-                        return null;
-                    }
+    @SneakyThrows
+    private List<JiraChangelogItem> extractChangelogItems(final JsonObject issue) {
+        JiraChangelog changelog = objectMapper.readValue(issue.getAsJsonObject("changelog").toString(), JiraChangelog.class);
+        changelog.getHistories().forEach(cl -> cl.getItems().forEach(i -> i.setCreated(cl.getCreated())));
+        return changelog.getHistories().parallelStream()
+                .map(JiraChangelogHistory::getItems)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
 
-                    Changelog changelog = new Changelog();
-                    changelog.setCreated(DateUtil.parseFromJira(history.get("created").getAsString()));
-                    changelog.setFrom(getAsStringSafe(item.get("from")));
-                    changelog.setTo(getAsStringSafe(item.get("to")));
-
-                    return changelog;
-                })
-                .filter(Objects::nonNull)
+    @SneakyThrows
+    private List<Changelog> parseChangelog(final List<JiraChangelogItem> changelogItems, final List<String> holidays) {
+        List<Changelog> collect = changelogItems.stream()
+                .filter(i -> "status".equals(i.getField()))
+                .map(i -> Changelog.builder()
+                        .from(i.getFromString())
+                        .to(i.getToString())
+                        .created(i.getCreated())
+                        .build())
                 .collect(Collectors.toList());
 
         for (int i = 0; i < collect.size(); i++) {
@@ -151,27 +173,7 @@ public class IssueMapper {
         return collect;
     }
 
-    private JsonObject getItem(final JsonObject history) {
-        JsonArray items = history.getAsJsonArray("items");
-
-        return StreamSupport.stream(items.spliterator(), true)
-                .map(itemRaw -> {
-                    JsonObject item = itemRaw.getAsJsonObject();
-                    if (!"status".equalsIgnoreCase(item.get("field").getAsString())) {
-                        return null;
-                    }
-
-                    String fromString = getAsStringSafe(item.get("fromString"));
-                    String toString = getAsStringSafe(item.get("toString"));
-
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("from", fromString);
-                    jsonObject.addProperty("to", toString);
-                    return jsonObject;
-                }).filter(Objects::nonNull).findFirst().orElse(null);
-    }
-
-    private String getElement(final JsonObject fields, final String cf) {
+    private String parseElement(final JsonObject fields, final String cf) {
         if (StringUtils.isEmpty(cf)) {
             return null;
         }
@@ -205,6 +207,17 @@ public class IssueMapper {
             return null;
         }
         return jsonElement.getAsString();
+    }
+
+    private List<DueDateHistory> parseDueDateHistory(final List<JiraChangelogItem> changelogItems) {
+        return changelogItems.stream()
+                .filter(i -> "duedate".equals(i.getField()))
+                .map(i -> DueDateHistory.builder()
+                        .created(i.getCreated())
+                        .dueDate(LocalDate.parse(i.getTo(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                        .build())
+                .sorted(Comparator.comparing(DueDateHistory::getCreated))
+                .collect(Collectors.toList());
     }
 
 }
