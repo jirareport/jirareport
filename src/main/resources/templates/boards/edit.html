@@ -72,7 +72,7 @@
 
             <div class="form-group">
                 <label>Campo de tamanho/estimativa</label>
-                <select class="selectpicker" th:fiel    d="*{estimateCF}" data-width="100%" data-live-search="true">
+                <select class="selectpicker" th:field="*{estimateCF}" data-width="100%" data-live-search="true">
                     <option value="">Selecione</option>
                     <option th:each="jiraField : ${jiraFields}" th:value="${jiraField.id}">[[${jiraField.name}]] ([[${jiraField.id}]])</option>
                 </select>
