@@ -4,12 +4,10 @@
       layout:decorator="layouts/application">
 
 <th:block layout:fragment="content">
-    <div class="container-fluid">
-        <div class="page-header">
-            <h1>Alterar feriado</h1>
-        </div>
-
-        <th:block th:include="holidays/_form :: form('PUT')"/>
+    <div class="page-header">
+        <h1>Alterar feriado</h1>
     </div>
+
+    <th:block th:include="holidays/_form :: form('PUT')"/>
 </th:block>
 </html>
