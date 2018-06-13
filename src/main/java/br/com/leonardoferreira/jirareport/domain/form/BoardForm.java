@@ -35,6 +35,8 @@ public class BoardForm {
 
     private String projectCF;
 
+    private Boolean calcDueDate;
+
     private JiraProject jiraProject;
 
     public void setStartColumn(final String startColumn) {

@@ -55,6 +55,9 @@ public class Board extends BaseEntity {
 
     private String projectCF;
 
+    @Column(columnDefinition = "SMALLINT")
+    private Boolean calcDueDate;
+
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<LeadTimeConfig> leadTimeConfigs;
 
