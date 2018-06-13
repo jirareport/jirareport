@@ -1,6 +1,9 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import br.com.leonardoferreira.jirareport.util.StringUtil;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -128,27 +131,27 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     private String buildJQL(final IssuePeriodForm issuePeriodForm, final Board board) {
         log.info("Method=buildJQL, issuePeriodForm={}, board={}", issuePeriodForm, board);
 
-        StringBuilder jql = new StringBuilder();
-        jql.append("project = ").append(board.getExternalId()).append(" ");
-        if (!CollectionUtils.isEmpty(board.getIgnoreIssueType())) {
-            jql.append(" AND issuetype not in (");
-            jql.append(String.join(",", board.getIgnoreIssueType()
-                    .stream()
-                    .map(i -> "'" + i + "'")
-                    .collect(Collectors.toList()))).append(" ) ");
-        }
-        jql.append("AND (STATUS CHANGED TO '").append(board.getEndColumn()).append("' DURING('");
-        jql.append(DateUtil.toENDate(issuePeriodForm.getStartDate())).append("', '");
-        jql.append(DateUtil.toENDate(issuePeriodForm.getEndDate())).append(" 23:59')");
-        jql.append("OR ( Resolved >= ");
-        jql.append(DateUtil.toENDate(issuePeriodForm.getStartDate()));
-        jql.append(" AND Resolved <= '");
-        jql.append(DateUtil.toENDate(issuePeriodForm.getEndDate())).append(" 23:59'");
-        jql.append(" AND NOT STATUS CHANGED TO '").append(board.getEndColumn()).append("' ");
-        jql.append("   )");
-        jql.append(")");
 
-        return jql.toString();
+        Map<String, Object> params = new HashMap<>();
+
+        StringBuilder jql = new StringBuilder();
+        jql.append(" project = :project ");
+        jql.append(" AND ( STATUS CHANGED TO :endColumn DURING(:startDate, :endDate) ");
+        jql.append("       OR ( STATUS CHANGED TO :lastColumn DURING (:startDate, :endDate) AND NOT STATUS CHANGED TO :endColumn )");
+        jql.append("     ) ");
+
+        if (board.getIgnoreIssueType() != null && !board.getIgnoreIssueType().isEmpty()) {
+            jql.append(" AND issueType not in (:issueTypes) ");
+            params.put("issueTypes", board.getIgnoreIssueType());
+        }
+
+        params.put("project", board.getExternalId().toString());
+        params.put("startDate", DateUtil.toENDate(issuePeriodForm.getStartDate()));
+        params.put("endDate", DateUtil.toENDate(issuePeriodForm.getEndDate()) + " 23:59");
+        params.put("lastColumn", board.getLastColumn());
+        params.put("endColumn", board.getEndColumn());
+
+        return StringUtil.replaceParams(jql.toString(), params);
     }
 
     private List<String> findAllKeys(final SandBox sandBox, final IssueForm issueForm) {
