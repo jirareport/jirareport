@@ -67,4 +67,7 @@ public class Board extends BaseEntity {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Issue> issues;
 
+    public String getLastColumn() {
+        return fluxColumn == null || fluxColumn.isEmpty() ? "Done" : fluxColumn.get(fluxColumn.size() - 1);
+    }
 }
