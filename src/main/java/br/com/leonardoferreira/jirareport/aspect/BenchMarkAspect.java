@@ -16,29 +16,18 @@ public class BenchMarkAspect {
 
     @Around("@annotation(br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime)")
     public Object around(final ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        Exception e = null;
-        Object ret = null;
-        long end;
-
-        long start = System.currentTimeMillis();
+        long start = 0;
         try {
-            ret = proceedingJoinPoint.proceed();
-            end = System.currentTimeMillis();
-        } catch (Exception ex) {
-            e = ex;
-            end = System.currentTimeMillis();
+            start = System.currentTimeMillis();
+            return proceedingJoinPoint.proceed();
+        } finally {
+            long end = System.currentTimeMillis();
+            String className = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName();
+            String methodName = proceedingJoinPoint.getSignature().getName();
+            String fullName = className + "#" + methodName;
+
+            log.info("A=BenchMarkAspect, operation={}, executionTime={}", fullName, (end - start) + "ms");
         }
-
-        String className = proceedingJoinPoint.getSignature().getDeclaringType().getSimpleName();
-        String methodName = proceedingJoinPoint.getSignature().getName();
-        String fullName = className + "#" + methodName;
-
-        log.info("A=BenchMarkAspect, operation={}, executionTime={}", fullName, (end - start) + "ms");
-
-        if (e != null) {
-            throw e;
-        }
-        return ret;
     }
 
 }
