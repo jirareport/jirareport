@@ -31,6 +31,7 @@ import java.util.stream.StreamSupport;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
@@ -49,6 +50,7 @@ public class IssueMapper {
     private final JsonParser jsonParser = new JsonParser();
 
     @ExecutionTime
+    @Transactional
     public List<Issue> parse(final String rawText, final Board board) {
         JsonElement response = jsonParser.parse(rawText);
         JsonArray issues = response.getAsJsonObject().getAsJsonArray("issues");
@@ -211,7 +213,7 @@ public class IssueMapper {
 
     private List<DueDateHistory> parseDueDateHistory(final List<JiraChangelogItem> changelogItems) {
         return changelogItems.stream()
-                .filter(i -> "duedate".equals(i.getField()))
+                .filter(i -> "duedate".equals(i.getField()) && !StringUtils.isEmpty(i.getTo()))
                 .map(i -> DueDateHistory.builder()
                         .created(i.getCreated())
                         .dueDate(LocalDate.parse(i.getTo(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
