@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -30,7 +31,7 @@ public class PageController extends AbstractController implements ErrorControlle
         }
     }
 
-    @GetMapping("/error")
+    @RequestMapping("/error")
     public ModelAndView error(final HttpServletRequest request) {
         String token = UUID.randomUUID().toString();
         log.info("Method=error, MSG=Error trace, Trace={}", token);

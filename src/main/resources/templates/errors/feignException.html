@@ -8,7 +8,7 @@
         <h1>Ocorreu um erro tentando acessar um sistema externo</h1>
     </div>
 
-    <div class="jumbotron" style="font-size: 22px;">
+    <div class="jumbotron container-fluid" style="font-size: 22px;">
         <p th:if="${jiraError.message}"><strong>Mensagem:</strong> [[${jiraError.message}]]</p>
 
         <p th:if="${jiraError.statusCode}"><strong>Status:</strong> [[${jiraError.statusCode}]]</p>

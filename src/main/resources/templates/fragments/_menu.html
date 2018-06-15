@@ -11,7 +11,7 @@
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <i class="fa fa-user fa-fw"></i>
-                    <th:block th:text="${#authentication.principal.currentUser.name}"/>
+                    <th:block th:text="${#authentication.principal?.currentUser?.name}"/>
                     <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu">
