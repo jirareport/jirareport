@@ -3,6 +3,7 @@ package br.com.leonardoferreira.jirareport.mapper;
 import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
+import br.com.leonardoferreira.jirareport.domain.ImpedimentType;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.embedded.DueDateHistory;
@@ -228,18 +229,15 @@ public class IssueMapper {
     private Long countTimeInImpediment(final Board board, final List<JiraChangelogItem> changelogItems,
                                        final List<Changelog> changelog, final LocalDateTime endDate, final List<String> holidays) {
         Long timeInImpediment;
-        switch (board.getImpedimentType()) {
-            case FLAG:
-                timeInImpediment = countTimeInImpedimentByFlag(changelogItems, endDate, holidays);
-                break;
-            case COLUMN:
-                List<String> impedimentColumns = board.getImpedimentColumns();
-                timeInImpediment = impedimentColumns == null ? 0L : countTimeInImpedimentByColumn(changelog, impedimentColumns);
-                break;
-            default:
-                timeInImpediment = 0L;
-                break;
+        if (ImpedimentType.FLAG.equals(board.getImpedimentType())) {
+            timeInImpediment = countTimeInImpedimentByFlag(changelogItems, endDate, holidays);
+        } else if (ImpedimentType.COLUMN.equals(board.getImpedimentType())) {
+            List<String> impedimentColumns = board.getImpedimentColumns();
+            timeInImpediment = impedimentColumns == null ? 0L : countTimeInImpedimentByColumn(changelog, impedimentColumns);
+        } else {
+            timeInImpediment = 0L;
         }
+
         return timeInImpediment;
     }
 
