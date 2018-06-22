@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -114,6 +115,8 @@ public class IssueMapper {
                         }
                     }
 
+                    Long timeInImpediment = countTimeInImpediment(board, changelogItems, changelog, endDate, holidays);
+
                     return Issue.builder()
                             .creator(author)
                             .key(getAsStringSafe(issue.get("key")))
@@ -131,13 +134,13 @@ public class IssueMapper {
                             .board(board)
                             .differenceFirstAndLastDueDate(differenceFirstAndLastDueDate)
                             .dueDateHistory(dueDateHistory)
+                            .impedimentTime(timeInImpediment)
                             .build();
 
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
-
 
     @SneakyThrows
     private List<JiraChangelogItem> extractChangelogItems(final JsonObject issue) {
@@ -220,6 +223,60 @@ public class IssueMapper {
                         .build())
                 .sorted(Comparator.comparing(DueDateHistory::getCreated))
                 .collect(Collectors.toList());
+    }
+
+    private Long countTimeInImpediment(final Board board, final List<JiraChangelogItem> changelogItems,
+                                       final List<Changelog> changelog, final LocalDateTime endDate, final List<String> holidays) {
+        Long timeInImpediment;
+        switch (board.getImpedimentType()) {
+            case FLAG:
+                timeInImpediment = countTimeInImpedimentByFlag(changelogItems, endDate, holidays);
+                break;
+            case COLUMN:
+                List<String> impedimentColumns = board.getImpedimentColumns();
+                timeInImpediment = impedimentColumns == null ? 0L : countTimeInImpedimentByColumn(changelog, impedimentColumns);
+                break;
+            default:
+                timeInImpediment = 0L;
+                break;
+        }
+        return timeInImpediment;
+    }
+
+    private Long countTimeInImpedimentByFlag(final List<JiraChangelogItem> changelogItems, final LocalDateTime endDate, final List<String> holidays) {
+        List<LocalDateTime> beginnings = new ArrayList<>();
+        List<LocalDateTime> terms = new ArrayList<>();
+
+        changelogItems.stream()
+                .filter(i -> "flagged".equalsIgnoreCase(i.getField()))
+                .forEach(i -> {
+                    if ("impediment".equalsIgnoreCase(i.getToString())) {
+                        beginnings.add(i.getCreated());
+                    } else {
+                        terms.add(i.getCreated());
+                    }
+                });
+
+        if (beginnings.size() == terms.size() - 1) {
+            terms.add(endDate);
+        }
+
+        beginnings.sort(LocalDateTime::compareTo);
+        terms.sort(LocalDateTime::compareTo);
+
+        Long timeInImpediment = 0L;
+        for (int i = 0; i < terms.size(); i++) {
+            timeInImpediment += DateUtil.daysDiff(beginnings.get(i), terms.get(i), holidays);
+        }
+
+        return timeInImpediment;
+    }
+
+    private Long countTimeInImpedimentByColumn(final List<Changelog> changelog, final List<String> impedimentColumns) {
+        return changelog.stream()
+                .filter(cl -> impedimentColumns.contains(cl.getTo()) && cl.getLeadTime() != null)
+                .mapToLong(Changelog::getLeadTime)
+                .sum();
     }
 
 }

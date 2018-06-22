@@ -131,6 +131,8 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     private String buildJQL(final IssuePeriodForm issuePeriodForm, final Board board) {
         log.info("Method=buildJQL, issuePeriodForm={}, board={}", issuePeriodForm, board);
 
+        final List<String> fluxColumn = board.getFluxColumn();
+        String lastColumn = fluxColumn == null || fluxColumn.isEmpty() ? "Done" : fluxColumn.get(fluxColumn.size() - 1);
 
         Map<String, Object> params = new HashMap<>();
 
@@ -148,7 +150,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         params.put("project", board.getExternalId().toString());
         params.put("startDate", DateUtil.toENDate(issuePeriodForm.getStartDate()));
         params.put("endDate", DateUtil.toENDate(issuePeriodForm.getEndDate()) + " 23:59");
-        params.put("lastColumn", board.getLastColumn());
+        params.put("lastColumn", lastColumn);
         params.put("endColumn", board.getEndColumn());
 
         return StringUtil.replaceParams(jql.toString(), params);

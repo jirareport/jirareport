@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.helper;
 
+import br.com.leonardoferreira.jirareport.domain.ImpedimentType;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -20,5 +21,9 @@ public class ApplicationHelper {
 
     public String fmtLocalDate(final LocalDate localDate) {
         return localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    public ImpedimentType[] impedimentTypes() {
+        return ImpedimentType.values();
     }
 }
