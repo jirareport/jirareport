@@ -85,7 +85,7 @@ public class IssueMapper {
                         }
                     }
 
-                    if (startDate == null && "BACKLOG".equals(board.getStartColumn())) {
+                    if ("BACKLOG".equals(board.getStartColumn())) {
                         startDate = created;
                     }
 

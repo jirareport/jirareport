@@ -76,7 +76,7 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
             }
         }
 
-        if (startDate == null && "BACKLOG".equals(leadTimeConfig.getStartColumn())) {
+        if ("BACKLOG".equals(leadTimeConfig.getStartColumn())) {
             startDate = issue.getCreated();
         }
 
