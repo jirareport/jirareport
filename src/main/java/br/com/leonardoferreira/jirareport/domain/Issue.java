@@ -84,4 +84,6 @@ public class Issue extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private List<DueDateHistory> dueDateHistory;
 
+    private Long impedimentTime;
+
 }

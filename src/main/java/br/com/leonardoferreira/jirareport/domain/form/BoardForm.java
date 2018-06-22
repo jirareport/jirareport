@@ -1,10 +1,10 @@
 package br.com.leonardoferreira.jirareport.domain.form;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import br.com.leonardoferreira.jirareport.domain.ImpedimentType;
 import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.ToString;
 
@@ -38,6 +38,10 @@ public class BoardForm {
     private Boolean calcDueDate;
 
     private JiraProject jiraProject;
+
+    private ImpedimentType impedimentType;
+
+    private List<String> impedimentColumns;
 
     public void setStartColumn(final String startColumn) {
         this.startColumn = startColumn == null ? null : startColumn.toUpperCase(DateUtil.LOCALE_BR);
