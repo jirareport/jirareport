@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -89,8 +90,8 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=estimatedChart, issues={}", issues);
 
         Map<String, Long> collect = issues.stream()
-                .filter(i -> i.getEstimated() != null)
-                .collect(Collectors.groupingBy(Issue::getEstimated, Collectors.counting()));
+                .collect(Collectors.groupingBy(i-> Optional.ofNullable(i.getEstimated()).orElse("Não informado"),
+                        Collectors.counting()));
 
         return CompletableFuture.completedFuture(new Chart<>(collect));
     }
@@ -102,8 +103,9 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=leadTimeBySystem, issues={}", issues);
 
         Map<String, Double> collect = issues.stream()
-                .filter(i -> !StringUtils.isEmpty(i.getSystem()) && i.getLeadTime() != null)
-                .collect(Collectors.groupingBy(Issue::getSystem, Collectors.averagingLong(Issue::getLeadTime)));
+                .filter(i -> i.getLeadTime() != null)
+                .collect(Collectors.groupingBy(i-> Optional.ofNullable(i.getSystem()).orElse("Não informado"),
+                        Collectors.averagingLong(Issue::getLeadTime)));
 
         return CompletableFuture.completedFuture(new Chart<>(collect));
     }
@@ -115,8 +117,8 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=tasksBySystem, issues={}", issues);
 
         Map<String, Long> collect = issues.stream()
-                .filter(i -> !StringUtils.isEmpty(i.getSystem()))
-                .collect(Collectors.groupingBy(Issue::getSystem, Collectors.counting()));
+                .collect(Collectors.groupingBy(i-> Optional.ofNullable(i.getSystem()).orElse("Não informado"),
+                        Collectors.counting()));
 
         return CompletableFuture.completedFuture(new Chart<>(collect));
     }
@@ -128,8 +130,9 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=leadTimeBySize, issues={}", issues);
 
         Map<String, Double> collect = issues.stream()
-                .filter(i -> !StringUtils.isEmpty(i.getEstimated()) && i.getLeadTime() != null)
-                .collect(Collectors.groupingBy(Issue::getEstimated, Collectors.averagingLong(Issue::getLeadTime)));
+                .filter(i -> i.getLeadTime() != null)
+                .collect(Collectors.groupingBy(i-> Optional.ofNullable(i.getEstimated()).orElse("Não informado"),
+                        Collectors.averagingLong(Issue::getLeadTime)));
 
         return CompletableFuture.completedFuture(new Chart<>(collect));
     }
@@ -184,8 +187,9 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=leadTimeByProject, issues={}", issues);
 
         Map<String, Double> collect = issues.stream()
-                .filter(i -> !StringUtils.isEmpty(i.getProject()) && i.getLeadTime() != null)
-                .collect(Collectors.groupingBy(Issue::getProject, Collectors.averagingLong(Issue::getLeadTime)));
+                .filter(i -> i.getLeadTime() != null)
+                .collect(Collectors.groupingBy(i-> Optional.ofNullable(i.getProject()).orElse("Não informado"),
+                        Collectors.averagingLong(Issue::getLeadTime)));
 
         return CompletableFuture.completedFuture(new Chart<>(collect));
     }
@@ -197,8 +201,8 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=tasksByProject, issues={}", issues);
 
         Map<String, Long> collect = issues.stream()
-                .filter(i -> !StringUtils.isEmpty(i.getProject()))
-                .collect(Collectors.groupingBy(Issue::getProject, Collectors.counting()));
+                .collect(Collectors.groupingBy(i-> Optional.ofNullable(i.getProject()).orElse("Não informado"),
+                        Collectors.counting()));
 
         return CompletableFuture.completedFuture(new Chart<>(collect));
     }
