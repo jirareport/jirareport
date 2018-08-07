@@ -18,7 +18,7 @@ CREATE TABLE board (
 
 CREATE TABLE holiday (
     id           SERIAL                       NOT NULL PRIMARY KEY,
-    board_id     BIGINT                       NOT NULL REFERENCES public.board ON DELETE CASCADE,
+    board_id     BIGINT                       NOT NULL REFERENCES board ON DELETE CASCADE,
     date         DATE                         NOT NULL,
     description  VARCHAR(255)                 NOT NULL,
     owner        VARCHAR(255)                 NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE holiday (
 
 CREATE TABLE lead_time_config (
     id           BIGSERIAL                   NOT NULL PRIMARY KEY,
-    board_id     BIGINT                      NOT NULL REFERENCES public.board ON DELETE CASCADE,
+    board_id     BIGINT                      NOT NULL REFERENCES board ON DELETE CASCADE,
     name         VARCHAR(255)                NOT NULL,
     start_column VARCHAR(255)                NOT NULL,
     end_column   VARCHAR(255)                NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE lead_time_config (
 
 CREATE TABLE issue (
     id           BIGSERIAL                   NOT NULL PRIMARY KEY,
-    board_id     BIGINT                      NOT NULL REFERENCES public.board ON DELETE CASCADE,
+    board_id     BIGINT                      NOT NULL REFERENCES board ON DELETE CASCADE,
     key          VARCHAR(255)                NOT NULL,
     summary      VARCHAR(255),
     issue_type   VARCHAR(255),
