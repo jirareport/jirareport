@@ -1,4 +1,4 @@
-CREATE TABLE public.board (
+CREATE TABLE board (
     id                 BIGSERIAL                   NOT NULL PRIMARY KEY,
     name               VARCHAR(255)                NOT NULL,
     external_id        BIGINT                      NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE public.board (
     updated_at         TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
 
-CREATE TABLE public.holiday (
+CREATE TABLE holiday (
     id           SERIAL                       NOT NULL PRIMARY KEY,
     board_id     BIGINT                       NOT NULL REFERENCES public.board ON DELETE CASCADE,
     date         DATE                         NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE public.holiday (
     updated_at   TIMESTAMP WITHOUT TIME ZONE  NOT NULL
 );
 
-CREATE TABLE public.lead_time_config (
+CREATE TABLE lead_time_config (
     id           BIGSERIAL                   NOT NULL PRIMARY KEY,
     board_id     BIGINT                      NOT NULL REFERENCES public.board ON DELETE CASCADE,
     name         VARCHAR(255)                NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE public.lead_time_config (
     updated_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
 
-CREATE TABLE public.issue (
+CREATE TABLE issue (
     id           BIGSERIAL                   NOT NULL PRIMARY KEY,
     board_id     BIGINT                      NOT NULL REFERENCES public.board ON DELETE CASCADE,
     key          VARCHAR(255)                NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE public.issue (
     updated_at   TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
 
-CREATE TABLE public.issue_period (
+CREATE TABLE issue_period (
     id                      BIGSERIAL                   NOT NULL PRIMARY KEY,
     board_id                BIGINT                      NOT NULL REFERENCES public.board ON DELETE CASCADE,
     start_date              DATE                        NOT NULL,
@@ -85,12 +85,12 @@ CREATE TABLE public.issue_period (
     updated_at              TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );
 
-CREATE TABLE public.issue_period_issue (
+CREATE TABLE issue_period_issue (
     issue_period_id BIGINT NOT NULL REFERENCES public.issue_period ON DELETE CASCADE,
     issue_id        BIGINT NOT NULL REFERENCES public.issue ON DELETE CASCADE
 );
 
-CREATE TABLE public.lead_time (
+CREATE TABLE lead_time (
     id                  BIGSERIAL                    NOT NULL,
     issue_id            BIGINT                       NOT NULL REFERENCES public.issue ON DELETE CASCADE,
     lead_time_config_id BIGINT                       NOT NULL REFERENCES public.lead_time_config ON DELETE CASCADE,
