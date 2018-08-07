@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = "2.0.2.RELEASE"
+        springBootVersion = "2.0.4.RELEASE"
     }
     repositories {
         mavenCentral()
@@ -25,13 +25,12 @@ compileTestJava.options.encoding = "UTF-8"
 
 repositories {
     mavenCentral()
-    maven { url "https://repo.spring.io/milestone" }
 }
 
 ext {
     gsonVersion = "2.8.1"
     httpClientVersion = "4.5.1"
-    springCloudVersion = "Finchley.RC1"
+    springCloudVersion = "Finchley.SR1"
     hibernateTypesVersion = "2.2.0"
     mapstructVersion = "1.2.0.Final"
 }
