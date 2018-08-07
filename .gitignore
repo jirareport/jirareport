@@ -17,14 +17,6 @@
 *.ipr
 out/
 
-### NetBeans ###
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-
 node_modules
 
 data
