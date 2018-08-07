@@ -63,7 +63,7 @@ CREATE TABLE issue (
 
 CREATE TABLE issue_period (
     id                      BIGSERIAL                   NOT NULL PRIMARY KEY,
-    board_id                BIGINT                      NOT NULL REFERENCES public.board ON DELETE CASCADE,
+    board_id                BIGINT                      NOT NULL REFERENCES board ON DELETE CASCADE,
     start_date              DATE                        NOT NULL,
     end_date                DATE                        NOT NULL,
     avg_lead_time           DECIMAL(10, 2)              NOT NULL,
@@ -86,14 +86,14 @@ CREATE TABLE issue_period (
 );
 
 CREATE TABLE issue_period_issue (
-    issue_period_id BIGINT NOT NULL REFERENCES public.issue_period ON DELETE CASCADE,
-    issue_id        BIGINT NOT NULL REFERENCES public.issue ON DELETE CASCADE
+    issue_period_id BIGINT NOT NULL REFERENCES issue_period ON DELETE CASCADE,
+    issue_id        BIGINT NOT NULL REFERENCES issue ON DELETE CASCADE
 );
 
 CREATE TABLE lead_time (
     id                  BIGSERIAL                    NOT NULL,
-    issue_id            BIGINT                       NOT NULL REFERENCES public.issue ON DELETE CASCADE,
-    lead_time_config_id BIGINT                       NOT NULL REFERENCES public.lead_time_config ON DELETE CASCADE,
+    issue_id            BIGINT                       NOT NULL REFERENCES issue ON DELETE CASCADE,
+    lead_time_config_id BIGINT                       NOT NULL REFERENCES lead_time_config ON DELETE CASCADE,
     lead_time           BIGINT,
     end_date            TIMESTAMP WITHOUT TIME ZONE,
     start_date          TIMESTAMP WITHOUT TIME ZONE,
