@@ -23,6 +23,8 @@ targetCompatibility = 1.8
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
+mainClassName = "br.com.leonardoferreira.jirareport.Application"
+
 repositories {
     mavenCentral()
     maven { url "https://repo.spring.io/milestone" }
@@ -86,14 +88,6 @@ pmd {
             "java-basic",
             "java-design"
     ]
-}
-
-task buildGulp(type: Exec) {
-    commandLine './node_modules/gulp/bin/gulp.js'
-}
-
-bootRun {
-    dependsOn buildGulp
 }
 
 /**
