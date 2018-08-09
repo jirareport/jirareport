@@ -14,17 +14,8 @@ import org.thymeleaf.expression.IExpressionObjectFactory;
 @Component
 public class CustomDialectRegister implements IDialect, IExpressionObjectDialect, IExpressionObjectFactory {
 
-    private static final String APPLICATION_HELPER = "applicationHelper";
-
-    @Getter
-    private final String name;
-
     @Autowired
     private List<Helper> helpers;
-
-    public CustomDialectRegister() {
-        this.name = "CustomDialectRegister";
-    }
 
     @Override
     public IExpressionObjectFactory getExpressionObjectFactory() {
@@ -56,4 +47,8 @@ public class CustomDialectRegister implements IDialect, IExpressionObjectDialect
                 .orElse(false);
     }
 
+    @Override
+    public String getName() {
+        return "CustomDialectRegister";
+    }
 }
