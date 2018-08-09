@@ -11,6 +11,12 @@ import br.com.leonardoferreira.jirareport.domain.Issue;
  */
 public class ApplicationHelper {
 
+    private final String jiraUrl;
+
+    public ApplicationHelper(final String url) {
+        jiraUrl = url;
+    }
+
     public String issueTitle(final Issue issue) {
         return String.format("%s %s", issue.getKey(), issue.getSummary());
     }
@@ -25,5 +31,9 @@ public class ApplicationHelper {
 
     public ImpedimentType[] impedimentTypes() {
         return ImpedimentType.values();
+    }
+
+    public String buildJiraLink(final String key) {
+        return String.format("%s/browse/%s", jiraUrl, key);
     }
 }

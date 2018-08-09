@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.IExpressionContext;
 import org.thymeleaf.dialect.IDialect;
@@ -15,6 +16,9 @@ public class CustomDialectRegister implements IDialect, IExpressionObjectDialect
 
     @Getter
     private final String name;
+
+    @Value("${jira.url}")
+    private String jiraUrl;
 
     public CustomDialectRegister() {
         this.name = "CustomDialectRegister";
@@ -32,7 +36,7 @@ public class CustomDialectRegister implements IDialect, IExpressionObjectDialect
             @Override
             public Object buildObject(final IExpressionContext context,
                                       final String expressionObjectName) {
-                return new ApplicationHelper();
+                return new ApplicationHelper(jiraUrl);
             }
 
             @Override

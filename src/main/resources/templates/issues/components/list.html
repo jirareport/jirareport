@@ -25,7 +25,10 @@
                 <td class="text-center">
                     <button class="btn btn-xs btn-default" data-toggle="modal" th:attr="data-target=${'#' + issue.key}" title="Lead Times"><i class="fa fa-eye"></i></button>
                 </td>
-                <td th:text="${#applicationHelper.issueTitle(issue)}" th:attr="data-task=${issue.key}"></td>
+                <td th:attr="data-task=${issue.key}">
+                    <th:block th:text="${#applicationHelper.issueTitle(issue)}" />&nbsp;
+                    <a target="_blank" th:href="${#applicationHelper.buildJiraLink(issue.key)}"><i class="fa fa-external-link"></i></a>
+                </td>
                 <td th:text="${issue.issueType}"></td>
                 <td th:text="${#temporals.format(issue.startDate, 'dd/MM/yyyy')}"></td>
                 <td th:text="${#temporals.format(issue.endDate, 'dd/MM/yyyy')}"></td>
