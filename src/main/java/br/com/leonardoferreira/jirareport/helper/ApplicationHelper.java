@@ -1,20 +1,24 @@
 package br.com.leonardoferreira.jirareport.helper;
 
 import br.com.leonardoferreira.jirareport.domain.ImpedimentType;
+import br.com.leonardoferreira.jirareport.domain.Issue;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
-import br.com.leonardoferreira.jirareport.domain.Issue;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * @author lferreira on 31/05/18
  */
-public class ApplicationHelper {
+@Component
+public class ApplicationHelper implements Helper {
 
-    private final String jiraUrl;
+    @Value("${jira.url}")
+    private String jiraUrl;
 
-    public ApplicationHelper(final String url) {
-        jiraUrl = url;
+    @Override
+    public String getName() {
+        return "applicationHelper";
     }
 
     public String issueTitle(final Issue issue) {
@@ -36,4 +40,5 @@ public class ApplicationHelper {
     public String buildJiraLink(final String key) {
         return String.format("%s/browse/%s", jiraUrl, key);
     }
+
 }
