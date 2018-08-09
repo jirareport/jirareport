@@ -3,7 +3,6 @@ package br.com.leonardoferreira.jirareport.helper;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.IExpressionContext;
