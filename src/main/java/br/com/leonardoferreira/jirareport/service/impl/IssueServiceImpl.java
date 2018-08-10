@@ -59,7 +59,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     @ExecutionTime
     @Transactional
     public List<Issue> findAllInJira(final IssuePeriodForm issuePeriodForm, final Long boardId) {
-        log.info("Method=findAllInJira, issuePeriodForm={}", issuePeriodForm);
+        log.info("Method=findAllInJira, issuePeriodForm={}, boardId={}", issuePeriodForm, boardId);
 
         final Board board = boardService.findById(boardId);
 
