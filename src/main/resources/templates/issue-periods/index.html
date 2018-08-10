@@ -8,11 +8,15 @@
         <h1>Períodos <small th:text="${board.name}"></small></h1>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3>Novo</h3>
-        </div>
-        <form th:action="@{/boards/{id}/issue-periods(id=${board.id})}" th:method="POST" th:object="${issuePeriodForm}">
+    <form th:action="@{/boards/{id}/issue-periods(id=${board.id})}" th:method="POST" th:object="${issuePeriodForm}">
+        <th:block th:each="e : ${#fields.detailedErrors()}">
+            <div th:if="${e.fieldName == 'startDateIsBeforeEndDate'}" th:text="${e.message}" class="alert alert-danger"></div>
+            <div th:if="${e.fieldName == 'validRange'}" th:text="${e.message}" class="alert alert-danger"></div>
+        </th:block>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>Novo</h3>
+            </div>
             <div class="panel-body row">
                 <div class="form-group col-md-3">
                     <label>Data Inicio</label>
@@ -43,8 +47,8 @@
                     <button type="submit" class="btn btn-success" data-loader>Salvar</button>
                 </div>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
 
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active"><a href="#list" data-toggle="tab">Listagem</a></li>
