@@ -7,6 +7,7 @@ import br.com.leonardoferreira.jirareport.domain.form.IssuePeriodForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
+import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodDetails;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodList;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
@@ -74,8 +75,16 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         Double wipAvg = wipService.calcAvgWip(issuePeriodForm.getStartDate(), issuePeriodForm.getEndDate(),
                 issues, CalcUtil.calcStartColumns(board));
 
+        IssuePeriodDetails details = IssuePeriodDetails.builder()
+                .boardId(boardId)
+                .jql(jql)
+                .wipAvg(wipAvg)
+                .avgLeadTime(avgLeadTime)
+                .issueCount(issues.size())
+                .build();
+
         IssuePeriod issuePeriod = issuePeriodMapper.fromJiraData(issuePeriodForm, issues,
-                avgLeadTime, chartAggregator, issues.size(), boardId, jql, wipAvg);
+                chartAggregator, details);
 
         issuePeriodRepository.save(issuePeriod);
     }

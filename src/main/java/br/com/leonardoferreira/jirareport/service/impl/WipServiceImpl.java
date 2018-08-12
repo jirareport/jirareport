@@ -43,7 +43,7 @@ public class WipServiceImpl implements WipService {
             aux = currentDate.plusDays(1);
         }
 
-        if (dailyWip.size() == 0) {
+        if (dailyWip.isEmpty()) {
             return 0D;
         }
 
