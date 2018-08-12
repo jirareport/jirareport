@@ -1,16 +1,10 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import br.com.leonardoferreira.jirareport.util.StringUtil;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.client.IssueClient;
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Issue;
+import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.form.IssuePeriodForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
@@ -23,11 +17,24 @@ import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.LeadTimeService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+import br.com.leonardoferreira.jirareport.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author lferreira
@@ -96,10 +103,13 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
                 .mapToLong(Issue::getLeadTime)
                 .average().orElse(0D);
 
+        Chart<String, Long> weeklyThroughput = calcWeeklyThroughput(issueForm, issues);
+
         return SandBox.builder()
                 .issues(issues)
                 .chartAggregator(chartAggregator)
                 .avgLeadTime(avgLeadTime)
+                .weeklyThroughput(weeklyThroughput)
                 .build();
     }
 
@@ -118,7 +128,6 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
                 .projects(issueRepository.findAllIssueProjectsByBoardId(boardId))
                 .build();
     }
-
 
     @Override
     @Transactional(readOnly = true)
@@ -161,4 +170,26 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
                 .distinct().sorted().collect(Collectors.toList());
     }
 
+    private Chart<String, Long> calcWeeklyThroughput(final IssueForm issueForm, final List<Issue> issues) {
+        Chart<String, Long> chart = new Chart<>();
+
+        TemporalField temporalField = WeekFields.of(new Locale("pt-BR")).dayOfWeek();
+        LocalDate currentDate = issueForm.getStartDate().with(temporalField, 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        while (currentDate.isBefore(issueForm.getEndDate())) {
+            LocalDate startWeek = currentDate;
+            currentDate = currentDate.plusWeeks(1);
+            LocalDate endWeek = currentDate;
+
+            long issuesCount = issues.stream()
+                    .filter(i -> i.getEndDate().isAfter(startWeek.atStartOfDay()) && i.getEndDate().isBefore(endWeek.atStartOfDay()))
+                    .count();
+
+            String week = String.format("[%s - %s]", startWeek.format(formatter), endWeek.format(formatter));
+            chart.add(week, issuesCount);
+        }
+
+        return chart;
+    }
 }
