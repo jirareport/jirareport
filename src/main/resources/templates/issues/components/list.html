@@ -27,7 +27,7 @@
                 </td>
                 <td th:attr="data-task=${issue.key}">
                     <th:block th:text="${#applicationHelper.issueTitle(issue)}" />&nbsp;
-                    <a target="_blank" th:href="${#applicationHelper.buildJiraLink(issue.key)}"><i class="fa fa-external-link"></i></a>
+                    <a target="_blank" th:href="${#jiraHelper.issueLink(issue.key)}" title="Ver issue no Jira"><i class="fa fa-external-link"></i></a>
                 </td>
                 <td th:text="${issue.issueType}"></td>
                 <td th:text="${#temporals.format(issue.startDate, 'dd/MM/yyyy')}"></td>
