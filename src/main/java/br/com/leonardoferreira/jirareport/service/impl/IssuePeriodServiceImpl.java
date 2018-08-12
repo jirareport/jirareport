@@ -16,6 +16,8 @@ import br.com.leonardoferreira.jirareport.service.BoardService;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
+import br.com.leonardoferreira.jirareport.service.WipService;
+import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,9 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     @Autowired
     private IssuePeriodMapper issuePeriodMapper;
 
+    @Autowired
+    private WipService wipService;
+
     @Override
     @Transactional
     public void create(final IssuePeriodForm issuePeriodForm, final Long boardId) {
@@ -66,8 +71,11 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
         ChartAggregator chartAggregator = chartService.buildAllCharts(issues);
 
+        Double wipAvg = wipService.calcAvgWip(issuePeriodForm.getStartDate(), issuePeriodForm.getEndDate(),
+                issues, CalcUtil.calcStartColumns(board));
+
         IssuePeriod issuePeriod = issuePeriodMapper.fromJiraData(issuePeriodForm, issues,
-                avgLeadTime, chartAggregator, issues.size(), boardId, jql);
+                avgLeadTime, chartAggregator, issues.size(), boardId, jql, wipAvg);
 
         issuePeriodRepository.save(issuePeriod);
     }
