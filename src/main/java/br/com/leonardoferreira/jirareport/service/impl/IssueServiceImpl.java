@@ -19,17 +19,6 @@ import br.com.leonardoferreira.jirareport.service.LeadTimeService;
 import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import br.com.leonardoferreira.jirareport.util.StringUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
@@ -40,6 +29,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author lferreira
