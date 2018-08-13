@@ -3,6 +3,7 @@ package br.com.leonardoferreira.jirareport.service.impl;
 import br.com.leonardoferreira.jirareport.client.HolidayClient;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Board;
+import br.com.leonardoferreira.jirareport.domain.UserConfig;
 import br.com.leonardoferreira.jirareport.domain.vo.HolidayVO;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.mapper.HolidayMapper;
@@ -10,10 +11,12 @@ import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
 import br.com.leonardoferreira.jirareport.repository.BoardRepository;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import br.com.leonardoferreira.jirareport.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -41,6 +44,9 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
 
     @Autowired
     private HolidayMapper holidayMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     @Transactional(readOnly = true)
@@ -104,7 +110,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
         log.info("Method=createImported, boardId={}", boardId);
 
         List<Holiday> holidaysByBoard = holidayRepository.findAllByBoardId(boardId);
-        List<HolidayVO> allHolidaysVOInCity = holidayClient.findAllHolidaysInCity("2018", "SP", "ARARAQUARA");
+        List<HolidayVO> allHolidaysVOInCity = findAllHolidaysInCity();
         List<Holiday> allHolidaysInCity = holidayMapper.fromVOS(allHolidaysVOInCity, boardId);
 
         if (holidaysByBoard.containsAll(allHolidaysInCity)) {
@@ -122,5 +128,11 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
         }
 
         return true;
+    }
+
+    private List<HolidayVO> findAllHolidaysInCity() {
+        UserConfig userConfig = userService.findHolidayInfo();
+        return holidayClient.findAllHolidaysInCity(LocalDate.now().getYear(),
+                userConfig.getState(), userConfig.getCity(), userConfig.getHolidayToken());
     }
 }

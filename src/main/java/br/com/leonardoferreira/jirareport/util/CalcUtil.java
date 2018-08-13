@@ -1,10 +1,10 @@
 package br.com.leonardoferreira.jirareport.util;
 
+import br.com.leonardoferreira.jirareport.domain.Board;
+
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
-import br.com.leonardoferreira.jirareport.domain.Board;
 
 /**
  * @author lferreira
@@ -14,8 +14,6 @@ public final class CalcUtil {
 
     private CalcUtil() {
     }
-
-
 
     public static Set<String> calcStartColumns(final String startColumn,
                                         final String endColumn,
@@ -59,4 +57,5 @@ public final class CalcUtil {
     public static Set<String> calcEndColumns(final Board board) {
         return CalcUtil.calcEndColumns(board.getEndColumn(), board.getFluxColumn());
     }
+
 }
