@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * Created by jfalbo
  */
-@FeignClient(name = "holiday-client", url = "${holiday.url} + ${holiday.token}")
+@FeignClient(name = "holiday-client", url = "${holiday.url}")
 public interface HolidayClient {
 
     @GetMapping
     @Cacheable("findAllHolidaysInCity")
-    List<HolidayVO> findAllHolidaysInCity(@RequestParam("ano") final String year,
+    List<HolidayVO> findAllHolidaysInCity(@RequestParam("ano") final Integer year,
                                           @RequestParam("estado") final String state,
-                                          @RequestParam("cidade") final String city);
+                                          @RequestParam("cidade") final String city,
+                                          @RequestParam("token") final String token);
 }
