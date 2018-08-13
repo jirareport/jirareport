@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import br.com.leonardoferreira.jirareport.util.DateUtil;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -152,7 +153,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .forEach((k, v) -> collect.add(new ColumnTimeAvg(k, v)));
 
         if (fluxColumn != null) {
-            collect.sort(Comparator.comparingInt(i -> fluxColumn.indexOf(i.getColumnName())));
+            collect.sort(Comparator.comparingInt(i -> fluxColumn.indexOf(i.getColumnName().toUpperCase(DateUtil.LOCALE_BR))));
         }
 
         return CompletableFuture.completedFuture(collect);
