@@ -113,6 +113,8 @@ public class IssuePeriod extends BaseEntity {
 
     private String jql;
 
+    private Double wipAvg;
+
     public String getDates() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return String.format("[%s - %s]", startDate.format(formatter), endDate.format(formatter));

@@ -7,6 +7,7 @@ import br.com.leonardoferreira.jirareport.domain.form.IssuePeriodForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
+import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodDetails;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodList;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
@@ -16,6 +17,8 @@ import br.com.leonardoferreira.jirareport.service.BoardService;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
+import br.com.leonardoferreira.jirareport.service.WipService;
+import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +50,9 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     @Autowired
     private IssuePeriodMapper issuePeriodMapper;
 
+    @Autowired
+    private WipService wipService;
+
     @Override
     @Transactional
     public void create(final IssuePeriodForm issuePeriodForm, final Long boardId) {
@@ -66,8 +72,19 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
         ChartAggregator chartAggregator = chartService.buildAllCharts(issues, board);
 
+        Double wipAvg = wipService.calcAvgWip(issuePeriodForm.getStartDate(), issuePeriodForm.getEndDate(),
+                issues, CalcUtil.calcStartColumns(board));
+
+        IssuePeriodDetails details = IssuePeriodDetails.builder()
+                .boardId(boardId)
+                .jql(jql)
+                .wipAvg(wipAvg)
+                .avgLeadTime(avgLeadTime)
+                .issueCount(issues.size())
+                .build();
+
         IssuePeriod issuePeriod = issuePeriodMapper.fromJiraData(issuePeriodForm, issues,
-                avgLeadTime, chartAggregator, issues.size(), boardId, jql);
+                chartAggregator, details);
 
         issuePeriodRepository.save(issuePeriod);
     }
