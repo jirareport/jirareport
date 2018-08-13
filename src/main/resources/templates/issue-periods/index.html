@@ -69,6 +69,7 @@
                                 <th>ID</th>
                                 <th>LeadTime</th>
                                 <th>Histórias</th>
+                                <th>WIP médio</th>
                                 <th>Ações</th>
                             </tr>
                             </thead>
@@ -80,6 +81,7 @@
                                 </td>
                                 <td th:text="${#applicationHelper.fmtLeadTime(issuePeriod.avgLeadTime)}"></td>
                                 <td th:text="${issuePeriod.issuesCount}"></td>
+                                <td th:text="${issuePeriod.wipAvg}"></td>
                                 <td>
                                     <a th:href="@{/boards/{boardId}/issue-periods/{issuePeriodId}(boardId=${board.id},issuePeriodId=${issuePeriod.id})}"
                                        data-method="DELETE" data-confirm="Tem certeza?" class="btn btn-xs btn-danger">Remover</a>
