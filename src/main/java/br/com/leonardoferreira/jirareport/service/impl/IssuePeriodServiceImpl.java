@@ -70,7 +70,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
                 .mapToLong(Issue::getLeadTime)
                 .average().orElse(0D);
 
-        ChartAggregator chartAggregator = chartService.buildAllCharts(issues);
+        ChartAggregator chartAggregator = chartService.buildAllCharts(issues, board);
 
         Double wipAvg = wipService.calcAvgWip(issuePeriodForm.getStartDate(), issuePeriodForm.getEndDate(),
                 issues, CalcUtil.calcStartColumns(board));

@@ -51,6 +51,9 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     @Autowired
     private LeadTimeService leadTimeService;
 
+    @Autowired
+    private BoardService boardService;
+
     @Override
     @ExecutionTime
     @Transactional
@@ -78,7 +81,9 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         }
 
         List<Issue> issues = issueRepository.findByExample(boardId, issueForm);
-        final ChartAggregator chartAggregator = chartService.buildAllCharts(issues);
+
+        Board board = boardService.findById(boardId);
+        ChartAggregator chartAggregator = chartService.buildAllCharts(issues, board);
 
         Double avgLeadTime = issues.parallelStream()
                 .filter(i -> i.getLeadTime() != null)

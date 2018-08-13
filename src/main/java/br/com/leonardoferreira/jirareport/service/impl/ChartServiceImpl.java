@@ -140,7 +140,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     @Async
     @Override
     @ExecutionTime
-    public CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg(final List<Issue> issues) {
+    public CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg(final List<Issue> issues, final List<String> fluxColumn) {
         log.info("Method=columnTimeAvg, issues={}", issues);
 
         List<ColumnTimeAvg> collect = new ArrayList<>();
@@ -150,6 +150,10 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .filter(changelog -> changelog.getTo() != null && changelog.getLeadTime() != null)
                 .collect(Collectors.groupingBy(Changelog::getTo, Collectors.averagingDouble(Changelog::getLeadTime)))
                 .forEach((k, v) -> collect.add(new ColumnTimeAvg(k, v)));
+
+        if (fluxColumn != null) {
+            collect.sort(Comparator.comparingInt(i -> fluxColumn.indexOf(i.getColumnName())));
+        }
 
         return CompletableFuture.completedFuture(collect);
     }
@@ -210,7 +214,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     @Override
     @SneakyThrows
     @ExecutionTime
-    public ChartAggregator buildAllCharts(final List<Issue> issues) {
+    public ChartAggregator buildAllCharts(final List<Issue> issues, final Board board) {
         log.info("Method=buildAllCharts, issues={}", issues);
 
         CompletableFuture<Histogram> histogram = chartService.issueHistogram(issues);
@@ -218,7 +222,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         CompletableFuture<Chart<String, Double>> leadTimeBySystem = chartService.leadTimeBySystem(issues);
         CompletableFuture<Chart<String, Long>> tasksBySystem = chartService.tasksBySystem(issues);
         CompletableFuture<Chart<String, Double>> leadTimeBySize = chartService.leadTimeBySize(issues);
-        CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg = chartService.columnTimeAvg(issues);
+        CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg = chartService.columnTimeAvg(issues, board.getFluxColumn());
         CompletableFuture<Chart<String, Double>> leadTimeByType = chartService.leadTimeByType(issues);
         CompletableFuture<Chart<String, Long>> tasksByType = chartService.tasksByType(issues);
         CompletableFuture<Chart<String, Double>> leadTimeByProject = chartService.leadTimeByProject(issues);
