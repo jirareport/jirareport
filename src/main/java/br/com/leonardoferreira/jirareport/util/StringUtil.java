@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.util;
 
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,5 +29,11 @@ public final class StringUtil {
 
     public static String wrapList(final List<?> list) {
         return String.join(",", list.stream().map(StringUtil::wrap).collect(Collectors.toList()));
+    }
+
+    public static String stripAccents(final String s) {
+        String str = Normalizer.normalize(s, Normalizer.Form.NFD);
+        str = str.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        return str;
     }
 }
