@@ -1,0 +1,1 @@
+alter table issue_period add column jql text;

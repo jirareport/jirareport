@@ -35,6 +35,7 @@ public interface IssuePeriodMapper {
             @Mapping(target = "tasksByProject",       source = "chartAggregator.tasksByProject"),
             @Mapping(target = "leadTimeCompareChart", source = "chartAggregator.leadTimeCompareChart"),
             @Mapping(target = "issuesCount",          source = "issueCount"),
+            @Mapping(target = "jql",                  source = "jql"),
             @Mapping(target = "owner",                ignore = true),
             @Mapping(target = "lastEditor",           ignore = true),
             @Mapping(target = "createdAt",            ignore = true),
@@ -42,5 +43,5 @@ public interface IssuePeriodMapper {
     })
     IssuePeriod fromJiraData(IssuePeriodForm issuePeriodForm, List<Issue> issues,
                              Double avgLeadTime, ChartAggregator chartAggregator,
-                             Integer issueCount, Long boardId);
+                             Integer issueCount, Long boardId, String jql);
 }

@@ -1,12 +1,5 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import br.com.leonardoferreira.jirareport.util.StringUtil;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.client.IssueClient;
 import br.com.leonardoferreira.jirareport.domain.Board;
@@ -22,12 +15,19 @@ import br.com.leonardoferreira.jirareport.service.BoardService;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.LeadTimeService;
+import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+import br.com.leonardoferreira.jirareport.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author lferreira
@@ -41,9 +41,6 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     private IssueClient issueClient;
 
     @Autowired
-    private BoardService boardService;
-
-    @Autowired
     private IssueMapper issueMapper;
 
     @Autowired
@@ -55,22 +52,18 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     @Autowired
     private LeadTimeService leadTimeService;
 
+    @Autowired
+    private BoardService boardService;
+
     @Override
     @ExecutionTime
     @Transactional
-    public List<Issue> findAllInJira(final IssuePeriodForm issuePeriodForm, final Long boardId) {
-        log.info("Method=findAllInJira, issuePeriodForm={}, boardId={}", issuePeriodForm, boardId);
+    public List<Issue> createByJql(final String jql, final Board board) {
+        log.info("Method=createByJql, jql={}, board={}", jql, board);
 
-        final Board board = boardService.findById(boardId);
-
-        String issuesStr = issueClient.findAll(currentToken(), buildJQL(issuePeriodForm, board));
+        String issuesStr = issueClient.findAll(currentToken(), jql);
 
         List<Issue> issues = issueMapper.parse(issuesStr, board);
-        List<String> keys = issues.stream().map(Issue::getKey).collect(Collectors.toList());
-
-        if (!CollectionUtils.isEmpty(keys)) {
-            issueRepository.deleteByKeysAndBoardId(keys, boardId);
-        }
 
         issueRepository.saveAll(issues);
         leadTimeService.createLeadTimes(issues, board.getId());
@@ -89,7 +82,9 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         }
 
         List<Issue> issues = issueRepository.findByExample(boardId, issueForm);
-        final ChartAggregator chartAggregator = chartService.buildAllCharts(issues);
+
+        Board board = boardService.findById(boardId);
+        ChartAggregator chartAggregator = chartService.buildAllCharts(issues, board);
 
         Double avgLeadTime = issues.parallelStream()
                 .filter(i -> i.getLeadTime() != null)
@@ -128,8 +123,10 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         return issueRepository.findByIssuePeriodId(issuePeriodId);
     }
 
-    private String buildJQL(final IssuePeriodForm issuePeriodForm, final Board board) {
-        log.info("Method=buildJQL, issuePeriodForm={}, board={}", issuePeriodForm, board);
+    @Override
+    @Transactional(readOnly = true)
+    public String searchJQL(final IssuePeriodForm issuePeriodForm, final Board board) {
+        log.info("Method=searchJQL, issuePeriodForm={}, board={}", issuePeriodForm, board);
 
         final List<String> fluxColumn = board.getFluxColumn();
         String lastColumn = fluxColumn == null || fluxColumn.isEmpty() ? "Done" : fluxColumn.get(fluxColumn.size() - 1);
@@ -137,23 +134,35 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         Map<String, Object> params = new HashMap<>();
 
         StringBuilder jql = new StringBuilder();
-        jql.append(" project = :project ");
-        jql.append(" AND ( STATUS CHANGED TO :endColumn DURING(:startDate, :endDate) ");
-        jql.append("       OR ( STATUS CHANGED TO :lastColumn DURING (:startDate, :endDate) AND NOT STATUS CHANGED TO :endColumn )");
+        jql.append(" project = {project} ");
+        jql.append(" AND ( STATUS CHANGED TO {endColumn} DURING({startDate}, {endDate}) ");
+        jql.append("       OR ( STATUS CHANGED TO {lastColumn} DURING ({startDate}, {endDate}) AND NOT STATUS CHANGED TO {endColumn} )");
         jql.append("     ) ");
 
         if (board.getIgnoreIssueType() != null && !board.getIgnoreIssueType().isEmpty()) {
-            jql.append(" AND issueType not in (:issueTypes) ");
+            jql.append(" AND issueType NOT IN ({issueTypes}) ");
             params.put("issueTypes", board.getIgnoreIssueType());
         }
+
+        jql.append(" AND status WAS IN ({startColumns}) ");
+        jql.append(" AND status WAS IN ({endColumns}) ");
 
         params.put("project", board.getExternalId().toString());
         params.put("startDate", DateUtil.toENDate(issuePeriodForm.getStartDate()));
         params.put("endDate", DateUtil.toENDate(issuePeriodForm.getEndDate()) + " 23:59");
         params.put("lastColumn", lastColumn);
         params.put("endColumn", board.getEndColumn());
+        params.put("endColumns", CalcUtil.calcEndColumns(board));
+        params.put("startColumns", CalcUtil.calcStartColumns(board));
 
         return StringUtil.replaceParams(jql.toString(), params);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAll(final List<Issue> issues) {
+        log.info("Method=deleteAll, issues={}", issues);
+        issueRepository.deleteAll(issues);
     }
 
     private List<String> findAllKeys(final SandBox sandBox, final IssueForm issueForm) {

@@ -74,7 +74,10 @@
                             </thead>
                             <tbody>
                             <tr th:each="issuePeriod : ${issuePeriods}">
-                                <td th:text="${issuePeriod.dates}"></td>
+                                <td>
+                                    <th:block th:text="${issuePeriod.dates}"/>&nbsp;
+                                    <a target="_blank" th:href="${#jiraHelper.searchIssuesLink(issuePeriod.jql)}" title="Ver consulta no Jira"><i class="fa fa-external-link"></i></a>
+                                </td>
                                 <td th:text="${#applicationHelper.fmtLeadTime(issuePeriod.avgLeadTime)}"></td>
                                 <td th:text="${issuePeriod.issuesCount}"></td>
                                 <td>
