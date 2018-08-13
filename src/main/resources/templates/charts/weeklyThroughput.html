@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="chart(chartData)">
+    <th:block
+            th:if="${chartData?.hasData}"
+            th:include="components/chart/_bar :: chart('weekly_throughput', 'Semana', 'Throughput', ${chartData}, true)" />
+    <span th:unless="${chartData?.hasData}">Nenhum registro encontrado</span>
+</th:block>
+</html>
+

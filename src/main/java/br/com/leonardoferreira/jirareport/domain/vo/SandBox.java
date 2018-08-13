@@ -1,12 +1,13 @@
 package br.com.leonardoferreira.jirareport.domain.vo;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import br.com.leonardoferreira.jirareport.domain.Issue;
+import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author lferreira
@@ -22,6 +23,8 @@ public class SandBox {
     private ChartAggregator chartAggregator;
 
     private Double avgLeadTime;
+
+    private Chart<String, Long> weeklyThroughput;
 
     public SandBox() {
         this.issues = new ArrayList<>();
