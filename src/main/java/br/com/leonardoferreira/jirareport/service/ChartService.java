@@ -28,7 +28,7 @@ public interface ChartService {
 
     CompletableFuture<Chart<String, Double>> leadTimeBySize(List<Issue> issues);
 
-    CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg(List<Issue> issues);
+    CompletableFuture<List<ColumnTimeAvg>> columnTimeAvg(List<Issue> issues, List<String> fluxColumn);
 
     CompletableFuture<Chart<String, Double>> leadTimeByType(List<Issue> issues);
 
@@ -38,7 +38,7 @@ public interface ChartService {
 
     CompletableFuture<Chart<String, Long>> tasksByProject(List<Issue> issues);
 
-    ChartAggregator buildAllCharts(List<Issue> issues);
+    ChartAggregator buildAllCharts(List<Issue> issues, Board board);
 
     CompletableFuture<Chart<String, Double>> calcLeadTimeCompare(List<Issue> issues);
 

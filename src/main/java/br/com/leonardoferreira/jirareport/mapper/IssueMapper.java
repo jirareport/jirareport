@@ -100,7 +100,7 @@ public class IssueMapper {
                     String author = null;
                     JsonObject creator = fields.getAsJsonObject("creator");
                     if (creator != null) {
-                        author = creator.get("displayName").getAsString();
+                        author = getAsStringSafe(creator.get("displayName"));
                     }
 
                     Long differenceFirstAndLastDueDate = null;

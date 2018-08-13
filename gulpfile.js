@@ -1,12 +1,12 @@
-const gulp      = require('gulp');
-const uglify    = require('gulp-uglify');
+const gulp = require('gulp');
+const uglify = require('gulp-uglify');
 const uglifycss = require('gulp-uglifycss');
-const concat    = require('gulp-concat');
-const rename    = require('gulp-rename');
-const clean     = require('gulp-clean');
-const replace   = require('gulp-replace');
-const babel     = require('gulp-babel');
-const watch     = require('gulp-watch');
+const concat = require('gulp-concat');
+const rename = require('gulp-rename');
+const clean = require('gulp-clean');
+const replace = require('gulp-replace');
+const babel = require('gulp-babel');
+const watch = require('gulp-watch');
 
 const options = {
   baseDir: "./src/main/resources/static",
@@ -39,7 +39,10 @@ const options = {
       "./node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js",
       "./node_modules/jquery-bootstrap-scrolling-tabs/dist/jquery.scrolling-tabs.min.js",
       "./node_modules/bootstrap-select/dist/js/bootstrap-select.min.js",
-      "./node_modules/bootstrap-table/dist/bootstrap-table.min.js"
+      "./node_modules/bootstrap-table/dist/bootstrap-table.min.js",
+      "./node_modules/tableexport.jquery.plugin/libs/FileSaver/FileSaver.min.js",
+      "./node_modules/tableexport.jquery.plugin/libs/js-xlsx/xlsx.core.min.js",
+      "./node_modules/tableexport.jquery.plugin/tableExport.min.js"
     ],
     fonts: [
       "./node_modules/font-awesome/fonts/*",

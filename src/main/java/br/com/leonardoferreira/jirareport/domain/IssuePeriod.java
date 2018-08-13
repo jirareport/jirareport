@@ -111,6 +111,8 @@ public class IssuePeriod extends BaseEntity {
 
     private Integer issuesCount;
 
+    private String jql;
+
     public String getDates() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return String.format("[%s - %s]", startDate.format(formatter), endDate.format(formatter));

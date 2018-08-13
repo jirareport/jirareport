@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="list(issues)">
-    <table class="table" data-toggle="table">
+    <table class="table" data-toggle="table" id="issue-table">
         <thead>
         <tr>
             <th></th>
@@ -27,7 +27,7 @@
                 </td>
                 <td th:attr="data-task=${issue.key}">
                     <th:block th:text="${#applicationHelper.issueTitle(issue)}" />&nbsp;
-                    <a target="_blank" th:href="${#applicationHelper.buildJiraLink(issue.key)}"><i class="fa fa-external-link"></i></a>
+                    <a target="_blank" th:href="${#jiraHelper.issueLink(issue.key)}" title="Ver issue no Jira"><i class="fa fa-external-link"></i></a>
                 </td>
                 <td th:text="${issue.issueType}"></td>
                 <td th:text="${#temporals.format(issue.startDate, 'dd/MM/yyyy')}"></td>
@@ -44,6 +44,13 @@
         </th:block>
         </tbody>
     </table>
+
+    <br>
+    <div class="btn-group pull-right">
+        <button class="btn btn-default" onclick="$('#issue-table').tableExport({type:'csv', fileName: 'Listagem de issues'});">Exportar para CSV</button>
+        <button class="btn btn-default" onclick="$('#issue-table').tableExport({type:'excel', fileName: 'Listagem de issues'});">Exportar para Excel</button>
+    </div>
+
     <th:block th:each="issue : ${issues}" th:include="issues/components/leadtime_modal :: modal(${issue}, ${board})"/>
 </th:block>
 </html>
