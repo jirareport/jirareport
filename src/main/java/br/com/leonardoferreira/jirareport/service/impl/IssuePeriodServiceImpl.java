@@ -1,10 +1,8 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import java.util.List;
-
+import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
-import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.form.IssuePeriodForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
@@ -14,15 +12,17 @@ import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.mapper.IssuePeriodMapper;
 import br.com.leonardoferreira.jirareport.repository.IssuePeriodRepository;
+import br.com.leonardoferreira.jirareport.service.BoardService;
 import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.service.IssuePeriodService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
-import br.com.leonardoferreira.jirareport.service.BoardService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author lferreira
@@ -50,25 +50,24 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     @Override
     @Transactional
     public void create(final IssuePeriodForm issuePeriodForm, final Long boardId) {
-        log.info("Method=create, issuePeriodForm={}", issuePeriodForm);
+        log.info("Method=create, issuePeriodForm={}, boardId={}", issuePeriodForm, boardId);
 
-        IssuePeriod oldIssuePeriod = issuePeriodRepository.findByStartDateAndEndDateAndBoardId(issuePeriodForm.getStartDate(),
-                issuePeriodForm.getEndDate(), boardId);
-        if (oldIssuePeriod != null) {
-            issuePeriodRepository.delete(oldIssuePeriod);
-        }
+        delete(issuePeriodForm, boardId);
 
-        List<Issue> issues = issueService.findAllInJira(issuePeriodForm, boardId);
+        Board board = boardService.findById(boardId);
+
+        String jql = issueService.searchJQL(issuePeriodForm, board);
+        List<Issue> issues = issueService.createByJql(jql, board);
 
         Double avgLeadTime = issues.parallelStream()
                 .filter(i -> i.getLeadTime() != null)
                 .mapToLong(Issue::getLeadTime)
                 .average().orElse(0D);
 
-        final ChartAggregator chartAggregator = chartService.buildAllCharts(issues);
+        ChartAggregator chartAggregator = chartService.buildAllCharts(issues);
 
         IssuePeriod issuePeriod = issuePeriodMapper.fromJiraData(issuePeriodForm, issues,
-                avgLeadTime, chartAggregator, issues.size(), boardId);
+                avgLeadTime, chartAggregator, issues.size(), boardId, jql);
 
         issuePeriodRepository.save(issuePeriod);
     }
@@ -122,13 +121,13 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     }
 
     @Override
+    @Transactional
     public void update(final Long issuePeriodId) {
         log.info("Method=update, issuePeriodId={}", issuePeriodId);
 
         IssuePeriod issuePeriod = findById(issuePeriodId);
         IssuePeriodForm issuePeriodForm = new IssuePeriodForm(issuePeriod.getStartDate(), issuePeriod.getEndDate());
 
-        remove(issuePeriodId);
         create(issuePeriodForm, issuePeriod.getBoardId());
     }
 
@@ -143,5 +142,17 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
                 .issuePeriods(issuePeriods)
                 .issuePeriodChart(issuePeriodChart)
                 .build();
+    }
+
+    private void delete(final IssuePeriodForm issuePeriodForm, final Long boardId) {
+        log.info("Method=delete, issuePeriodForm={}, boardId={}", issuePeriodForm, boardId);
+
+        IssuePeriod issuePeriod = issuePeriodRepository.findByStartDateAndEndDateAndBoardId(issuePeriodForm.getStartDate(),
+                issuePeriodForm.getEndDate(), boardId);
+
+        if (issuePeriod != null) {
+            issuePeriodRepository.delete(issuePeriod);
+            issueService.deleteAll(issuePeriod.getIssues());
+        }
     }
 }
