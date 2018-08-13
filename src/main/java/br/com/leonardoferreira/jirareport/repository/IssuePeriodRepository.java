@@ -18,5 +18,9 @@ public interface IssuePeriodRepository extends CrudRepository<IssuePeriod, Long>
     @EntityGraph(attributePaths = { "issues", "issues.leadTimes", "issues.leadTimes.leadTimeConfig" }, type = EntityGraph.EntityGraphType.LOAD)
     List<IssuePeriod> findByBoardId(Long boardId);
 
+    @EntityGraph(attributePaths = { "issues" })
     IssuePeriod findByStartDateAndEndDateAndBoardId(LocalDate startDate, LocalDate endDate, Long boardId);
+
+    List<IssuePeriod> findByJqlIsNull();
+
 }
