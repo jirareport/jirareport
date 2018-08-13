@@ -167,13 +167,14 @@ public class IssueMapper {
         for (int i = 0; i < collect.size(); i++) {
             Changelog current = collect.get(i);
             if (i + 1 == collect.size()) {
-                current.setCreated(current.getCreated());
+                current.setLeadTime(0L);
+                current.setEndDate(current.getCreated());
                 break;
             }
 
             Changelog next = collect.get(i + 1);
             current.setLeadTime(DateUtil.daysDiff(current.getCreated(), next.getCreated(), holidays));
-            current.setCreated(current.getCreated());
+            current.setEndDate(next.getCreated());
         }
 
         return collect;
