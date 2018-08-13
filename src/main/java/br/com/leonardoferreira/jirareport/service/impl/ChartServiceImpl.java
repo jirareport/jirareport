@@ -55,7 +55,6 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
         issues.sort(Comparator.comparing(Issue::getLeadTime));
 
-
         Long median = null;
         Long percentile75 = null;
         Long percentile90 = null;
@@ -148,8 +147,8 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .map(Issue::getChangelog)
                 .flatMap(Collection::stream)
                 .filter(changelog -> changelog.getTo() != null && changelog.getLeadTime() != null)
-                .collect(Collectors.groupingBy(Changelog::getTo, Collectors.averagingDouble(Changelog::getLeadTime)))
-                .forEach((k, v) -> collect.add(new ColumnTimeAvg(k, v)));
+                .collect(Collectors.groupingBy(Changelog::getTo, Collectors.summingDouble(Changelog::getLeadTime)))
+                .forEach((k, v) -> collect.add(new ColumnTimeAvg(k, v / issues.size())));
 
         if (fluxColumn != null) {
             collect.sort(Comparator.comparingInt(i -> fluxColumn.indexOf(i.getColumnName())));
