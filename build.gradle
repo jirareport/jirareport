@@ -75,7 +75,7 @@ dependencyManagement {
 }
 
 checkstyle {
-    toolVersion = "5.9"
+    toolVersion = "8.11"
     configFile = new File(rootDir, "checkstyle.xml")
 }
 

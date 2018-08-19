@@ -20,6 +20,7 @@ public final class DateUtil {
     public static final Locale LOCALE_BR = new Locale("pt", "BR");
 
     private static final String DEFAULT_FORMATTER = "yyyy-MM-dd";
+
     public static final String FORMATTER = "2018-05-03T23:20:26.000-0300";
 
     private DateUtil() {

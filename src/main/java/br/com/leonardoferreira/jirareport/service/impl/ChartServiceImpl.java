@@ -1,6 +1,7 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=estimatedChart, issues={}", issues);
 
         Map<String, Long> collect = issues.stream()
-                .collect(Collectors.groupingBy(i-> Optional.ofNullable(i.getEstimated()).orElse("Não informado"),
+                .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getEstimated()).orElse("Não informado"),
                         Collectors.counting()));
 
         return CompletableFuture.completedFuture(new Chart<>(collect));
@@ -104,7 +105,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
         Map<String, Double> collect = issues.stream()
                 .filter(i -> i.getLeadTime() != null)
-                .collect(Collectors.groupingBy(i-> Optional.ofNullable(i.getSystem()).orElse("Não informado"),
+                .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getSystem()).orElse("Não informado"),
                         Collectors.averagingLong(Issue::getLeadTime)));
 
         return CompletableFuture.completedFuture(new Chart<>(collect));
@@ -117,7 +118,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=tasksBySystem, issues={}", issues);
 
         Map<String, Long> collect = issues.stream()
-                .collect(Collectors.groupingBy(i-> Optional.ofNullable(i.getSystem()).orElse("Não informado"),
+                .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getSystem()).orElse("Não informado"),
                         Collectors.counting()));
 
         return CompletableFuture.completedFuture(new Chart<>(collect));
@@ -131,7 +132,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
         Map<String, Double> collect = issues.stream()
                 .filter(i -> i.getLeadTime() != null)
-                .collect(Collectors.groupingBy(i-> Optional.ofNullable(i.getEstimated()).orElse("Não informado"),
+                .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getEstimated()).orElse("Não informado"),
                         Collectors.averagingLong(Issue::getLeadTime)));
 
         return CompletableFuture.completedFuture(new Chart<>(collect));
@@ -192,7 +193,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
         Map<String, Double> collect = issues.stream()
                 .filter(i -> i.getLeadTime() != null)
-                .collect(Collectors.groupingBy(i-> Optional.ofNullable(i.getProject()).orElse("Não informado"),
+                .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getProject()).orElse("Não informado"),
                         Collectors.averagingLong(Issue::getLeadTime)));
 
         return CompletableFuture.completedFuture(new Chart<>(collect));
@@ -205,7 +206,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=tasksByProject, issues={}", issues);
 
         Map<String, Long> collect = issues.stream()
-                .collect(Collectors.groupingBy(i-> Optional.ofNullable(i.getProject()).orElse("Não informado"),
+                .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getProject()).orElse("Não informado"),
                         Collectors.counting()));
 
         return CompletableFuture.completedFuture(new Chart<>(collect));

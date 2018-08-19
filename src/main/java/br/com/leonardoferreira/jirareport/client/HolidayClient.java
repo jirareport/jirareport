@@ -16,8 +16,8 @@ public interface HolidayClient {
 
     @GetMapping
     @Cacheable("findAllHolidaysInCity")
-    List<HolidayVO> findAllHolidaysInCity(@RequestParam("ano") final Integer year,
-                                          @RequestParam("estado") final String state,
-                                          @RequestParam("cidade") final String city,
-                                          @RequestParam("token") final String token);
+    List<HolidayVO> findAllHolidaysInCity(@RequestParam("ano") Integer year,
+                                          @RequestParam("estado") String state,
+                                          @RequestParam("cidade") String city,
+                                          @RequestParam("token") String token);
 }

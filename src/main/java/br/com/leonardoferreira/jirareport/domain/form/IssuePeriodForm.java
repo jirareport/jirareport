@@ -1,6 +1,5 @@
 package br.com.leonardoferreira.jirareport.domain.form;
 
-
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

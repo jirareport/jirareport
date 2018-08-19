@@ -1,12 +1,11 @@
 package br.com.leonardoferreira.jirareport.repository;
 
-import java.util.List;
-
 import br.com.leonardoferreira.jirareport.domain.Issue;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface IssueRepository extends CrudRepository<Issue, Long>, IssueCustomRepository {
@@ -43,7 +42,4 @@ public interface IssueRepository extends CrudRepository<Issue, Long>, IssueCusto
             + " WHERE ip.id = :issuePeriodId")
     List<Issue> findByIssuePeriodId(Long issuePeriodId);
 
-    @Modifying
-    @Query("DELETE FROM Issue i WHERE i.key IN (:keys) and i.board.id = :boardId")
-    void deleteByKeysAndBoardId(List<String> keys, Long boardId);
 }
