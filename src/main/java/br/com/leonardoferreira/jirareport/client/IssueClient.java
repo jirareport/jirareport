@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "issue-client", url = "${jira.url}")
 public interface IssueClient {
 
-    @GetMapping("/rest/api/2/search?expand=changelog")
+    @GetMapping("/rest/api/2/search?expand=changelog&maxResults=100")
     String findAll(@RequestHeader("Authorization") String token, @RequestParam("jql") String jql);
 
 }
