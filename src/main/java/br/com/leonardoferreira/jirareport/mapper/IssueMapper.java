@@ -70,7 +70,7 @@ public class IssueMapper {
                     JsonObject fields = issue.get("fields").getAsJsonObject();
 
                     List<JiraChangelogItem> changelogItems = extractChangelogItems(issue);
-                    List<Changelog> changelog = parseChangelog(changelogItems, holidays);
+                    List<Changelog> changelog = parseChangelog(changelogItems, holidays, board.getIgnoreWeekend());
 
                     LocalDateTime created = DateUtil.parseFromJira(fields.get("created").getAsString());
 
@@ -95,7 +95,7 @@ public class IssueMapper {
                         return null;
                     }
 
-                    Long leadTime = DateUtil.daysDiff(startDate, endDate, holidays);
+                    Long leadTime = DateUtil.daysDiff(startDate, endDate, holidays, board.getIgnoreWeekend());
 
                     String author = null;
                     JsonObject creator = fields.getAsJsonObject("creator");
@@ -154,7 +154,8 @@ public class IssueMapper {
     }
 
     @SneakyThrows
-    private List<Changelog> parseChangelog(final List<JiraChangelogItem> changelogItems, final List<String> holidays) {
+    private List<Changelog> parseChangelog(final List<JiraChangelogItem> changelogItems,
+                                           final List<String> holidays, final Boolean ignoreWeekend) {
         List<Changelog> collect = changelogItems.stream()
                 .filter(i -> "status".equals(i.getField()))
                 .map(i -> Changelog.builder()
@@ -173,7 +174,7 @@ public class IssueMapper {
             }
 
             Changelog next = collect.get(i + 1);
-            current.setLeadTime(DateUtil.daysDiff(current.getCreated(), next.getCreated(), holidays));
+            current.setLeadTime(DateUtil.daysDiff(current.getCreated(), next.getCreated(), holidays, ignoreWeekend));
             current.setEndDate(next.getCreated());
         }
 
@@ -231,7 +232,7 @@ public class IssueMapper {
                                        final List<Changelog> changelog, final LocalDateTime endDate, final List<String> holidays) {
         Long timeInImpediment;
         if (ImpedimentType.FLAG.equals(board.getImpedimentType())) {
-            timeInImpediment = countTimeInImpedimentByFlag(changelogItems, endDate, holidays);
+            timeInImpediment = countTimeInImpedimentByFlag(changelogItems, endDate, holidays, board.getIgnoreWeekend());
         } else if (ImpedimentType.COLUMN.equals(board.getImpedimentType())) {
             List<String> impedimentColumns = board.getImpedimentColumns();
             timeInImpediment = impedimentColumns == null ? 0L : countTimeInImpedimentByColumn(changelog, impedimentColumns);
@@ -242,7 +243,8 @@ public class IssueMapper {
         return timeInImpediment;
     }
 
-    private Long countTimeInImpedimentByFlag(final List<JiraChangelogItem> changelogItems, final LocalDateTime endDate, final List<String> holidays) {
+    private Long countTimeInImpedimentByFlag(final List<JiraChangelogItem> changelogItems, final LocalDateTime endDate,
+                                             final List<String> holidays, final Boolean ignoreWeekend) {
         List<LocalDateTime> beginnings = new ArrayList<>();
         List<LocalDateTime> terms = new ArrayList<>();
 
@@ -265,7 +267,7 @@ public class IssueMapper {
 
         Long timeInImpediment = 0L;
         for (int i = 0; i < terms.size(); i++) {
-            timeInImpediment += DateUtil.daysDiff(beginnings.get(i), terms.get(i), holidays);
+            timeInImpediment += DateUtil.daysDiff(beginnings.get(i), terms.get(i), holidays, ignoreWeekend);
         }
 
         return timeInImpediment;

@@ -56,17 +56,22 @@ public final class DateUtil {
         return issuePeriod.getStartDate().compareTo(issuePeriod1.getStartDate());
     }
 
-    public static Long daysDiff(final LocalDateTime startDate, final LocalDateTime endDate, final List<String> holidays) {
+    public static Long daysDiff(final LocalDateTime startDate, final LocalDateTime endDate,
+                                final List<String> holidays, final Boolean ignoreWeekend) {
         LocalDate start = startDate.toLocalDate();
         LocalDate end = endDate.toLocalDate();
 
-        Long workingDays = 0L;
-        while (!start.isAfter(end)) {
-            DayOfWeek day = start.getDayOfWeek();
-            if (!DayOfWeek.SATURDAY.equals(day) && !DayOfWeek.SUNDAY.equals(day) && !isHoliday(start, holidays)) {
-                workingDays++;
+        long workingDays = 0L;
+        if (!Boolean.TRUE.equals(ignoreWeekend)) {
+            workingDays = ChronoUnit.DAYS.between(start, end);
+        } else {
+            while (!start.isAfter(end)) {
+                DayOfWeek day = start.getDayOfWeek();
+                if (!DayOfWeek.SATURDAY.equals(day) && !DayOfWeek.SUNDAY.equals(day) && !isHoliday(start, holidays)) {
+                    workingDays++;
+                }
+                start = start.plusDays(1);
             }
-            start = start.plusDays(1);
         }
 
         return workingDays;

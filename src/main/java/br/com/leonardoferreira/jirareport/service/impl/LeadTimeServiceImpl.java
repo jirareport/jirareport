@@ -6,12 +6,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
+import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.LeadTime;
 import br.com.leonardoferreira.jirareport.domain.LeadTimeConfig;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.repository.LeadTimeRepository;
+import br.com.leonardoferreira.jirareport.service.BoardService;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.service.LeadTimeConfigService;
 import br.com.leonardoferreira.jirareport.service.LeadTimeService;
@@ -37,6 +39,9 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
     @Autowired
     private LeadTimeRepository leadTimeRepository;
 
+    @Autowired
+    private BoardService boardService;
+
     @Override
     @Transactional
     @ExecutionTime
@@ -44,20 +49,20 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
         log.info("Method=createLeadTimes, issues={}, boardId={}", issues, boardId);
 
         List<LeadTimeConfig> leadTimeConfigs = leadTimeConfigService.findAllByBoardId(boardId);
-        final List<String> holidays = holidayService.findByBoard(boardId).stream()
+        List<String> holidays = holidayService.findByBoard(boardId).stream()
                 .map(Holiday::getEnDate).collect(Collectors.toList());
+        Board board = boardService.findById(boardId);
 
         issues.forEach(issue -> {
             leadTimeRepository.deleteByIssueId(issue.getId());
             issue.setLeadTimes(leadTimeConfigs.stream()
-                    .map(leadTimeConfig -> calcLeadTime(leadTimeConfig, issue, holidays))
+                    .map(leadTimeConfig -> calcLeadTime(leadTimeConfig, issue, holidays, board.getIgnoreWeekend()))
                     .collect(Collectors.toSet()));
         });
     }
 
-    private LeadTime calcLeadTime(final LeadTimeConfig leadTimeConfig,
-                                  final Issue issue,
-                                  final List<String> holidays) {
+    private LeadTime calcLeadTime(final LeadTimeConfig leadTimeConfig, final Issue issue,
+                                  final List<String> holidays, final Boolean ignoreWeekend) {
         log.info("Method=calcLeadTime, leadTimeConfig={}, issue={}, holidays={}", leadTimeConfig, issue, holidays);
 
         LocalDateTime startDate = null;
@@ -82,7 +87,7 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
 
         Long leadTime = 0L;
         if (startDate != null && endDate != null) {
-            leadTime = DateUtil.daysDiff(startDate, endDate, holidays);
+            leadTime = DateUtil.daysDiff(startDate, endDate, holidays, ignoreWeekend);
         }
 
         return leadTimeRepository.save(LeadTime.builder()
