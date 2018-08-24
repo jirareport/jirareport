@@ -37,6 +37,8 @@ public class BoardForm {
 
     private Boolean calcDueDate;
 
+    private Boolean ignoreWeekend;
+
     private JiraProject jiraProject;
 
     private ImpedimentType impedimentType;

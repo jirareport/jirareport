@@ -1,6 +1,27 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
+import br.com.leonardoferreira.jirareport.domain.Board;
+import br.com.leonardoferreira.jirareport.domain.Issue;
+import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
+import br.com.leonardoferreira.jirareport.domain.LeadTime;
+import br.com.leonardoferreira.jirareport.domain.LeadTimeConfig;
+import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
+import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
+import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
+import br.com.leonardoferreira.jirareport.domain.embedded.Histogram;
+import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
+import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
+import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
+import br.com.leonardoferreira.jirareport.service.ChartService;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -15,28 +36,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-
-import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
-import br.com.leonardoferreira.jirareport.domain.Issue;
-import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
-import br.com.leonardoferreira.jirareport.domain.LeadTime;
-import br.com.leonardoferreira.jirareport.domain.LeadTimeConfig;
-import br.com.leonardoferreira.jirareport.domain.Board;
-import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
-import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
-import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
-import br.com.leonardoferreira.jirareport.domain.embedded.Histogram;
-import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
-import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
-import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
-import br.com.leonardoferreira.jirareport.service.ChartService;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.util.StringUtils;
 
 /**
  * @author lferreira
@@ -61,11 +60,10 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         Long percentile75 = null;
         Long percentile90 = null;
 
-        if (issues.size() >= 10) {
-            int totalElements = issues.size();
-            int medianIndex = calculateCeilingPercentage(totalElements, 50);
-            int percentile75Index = calculateCeilingPercentage(totalElements, 75);
-            int percentile90Index = calculateCeilingPercentage(totalElements, 90);
+        if (!issues.isEmpty()) {
+            int medianIndex = calculateCeilingPercentage(issues.size(), 50);
+            int percentile75Index = calculateCeilingPercentage(issues.size(), 75);
+            int percentile90Index = calculateCeilingPercentage(issues.size(), 90);
 
             median = issues.get(medianIndex - 1).getLeadTime();
             percentile75 = issues.get(percentile75Index - 1).getLeadTime();

@@ -101,6 +101,10 @@
                     <label><input type="checkbox" th:field="*{calcDueDate}">Utiliza calculo de DueDate?</label>
                 </div>
 
+                <div class="checkbox">
+                    <label><input type="checkbox" th:field="*{ignoreWeekend}">Conta lead time como dias corridos?</label>
+                </div>
+
                 <div class="form-group">
                     <label>Tipo de impedimento</label>
                     <select class="selectpicker" th:field="*{impedimentType}" data-width="100%" data-live-search="true" id="impedimentColumns-select">
