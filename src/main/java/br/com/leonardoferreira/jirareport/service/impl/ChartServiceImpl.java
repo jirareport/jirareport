@@ -65,7 +65,6 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
             int percentile75Index = calculateCeilingPercentage(issues.size(), 75);
             int percentile90Index = calculateCeilingPercentage(issues.size(), 90);
 
-
             median = issues.get(medianIndex - 1).getLeadTime();
             percentile75 = issues.get(percentile75Index - 1).getLeadTime();
             percentile90 = issues.get(percentile90Index - 1).getLeadTime();
