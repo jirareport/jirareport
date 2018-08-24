@@ -3,6 +3,7 @@ package br.com.leonardoferreira.jirareport.repository;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,33 +14,33 @@ public interface IssueRepository extends CrudRepository<Issue, Long>, IssueCusto
     @Query(value = "SELECT DISTINCT issue.estimated FROM issue "
             + " WHERE issue.board_id = :boardId "
             + " AND issue.estimated IS NOT NULL", nativeQuery = true)
-    List<String> findAllEstimativesByBoardId(Long boardId);
+    List<String> findAllEstimativesByBoardId(@Param("boardId") Long boardId);
 
     @Query(value = "SELECT DISTINCT issue.system FROM issue "
             + " WHERE issue.board_id = :boardId "
             + " AND issue.system IS NOT NULL", nativeQuery = true)
-    List<String> findAllSystemsByBoardId(Long boardId);
+    List<String> findAllSystemsByBoardId(@Param("boardId") Long boardId);
 
     @Query(value = "SELECT DISTINCT issue.epic FROM issue "
             + " WHERE issue.board_id = :boardId "
             + " AND issue.epic IS NOT NULL", nativeQuery = true)
-    List<String> findAllEpicsByBoardId(Long boardId);
+    List<String> findAllEpicsByBoardId(@Param("boardId") Long boardId);
 
     @Query(value = "SELECT DISTINCT issue.issue_type FROM issue "
             + " WHERE issue.board_id = :boardId "
             + " AND issue.issue_type IS NOT NULL", nativeQuery = true)
-    List<String> findAllIssueTypesByBoardId(Long boardId);
+    List<String> findAllIssueTypesByBoardId(@Param("boardId") Long boardId);
 
     @Query(value = "SELECT DISTINCT issue.project FROM issue "
             + " WHERE issue.board_id = :boardId "
             + " AND issue.project IS NOT NULL", nativeQuery = true)
-    List<String> findAllIssueProjectsByBoardId(Long boardId);
+    List<String> findAllIssueProjectsByBoardId(@Param("boardId") Long boardId);
 
     @Query("SELECT DISTINCT i FROM Issue i "
             + " JOIN i.issuePeriods ip "
             + " LEFT JOIN FETCH i.leadTimes leadTimes "
             + " LEFT JOIN FETCH leadTimes.leadTimeConfig "
             + " WHERE ip.id = :issuePeriodId")
-    List<Issue> findByIssuePeriodId(Long issuePeriodId);
+    List<Issue> findByIssuePeriodId(@Param("issuePeriodId") Long issuePeriodId);
 
 }

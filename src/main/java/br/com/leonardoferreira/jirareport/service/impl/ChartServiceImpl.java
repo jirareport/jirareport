@@ -56,13 +56,20 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
         issues.sort(Comparator.comparing(Issue::getLeadTime));
 
-        int medianIndex = calculateCeilingPercentage(issues.size(), 50);
-        int percentile75Index = calculateCeilingPercentage(issues.size(), 75);
-        int percentile90Index = calculateCeilingPercentage(issues.size(), 90);
+        Long median = null;
+        Long percentile75 = null;
+        Long percentile90 = null;
 
-        Long median = issues.get(medianIndex - 1).getLeadTime();
-        Long percentile75 = issues.get(percentile75Index - 1).getLeadTime();
-        Long percentile90 = issues.get(percentile90Index - 1).getLeadTime();
+        if (!issues.isEmpty()) {
+            int medianIndex = calculateCeilingPercentage(issues.size(), 50);
+            int percentile75Index = calculateCeilingPercentage(issues.size(), 75);
+            int percentile90Index = calculateCeilingPercentage(issues.size(), 90);
+
+
+            median = issues.get(medianIndex - 1).getLeadTime();
+            percentile75 = issues.get(percentile75Index - 1).getLeadTime();
+            percentile90 = issues.get(percentile90Index - 1).getLeadTime();
+        }
 
         Chart<Long, Long> chart = histogramChart(issues);
 

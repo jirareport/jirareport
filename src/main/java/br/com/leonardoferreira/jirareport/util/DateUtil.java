@@ -62,7 +62,7 @@ public final class DateUtil {
         LocalDate end = endDate.toLocalDate();
 
         long workingDays = 0L;
-        if (!Boolean.TRUE.equals(ignoreWeekend)) {
+        if (Boolean.TRUE.equals(ignoreWeekend)) {
             workingDays = ChronoUnit.DAYS.between(start, end);
         } else {
             while (!start.isAfter(end)) {
