@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,7 @@ import org.springframework.util.StringUtils;
  * @author lferreira
  * @since 7/28/17 12:52 PM
  */
+@Slf4j
 @Component
 public class IssueMapper {
 
@@ -263,6 +265,7 @@ public class IssueMapper {
         }
 
         if (beginnings.size() != terms.size()) {
+            log.info("Method=countTimeInImpedimentByFlag, Info=tamanhos diferentes, beginnings={}, terms={}", beginnings.size(), terms.size());
             return 0L;
         }
 
