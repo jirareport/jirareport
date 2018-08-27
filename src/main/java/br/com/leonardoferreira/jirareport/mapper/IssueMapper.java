@@ -262,6 +262,10 @@ public class IssueMapper {
             terms.add(endDate);
         }
 
+        if (beginnings.size() != terms.size()) {
+            return 0L;
+        }
+
         beginnings.sort(LocalDateTime::compareTo);
         terms.sort(LocalDateTime::compareTo);
 
