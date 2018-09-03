@@ -14,6 +14,8 @@ import javax.persistence.Id;
 @EqualsAndHashCode(of = "username", callSuper = false)
 public class UserConfig extends BaseEntity {
 
+    private static final long serialVersionUID = -9168105728096346993L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

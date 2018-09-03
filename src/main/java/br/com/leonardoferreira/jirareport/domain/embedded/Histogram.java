@@ -21,7 +21,7 @@ public class Histogram {
     private Long percentile90;
 
     @JsonIgnore
-    public boolean getHasPercentile() {
+    public Boolean getHasPercentile() {
         return median != null && percentile75 != null && percentile90 != null;
     }
 

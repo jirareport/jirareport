@@ -64,14 +64,14 @@ public class NaiveSSLSocketFactory extends SSLSocketFactory {
     @Override
     public Socket createSocket(final Socket socket, final String host, final int port, final boolean autoClose)
             throws IOException {
-        return (naivelyTrustedHostnames.contains(host))
+        return naivelyTrustedHostnames.contains(host)
                 ? alwaysAllowSslContext.getSocketFactory().createSocket(socket, host, port, autoClose)
                 : sslSocketFactory.createSocket(socket, host, port, autoClose);
     }
 
     @Override
     public Socket createSocket(final String host, final int port) throws IOException {
-        return (naivelyTrustedHostnames.contains(host))
+        return naivelyTrustedHostnames.contains(host)
                 ? alwaysAllowSslContext.getSocketFactory().createSocket(host, port)
                 : sslSocketFactory.createSocket(host, port);
     }
@@ -79,14 +79,14 @@ public class NaiveSSLSocketFactory extends SSLSocketFactory {
     @Override
     public Socket createSocket(final String host, final int port, final InetAddress localAddress, final int localPort)
             throws IOException {
-        return (naivelyTrustedHostnames.contains(host))
+        return naivelyTrustedHostnames.contains(host)
                 ? alwaysAllowSslContext.getSocketFactory().createSocket(host, port, localAddress, localPort)
                 : sslSocketFactory.createSocket(host, port, localAddress, localPort);
     }
 
     @Override
     public Socket createSocket(final InetAddress host, final int port) throws IOException {
-        return (naivelyTrustedHostnames.contains(host.getHostName()))
+        return naivelyTrustedHostnames.contains(host.getHostName())
                 ? alwaysAllowSslContext.getSocketFactory().createSocket(host, port)
                 : sslSocketFactory.createSocket(host, port);
     }
@@ -94,7 +94,7 @@ public class NaiveSSLSocketFactory extends SSLSocketFactory {
     @Override
     public Socket createSocket(final InetAddress host, final int port, final InetAddress localHost, final int localPort)
             throws IOException {
-        return (naivelyTrustedHostnames.contains(host.getHostName()))
+        return naivelyTrustedHostnames.contains(host.getHostName())
                 ? alwaysAllowSslContext.getSocketFactory().createSocket(host, port, localHost, localPort)
                 : sslSocketFactory.createSocket(host, port, localHost, localPort);
     }

@@ -35,7 +35,7 @@ public class Chart<L, V> implements Serializable {
     }
 
     @Transient
-    public boolean getHasData() {
+    public Boolean getHasData() {
         return data != null && !data.keySet().isEmpty();
     }
 
