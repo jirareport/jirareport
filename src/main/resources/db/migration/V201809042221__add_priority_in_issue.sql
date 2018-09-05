@@ -1,0 +1,2 @@
+ALTER TABLE issue
+  ADD COLUMN priority VARCHAR(100);
