@@ -81,12 +81,10 @@ checkstyle {
 }
 
 pmd {
-    toolVersion = "6.0.0"
-    ruleSets = [
-            "java-unusedcode",
-            "java-basic",
-            "java-design"
-    ]
+    toolVersion = "6.7.0"
+    ruleSets = [ ]
+    consoleOutput = true
+    ruleSetFiles = files("pmd-ruleset.xml")
 }
 
 

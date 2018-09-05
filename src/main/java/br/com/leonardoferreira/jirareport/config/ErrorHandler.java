@@ -14,7 +14,7 @@ public class ErrorHandler {
 
     @ExceptionHandler(ResourceNotFound.class)
     public ModelAndView resourceNotFoundHander(final ResourceNotFound resourceNotFound) {
-        resourceNotFound.printStackTrace();
+        log.error("Method=resourceNotFoundHander, e={}", resourceNotFound.getMessage(), resourceNotFound);
         return new ModelAndView("errors/404");
     }
 

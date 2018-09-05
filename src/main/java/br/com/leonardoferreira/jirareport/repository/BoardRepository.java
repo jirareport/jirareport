@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BoardRepository extends CrudRepository<Board, Long> {
 
+    @Override
     @EntityGraph(attributePaths = { "leadTimeConfigs" }, type = EntityGraph.EntityGraphType.LOAD)
     Optional<Board> findById(Long id);
 

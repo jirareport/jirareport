@@ -35,7 +35,7 @@ public class LeadTimeCompareChart implements Serializable {
         return new ObjectMapper().writeValueAsString(datasources);
     }
 
-    public boolean getHasData() {
+    public Boolean getHasData() {
         return labels != null && !labels.isEmpty();
     }
 
