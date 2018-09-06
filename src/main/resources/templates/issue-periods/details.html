@@ -29,6 +29,8 @@
         <li th:unless="${#strings.isEmpty(board.projectCF)}" role="presentation"><a href="#tasksByProject" data-toggle="tab">Histórias por
             projeto</a></li>
         <li th:unless="${#lists.isEmpty(board.leadTimeConfigs)}" role="presentation"><a href="#leadTimes" data-toggle="tab">Lead Times</a></li>
+        <li role="presentation"><a href="#leadTimeByPriority" data-toggle="tab">Lead Time por prioridade</a></li>
+        <li role="presentation"><a href="#throughputByPriority" data-toggle="tab">Throughput por prioridade</a></li>
     </ul>
 
     <div class="panel panel-default bt-0">
@@ -69,6 +71,12 @@
                 </div>
                 <div th:unless="${#lists.isEmpty(board.leadTimeConfigs)}" role="tabpanel" class="tab-pane" id="leadTimes">
                     <th:block th:include="charts/issueLeadTimes :: chart(${issuePeriod.leadTimeCompareChart})"/>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="leadTimeByPriority">
+                    <th:block th:include="charts/leadTimeByPriority :: chart(${issuePeriod.leadTimeByPriority})"/>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="throughputByPriority">
+                    <th:block th:include="charts/throughputByPriority :: chart(${issuePeriod.throughputByPriority})"/>
                 </div>
             </div>
         </div>

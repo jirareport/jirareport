@@ -1,7 +1,5 @@
 package br.com.leonardoferreira.jirareport.domain.vo;
 
-import java.util.List;
-
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.embedded.Histogram;
@@ -9,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * @author lferreira
@@ -42,5 +42,8 @@ public class ChartAggregator {
 
     private Chart<String, Double> leadTimeCompareChart;
 
+    private Chart<String, Double> leadTimeByPriority;
+
+    private Chart<String, Long> throughputByPriority;
 
 }

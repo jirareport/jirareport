@@ -65,6 +65,8 @@ public class Issue extends BaseEntity {
 
     private LocalDateTime created;
 
+    private String priority;
+
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private List<Changelog> changelog;

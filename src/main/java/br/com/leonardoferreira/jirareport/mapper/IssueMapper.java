@@ -120,6 +120,12 @@ public class IssueMapper {
 
                     Long timeInImpediment = countTimeInImpediment(board, changelogItems, changelog, endDate, holidays);
 
+                    String priority = null;
+                    if (fields.has("priority")) {
+                        JsonObject priorityObj = fields.getAsJsonObject("priority");
+                        priority = getAsStringSafe(priorityObj.get("name"));
+                    }
+
                     return Issue.builder()
                             .creator(author)
                             .key(getAsStringSafe(issue.get("key")))
@@ -138,6 +144,7 @@ public class IssueMapper {
                             .differenceFirstAndLastDueDate(differenceFirstAndLastDueDate)
                             .dueDateHistory(dueDateHistory)
                             .impedimentTime(timeInImpediment)
+                            .priority(priority)
                             .build();
 
                 })

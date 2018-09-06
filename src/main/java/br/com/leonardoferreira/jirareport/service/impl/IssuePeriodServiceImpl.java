@@ -134,7 +134,8 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     public void remove(final Long id) {
         log.info("Method=remove, id={}", id);
 
-        issuePeriodRepository.deleteById(id);
+        IssuePeriod issuePeriod = findById(id);
+        delete(issuePeriod);
     }
 
     @Override
@@ -168,8 +169,13 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
                 issuePeriodForm.getEndDate(), boardId);
 
         if (issuePeriod != null) {
-            issuePeriodRepository.delete(issuePeriod);
-            issueService.deleteAll(issuePeriod.getIssues());
+            delete(issuePeriod);
         }
+    }
+
+    private void delete(final IssuePeriod issuePeriod) {
+        issuePeriodRepository.delete(issuePeriod);
+        issueService.deleteAll(issuePeriod.getIssues());
+
     }
 }

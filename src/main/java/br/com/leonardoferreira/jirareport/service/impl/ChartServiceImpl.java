@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.util.StringUtils;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -227,6 +227,8 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         CompletableFuture<Chart<String, Double>> leadTimeByProject = chartService.leadTimeByProject(issues);
         CompletableFuture<Chart<String, Long>> tasksByProject = chartService.tasksByProject(issues);
         CompletableFuture<Chart<String, Double>> leadTimeCompareChart = chartService.calcLeadTimeCompare(issues);
+        CompletableFuture<Chart<String, Double>> leadTimeByPriority = chartService.leadTimeByPriority(issues);
+        CompletableFuture<Chart<String, Long>> throughputByPriority = chartService.throughputByPriority(issues);
 
         return ChartAggregator.builder()
                 .histogram(histogram.get())
@@ -240,6 +242,8 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .leadTimeByProject(leadTimeByProject.get())
                 .tasksByProject(tasksByProject.get())
                 .leadTimeCompareChart(leadTimeCompareChart.get())
+                .leadTimeByPriority(leadTimeByPriority.get())
+                .throughputByPriority(throughputByPriority.get())
                 .build();
     }
 
@@ -329,6 +333,32 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .labels(periodsSize.keySet())
                 .datasources(datasources)
                 .build();
+    }
+
+    @Async
+    @Override
+    public CompletableFuture<Chart<String, Double>> leadTimeByPriority(final List<Issue> issues) {
+        log.info("Method=leadTimeByPriority, issues={}", issues);
+
+        Map<String, Double> collect = issues.stream()
+                .filter(i -> i.getLeadTime() != null && !StringUtils.isEmpty(i.getPriority()))
+                .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getPriority()).orElse("Não informado"),
+                        Collectors.averagingDouble(Issue::getLeadTime)));
+
+        return CompletableFuture.completedFuture(new Chart<>(collect));
+    }
+
+    @Async
+    @Override
+    public CompletableFuture<Chart<String, Long>> throughputByPriority(final List<Issue> issues) {
+        log.info("Method=throughputByPriority, issues={}", issues);
+
+        Map<String, Long> collect = issues.stream()
+                .filter(i -> i.getLeadTime() != null && !StringUtils.isEmpty(i.getPriority()))
+                .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getPriority()).orElse("Não informado"),
+                        Collectors.counting()));
+
+        return CompletableFuture.completedFuture(new Chart<>(collect));
     }
 
     private int calculateCeilingPercentage(final int totalElements, final int percentage) {
