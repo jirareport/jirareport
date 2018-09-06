@@ -109,6 +109,14 @@ public class IssuePeriod extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private Chart<String, Double> leadTimeCompareChart;
 
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private Chart<String, Double> leadTimeByPriority;
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private Chart<String, Long> throughputByPriority;
+
     private Integer issuesCount;
 
     private String jql;

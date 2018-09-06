@@ -46,4 +46,7 @@ public interface ChartService {
 
     IssueCountBySize buildIssueCountBySize(List<IssuePeriod> issuePeriods);
 
+    CompletableFuture<Chart<String, Double>> leadTimeByPriority(List<Issue> issues);
+
+    CompletableFuture<Chart<String, Long>> throughputByPriority(List<Issue> issues);
 }

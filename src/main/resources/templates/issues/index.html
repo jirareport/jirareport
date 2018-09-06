@@ -129,6 +129,8 @@
             <li th:unless="${#strings.isEmpty(board.ProjectCF)}" role="presentation"><a href="#tasksByProject" data-toggle="tab">Histórias por projeto</a></li>
             <li th:unless="${#lists.isEmpty(board.leadTimeConfigs)}" role="presentation"><a href="#leadTimes" data-toggle="tab">Lead times</a></li>
             <li role="presentation"><a href="#weeklyThroughput" data-toggle="tab">Throughput semanal</a></li>
+            <li role="presentation"><a href="#leadTimeByPriority" data-toggle="tab">Lead Time por prioridade</a></li>
+            <li role="presentation"><a href="#throughputByPriority" data-toggle="tab">Throughput por prioridade</a></li>
         </ul>
 
         <div class="panel panel-default bt-0">
@@ -172,6 +174,12 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="weeklyThroughput">
                         <th:block th:include="charts/weeklyThroughput :: chart(${sandBox.weeklyThroughput})"/>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="leadTimeByPriority">
+                        <th:block th:include="charts/leadTimeByPriority :: chart(${sandBox.chartAggregator.leadTimeByPriority})"/>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="throughputByPriority">
+                        <th:block th:include="charts/throughputByPriority :: chart(${sandBox.chartAggregator.throughputByPriority})"/>
                     </div>
                 </div>
             </div>
