@@ -16,9 +16,15 @@ import br.com.leonardoferreira.jirareport.util.DateUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,12 +37,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 /**
  * @author lferreira
@@ -122,7 +122,7 @@ public class IssueMapper {
                     Long timeInImpediment = countTimeInImpediment(board, changelogItems, changelog, endDate, holidays);
 
                     String priority = null;
-                    if (fields.has("priority") && !(fields.get("priority") instanceof JsonNull)) {
+                    if (fields.has("priority") && !fields.get("priority").isJsonNull() && fields.get("priority").isJsonObject()) {
                         JsonObject priorityObj = fields.getAsJsonObject("priority");
                         priority = getAsStringSafe(priorityObj.get("name"));
                     }
