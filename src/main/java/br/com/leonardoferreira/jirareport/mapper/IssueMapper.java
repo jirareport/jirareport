@@ -16,6 +16,7 @@ import br.com.leonardoferreira.jirareport.util.DateUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.time.LocalDate;
@@ -121,7 +122,7 @@ public class IssueMapper {
                     Long timeInImpediment = countTimeInImpediment(board, changelogItems, changelog, endDate, holidays);
 
                     String priority = null;
-                    if (fields.has("priority")) {
+                    if (fields.has("priority") && !(fields.get("priority") instanceof JsonNull)) {
                         JsonObject priorityObj = fields.getAsJsonObject("priority");
                         priority = getAsStringSafe(priorityObj.get("name"));
                     }
