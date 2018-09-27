@@ -37,6 +37,7 @@ public interface IssuePeriodMapper {
             @Mapping(target = "leadTimeCompareChart", source = "chartAggregator.leadTimeCompareChart"),
             @Mapping(target = "leadTimeByPriority",   source = "chartAggregator.leadTimeByPriority"),
             @Mapping(target = "throughputByPriority", source = "chartAggregator.throughputByPriority"),
+            @Mapping(target = "dynamicCharts",        source = "chartAggregator.dynamicCharts"),
             @Mapping(target = "issuesCount",          source = "details.issueCount"),
             @Mapping(target = "jql",                  source = "details.jql"),
             @Mapping(target = "wipAvg",               source = "details.wipAvg"),

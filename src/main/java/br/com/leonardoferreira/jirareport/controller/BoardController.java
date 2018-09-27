@@ -1,8 +1,5 @@
 package br.com.leonardoferreira.jirareport.controller;
 
-import java.util.List;
-import java.util.Set;
-
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.form.BoardForm;
 import br.com.leonardoferreira.jirareport.domain.vo.JiraField;
@@ -13,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +19,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author lferreira
@@ -79,14 +81,15 @@ public class BoardController extends AbstractController {
                 .addObject("boardForm", boardForm)
                 .addObject("suggestedStatus", statusFromProjectInJira)
                 .addObject("jiraFields", jiraFields);
-
     }
 
     @PutMapping
     public ModelAndView update(final BoardForm board, final RedirectAttributes redirectAttributes) {
+        board.cleanDynamicFields();
         boardService.update(board);
 
         addFlashSuccess(redirectAttributes, "Alterações salvas com sucesso.");
         return new ModelAndView("redirect:/boards");
     }
+
 }

@@ -31,6 +31,9 @@
         <li th:unless="${#lists.isEmpty(board.leadTimeConfigs)}" role="presentation"><a href="#leadTimes" data-toggle="tab">Lead Times</a></li>
         <li role="presentation"><a href="#leadTimeByPriority" data-toggle="tab">Lead Time por prioridade</a></li>
         <li role="presentation"><a href="#throughputByPriority" data-toggle="tab">Throughput por prioridade</a></li>
+        <li th:unless="${#lists.isEmpty(board.dynamicFields)}" role="presentation">
+            <a href="#dynamicCharts" data-toggle="tab">Gráficos dinâmicos</a>
+        </li>
     </ul>
 
     <div class="panel panel-default bt-0">
@@ -78,6 +81,15 @@
                 <div role="tabpanel" class="tab-pane" id="throughputByPriority">
                     <th:block th:include="charts/throughputByPriority :: chart(${issuePeriod.throughputByPriority})"/>
                 </div>
+                <div role="tabpanel" class="tab-pane" id="dynamicCharts">
+                    <span th:if="${#lists.isEmpty(issuePeriod.dynamicCharts)}">Nenhum registro encontrado</span>
+
+                    <div th:each="dynamicChart : ${issuePeriod.dynamicCharts}" class="row" th:unless="${#lists.isEmpty(issuePeriod.dynamicCharts)}">
+                        <br/><br/>
+                        <th:block th:include="charts/dynamicLeadTime :: chart(${dynamicChart})"/>
+                        <th:block th:include="charts/dynamicThroughput :: chart(${dynamicChart})"/>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -85,7 +97,6 @@
     <div class="text-right">
         <a th:href="@{/boards/{id}/issue-periods(id=${issuePeriod.boardId})}" class="btn btn-default">Voltar</a>
     </div>
-
 
 </th:block>
 </html>

@@ -131,6 +131,9 @@
             <li role="presentation"><a href="#weeklyThroughput" data-toggle="tab">Throughput semanal</a></li>
             <li role="presentation"><a href="#leadTimeByPriority" data-toggle="tab">Lead Time por prioridade</a></li>
             <li role="presentation"><a href="#throughputByPriority" data-toggle="tab">Throughput por prioridade</a></li>
+            <li th:unless="${#lists.isEmpty(board.dynamicFields)}" role="presentation">
+                <a href="#dynamicCharts" data-toggle="tab">Gráficos dinâmicos</a>
+            </li>
         </ul>
 
         <div class="panel panel-default bt-0">
@@ -180,6 +183,15 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="throughputByPriority">
                         <th:block th:include="charts/throughputByPriority :: chart(${sandBox.chartAggregator.throughputByPriority})"/>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="dynamicCharts">
+                        <span th:if="${#lists.isEmpty(sandBox.chartAggregator.dynamicCharts)}">Nenhum registro encontrado</span>
+
+                        <div th:each="dynamicChart : ${sandBox.chartAggregator.dynamicCharts}" class="row" th:unless="${#lists.isEmpty(sandBox.chartAggregator.dynamicCharts)}">
+                            <br/><br/>
+                            <th:block th:include="charts/dynamicLeadTime :: chart(${dynamicChart})"/>
+                            <th:block th:include="charts/dynamicThroughput :: chart(${dynamicChart})"/>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -11,6 +11,9 @@ import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.embedded.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
+import br.com.leonardoferreira.jirareport.domain.vo.DynamicChart;
+import br.com.leonardoferreira.jirareport.domain.vo.DynamicField;
+import br.com.leonardoferreira.jirareport.domain.vo.DynamicFieldConfig;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import br.com.leonardoferreira.jirareport.service.ChartService;
@@ -21,12 +24,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -229,6 +234,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         CompletableFuture<Chart<String, Double>> leadTimeCompareChart = chartService.calcLeadTimeCompare(issues);
         CompletableFuture<Chart<String, Double>> leadTimeByPriority = chartService.leadTimeByPriority(issues);
         CompletableFuture<Chart<String, Long>> throughputByPriority = chartService.throughputByPriority(issues);
+        CompletableFuture<List<DynamicChart>> dynamicCharts = chartService.buildDynamicCharts(board, issues);
 
         return ChartAggregator.builder()
                 .histogram(histogram.get())
@@ -244,6 +250,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .leadTimeCompareChart(leadTimeCompareChart.get())
                 .leadTimeByPriority(leadTimeByPriority.get())
                 .throughputByPriority(throughputByPriority.get())
+                .dynamicCharts(dynamicCharts.get())
                 .build();
     }
 
@@ -359,6 +366,44 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                         Collectors.counting()));
 
         return CompletableFuture.completedFuture(new Chart<>(collect));
+    }
+
+    @Async
+    @Override
+    @ExecutionTime
+    public CompletableFuture<List<DynamicChart>> buildDynamicCharts(final Board board, final List<Issue> issues) {
+        log.info("Method=buildDynamicCharts, board={}, issues={}", board, issues);
+
+        if (board.getDynamicFields() == null || board.getDynamicFields().isEmpty()) {
+            return CompletableFuture.completedFuture(Collections.emptyList());
+        }
+
+        List<DynamicChart> collect = board.getDynamicFields().stream()
+                .map(config -> {
+                    Chart<String, Double> leadTime = buildDynamicLeadTime(config, issues);
+                    Chart<String, Long> throughput = buildDynamicThroughput(config, issues);
+                    return new DynamicChart(config.getName(), leadTime, throughput);
+                })
+                .collect(Collectors.toList());
+
+        return CompletableFuture.completedFuture(collect);
+    }
+
+    private Chart<String, Long> buildDynamicThroughput(DynamicFieldConfig config, List<Issue> issues) {
+        Map<String, Long> collect = issues.stream()
+                .filter(i -> i.getLeadTime() != null && !CollectionUtils.isEmpty(i.getDynamicFields()))
+                .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getDynamicFields().get(config.getName())).orElse("Não informado"),
+                        Collectors.counting()));
+
+        return new Chart<>(collect);
+    }
+
+    private Chart<String, Double> buildDynamicLeadTime(DynamicFieldConfig config, List<Issue> issues) {
+        Map<String, Double> collect = issues.stream()
+                .filter(i -> i.getLeadTime() != null && !CollectionUtils.isEmpty(i.getDynamicFields()))
+                .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getDynamicFields().get(config.getName())).orElse("Não informado"),
+                        Collectors.averagingDouble(Issue::getLeadTime)));
+        return new Chart<>(collect);
     }
 
     private int calculateCeilingPercentage(final int totalElements, final int percentage) {

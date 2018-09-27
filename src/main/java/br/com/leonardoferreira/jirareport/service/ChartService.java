@@ -1,8 +1,5 @@
 package br.com.leonardoferreira.jirareport.service;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
@@ -10,8 +7,12 @@ import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.embedded.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
+import br.com.leonardoferreira.jirareport.domain.vo.DynamicChart;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Created by lferreira on 3/26/18
@@ -49,4 +50,6 @@ public interface ChartService {
     CompletableFuture<Chart<String, Double>> leadTimeByPriority(List<Issue> issues);
 
     CompletableFuture<Chart<String, Long>> throughputByPriority(List<Issue> issues);
+
+    CompletableFuture<List<DynamicChart>> buildDynamicCharts(Board board, List<Issue> issues);
 }

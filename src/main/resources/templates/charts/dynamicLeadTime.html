@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="chart(dynamicChart)">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 th:text="${'Lead Time por ' + dynamicChart.name}"></h3>
+            </div>
+            <div class="panel-body">
+                <th:block
+                        th:if="${dynamicChart.leadTime?.hasData}"
+                        th:include="components/chart/_doughnut :: chart(${'lead_time_by_' + dynamicChart.id}, 'LeadTime', ${dynamicChart.name}, ${dynamicChart.leadTime})"/>
+                <span th:unless="${dynamicChart.leadTime?.hasData}">Nenhum registro encontrado</span>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

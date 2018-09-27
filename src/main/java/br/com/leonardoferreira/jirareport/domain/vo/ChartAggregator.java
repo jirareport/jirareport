@@ -46,4 +46,6 @@ public class ChartAggregator {
 
     private Chart<String, Long> throughputByPriority;
 
+    private List<DynamicChart> dynamicCharts;
+
 }
