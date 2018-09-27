@@ -12,7 +12,6 @@ import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.embedded.Histogram;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.DynamicChart;
-import br.com.leonardoferreira.jirareport.domain.vo.DynamicField;
 import br.com.leonardoferreira.jirareport.domain.vo.DynamicFieldConfig;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
@@ -389,7 +388,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         return CompletableFuture.completedFuture(collect);
     }
 
-    private Chart<String, Long> buildDynamicThroughput(DynamicFieldConfig config, List<Issue> issues) {
+    private Chart<String, Long> buildDynamicThroughput(final DynamicFieldConfig config, final List<Issue> issues) {
         Map<String, Long> collect = issues.stream()
                 .filter(i -> i.getLeadTime() != null && !CollectionUtils.isEmpty(i.getDynamicFields()))
                 .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getDynamicFields().get(config.getName())).orElse("Não informado"),
@@ -398,7 +397,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         return new Chart<>(collect);
     }
 
-    private Chart<String, Double> buildDynamicLeadTime(DynamicFieldConfig config, List<Issue> issues) {
+    private Chart<String, Double> buildDynamicLeadTime(final DynamicFieldConfig config, final List<Issue> issues) {
         Map<String, Double> collect = issues.stream()
                 .filter(i -> i.getLeadTime() != null && !CollectionUtils.isEmpty(i.getDynamicFields()))
                 .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getDynamicFields().get(config.getName())).orElse("Não informado"),
