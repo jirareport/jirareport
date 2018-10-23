@@ -32,7 +32,7 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
     @Transactional(readOnly = true)
     public List<Issue> findByExample(final Long boardId, final IssueForm issueForm) {
         log.info("Method=findByExample, boardId={}, issueForm={}", boardId, issueForm);
-        
+
         Map<String, Object> params = new HashMap<>();
 
         StringBuilder sb = new StringBuilder();
@@ -71,6 +71,11 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         if (!CollectionUtils.isEmpty(issueForm.getProjects())) {
             sb.append(" AND issue.project IN (:projects) ");
             params.put("projects", issueForm.getProjects());
+        }
+
+        if (!CollectionUtils.isEmpty(issueForm.getPriorities())) {
+            sb.append(" AND issue.priority IN (:priorities) ");
+            params.put("priorities", issueForm.getPriorities());
         }
 
         params.put("boardId", boardId);

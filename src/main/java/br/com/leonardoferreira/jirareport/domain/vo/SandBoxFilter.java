@@ -29,4 +29,6 @@ public class SandBoxFilter {
 
     private List<String> projects;
 
+    private List<String> priorities;
+
 }
