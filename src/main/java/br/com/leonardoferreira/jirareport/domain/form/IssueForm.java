@@ -25,4 +25,6 @@ public class IssueForm {
 
     private List<String> projects = new ArrayList<>();
 
+    private List<String> priorities = new ArrayList<>();
+
 }
