@@ -133,6 +133,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
                 .epics(issueRepository.findAllEpicsByBoardId(boardId))
                 .issueTypes(issueRepository.findAllIssueTypesByBoardId(boardId))
                 .projects(issueRepository.findAllIssueProjectsByBoardId(boardId))
+                .priorities(issueRepository.findAllIssuePrioritiesByBoardId(boardId))
                 .build();
     }
 

@@ -43,4 +43,8 @@ public interface IssueRepository extends CrudRepository<Issue, Long>, IssueCusto
             + " WHERE ip.id = :issuePeriodId")
     List<Issue> findByIssuePeriodId(@Param("issuePeriodId") Long issuePeriodId);
 
+    @Query(value = "SELECT DISTINCT issue.priority FROM issue "
+            + " WHERE issue.board_id = :boardId "
+            + " AND issue.priority IS NOT NULL", nativeQuery = true)
+    List<String> findAllIssuePrioritiesByBoardId(@Param("boardId") Long boardId);
 }
