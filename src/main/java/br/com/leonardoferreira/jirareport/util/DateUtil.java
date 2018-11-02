@@ -63,7 +63,7 @@ public final class DateUtil {
 
         long workingDays = 0L;
         if (Boolean.TRUE.equals(ignoreWeekend)) {
-            workingDays = ChronoUnit.DAYS.between(start, end);
+            workingDays = ChronoUnit.DAYS.between(start, end) + 1;
         } else {
             while (!start.isAfter(end)) {
                 DayOfWeek day = start.getDayOfWeek();
