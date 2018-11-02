@@ -19,6 +19,7 @@ import javax.persistence.OrderBy;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.embedded.ColumnTimeAvg;
 import br.com.leonardoferreira.jirareport.domain.embedded.Histogram;
+import br.com.leonardoferreira.jirareport.domain.vo.DynamicChart;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -122,6 +123,10 @@ public class IssuePeriod extends BaseEntity {
     private String jql;
 
     private Double wipAvg;
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private List<DynamicChart> dynamicCharts;
 
     public String getDates() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

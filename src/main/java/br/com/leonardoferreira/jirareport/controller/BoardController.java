@@ -1,8 +1,5 @@
 package br.com.leonardoferreira.jirareport.controller;
 
-import java.util.List;
-import java.util.Set;
-
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.form.BoardForm;
 import br.com.leonardoferreira.jirareport.domain.vo.JiraField;
@@ -21,6 +18,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author lferreira
@@ -79,14 +79,15 @@ public class BoardController extends AbstractController {
                 .addObject("boardForm", boardForm)
                 .addObject("suggestedStatus", statusFromProjectInJira)
                 .addObject("jiraFields", jiraFields);
-
     }
 
     @PutMapping
     public ModelAndView update(final BoardForm board, final RedirectAttributes redirectAttributes) {
+        board.cleanDynamicFields();
         boardService.update(board);
 
         addFlashSuccess(redirectAttributes, "Alterações salvas com sucesso.");
         return new ModelAndView("redirect:/boards");
     }
+
 }

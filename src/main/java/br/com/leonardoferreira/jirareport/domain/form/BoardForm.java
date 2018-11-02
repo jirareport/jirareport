@@ -1,12 +1,15 @@
 package br.com.leonardoferreira.jirareport.domain.form;
 
 import br.com.leonardoferreira.jirareport.domain.ImpedimentType;
+import br.com.leonardoferreira.jirareport.domain.vo.DynamicFieldConfig;
 import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author lferreira on 31/05/18
@@ -45,6 +48,8 @@ public class BoardForm {
 
     private List<String> impedimentColumns;
 
+    private List<DynamicFieldConfig> dynamicFields;
+
     private String usedToEstimatedCF;
 
     public void setStartColumn(final String startColumn) {
@@ -58,6 +63,12 @@ public class BoardForm {
     public void setFluxColumn(final List<String> fluxColumn) {
         this.fluxColumn =
                 fluxColumn == null ? null : fluxColumn.stream().map(String::toUpperCase).collect(Collectors.toList());
+    }
+
+    public void cleanDynamicFields() {
+        dynamicFields = dynamicFields == null ? dynamicFields : dynamicFields.stream()
+                .filter(i -> !StringUtils.isEmpty(i.getField()) && !StringUtils.isEmpty(i.getName()))
+                .collect(Collectors.toList());
     }
 
 }
