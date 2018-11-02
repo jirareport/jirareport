@@ -19,6 +19,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -48,7 +49,13 @@ public class EstimateIssue {
 
     private LocalDateTime startDate;
 
-    private LocalDateTime endDate;
+    private LocalDate estimateDateAvg;
+
+    private LocalDate estimateDatePercentile50;
+
+    private LocalDate estimateDatePercentile75;
+
+    private LocalDate estimateDatePercentile90;
 
     private Long leadTime;
 

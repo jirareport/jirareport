@@ -11,27 +11,20 @@ import br.com.leonardoferreira.jirareport.domain.vo.changelog.JiraChangelogItem;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+import br.com.leonardoferreira.jirareport.util.ParseUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -43,9 +36,6 @@ public class EstimateIssueMapper {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    private IssueMapper issueMapper;
 
     @SneakyThrows
     public List<EstimateIssue> parseEstimate(final String rawText, final Board board) {
@@ -63,7 +53,7 @@ public class EstimateIssueMapper {
                     JsonNode fields = issue.path("fields");
 
                     List<JiraChangelogItem> changelogItems = extractChangelogItems(issue);
-                    List<Changelog> changelog = issueMapper.parseChangelog(changelogItems, holidays, board.getIgnoreWeekend());
+                    List<Changelog> changelog = ParseUtil.parseChangelog(changelogItems, holidays, board.getIgnoreWeekend());
 
                     LocalDateTime created = DateUtil.parseFromJira(fields.get("created").asText());
 
@@ -81,13 +71,13 @@ public class EstimateIssueMapper {
 
                     String priority = null;
                     if (fields.has("priority") && !fields.get("priority").isNull() && !fields.path("priority").isMissingNode()) {
-                        priority = fields.path("priority").get("text").asText(null);
+                        priority = fields.path("priority").get("name").asText(null);
                     }
 
 
                     Long leadTime = DateUtil.daysDiff(startDate, LocalDateTime.now(), holidays, board.getIgnoreWeekend());
 
-                    Long timeInImpediment = issueMapper.countTimeInImpediment(board, changelogItems, changelog, LocalDateTime.now(), holidays);
+                    Long timeInImpediment = ParseUtil.countTimeInImpediment(board, changelogItems, changelog, LocalDateTime.now(), holidays);
 
                     String author = null;
                     JsonNode creator = fields.path("creator");

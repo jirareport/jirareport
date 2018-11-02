@@ -2,6 +2,8 @@ package br.com.leonardoferreira.jirareport.util;
 
 import br.com.leonardoferreira.jirareport.domain.Board;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -70,6 +72,12 @@ public final class CalcUtil {
     public static Set<String> calcWipColumns(final Board board) {
         return CalcUtil.calcWipColumns(board.getStartColumn(), board.getEndColumn(), board.getFluxColumn());
     }
+
+    public static int calculateCeilingPercentage(final int totalElements, final int percentage) {
+        return new BigDecimal((double) totalElements * percentage / 100).setScale(0, RoundingMode.CEILING)
+                .intValue();
+    }
+
 
 
 }

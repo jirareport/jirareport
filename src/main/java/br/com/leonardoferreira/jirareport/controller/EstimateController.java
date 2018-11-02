@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -29,13 +30,16 @@ public class EstimateController extends AbstractController {
 
         Board board = boardService.findById(boardId);
 
+        estimateForm.setStartDate(LocalDate.now().minusMonths(4));
+        estimateForm.setEndDate(LocalDate.now());
+
         List<EstimateIssue> estimateIssueList = estimateService.findEstimateIssues(boardId, estimateForm);
 
 
         return new ModelAndView("estimate/index")
                 .addObject("estimateForm", estimateForm)
                 .addObject("board", board)
-                .addObject("estimate", null);
+                .addObject("estimateIssue", estimateIssueList);
 
     }
 }

@@ -16,6 +16,7 @@ import br.com.leonardoferreira.jirareport.domain.vo.DynamicFieldConfig;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import br.com.leonardoferreira.jirareport.service.ChartService;
+import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -65,9 +66,9 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         Long percentile90 = null;
 
         if (!issues.isEmpty()) {
-            int medianIndex = calculateCeilingPercentage(issues.size(), 50);
-            int percentile75Index = calculateCeilingPercentage(issues.size(), 75);
-            int percentile90Index = calculateCeilingPercentage(issues.size(), 90);
+            int medianIndex = CalcUtil.calculateCeilingPercentage(issues.size(), 50);
+            int percentile75Index = CalcUtil.calculateCeilingPercentage(issues.size(), 75);
+            int percentile90Index = CalcUtil.calculateCeilingPercentage(issues.size(), 90);
 
             median = issues.get(medianIndex - 1).getLeadTime();
             percentile75 = issues.get(percentile75Index - 1).getLeadTime();
@@ -403,11 +404,6 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getDynamicFields().get(config.getName())).orElse("Não informado"),
                         Collectors.averagingDouble(Issue::getLeadTime)));
         return new Chart<>(collect);
-    }
-
-    private int calculateCeilingPercentage(final int totalElements, final int percentage) {
-        return new BigDecimal((double) totalElements * percentage / 100).setScale(0, RoundingMode.CEILING)
-                .intValue();
     }
 
     private Chart<Long, Long> histogramChart(final List<Issue> issues) {
