@@ -1,14 +1,5 @@
 package br.com.leonardoferreira.jirareport;
 
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.function.Function;
-
 import br.com.leonardoferreira.jirareport.domain.vo.Account;
 import brave.sampler.Sampler;
 import org.springframework.boot.SpringApplication;
@@ -24,6 +15,15 @@ import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.function.Function;
 
 @EnableCaching
 @EnableJpaAuditing
@@ -78,4 +78,5 @@ public class Application {
     public Sampler sampler() {
         return Sampler.ALWAYS_SAMPLE;
     }
+
 }

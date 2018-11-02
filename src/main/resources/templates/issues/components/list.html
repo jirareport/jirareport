@@ -18,6 +18,7 @@
             <th data-field="board" data-sortable="true" th:unless="${#strings.isEmpty(board.projectCF)}">Projeto</th>
             <th data-field="creator" data-sortable="true">Criador</th>
             <th data-field="priority" data-sortable="true">Prioridade</th>
+            <th th:each="dynamicField : ${board.dynamicFields}" th:attr="data-field=${dynamicField.field}" th:text="${dynamicField.name}" data-sortable="true"></th>
         </tr>
         </thead>
         <tbody>
@@ -42,6 +43,7 @@
                 <td th:unless="${#strings.isEmpty(board.projectCF)}" th:text="${issue.project}"></td>
                 <td th:text="${issue.creator}"></td>
                 <td th:text="${issue.priority}"></td>
+                <td th:each="dynamicField : ${board.dynamicFields}" th:text="${issue.dynamicFields.get(dynamicField.name)}"></td>
             </tr>
         </th:block>
         </tbody>

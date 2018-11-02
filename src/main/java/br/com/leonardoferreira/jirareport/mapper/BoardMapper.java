@@ -25,6 +25,7 @@ public interface BoardMapper {
             @Mapping(target = "estimateCF",      source = "board.estimateCF"),
             @Mapping(target = "systemCF",        source = "board.systemCF"),
             @Mapping(target = "projectCF",       source = "board.projectCF"),
+            @Mapping(target = "dynamicFields",   source = "board.dynamicFields"),
             @Mapping(target = "jiraProject",     source = "jiraProject")
     })
     BoardForm toForm(Board board, JiraProject jiraProject);

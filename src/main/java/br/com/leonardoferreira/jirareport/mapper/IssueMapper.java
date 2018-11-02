@@ -7,6 +7,7 @@ import br.com.leonardoferreira.jirareport.domain.ImpedimentType;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.embedded.DueDateHistory;
+import br.com.leonardoferreira.jirareport.domain.vo.DynamicFieldConfig;
 import br.com.leonardoferreira.jirareport.domain.vo.changelog.JiraChangelog;
 import br.com.leonardoferreira.jirareport.domain.vo.changelog.JiraChangelogHistory;
 import br.com.leonardoferreira.jirareport.domain.vo.changelog.JiraChangelogItem;
@@ -18,13 +19,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,11 +26,19 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 /**
  * @author lferreira
@@ -127,6 +129,8 @@ public class IssueMapper {
                         priority = getAsStringSafe(priorityObj.get("name"));
                     }
 
+                    Map<String, String> dynamicFields = parseDynamicFields(board, fields);
+
                     return Issue.builder()
                             .creator(author)
                             .key(getAsStringSafe(issue.get("key")))
@@ -146,6 +150,7 @@ public class IssueMapper {
                             .dueDateHistory(dueDateHistory)
                             .impedimentTime(timeInImpediment)
                             .priority(priority)
+                            .dynamicFields(dynamicFields)
                             .build();
 
                 })
@@ -224,6 +229,12 @@ public class IssueMapper {
         if (jsonElement == null || jsonElement.isJsonNull()) {
             return null;
         }
+
+        if (jsonElement.isJsonObject()) {
+            JsonElement value = jsonElement.getAsJsonObject().get("value");
+            return getAsStringSafe(value);
+        }
+
         return jsonElement.getAsString();
     }
 
@@ -293,6 +304,19 @@ public class IssueMapper {
                 .filter(cl -> impedimentColumns.contains(cl.getTo()) && cl.getLeadTime() != null)
                 .mapToLong(Changelog::getLeadTime)
                 .sum();
+    }
+
+    private Map<String, String> parseDynamicFields(final Board board, final JsonObject fields) {
+        if (board.getDynamicFields() == null || board.getDynamicFields().isEmpty()) {
+            return null;
+        }
+
+        Map<String, String> dynamicFields = new HashMap<>();
+        for (DynamicFieldConfig dynamicField : board.getDynamicFields()) {
+            dynamicFields.put(dynamicField.getName(), getAsStringSafe(fields.get(dynamicField.getField())));
+        }
+
+        return dynamicFields;
     }
 
 }

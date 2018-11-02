@@ -51,7 +51,7 @@
         </div>
 
         <div class="panel panel-default">
-            <div class="panel-heading" data-toggle="collapse" data-target="#advancedConfigs" style="cursor: pointer"><i id="advancedConfigsIcon" class="fa fa-chevron-right"></i> Configurações Avançadas</div>
+            <div class="panel-heading" data-toggle="collapse" data-target="#advancedConfigs" style="cursor: pointer"><i class="fa fa-chevron-right"></i> Configurações Avançadas</div>
 
             <div class="panel-body collapse" id="advancedConfigs">
                 <div class="form-group">
@@ -124,6 +124,59 @@
                             <span th:text="${status}"></span>
                         </a>
                     </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading" data-toggle="collapse" data-target="#dynamicFields" style="cursor: pointer"><i class="fa fa-chevron-right"></i> Campos Dinâmicos</div>
+
+            <div class="panel-body collapse" id="dynamicFields">
+
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label>Nome:</label>
+                        <input type="text" class="form-control" id="dynamicField_name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Campo:</label>
+                        <select class="selectpicker" data-width="730px" data-live-search="true" id="dynamicField_field">
+                            <option value="">Selecione</option>
+                            <option th:each="jiraField : ${jiraFields}" th:value="${jiraField.id}">[[${jiraField.name}]] ([[${jiraField.id}]])</option>
+                        </select>
+                    </div>
+
+                    <input type="hidden" id="dynamicField_id" th:value="${boardForm.dynamicFields == null ? 0 : #lists.size(boardForm.dynamicFields)}">
+
+                    <button class="btn btn-default" id="dynamicFields_add" type="button">Adicionar</button>
+                </div>
+                <br>
+
+                <div class="panel panel-default">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Campo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dynamicFields_tbody">
+                            <tr th:each="dynamicField, itemStat : *{dynamicFields}">
+                                <td>
+                                    <input th:name="|dynamicFields[${itemStat.index}].name|" th:value="${dynamicField.name}" class="form-control" />
+                                </td>
+                                <td>
+                                    <input th:name="|dynamicFields[${itemStat.index}].field|" th:value="${dynamicField.field}" class="form-control" />
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger dynamicFields_remove"><i class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

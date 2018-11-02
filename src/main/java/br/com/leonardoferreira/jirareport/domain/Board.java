@@ -1,6 +1,10 @@
 package br.com.leonardoferreira.jirareport.domain;
 
-import java.util.List;
+import br.com.leonardoferreira.jirareport.domain.vo.DynamicFieldConfig;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,11 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.hibernate.annotations.Type;
+import java.util.List;
 
 /**
  * @author lferreira
@@ -76,5 +76,9 @@ public class Board extends BaseEntity {
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private List<String> impedimentColumns;
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private List<DynamicFieldConfig> dynamicFields;
 
 }
