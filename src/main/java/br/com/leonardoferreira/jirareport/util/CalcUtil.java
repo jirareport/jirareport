@@ -34,6 +34,15 @@ public final class CalcUtil {
         return startColumns;
     }
 
+    public static Set<String> calcWipColumns(final String startColumn,
+                                               final String endColumn,
+                                               final List<String> fluxColumn) {
+        Set<String> wipColumns = calcStartColumns(startColumn, endColumn, fluxColumn);
+        wipColumns.remove(endColumn);
+        return wipColumns;
+    }
+
+
     public static Set<String> calcEndColumns(final String endColumn,
                                              final List<String> fluxColumn) {
         Set<String> endColumns = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
@@ -57,5 +66,10 @@ public final class CalcUtil {
     public static Set<String> calcEndColumns(final Board board) {
         return CalcUtil.calcEndColumns(board.getEndColumn(), board.getFluxColumn());
     }
+
+    public static Set<String> calcWipColumns(final Board board) {
+        return CalcUtil.calcWipColumns(board.getStartColumn(), board.getEndColumn(), board.getFluxColumn());
+    }
+
 
 }

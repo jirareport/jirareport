@@ -164,7 +164,7 @@ public class IssueMapper {
     }
 
     @SneakyThrows
-    private List<Changelog> parseChangelog(final List<JiraChangelogItem> changelogItems,
+    List<Changelog> parseChangelog(final List<JiraChangelogItem> changelogItems,
                                            final List<String> holidays, final Boolean ignoreWeekend) {
         List<Changelog> collect = changelogItems.stream()
                 .filter(i -> "status".equals(i.getField()))

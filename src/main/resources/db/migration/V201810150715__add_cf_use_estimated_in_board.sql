@@ -1,0 +1,1 @@
+ALTER TABLE board ADD COLUMN used_to_estimatedcf VARCHAR(255);

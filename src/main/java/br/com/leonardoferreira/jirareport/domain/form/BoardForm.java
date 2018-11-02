@@ -45,6 +45,8 @@ public class BoardForm {
 
     private List<String> impedimentColumns;
 
+    private String usedToEstimatedCF;
+
     public void setStartColumn(final String startColumn) {
         this.startColumn = startColumn == null ? null : startColumn.toUpperCase(DateUtil.LOCALE_BR);
     }
