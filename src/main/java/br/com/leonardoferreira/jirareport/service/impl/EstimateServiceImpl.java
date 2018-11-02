@@ -39,7 +39,7 @@ public class EstimateServiceImpl implements EstimateService {
 
         List<EstimateIssue> issueList = issueService.findByJql(searchJQL(board), board);
 
-        // Calçular o que precisar
+        // Calçular o que precisar a estimativa
 
         return null;
     }

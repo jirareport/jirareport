@@ -238,7 +238,7 @@ public class IssueMapper {
                 .collect(Collectors.toList());
     }
 
-    private Long countTimeInImpediment(final Board board, final List<JiraChangelogItem> changelogItems,
+    Long countTimeInImpediment(final Board board, final List<JiraChangelogItem> changelogItems,
                                        final List<Changelog> changelog, final LocalDateTime endDate, final List<String> holidays) {
         Long timeInImpediment;
         if (ImpedimentType.FLAG.equals(board.getImpedimentType())) {

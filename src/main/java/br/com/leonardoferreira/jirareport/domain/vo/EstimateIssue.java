@@ -69,10 +69,4 @@ public class EstimateIssue {
     @ManyToOne
     private Board board;
 
-    private Long differenceFirstAndLastDueDate;
-
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    private List<DueDateHistory> dueDateHistory;
-
     private Long impedimentTime;}
