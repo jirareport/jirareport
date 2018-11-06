@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="chart(id, title, label, chart)">
+    <div class="box-body">
+        <canvas th:id="${id}" width="400" height="150"
+                data-begin-at-zero="true"
+                th:attr="data-chart-labels=${chart.axisXJSON},
+                         data-chart-data=${chart.axisYJSON},
+                         data-chart-label=${label},
+                         data-chart-title=${title},
+                         data-chart=${#applicationHelper.retrieveFavoriteThroughputChartType()}"></canvas>
+    </div>
+</th:block>
+</html>
