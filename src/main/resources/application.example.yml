@@ -22,6 +22,16 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+  main:
+    allow-bean-definition-overriding: true
+  cache:
+    cache-names:
+    - findAllHolidaysInCity
+    - findAllFields
+    - retrieveCurrentUserConfig
+    caffeine:
+      spec: expireAfterWrite=15m
+
   flyway:
     enabled: true
     out-of-order: true
