@@ -1,7 +1,10 @@
 package br.com.leonardoferreira.jirareport.helper;
 
+import br.com.leonardoferreira.jirareport.domain.ChartType;
 import br.com.leonardoferreira.jirareport.domain.ImpedimentType;
 import br.com.leonardoferreira.jirareport.domain.Issue;
+import br.com.leonardoferreira.jirareport.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -12,6 +15,9 @@ import java.time.format.DateTimeFormatter;
  */
 @Component
 public class ApplicationHelper implements Helper {
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public String getName() {
@@ -34,4 +40,13 @@ public class ApplicationHelper implements Helper {
         return ImpedimentType.values();
     }
 
+    public String retrieveFavoriteLeadTimeChartType() {
+        ChartType chartType = userService.retrieveFavoriteLeadTimeChartType();
+        return chartType == null ? "bar" : chartType.chartName();
+    }
+
+    public String retrieveFavoriteThroughputChartType() {
+        ChartType chartType = userService.retrieveFavoriteThroughputChartType();
+        return chartType == null ? "doughnut" : chartType.chartName();
+    }
 }

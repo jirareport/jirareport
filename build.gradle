@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = "2.0.4.RELEASE"
+        springBootVersion = "2.1.0.RELEASE"
     }
     repositories {
         mavenCentral()
@@ -37,36 +37,37 @@ ext {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-security")
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("org.springframework.boot:spring-boot-starter-cache")
-    compile("org.springframework.boot:spring-boot-starter-actuator")
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.boot:spring-boot-starter-cache"
+    implementation "com.github.ben-manes.caffeine:caffeine"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
 
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
-    compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
+    implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+    implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
+    implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
 
-    compile("org.springframework.boot:spring-boot-devtools")
+    implementation "org.springframework.boot:spring-boot-devtools"
 
-    compile("org.apache.httpcomponents:httpclient:${httpClientVersion}")
-    compile("com.google.code.gson:gson:${gsonVersion}")
+    implementation "org.apache.httpcomponents:httpclient:${httpClientVersion}"
+    implementation "com.google.code.gson:gson:${gsonVersion}"
 
-    compile("org.springframework.cloud:spring-cloud-starter-openfeign")
-    compile("org.springframework.cloud:spring-cloud-starter-sleuth")
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+    implementation "org.springframework.cloud:spring-cloud-starter-sleuth"
 
-    runtime("org.postgresql:postgresql")
+    implementation "org.postgresql:postgresql"
 
-    compile("com.vladmihalcea:hibernate-types-52:${hibernateTypesVersion}")
+    implementation "com.vladmihalcea:hibernate-types-52:${hibernateTypesVersion}"
 
-    compile("org.mapstruct:mapstruct-jdk8:${mapstructVersion}")
-    compile("org.mapstruct:mapstruct-processor:${mapstructVersion}")
+    implementation "org.mapstruct:mapstruct-jdk8:${mapstructVersion}"
+    implementation "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
-    compileOnly("org.projectlombok:lombok")
+    implementation "org.projectlombok:lombok"
 
-    compile("org.flywaydb:flyway-core:5.0.7")
+    implementation "org.flywaydb:flyway-core"
 
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 dependencyManagement {

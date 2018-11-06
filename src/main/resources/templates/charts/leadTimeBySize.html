@@ -3,8 +3,7 @@
 <th:block th:fragment="chart(chartData)">
     <th:block
             th:if="${chartData?.hasData}"
-            th:include="components/chart/_bar :: chart('lead_time_by_size', 'Tamanho de história', 'Lead Time', ${chartData}, true)" />
+            th:include="components/chart/favorite/_leadtime :: chart('lead_time_by_size', 'Tamanho de história', 'Lead Time', ${chartData})" />
     <span th:unless="${chartData?.hasData}">Nenhum registro encontrado</span>
 </th:block>
 </html>
-

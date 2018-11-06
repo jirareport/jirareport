@@ -1,7 +1,9 @@
 package br.com.leonardoferreira.jirareport.service;
 
+import br.com.leonardoferreira.jirareport.domain.ChartType;
 import br.com.leonardoferreira.jirareport.domain.UserConfig;
 import br.com.leonardoferreira.jirareport.domain.form.UserConfigForm;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface UserService {
 
@@ -10,5 +12,11 @@ public interface UserService {
     UserConfigForm myInfo();
 
     UserConfig findHolidayInfo();
+
+    ChartType retrieveFavoriteLeadTimeChartType();
+
+    ChartType retrieveFavoriteThroughputChartType();
+
+    UserConfig retrieveCurrentUserConfig();
 
 }
