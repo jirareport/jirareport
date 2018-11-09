@@ -30,7 +30,7 @@
                         </tbody>
                     </table>
 
-                    <th:block th:unless="${#lists.isEmpty(board.leadTimeConfigs)}">
+                    <th:block th:unless="${#lists.isEmpty(board.leadTimeConfigs) or #lists.isEmpty(issue.leadTimes)}">
                         <br/>
 
                         <h3 class="page-header" style="margin-top: 0">Outros lead times</h3>

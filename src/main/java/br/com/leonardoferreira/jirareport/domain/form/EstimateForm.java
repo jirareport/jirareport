@@ -13,4 +13,5 @@ public class EstimateForm {
 
     private LocalDate endDate;
 
+    private String filter;
 }

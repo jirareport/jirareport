@@ -5,11 +5,8 @@ import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.form.EstimateForm;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
-import br.com.leonardoferreira.jirareport.domain.form.IssuePeriodForm;
-import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
 import br.com.leonardoferreira.jirareport.domain.vo.EstimateIssue;
 import br.com.leonardoferreira.jirareport.domain.vo.Percentile;
-import br.com.leonardoferreira.jirareport.domain.vo.SandBox;
 import br.com.leonardoferreira.jirareport.exception.InternalServerErrorException;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.repository.BoardRepository;
@@ -21,17 +18,15 @@ import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import br.com.leonardoferreira.jirareport.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -71,12 +66,12 @@ public class EstimateServiceImpl implements EstimateService {
         Map<String, Percentile> fieldPercentileMap = new HashMap<>();
         issueList.forEach(
                 issue -> {
-                    Percentile percentile = fieldPercentileMap.get(issue.getIssueType());
+                    String value = getByFilter(issue, estimateForm.getFilter());
+                    Percentile percentile = fieldPercentileMap.get(value);
                     if (percentile == null) {
-                        percentile = calculatePercentile(board, estimateForm, issue.getIssueType());
-                        fieldPercentileMap.put(issue.getIssueType(), percentile);
+                        percentile = calculatePercentile(board, estimateForm, value);
+                        fieldPercentileMap.put(value, percentile);
                     }
-                    // TODO Rever como calcular o long do average
                     issue.setEstimateDateAvg(DateUtil.addDays(issue.getStartDate(),
                             percentile.getAverage().longValue(), holidays, board.getIgnoreWeekend()));
                     issue.setEstimateDatePercentile50(DateUtil.addDays(issue.getStartDate(),
@@ -91,12 +86,9 @@ public class EstimateServiceImpl implements EstimateService {
         return issueList;
     }
 
-    private Percentile calculatePercentile(Board board, EstimateForm estimateForm, String field) {
+    private Percentile calculatePercentile(Board board, EstimateForm estimateForm, String value) {
 
-        IssueForm issueForm = new IssueForm();
-        issueForm.setStartDate(estimateForm.getStartDate());
-        issueForm.setEndDate(estimateForm.getEndDate());
-        issueForm.setIssueTypes(Arrays.asList(field));
+        IssueForm issueForm = getIssueFormByEstimateForm(estimateForm, value);
 
         List<Issue> issues = issueRepository.findByExample(board.getId(), issueForm);
         Double avgLeadTime = issues.parallelStream()
@@ -125,6 +117,61 @@ public class EstimateServiceImpl implements EstimateService {
                 .percentile75(percentile75)
                 .percentile90(percentile90)
                 .build();
+    }
+
+    private IssueForm getIssueFormByEstimateForm(final EstimateForm estimateForm, final String value) {
+        IssueForm issueForm = new IssueForm();
+        issueForm.setStartDate(estimateForm.getStartDate());
+        issueForm.setEndDate(estimateForm.getEndDate());
+        String filter = estimateForm.getFilter();
+        if (StringUtils.isEmpty(filter) || StringUtils.isEmpty(value)){
+            return issueForm;
+        }
+
+        if (filter.equals("issueType")){
+            issueForm.getIssueTypes().add(value);
+        }
+        else if (filter.equals("system")){
+            issueForm.getSystems().add(value);
+        }
+        else if (filter.equals("taskSize")){
+            issueForm.getTaskSize().add(value);
+        }
+        else if (filter.equals("epic")){
+            issueForm.getEpics().add(value);
+        }
+        else if (filter.equals("project")){
+            issueForm.getProjects().add(value);
+        }
+        else if (filter.equals("priority")){
+            issueForm.getPriorities().add(value);
+        }
+        return issueForm;
+    }
+
+    private String getByFilter(EstimateIssue issue, String filter){
+        if (StringUtils.isEmpty(filter)){
+            return null;
+        }
+        if (filter.equals("issueType")){
+            return issue.getIssueType();
+        }
+        if (filter.equals("system")){
+            return issue.getSystem();
+        }
+        if (filter.equals("taskSize")){
+            return issue.getEstimated();
+        }
+        if (filter.equals("epic")){
+            return issue.getEpic();
+        }
+        if (filter.equals("project")){
+            return issue.getProject();
+        }
+        if (filter.equals("priority")){
+            return issue.getPriority();
+        }
+        return null;
     }
 
     private String searchJQL(final Board board) {
