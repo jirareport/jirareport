@@ -50,8 +50,6 @@ public class BoardForm {
 
     private List<DynamicFieldConfig> dynamicFields;
 
-    private String usedToEstimatedCF;
-
     public void setStartColumn(final String startColumn) {
         this.startColumn = startColumn == null ? null : startColumn.toUpperCase(DateUtil.LOCALE_BR);
     }

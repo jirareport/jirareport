@@ -81,6 +81,4 @@ public class Board extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private List<DynamicFieldConfig> dynamicFields;
 
-    private String usedToEstimatedCF;
-
 }
