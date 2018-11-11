@@ -1,5 +1,7 @@
 package br.com.leonardoferreira.jirareport.domain;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,5 +30,11 @@ public class UserConfig extends BaseEntity {
     private String city;
 
     private String holidayToken;
+
+    @Enumerated(EnumType.STRING)
+    private ChartType leadTimeChartType;
+
+    @Enumerated(EnumType.STRING)
+    private ChartType throughputChartType;
 
 }

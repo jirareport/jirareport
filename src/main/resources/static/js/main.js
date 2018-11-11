@@ -1,8 +1,4 @@
 $(document).ready(function () {
-    $('.nav-tabs').scrollingTabs({
-        disableScrollArrowsOnFullyScrolled: true
-    });
-
     $('.search-input').hideseek({
         highlight: true,
         nodata: 'Nenhum registro encontrado.',
@@ -21,7 +17,7 @@ $(document).ready(function () {
 
     $('*[data-chart-multi-dataset]').each(function () {
         var datasources = $(this).data('datasources');
-        var labels = $(this).data('labels')
+        var labels = $(this).data('labels');
         var id = $(this).attr("id");
         var stacked = $(this).data('stacked');
         var datasets = [];
@@ -29,7 +25,7 @@ $(document).ready(function () {
         for (var key in datasources) {
             var colorRgb = randomColorRGB();
             var backgroundColor = colorRgb;
-            var solidRgb = colorRgb.replace('rgba', 'rgb').split(',')
+            var solidRgb = colorRgb.replace('rgba', 'rgb').split(',');
             var borderColor = solidRgb[0] + "," + solidRgb[1] + "," + solidRgb[2] + ")";
             datasets.push({
                 label: key,
@@ -68,12 +64,12 @@ $(document).ready(function () {
 
     $('*[data-chart]').each(function () {
         var id = $(this).attr("id");
-        var type = $(this).data('chart')
-        var labels = $(this).data('chart-labels')
-        var label = $(this).data('chart-label')
-        var dataChart = $(this).data('chart-data')
-        var title = $(this).data('chart-title')
-        var beginAtZero = $(this).data('begin-at-zero')
+        var type = $(this).data('chart');
+        var labels = $(this).data('chart-labels');
+        var label = $(this).data('chart-label');
+        var dataChart = $(this).data('chart-data');
+        var title = $(this).data('chart-title');
+        var beginAtZero = $(this).data('begin-at-zero');
 
         var options = {};
 
@@ -83,10 +79,25 @@ $(document).ready(function () {
                 label: label,
                 data: dataChart
             }]
-        }
+        };
 
-        if (type == 'bar') {
-            options.plugins = {datalabels: {display: false}}
+        options.plugins = {
+            datalabels: {
+                color: '#FFF',
+                font: {
+                    weight: 'bold',
+                    size: 20
+                },
+                display: function (ctx) {
+                    return ctx.dataset.data[ctx.dataIndex] > 0 && ctx.chart.isDatasetVisible(ctx.datasetIndex);
+                },
+                formatter: function (value, ctx) {
+                    return isNaN(value) || value % 1 === 0 || value.toFixed === undefined ? value : value.toFixed(2);
+                }
+            }
+        };
+
+        if (type === 'bar') {
             options.scales = {
                 xAxes: [{
                     gridLines: {display: true},
@@ -98,32 +109,10 @@ $(document).ready(function () {
                     scaleLabel: {display: true, labelString: label},
                     ticks: {beginAtZero: beginAtZero}
                 }]
-            }
+            };
 
-            var colorRgb = randomColorRGB();
-            var solidRgb = colorRgb.replace('rgba', 'rgb').split(',')
-            var borderColor = solidRgb[0] + "," + solidRgb[1] + "," + solidRgb[2] + ")";
-
-            data.datasets[0].backgroundColor = colorRgb;
-            data.datasets[0].borderColor = borderColor;
-            data.datasets[0].borderWidth = 1;
-        } else if (type == 'doughnut') {
-            options.plugins = {
-                datalabels: {
-                    color: '#FFF',
-                    font: {
-                        weight: 'bold',
-                        size: 20
-                    },
-                    display: function (ctx) {
-                        return ctx.dataset.data[ctx.dataIndex] > 0
-                    },
-                    formatter: function (value, ctx) {
-                        return value.toFixed(2);
-                    }
-                }
-            }
-
+            data.datasets[0].backgroundColor = randomColor();
+        } else {
             data.datasets[0].backgroundColor = [];
             for (var i = 0; i < dataChart.length; i++) {
                 data.datasets[0].backgroundColor.push(randomColor());

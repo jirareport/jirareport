@@ -37,7 +37,6 @@ const options = {
       "./node_modules/bootstrap-datepicker/dist/locales/bootstrap-datepicker.pt-BR.min.js",
       "./node_modules/chart.js/dist/Chart.min.js",
       "./node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js",
-      "./node_modules/jquery-bootstrap-scrolling-tabs/dist/jquery.scrolling-tabs.min.js",
       "./node_modules/bootstrap-select/dist/js/bootstrap-select.min.js",
       "./node_modules/bootstrap-table/dist/bootstrap-table.min.js",
       "./node_modules/tableexport.jquery.plugin/libs/FileSaver/FileSaver.min.js",

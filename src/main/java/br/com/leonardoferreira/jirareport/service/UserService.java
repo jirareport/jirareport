@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.service;
 
+import br.com.leonardoferreira.jirareport.domain.ChartType;
 import br.com.leonardoferreira.jirareport.domain.UserConfig;
 import br.com.leonardoferreira.jirareport.domain.form.UserConfigForm;
 
@@ -10,5 +11,11 @@ public interface UserService {
     UserConfigForm myInfo();
 
     UserConfig findHolidayInfo();
+
+    ChartType retrieveFavoriteLeadTimeChartType();
+
+    ChartType retrieveFavoriteThroughputChartType();
+
+    UserConfig retrieveCurrentUserConfig();
 
 }
