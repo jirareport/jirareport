@@ -76,9 +76,9 @@ public class EstimateServiceImpl implements EstimateService {
                     issue.setEstimateDatePercentile50(DateUtil.addDays(issue.getStartDate(),
                             percentile.getMedian(), holidays, board.getIgnoreWeekend()));
                     issue.setEstimateDatePercentile75(DateUtil.addDays(issue.getStartDate(),
-                            percentile.getPercentile75().longValue(), holidays, board.getIgnoreWeekend()));
+                            percentile.getPercentile75(), holidays, board.getIgnoreWeekend()));
                     issue.setEstimateDatePercentile90(DateUtil.addDays(issue.getStartDate(),
-                            percentile.getPercentile90().longValue(), holidays, board.getIgnoreWeekend()));
+                            percentile.getPercentile90(), holidays, board.getIgnoreWeekend()));
                 }
         );
 

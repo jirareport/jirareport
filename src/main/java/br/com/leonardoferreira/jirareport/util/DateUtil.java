@@ -80,13 +80,13 @@ public final class DateUtil {
     public static LocalDate addDays(final LocalDateTime startDate, final Long numDays,
                                     final List<String> holidays, final Boolean ignoreWeekend) {
 
-        if (numDays < 1) {
+        if (numDays <= 1) {
             return startDate.toLocalDate();
         }
         if (ignoreWeekend) {
-            return startDate.toLocalDate().plusDays(numDays);
+            return startDate.toLocalDate().plusDays(numDays - 1);
         }
-        Long total = numDays;
+        Long total = numDays - 1;
         LocalDate ref = startDate.toLocalDate();
 
         while (total > 0) {
