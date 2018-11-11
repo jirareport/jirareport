@@ -1,12 +1,10 @@
 package br.com.leonardoferreira.jirareport.domain.form;
 
+import lombok.Data;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Builder;
-import lombok.Data;
-import org.apache.commons.lang.StringUtils;
 
 @Data
 public class IssueForm {

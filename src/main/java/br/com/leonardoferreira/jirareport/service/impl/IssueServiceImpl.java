@@ -82,13 +82,12 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     }
 
     @Override
-    public List<EstimateIssue> findByJql(final String jql, final Board board){
+    public List<EstimateIssue> findByJql(final String jql, final Board board) {
         log.info("Method=findByJql, jql={}, board={}", jql, board);
         String issuesStr = issueClient.findAll(currentToken(), jql);
 
         return estimateIssueMapper.parseEstimate(issuesStr, board);
     }
-
 
     @Override
     @ExecutionTime

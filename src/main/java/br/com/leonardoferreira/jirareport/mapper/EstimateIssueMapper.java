@@ -1,6 +1,5 @@
 package br.com.leonardoferreira.jirareport.mapper;
 
-
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
@@ -47,8 +46,8 @@ public class EstimateIssueMapper {
 
         Set<String> startColumns = CalcUtil.calcStartColumns(board);
 
-        Iterable<JsonNode> iterable = ()->issues;
-        List<EstimateIssue> list = StreamSupport.stream(iterable.spliterator(), false)
+        Iterable<JsonNode> iterable = () -> issues;
+        return StreamSupport.stream(iterable.spliterator(), false)
                 .map(issue -> {
                     JsonNode fields = issue.path("fields");
 
@@ -71,12 +70,10 @@ public class EstimateIssueMapper {
                         startDate = created;
                     }
 
-
                     String priority = null;
                     if (fields.has("priority") && !fields.get("priority").isNull() && !fields.path("priority").isMissingNode()) {
                         priority = fields.path("priority").get("name").asText(null);
                     }
-
 
                     Long leadTime = DateUtil.daysDiff(startDate, LocalDateTime.now(), holidays, board.getIgnoreWeekend());
 
@@ -105,12 +102,10 @@ public class EstimateIssueMapper {
                             .priority(priority)
                             .build();
                 }).collect(Collectors.toList());
-        return list;
     }
 
-
     @SneakyThrows
-    private List<JiraChangelogItem> extractChangelogItems(JsonNode issue) {
+    private List<JiraChangelogItem> extractChangelogItems(final JsonNode issue) {
         JiraChangelog changelog = objectMapper.readValue(issue.path("changelog").toString(), JiraChangelog.class);
         changelog.getHistories().forEach(cl -> cl.getItems().forEach(i -> i.setCreated(cl.getCreated())));
         return changelog.getHistories().parallelStream()
@@ -118,7 +113,6 @@ public class EstimateIssueMapper {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
-
 
     private String parseElement(final JsonNode fields, final String cf) {
         if (StringUtils.isEmpty(cf)) {
@@ -134,7 +128,7 @@ public class EstimateIssueMapper {
             if (elements == null || !elements.hasNext()) {
                 return null;
             }
-            Iterable<JsonNode> iterable = ()->elements;
+            Iterable<JsonNode> iterable = () -> elements;
             return StreamSupport.stream(iterable.spliterator(), true)
                     .map(component -> component.isContainerNode()
                             ? component.get("name").asText(null)

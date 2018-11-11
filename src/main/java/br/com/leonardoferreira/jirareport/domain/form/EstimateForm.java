@@ -1,10 +1,9 @@
 package br.com.leonardoferreira.jirareport.domain.form;
 
+import br.com.leonardoferreira.jirareport.domain.EstimateFieldReference;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class EstimateForm {
@@ -13,5 +12,5 @@ public class EstimateForm {
 
     private LocalDate endDate;
 
-    private String filter;
+    private EstimateFieldReference filter;
 }

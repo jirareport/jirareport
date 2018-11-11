@@ -4,7 +4,6 @@ import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import br.com.leonardoferreira.jirareport.domain.LeadTime;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
-import br.com.leonardoferreira.jirareport.domain.embedded.DueDateHistory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -76,4 +75,5 @@ public class EstimateIssue {
     @ManyToOne
     private Board board;
 
-    private Long impedimentTime;}
+    private Long impedimentTime;
+}

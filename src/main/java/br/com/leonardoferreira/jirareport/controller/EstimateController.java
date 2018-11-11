@@ -1,6 +1,7 @@
 package br.com.leonardoferreira.jirareport.controller;
 
 import br.com.leonardoferreira.jirareport.domain.Board;
+import br.com.leonardoferreira.jirareport.domain.EstimateFieldReference;
 import br.com.leonardoferreira.jirareport.domain.form.EstimateForm;
 import br.com.leonardoferreira.jirareport.domain.vo.EstimateIssue;
 import br.com.leonardoferreira.jirareport.service.BoardService;
@@ -14,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/boards/{boardId}/estimate")
@@ -29,13 +28,17 @@ public class EstimateController extends AbstractController {
     private EstimateService estimateService;
 
     @GetMapping
-    public ModelAndView index(@PathVariable final Long boardId, final EstimateForm estimateForm){
+    public ModelAndView index(@PathVariable final Long boardId, final EstimateForm estimateForm) {
 
         Board board = boardService.findById(boardId);
 
         List<EstimateIssue> estimateIssueList = estimateService.findEstimateIssues(boardId, estimateForm);
 
-        Map<String, String> filterMap = getFilterMap(board);
+        List<EstimateFieldReference> estimateFieldReferenceList = EstimateFieldReference.retrieveCustomList(
+                StringUtils.isNotEmpty(board.getSystemCF()),
+                StringUtils.isNotEmpty(board.getEstimateCF()),
+                StringUtils.isNotEmpty(board.getEpicCF()),
+                StringUtils.isNotEmpty(board.getProjectCF()));
 
         if (estimateForm.getStartDate() == null || estimateForm.getEndDate() == null) {
             estimateForm.setStartDate(LocalDate.now().minusMonths(4));
@@ -45,28 +48,7 @@ public class EstimateController extends AbstractController {
         return new ModelAndView("estimate/index")
                 .addObject("estimateForm", estimateForm)
                 .addObject("board", board)
-                .addObject("filterMap", filterMap)
+                .addObject("estimateFieldReferenceList", estimateFieldReferenceList)
                 .addObject("estimateIssueList", estimateIssueList);
-
-    }
-
-    private Map<String, String> getFilterMap(Board board) {
-        Map<String,String> map = new HashMap<>();
-        map.put("issueType","Tipo de issue");
-
-        if (StringUtils.isNotEmpty(board.getSystemCF())){
-            map.put("system", "Sistema");
-        }
-        if (StringUtils.isNotEmpty(board.getEstimateCF())){
-            map.put("taskSize", "Tamanho/estimativa");
-        }
-        if (StringUtils.isNotEmpty(board.getEpicCF())){
-            map.put("epic", "Épico");
-        }
-        if (StringUtils.isNotEmpty(board.getProjectCF())){
-            map.put("project", "Projeto");
-        }
-        map.put("prority", "Prioridade");
-        return map;
     }
 }

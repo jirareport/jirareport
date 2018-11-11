@@ -40,8 +40,9 @@
                     <label>Campo de filtro</label>
                     <div>
                         <select class="form-control" th:field="*{filter}" data-width="100%">
-                            <option th:each="entry : ${filterMap}" th:value="${entry.key}"
-                                    th:text="${entry.value}"></option>
+                            <option value="">Selecione</option>
+                            <option th:each="entry : ${estimateFieldReferenceList}" th:value="${entry.name()}"
+                                    th:text="${entry.description}"></option>
                         </select>
                     </div>
                 </div>

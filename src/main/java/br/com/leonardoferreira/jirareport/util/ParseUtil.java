@@ -14,6 +14,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public final class ParseUtil {
+
+    private ParseUtil() {
+
+    }
+
     @SneakyThrows
     public static List<Changelog> parseChangelog(final List<JiraChangelogItem> changelogItems,
                                    final List<String> holidays, final Boolean ignoreWeekend) {
@@ -41,7 +46,6 @@ public final class ParseUtil {
 
         return collect;
     }
-
 
     public static Long countTimeInImpediment(final Board board, final List<JiraChangelogItem> changelogItems,
                                final List<Changelog> changelog, final LocalDateTime endDate, final List<String> holidays) {
@@ -99,7 +103,4 @@ public final class ParseUtil {
                 .mapToLong(Changelog::getLeadTime)
                 .sum();
     }
-
-
-
 }

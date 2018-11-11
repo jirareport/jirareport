@@ -3,7 +3,6 @@ package br.com.leonardoferreira.jirareport.mapper;
 import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
-import br.com.leonardoferreira.jirareport.domain.ImpedimentType;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.embedded.DueDateHistory;
@@ -20,11 +19,17 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -34,12 +39,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 /**
  * @author lferreira
@@ -169,7 +168,6 @@ public class IssueMapper {
                 .collect(Collectors.toList());
     }
 
-
     private String parseElement(final JsonObject fields, final String cf) {
         if (StringUtils.isEmpty(cf)) {
             return null;
@@ -222,7 +220,6 @@ public class IssueMapper {
                 .sorted(Comparator.comparing(DueDateHistory::getCreated))
                 .collect(Collectors.toList());
     }
-
 
     private Map<String, String> parseDynamicFields(final Board board, final JsonObject fields) {
         if (board.getDynamicFields() == null || board.getDynamicFields().isEmpty()) {

@@ -77,19 +77,20 @@ public final class DateUtil {
         return workingDays;
     }
 
-    public static LocalDate addDays(final LocalDateTime startDate, final Long numDays, final List<String> holidays, final Boolean ignoreWeekend){
+    public static LocalDate addDays(final LocalDateTime startDate, final Long numDays,
+                                    final List<String> holidays, final Boolean ignoreWeekend) {
 
-        if (numDays < 1){
+        if (numDays < 1) {
             return startDate.toLocalDate();
         }
-        if (ignoreWeekend){
+        if (ignoreWeekend) {
             return startDate.toLocalDate().plusDays(numDays);
         }
         Long total = numDays;
         LocalDate ref = startDate.toLocalDate();
 
-        while(total > 0){
-            ref= ref.plusDays(1);
+        while (total > 0) {
+            ref = ref.plusDays(1);
             DayOfWeek day = ref.getDayOfWeek();
             if (!DayOfWeek.SATURDAY.equals(day) && !DayOfWeek.SUNDAY.equals(day) && !isHoliday(ref, holidays)) {
                 total--;

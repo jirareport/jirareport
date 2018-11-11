@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class InternalServerErrorException extends RuntimeException {
     private static final long serialVersionUID = 2093334930630431201L;
 
-    public InternalServerErrorException(String message) {
+    public InternalServerErrorException(final String message) {
         super(message);
     }
 }
