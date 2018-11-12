@@ -1,7 +1,6 @@
 package br.com.leonardoferreira.jirareport.mapper;
 
 import br.com.leonardoferreira.jirareport.domain.Board;
-import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.vo.EstimateIssue;
 import br.com.leonardoferreira.jirareport.domain.vo.changelog.JiraChangelog;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Iterator;
@@ -41,8 +41,7 @@ public class EstimateIssueMapper {
         JsonNode jsonNode = objectMapper.readTree(rawText);
         Iterator<JsonNode> issues = jsonNode.path("issues").elements();
 
-        final List<String> holidays = holidayService.findByBoard(board.getId())
-                .stream().map(Holiday::getEnDate).collect(Collectors.toList());
+        List<LocalDate> holidays = holidayService.findDaysByBoard(board.getId());
 
         Set<String> startColumns = CalcUtil.calcStartColumns(board);
 
@@ -97,7 +96,6 @@ public class EstimateIssueMapper {
                             .project(parseElement(fields, board.getProjectCF()))
                             .summary(fields.get("summary").asText())
                             .changelog(changelog)
-                            .board(board)
                             .impedimentTime(timeInImpediment)
                             .priority(priority)
                             .build();

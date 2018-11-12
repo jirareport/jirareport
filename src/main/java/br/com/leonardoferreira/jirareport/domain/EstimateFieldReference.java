@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum EstimateFieldReference {
 
     ISSUE_TYPE("Tipo de issue"),

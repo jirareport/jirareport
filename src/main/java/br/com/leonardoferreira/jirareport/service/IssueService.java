@@ -18,9 +18,11 @@ public interface IssueService {
 
     List<Issue> createByJql(String jql, Board board);
 
-    List<EstimateIssue> findByJql(String jql, Board board);
+    List<EstimateIssue> findEstimateByJql(String jql, Board board);
 
     SandBox findByExample(Long boardId, IssueForm issueForm);
+
+    List<Long> findLeadTimeByExample(Long boardId, IssueForm issueForm);
 
     SandBoxFilter findSandBoxFilters(Long boardId, SandBox sandBox, IssueForm issueForm);
 

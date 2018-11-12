@@ -82,8 +82,8 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     }
 
     @Override
-    public List<EstimateIssue> findByJql(final String jql, final Board board) {
-        log.info("Method=findByJql, jql={}, board={}", jql, board);
+    public List<EstimateIssue> findEstimateByJql(final String jql, final Board board) {
+        log.info("Method=findEstimateByJql, jql={}, board={}", jql, board);
         String issuesStr = issueClient.findAll(currentToken(), jql);
 
         return estimateIssueMapper.parseEstimate(issuesStr, board);
@@ -117,6 +117,18 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
                 .avgLeadTime(avgLeadTime)
                 .weeklyThroughput(weeklyThroughput)
                 .build();
+    }
+
+    @Override
+    @ExecutionTime
+    @Transactional(readOnly = true)
+    public List<Long> findLeadTimeByExample(final Long boardId, final IssueForm issueForm) {
+        log.info("Method=findLeadTimeByExample, board={}, issueForm={}", boardId, issueForm);
+
+        return issueRepository.findByExample(boardId, issueForm)
+                .stream()
+                .map(Issue::getLeadTime)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -51,7 +51,7 @@ public final class DateUtil {
     }
 
     public static Long daysDiff(final LocalDateTime startDate, final LocalDateTime endDate,
-                                final List<String> holidays, final Boolean ignoreWeekend) {
+                                final List<LocalDate> holidays, final Boolean ignoreWeekend) {
         LocalDate start = startDate.toLocalDate();
         LocalDate end = endDate.toLocalDate();
 
@@ -72,12 +72,12 @@ public final class DateUtil {
     }
 
     public static LocalDate addDays(final LocalDateTime startDate, final Long numDays,
-                                    final List<String> holidays, final Boolean ignoreWeekend) {
+                                    final List<LocalDate> holidays, final Boolean ignoreWeekend) {
 
         if (numDays <= 1) {
             return startDate.toLocalDate();
         }
-        if (ignoreWeekend) {
+        if (Boolean.TRUE.equals(ignoreWeekend)) {
             return startDate.toLocalDate().plusDays(numDays - 1);
         }
         Long total = numDays - 1;
@@ -93,8 +93,8 @@ public final class DateUtil {
         return ref;
     }
 
-    private static boolean isHoliday(final LocalDate day, final List<String> holidays) {
-        return holidays.contains(day.format(DateTimeFormatter.ofPattern(DEFAULT_FORMATTER)));
+    private static boolean isHoliday(final LocalDate day, final List<LocalDate> holidays) {
+        return holidays.contains(day);
     }
 
     public static LocalDateTime parseFromJira(final String date) {

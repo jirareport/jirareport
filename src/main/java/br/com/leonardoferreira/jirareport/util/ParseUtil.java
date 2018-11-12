@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public final class ParseUtil {
 
     @SneakyThrows
     public static List<Changelog> parseChangelog(final List<JiraChangelogItem> changelogItems,
-                                   final List<String> holidays, final Boolean ignoreWeekend) {
+                                                 final List<LocalDate> holidays, final Boolean ignoreWeekend) {
         List<Changelog> collect = changelogItems.stream()
                 .filter(i -> "status".equals(i.getField()))
                 .map(i -> Changelog.builder()
@@ -47,7 +48,7 @@ public final class ParseUtil {
     }
 
     public static Long countTimeInImpediment(final Board board, final List<JiraChangelogItem> changelogItems,
-                               final List<Changelog> changelog, final LocalDateTime endDate, final List<String> holidays) {
+                               final List<Changelog> changelog, final LocalDateTime endDate, final List<LocalDate> holidays) {
         Long timeInImpediment;
         if (ImpedimentType.FLAG.equals(board.getImpedimentType())) {
             timeInImpediment = countTimeInImpedimentByFlag(changelogItems, endDate, holidays, board.getIgnoreWeekend());
@@ -62,7 +63,7 @@ public final class ParseUtil {
     }
 
     private static Long countTimeInImpedimentByFlag(final List<JiraChangelogItem> changelogItems, final LocalDateTime endDate,
-                                             final List<String> holidays, final Boolean ignoreWeekend) {
+                                             final List<LocalDate> holidays, final Boolean ignoreWeekend) {
         List<LocalDateTime> beginnings = new ArrayList<>();
         List<LocalDateTime> terms = new ArrayList<>();
 

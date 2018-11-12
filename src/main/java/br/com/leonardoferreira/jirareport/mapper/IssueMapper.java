@@ -2,7 +2,6 @@ package br.com.leonardoferreira.jirareport.mapper;
 
 import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.domain.Board;
-import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.embedded.DueDateHistory;
@@ -62,8 +61,7 @@ public class IssueMapper {
         JsonElement response = jsonParser.parse(rawText);
         JsonArray issues = response.getAsJsonObject().getAsJsonArray("issues");
 
-        final List<String> holidays = holidayService.findByBoard(board.getId())
-                .stream().map(Holiday::getEnDate).collect(Collectors.toList());
+        List<LocalDate> holidays = holidayService.findDaysByBoard(board.getId());
 
         Set<String> startColumns = CalcUtil.calcStartColumns(board);
         Set<String> endColumns = CalcUtil.calcEndColumns(board);

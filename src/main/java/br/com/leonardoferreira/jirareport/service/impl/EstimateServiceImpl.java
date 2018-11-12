@@ -2,16 +2,12 @@ package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.EstimateFieldReference;
-import br.com.leonardoferreira.jirareport.domain.Holiday;
-import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.form.EstimateForm;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.vo.EstimateIssue;
 import br.com.leonardoferreira.jirareport.domain.vo.Percentile;
 import br.com.leonardoferreira.jirareport.exception.InternalServerErrorException;
-import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
-import br.com.leonardoferreira.jirareport.repository.BoardRepository;
-import br.com.leonardoferreira.jirareport.repository.IssueRepository;
+import br.com.leonardoferreira.jirareport.service.BoardService;
 import br.com.leonardoferreira.jirareport.service.EstimateService;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.service.IssueService;
@@ -22,46 +18,46 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class EstimateServiceImpl implements EstimateService {
 
     @Autowired
-    private BoardRepository boardRepository;
+    private BoardService boardService;
 
     @Autowired
     private IssueService issueService;
 
     @Autowired
-    private IssueRepository issueRepository;
-
-    @Autowired
     private HolidayService holidayService;
 
     @Override
+    @Transactional(readOnly = true)
     public List<EstimateIssue> findEstimateIssues(final Long boardId, final EstimateForm estimateForm) {
+        log.info("Method=findEstimateIssues, boardId={}, estimateForm={}", boardId, estimateForm);
+
         if (estimateForm.getStartDate() == null || estimateForm.getEndDate() == null) {
             return Collections.emptyList();
         }
 
-        final Board board = boardRepository.findById(boardId).orElseThrow(ResourceNotFound::new);
+        Board board = boardService.findById(boardId);
 
-        List<EstimateIssue> issueList = issueService.findByJql(searchJQL(board), board);
+        List<EstimateIssue> issueList = issueService.findEstimateByJql(searchJQL(board), board);
 
-        final List<String> holidays = board.getIgnoreWeekend()
+        List<LocalDate> holidays = board.getIgnoreWeekend()
                 ? Collections.emptyList()
-                : holidayService.findByBoard(boardId)
-                        .stream().map(Holiday::getEnDate).collect(Collectors.toList());
+                : holidayService.findDaysByBoard(boardId);
 
-        final Map<String, Percentile> fieldPercentileMap = new HashMap<>();
+        Map<String, Percentile> fieldPercentileMap = new HashMap<>();
         issueList.forEach(
                 issue -> {
                     String value = retrieveByFilter(issue, estimateForm.getFilter());
@@ -85,17 +81,18 @@ public class EstimateServiceImpl implements EstimateService {
     }
 
     private Percentile calculatePercentile(final Board board, final EstimateForm estimateForm, final String value) {
+        log.info("Method=calculatePercentile, board={}, estimateForm={}, value={}", board, estimateForm, value);
 
         IssueForm issueForm = buildIssueFormByEstimateForm(estimateForm, value);
 
-        List<Issue> issues = issueRepository.findByExample(board.getId(), issueForm);
-
-        List<Long> leadTimeList = issues.stream().map(Issue::getLeadTime).collect(Collectors.toList());
+        List<Long> leadTimeList = issueService.findLeadTimeByExample(board.getId(), issueForm);
 
         return CalcUtil.calculatePercentile(leadTimeList);
     }
 
     private IssueForm buildIssueFormByEstimateForm(final EstimateForm estimateForm, final String value) {
+        log.info("Method=buildIssueFormByEstimateForm, estimateForm={}, value={}", estimateForm, value);
+
         IssueForm issueForm = new IssueForm();
         issueForm.setStartDate(estimateForm.getStartDate());
         issueForm.setEndDate(estimateForm.getEndDate());
@@ -121,6 +118,8 @@ public class EstimateServiceImpl implements EstimateService {
     }
 
     private String retrieveByFilter(final EstimateIssue issue, final EstimateFieldReference filter) {
+        log.info("Method=retrieveByFilter, issue={}, filter={}", issue, filter);
+
         if (filter == null) {
             return null;
         }

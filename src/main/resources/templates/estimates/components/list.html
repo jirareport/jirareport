@@ -57,6 +57,6 @@
         <button class="btn btn-default" onclick="$('#issue-table').tableExport({type:'excel', fileName: 'Listagem de issues'});">Exportar para Excel</button>
     </div>
 
-    <th:block th:each="issue : ${issues}" th:include="issues/components/leadtime_modal :: modal(${issue}, ${board})"/>
+    <th:block th:each="issue : ${issues}" th:include="issues/components/leadtime_modal :: modal(${issue}, ${board}, false)"/>
 </th:block>
 </html>
