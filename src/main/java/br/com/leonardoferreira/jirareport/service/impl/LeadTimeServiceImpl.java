@@ -1,13 +1,7 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
 import br.com.leonardoferreira.jirareport.domain.Board;
-import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.LeadTime;
 import br.com.leonardoferreira.jirareport.domain.LeadTimeConfig;
@@ -22,6 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author lferreira on 17/05/18
@@ -49,8 +49,7 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
         log.info("Method=createLeadTimes, issues={}, boardId={}", issues, boardId);
 
         List<LeadTimeConfig> leadTimeConfigs = leadTimeConfigService.findAllByBoardId(boardId);
-        List<String> holidays = holidayService.findByBoard(boardId).stream()
-                .map(Holiday::getEnDate).collect(Collectors.toList());
+        List<LocalDate> holidays = holidayService.findDaysByBoard(boardId);
         Board board = boardService.findById(boardId);
 
         issues.forEach(issue -> {
@@ -62,7 +61,7 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
     }
 
     private LeadTime calcLeadTime(final LeadTimeConfig leadTimeConfig, final Issue issue,
-                                  final List<String> holidays, final Boolean ignoreWeekend) {
+                                  final List<LocalDate> holidays, final Boolean ignoreWeekend) {
         log.info("Method=calcLeadTime, leadTimeConfig={}, issue={}, holidays={}", leadTimeConfig, issue, holidays);
 
         LocalDateTime startDate = null;

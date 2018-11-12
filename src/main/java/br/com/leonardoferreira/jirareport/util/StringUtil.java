@@ -1,18 +1,15 @@
 package br.com.leonardoferreira.jirareport.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.text.Normalizer;
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * @author s2it_leferreira
- * @since 13/06/18 10:00
- */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StringUtil {
-
-    private StringUtil() {
-    }
 
     public static String replaceParams(final String jql, final Map<String, Object> params) {
         String result = jql;

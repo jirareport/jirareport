@@ -8,8 +8,10 @@ import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import br.com.leonardoferreira.jirareport.domain.form.IssueForm;
 import br.com.leonardoferreira.jirareport.domain.form.IssuePeriodForm;
 import br.com.leonardoferreira.jirareport.domain.vo.ChartAggregator;
+import br.com.leonardoferreira.jirareport.domain.vo.EstimateIssue;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBox;
 import br.com.leonardoferreira.jirareport.domain.vo.SandBoxFilter;
+import br.com.leonardoferreira.jirareport.mapper.EstimateIssueMapper;
 import br.com.leonardoferreira.jirareport.mapper.IssueMapper;
 import br.com.leonardoferreira.jirareport.repository.IssueRepository;
 import br.com.leonardoferreira.jirareport.service.BoardService;
@@ -49,6 +51,9 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     private IssueMapper issueMapper;
 
     @Autowired
+    private EstimateIssueMapper estimateIssueMapper;
+
+    @Autowired
     private IssueRepository issueRepository;
 
     @Autowired
@@ -74,6 +79,14 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         leadTimeService.createLeadTimes(issues, board.getId());
 
         return issues;
+    }
+
+    @Override
+    public List<EstimateIssue> findEstimateByJql(final String jql, final Board board) {
+        log.info("Method=findEstimateByJql, jql={}, board={}", jql, board);
+        String issuesStr = issueClient.findAll(currentToken(), jql);
+
+        return estimateIssueMapper.parseEstimate(issuesStr, board);
     }
 
     @Override
@@ -104,6 +117,18 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
                 .avgLeadTime(avgLeadTime)
                 .weeklyThroughput(weeklyThroughput)
                 .build();
+    }
+
+    @Override
+    @ExecutionTime
+    @Transactional(readOnly = true)
+    public List<Long> findLeadTimeByExample(final Long boardId, final IssueForm issueForm) {
+        log.info("Method=findLeadTimeByExample, board={}, issueForm={}", boardId, issueForm);
+
+        return issueRepository.findByExample(boardId, issueForm)
+                .stream()
+                .map(Issue::getLeadTime)
+                .collect(Collectors.toList());
     }
 
     @Override

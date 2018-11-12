@@ -9,22 +9,16 @@ import java.util.List;
 import java.util.Locale;
 
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
-/**
- * @author lferreira
- * @since 7/31/17 10:30 AM
- */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DateUtil {
 
     public static final Locale LOCALE_BR = new Locale("pt", "BR");
 
     private static final String DEFAULT_FORMATTER = "yyyy-MM-dd";
-
-    public static final String FORMATTER = "2018-05-03T23:20:26.000-0300";
-
-    private DateUtil() {
-    }
 
     public static String displayFormat(final String date) {
         if (StringUtils.isEmpty(date)) {
@@ -57,7 +51,7 @@ public final class DateUtil {
     }
 
     public static Long daysDiff(final LocalDateTime startDate, final LocalDateTime endDate,
-                                final List<String> holidays, final Boolean ignoreWeekend) {
+                                final List<LocalDate> holidays, final Boolean ignoreWeekend) {
         LocalDate start = startDate.toLocalDate();
         LocalDate end = endDate.toLocalDate();
 
@@ -77,8 +71,30 @@ public final class DateUtil {
         return workingDays;
     }
 
-    private static boolean isHoliday(final LocalDate day, final List<String> holidays) {
-        return holidays.contains(day.format(DateTimeFormatter.ofPattern(DEFAULT_FORMATTER)));
+    public static LocalDate addDays(final LocalDateTime startDate, final Long numDays,
+                                    final List<LocalDate> holidays, final Boolean ignoreWeekend) {
+
+        if (numDays <= 1) {
+            return startDate.toLocalDate();
+        }
+        if (Boolean.TRUE.equals(ignoreWeekend)) {
+            return startDate.toLocalDate().plusDays(numDays - 1);
+        }
+        Long total = numDays - 1;
+        LocalDate ref = startDate.toLocalDate();
+
+        while (total > 0) {
+            ref = ref.plusDays(1);
+            DayOfWeek day = ref.getDayOfWeek();
+            if (!DayOfWeek.SATURDAY.equals(day) && !DayOfWeek.SUNDAY.equals(day) && !isHoliday(ref, holidays)) {
+                total--;
+            }
+        }
+        return ref;
+    }
+
+    private static boolean isHoliday(final LocalDate day, final List<LocalDate> holidays) {
+        return holidays.contains(day);
     }
 
     public static LocalDateTime parseFromJira(final String date) {

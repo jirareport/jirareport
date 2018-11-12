@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/application">
+
+<th:block layout:fragment="content">
+    <div class="page-header">
+        <h1>Previsibilidade <small th:text="${board.name}"></small></h1>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Filtro</h3>
+        </div>
+        <form th:action="@{/boards/{id}/estimates(id=${board.id})}" th:object="${estimateForm}">
+            <div class="panel-body row">
+                <div class="form-group col-md-3">
+                    <label>Data Inicio</label>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control datepicker" th:field="*{startDate}" autocomplete="off" />
+                        <div class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </div>
+                    </div>
+                    <label th:errors="*{startDate}"></label>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Data Fim</label>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control datepicker" th:field="*{endDate}" autocomplete="off" />
+                        <div class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </div>
+                    </div>
+                    <label th:errors="*{endDate}"></label>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Campo de filtro</label>
+                    <div>
+                        <select class="form-control" th:field="*{filter}" data-width="100%">
+                            <option value="">Selecione</option>
+                            <option th:each="entry : ${estimateFieldReferenceList}" th:value="${entry.name()}"
+                                    th:text="${entry.description}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="text-right">
+                    <a th:href="@{/boards}" class="btn btn-default">Voltar</a>
+                    <button type="submit" class="btn btn-success" data-loader>Calcular</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:if="${estimateIssueList != null} and ${!#lists.isEmpty(estimateIssueList)}">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#list" data-toggle="tab">Listagem</a></li>
+        </ul>
+        <div class="panel panel-default bt-0">
+            <div class="panel-body">
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="issues">
+                        <th:block th:include="estimates/components/list :: list(${estimateIssueList})"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</th:block>

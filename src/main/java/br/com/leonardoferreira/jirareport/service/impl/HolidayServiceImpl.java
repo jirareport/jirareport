@@ -1,21 +1,15 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
 import br.com.leonardoferreira.jirareport.client.HolidayClient;
-import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Board;
+import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.UserConfig;
 import br.com.leonardoferreira.jirareport.domain.vo.HolidayVO;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.mapper.HolidayMapper;
-import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
 import br.com.leonardoferreira.jirareport.repository.BoardRepository;
+import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
-
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import br.com.leonardoferreira.jirareport.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +18,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author lferreira
@@ -62,6 +62,16 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
         log.info("Method=findByBoard, boardId={}", boardId);
 
         return holidayRepository.findAllByBoardId(boardId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<LocalDate> findDaysByBoard(final Long boardId) {
+        log.info("Method=findDaysByBoard, boardId={}", boardId);
+        return holidayRepository.findAllByBoardId(boardId)
+                .stream()
+                .map(Holiday::getDate)
+                .collect(Collectors.toList());
     }
 
     @Override

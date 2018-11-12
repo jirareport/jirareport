@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<th:block th:fragment="modal(issue, board)">
+<th:block th:fragment="modal(issue, board, renderOtherLeadTimes)">
 
     <div class="modal fade" th:id="${issue.key}" role="dialog">
         <div class="modal-dialog modal-lg">
@@ -30,7 +30,7 @@
                         </tbody>
                     </table>
 
-                    <th:block th:unless="${#lists.isEmpty(board.leadTimeConfigs)}">
+                    <th:block th:if="${renderOtherLeadTimes and !#lists.isEmpty(board.leadTimeConfigs) and !#lists.isEmpty(issue.leadTimes)}">
                         <br/>
 
                         <h3 class="page-header" style="margin-top: 0">Outros lead times</h3>

@@ -15,7 +15,9 @@ import br.com.leonardoferreira.jirareport.domain.vo.DynamicChart;
 import br.com.leonardoferreira.jirareport.domain.vo.DynamicFieldConfig;
 import br.com.leonardoferreira.jirareport.domain.vo.IssueCountBySize;
 import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
+import br.com.leonardoferreira.jirareport.domain.vo.Percentile;
 import br.com.leonardoferreira.jirareport.service.ChartService;
+import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -58,29 +58,15 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     public CompletableFuture<Histogram> issueHistogram(final List<Issue> issues) {
         log.info("Method=issueHistogram, issues={}", issues);
 
-        issues.sort(Comparator.comparing(Issue::getLeadTime));
-
-        Long median = null;
-        Long percentile75 = null;
-        Long percentile90 = null;
-
-        if (!issues.isEmpty()) {
-            int medianIndex = calculateCeilingPercentage(issues.size(), 50);
-            int percentile75Index = calculateCeilingPercentage(issues.size(), 75);
-            int percentile90Index = calculateCeilingPercentage(issues.size(), 90);
-
-            median = issues.get(medianIndex - 1).getLeadTime();
-            percentile75 = issues.get(percentile75Index - 1).getLeadTime();
-            percentile90 = issues.get(percentile90Index - 1).getLeadTime();
-        }
-
+        List<Long> leadTimeList = issues.stream().map(Issue::getLeadTime).collect(Collectors.toList());
+        Percentile percentile = CalcUtil.calculatePercentile(leadTimeList);
         Chart<Long, Long> chart = histogramChart(issues);
 
         Histogram histogram = Histogram.builder()
                 .chart(chart)
-                .median(median)
-                .percentile75(percentile75)
-                .percentile90(percentile90)
+                .median(percentile.getMedian())
+                .percentile75(percentile.getPercentile75())
+                .percentile90(percentile.getPercentile90())
                 .build();
 
         return CompletableFuture.completedFuture(histogram);
@@ -403,11 +389,6 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
                 .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getDynamicFields().get(config.getName())).orElse("Não informado"),
                         Collectors.averagingDouble(Issue::getLeadTime)));
         return new Chart<>(collect);
-    }
-
-    private int calculateCeilingPercentage(final int totalElements, final int percentage) {
-        return new BigDecimal((double) totalElements * percentage / 100).setScale(0, RoundingMode.CEILING)
-                .intValue();
     }
 
     private Chart<Long, Long> histogramChart(final List<Issue> issues) {
