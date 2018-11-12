@@ -80,7 +80,7 @@ public class EstimateIssueMapper {
 
                     String author = null;
                     JsonNode creator = fields.path("creator");
-                    if (creator != null) {
+                    if (creator != null && !creator.isNull()) {
                         author = creator.get("displayName").asText(null);
                     }
                     return EstimateIssue.builder()
