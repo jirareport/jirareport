@@ -7,13 +7,11 @@ import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -28,7 +26,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(of = "key")
-@EqualsAndHashCode(callSuper = false)
 public class EstimateIssue {
     private String key;
 
@@ -63,7 +60,6 @@ public class EstimateIssue {
     private String priority;
 
     @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
     private List<Changelog> changelog;
 
     @ManyToMany(mappedBy = "issues", cascade = CascadeType.DETACH)

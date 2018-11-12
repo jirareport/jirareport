@@ -1,10 +1,13 @@
 package br.com.leonardoferreira.jirareport.domain;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public enum EstimateFieldReference {
 
     ISSUE_TYPE("Tipo de issue"),
@@ -16,10 +19,6 @@ public enum EstimateFieldReference {
 
     @Getter
     private final String description;
-
-    EstimateFieldReference(final String description) {
-        this.description = description;
-    }
 
     public static List<EstimateFieldReference> retrieveCustomList(final boolean system, final boolean taskSize,
                                                                   final boolean epic, final boolean project) {

@@ -4,6 +4,8 @@ import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.ImpedimentType;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.vo.changelog.JiraChangelogItem;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,11 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ParseUtil {
-
-    private ParseUtil() {
-
-    }
 
     @SneakyThrows
     public static List<Changelog> parseChangelog(final List<JiraChangelogItem> changelogItems,

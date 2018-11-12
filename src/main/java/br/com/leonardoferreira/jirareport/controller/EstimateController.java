@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Controller
-@RequestMapping("/boards/{boardId}/estimate")
+@RequestMapping("/boards/{boardId}/estimates")
 public class EstimateController extends AbstractController {
 
     @Autowired
@@ -45,7 +45,7 @@ public class EstimateController extends AbstractController {
             estimateForm.setEndDate(LocalDate.now());
         }
 
-        return new ModelAndView("estimate/index")
+        return new ModelAndView("estimates/index")
                 .addObject("estimateForm", estimateForm)
                 .addObject("board", board)
                 .addObject("estimateFieldReferenceList", estimateFieldReferenceList)

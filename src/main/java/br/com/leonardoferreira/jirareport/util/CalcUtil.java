@@ -2,6 +2,8 @@ package br.com.leonardoferreira.jirareport.util;
 
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.vo.Percentile;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -11,14 +13,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * @author lferreira
- * @since 5/18/18 6:43 PM
- */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CalcUtil {
-
-    private CalcUtil() {
-    }
 
     public static Set<String> calcStartColumns(final String startColumn,
                                         final String endColumn,

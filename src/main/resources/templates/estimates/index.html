@@ -12,7 +12,7 @@
         <div class="panel-heading">
             <h3>Filtro</h3>
         </div>
-        <form th:action="@{/boards/{id}/estimate(id=${board.id})}" th:object="${estimateForm}">
+        <form th:action="@{/boards/{id}/estimates(id=${board.id})}" th:object="${estimateForm}">
             <div class="panel-body row">
                 <div class="form-group col-md-3">
                     <label>Data Inicio</label>
@@ -63,7 +63,7 @@
             <div class="panel-body">
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="issues">
-                        <th:block th:include="estimate/components/list :: list(${estimateIssueList})"/>
+                        <th:block th:include="estimates/components/list :: list(${estimateIssueList})"/>
                     </div>
                 </div>
             </div>

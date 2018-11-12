@@ -61,7 +61,6 @@ public class EstimateServiceImpl implements EstimateService {
                 : holidayService.findByBoard(boardId)
                         .stream().map(Holiday::getEnDate).collect(Collectors.toList());
 
-        // Calçular o que precisar a estimativa
         final Map<String, Percentile> fieldPercentileMap = new HashMap<>();
         issueList.forEach(
                 issue -> {
@@ -149,7 +148,6 @@ public class EstimateServiceImpl implements EstimateService {
     private String searchJQL(final Board board) {
         log.info("Method=searchJQL, board={}", board);
 
-        // Precisa tirar a última coluna
         Set<String> fluxColumns = CalcUtil.calcWipColumns(board);
         if (fluxColumns == null || fluxColumns.isEmpty()) {
             throw new InternalServerErrorException("O fluxo de colunas não está configurado");

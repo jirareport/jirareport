@@ -9,22 +9,16 @@ import java.util.List;
 import java.util.Locale;
 
 import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
-/**
- * @author lferreira
- * @since 7/31/17 10:30 AM
- */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DateUtil {
 
     public static final Locale LOCALE_BR = new Locale("pt", "BR");
 
     private static final String DEFAULT_FORMATTER = "yyyy-MM-dd";
-
-    public static final String FORMATTER = "2018-05-03T23:20:26.000-0300";
-
-    private DateUtil() {
-    }
 
     public static String displayFormat(final String date) {
         if (StringUtils.isEmpty(date)) {
