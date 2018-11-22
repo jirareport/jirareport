@@ -53,10 +53,11 @@ public class EstimateIssueMapper {
 
                     List<JiraChangelogItem> changelogItems = extractChangelogItems(issue);
                     List<Changelog> changelog = ParseUtil.parseChangelog(changelogItems, holidays, board.getIgnoreWeekend());
-                    Changelog changelogItem = changelog.get(changelog.size() - 1);
-                    changelogItem.setLeadTime(DateUtil.daysDiff(changelogItem.getCreated(), LocalDateTime.now(), holidays, board.getIgnoreWeekend()));
-                    changelogItem.setEndDate(LocalDateTime.now());
-
+                    if (!changelog.isEmpty()) {
+                        Changelog changelogItem = changelog.get(changelog.size() - 1);
+                        changelogItem.setLeadTime(DateUtil.daysDiff(changelogItem.getCreated(), LocalDateTime.now(), holidays, board.getIgnoreWeekend()));
+                        changelogItem.setEndDate(LocalDateTime.now());
+                    }
                     LocalDateTime created = DateUtil.parseFromJira(fields.get("created").asText());
 
                     LocalDateTime startDate = null;
