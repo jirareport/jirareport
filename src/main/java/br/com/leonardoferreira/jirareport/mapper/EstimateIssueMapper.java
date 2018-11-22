@@ -55,7 +55,8 @@ public class EstimateIssueMapper {
                     List<Changelog> changelog = ParseUtil.parseChangelog(changelogItems, holidays, board.getIgnoreWeekend());
                     if (!changelog.isEmpty()) {
                         Changelog changelogItem = changelog.get(changelog.size() - 1);
-                        changelogItem.setLeadTime(DateUtil.daysDiff(changelogItem.getCreated(), LocalDateTime.now(), holidays, board.getIgnoreWeekend()));
+                        changelogItem.setLeadTime(DateUtil.daysDiff(changelogItem.getCreated(), LocalDateTime.now(),
+                                holidays, board.getIgnoreWeekend()));
                         changelogItem.setEndDate(LocalDateTime.now());
                     }
                     LocalDateTime created = DateUtil.parseFromJira(fields.get("created").asText());
@@ -70,7 +71,7 @@ public class EstimateIssueMapper {
                     if ("BACKLOG".equals(board.getStartColumn())) {
                         startDate = created;
                     }
-                    if (startDate == null){
+                    if (startDate == null) {
                         return null;
                     }
                     String priority = null;
