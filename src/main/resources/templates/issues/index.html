@@ -117,10 +117,8 @@
 
     <th:block th:if="${sandBox.issues != null} and ${!#lists.isEmpty(sandBox.issues)}">
         <div class="row">
-            <th:block
-                    th:include="components/card :: card(6, 'primary', 'fa-calendar', ${#applicationHelper.fmtLeadTime(sandBox.avgLeadTime)}, 'Lead time médio')"/>
-            <th:block
-                    th:include="components/card :: card(6, 'green', 'fa-tasks', ${#lists.size(sandBox.issues)}, 'Histórias')"/>
+            <th:block th:include="components/card :: card(6, 'primary', 'fa-calendar', ${#applicationHelper.fmtLeadTime(sandBox.avgLeadTime)}, 'Lead time médio')"/>
+            <th:block th:include="components/card :: card(6, 'green', 'fa-tasks', ${#lists.size(sandBox.issues)}, 'Histórias')"/>
         </div>
 
         <ul class="nav nav-tabs" role="tablist">
@@ -128,19 +126,19 @@
 
             <li role="presentation"><a href="#leadTimeHistogram" data-toggle="tab">Histograma de lead time</a></li>
 
-            <li class="dropdown">
+            <li class="dropdown" th:unless="${#strings.isEmpty(board.estimateCF)}">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Estimativa <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li th:unless="${#strings.isEmpty(board.estimateCF)}" role="presentation"><a href="#leadTimeBySize" data-toggle="tab">Lead time</a></li>
-                    <li th:unless="${#strings.isEmpty(board.estimateCF)}" role="presentation"><a href="#estimatedChart" data-toggle="tab">Throughput</a></li>
+                    <li role="presentation"><a href="#leadTimeBySize" data-toggle="tab">Lead time</a></li>
+                    <li role="presentation"><a href="#estimatedChart" data-toggle="tab">Throughput</a></li>
                 </ul>
             </li>
 
-            <li class="dropdown">
+            <li class="dropdown" th:unless="${#strings.isEmpty(board.systemCF)}">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Sistema <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li th:unless="${#strings.isEmpty(board.systemCF)}" role="presentation"><a href="#leadTimeBySystem" data-toggle="tab">Lead time</a></li>
-                    <li th:unless="${#strings.isEmpty(board.systemCF)}" role="presentation"><a href="#tasksBySystem" data-toggle="tab">Throughput</a></li>
+                    <li role="presentation"><a href="#leadTimeBySystem" data-toggle="tab">Lead time</a></li>
+                    <li role="presentation"><a href="#tasksBySystem" data-toggle="tab">Throughput</a></li>
                 </ul>
             </li>
 
@@ -152,11 +150,11 @@
                 </ul>
             </li>
 
-            <li class="dropdown">
+            <li class="dropdown" th:unless="${#strings.isEmpty(board.ProjectCF)}">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Projeto <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li th:unless="${#strings.isEmpty(board.ProjectCF)}" role="presentation"><a href="#leadTimeByProject" data-toggle="tab">Lead time</a></li>
-                    <li th:unless="${#strings.isEmpty(board.ProjectCF)}" role="presentation"><a href="#tasksByProject" data-toggle="tab">Throughput</a></li>
+                    <li role="presentation"><a href="#leadTimeByProject" data-toggle="tab">Lead time</a></li>
+                    <li role="presentation"><a href="#tasksByProject" data-toggle="tab">Throughput</a></li>
                 </ul>
             </li>
 
