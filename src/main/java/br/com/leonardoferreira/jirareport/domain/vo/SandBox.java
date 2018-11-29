@@ -2,12 +2,11 @@ package br.com.leonardoferreira.jirareport.domain.vo;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author lferreira

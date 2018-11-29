@@ -4,6 +4,8 @@ import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.ImpedimentType;
 import br.com.leonardoferreira.jirareport.domain.embedded.Changelog;
 import br.com.leonardoferreira.jirareport.domain.vo.changelog.JiraChangelogItem;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
@@ -48,7 +50,7 @@ public final class ParseUtil {
     }
 
     public static Long countTimeInImpediment(final Board board, final List<JiraChangelogItem> changelogItems,
-                               final List<Changelog> changelog, final LocalDateTime endDate, final List<LocalDate> holidays) {
+                                             final List<Changelog> changelog, final LocalDateTime endDate, final List<LocalDate> holidays) {
         Long timeInImpediment;
         if (ImpedimentType.FLAG.equals(board.getImpedimentType())) {
             timeInImpediment = countTimeInImpedimentByFlag(changelogItems, endDate, holidays, board.getIgnoreWeekend());
@@ -62,8 +64,13 @@ public final class ParseUtil {
         return timeInImpediment;
     }
 
+    @SneakyThrows
+    public static List<String> toStringArray(final ObjectMapper objectMapper, final String array) {
+        return objectMapper.readValue(array, new TypeReference<List<String>>() { });
+    }
+
     private static Long countTimeInImpedimentByFlag(final List<JiraChangelogItem> changelogItems, final LocalDateTime endDate,
-                                             final List<LocalDate> holidays, final Boolean ignoreWeekend) {
+                                                    final List<LocalDate> holidays, final Boolean ignoreWeekend) {
         List<LocalDateTime> beginnings = new ArrayList<>();
         List<LocalDateTime> terms = new ArrayList<>();
 
@@ -103,4 +110,5 @@ public final class ParseUtil {
                 .mapToLong(Changelog::getLeadTime)
                 .sum();
     }
+
 }
