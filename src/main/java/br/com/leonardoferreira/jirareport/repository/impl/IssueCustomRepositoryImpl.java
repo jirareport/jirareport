@@ -49,8 +49,8 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
 
         StringBuilder sb = new StringBuilder();
         sb.append(" SELECT * FROM issue ");
-        sb.append(" left join lead_time on issue.id = lead_time.issue_id ");
-        sb.append(" left join lead_time_config on lead_time.lead_time_config_id = lead_time_config.id ");
+        sb.append(" LEFT JOIN lead_time ON issue.id = lead_time.issue_id ");
+        sb.append(" LEFT JOIN lead_time_config ON lead_time.lead_time_config_id = lead_time_config.id ");
         sb.append(" WHERE issue.board_id = :boardId ");
 
         sb.append(" AND issue.end_date BETWEEN :startDate AND :endDate ");
@@ -99,7 +99,7 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
 
                 String field = (dynamicFieldsValue.getField() + i).replaceAll(" ", "");
                 sb.append(" AND issue.dynamic_fields->>'").append(dynamicFieldsValue.getField())
-                        .append("' in (:").append(field).append(") ");
+                        .append("' IN (:").append(field).append(") ");
                 params.put(field, dynamicFieldsValue.getValues());
             }
         }
@@ -122,15 +122,15 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
 
         List<String> dynamicFields = findAllDynamicFieldsByBoardId(boardId);
 
-        StringBuilder query = new StringBuilder("select ");
-        dynamicFields.forEach(it -> query.append("array_to_json(array_remove(array_agg(distinct fields.\"")
+        StringBuilder query = new StringBuilder("SELECT ");
+        dynamicFields.forEach(it -> query.append("ARRAY_TO_JSON(ARRAY_REMOVE(ARRAY_AGG(DISTINCT fields.\"")
                 .append(it).append("\"), null)) as \"").append(it).append("\","));
         query.deleteCharAt(query.length() - 1);
-        query.append(" from issue, jsonb_to_record(dynamic_fields) as fields( ");
-        dynamicFields.forEach(it -> query.append("\"").append(it).append("\" text,"));
+        query.append(" FROM issue, JSONB_TO_RECORD(dynamic_fields) AS fields( ");
+        dynamicFields.forEach(it -> query.append("\"").append(it).append("\" TEXT,"));
         query.deleteCharAt(query.length() - 1);
         query.append(")");
-        query.append(" where board_id = ? ");
+        query.append(" WHERE board_id = ? ");
 
         return jdbcTemplate.queryForObject(query.toString(), (rs, rowNum) -> {
             ResultSetMetaData metaData = rs.getMetaData();
@@ -148,7 +148,7 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
     private List<String> findAllDynamicFieldsByBoardId(final Long boardId) {
         log.info("Method=findAllDynamicFieldsByBoardId, boardId={}", boardId);
 
-        String query = "select distinct jsonb_object_keys(dynamic_fields) from issue where board_id = ?";
+        String query = "SELECT DISTINCT JSONB_OBJECT_KEYS(dynamic_fields) FROM issue WHERE board_id = ?";
         return jdbcTemplate.queryForList(query, String.class, boardId);
     }
 
