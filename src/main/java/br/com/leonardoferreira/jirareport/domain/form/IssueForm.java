@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.domain.form;
 
+import br.com.leonardoferreira.jirareport.domain.DynamicFieldsValues;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -26,5 +27,7 @@ public class IssueForm {
     private List<String> projects = new ArrayList<>();
 
     private List<String> priorities = new ArrayList<>();
+
+    private List<DynamicFieldsValues> dynamicFieldsValues = new ArrayList<>();
 
 }

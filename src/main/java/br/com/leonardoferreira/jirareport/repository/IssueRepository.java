@@ -1,12 +1,11 @@
 package br.com.leonardoferreira.jirareport.repository;
 
 import br.com.leonardoferreira.jirareport.domain.Issue;
+import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface IssueRepository extends CrudRepository<Issue, Long>, IssueCustomRepository {
@@ -47,4 +46,5 @@ public interface IssueRepository extends CrudRepository<Issue, Long>, IssueCusto
             + " WHERE issue.board_id = :boardId "
             + " AND issue.priority IS NOT NULL", nativeQuery = true)
     List<String> findAllIssuePrioritiesByBoardId(@Param("boardId") Long boardId);
+
 }
