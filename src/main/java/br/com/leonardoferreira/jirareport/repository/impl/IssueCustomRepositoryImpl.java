@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.ResultSetMetaData;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,6 +122,9 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         log.info("Method=findAllDynamicFieldValues, boardId={}", boardId);
 
         List<String> dynamicFields = findAllDynamicFieldsByBoardId(boardId);
+        if (CollectionUtils.isEmpty(dynamicFields)) {
+            return Collections.emptyList();
+        }
 
         StringBuilder query = new StringBuilder("SELECT ");
         dynamicFields.forEach(it -> query.append("ARRAY_TO_JSON(ARRAY_REMOVE(ARRAY_AGG(DISTINCT fields.\"")
