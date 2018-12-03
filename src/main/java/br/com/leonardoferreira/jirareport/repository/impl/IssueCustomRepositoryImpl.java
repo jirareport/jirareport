@@ -49,7 +49,7 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
         Map<String, Object> params = new HashMap<>();
 
         StringBuilder sb = new StringBuilder();
-        sb.append(" SELECT * FROM issue ");
+        sb.append(" SELECT DISTINCT issue.* FROM issue ");
         sb.append(" LEFT JOIN lead_time ON issue.id = lead_time.issue_id ");
         sb.append(" LEFT JOIN lead_time_config ON lead_time.lead_time_config_id = lead_time_config.id ");
         sb.append(" WHERE issue.board_id = :boardId ");
