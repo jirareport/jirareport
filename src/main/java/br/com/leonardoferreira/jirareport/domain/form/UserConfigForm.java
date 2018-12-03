@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.domain.form;
 
+import br.com.leonardoferreira.jirareport.domain.ChartType;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
 import br.com.leonardoferreira.jirareport.util.StringUtil;
 import lombok.Data;
@@ -13,9 +14,9 @@ public class UserConfigForm {
 
     private String holidayToken;
 
-    private String leadTimeChartType;
+    private ChartType leadTimeChartType;
 
-    private String throughputChartType;
+    private ChartType throughputChartType;
 
     public String getCity() {
         if (this.city == null) {
