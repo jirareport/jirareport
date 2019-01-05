@@ -9,10 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * @author lferreira
- * @since 11/14/17 3:43 PM
- */
 @Slf4j
 @Controller
 public class PageController extends AbstractController implements ErrorController {

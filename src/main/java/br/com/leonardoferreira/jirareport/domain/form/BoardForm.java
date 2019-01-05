@@ -11,9 +11,6 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @author lferreira on 31/05/18
- */
 @Data
 @ToString(of = "name")
 public class BoardForm {

@@ -5,10 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-/**
- * @author lferreira
- * @since 7/28/17 10:34 AM
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

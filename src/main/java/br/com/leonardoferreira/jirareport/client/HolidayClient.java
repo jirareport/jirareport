@@ -8,9 +8,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-/**
- * Created by jfalbo
- */
 @FeignClient(name = "holiday-client", url = "${holiday.url}")
 public interface HolidayClient {
 

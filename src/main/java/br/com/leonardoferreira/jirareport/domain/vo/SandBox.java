@@ -8,10 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-/**
- * @author lferreira
- * @since 5/11/18 4:25 PM
- */
 @Data
 @Builder
 @AllArgsConstructor

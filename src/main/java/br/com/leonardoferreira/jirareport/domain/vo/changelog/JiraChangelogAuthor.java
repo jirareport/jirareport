@@ -4,10 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-/**
- * @author s2it_leferreira
- * @since 11/06/18 13:43
- */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JiraChangelogAuthor {

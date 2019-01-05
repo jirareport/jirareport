@@ -39,10 +39,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-/**
- * @author lferreira
- * @since 7/28/17 12:52 PM
- */
 @Slf4j
 @Component
 public class IssueMapper {

@@ -7,10 +7,6 @@ import br.com.leonardoferreira.jirareport.domain.Holiday;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-/**
- * @author lferreira
- * @since 5/7/18 6:52 PM
- */
 public interface HolidayService {
 
     Page<Holiday> findByBoard(Long boardId, Pageable pageable);

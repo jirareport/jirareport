@@ -12,10 +12,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-/**
- * @author lferreira
- * @since 3/23/18 6:21 PM
- */
 @Repository
 public interface BoardRepository extends CrudRepository<Board, Long> {
 

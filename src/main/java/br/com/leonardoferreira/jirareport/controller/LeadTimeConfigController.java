@@ -20,9 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/**
- * @author lferreira on 17/05/18
- */
 @Controller
 @RequestMapping("/boards/{boardId}/lead-time-configs")
 public class LeadTimeConfigController extends AbstractController {

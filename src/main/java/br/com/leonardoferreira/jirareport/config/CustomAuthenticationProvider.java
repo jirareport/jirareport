@@ -13,10 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-/**
- * @author lferreira
- * @since 11/14/17 3:30 PM
- */
 @Slf4j
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {

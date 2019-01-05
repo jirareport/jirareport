@@ -24,10 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/**
- * @author lferreira
- * @since 11/14/17 5:18 PM
- */
 @Controller
 @RequestMapping("/boards/{boardId}/issue-periods")
 public class IssuePeriodController extends AbstractController {

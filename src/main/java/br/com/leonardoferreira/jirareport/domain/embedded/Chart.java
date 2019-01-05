@@ -9,10 +9,6 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-/**
- * @author lferreira
- * @since 11/16/17 12:46 PM
- */
 @Data
 @AllArgsConstructor
 public class Chart<L, V> implements Serializable {

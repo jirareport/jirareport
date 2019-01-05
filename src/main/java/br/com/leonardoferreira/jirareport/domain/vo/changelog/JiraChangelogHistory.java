@@ -6,10 +6,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Data;
 
-/**
- * @author s2it_leferreira
- * @since 11/06/18 13:42
- */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JiraChangelogHistory {

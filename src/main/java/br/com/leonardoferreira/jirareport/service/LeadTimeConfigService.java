@@ -4,9 +4,6 @@ import java.util.List;
 
 import br.com.leonardoferreira.jirareport.domain.LeadTimeConfig;
 
-/**
- * @author lferreira on 17/05/18
- */
 public interface LeadTimeConfigService {
 
     List<LeadTimeConfig> findAllByBoardId(Long boardId);

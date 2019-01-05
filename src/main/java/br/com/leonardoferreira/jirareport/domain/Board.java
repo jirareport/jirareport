@@ -17,10 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.List;
 
-/**
- * @author lferreira
- * @since 7/28/17 11:39 AM
- */
 @Data
 @Entity
 @ToString(exclude = { "leadTimeConfigs", "holidays", "issues" })

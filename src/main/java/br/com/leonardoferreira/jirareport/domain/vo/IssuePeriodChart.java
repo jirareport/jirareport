@@ -5,10 +5,6 @@ import br.com.leonardoferreira.jirareport.domain.embedded.Chart;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-/**
- * @author lferreira
- * @since 11/23/17 12:39 PM
- */
 @Data
 @AllArgsConstructor
 public class IssuePeriodChart {

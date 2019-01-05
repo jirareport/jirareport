@@ -2,9 +2,6 @@ package br.com.leonardoferreira.jirareport.domain.vo;
 
 import lombok.Data;
 
-/**
- * @author s2it_jsilveira
- */
 @Data
 public class StatusCategory {
 

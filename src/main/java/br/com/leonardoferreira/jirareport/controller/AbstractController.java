@@ -4,10 +4,6 @@ import br.com.leonardoferreira.jirareport.domain.vo.Account;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/**
- * @author lferreira
- * @since 12/4/17 1:50 PM
- */
 public class AbstractController {
 
     protected Account currentUser() {

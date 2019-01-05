@@ -14,9 +14,6 @@ import br.com.leonardoferreira.jirareport.domain.vo.LeadTimeCompareChart;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Created by lferreira on 3/26/18
- */
 public interface ChartService {
 
     CompletableFuture<Histogram> issueHistogram(List<Issue> issues);

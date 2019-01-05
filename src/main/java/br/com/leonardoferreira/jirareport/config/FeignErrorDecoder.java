@@ -10,9 +10,6 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * @author lferreira on 08/06/18
- */
 @Component
 public class FeignErrorDecoder implements ErrorDecoder {
 

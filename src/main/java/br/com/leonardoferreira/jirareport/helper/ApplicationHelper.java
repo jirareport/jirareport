@@ -10,9 +10,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-/**
- * @author lferreira on 31/05/18
- */
 @Component
 public class ApplicationHelper implements Helper {
 

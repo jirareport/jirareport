@@ -22,10 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 import java.util.Set;
 
-/**
- * @author lferreira
- * @since 11/14/17 3:48 PM
- */
 @Controller
 @RequestMapping("/boards")
 public class BoardController extends AbstractController {

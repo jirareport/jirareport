@@ -41,10 +41,6 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-/**
- * @author lferreira
- * @since 3/20/18 9:52 AM
- */
 @Slf4j
 @Service
 public class ChartServiceImpl extends AbstractService implements ChartService {

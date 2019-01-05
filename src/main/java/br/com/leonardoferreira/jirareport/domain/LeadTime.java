@@ -14,9 +14,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * @author lferreira on 17/05/18
- */
 @Data
 @Entity
 @Builder

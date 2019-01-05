@@ -23,9 +23,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * @author lferreira on 17/05/18
- */
 @Slf4j
 @Service
 public class LeadTimeServiceImpl extends AbstractService implements LeadTimeService {

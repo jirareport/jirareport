@@ -10,10 +10,6 @@ import br.com.leonardoferreira.jirareport.domain.vo.SandBoxFilter;
 
 import java.util.List;
 
-/**
- * @author lferreira
- * @since 5/7/18 8:01 PM
- */
 public interface IssueService {
 
     List<Issue> createByJql(String jql, Board board);

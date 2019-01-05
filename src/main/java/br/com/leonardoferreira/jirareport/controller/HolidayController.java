@@ -20,10 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/**
- * @author lferreira
- * @since 5/7/18 6:53 PM
- */
 @Controller
 @RequestMapping("/boards/{boardId}/holidays")
 public class HolidayController extends AbstractController {

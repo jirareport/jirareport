@@ -25,10 +25,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * @author lferreira
- * @since 5/7/18 6:52 PM
- */
 @Slf4j
 @Service
 public class HolidayServiceImpl extends AbstractService implements HolidayService {

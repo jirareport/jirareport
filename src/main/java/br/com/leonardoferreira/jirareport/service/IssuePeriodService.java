@@ -8,9 +8,6 @@ import br.com.leonardoferreira.jirareport.domain.form.IssuePeriodForm;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodChart;
 import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodList;
 
-/**
- * Created by lferreira on 3/26/18
- */
 public interface IssuePeriodService {
 
     void create(IssuePeriodForm issuePeriodForm, Long boardId);

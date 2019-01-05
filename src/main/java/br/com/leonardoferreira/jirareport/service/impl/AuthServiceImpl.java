@@ -10,10 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * @author lferreira
- * @since 7/28/17 10:14 AM
- */
 @Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {

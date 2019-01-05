@@ -5,10 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDateTime;
 import lombok.Data;
 
-/**
- * @author s2it_leferreira
- * @since 11/06/18 13:48
- */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class JiraChangelogItem {

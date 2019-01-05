@@ -27,10 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * @author lferreira
- * @since 7/28/17 12:50 PM
- */
 @Slf4j
 @Service
 public class IssuePeriodServiceImpl extends AbstractService implements IssuePeriodService {

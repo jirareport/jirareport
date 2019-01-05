@@ -11,9 +11,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-/**
- * @author lferreira on 28/05/18
- */
 @Mapper(componentModel = "spring")
 public interface IssuePeriodMapper {
 

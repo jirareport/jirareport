@@ -8,10 +8,6 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-/**
- * @author lferreira
- * @since 11/21/17 4:34 PM
- */
 @Repository
 public interface IssuePeriodRepository extends CrudRepository<IssuePeriod, Long> {
 

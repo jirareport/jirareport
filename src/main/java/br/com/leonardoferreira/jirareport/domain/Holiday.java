@@ -20,10 +20,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- * @author lferreira
- * @since 5/7/18 6:49 PM
- */
 @Data
 @Entity
 @ToString(exclude = "board")

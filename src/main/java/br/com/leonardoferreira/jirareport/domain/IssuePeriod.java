@@ -27,10 +27,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
 
-/**
- * @author lferreira
- * @since 7/28/17 1:44 PM
- */
 @Data
 @Entity
 @NoArgsConstructor

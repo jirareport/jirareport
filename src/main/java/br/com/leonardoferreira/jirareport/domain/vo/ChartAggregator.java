@@ -10,10 +10,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-/**
- * @author lferreira
- * @since 5/11/18 12:33 PM
- */
 @Data
 @Builder
 @NoArgsConstructor

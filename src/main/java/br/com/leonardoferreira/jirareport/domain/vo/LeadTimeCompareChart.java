@@ -10,10 +10,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 
-/**
- * @author lferreira
- * @since 5/18/18 8:09 PM
- */
 @Data
 public class LeadTimeCompareChart implements Serializable {
     private static final long serialVersionUID = -1501002922104599319L;

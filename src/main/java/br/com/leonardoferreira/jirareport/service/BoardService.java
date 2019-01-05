@@ -9,9 +9,6 @@ import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-/**
- * Created by lferreira on 3/26/18
- */
 public interface BoardService {
 
     Page<Board> findAll(Pageable pageable, Board board);

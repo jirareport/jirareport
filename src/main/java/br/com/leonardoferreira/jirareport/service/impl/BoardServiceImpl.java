@@ -26,10 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-/**
- * @author lferreira
- * @since 7/28/17 11:40 AM
- */
 @Slf4j
 @Service
 public class BoardServiceImpl extends AbstractService implements BoardService {
