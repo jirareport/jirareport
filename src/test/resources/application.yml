@@ -1,17 +1,17 @@
 jira:
-  url: https://jira.url/jira
+  url: http://localhost:8888/jira
 
 holiday:
-  url: https://api.calendario.com.br/?json=true
-  token: seuToken
+  url: http://localhost:8888/holiday-api/?json=true
+  token: super-secret-token
 
 spring:
   application:
     name: jirareport
   datasource:
-    url: jdbc:postgresql://localhost:5432/jirareport
-    username: root
-    password: root
+    url: jdbc:postgresql://localhost:5432/jirareport_test
+    username: ${USER}
+    password: 123123
   jpa:
     hibernate:
       ddl-auto: none
@@ -26,9 +26,9 @@ spring:
     allow-bean-definition-overriding: true
   cache:
     cache-names:
-    - findAllHolidaysInCity
-    - findAllFields
-    - retrieveCurrentUserConfig
+      - findAllHolidaysInCity
+      - findAllFields
+      - retrieveCurrentUserConfig
     caffeine:
       spec: expireAfterWrite=15m
 

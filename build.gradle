@@ -67,7 +67,19 @@ dependencies {
 
     implementation "org.flywaydb:flyway-core"
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testCompile('br.com.leonardoferreira:JBacon:1.2.1')
+    testCompile('com.github.javafaker:javafaker:0.16')
+    testImplementation "org.springframework.security:spring-security-test"
+    testImplementation "com.github.tomakehurst:wiremock:2.19.0"
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: "junit", module: "junit"
+    }
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.2"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:5.3.2"
+}
+
+test {
+    useJUnitPlatform()
 }
 
 dependencyManagement {
@@ -77,12 +89,12 @@ dependencyManagement {
 }
 
 checkstyle {
-    toolVersion = "8.11"
+    toolVersion = "8.15"
     configFile = new File(rootDir, "checkstyle.xml")
 }
 
 pmd {
-    toolVersion = "6.7.0"
+    toolVersion = "6.10.0"
     ruleSets = [ ]
     consoleOutput = true
     ruleSetFiles = files("pmd-ruleset.xml")
