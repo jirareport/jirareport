@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
+import br.com.leonardoferreira.jirareport.domain.request.CreateBoardRequest;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -73,10 +74,13 @@ public class BoardServiceImpl extends AbstractService implements BoardService {
 
     @Override
     @Transactional
-    public void create(final Board board) {
-        log.info("Method=create, board={}", board);
+    public Long create(final CreateBoardRequest createBoardRequest) {
+        log.info("Method=create, createBoardRequest={}", createBoardRequest);
 
+        Board board = boardMapper.boardFromCreateBoardRequest(createBoardRequest);
         boardRepository.save(board);
+
+        return board.getId();
     }
 
     @Override

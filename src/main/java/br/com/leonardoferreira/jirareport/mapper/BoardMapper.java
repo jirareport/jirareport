@@ -2,16 +2,18 @@ package br.com.leonardoferreira.jirareport.mapper;
 
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.form.BoardForm;
+import br.com.leonardoferreira.jirareport.domain.request.CreateBoardRequest;
 import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BoardMapper {
 
-    @Mappings({
+    @Mappings({ // @formatter:off
             @Mapping(target = "id",              source = "board.id"),
             @Mapping(target = "name",            source = "board.name"),
             @Mapping(target = "startColumn",     source = "board.startColumn"),
@@ -24,19 +26,11 @@ public interface BoardMapper {
             @Mapping(target = "projectCF",       source = "board.projectCF"),
             @Mapping(target = "dynamicFields",   source = "board.dynamicFields"),
             @Mapping(target = "jiraProject",     source = "jiraProject")
-    })
+    }) // @formatter:on
     BoardForm toForm(Board board, JiraProject jiraProject);
 
-    @Mappings({
-            @Mapping(target = "id",              ignore = true),
-            @Mapping(target = "externalId",      ignore = true),
-            @Mapping(target = "leadTimeConfigs", ignore = true),
-            @Mapping(target = "holidays",        ignore = true),
-            @Mapping(target = "issues",          ignore = true),
-            @Mapping(target = "owner",           ignore = true),
-            @Mapping(target = "lastEditor",      ignore = true),
-            @Mapping(target = "createdAt",       ignore = true),
-            @Mapping(target = "updatedAt",       ignore = true)
-    })
     void fromForm(@MappingTarget Board board, BoardForm boardForm);
+
+    Board boardFromCreateBoardRequest(CreateBoardRequest request);
+
 }

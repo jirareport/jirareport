@@ -2,6 +2,7 @@ package br.com.leonardoferreira.jirareport.controller;
 
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.form.BoardForm;
+import br.com.leonardoferreira.jirareport.domain.request.CreateBoardRequest;
 import br.com.leonardoferreira.jirareport.domain.vo.JiraField;
 import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
 import br.com.leonardoferreira.jirareport.service.BoardService;
@@ -52,10 +53,10 @@ public class BoardController extends AbstractController {
     }
 
     @PostMapping
-    public ModelAndView create(final Board board) {
-        boardService.create(board);
+    public ModelAndView create(final CreateBoardRequest board) {
+        Long boardId = boardService.create(board);
 
-        return new ModelAndView(String.format("redirect:/boards/%s/edit", board.getId()));
+        return new ModelAndView(String.format("redirect:/boards/%s/edit", boardId));
     }
 
     @DeleteMapping("/{id}")

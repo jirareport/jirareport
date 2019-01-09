@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.service;
 
+import br.com.leonardoferreira.jirareport.domain.request.CreateBoardRequest;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public interface BoardService {
 
     List<JiraProject> findAllJiraProject();
 
-    void create(Board board);
+    Long create(CreateBoardRequest board);
 
     void delete(Long id);
 
