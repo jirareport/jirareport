@@ -7,6 +7,7 @@ import br.com.leonardoferreira.jirareport.domain.vo.JiraField;
 import br.com.leonardoferreira.jirareport.service.FieldService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ public class FieldServiceImpl extends AbstractService implements FieldService {
     private FieldClient fieldClient;
 
     @Override
+    @Cacheable("findAllFields")
     @Transactional(readOnly = true)
     public List<JiraField> findAllJiraFields() {
         log.info("Method=findAllJiraFields");

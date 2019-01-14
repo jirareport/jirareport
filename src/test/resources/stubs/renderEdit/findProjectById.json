@@ -1,0 +1,42 @@
+{
+  "request": {
+    "urlPath": "/jira/rest/api/2/project/1",
+    "headers": {
+      "Authorization": {
+        "equalTo": "secret-token"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "id": 1,
+      "name": "project 1",
+      "issueTypes": [
+        {
+          "id": 1,
+          "name": "type 1"
+        },
+        {
+          "id": 2,
+          "name": "type 2"
+        },
+        {
+          "id": 3,
+          "name": "type 3"
+        },
+        {
+          "id": 4,
+          "name": "type 4"
+        },
+        {
+          "id": 5,
+          "name": "type 5"
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
