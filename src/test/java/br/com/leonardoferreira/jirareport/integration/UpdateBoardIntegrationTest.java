@@ -93,7 +93,8 @@ public class UpdateBoardIntegrationTest extends BaseIntegrationTest {
                                 .param("dynamicFields[2].field", "dn2Field"))
                 .andDo(print())
                 .andExpect(redirectedUrl("/boards"))
-                .andExpect(flash().attribute("flashSuccess", "Alterações salvas com sucesso."));
+                .andExpect(flash().attribute("flashSuccess", "Alterações salvas com sucesso."))
+                .andExpect(status().is3xxRedirection());
 
         Board board = boardRepository.findById(1L)
                 .orElseThrow(ResourceNotFound::new);

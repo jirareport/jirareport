@@ -60,9 +60,10 @@ public class BoardController extends AbstractController {
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView delete(@PathVariable final Long id) {
+    public ModelAndView delete(@PathVariable final Long id, final RedirectAttributes redirectAttributes) {
         boardService.delete(id);
 
+        addFlashSuccess(redirectAttributes, "Board removido com sucesso.");
         return new ModelAndView("redirect:/boards");
     }
 
