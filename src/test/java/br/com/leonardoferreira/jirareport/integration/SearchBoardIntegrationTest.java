@@ -97,7 +97,7 @@ public class SearchBoardIntegrationTest extends BaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("boards/index"))
                 .andExpect(model().attributeExists("boards", "board", "owners"))
-                .andExpect(model().attribute("owners", Matchers.contains(
+                .andExpect(model().attribute("owners", Matchers.containsInAnyOrder(
                         AccountFactory.DEFAULT_USER, "user2", "user3", "user4")))
                 .andExpect(model().attribute("board", Matchers.allOf(
                         Matchers.hasProperty("name", Matchers.isEmptyOrNullString()),
