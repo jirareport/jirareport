@@ -205,6 +205,15 @@ public class IssueMapper {
             return getAsStringSafe(value);
         }
 
+        if (jsonElement.isJsonArray()) {
+            StringBuilder sb = new StringBuilder();
+            for (JsonElement element : jsonElement.getAsJsonArray()) {
+                sb.append(getAsStringSafe(element)).append(", ");
+            }
+
+            return sb.length() == 0 ? "" : sb.substring(0, sb.length() - 2);
+        }
+
         return jsonElement.getAsString();
     }
 
