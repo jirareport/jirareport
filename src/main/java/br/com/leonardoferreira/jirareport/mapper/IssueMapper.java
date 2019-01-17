@@ -70,90 +70,100 @@ public class IssueMapper {
                 .map(issueRaw -> {
                     JsonObject issue = issueRaw.getAsJsonObject();
 
-                    JsonObject fields = issue.get("fields").getAsJsonObject();
-
-                    List<JiraChangelogItem> changelogItems = extractChangelogItems(issue);
-                    List<Changelog> changelog = ParseUtil.parseChangelog(changelogItems, holidays, board.getIgnoreWeekend());
-
-                    LocalDateTime created = DateUtil.parseFromJira(fields.get("created").getAsString());
-
-                    LocalDateTime startDate = null;
-                    LocalDateTime endDate = null;
-
-                    for (Changelog cl : changelog) {
-                        if (startDate == null && startColumns.contains(cl.getTo())) {
-                            startDate = cl.getCreated();
-                        }
-
-                        if (endDate == null && endColumns.contains(cl.getTo())) {
-                            endDate = cl.getCreated();
-                        }
+                    try {
+                        return parseIssue(issue, board, holidays, startColumns, endColumns);
+                    } catch (Exception e) {
+                        log.error("Method=parse, info=Erro parseando issue, issue={}, err={}", getAsStringSafe(issue.get("key")), e.getMessage());
+                        throw e;
                     }
-
-                    if ("BACKLOG".equals(board.getStartColumn())) {
-                        startDate = created;
-                    }
-
-                    if (startDate == null || endDate == null) {
-                        return null;
-                    }
-
-                    Long leadTime = DateUtil.daysDiff(startDate, endDate, holidays, board.getIgnoreWeekend());
-
-                    String author = null;
-                    JsonObject creator = fields.getAsJsonObject("creator");
-                    if (creator != null) {
-                        author = getAsStringSafe(creator.get("displayName"));
-                    }
-
-                    Long differenceFirstAndLastDueDate = null;
-                    List<DueDateHistory> dueDateHistory = null;
-
-                    if (Boolean.TRUE.equals(board.getCalcDueDate())) {
-                        dueDateHistory = parseDueDateHistory(changelogItems);
-                        if (!dueDateHistory.isEmpty()) {
-                            LocalDate firstDueDate = dueDateHistory.get(0).getDueDate();
-                            LocalDate finalDueDate = dueDateHistory.get(dueDateHistory.size() - 1).getDueDate();
-
-                            differenceFirstAndLastDueDate = ChronoUnit.DAYS.between(firstDueDate, finalDueDate);
-                        }
-                    }
-
-                    Long timeInImpediment = ParseUtil.countTimeInImpediment(board, changelogItems, changelog, endDate, holidays);
-
-                    String priority = null;
-                    if (fields.has("priority") && !fields.get("priority").isJsonNull() && fields.get("priority").isJsonObject()) {
-                        JsonObject priorityObj = fields.getAsJsonObject("priority");
-                        priority = getAsStringSafe(priorityObj.get("name"));
-                    }
-
-                    Map<String, String> dynamicFields = parseDynamicFields(board, fields);
-
-                    return Issue.builder()
-                            .creator(author)
-                            .key(getAsStringSafe(issue.get("key")))
-                            .issueType(getAsStringSafe(fields.getAsJsonObject("issuetype").get("name")))
-                            .created(created)
-                            .startDate(startDate)
-                            .endDate(endDate)
-                            .leadTime(leadTime)
-                            .system(parseElement(fields, board.getSystemCF()))
-                            .epic(parseElement(fields, board.getEpicCF()))
-                            .estimated(parseElement(fields, board.getEstimateCF()))
-                            .project(parseElement(fields, board.getProjectCF()))
-                            .summary(fields.get("summary").getAsString())
-                            .changelog(changelog)
-                            .board(board)
-                            .differenceFirstAndLastDueDate(differenceFirstAndLastDueDate)
-                            .dueDateHistory(dueDateHistory)
-                            .impedimentTime(timeInImpediment)
-                            .priority(priority)
-                            .dynamicFields(dynamicFields)
-                            .build();
-
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    private Issue parseIssue(final JsonObject issue, final Board board,
+                             final List<LocalDate> holidays, final Set<String> startColumns,
+                             final Set<String> endColumns) {
+        JsonObject fields = issue.get("fields").getAsJsonObject();
+
+        List<JiraChangelogItem> changelogItems = extractChangelogItems(issue);
+        List<Changelog> changelog = ParseUtil.parseChangelog(changelogItems, holidays, board.getIgnoreWeekend());
+
+        LocalDateTime created = DateUtil.parseFromJira(fields.get("created").getAsString());
+
+        LocalDateTime startDate = null;
+        LocalDateTime endDate = null;
+
+        for (Changelog cl : changelog) {
+            if (startDate == null && startColumns.contains(cl.getTo())) {
+                startDate = cl.getCreated();
+            }
+
+            if (endDate == null && endColumns.contains(cl.getTo())) {
+                endDate = cl.getCreated();
+            }
+        }
+
+        if ("BACKLOG".equals(board.getStartColumn())) {
+            startDate = created;
+        }
+
+        if (startDate == null || endDate == null) {
+            return null;
+        }
+
+        Long leadTime = DateUtil.daysDiff(startDate, endDate, holidays, board.getIgnoreWeekend());
+
+        String author = null;
+        JsonObject creator = fields.getAsJsonObject("creator");
+        if (creator != null) {
+            author = getAsStringSafe(creator.get("displayName"));
+        }
+
+        Long differenceFirstAndLastDueDate = null;
+        List<DueDateHistory> dueDateHistory = null;
+
+        if (Boolean.TRUE.equals(board.getCalcDueDate())) {
+            dueDateHistory = parseDueDateHistory(changelogItems);
+            if (!dueDateHistory.isEmpty()) {
+                LocalDate firstDueDate = dueDateHistory.get(0).getDueDate();
+                LocalDate finalDueDate = dueDateHistory.get(dueDateHistory.size() - 1).getDueDate();
+
+                differenceFirstAndLastDueDate = ChronoUnit.DAYS.between(firstDueDate, finalDueDate);
+            }
+        }
+
+        Long timeInImpediment = ParseUtil.countTimeInImpediment(board, changelogItems, changelog, endDate, holidays);
+
+        String priority = null;
+        if (fields.has("priority") && !fields.get("priority").isJsonNull() && fields.get("priority").isJsonObject()) {
+            JsonObject priorityObj = fields.getAsJsonObject("priority");
+            priority = getAsStringSafe(priorityObj.get("name"));
+        }
+
+        Map<String, String> dynamicFields = parseDynamicFields(board, fields);
+
+        return Issue.builder()
+                .creator(author)
+                .key(getAsStringSafe(issue.get("key")))
+                .issueType(getAsStringSafe(fields.getAsJsonObject("issuetype").get("name")))
+                .created(created)
+                .startDate(startDate)
+                .endDate(endDate)
+                .leadTime(leadTime)
+                .system(parseElement(fields, board.getSystemCF()))
+                .epic(parseElement(fields, board.getEpicCF()))
+                .estimated(parseElement(fields, board.getEstimateCF()))
+                .project(parseElement(fields, board.getProjectCF()))
+                .summary(fields.get("summary").getAsString())
+                .changelog(changelog)
+                .board(board)
+                .differenceFirstAndLastDueDate(differenceFirstAndLastDueDate)
+                .dueDateHistory(dueDateHistory)
+                .impedimentTime(timeInImpediment)
+                .priority(priority)
+                .dynamicFields(dynamicFields)
+                .build();
     }
 
     @SneakyThrows
@@ -203,6 +213,15 @@ public class IssueMapper {
         if (jsonElement.isJsonObject()) {
             JsonElement value = jsonElement.getAsJsonObject().get("value");
             return getAsStringSafe(value);
+        }
+
+        if (jsonElement.isJsonArray()) {
+            StringBuilder sb = new StringBuilder();
+            for (JsonElement element : jsonElement.getAsJsonArray()) {
+                sb.append(getAsStringSafe(element)).append(", ");
+            }
+
+            return sb.length() == 0 ? "" : sb.substring(0, sb.length() - 2);
         }
 
         return jsonElement.getAsString();
