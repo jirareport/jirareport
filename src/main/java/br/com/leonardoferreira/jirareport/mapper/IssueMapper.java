@@ -18,13 +18,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -38,6 +31,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * @author lferreira
@@ -143,6 +143,16 @@ public class IssueMapper {
 
         Map<String, String> dynamicFields = parseDynamicFields(board, fields);
 
+        Long waitTime = 0L;
+        Long touchTime = 0L;
+        Double pctEfficiency = 0D;
+
+        if (!CollectionUtils.isEmpty(board.getTouchingColumns()) && !CollectionUtils.isEmpty(board.getWaitingColumns())) {
+            waitTime = calcWaitTime(changelog, board.getWaitingColumns());
+            touchTime = calcTouchTime(changelog, board.getTouchingColumns());
+            pctEfficiency = calcPctEfficiency(waitTime, touchTime);
+        }
+
         return Issue.builder()
                 .creator(author)
                 .key(getAsStringSafe(issue.get("key")))
@@ -163,6 +173,9 @@ public class IssueMapper {
                 .impedimentTime(timeInImpediment)
                 .priority(priority)
                 .dynamicFields(dynamicFields)
+                .waitTime(waitTime)
+                .touchTime(touchTime)
+                .pctEfficiency(pctEfficiency)
                 .build();
     }
 
@@ -251,4 +264,30 @@ public class IssueMapper {
         return dynamicFields;
     }
 
+    private double calcPctEfficiency(final Long waitTime, final Long touchTime) {
+        if (touchTime == 0 && waitTime == 0) {
+            return 0D;
+        }
+        return ((double) touchTime / (touchTime + waitTime)) * 100;
+    }
+
+    private Long calcTouchTime(final List<Changelog> changelogItems, final List<String> touchingColumns) {
+        return calcDurationInColumns(changelogItems, touchingColumns);
+    }
+
+    private Long calcWaitTime(final List<Changelog> changelogItems, final List<String> waitingColumns) {
+        return calcDurationInColumns(changelogItems, waitingColumns);
+    }
+
+    private Long calcDurationInColumns(final List<Changelog> changelogItems, final List<String> touchingColumns) {
+        long time = 0L;
+
+        for (Changelog changelogItem : changelogItems) {
+            if (touchingColumns.contains(changelogItem.getTo().toUpperCase(DateUtil.LOCALE_BR))) {
+                time += ChronoUnit.MINUTES.between(changelogItem.getCreated(), changelogItem.getEndDate());
+            }
+        }
+
+        return time;
+    }
 }

@@ -125,6 +125,28 @@
                         </a>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label>Colunas de trabalho</label>
+                    <input type="text" id="touchingColumns" th:field="*{touchingColumns}" class="form-control"/>
+                </div>
+
+                <div class="form-group btn-group btn-group-sm">
+                    <a href="#" th:each="status : ${suggestedStatus}" class="btn btn-default" data-column-suggest="touchingColumns" data-column-suggest-prefix=", ">
+                        <span th:text="${status}"></span>
+                    </a>
+                </div>
+
+                <div class="form-group">
+                    <label>Colunas de espera</label>
+                    <input type="text" id="waitingColumns" th:field="*{waitingColumns}" class="form-control"/>
+                </div>
+
+                <div class="form-group btn-group btn-group-sm">
+                    <a href="#" th:each="status : ${suggestedStatus}" class="btn btn-default" data-column-suggest="waitingColumns" data-column-suggest-prefix=", ">
+                        <span th:text="${status}"></span>
+                    </a>
+                </div>
             </div>
         </div>
 

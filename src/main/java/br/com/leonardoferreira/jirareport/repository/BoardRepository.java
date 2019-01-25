@@ -1,9 +1,8 @@
 package br.com.leonardoferreira.jirareport.repository;
 
+import br.com.leonardoferreira.jirareport.domain.Board;
 import java.util.List;
 import java.util.Optional;
-
-import br.com.leonardoferreira.jirareport.domain.Board;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,4 +28,6 @@ public interface BoardRepository extends CrudRepository<Board, Long> {
 
     @Query(value = "SELECT DISTINCT owner FROM BOARD", nativeQuery = true)
     List<String> findAllOwners();
+
+
 }

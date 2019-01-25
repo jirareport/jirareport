@@ -81,4 +81,12 @@ public class Board extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private List<DynamicFieldConfig> dynamicFields;
 
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private List<String> touchingColumns;
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private List<String> waitingColumns;
+
 }

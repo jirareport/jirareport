@@ -23,7 +23,7 @@
                         </thead>
                         <tbody>
                         <tr th:each="changelog : ${issue.changelog}">
-                            <td th:text="${#temporals.format(changelog.created, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${#temporals.format(changelog.created, 'dd/MM/yyyy HH:mm:ss')}"></td>
                             <td th:text="${changelog.to}"></td>
                             <td th:text="${changelog.leadTime}"></td>
                         </tr>
@@ -73,8 +73,17 @@
                             </tr>
                             </tbody>
                         </table>
-
                     </th:block>
+
+                    <th:block th:unless="${#lists.isEmpty(board.touchingColumns) or #lists.isEmpty(board.waitingColumns)}">
+                        <br/>
+                        <h3 class="page-header" style="margin-top: 0">Eficiência</h3>
+
+                        <p><strong>Touch time</strong>: [[${#numbers.formatDecimal(issue.touchTime / 60.0, 0, 'COMMA', 2, 'POINT')}]] Horas</p>
+                        <p><strong>Wait time</strong>: [[${#numbers.formatDecimal(issue.waitTime / 60.0, 0, 'COMMA', 2, 'POINT')}]] Horas</p>
+                        <p><strong>Eficiência</strong>: [[${issue.pctEfficiency}]]%</p>
+                    </th:block>
+
                 </div>
             </div>
         </div>
