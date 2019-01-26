@@ -44,6 +44,8 @@ dependencies {
     implementation "com.github.ben-manes.caffeine:caffeine"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
 
+    implementation "org.springframework.security:spring-security-jwt:1.0.10.RELEASE"
+
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
     implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
     implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
@@ -74,8 +76,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude group: "junit", module: "junit"
     }
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.3.2"
-    testImplementation "org.junit.jupiter:junit-jupiter-engine:5.3.2"
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine"
 }
 
 test {
