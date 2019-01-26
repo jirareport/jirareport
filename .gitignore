@@ -21,6 +21,6 @@ node_modules
 
 data
 
-src/main/resources/application.yml
+src/main/resources/application-*.yml
 
 yarn.lock

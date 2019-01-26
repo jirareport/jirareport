@@ -8,10 +8,12 @@ holiday:
 spring:
   application:
     name: jirareport
+  profiles:
+    active: dev
   datasource:
     url: jdbc:postgresql://localhost:5432/jirareport
-    username: root
-    password: root
+    username: ${USER}
+    password: ${PASSWORD:123123}
   jpa:
     hibernate:
       ddl-auto: none
