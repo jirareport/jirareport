@@ -1,28 +1,30 @@
 package br.com.leonardoferreira.jirareport.controller;
 
-import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.Board;
-import br.com.leonardoferreira.jirareport.service.HolidayService;
+import br.com.leonardoferreira.jirareport.domain.Holiday;
+import br.com.leonardoferreira.jirareport.domain.response.ListHolidayResponse;
 import br.com.leonardoferreira.jirareport.service.BoardService;
+import br.com.leonardoferreira.jirareport.service.HolidayService;
+import java.net.URI;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@Controller
+@RestController
 @RequestMapping("/boards/{boardId}/holidays")
-public class HolidayController extends AbstractController {
+public class HolidayController {
 
     @Autowired
     private HolidayService holidayService;
@@ -31,85 +33,48 @@ public class HolidayController extends AbstractController {
     private BoardService boardService;
 
     @GetMapping
-    public ModelAndView index(@PathVariable final Long boardId,
-                              @PageableDefault(sort = "date") final Pageable pageable) {
-        final Page<Holiday> holidays = holidayService.findByBoard(boardId, pageable);
-        final Board board = boardService.findById(boardId);
+    public ListHolidayResponse index(@PathVariable final Long boardId,
+                                     @PageableDefault(sort = "date") final Pageable pageable) {
+        Page<Holiday> holidays = holidayService.findByBoard(boardId, pageable);
+        Board board = boardService.findById(boardId);
 
-        return new ModelAndView("holidays/index")
-                .addObject("holidays", holidays)
-                .addObject("board", board);
-    }
-
-    @GetMapping("/new")
-    public ModelAndView create(@PathVariable final Long boardId) {
-        return new ModelAndView("holidays/new")
-                .addObject("holiday", new Holiday())
-                .addObject("boardId", boardId);
+        return new ListHolidayResponse(holidays, board);
     }
 
     @PostMapping
-    public ModelAndView create(@PathVariable final Long boardId,
-                               @Validated final Holiday holiday,
-                               final BindingResult bindingResult,
-                               final RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            return new ModelAndView("holidays/new")
-                    .addObject("holiday", holiday)
-                    .addObject("boardId", boardId);
-        }
+    public ResponseEntity<?> create(@PathVariable final Long boardId, @Valid final Holiday holiday) {
+        Long id = holidayService.create(boardId, holiday);
 
-        holidayService.create(boardId, holiday);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .build(id);
 
-        addFlashSuccess(redirectAttributes, "Registro inserido com sucesso");
-        return new ModelAndView(String.format("redirect:/boards/%s/holidays", boardId));
+        return ResponseEntity.created(location).build();
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView delete(@PathVariable final Long boardId,
-                               @PathVariable final Long id, final RedirectAttributes redirectAttributes) {
+    public ResponseEntity<?> delete(@PathVariable final Long id) {
         holidayService.delete(id);
-
-        addFlashSuccess(redirectAttributes, "Registro removido com sucesso");
-        return new ModelAndView(String.format("redirect:/boards/%s/holidays", boardId));
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/import")
-    public ModelAndView importFromAPI(@PathVariable final Long boardId, final RedirectAttributes redirectAttributes) {
-
-        if (holidayService.createImported(boardId)) {
-            addFlashSuccess(redirectAttributes, "Registros importados com sucesso.");
-        } else {
-            addFlashError(redirectAttributes, "Feriados já importados.");
-        }
-
-        return new ModelAndView(String.format("redirect:/boards/%s/holidays", boardId));
+    public ResponseEntity<?> importFromAPI(@PathVariable final Long boardId) {
+        holidayService.createImported(boardId);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/edit/{id}")
-    public ModelAndView update(@PathVariable final Long boardId, @PathVariable final Long id) {
-        Holiday holiday = holidayService.findById(id);
-
-        return new ModelAndView("holidays/edit")
-                .addObject("holiday", holiday)
-                .addObject("boardId", boardId);
+    @GetMapping("/{id}")
+    public Holiday findById(@PathVariable final Long id) {
+        return holidayService.findById(id);
     }
 
     @PutMapping
-    public ModelAndView update(@PathVariable final Long boardId,
-                               @Validated final Holiday holiday,
-                               final BindingResult bindingResult,
-                               final RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            return new ModelAndView("holidays/edit")
-                    .addObject("holiday", holiday)
-                    .addObject("boardId", boardId);
-        }
-
+    public ResponseEntity<?> update(@PathVariable final Long boardId,
+                                    @Valid final Holiday holiday) {
         holidayService.update(boardId, holiday);
-
-        addFlashSuccess(redirectAttributes, "Registro atualizado com sucesso.");
-        return new ModelAndView(String.format("redirect:/boards/%s/holidays", boardId));
+        return ResponseEntity.noContent().build();
     }
 
 }

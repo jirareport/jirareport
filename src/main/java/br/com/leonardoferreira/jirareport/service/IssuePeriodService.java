@@ -10,7 +10,7 @@ import br.com.leonardoferreira.jirareport.domain.vo.IssuePeriodList;
 
 public interface IssuePeriodService {
 
-    void create(IssuePeriodForm issuePeriodForm, Long boardId);
+    Long create(IssuePeriodForm issuePeriodForm, Long boardId);
 
     List<IssuePeriod> findByBoardId(Long boardId);
 

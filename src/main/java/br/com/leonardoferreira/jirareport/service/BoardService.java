@@ -1,20 +1,18 @@
 package br.com.leonardoferreira.jirareport.service;
 
+import br.com.leonardoferreira.jirareport.domain.Board;
+import br.com.leonardoferreira.jirareport.domain.request.UpdateBoardRequest;
+import br.com.leonardoferreira.jirareport.domain.response.BoardDetailsResponse;
 import br.com.leonardoferreira.jirareport.domain.request.CreateBoardRequest;
+import br.com.leonardoferreira.jirareport.domain.response.BoardResponse;
 import java.util.List;
 import java.util.Set;
-
-import br.com.leonardoferreira.jirareport.domain.Board;
-import br.com.leonardoferreira.jirareport.domain.form.BoardForm;
-import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface BoardService {
 
-    Page<Board> findAll(Pageable pageable, Board board);
-
-    List<JiraProject> findAllJiraProject();
+    Page<BoardResponse> findAll(Pageable pageable, Board board);
 
     Long create(CreateBoardRequest board);
 
@@ -22,13 +20,13 @@ public interface BoardService {
 
     Board findById(Long id);
 
-    void update(BoardForm board);
+    void update(Long boardId, UpdateBoardRequest updateBoardRequest);
 
     Set<String> findStatusFromBoardInJira(Board board);
 
     Set<String> findStatusFromBoardInJira(Long boardId);
 
-    BoardForm findToUpdate(Long id);
+    BoardDetailsResponse findDetailsById(Long id);
 
     List<String> findAllOwners();
 

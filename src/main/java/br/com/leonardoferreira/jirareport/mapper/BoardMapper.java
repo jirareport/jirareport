@@ -1,36 +1,30 @@
 package br.com.leonardoferreira.jirareport.mapper;
 
 import br.com.leonardoferreira.jirareport.domain.Board;
-import br.com.leonardoferreira.jirareport.domain.form.BoardForm;
 import br.com.leonardoferreira.jirareport.domain.request.CreateBoardRequest;
-import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
+import br.com.leonardoferreira.jirareport.domain.request.UpdateBoardRequest;
+import br.com.leonardoferreira.jirareport.domain.response.BoardDetailsResponse;
+import br.com.leonardoferreira.jirareport.domain.response.BoardResponse;
+import java.util.List;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BoardMapper {
 
-    @Mappings({ // @formatter:off
-            @Mapping(target = "id",              source = "board.id"),
-            @Mapping(target = "name",            source = "board.name"),
-            @Mapping(target = "startColumn",     source = "board.startColumn"),
-            @Mapping(target = "endColumn",       source = "board.endColumn"),
-            @Mapping(target = "fluxColumn",      source = "board.fluxColumn"),
-            @Mapping(target = "ignoreIssueType", source = "board.ignoreIssueType"),
-            @Mapping(target = "epicCF",          source = "board.epicCF"),
-            @Mapping(target = "estimateCF",      source = "board.estimateCF"),
-            @Mapping(target = "systemCF",        source = "board.systemCF"),
-            @Mapping(target = "projectCF",       source = "board.projectCF"),
-            @Mapping(target = "dynamicFields",   source = "board.dynamicFields"),
-            @Mapping(target = "jiraProject",     source = "jiraProject")
-    }) // @formatter:on
-    BoardForm toForm(Board board, JiraProject jiraProject);
-
-    void fromForm(@MappingTarget Board board, BoardForm boardForm);
+    BoardDetailsResponse toBoardResponseDetails(Board board);
 
     Board boardFromCreateBoardRequest(CreateBoardRequest request);
 
+    List<BoardResponse> toBoardResponse(List<Board> boards);
+
+    default Page<BoardResponse> toBoardResponse(Page<Board> boards) {
+        List<BoardResponse> boardResponses = toBoardResponse(boards.getContent());
+        return new PageImpl<>(boardResponses, boards.getPageable(), boards.getTotalElements());
+    }
+
+    void fromUpdateBoardRequest(@MappingTarget Board board, UpdateBoardRequest updateBoardRequest);
 }

@@ -1,26 +1,17 @@
 package br.com.leonardoferreira.jirareport.integration;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
 import br.com.leonardoferreira.jirareport.base.BaseIntegrationTest;
-import br.com.leonardoferreira.jirareport.base.WithDefaultUser;
 import br.com.leonardoferreira.jirareport.domain.Board;
-import br.com.leonardoferreira.jirareport.factory.AccountFactory;
 import br.com.leonardoferreira.jirareport.factory.BoardFactory;
-import java.util.Map;
-import java.util.Objects;
+import br.com.leonardoferreira.jirareport.matcher.IdMatcher;
+import io.restassured.RestAssured;
+import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MvcResult;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -30,98 +21,153 @@ public class SearchBoardIntegrationTest extends BaseIntegrationTest {
     private BoardFactory boardFactory;
 
     @Test
-    @WithDefaultUser
-    public void findAllCurrentUserBoards() throws Exception {
-        boardFactory.create(10);
+    public void findAllBoardsOfCurrentUser() {
+        withDefaultUser(() -> boardFactory.create(10));
         withUser("other_user", () -> boardFactory.create(5));
 
-        mockMvc.perform(get("/boards"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("boards/index"))
-                .andExpect(model().attributeExists("boards", "board", "owners"))
-                .andExpect(model().attribute("owners", Matchers.containsInAnyOrder("default_user", "other_user")))
-                .andExpect(model().attribute("board", Matchers.allOf(
-                        Matchers.hasProperty("name", Matchers.isEmptyOrNullString()),
-                        Matchers.hasProperty("owner", Matchers.is(AccountFactory.DEFAULT_USER))
-                )))
-                .andExpect(model().attribute("boards", Matchers.allOf(
-                        Matchers.hasProperty("totalPages", Matchers.is(1)),
-                        Matchers.hasProperty("totalElements", Matchers.is(10L)),
-                        Matchers.hasProperty("content", Matchers.hasSize(10))
-                )));
+        // @formatter:off
+        RestAssured
+                .given()
+                    .log().all()
+                    .header(defaultUserHeader())
+                .when()
+                    .get("/boards")
+                .then()
+                    .log().all()
+                    .statusCode(HttpStatus.SC_OK)
+                    .body("totalPages", Matchers.is(1))
+                    .body("totalElements", Matchers.is(10))
+                    .body("content.findAll { it.owner == 'default_user'}", Matchers.hasSize(10));
+        // @formatter:on
     }
 
     @Test
-    @WithDefaultUser
-    public void filterBoardByName() throws Exception {
-        boardFactory.create(5, empty -> {
-            empty.setName("Uniq Start Name");
+    public void findAllOwners() {
+        withDefaultUser(() -> boardFactory.create(5));
+        withUser("first_user", () -> boardFactory.create(5));
+        withUser("second_user", () -> boardFactory.create(5));
+
+        // @formatter:off
+        RestAssured
+                .given()
+                    .log().all()
+                    .header(defaultUserHeader())
+                .when()
+                    .get("/boards/owners")
+                .then()
+                    .log().all()
+                    .statusCode(HttpStatus.SC_OK)
+                    .body("$", Matchers.hasSize(3))
+                    .body("find { it == 'default_user' }", Matchers.not(Matchers.isEmptyOrNullString()))
+                    .body("find { it == 'first_user' }", Matchers.not(Matchers.isEmptyOrNullString()))
+                    .body("find { it == 'second_user' }", Matchers.not(Matchers.isEmptyOrNullString()));
+        // @formatter:on
+    }
+
+    @Test
+    public void filterBoardByName() {
+        withDefaultUser(() -> {
+            boardFactory.create(5, empty -> empty.setName("Uniq Start Name"));
+            boardFactory.create(5);
         });
-        boardFactory.create(5);
 
-        MvcResult mvcResult = mockMvc
-                .perform(
-                        get("/boards")
-                                .param("name", "start"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("boards/index"))
-                .andExpect(model().attributeExists("boards", "board", "owners"))
-                .andExpect(model().attribute("owners", Matchers.contains(AccountFactory.DEFAULT_USER)))
-                .andExpect(model().attribute("board", Matchers.allOf(
-                        Matchers.hasProperty("owner", Matchers.is(AccountFactory.DEFAULT_USER)),
-                        Matchers.hasProperty("name", Matchers.is("start"))
-                )))
-                .andReturn();
-
-        Map<String, Object> model = Objects.requireNonNull(mvcResult.getModelAndView()).getModel();
-        Page<Board> boards = (Page<Board>) model.get("boards");
-        Assertions.assertAll("boards content",
-                () -> Assertions.assertEquals(boards.getTotalPages(), 1),
-                () -> Assertions.assertEquals(boards.getTotalElements(), 5),
-                () -> Assertions.assertEquals(5, boards.getContent().stream()
-                        .filter(board -> board.getName().equals("Uniq Start Name")).count()));
-
+        // @formatter:off
+        RestAssured
+                .given()
+                    .log().all()
+                    .header(defaultUserHeader())
+                    .param("name", "start")
+                .when()
+                    .get("/boards")
+                .then()
+                    .log().all()
+                    .statusCode(HttpStatus.SC_OK)
+                    .body("totalPages", Matchers.is(1))
+                    .body("totalElements", Matchers.is(5))
+                    .body("content.findAll { it.name == 'Uniq Start Name' }", Matchers.hasSize(5));
+        // @formatter:on
     }
 
     @Test
-    @WithDefaultUser
-    public void findBoardsOfAllOwners() throws Exception {
-        boardFactory.create(5);
+    public void findBoardsOfAllOwners() {
+        withDefaultUser(() -> boardFactory.create(5));
         withUser("user2", () -> boardFactory.create(5));
         withUser("user3", () -> boardFactory.create(5));
         withUser("user4", () -> boardFactory.create(5));
 
-        MvcResult mvcResult = mockMvc
-                .perform(get("/boards")
-                        .param("owner", "all"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("boards/index"))
-                .andExpect(model().attributeExists("boards", "board", "owners"))
-                .andExpect(model().attribute("owners", Matchers.containsInAnyOrder(
-                        AccountFactory.DEFAULT_USER, "user2", "user3", "user4")))
-                .andExpect(model().attribute("board", Matchers.allOf(
-                        Matchers.hasProperty("name", Matchers.isEmptyOrNullString()),
-                        Matchers.hasProperty("owner", Matchers.nullValue())
-                )))
-                .andExpect(model().attribute("boards", Matchers.allOf(
-                        Matchers.hasProperty("totalPages", Matchers.is(1)),
-                        Matchers.hasProperty("totalElements", Matchers.is(20L)),
-                        Matchers.hasProperty("content", Matchers.hasSize(20))
-                )))
-                .andReturn();
+        // @formatter:off
+        RestAssured
+                .given()
+                    .log().all()
+                    .param("owner", "all")
+                    .header(defaultUserHeader())
+                .when()
+                    .get("/boards")
+                .then()
+                    .log().all()
+                    .statusCode(HttpStatus.SC_OK)
+                    .body("totalElements", Matchers.is(20))
+                    .body("totalPages", Matchers.is(1))
+                    .body("content.findAll { it.owner == 'default_user' }", Matchers.hasSize(5))
+                    .body("content.findAll { it.owner == 'user2' }", Matchers.hasSize(5))
+                    .body("content.findAll { it.owner == 'user3' }", Matchers.hasSize(5))
+                    .body("content.findAll { it.owner == 'user4' }", Matchers.hasSize(5));
+        // @formatter:on
+    }
 
-        Map<String, Object> model = Objects.requireNonNull(mvcResult.getModelAndView()).getModel();
-        Page<Board> boards = (Page<Board>) model.get("boards");
-        Assertions.assertAll("boards content",
-                () -> Assertions.assertEquals(boards.getTotalPages(), 1),
-                () -> Assertions.assertEquals(boards.getTotalElements(), 20),
-                () -> Assertions.assertEquals(5, boards.getContent().stream()
-                        .filter(board -> board.getOwner().equals(AccountFactory.DEFAULT_USER)).count()),
-                () -> Assertions.assertEquals(5, boards.getContent().stream()
-                        .filter(board -> board.getOwner().equals("user2")).count()),
-                () -> Assertions.assertEquals(5, boards.getContent().stream()
-                        .filter(board -> board.getOwner().equals("user3")).count()),
-                () -> Assertions.assertEquals(5, boards.getContent().stream()
-                        .filter(board -> board.getOwner().equals("user4")).count()));
+    @Test
+    public void findBoardsByOwner() {
+        withDefaultUser(() -> boardFactory.create(5));
+        withUser("user2", () -> boardFactory.create(5));
+        withUser("user3", () -> boardFactory.create(5));
+        withUser("user4", () -> boardFactory.create(5));
+
+        // @formatter:off
+        RestAssured
+                .given()
+                    .log().all()
+                    .param("owner", "user3")
+                    .header(defaultUserHeader())
+                .when()
+                    .get("/boards")
+                .then()
+                    .log().all()
+                    .statusCode(HttpStatus.SC_OK)
+                    .body("totalElements", Matchers.is(5))
+                    .body("totalPages", Matchers.is(1))
+                    .body("content.findAll { it.owner == 'user3' }", Matchers.hasSize(5));
+        // @formatter:on
+    }
+
+    @Test
+    public void findBoardById() {
+        Board board = withDefaultUser(() -> boardFactory.create("fullBoard"));
+
+        // @formatter:off
+        RestAssured
+                .given()
+                    .log().all()
+                    .header(defaultUserHeader())
+                .when()
+                    .get("/boards/{id}", board.getId())
+                .then()
+                    .log().all()
+                    .statusCode(HttpStatus.SC_OK)
+                    .body("name", Matchers.is(board.getName()))
+                    .body("externalId", IdMatcher.is(board.getExternalId()))
+                    .body("startColumn", Matchers.is(board.getStartColumn()))
+                    .body("endColumn", Matchers.is(board.getEndColumn()))
+                    .body("fluxColumn", Matchers.contains(board.getFluxColumn().toArray()))
+                    .body("ignoreIssueType", Matchers.contains(board.getIgnoreIssueType().toArray()))
+                    .body("epicCF", Matchers.is(board.getEpicCF()))
+                    .body("estimateCF", Matchers.is(board.getEstimateCF()))
+                    .body("systemCF", Matchers.is(board.getSystemCF()))
+                    .body("projectCF", Matchers.is(board.getProjectCF()))
+                    .body("calcDueDate", Matchers.is(board.getCalcDueDate()))
+                    .body("ignoreWeekend", Matchers.is(board.getIgnoreWeekend()))
+                    .body("impedimentType", Matchers.is(board.getImpedimentType().name()))
+                    .body("impedimentColumns", Matchers.contains(board.getImpedimentColumns().toArray()))
+                    .body("dynamicFields", Matchers.hasSize(board.getDynamicFields().size()));
+        // @formatter:on
     }
 }

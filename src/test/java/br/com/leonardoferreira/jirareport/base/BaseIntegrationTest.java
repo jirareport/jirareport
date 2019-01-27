@@ -2,19 +2,19 @@ package br.com.leonardoferreira.jirareport.base;
 
 import br.com.leonardoferreira.jirareport.domain.vo.Account;
 import br.com.leonardoferreira.jirareport.factory.AccountFactory;
+import io.restassured.RestAssured;
+import io.restassured.http.Header;
+import java.util.function.Supplier;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 public class BaseIntegrationTest {
-
-    @Autowired
-    protected MockMvc mockMvc;
 
     @Autowired
     protected CleanDatabase cleanDatabase;
@@ -22,8 +22,12 @@ public class BaseIntegrationTest {
     @Autowired
     protected AccountFactory accountFactory;
 
+    @LocalServerPort
+    private Integer port;
+
     @BeforeEach
     public void beforeEach() {
+        RestAssured.port = port;
         cleanDatabase.clean();
     }
 
@@ -31,7 +35,15 @@ public class BaseIntegrationTest {
         return SecurityMockMvcRequestPostProcessors.user(accountFactory.defaultUser());
     }
 
-    protected void withUser(final String username, final Runnable consumer) {
+    protected void withDefaultUser(final Runnable runnable) {
+        withUser(AccountFactory.DEFAULT_USER, runnable);
+    }
+
+    protected <T> T withDefaultUser(final Supplier<T> supplier) {
+        return withUser(AccountFactory.DEFAULT_USER, supplier);
+    }
+
+    protected <T> T withUser(final String username, final Supplier<T> supplier) {
         SecurityContext oldContext = TestSecurityContextHolder.getContext();
 
         TestSecurityContextHolder.clearContext();
@@ -39,9 +51,22 @@ public class BaseIntegrationTest {
         TestSecurityContextHolder.setAuthentication(new UsernamePasswordAuthenticationToken(principal,
                 principal.getPassword(), principal.getAuthorities()));
 
-        consumer.run();
+        T result = supplier.get();
 
         TestSecurityContextHolder.clearContext();
         TestSecurityContextHolder.setContext(oldContext);
+
+        return result;
+    }
+
+    protected void withUser(final String username, final Runnable runnable) {
+        withUser(username, () -> {
+            runnable.run();
+            return null;
+        });
+    }
+
+    protected Header defaultUserHeader() {
+        return new Header("X-Auth-Token", accountFactory.defaultUserToken());
     }
 }

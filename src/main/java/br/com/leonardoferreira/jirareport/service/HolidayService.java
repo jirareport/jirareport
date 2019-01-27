@@ -15,7 +15,7 @@ public interface HolidayService {
 
     List<LocalDate> findDaysByBoard(Long boardId);
 
-    void create(Long boardId, Holiday holiday);
+    Long create(Long boardId, Holiday holiday);
 
     void delete(Long id);
 

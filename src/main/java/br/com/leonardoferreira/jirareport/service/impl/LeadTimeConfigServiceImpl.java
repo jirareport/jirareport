@@ -37,13 +37,15 @@ public class LeadTimeConfigServiceImpl extends AbstractService implements LeadTi
 
     @Override
     @Transactional
-    public void create(final Long boardId, final LeadTimeConfig leadTimeConfig) {
+    public Long create(final Long boardId, final LeadTimeConfig leadTimeConfig) {
         log.info("Method=create, boardId={}, leadTimeConfig={}", boardId, leadTimeConfig);
 
         Board board = boardService.findById(boardId);
         leadTimeConfig.setBoard(board);
 
         leadTimeConfigRepository.save(leadTimeConfig);
+
+        return leadTimeConfig.getId();
     }
 
     @Override

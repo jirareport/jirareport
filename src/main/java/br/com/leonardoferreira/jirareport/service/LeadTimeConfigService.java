@@ -8,7 +8,7 @@ public interface LeadTimeConfigService {
 
     List<LeadTimeConfig> findAllByBoardId(Long boardId);
 
-    void create(Long boardId, LeadTimeConfig leadTimeConfig);
+    Long create(Long boardId, LeadTimeConfig leadTimeConfig);
 
     LeadTimeConfig findByBoardAndId(Long boardId, Long id);
 

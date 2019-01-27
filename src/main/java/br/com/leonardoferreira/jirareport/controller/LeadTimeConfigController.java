@@ -1,28 +1,28 @@
 package br.com.leonardoferreira.jirareport.controller;
 
-import java.util.List;
-import java.util.Set;
-
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.LeadTimeConfig;
-import br.com.leonardoferreira.jirareport.service.LeadTimeConfigService;
+import br.com.leonardoferreira.jirareport.domain.response.ListLeadTimeConfigResponse;
 import br.com.leonardoferreira.jirareport.service.BoardService;
+import br.com.leonardoferreira.jirareport.service.LeadTimeConfigService;
+import java.net.URI;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@Controller
+@RestController
 @RequestMapping("/boards/{boardId}/lead-time-configs")
-public class LeadTimeConfigController extends AbstractController {
+public class LeadTimeConfigController {
 
     @Autowired
     private LeadTimeConfigService leadTimeConfigService;
@@ -31,82 +31,46 @@ public class LeadTimeConfigController extends AbstractController {
     private BoardService boardService;
 
     @GetMapping
-    public ModelAndView index(@PathVariable final Long boardId) {
+    public ListLeadTimeConfigResponse index(@PathVariable final Long boardId) {
         List<LeadTimeConfig> leadTimeConfigs = leadTimeConfigService.findAllByBoardId(boardId);
         Board board = boardService.findById(boardId);
 
-        return new ModelAndView("lead-time-configs/index")
-                .addObject("board", board)
-                .addObject("leadTimeConfigs", leadTimeConfigs);
-    }
-
-    @GetMapping("/new")
-    public ModelAndView create(@PathVariable final Long boardId) {
-        Board board = boardService.findById(boardId);
-        Set<String> suggestedStatus = boardService.findStatusFromBoardInJira(board);
-
-        return new ModelAndView("lead-time-configs/new")
-                .addObject("leadTimeConfig", new LeadTimeConfig())
-                .addObject("suggestedStatus", suggestedStatus);
+        return ListLeadTimeConfigResponse.builder()
+                .leadTimeConfigs(leadTimeConfigs)
+                .board(board)
+                .build();
     }
 
     @PostMapping
-    public ModelAndView create(@PathVariable final Long boardId,
-                               @Validated final LeadTimeConfig leadTimeConfig,
-                               final BindingResult bindingResult,
-                               final RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            Set<String> suggestedStatus = boardService.findStatusFromBoardInJira(boardId);
+    public ResponseEntity<Object> create(@PathVariable final Long boardId,
+                                         @Validated @RequestBody final LeadTimeConfig leadTimeConfig) {
+        Long id = leadTimeConfigService.create(boardId, leadTimeConfig);
 
-            return new ModelAndView("lead-time-configs/new")
-                    .addObject("leadTimeConfig", leadTimeConfig)
-                    .addObject("suggestedStatus", suggestedStatus);
-        }
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .build(id);
 
-        leadTimeConfigService.create(boardId, leadTimeConfig);
-
-        addFlashSuccess(redirectAttributes, "Registro inserido com sucesso.");
-        return new ModelAndView(String.format("redirect:/boards/%s/lead-time-configs", boardId));
+        return ResponseEntity.created(location).build();
     }
 
-    @GetMapping("/edit/{id}")
-    public ModelAndView update(@PathVariable final Long boardId,
-                               @PathVariable final Long id) {
-        LeadTimeConfig leadTimeConfig = leadTimeConfigService.findByBoardAndId(boardId, id);
-        Set<String> suggestedStatus = boardService.findStatusFromBoardInJira(boardId);
-
-        return new ModelAndView("lead-time-configs/edit")
-                .addObject("leadTimeConfig", leadTimeConfig)
-                .addObject("suggestedStatus", suggestedStatus);
+    @GetMapping("/{id}")
+    public LeadTimeConfig findById(@PathVariable final Long boardId,
+                                   @PathVariable final Long id) {
+        return leadTimeConfigService.findByBoardAndId(boardId, id);
     }
 
     @PutMapping
-    public ModelAndView update(@PathVariable final Long boardId,
-                               @Validated final LeadTimeConfig leadTimeConfig,
-                               final BindingResult bindingResult,
-                               final RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            Set<String> suggestedStatus = boardService.findStatusFromBoardInJira(boardId);
-
-            return new ModelAndView("lead-time-configs/new")
-                    .addObject("leadTimeConfig", leadTimeConfig)
-                    .addObject("suggestedStatus", suggestedStatus);
-        }
-
+    public ResponseEntity<Object> update(@PathVariable final Long boardId,
+                                         @Validated @RequestBody final LeadTimeConfig leadTimeConfig) {
         leadTimeConfigService.update(boardId, leadTimeConfig);
-
-        addFlashSuccess(redirectAttributes, "Registro atualizado com sucesso.");
-        return new ModelAndView(String.format("redirect:/boards/%s/lead-time-configs", boardId));
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView delete(@PathVariable final Long boardId,
-                               @PathVariable final Long id,
-                               final RedirectAttributes redirectAttributes) {
+    public ResponseEntity<Object> delete(@PathVariable final Long boardId,
+                                         @PathVariable final Long id) {
         leadTimeConfigService.deleteByBoardAndId(boardId, id);
-
-        addFlashSuccess(redirectAttributes, "Registro removido com sucesso.");
-        return new ModelAndView(String.format("redirect:/boards/%s/lead-time-configs", boardId));
+        return ResponseEntity.noContent().build();
     }
-
 }

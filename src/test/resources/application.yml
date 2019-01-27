@@ -5,6 +5,10 @@ holiday:
   url: http://localhost:8888/holiday-api/?json=true
   token: super-secret-token
 
+ssh-key:
+  public: classpath:/ssh_key/jirareport.pub
+  private: classpath:/ssh_key/jirareport
+
 spring:
   application:
     name: jirareport

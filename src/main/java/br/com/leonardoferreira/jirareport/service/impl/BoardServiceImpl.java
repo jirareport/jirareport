@@ -1,22 +1,22 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import br.com.leonardoferreira.jirareport.domain.request.CreateBoardRequest;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import br.com.leonardoferreira.jirareport.aspect.annotation.ExecutionTime;
-import br.com.leonardoferreira.jirareport.client.ProjectClient;
 import br.com.leonardoferreira.jirareport.domain.Board;
-import br.com.leonardoferreira.jirareport.domain.form.BoardForm;
+import br.com.leonardoferreira.jirareport.domain.request.CreateBoardRequest;
+import br.com.leonardoferreira.jirareport.domain.request.UpdateBoardRequest;
+import br.com.leonardoferreira.jirareport.domain.response.BoardDetailsResponse;
+import br.com.leonardoferreira.jirareport.domain.response.BoardResponse;
 import br.com.leonardoferreira.jirareport.domain.vo.BoardStatus;
 import br.com.leonardoferreira.jirareport.domain.vo.BoardStatusList;
-import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.mapper.BoardMapper;
 import br.com.leonardoferreira.jirareport.repository.BoardRepository;
 import br.com.leonardoferreira.jirareport.service.BoardService;
+import br.com.leonardoferreira.jirareport.service.ProjectService;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -32,7 +32,7 @@ import org.springframework.util.StringUtils;
 public class BoardServiceImpl extends AbstractService implements BoardService {
 
     @Autowired
-    private ProjectClient projectClient;
+    private ProjectService projectService;
 
     @Autowired
     private BoardRepository boardRepository;
@@ -42,7 +42,7 @@ public class BoardServiceImpl extends AbstractService implements BoardService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Board> findAll(final Pageable pageable, final Board board) {
+    public Page<BoardResponse> findAll(final Pageable pageable, final Board board) {
         log.info("Method=findAll");
 
         if (StringUtils.isEmpty(board.getOwner())) {
@@ -61,15 +61,8 @@ public class BoardServiceImpl extends AbstractService implements BoardService {
 
         Example<Board> example = Example.of(board, matcher);
 
-        return boardRepository.findAll(example, pageable);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<JiraProject> findAllJiraProject() {
-        log.info("Method=findAllJiraProject");
-
-        return projectClient.findAll(currentToken());
+        Page<Board> boards = boardRepository.findAll(example, pageable);
+        return boardMapper.toBoardResponse(boards);
     }
 
     @Override
@@ -88,7 +81,8 @@ public class BoardServiceImpl extends AbstractService implements BoardService {
     public void delete(final Long id) {
         log.info("Method=delete, id={}", id);
 
-        boardRepository.deleteByIdAndOwner(id, currentUser().getUsername());
+        Board board = findById(id);
+        boardRepository.deleteByIdAndOwner(board.getId(), currentUser().getUsername());
     }
 
     @Override
@@ -102,11 +96,12 @@ public class BoardServiceImpl extends AbstractService implements BoardService {
 
     @Override
     @Transactional
-    public void update(final BoardForm boardForm) {
-        log.info("Method=board, boardForm={}", boardForm);
+    public void update(final Long boardId, final UpdateBoardRequest updateBoardRequest) {
+        log.info("Method=board, updateBoardRequest={}", updateBoardRequest);
 
-        Board board = findById(boardForm.getId());
-        boardMapper.fromForm(board, boardForm);
+        Board board = findById(boardId);
+        boardMapper.fromUpdateBoardRequest(board, updateBoardRequest);
+
         boardRepository.save(board);
     }
 
@@ -122,7 +117,7 @@ public class BoardServiceImpl extends AbstractService implements BoardService {
     public Set<String> findStatusFromBoardInJira(final Board board) {
         log.info("Method=findStatusFromBoardInJira, board={}", board);
 
-        List<BoardStatusList> listStatusesBoard = projectClient.findStatusFromProject(currentToken(), board.getExternalId());
+        List<BoardStatusList> listStatusesBoard = projectService.findStatusFromProject(board.getExternalId());
 
         return listStatusesBoard.stream()
                 .map(BoardStatusList::getStatuses)
@@ -133,13 +128,9 @@ public class BoardServiceImpl extends AbstractService implements BoardService {
 
     @Override
     @Transactional(readOnly = true)
-    public BoardForm findToUpdate(final Long id) {
-        log.info("Method=findToUpdate, id={}", id);
-
-        Board board = findById(id);
-        JiraProject jiraProject = projectClient.findById(currentToken(), board.getExternalId());
-
-        return boardMapper.toForm(board, jiraProject);
+    public BoardDetailsResponse findDetailsById(final Long id) {
+        log.info("Method=findDetailsById, id={}", id);
+        return boardMapper.toBoardResponseDetails(findById(id));
     }
 
     @Override

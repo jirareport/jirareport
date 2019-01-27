@@ -16,6 +16,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.jwt.crypto.sign.RsaSigner;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
+import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
+import org.springframework.security.jwt.crypto.sign.Signer;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.util.StreamUtils;
 
@@ -73,16 +75,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public RsaSigner rsaSigner(final ResourceLoader resourceLoader,
-                               @Value("${ssh-key.private}") final String path) throws IOException {
+    public Signer rsaSigner(final ResourceLoader resourceLoader,
+                            @Value("${ssh-key.private}") final String path) throws IOException {
         Resource resource = resourceLoader.getResource(path);
         return new RsaSigner(
                 StreamUtils.copyToString(resource.getInputStream(), Charset.forName("UTF-8")));
     }
 
     @Bean
-    public RsaVerifier rsaVerifier(final ResourceLoader resourceLoader,
-                                   @Value("${ssh-key.public}") final String path) throws IOException {
+    public SignatureVerifier rsaVerifier(final ResourceLoader resourceLoader,
+                                         @Value("${ssh-key.public}") final String path) throws IOException {
         Resource resource = resourceLoader.getResource(path);
         return new RsaVerifier(
                 StreamUtils.copyToString(resource.getInputStream(), Charset.forName("UTF-8")));

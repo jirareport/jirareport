@@ -5,6 +5,7 @@ import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.UserConfig;
 import br.com.leonardoferreira.jirareport.domain.vo.HolidayVO;
+import br.com.leonardoferreira.jirareport.exception.HolidaysAlreadyImported;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.mapper.HolidayMapper;
 import br.com.leonardoferreira.jirareport.repository.BoardRepository;
@@ -72,13 +73,15 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
 
     @Override
     @Transactional
-    public void create(final Long boardId, final Holiday holiday) {
+    public Long create(final Long boardId, final Holiday holiday) {
         log.info("Method=create, holiday={}", holiday);
 
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(ResourceNotFound::new);
         holiday.setBoard(board);
         holidayRepository.save(holiday);
+
+        return holiday.getId();
     }
 
     @Override
@@ -130,7 +133,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
             holidayRepository.saveAll(holidays);
         } catch (DataIntegrityViolationException e) {
             log.error("Method=createImported, e={}", e.getMessage(), e);
-            return false;
+            throw new HolidaysAlreadyImported(e);
         }
 
         return true;

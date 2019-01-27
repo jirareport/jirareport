@@ -1,14 +1,10 @@
 package br.com.leonardoferreira.jirareport.integration;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import br.com.leonardoferreira.jirareport.base.BaseIntegrationTest;
-import br.com.leonardoferreira.jirareport.base.WithDefaultUser;
 import br.com.leonardoferreira.jirareport.factory.BoardFactory;
 import br.com.leonardoferreira.jirareport.repository.BoardRepository;
+import io.restassured.RestAssured;
+import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,18 +23,38 @@ public class DeleteBoardIntegrationTest extends BaseIntegrationTest {
     private BoardRepository boardRepository;
 
     @Test
-    @WithDefaultUser
-    public void deleteBord() throws Exception {
-        boardFactory.create();
+    public void deleteBord() {
+        withDefaultUser(() -> boardFactory.create());
 
-        mockMvc
-                .perform(
-                        delete("/boards/1"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/boards"))
-                .andExpect(flash().attribute("flashSuccess", "Board removido com sucesso."));
+        // @formatter:off
+        RestAssured
+                .given()
+                    .log().all()
+                    .header(defaultUserHeader())
+                .when()
+                    .delete("/boards/1")
+                .then()
+                    .log().all()
+                    .statusCode(HttpStatus.SC_NO_CONTENT);
+        // @formatter:on
 
         long count = boardRepository.count();
         Assertions.assertEquals(0, count);
     }
+
+    @Test
+    public void deleteNonexistentBoard() {
+        // @formatter:off
+        RestAssured
+                .given()
+                    .log().all()
+                    .header(defaultUserHeader())
+                .when()
+                    .delete("/boards/1")
+                .then()
+                    .log().all()
+                    .statusCode(HttpStatus.SC_NOT_FOUND);
+        // @formatter:on
+    }
+
 }

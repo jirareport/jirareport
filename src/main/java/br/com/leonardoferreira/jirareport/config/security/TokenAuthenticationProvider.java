@@ -1,6 +1,7 @@
 package br.com.leonardoferreira.jirareport.config.security;
 
 import br.com.leonardoferreira.jirareport.domain.vo.Account;
+import br.com.leonardoferreira.jirareport.service.TokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,16 +18,12 @@ import org.springframework.stereotype.Component;
 public class TokenAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private RsaVerifier rsaVerifier;
+    private TokenService tokenService;
 
     @Override
     public Authentication authenticate(final Authentication authentication) throws AuthenticationException {
         try {
-            Jwt jwt = JwtHelper.decodeAndVerify((String) authentication.getPrincipal(), rsaVerifier);
-            Account account = objectMapper.readValue(jwt.getClaims(), Account.class);
+            Account account = tokenService.decode((String) authentication.getPrincipal());
             return new PreAuthenticatedAuthenticationToken(account, account.getPassword(), account.getAuthorities());
         } catch (Exception e) {
             throw new PreAuthenticatedCredentialsNotFoundException(e.getMessage(), e);

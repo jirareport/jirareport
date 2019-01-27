@@ -1,21 +1,14 @@
-package br.com.leonardoferreira.jirareport.domain.form;
+package br.com.leonardoferreira.jirareport.domain.request;
 
 import br.com.leonardoferreira.jirareport.domain.ImpedimentType;
 import br.com.leonardoferreira.jirareport.domain.vo.DynamicFieldConfig;
-import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
-import lombok.Data;
-import lombok.ToString;
-import org.springframework.util.StringUtils;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.Data;
 
 @Data
-@ToString(of = "name")
-public class BoardForm {
-
-    private Long id;
+public class UpdateBoardRequest {
 
     private String name;
 
@@ -39,8 +32,6 @@ public class BoardForm {
 
     private Boolean ignoreWeekend;
 
-    private JiraProject jiraProject;
-
     private ImpedimentType impedimentType;
 
     private List<String> impedimentColumns;
@@ -58,12 +49,6 @@ public class BoardForm {
     public void setFluxColumn(final List<String> fluxColumn) {
         this.fluxColumn =
                 fluxColumn == null ? null : fluxColumn.stream().map(String::toUpperCase).collect(Collectors.toList());
-    }
-
-    public void cleanDynamicFields() {
-        dynamicFields = dynamicFields == null ? dynamicFields : dynamicFields.stream()
-                .filter(i -> !StringUtils.isEmpty(i.getField()) && !StringUtils.isEmpty(i.getName()))
-                .collect(Collectors.toList());
     }
 
 }

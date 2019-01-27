@@ -69,8 +69,10 @@ dependencies {
 
     implementation "org.flywaydb:flyway-core"
 
-    testCompile('br.com.leonardoferreira:JBacon:1.2.1')
-    testCompile('com.github.javafaker:javafaker:0.16')
+    testImplementation "br.com.leonardoferreira:JBacon:1.2.1"
+    testImplementation "com.github.javafaker:javafaker:0.16"
+    
+    testCompile('io.rest-assured:rest-assured:3.1.0')
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "com.github.tomakehurst:wiremock:2.19.0"
     testImplementation("org.springframework.boot:spring-boot-starter-test") {

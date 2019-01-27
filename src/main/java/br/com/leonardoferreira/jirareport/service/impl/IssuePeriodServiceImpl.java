@@ -51,7 +51,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
     @Override
     @Transactional
-    public void create(final IssuePeriodForm issuePeriodForm, final Long boardId) {
+    public Long create(final IssuePeriodForm issuePeriodForm, final Long boardId) {
         log.info("Method=create, issuePeriodForm={}, boardId={}", issuePeriodForm, boardId);
 
         delete(issuePeriodForm, boardId);
@@ -83,6 +83,8 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
                 chartAggregator, details);
 
         issuePeriodRepository.save(issuePeriod);
+
+        return issuePeriod.getId();
     }
 
     @Override
