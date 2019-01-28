@@ -17,4 +17,6 @@ public class IssuePeriodDetails {
 
     private Double wipAvg;
 
+    private Double avgPctEfficiency;
+
 }

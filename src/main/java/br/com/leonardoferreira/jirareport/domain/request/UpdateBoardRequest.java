@@ -38,6 +38,10 @@ public class UpdateBoardRequest {
 
     private List<DynamicFieldConfig> dynamicFields;
 
+    private List<String> touchingColumns;
+
+    private List<String> waitingColumns;
+
     public void setStartColumn(final String startColumn) {
         this.startColumn = startColumn == null ? null : startColumn.toUpperCase(DateUtil.LOCALE_BR);
     }
@@ -51,4 +55,13 @@ public class UpdateBoardRequest {
                 fluxColumn == null ? null : fluxColumn.stream().map(String::toUpperCase).collect(Collectors.toList());
     }
 
+    public void setTouchingColumns(final List<String> touchingColumns) {
+        this.touchingColumns = touchingColumns == null ? null : touchingColumns.stream()
+                .map(String::toUpperCase).collect(Collectors.toList());
+    }
+
+    public void setWaitingColumns(final List<String> waitingColumns) {
+        this.waitingColumns = waitingColumns == null ? null : waitingColumns.stream()
+                .map(String::toUpperCase).collect(Collectors.toList());
+    }
 }
