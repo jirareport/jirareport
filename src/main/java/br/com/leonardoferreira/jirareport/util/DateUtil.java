@@ -104,4 +104,24 @@ public final class DateUtil {
         return LocalDateTime.parse(date.substring(0, 19), DateTimeFormatter.ISO_DATE_TIME);
     }
 
+    public static Long hoursDiff(final LocalDateTime startDate, final LocalDateTime endDate,
+                                 final List<LocalDate> holidays, final Boolean ignoreWeekend) {
+        LocalDateTime start = startDate;
+
+        long workingHours = 0L;
+        if (Boolean.TRUE.equals(ignoreWeekend)) {
+            workingHours = ChronoUnit.MINUTES.between(start, endDate);
+        } else {
+            while (!start.isAfter(endDate)) {
+                DayOfWeek day = start.getDayOfWeek();
+                if (!DayOfWeek.SATURDAY.equals(day) && !DayOfWeek.SUNDAY.equals(day) && !isHoliday(start.toLocalDate(), holidays)) {
+                    workingHours++;
+                }
+                start = start.plusMinutes(1);
+            }
+        }
+
+        return workingHours;
+    }
+
 }

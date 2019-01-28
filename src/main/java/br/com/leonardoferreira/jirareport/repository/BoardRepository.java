@@ -29,5 +29,4 @@ public interface BoardRepository extends CrudRepository<Board, Long> {
     @Query(value = "SELECT DISTINCT owner FROM BOARD", nativeQuery = true)
     List<String> findAllOwners();
 
-
 }

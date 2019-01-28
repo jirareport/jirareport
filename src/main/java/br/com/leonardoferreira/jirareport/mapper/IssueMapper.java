@@ -148,8 +148,8 @@ public class IssueMapper {
         Double pctEfficiency = 0D;
 
         if (!CollectionUtils.isEmpty(board.getTouchingColumns()) && !CollectionUtils.isEmpty(board.getWaitingColumns())) {
-            waitTime = calcWaitTime(changelog, board.getWaitingColumns());
-            touchTime = calcTouchTime(changelog, board.getTouchingColumns());
+            waitTime = calcWaitTime(changelog, board.getWaitingColumns(), holidays, board.getIgnoreWeekend());
+            touchTime = calcTouchTime(changelog, board.getTouchingColumns(), holidays, board.getIgnoreWeekend());
             pctEfficiency = calcPctEfficiency(waitTime, touchTime);
         }
 
@@ -271,20 +271,29 @@ public class IssueMapper {
         return ((double) touchTime / (touchTime + waitTime)) * 100;
     }
 
-    private Long calcTouchTime(final List<Changelog> changelogItems, final List<String> touchingColumns) {
-        return calcDurationInColumns(changelogItems, touchingColumns);
+    private Long calcTouchTime(final List<Changelog> changelogItems,
+                               final List<String> touchingColumns,
+                               final List<LocalDate> holidays,
+                               final Boolean ignoreWeekend) {
+        return calcDurationInColumns(changelogItems, touchingColumns, holidays, ignoreWeekend);
     }
 
-    private Long calcWaitTime(final List<Changelog> changelogItems, final List<String> waitingColumns) {
-        return calcDurationInColumns(changelogItems, waitingColumns);
+    private Long calcWaitTime(final List<Changelog> changelogItems,
+                              final List<String> waitingColumns,
+                              final List<LocalDate> holidays,
+                              final Boolean ignoreWeekend) {
+        return calcDurationInColumns(changelogItems, waitingColumns, holidays, ignoreWeekend);
     }
 
-    private Long calcDurationInColumns(final List<Changelog> changelogItems, final List<String> touchingColumns) {
+    private Long calcDurationInColumns(final List<Changelog> changelogItems,
+                                       final List<String> touchingColumns,
+                                       final List<LocalDate> holidays,
+                                       final Boolean ignoreWeekend) {
         long time = 0L;
 
         for (Changelog changelogItem : changelogItems) {
             if (touchingColumns.contains(changelogItem.getTo().toUpperCase(DateUtil.LOCALE_BR))) {
-                time += ChronoUnit.MINUTES.between(changelogItem.getCreated(), changelogItem.getEndDate());
+                time += DateUtil.hoursDiff(changelogItem.getCreated(), changelogItem.getEndDate(), holidays, ignoreWeekend);
             }
         }
 
