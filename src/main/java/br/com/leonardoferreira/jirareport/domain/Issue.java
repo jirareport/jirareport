@@ -94,4 +94,10 @@ public class Issue extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private Map<String, String> dynamicFields;
 
+    private Long waitTime;
+
+    private Long touchTime;
+
+    private Double pctEfficiency;
+
 }

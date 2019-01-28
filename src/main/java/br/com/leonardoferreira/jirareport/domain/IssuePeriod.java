@@ -124,6 +124,8 @@ public class IssuePeriod extends BaseEntity {
 
     private Double wipAvg;
 
+    private Double avgPctEfficiency;
+
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private List<DynamicChart> dynamicCharts;
