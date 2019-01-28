@@ -41,6 +41,7 @@ public interface IssuePeriodMapper {
             @Mapping(target = "issuesCount",          source = "details.issueCount"),
             @Mapping(target = "jql",                  source = "details.jql"),
             @Mapping(target = "wipAvg",               source = "details.wipAvg"),
+            @Mapping(target = "avgPctEfficiency",     source = "details.avgPctEfficiency"),
             @Mapping(target = "owner",                ignore = true),
             @Mapping(target = "lastEditor",           ignore = true),
             @Mapping(target = "createdAt",            ignore = true),

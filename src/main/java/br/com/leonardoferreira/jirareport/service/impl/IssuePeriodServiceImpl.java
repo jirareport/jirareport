@@ -20,6 +20,7 @@ import br.com.leonardoferreira.jirareport.service.IssueService;
 import br.com.leonardoferreira.jirareport.service.WipService;
 import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,8 +67,13 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         List<Issue> issues = issueService.createByJql(jql, board);
 
         Double avgLeadTime = issues.parallelStream()
-                .filter(i -> i.getLeadTime() != null)
+                .filter(i -> Objects.nonNull(i.getLeadTime()))
                 .mapToLong(Issue::getLeadTime)
+                .average().orElse(0D);
+
+        Double avgPctEfficiency = issues.parallelStream()
+                .filter(i -> Objects.nonNull(i.getPctEfficiency()))
+                .mapToDouble(Issue::getPctEfficiency)
                 .average().orElse(0D);
 
         ChartAggregator chartAggregator = chartService.buildAllCharts(issues, board);
@@ -81,6 +87,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
                 .wipAvg(wipAvg)
                 .avgLeadTime(avgLeadTime)
                 .issueCount(issues.size())
+                .avgPctEfficiency(avgPctEfficiency)
                 .build();
 
         IssuePeriod issuePeriod = issuePeriodMapper.fromJiraData(issuePeriodForm, issues,
