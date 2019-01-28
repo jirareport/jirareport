@@ -1,14 +1,14 @@
 package br.com.leonardoferreira.jirareport.util;
 
+import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
-
-import br.com.leonardoferreira.jirareport.domain.IssuePeriod;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -61,7 +61,7 @@ public final class DateUtil {
         } else {
             while (!start.isAfter(end)) {
                 DayOfWeek day = start.getDayOfWeek();
-                if (!DayOfWeek.SATURDAY.equals(day) && !DayOfWeek.SUNDAY.equals(day) && !isHoliday(start, holidays)) {
+                if (isWorkDay(holidays, day, start)) {
                     workingDays++;
                 }
                 start = start.plusDays(1);
@@ -86,7 +86,7 @@ public final class DateUtil {
         while (total > 0) {
             ref = ref.plusDays(1);
             DayOfWeek day = ref.getDayOfWeek();
-            if (!DayOfWeek.SATURDAY.equals(day) && !DayOfWeek.SUNDAY.equals(day) && !isHoliday(ref, holidays)) {
+            if (isWorkDay(holidays, day, ref)) {
                 total--;
             }
         }
@@ -104,24 +104,34 @@ public final class DateUtil {
         return LocalDateTime.parse(date.substring(0, 19), DateTimeFormatter.ISO_DATE_TIME);
     }
 
-    public static Long hoursDiff(final LocalDateTime startDate, final LocalDateTime endDate,
-                                 final List<LocalDate> holidays, final Boolean ignoreWeekend) {
+    public static Long minutesDiff(final LocalDateTime startDate, final LocalDateTime endDate,
+                                   final List<LocalDate> holidays, final Boolean ignoreWeekend) {
         LocalDateTime start = startDate;
 
         long workingHours = 0L;
         if (Boolean.TRUE.equals(ignoreWeekend)) {
-            workingHours = ChronoUnit.MINUTES.between(start, endDate);
+            workingHours = ChronoUnit.MINUTES.between(startDate, endDate);
         } else {
             while (!start.isAfter(endDate)) {
-                DayOfWeek day = start.getDayOfWeek();
-                if (!DayOfWeek.SATURDAY.equals(day) && !DayOfWeek.SUNDAY.equals(day) && !isHoliday(start.toLocalDate(), holidays)) {
-                    workingHours++;
+                if (isWorkDay(holidays, start.getDayOfWeek(), start.toLocalDate())) {
+                    LocalDateTime endOfDay = start.toLocalDate().atTime(LocalTime.MAX);
+
+                    if (endOfDay.isBefore(endDate)) {
+                        workingHours += ChronoUnit.MINUTES.between(start, endOfDay);
+                    } else {
+                        workingHours += ChronoUnit.MINUTES.between(start, endDate);
+                    }
                 }
-                start = start.plusMinutes(1);
+
+                start = start.plusDays(1).truncatedTo(ChronoUnit.DAYS);
             }
         }
 
         return workingHours;
+    }
+
+    private static boolean isWorkDay(final List<LocalDate> holidays, final DayOfWeek day, final LocalDate localDate) {
+        return !DayOfWeek.SATURDAY.equals(day) && !DayOfWeek.SUNDAY.equals(day) && !isHoliday(localDate, holidays);
     }
 
 }

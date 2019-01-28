@@ -293,7 +293,7 @@ public class IssueMapper {
 
         for (Changelog changelogItem : changelogItems) {
             if (touchingColumns.contains(changelogItem.getTo().toUpperCase(DateUtil.LOCALE_BR))) {
-                time += DateUtil.hoursDiff(changelogItem.getCreated(), changelogItem.getEndDate(), holidays, ignoreWeekend);
+                time += DateUtil.minutesDiff(changelogItem.getCreated(), changelogItem.getEndDate(), holidays, ignoreWeekend);
             }
         }
 
