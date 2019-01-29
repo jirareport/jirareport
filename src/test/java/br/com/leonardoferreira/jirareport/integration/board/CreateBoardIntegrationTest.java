@@ -1,4 +1,4 @@
-package br.com.leonardoferreira.jirareport.integration;
+package br.com.leonardoferreira.jirareport.integration.board;
 
 import br.com.leonardoferreira.jirareport.base.BaseIntegrationTest;
 import br.com.leonardoferreira.jirareport.domain.Board;

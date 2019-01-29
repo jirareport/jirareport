@@ -1,28 +1,26 @@
 package br.com.leonardoferreira.jirareport.service;
 
+import br.com.leonardoferreira.jirareport.domain.request.HolidayRequest;
+import br.com.leonardoferreira.jirareport.domain.response.HolidayResponse;
 import java.time.LocalDate;
 import java.util.List;
-
-import br.com.leonardoferreira.jirareport.domain.Holiday;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface HolidayService {
 
-    Page<Holiday> findByBoard(Long boardId, Pageable pageable);
-
-    List<Holiday> findByBoard(Long boardId);
+    Page<HolidayResponse> findByBoard(Long boardId, Pageable pageable);
 
     List<LocalDate> findDaysByBoard(Long boardId);
 
-    Long create(Long boardId, Holiday holiday);
+    Long create(Long boardId, HolidayRequest holidayRequest);
 
     void delete(Long id);
 
-    Holiday findById(Long id);
+    HolidayResponse findById(Long id);
 
-    void update(Long boardId, Holiday holiday);
+    void update(Long boardId, Long holidayId, HolidayRequest holidayRequest);
 
-    boolean createImported(Long boardId);
+    void createImported(Long boardId);
 
 }

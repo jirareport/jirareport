@@ -14,16 +14,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/jirareport
     username: ${USER}
     password: ${PASSWORD:123123}
-  jpa:
-    hibernate:
-      ddl-auto: none
-    show-sql: true
-    open-in-view: false
-    properties:
-      hibernate:
-        jdbc:
-          lob:
-            non_contextual_creation: true
+
   main:
     allow-bean-definition-overriding: true
   cache:

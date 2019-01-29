@@ -1,8 +1,8 @@
-package br.com.leonardoferreira.jirareport.integration;
+package br.com.leonardoferreira.jirareport.integration.holiday;
 
 import br.com.leonardoferreira.jirareport.base.BaseIntegrationTest;
-import br.com.leonardoferreira.jirareport.factory.BoardFactory;
-import br.com.leonardoferreira.jirareport.repository.BoardRepository;
+import br.com.leonardoferreira.jirareport.factory.HolidayFactory;
+import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
 import io.restassured.RestAssured;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
@@ -12,19 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith({SpringExtension.class})
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class DeleteBoardIntegrationTest extends BaseIntegrationTest {
+public class DeleteHolidayIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
-    private BoardFactory boardFactory;
+    private HolidayFactory holidayFactory;
 
     @Autowired
-    private BoardRepository boardRepository;
+    private HolidayRepository holidayRepository;
 
     @Test
-    public void deleteBord() {
-        withDefaultUser(() -> boardFactory.create());
+    public void deleteHoliday() {
+        withDefaultUser(() -> holidayFactory.create());
 
         // @formatter:off
         RestAssured
@@ -32,29 +32,28 @@ public class DeleteBoardIntegrationTest extends BaseIntegrationTest {
                     .log().all()
                     .header(defaultUserHeader())
                 .when()
-                    .delete("/boards/1")
+                    .delete("/boards/1/holidays/1")
                 .then()
                     .log().all()
                     .statusCode(HttpStatus.SC_NO_CONTENT);
         // @formatter:on
 
-        long count = boardRepository.count();
+        long count = holidayRepository.count();
         Assertions.assertEquals(0, count);
     }
 
     @Test
-    public void deleteNonexistentBoard() {
+    void deleteHolidayNotFound() {
         // @formatter:off
         RestAssured
                 .given()
-                    .log().all()
                     .header(defaultUserHeader())
+                    .log().all()
                 .when()
-                    .delete("/boards/1")
+                    .delete("/boards/1/holidays/999")
                 .then()
                     .log().all()
-                    .statusCode(HttpStatus.SC_NOT_FOUND);
+                    .spec(notFoundSpec());
         // @formatter:on
     }
-
 }

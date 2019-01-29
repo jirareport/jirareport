@@ -1,9 +1,7 @@
 package br.com.leonardoferreira.jirareport.controller;
 
-import br.com.leonardoferreira.jirareport.domain.Board;
-import br.com.leonardoferreira.jirareport.domain.Holiday;
-import br.com.leonardoferreira.jirareport.domain.response.ListHolidayResponse;
-import br.com.leonardoferreira.jirareport.service.BoardService;
+import br.com.leonardoferreira.jirareport.domain.request.HolidayRequest;
+import br.com.leonardoferreira.jirareport.domain.response.HolidayResponse;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import java.net.URI;
 import javax.validation.Valid;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -29,20 +28,15 @@ public class HolidayController {
     @Autowired
     private HolidayService holidayService;
 
-    @Autowired
-    private BoardService boardService;
-
     @GetMapping
-    public ListHolidayResponse index(@PathVariable final Long boardId,
-                                     @PageableDefault(sort = "date") final Pageable pageable) {
-        Page<Holiday> holidays = holidayService.findByBoard(boardId, pageable);
-        Board board = boardService.findById(boardId);
-
-        return new ListHolidayResponse(holidays, board);
+    public Page<HolidayResponse> index(@PathVariable final Long boardId,
+                                       @PageableDefault(sort = "date") final Pageable pageable) {
+        return holidayService.findByBoard(boardId, pageable);
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@PathVariable final Long boardId, @Valid final Holiday holiday) {
+    public ResponseEntity<?> create(@PathVariable final Long boardId,
+                                    @Valid @RequestBody final HolidayRequest holiday) {
         Long id = holidayService.create(boardId, holiday);
 
         URI location = ServletUriComponentsBuilder
@@ -66,14 +60,15 @@ public class HolidayController {
     }
 
     @GetMapping("/{id}")
-    public Holiday findById(@PathVariable final Long id) {
+    public HolidayResponse findById(@PathVariable final Long id) {
         return holidayService.findById(id);
     }
 
-    @PutMapping
+    @PutMapping("/{holidayId}")
     public ResponseEntity<?> update(@PathVariable final Long boardId,
-                                    @Valid final Holiday holiday) {
-        holidayService.update(boardId, holiday);
+                                    @PathVariable final Long holidayId,
+                                    @Valid @RequestBody final HolidayRequest holidayRequest) {
+        holidayService.update(boardId, holidayId, holidayRequest);
         return ResponseEntity.noContent().build();
     }
 

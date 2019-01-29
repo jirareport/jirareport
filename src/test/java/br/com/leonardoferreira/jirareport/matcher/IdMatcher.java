@@ -1,6 +1,5 @@
 package br.com.leonardoferreira.jirareport.matcher;
 
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.hamcrest.BaseMatcher;

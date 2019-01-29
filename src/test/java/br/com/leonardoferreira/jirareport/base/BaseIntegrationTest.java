@@ -3,8 +3,12 @@ package br.com.leonardoferreira.jirareport.base;
 import br.com.leonardoferreira.jirareport.domain.vo.Account;
 import br.com.leonardoferreira.jirareport.factory.AccountFactory;
 import io.restassured.RestAssured;
+import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.Header;
+import io.restassured.specification.ResponseSpecification;
 import java.util.function.Supplier;
+import org.apache.http.HttpStatus;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -68,5 +72,14 @@ public class BaseIntegrationTest {
 
     protected Header defaultUserHeader() {
         return new Header("X-Auth-Token", accountFactory.defaultUserToken());
+    }
+
+    protected ResponseSpecification notFoundSpec() {
+        return new ResponseSpecBuilder()
+                .expectStatusCode(HttpStatus.SC_NOT_FOUND)
+                .expectBody("error", Matchers.is("Not Found"))
+                .expectBody("message", Matchers.is("Resource Not Found"))
+                .expectBody("status", Matchers.is(404))
+                .build();
     }
 }

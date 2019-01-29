@@ -1,4 +1,4 @@
-package br.com.leonardoferreira.jirareport.integration;
+package br.com.leonardoferreira.jirareport.integration.board;
 
 import br.com.leonardoferreira.jirareport.base.BaseIntegrationTest;
 import br.com.leonardoferreira.jirareport.domain.Board;
@@ -68,4 +68,20 @@ public class UpdateBoardIntegrationTest extends BaseIntegrationTest {
                 () -> Assertions.assertEquals(request.getDynamicFields().size(), board.getDynamicFields().size()));
     }
 
+    @Test
+    public void updateNotFoundBoard() {
+        // @formatter:off
+        RestAssured
+                .given()
+                    .log().all()
+                    .header(defaultUserHeader())
+                    .contentType(ContentType.JSON)
+                    .body(new UpdateBoardRequest())
+                .when()
+                    .put("/boards/999")
+                .then()
+                    .log().all()
+                    .spec(notFoundSpec());
+        // @formatter:on
+    }
 }

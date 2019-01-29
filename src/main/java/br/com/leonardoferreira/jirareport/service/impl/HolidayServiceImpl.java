@@ -4,14 +4,21 @@ import br.com.leonardoferreira.jirareport.client.HolidayClient;
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.Holiday;
 import br.com.leonardoferreira.jirareport.domain.UserConfig;
+import br.com.leonardoferreira.jirareport.domain.request.HolidayRequest;
+import br.com.leonardoferreira.jirareport.domain.response.HolidayResponse;
 import br.com.leonardoferreira.jirareport.domain.vo.HolidayVO;
 import br.com.leonardoferreira.jirareport.exception.HolidaysAlreadyImported;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.mapper.HolidayMapper;
-import br.com.leonardoferreira.jirareport.repository.BoardRepository;
 import br.com.leonardoferreira.jirareport.repository.HolidayRepository;
+import br.com.leonardoferreira.jirareport.service.BoardService;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.service.UserService;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,12 +26,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -34,7 +35,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     private HolidayRepository holidayRepository;
 
     @Autowired
-    private BoardRepository boardRepository;
+    private BoardService boardService;
 
     @Autowired
     private HolidayClient holidayClient;
@@ -47,18 +48,11 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Holiday> findByBoard(final Long boardId, final Pageable pageable) {
+    public Page<HolidayResponse> findByBoard(final Long boardId, final Pageable pageable) {
         log.info("Method=findByBoard, boardId={}", boardId);
 
-        return holidayRepository.findAllByBoardId(boardId, pageable);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Holiday> findByBoard(final Long boardId) {
-        log.info("Method=findByBoard, boardId={}", boardId);
-
-        return holidayRepository.findAllByBoardId(boardId);
+        Page<Holiday> holidays = holidayRepository.findAllByBoardId(boardId, pageable);
+        return holidayMapper.toHolidayResponse(holidays);
     }
 
     @Override
@@ -73,12 +67,12 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
 
     @Override
     @Transactional
-    public Long create(final Long boardId, final Holiday holiday) {
-        log.info("Method=create, holiday={}", holiday);
+    public Long create(final Long boardId, final HolidayRequest holidayRequest) {
+        log.info("Method=create, boardId={}, holidayRequest={}", boardId, holidayRequest);
 
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(ResourceNotFound::new);
-        holiday.setBoard(board);
+        Board board = boardService.findById(boardId);
+
+        Holiday holiday = holidayMapper.toHoliday(holidayRequest, board);
         holidayRepository.save(holiday);
 
         return holiday.getId();
@@ -89,33 +83,43 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     public void delete(final Long id) {
         log.info("Method=delete, id={}", id);
 
-        holidayRepository.deleteById(id);
+        Holiday holiday = holidayRepository.findById(id)
+                .orElseThrow(ResourceNotFound::new);
+        holidayRepository.delete(holiday);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Holiday findById(final Long id) {
+    public HolidayResponse findById(final Long id) {
         log.info("Method=findById, id={}", id);
 
-        return holidayRepository.findById(id)
+        Holiday holiday = holidayRepository.findById(id)
                 .orElseThrow(ResourceNotFound::new);
+
+        return holidayMapper.toHolidayResponse(holiday);
     }
 
     @Override
     @Transactional
-    public void update(final Long boardId, final Holiday holiday) {
-        log.info("Method=update, holiday={}", holiday);
+    public void update(final Long boardId, final Long holidayId, final HolidayRequest holidayRequest) {
+        log.info("Method=update, boardId={}, holidayId={}, holidayRequest={}", boardId, holidayId, holidayRequest);
 
-        final Board board = boardRepository.findById(boardId)
+        Board board = boardService.findById(boardId);
+        Holiday holiday = holidayRepository.findById(holidayId)
                 .orElseThrow(ResourceNotFound::new);
 
-        holiday.setBoard(board);
+        if (!holiday.getBoard().equals(board)) {
+            throw new ResourceNotFound();
+        }
+
+        holidayMapper.updateFromRequest(holiday, holidayRequest);
+
         holidayRepository.save(holiday);
     }
 
     @Override
     @Transactional
-    public boolean createImported(final Long boardId) {
+    public void createImported(final Long boardId) {
         log.info("Method=createImported, boardId={}", boardId);
 
         List<Holiday> holidaysByBoard = holidayRepository.findAllByBoardId(boardId);
@@ -123,7 +127,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
         List<Holiday> allHolidaysInCity = holidayMapper.fromVOS(allHolidaysVOInCity, boardId);
 
         if (holidaysByBoard.containsAll(allHolidaysInCity)) {
-            return false;
+            throw new HolidaysAlreadyImported();
         }
 
         Set<Holiday> holidays = new HashSet<>(holidaysByBoard);
@@ -135,8 +139,6 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
             log.error("Method=createImported, e={}", e.getMessage(), e);
             throw new HolidaysAlreadyImported(e);
         }
-
-        return true;
     }
 
     private List<HolidayVO> findAllHolidaysInCity() {

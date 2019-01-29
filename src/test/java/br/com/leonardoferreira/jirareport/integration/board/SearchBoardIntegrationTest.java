@@ -1,4 +1,4 @@
-package br.com.leonardoferreira.jirareport.integration;
+package br.com.leonardoferreira.jirareport.integration.board;
 
 import br.com.leonardoferreira.jirareport.base.BaseIntegrationTest;
 import br.com.leonardoferreira.jirareport.domain.Board;
@@ -168,6 +168,21 @@ public class SearchBoardIntegrationTest extends BaseIntegrationTest {
                     .body("impedimentType", Matchers.is(board.getImpedimentType().name()))
                     .body("impedimentColumns", Matchers.contains(board.getImpedimentColumns().toArray()))
                     .body("dynamicFields", Matchers.hasSize(board.getDynamicFields().size()));
+        // @formatter:on
+    }
+
+    @Test
+    public void findByIdNotFound() {
+        // @formatter:off
+        RestAssured
+                .given()
+                    .log().all()
+                    .header(defaultUserHeader())
+                .when()
+                    .get("/boards/9999")
+                .then()
+                    .log().all()
+                    .spec(notFoundSpec());
         // @formatter:on
     }
 }
