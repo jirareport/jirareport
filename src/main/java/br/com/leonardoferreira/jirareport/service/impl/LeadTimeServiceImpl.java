@@ -11,17 +11,17 @@ import br.com.leonardoferreira.jirareport.service.BoardService;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.service.LeadTimeConfigService;
 import br.com.leonardoferreira.jirareport.service.LeadTimeService;
+import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -52,20 +52,20 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
         issues.forEach(issue -> {
             leadTimeRepository.deleteByIssueId(issue.getId());
             issue.setLeadTimes(leadTimeConfigs.stream()
-                    .map(leadTimeConfig -> calcLeadTime(leadTimeConfig, issue, holidays, board.getIgnoreWeekend()))
+                    .map(leadTimeConfig -> calcLeadTime(leadTimeConfig, issue, holidays, board))
                     .collect(Collectors.toSet()));
         });
     }
 
     private LeadTime calcLeadTime(final LeadTimeConfig leadTimeConfig, final Issue issue,
-                                  final List<LocalDate> holidays, final Boolean ignoreWeekend) {
+                                  final List<LocalDate> holidays, final Board board) {
         log.info("Method=calcLeadTime, leadTimeConfig={}, issue={}, holidays={}", leadTimeConfig, issue, holidays);
 
         LocalDateTime startDate = null;
         LocalDateTime endDate = null;
 
-        Set<String> startColumns = leadTimeConfig.getStartColumns();
-        Set<String> endColumns = leadTimeConfig.getEndColumns();
+        Set<String> startColumns = CalcUtil.calcStartColumns(leadTimeConfig.getStartColumn(), leadTimeConfig.getEndColumn(), board.getFluxColumn());
+        Set<String> endColumns = CalcUtil.calcEndColumns(leadTimeConfig.getEndColumn(), board.getFluxColumn());
 
         for (Changelog cl : issue.getChangelog()) {
             if (startDate == null && startColumns.contains(cl.getTo())) {
@@ -83,7 +83,7 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
 
         Long leadTime = 0L;
         if (startDate != null && endDate != null) {
-            leadTime = DateUtil.daysDiff(startDate, endDate, holidays, ignoreWeekend);
+            leadTime = DateUtil.daysDiff(startDate, endDate, holidays, board.getIgnoreWeekend());
         }
 
         return leadTimeRepository.save(LeadTime.builder()

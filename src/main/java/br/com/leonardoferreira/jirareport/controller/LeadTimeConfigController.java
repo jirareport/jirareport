@@ -1,15 +1,13 @@
 package br.com.leonardoferreira.jirareport.controller;
 
-import br.com.leonardoferreira.jirareport.domain.Board;
-import br.com.leonardoferreira.jirareport.domain.LeadTimeConfig;
-import br.com.leonardoferreira.jirareport.domain.response.ListLeadTimeConfigResponse;
-import br.com.leonardoferreira.jirareport.service.BoardService;
+import br.com.leonardoferreira.jirareport.domain.request.LeadTimeConfigRequest;
+import br.com.leonardoferreira.jirareport.domain.response.LeadTimeConfigResponse;
 import br.com.leonardoferreira.jirareport.service.LeadTimeConfigService;
 import java.net.URI;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,24 +25,15 @@ public class LeadTimeConfigController {
     @Autowired
     private LeadTimeConfigService leadTimeConfigService;
 
-    @Autowired
-    private BoardService boardService;
-
     @GetMapping
-    public ListLeadTimeConfigResponse index(@PathVariable final Long boardId) {
-        List<LeadTimeConfig> leadTimeConfigs = leadTimeConfigService.findAllByBoardId(boardId);
-        Board board = boardService.findById(boardId);
-
-        return ListLeadTimeConfigResponse.builder()
-                .leadTimeConfigs(leadTimeConfigs)
-                .board(board)
-                .build();
+    public List<LeadTimeConfigResponse> index(@PathVariable final Long boardId) {
+        return leadTimeConfigService.findAll(boardId);
     }
 
     @PostMapping
     public ResponseEntity<Object> create(@PathVariable final Long boardId,
-                                         @Validated @RequestBody final LeadTimeConfig leadTimeConfig) {
-        Long id = leadTimeConfigService.create(boardId, leadTimeConfig);
+                                         @Valid @RequestBody final LeadTimeConfigRequest leadTimeConfigRequest) {
+        Long id = leadTimeConfigService.create(boardId, leadTimeConfigRequest);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -55,20 +44,21 @@ public class LeadTimeConfigController {
     }
 
     @GetMapping("/{id}")
-    public LeadTimeConfig findById(@PathVariable final Long boardId,
+    public LeadTimeConfigResponse findById(@PathVariable final Long boardId,
                                    @PathVariable final Long id) {
         return leadTimeConfigService.findByBoardAndId(boardId, id);
     }
 
-    @PutMapping
-    public ResponseEntity<Object> update(@PathVariable final Long boardId,
-                                         @Validated @RequestBody final LeadTimeConfig leadTimeConfig) {
-        leadTimeConfigService.update(boardId, leadTimeConfig);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable final Long boardId,
+                                         @PathVariable final Long id,
+                                         @Valid @RequestBody final LeadTimeConfigRequest leadTimeConfigRequest) {
+        leadTimeConfigService.update(boardId, id, leadTimeConfigRequest);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable final Long boardId,
+    public ResponseEntity<?> delete(@PathVariable final Long boardId,
                                          @PathVariable final Long id) {
         leadTimeConfigService.deleteByBoardAndId(boardId, id);
         return ResponseEntity.noContent().build();

@@ -1,14 +1,15 @@
 package br.com.leonardoferreira.jirareport.service.impl;
 
-import java.util.List;
-
 import br.com.leonardoferreira.jirareport.domain.Board;
 import br.com.leonardoferreira.jirareport.domain.LeadTimeConfig;
+import br.com.leonardoferreira.jirareport.domain.request.LeadTimeConfigRequest;
+import br.com.leonardoferreira.jirareport.domain.response.LeadTimeConfigResponse;
 import br.com.leonardoferreira.jirareport.exception.ResourceNotFound;
 import br.com.leonardoferreira.jirareport.mapper.LeadTimeConfigMapper;
 import br.com.leonardoferreira.jirareport.repository.LeadTimeConfigRepository;
-import br.com.leonardoferreira.jirareport.service.LeadTimeConfigService;
 import br.com.leonardoferreira.jirareport.service.BoardService;
+import br.com.leonardoferreira.jirareport.service.LeadTimeConfigService;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,17 +32,25 @@ public class LeadTimeConfigServiceImpl extends AbstractService implements LeadTi
     @Transactional(readOnly = true)
     public List<LeadTimeConfig> findAllByBoardId(final Long boardId) {
         log.info("Method=findAllByBoardId, boardId={}", boardId);
-
         return leadTimeConfigRepository.findByBoardId(boardId);
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<LeadTimeConfigResponse> findAll(final Long boardId) {
+        log.info("Method=findAllByBoardId, boardId={}", boardId);
+        List<LeadTimeConfig> leadTimeConfigs = leadTimeConfigRepository.findByBoardId(boardId);
+
+        return leadTimeConfigMapper.toResponse(leadTimeConfigs);
+    }
+
+    @Override
     @Transactional
-    public Long create(final Long boardId, final LeadTimeConfig leadTimeConfig) {
-        log.info("Method=create, boardId={}, leadTimeConfig={}", boardId, leadTimeConfig);
+    public Long create(final Long boardId, final LeadTimeConfigRequest leadTimeConfigRequest) {
+        log.info("Method=create, boardId={}, leadTimeConfigRequest={}", boardId, leadTimeConfigRequest);
 
         Board board = boardService.findById(boardId);
-        leadTimeConfig.setBoard(board);
+        LeadTimeConfig leadTimeConfig = leadTimeConfigMapper.toLeadTimeConfig(leadTimeConfigRequest, board.getId());
 
         leadTimeConfigRepository.save(leadTimeConfig);
 
@@ -50,22 +59,23 @@ public class LeadTimeConfigServiceImpl extends AbstractService implements LeadTi
 
     @Override
     @Transactional(readOnly = true)
-    public LeadTimeConfig findByBoardAndId(final Long boardId, final Long id) {
+    public LeadTimeConfigResponse findByBoardAndId(final Long boardId, final Long id) {
         log.info("Method=findByBoardAndId, boardId={}, id={}", boardId, id);
 
-        return leadTimeConfigRepository.findByIdAndBoardId(id, boardId);
+        LeadTimeConfig leadTimeConfig = leadTimeConfigRepository.findByIdAndBoardId(id, boardId)
+                .orElseThrow(ResourceNotFound::new);
+        return leadTimeConfigMapper.toResponse(leadTimeConfig);
     }
 
     @Override
     @Transactional
-    public void update(final Long boardId, final LeadTimeConfig request) {
-        log.info("Method=update, boardId={}, request={}", boardId, request);
+    public void update(final Long boardId, final Long id, final LeadTimeConfigRequest leadTimeConfigRequest) {
+        log.info("Method=update, boardId={}, id={}, leadTimeConfigRequest={}", boardId, id, leadTimeConfigRequest);
 
-        LeadTimeConfig leadTimeConfig = leadTimeConfigRepository.findById(request.getId())
+        LeadTimeConfig leadTimeConfig = leadTimeConfigRepository.findByIdAndBoardId(id, boardId)
                 .orElseThrow(ResourceNotFound::new);
 
-        leadTimeConfigMapper.update(leadTimeConfig, request);
-
+        leadTimeConfigMapper.updateFromRequest(leadTimeConfig, leadTimeConfigRequest);
         leadTimeConfigRepository.save(leadTimeConfig);
     }
 
@@ -74,6 +84,8 @@ public class LeadTimeConfigServiceImpl extends AbstractService implements LeadTi
     public void deleteByBoardAndId(final Long boardId, final Long id) {
         log.info("Method=deleteByBoardAndId, boardId={}, id={}", boardId, id);
 
-        leadTimeConfigRepository.deleteByIdAndBoardId(id, boardId);
+        LeadTimeConfig leadTimeConfig = leadTimeConfigRepository.findByIdAndBoardId(id, boardId)
+                .orElseThrow(ResourceNotFound::new);
+        leadTimeConfigRepository.delete(leadTimeConfig);
     }
 }
