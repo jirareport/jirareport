@@ -64,7 +64,7 @@ public class UpdateHolidayIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    void failInValidations() {
+    public void failInValidations() {
         withDefaultUser(() -> holidayFactory.create());
         HolidayRequest request = new HolidayRequest();
 

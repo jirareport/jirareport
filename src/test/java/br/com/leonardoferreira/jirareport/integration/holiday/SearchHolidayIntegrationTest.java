@@ -79,7 +79,7 @@ public class SearchHolidayIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    void findByIdNotFound() {
+    public void findByIdNotFound() {
         // @formatter:off
         RestAssured
                 .given()

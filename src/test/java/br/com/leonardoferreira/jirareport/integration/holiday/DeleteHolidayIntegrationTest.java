@@ -43,7 +43,7 @@ public class DeleteHolidayIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    void deleteHolidayNotFound() {
+    public void deleteHolidayNotFound() {
         // @formatter:off
         RestAssured
                 .given()

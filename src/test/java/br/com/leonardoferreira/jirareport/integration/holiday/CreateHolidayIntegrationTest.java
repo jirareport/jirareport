@@ -48,7 +48,7 @@ public class CreateHolidayIntegrationTest extends BaseIntegrationTest {
                     .post("/boards/1/holidays")
                 .then()
                     .log().all()
-                    .statusCode(org.apache.http.HttpStatus.SC_CREATED)
+                    .statusCode(HttpStatus.SC_CREATED)
                     .header("location", Matchers.containsString("/boards/1/holidays/1"));
         // @formatter:on
 
@@ -60,7 +60,7 @@ public class CreateHolidayIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    void failInValidations() {
+    public void failInValidations() {
         HolidayRequest request = new HolidayRequest();
 
         // @formatter:off
