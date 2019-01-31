@@ -37,6 +37,8 @@ public class UpdateBoardRequestFactory extends JBacon<UpdateBoardRequest> {
                 new DynamicFieldConfig("dnf_2", faker.expression("custom_field_#{number.number_between '1000','9999'}")),
                 new DynamicFieldConfig("dnf_3", faker.expression("custom_field_#{number.number_between '1000','9999'}"))
         ));
+        updateBoardRequest.setTouchingColumns(faker.lorem().words());
+        updateBoardRequest.setWaitingColumns(faker.lorem().words());
 
         return updateBoardRequest;
     }

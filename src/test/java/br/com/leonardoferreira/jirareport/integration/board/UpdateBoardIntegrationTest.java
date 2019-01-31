@@ -8,8 +8,10 @@ import br.com.leonardoferreira.jirareport.extension.WireMockExtension;
 import br.com.leonardoferreira.jirareport.factory.BoardFactory;
 import br.com.leonardoferreira.jirareport.factory.UpdateBoardRequestFactory;
 import br.com.leonardoferreira.jirareport.repository.BoardRepository;
+import br.com.leonardoferreira.jirareport.util.DateUtil;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import java.util.stream.Collectors;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -54,9 +56,15 @@ public class UpdateBoardIntegrationTest extends BaseIntegrationTest {
                 .orElseThrow(ResourceNotFound::new);
         Assertions.assertAll("boardContent",
                 () -> Assertions.assertEquals(request.getName(), board.getName()),
-                () -> Assertions.assertEquals(request.getStartColumn(), board.getStartColumn()),
-                () -> Assertions.assertEquals(request.getEndColumn(), board.getEndColumn()),
+                () -> Assertions.assertEquals(request.getStartColumn().toUpperCase(DateUtil.LOCALE_BR), board.getStartColumn()),
+                () -> Assertions.assertEquals(request.getEndColumn().toUpperCase(DateUtil.LOCALE_BR), board.getEndColumn()),
                 () -> Assertions.assertEquals(request.getFluxColumn().size(), board.getFluxColumn().size()),
+                () -> Assertions.assertIterableEquals(request.getFluxColumn().stream().map(String::toUpperCase).collect(Collectors.toList()),
+                        board.getFluxColumn()),
+                () -> Assertions.assertIterableEquals(request.getTouchingColumns().stream().map(String::toUpperCase).collect(Collectors.toList()),
+                        board.getTouchingColumns()),
+                () -> Assertions.assertIterableEquals(request.getWaitingColumns().stream().map(String::toUpperCase).collect(Collectors.toList()),
+                        board.getWaitingColumns()),
                 () -> Assertions.assertEquals(request.getIgnoreIssueType().size(), board.getIgnoreIssueType().size()),
                 () -> Assertions.assertEquals(request.getEpicCF(), board.getEpicCF()),
                 () -> Assertions.assertEquals(request.getEstimateCF(), board.getEstimateCF()),

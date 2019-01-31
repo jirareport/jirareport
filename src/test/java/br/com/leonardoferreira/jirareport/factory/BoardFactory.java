@@ -58,6 +58,8 @@ public class BoardFactory extends JBacon<Board> {
         board.setImpedimentColumns(Arrays.asList("IMP_COLUMN1", "IMP_COLUMN2", "IMP_COLUMN3"));
         board.setDynamicFields(Arrays.asList(new DynamicFieldConfig("dn_field1", "customfield_127"),
                 new DynamicFieldConfig("dn_field2", "customfield_128")));
+        board.setTouchingColumns(faker.lorem().words());
+        board.setWaitingColumns(faker.lorem().words());
 
         return board;
     }
