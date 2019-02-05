@@ -34,6 +34,8 @@ public final class ParseUtil {
                         .build())
                 .collect(Collectors.toList());
 
+        collect.sort(Comparator.comparing(Changelog::getCreated));
+
         for (int i = 0; i < collect.size(); i++) {
             Changelog current = collect.get(i);
             if (i + 1 == collect.size()) {
@@ -46,8 +48,6 @@ public final class ParseUtil {
             current.setLeadTime(DateUtil.daysDiff(current.getCreated(), next.getCreated(), holidays, ignoreWeekend));
             current.setEndDate(next.getCreated());
         }
-
-        collect.sort(Comparator.comparing(Changelog::getCreated));
 
         return collect;
     }
