@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,8 @@ public final class ParseUtil {
                         .created(i.getCreated())
                         .build())
                 .collect(Collectors.toList());
+
+        collect.sort(Comparator.comparing(Changelog::getCreated));
 
         for (int i = 0; i < collect.size(); i++) {
             Changelog current = collect.get(i);
