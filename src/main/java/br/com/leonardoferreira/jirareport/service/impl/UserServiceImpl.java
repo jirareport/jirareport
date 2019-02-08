@@ -36,7 +36,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
     public UserConfigForm myInfo() {
         log.info("Method=myInfo");
 
-        UserConfig userConfig = userService.retrieveCurrentUserConfig();
+        UserConfig userConfig = retrieveCurrentUserConfig();
         return userConfigMapper.userConfigToForm(userConfig == null ? new UserConfig() : userConfig);
     }
 
@@ -46,7 +46,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
     public void update(final UserConfigForm userConfigForm) {
         log.info("Method=update, userConfigForm={}", userConfigForm);
 
-        UserConfig userConfig = userService.retrieveCurrentUserConfig();
+        UserConfig userConfig = retrieveCurrentUserConfig();
         if (userConfig == null) {
             userConfig = new UserConfig();
             userConfig.setUsername(currentUser().getUsername());
@@ -62,7 +62,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
     public UserConfig findHolidayInfo() {
         log.info("Method=findHolidayInfo");
 
-        UserConfig userConfig = userService.retrieveCurrentUserConfig();
+        UserConfig userConfig = retrieveCurrentUserConfig();
         if (userConfig == null || StringUtils.isEmpty(userConfig.getHolidayToken())) {
             userConfig = new UserConfig();
             userConfig.setCity("ARARAQUARA");
