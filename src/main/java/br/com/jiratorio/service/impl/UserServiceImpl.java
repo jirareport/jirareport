@@ -1,11 +1,12 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.repository.UserConfigRepository;
 import br.com.jiratorio.domain.ChartType;
 import br.com.jiratorio.domain.UserConfig;
 import br.com.jiratorio.domain.form.UserConfigForm;
 import br.com.jiratorio.mapper.UserConfigMapper;
+import br.com.jiratorio.repository.UserConfigRepository;
 import br.com.jiratorio.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,19 +18,18 @@ import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceImpl extends AbstractService implements UserService {
 
-    @Autowired
-    private UserConfigRepository userConfigRepository;
+    private final UserConfigRepository userConfigRepository;
 
-    @Autowired
-    private UserConfigMapper userConfigMapper;
-
-    @Value("${holiday.token}")
-    private String holidayToken;
+    private final UserConfigMapper userConfigMapper;
 
     @Autowired
     private UserService userService;
+
+    @Value("${holiday.token}")
+    private String holidayToken;
 
     @Override
     @Transactional(readOnly = true)

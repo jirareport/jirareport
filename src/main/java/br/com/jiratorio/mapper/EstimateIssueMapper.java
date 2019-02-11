@@ -1,23 +1,17 @@
 package br.com.jiratorio.mapper;
 
-import br.com.jiratorio.service.HolidayService;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.embedded.Changelog;
 import br.com.jiratorio.domain.vo.EstimateIssue;
 import br.com.jiratorio.domain.vo.changelog.JiraChangelog;
 import br.com.jiratorio.domain.vo.changelog.JiraChangelogHistory;
 import br.com.jiratorio.domain.vo.changelog.JiraChangelogItem;
+import br.com.jiratorio.service.HolidayService;
 import br.com.jiratorio.util.CalcUtil;
 import br.com.jiratorio.util.DateUtil;
 import br.com.jiratorio.util.ParseUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -27,15 +21,21 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EstimateIssueMapper {
-    @Autowired
-    private HolidayService holidayService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final HolidayService holidayService;
+
+    private final ObjectMapper objectMapper;
 
     @SneakyThrows
     public List<EstimateIssue> parseEstimate(final String rawText, final Board board) {

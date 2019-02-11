@@ -4,6 +4,7 @@ import br.com.jiratorio.domain.form.LoginForm;
 import br.com.jiratorio.domain.vo.Account;
 import br.com.jiratorio.service.AuthService;
 import br.com.jiratorio.service.TokenService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,13 +15,12 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class JiraAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
-    @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
     @Override
     public Authentication authenticate(final Authentication auth) {

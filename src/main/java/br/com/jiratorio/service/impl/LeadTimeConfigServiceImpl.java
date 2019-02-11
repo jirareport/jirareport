@@ -10,6 +10,7 @@ import br.com.jiratorio.mapper.LeadTimeConfigMapper;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.LeadTimeConfigService;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,16 +18,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class LeadTimeConfigServiceImpl extends AbstractService implements LeadTimeConfigService {
 
-    @Autowired
-    private LeadTimeConfigRepository leadTimeConfigRepository;
+    private final LeadTimeConfigRepository leadTimeConfigRepository;
 
-    @Autowired
-    private BoardService boardService;
+    private final BoardService boardService;
 
-    @Autowired
-    private LeadTimeConfigMapper leadTimeConfigMapper;
+    private final LeadTimeConfigMapper leadTimeConfigMapper;
 
     @Override
     @Transactional(readOnly = true)

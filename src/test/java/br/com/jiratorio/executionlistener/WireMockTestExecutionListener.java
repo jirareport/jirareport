@@ -35,7 +35,7 @@ public class WireMockTestExecutionListener extends AbstractTestExecutionListener
     }
 
     @Override
-    public void afterTestMethod(TestContext testContext) throws Exception {
+    public void afterTestMethod(final TestContext testContext) throws Exception {
         WireMockServer wireMockServer = testContext.getApplicationContext().getBean(WireMockServer.class);
         wireMockServer.getStubMappings()
                 .forEach(wireMockServer::removeStub);

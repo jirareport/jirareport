@@ -6,15 +6,16 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class FeignErrorDecoder implements ErrorDecoder {
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     @Override
     @SneakyThrows

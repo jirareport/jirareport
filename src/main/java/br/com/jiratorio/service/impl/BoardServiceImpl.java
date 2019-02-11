@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -29,16 +30,14 @@ import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BoardServiceImpl extends AbstractService implements BoardService {
 
-    @Autowired
-    private ProjectService projectService;
+    private final ProjectService projectService;
 
-    @Autowired
-    private BoardRepository boardRepository;
+    private final BoardRepository boardRepository;
 
-    @Autowired
-    private BoardMapper boardMapper;
+    private final BoardMapper boardMapper;
 
     @Override
     @Transactional(readOnly = true)

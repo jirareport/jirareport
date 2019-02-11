@@ -31,6 +31,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,19 +42,17 @@ import org.springframework.util.StringUtils;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class IssueMapper {
 
-    @Autowired
-    private HolidayService holidayService;
+    private final HolidayService holidayService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    private final JsonParser jsonParser = new JsonParser();
+    private final ObjectMapper objectMapper;
 
     @ExecutionTime
     @Transactional
     public List<Issue> parse(final String rawText, final Board board) {
+        JsonParser jsonParser = new JsonParser();
         JsonElement response = jsonParser.parse(rawText);
         JsonArray issues = response.getAsJsonObject().getAsJsonArray("issues");
 

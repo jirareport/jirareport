@@ -14,6 +14,7 @@ import br.com.jiratorio.service.IssueService;
 import br.com.jiratorio.util.CalcUtil;
 import br.com.jiratorio.util.DateUtil;
 import br.com.jiratorio.util.StringUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +30,14 @@ import java.util.Set;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EstimateServiceImpl implements EstimateService {
 
-    @Autowired
-    private BoardService boardService;
+    private final BoardService boardService;
 
-    @Autowired
-    private IssueService issueService;
+    private final IssueService issueService;
 
-    @Autowired
-    private HolidayService holidayService;
+    private final HolidayService holidayService;
 
     @Override
     @Transactional(readOnly = true)

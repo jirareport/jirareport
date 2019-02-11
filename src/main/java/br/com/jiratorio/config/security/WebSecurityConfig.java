@@ -1,35 +1,24 @@
 package br.com.jiratorio.config.security;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
 import javax.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.jwt.crypto.sign.RsaSigner;
-import org.springframework.security.jwt.crypto.sign.RsaVerifier;
-import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
-import org.springframework.security.jwt.crypto.sign.Signer;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.util.StreamUtils;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private JiraAuthenticationProvider jiraAuthenticationProvider;
+    private final JiraAuthenticationProvider jiraAuthenticationProvider;
 
-    @Autowired
-    private TokenAuthenticationProvider tokenAuthenticationProvider;
+    private final TokenAuthenticationProvider tokenAuthenticationProvider;
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
@@ -72,22 +61,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(jiraAuthenticationProvider)
                 .authenticationProvider(tokenAuthenticationProvider);
-    }
-
-    @Bean
-    public Signer rsaSigner(final ResourceLoader resourceLoader,
-                            @Value("${ssh-key.private}") final String path) throws IOException {
-        Resource resource = resourceLoader.getResource(path);
-        return new RsaSigner(
-                StreamUtils.copyToString(resource.getInputStream(), Charset.forName("UTF-8")));
-    }
-
-    @Bean
-    public SignatureVerifier rsaVerifier(final ResourceLoader resourceLoader,
-                                         @Value("${ssh-key.public}") final String path) throws IOException {
-        Resource resource = resourceLoader.getResource(path);
-        return new RsaVerifier(
-                StreamUtils.copyToString(resource.getInputStream(), Charset.forName("UTF-8")));
     }
 
 }

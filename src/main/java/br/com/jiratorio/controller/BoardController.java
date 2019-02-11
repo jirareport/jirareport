@@ -9,6 +9,7 @@ import br.com.jiratorio.service.BoardService;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,10 +26,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/boards")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BoardController {
 
-    @Autowired
-    private BoardService boardService;
+    private final BoardService boardService;
 
     @GetMapping
     public Page<BoardResponse> index(final Pageable pageable, final Board board) {

@@ -2,6 +2,7 @@ package br.com.jiratorio.config.security;
 
 import br.com.jiratorio.domain.vo.Account;
 import br.com.jiratorio.service.TokenService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -11,10 +12,10 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedC
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TokenAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
     @Override
     public Authentication authenticate(final Authentication authentication) throws AuthenticationException {

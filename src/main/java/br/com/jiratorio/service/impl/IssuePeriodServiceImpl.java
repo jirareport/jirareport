@@ -21,6 +21,7 @@ import br.com.jiratorio.service.WipService;
 import br.com.jiratorio.util.CalcUtil;
 import br.com.jiratorio.util.DateUtil;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,25 +31,20 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class IssuePeriodServiceImpl extends AbstractService implements IssuePeriodService {
 
-    @Autowired
-    private IssueService issueService;
+    private final IssueService issueService;
 
-    @Autowired
-    private IssuePeriodRepository issuePeriodRepository;
+    private final IssuePeriodRepository issuePeriodRepository;
 
-    @Autowired
-    private ChartService chartService;
+    private final ChartService chartService;
 
-    @Autowired
-    private BoardService boardService;
+    private final BoardService boardService;
 
-    @Autowired
-    private IssuePeriodMapper issuePeriodMapper;
+    private final IssuePeriodMapper issuePeriodMapper;
 
-    @Autowired
-    private WipService wipService;
+    private final WipService wipService;
 
     @Override
     @Transactional

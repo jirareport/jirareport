@@ -12,6 +12,7 @@ import br.com.jiratorio.service.IssuePeriodService;
 import br.com.jiratorio.service.IssueService;
 import java.net.URI;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,16 +28,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/boards/{boardId}/issue-periods")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class IssuePeriodController {
 
-    @Autowired
-    private IssuePeriodService issuePeriodService;
+    private final IssuePeriodService issuePeriodService;
 
-    @Autowired
-    private IssueService issueService;
+    private final IssueService issueService;
 
-    @Autowired
-    private BoardService boardService;
+    private final BoardService boardService;
 
     @GetMapping
     public ListIssuePeriodResponse index(@PathVariable final Long boardId) {

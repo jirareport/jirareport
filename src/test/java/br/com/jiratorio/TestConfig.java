@@ -30,5 +30,4 @@ public class TestConfig {
         return wireMockServer;
     }
 
-
 }

@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -29,22 +30,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class HolidayServiceImpl extends AbstractService implements HolidayService {
 
-    @Autowired
-    private HolidayRepository holidayRepository;
+    private final HolidayRepository holidayRepository;
 
-    @Autowired
-    private BoardService boardService;
+    private final BoardService boardService;
 
-    @Autowired
-    private HolidayClient holidayClient;
+    private final HolidayClient holidayClient;
 
-    @Autowired
-    private HolidayMapper holidayMapper;
+    private final HolidayMapper holidayMapper;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @Override
     @Transactional(readOnly = true)

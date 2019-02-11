@@ -7,6 +7,7 @@ import br.com.jiratorio.domain.vo.SandBox;
 import br.com.jiratorio.domain.vo.SandBoxFilter;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.IssueService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,13 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/boards/{boardId}/issues")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class IssueController {
 
-    @Autowired
-    private IssueService issueService;
+    private final IssueService issueService;
 
-    @Autowired
-    private BoardService boardService;
+    private final BoardService boardService;
 
     @GetMapping
     public ListIssueResponse index(@PathVariable final Long boardId, final IssueForm issueForm) {

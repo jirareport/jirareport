@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +28,14 @@ import org.springframework.util.StringUtils;
 
 @Slf4j
 @Repository
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class IssueCustomRepositoryImpl implements IssueCustomRepository {
 
-    @Autowired
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     @Override
     @SneakyThrows

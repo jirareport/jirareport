@@ -2,9 +2,6 @@ package br.com.jiratorio.service.impl;
 
 import br.com.jiratorio.domain.Issue;
 import br.com.jiratorio.service.WipService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -12,6 +9,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -19,7 +18,7 @@ public class WipServiceImpl implements WipService {
 
     @Override
     public Double calcAvgWip(final LocalDate start, final LocalDate end,
-                           final List<Issue> issues, final Set<String> wipColumns) {
+                             final List<Issue> issues, final Set<String> wipColumns) {
         log.info("Method=calcAvgWip, start={}, end={}, issues={}", start, end, issues);
 
         Map<String, Long> dailyWip = new TreeMap<>();
@@ -48,8 +47,8 @@ public class WipServiceImpl implements WipService {
         }
 
         long sum = dailyWip.values().stream()
-                    .mapToLong(i -> i)
-                    .sum();
+                .mapToLong(i -> i)
+                .sum();
 
         return (double) sum / dailyWip.size();
     }

@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,19 +26,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class LeadTimeServiceImpl extends AbstractService implements LeadTimeService {
 
-    @Autowired
-    private LeadTimeConfigService leadTimeConfigService;
+    private final LeadTimeConfigService leadTimeConfigService;
 
-    @Autowired
-    private HolidayService holidayService;
+    private final HolidayService holidayService;
 
-    @Autowired
-    private LeadTimeRepository leadTimeRepository;
+    private final LeadTimeRepository leadTimeRepository;
 
-    @Autowired
-    private BoardService boardService;
+    private final BoardService boardService;
 
     @Override
     @Transactional

@@ -3,6 +3,7 @@ package br.com.jiratorio.controller;
 import br.com.jiratorio.domain.form.UserConfigForm;
 import br.com.jiratorio.service.UserService;
 import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
-public class UserController  {
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping("/me")
     public UserConfigForm edit() {
@@ -26,7 +27,6 @@ public class UserController  {
     @PutMapping
     public ResponseEntity<Object> edit(@Valid @RequestBody final UserConfigForm userConfigForm) {
         userService.update(userConfigForm);
-
         return ResponseEntity.noContent().build();
     }
 
