@@ -167,6 +167,8 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         jql.append(" project = {project} ");
         jql.append(" AND ( STATUS CHANGED TO {endColumn} DURING({startDate}, {endDate}) ");
         jql.append("       OR ( STATUS CHANGED TO {lastColumn} DURING ({startDate}, {endDate}) AND NOT STATUS CHANGED TO {endColumn} )");
+        jql.append("       OR ( resolutiondate >= {startDate} AND resolutiondate <= {endDate} AND NOT STATUS CHANGED TO {endColumn} ");
+        jql.append("              AND NOT STATUS CHANGED TO {endColumn} )");
         jql.append("     ) ");
 
         if (board.getIgnoreIssueType() != null && !board.getIgnoreIssueType().isEmpty()) {
@@ -175,7 +177,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         }
 
         jql.append(" AND status WAS IN ({startColumns}) ");
-        jql.append(" AND status WAS IN ({endColumns}) ");
+        jql.append(" AND status IN ({endColumns}) ");
 
         params.put("project", board.getExternalId().toString());
         params.put("startDate", DateUtil.toENDate(issuePeriodForm.getStartDate()));
