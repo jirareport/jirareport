@@ -1,4 +1,4 @@
-package br.com.leonardoferreira.jirareport.extension;
+package br.com.leonardoferreira.jirareport.executionlistener;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

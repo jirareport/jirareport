@@ -1,12 +1,12 @@
 buildscript {
     ext {
-        springBootVersion = "2.1.0.RELEASE"
+        springBootVersion = "2.1.2.RELEASE"
     }
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
     }
 }
 
@@ -31,7 +31,7 @@ repositories {
 ext {
     gsonVersion = "2.8.1"
     httpClientVersion = "4.5.1"
-    springCloudVersion = "Finchley.SR1"
+    springCloudVersion = "Greenwich.RELEASE"
     hibernateTypesVersion = "2.2.0"
     mapstructVersion = "1.2.0.Final"
 }
@@ -71,8 +71,7 @@ dependencies {
 
     testImplementation "br.com.leonardoferreira:JBacon:1.2.1"
     testImplementation "com.github.javafaker:javafaker:0.16"
-    
-    testCompile('io.rest-assured:rest-assured:3.1.0')
+    testImplementation "io.rest-assured:rest-assured:3.1.0"
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "com.github.tomakehurst:wiremock:2.19.0"
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
@@ -99,7 +98,7 @@ checkstyle {
 
 pmd {
     toolVersion = "6.10.0"
-    ruleSets = [ ]
+    ruleSets = []
     consoleOutput = true
     ruleSetFiles = files("pmd-ruleset.xml")
 }

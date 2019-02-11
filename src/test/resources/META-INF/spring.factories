@@ -1,0 +1,2 @@
+org.springframework.test.context.TestExecutionListener=\
+  br.com.leonardoferreira.jirareport.executionlistener.WireMockTestExecutionListener
