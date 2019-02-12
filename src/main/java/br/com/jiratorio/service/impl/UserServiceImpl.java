@@ -6,7 +6,6 @@ import br.com.jiratorio.domain.form.UserConfigForm;
 import br.com.jiratorio.mapper.UserConfigMapper;
 import br.com.jiratorio.repository.UserConfigRepository;
 import br.com.jiratorio.service.UserService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,18 +17,24 @@ import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceImpl extends AbstractService implements UserService {
 
     private final UserConfigRepository userConfigRepository;
 
     private final UserConfigMapper userConfigMapper;
 
+    private final String holidayToken;
+
     @Autowired
     private UserService userService;
 
-    @Value("${holiday.token}")
-    private String holidayToken;
+    public UserServiceImpl(final UserConfigRepository userConfigRepository,
+                           final UserConfigMapper userConfigMapper,
+                           @Value("${holiday.token}") final String holidayToken) {
+        this.userConfigRepository = userConfigRepository;
+        this.userConfigMapper = userConfigMapper;
+        this.holidayToken = holidayToken;
+    }
 
     @Override
     @Transactional(readOnly = true)

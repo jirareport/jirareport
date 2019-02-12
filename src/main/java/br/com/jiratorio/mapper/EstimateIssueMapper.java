@@ -21,21 +21,24 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EstimateIssueMapper {
 
     private final HolidayService holidayService;
 
     private final ObjectMapper objectMapper;
+
+    public EstimateIssueMapper(final HolidayService holidayService,
+                               final ObjectMapper objectMapper) {
+        this.holidayService = holidayService;
+        this.objectMapper = objectMapper;
+    }
 
     @SneakyThrows
     public List<EstimateIssue> parseEstimate(final String rawText, final Board board) {

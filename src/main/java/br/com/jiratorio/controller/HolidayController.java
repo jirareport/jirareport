@@ -5,8 +5,6 @@ import br.com.jiratorio.domain.response.HolidayResponse;
 import br.com.jiratorio.service.HolidayService;
 import java.net.URI;
 import javax.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -24,10 +22,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/boards/{boardId}/holidays")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class HolidayController {
 
     private final HolidayService holidayService;
+
+    public HolidayController(final HolidayService holidayService) {
+        this.holidayService = holidayService;
+    }
 
     @GetMapping
     public Page<HolidayResponse> index(@PathVariable final Long boardId,

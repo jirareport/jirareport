@@ -1,6 +1,5 @@
 package br.com.jiratorio.mapper;
 
-import br.com.jiratorio.service.HolidayService;
 import br.com.jiratorio.aspect.annotation.ExecutionTime;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.Issue;
@@ -10,6 +9,7 @@ import br.com.jiratorio.domain.vo.DynamicFieldConfig;
 import br.com.jiratorio.domain.vo.changelog.JiraChangelog;
 import br.com.jiratorio.domain.vo.changelog.JiraChangelogHistory;
 import br.com.jiratorio.domain.vo.changelog.JiraChangelogItem;
+import br.com.jiratorio.service.HolidayService;
 import br.com.jiratorio.util.CalcUtil;
 import br.com.jiratorio.util.DateUtil;
 import br.com.jiratorio.util.ParseUtil;
@@ -31,10 +31,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -42,12 +40,17 @@ import org.springframework.util.StringUtils;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class IssueMapper {
 
     private final HolidayService holidayService;
 
     private final ObjectMapper objectMapper;
+
+    public IssueMapper(final HolidayService holidayService,
+                       final ObjectMapper objectMapper) {
+        this.holidayService = holidayService;
+        this.objectMapper = objectMapper;
+    }
 
     @ExecutionTime
     @Transactional

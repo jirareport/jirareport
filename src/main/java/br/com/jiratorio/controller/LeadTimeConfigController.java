@@ -6,8 +6,6 @@ import br.com.jiratorio.service.LeadTimeConfigService;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +19,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/boards/{boardId}/lead-time-configs")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class LeadTimeConfigController {
 
     private final LeadTimeConfigService leadTimeConfigService;
+
+    public LeadTimeConfigController(final LeadTimeConfigService leadTimeConfigService) {
+        this.leadTimeConfigService = leadTimeConfigService;
+    }
 
     @GetMapping
     public List<LeadTimeConfigResponse> index(@PathVariable final Long boardId) {

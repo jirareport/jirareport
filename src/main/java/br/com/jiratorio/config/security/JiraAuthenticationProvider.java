@@ -4,9 +4,7 @@ import br.com.jiratorio.domain.form.LoginForm;
 import br.com.jiratorio.domain.vo.Account;
 import br.com.jiratorio.service.AuthService;
 import br.com.jiratorio.service.TokenService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,12 +13,16 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class JiraAuthenticationProvider implements AuthenticationProvider {
 
     private final AuthService authService;
 
     private final TokenService tokenService;
+
+    public JiraAuthenticationProvider(final AuthService authService, final TokenService tokenService) {
+        this.authService = authService;
+        this.tokenService = tokenService;
+    }
 
     @Override
     public Authentication authenticate(final Authentication auth) {

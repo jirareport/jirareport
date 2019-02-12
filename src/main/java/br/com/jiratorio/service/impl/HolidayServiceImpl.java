@@ -1,7 +1,5 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.exception.ResourceNotFound;
-import br.com.jiratorio.repository.HolidayRepository;
 import br.com.jiratorio.client.HolidayClient;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.Holiday;
@@ -10,7 +8,9 @@ import br.com.jiratorio.domain.request.HolidayRequest;
 import br.com.jiratorio.domain.response.HolidayResponse;
 import br.com.jiratorio.domain.vo.HolidayVO;
 import br.com.jiratorio.exception.HolidaysAlreadyImported;
+import br.com.jiratorio.exception.ResourceNotFound;
 import br.com.jiratorio.mapper.HolidayMapper;
+import br.com.jiratorio.repository.HolidayRepository;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.HolidayService;
 import br.com.jiratorio.service.UserService;
@@ -19,9 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class HolidayServiceImpl extends AbstractService implements HolidayService {
 
     private final HolidayRepository holidayRepository;
@@ -42,6 +39,18 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     private final HolidayMapper holidayMapper;
 
     private final UserService userService;
+
+    public HolidayServiceImpl(final HolidayRepository holidayRepository,
+                              final BoardService boardService,
+                              final HolidayClient holidayClient,
+                              final HolidayMapper holidayMapper,
+                              final UserService userService) {
+        this.holidayRepository = holidayRepository;
+        this.boardService = boardService;
+        this.holidayClient = holidayClient;
+        this.holidayMapper = holidayMapper;
+        this.userService = userService;
+    }
 
     @Override
     @Transactional(readOnly = true)

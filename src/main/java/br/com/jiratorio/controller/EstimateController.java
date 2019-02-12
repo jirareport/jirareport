@@ -9,9 +9,7 @@ import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.EstimateService;
 import java.time.LocalDate;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/boards/{boardId}/estimates")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EstimateController {
 
     private final BoardService boardService;
 
     private final EstimateService estimateService;
+
+    public EstimateController(final BoardService boardService,
+                              final EstimateService estimateService) {
+        this.boardService = boardService;
+        this.estimateService = estimateService;
+    }
 
     @GetMapping
     public EstimateResponse index(@PathVariable final Long boardId, final EstimateForm estimateForm) {

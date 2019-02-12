@@ -1,6 +1,5 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.repository.IssueRepository;
 import br.com.jiratorio.aspect.annotation.ExecutionTime;
 import br.com.jiratorio.client.IssueClient;
 import br.com.jiratorio.domain.Board;
@@ -14,6 +13,7 @@ import br.com.jiratorio.domain.vo.SandBox;
 import br.com.jiratorio.domain.vo.SandBoxFilter;
 import br.com.jiratorio.mapper.EstimateIssueMapper;
 import br.com.jiratorio.mapper.IssueMapper;
+import br.com.jiratorio.repository.IssueRepository;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.ChartService;
 import br.com.jiratorio.service.IssueService;
@@ -31,15 +31,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class IssueServiceImpl extends AbstractService implements IssueService {
 
     private final IssueClient issueClient;
@@ -55,6 +52,22 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     private final LeadTimeService leadTimeService;
 
     private final BoardService boardService;
+
+    public IssueServiceImpl(final IssueClient issueClient,
+                            final IssueMapper issueMapper,
+                            final EstimateIssueMapper estimateIssueMapper,
+                            final IssueRepository issueRepository,
+                            final ChartService chartService,
+                            final LeadTimeService leadTimeService,
+                            final BoardService boardService) {
+        this.issueClient = issueClient;
+        this.issueMapper = issueMapper;
+        this.estimateIssueMapper = estimateIssueMapper;
+        this.issueRepository = issueRepository;
+        this.chartService = chartService;
+        this.leadTimeService = leadTimeService;
+        this.boardService = boardService;
+    }
 
     @Override
     @ExecutionTime

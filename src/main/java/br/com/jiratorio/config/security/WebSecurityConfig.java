@@ -1,8 +1,6 @@
 package br.com.jiratorio.config.security;
 
 import javax.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,12 +11,17 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JiraAuthenticationProvider jiraAuthenticationProvider;
 
     private final TokenAuthenticationProvider tokenAuthenticationProvider;
+
+    public WebSecurityConfig(final JiraAuthenticationProvider jiraAuthenticationProvider,
+                             final TokenAuthenticationProvider tokenAuthenticationProvider) {
+        this.jiraAuthenticationProvider = jiraAuthenticationProvider;
+        this.tokenAuthenticationProvider = tokenAuthenticationProvider;
+    }
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {

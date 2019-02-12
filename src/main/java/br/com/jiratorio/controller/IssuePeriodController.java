@@ -12,8 +12,6 @@ import br.com.jiratorio.service.IssuePeriodService;
 import br.com.jiratorio.service.IssueService;
 import java.net.URI;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +26,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/boards/{boardId}/issue-periods")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class IssuePeriodController {
 
     private final IssuePeriodService issuePeriodService;
@@ -36,6 +33,14 @@ public class IssuePeriodController {
     private final IssueService issueService;
 
     private final BoardService boardService;
+
+    public IssuePeriodController(final IssuePeriodService issuePeriodService,
+                                 final IssueService issueService,
+                                 final BoardService boardService) {
+        this.issuePeriodService = issuePeriodService;
+        this.issueService = issueService;
+        this.boardService = boardService;
+    }
 
     @GetMapping
     public ListIssuePeriodResponse index(@PathVariable final Long boardId) {

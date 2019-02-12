@@ -4,9 +4,7 @@ import br.com.jiratorio.domain.vo.Account;
 import br.com.jiratorio.exception.ParseTokenException;
 import br.com.jiratorio.service.TokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TokenServiceImpl implements TokenService {
 
     private final ObjectMapper objectMapper;
@@ -23,6 +20,14 @@ public class TokenServiceImpl implements TokenService {
     private final SignatureVerifier signatureVerifier;
 
     private final Signer signer;
+
+    public TokenServiceImpl(final ObjectMapper objectMapper,
+                            final SignatureVerifier signatureVerifier,
+                            final Signer signer) {
+        this.objectMapper = objectMapper;
+        this.signatureVerifier = signatureVerifier;
+        this.signer = signer;
+    }
 
     @Override
     public String encode(final Account account) {

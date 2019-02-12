@@ -1,24 +1,21 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.repository.LeadTimeConfigRepository;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.LeadTimeConfig;
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest;
 import br.com.jiratorio.domain.response.LeadTimeConfigResponse;
 import br.com.jiratorio.exception.ResourceNotFound;
 import br.com.jiratorio.mapper.LeadTimeConfigMapper;
+import br.com.jiratorio.repository.LeadTimeConfigRepository;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.LeadTimeConfigService;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class LeadTimeConfigServiceImpl extends AbstractService implements LeadTimeConfigService {
 
     private final LeadTimeConfigRepository leadTimeConfigRepository;
@@ -26,6 +23,14 @@ public class LeadTimeConfigServiceImpl extends AbstractService implements LeadTi
     private final BoardService boardService;
 
     private final LeadTimeConfigMapper leadTimeConfigMapper;
+
+    public LeadTimeConfigServiceImpl(final LeadTimeConfigRepository leadTimeConfigRepository,
+                                     final BoardService boardService,
+                                     final LeadTimeConfigMapper leadTimeConfigMapper) {
+        this.leadTimeConfigRepository = leadTimeConfigRepository;
+        this.boardService = boardService;
+        this.leadTimeConfigMapper = leadTimeConfigMapper;
+    }
 
     @Override
     @Transactional(readOnly = true)

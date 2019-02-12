@@ -6,17 +6,18 @@ import br.com.jiratorio.domain.vo.Account;
 import br.com.jiratorio.domain.vo.CurrentUser;
 import br.com.jiratorio.service.AuthService;
 import java.util.Base64;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthServiceImpl implements AuthService {
 
     private final AuthClient authClient;
+
+    public AuthServiceImpl(final AuthClient authClient) {
+        this.authClient = authClient;
+    }
 
     @Override
     public Account login(final LoginForm loginForm) {

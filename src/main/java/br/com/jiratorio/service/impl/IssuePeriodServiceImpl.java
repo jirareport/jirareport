@@ -1,7 +1,5 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.exception.ResourceNotFound;
-import br.com.jiratorio.repository.IssuePeriodRepository;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.Issue;
 import br.com.jiratorio.domain.IssuePeriod;
@@ -12,7 +10,9 @@ import br.com.jiratorio.domain.vo.IssuePeriodChart;
 import br.com.jiratorio.domain.vo.IssuePeriodDetails;
 import br.com.jiratorio.domain.vo.IssuePeriodList;
 import br.com.jiratorio.domain.vo.LeadTimeCompareChart;
+import br.com.jiratorio.exception.ResourceNotFound;
 import br.com.jiratorio.mapper.IssuePeriodMapper;
+import br.com.jiratorio.repository.IssuePeriodRepository;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.ChartService;
 import br.com.jiratorio.service.IssuePeriodService;
@@ -20,18 +20,14 @@ import br.com.jiratorio.service.IssueService;
 import br.com.jiratorio.service.WipService;
 import br.com.jiratorio.util.CalcUtil;
 import br.com.jiratorio.util.DateUtil;
+import java.util.List;
 import java.util.Objects;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class IssuePeriodServiceImpl extends AbstractService implements IssuePeriodService {
 
     private final IssueService issueService;
@@ -45,6 +41,20 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
     private final IssuePeriodMapper issuePeriodMapper;
 
     private final WipService wipService;
+
+    public IssuePeriodServiceImpl(final IssueService issueService,
+                                  final IssuePeriodRepository issuePeriodRepository,
+                                  final ChartService chartService,
+                                  final BoardService boardService,
+                                  final IssuePeriodMapper issuePeriodMapper,
+                                  final WipService wipService) {
+        this.issueService = issueService;
+        this.issuePeriodRepository = issuePeriodRepository;
+        this.chartService = chartService;
+        this.boardService = boardService;
+        this.issuePeriodMapper = issuePeriodMapper;
+        this.wipService = wipService;
+    }
 
     @Override
     @Transactional

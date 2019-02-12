@@ -1,7 +1,5 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.exception.ResourceNotFound;
-import br.com.jiratorio.repository.BoardRepository;
 import br.com.jiratorio.aspect.annotation.ExecutionTime;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.request.CreateBoardRequest;
@@ -10,16 +8,16 @@ import br.com.jiratorio.domain.response.BoardDetailsResponse;
 import br.com.jiratorio.domain.response.BoardResponse;
 import br.com.jiratorio.domain.vo.BoardStatus;
 import br.com.jiratorio.domain.vo.BoardStatusList;
+import br.com.jiratorio.exception.ResourceNotFound;
 import br.com.jiratorio.mapper.BoardMapper;
+import br.com.jiratorio.repository.BoardRepository;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.ProjectService;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
@@ -30,7 +28,6 @@ import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BoardServiceImpl extends AbstractService implements BoardService {
 
     private final ProjectService projectService;
@@ -38,6 +35,14 @@ public class BoardServiceImpl extends AbstractService implements BoardService {
     private final BoardRepository boardRepository;
 
     private final BoardMapper boardMapper;
+
+    public BoardServiceImpl(final ProjectService projectService,
+                            final BoardRepository boardRepository,
+                            final BoardMapper boardMapper) {
+        this.projectService = projectService;
+        this.boardRepository = boardRepository;
+        this.boardMapper = boardMapper;
+    }
 
     @Override
     @Transactional(readOnly = true)

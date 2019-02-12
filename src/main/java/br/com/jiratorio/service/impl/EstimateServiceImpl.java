@@ -1,12 +1,12 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.exception.InternalServerErrorException;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.EstimateFieldReference;
 import br.com.jiratorio.domain.form.EstimateForm;
 import br.com.jiratorio.domain.form.IssueForm;
 import br.com.jiratorio.domain.vo.EstimateIssue;
 import br.com.jiratorio.domain.vo.Percentile;
+import br.com.jiratorio.exception.InternalServerErrorException;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.EstimateService;
 import br.com.jiratorio.service.HolidayService;
@@ -14,23 +14,19 @@ import br.com.jiratorio.service.IssueService;
 import br.com.jiratorio.util.CalcUtil;
 import br.com.jiratorio.util.DateUtil;
 import br.com.jiratorio.util.StringUtil;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EstimateServiceImpl implements EstimateService {
 
     private final BoardService boardService;
@@ -38,6 +34,14 @@ public class EstimateServiceImpl implements EstimateService {
     private final IssueService issueService;
 
     private final HolidayService holidayService;
+
+    public EstimateServiceImpl(final BoardService boardService,
+                               final IssueService issueService,
+                               final HolidayService holidayService) {
+        this.boardService = boardService;
+        this.issueService = issueService;
+        this.holidayService = holidayService;
+    }
 
     @Override
     @Transactional(readOnly = true)

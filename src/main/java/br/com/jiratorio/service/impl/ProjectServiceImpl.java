@@ -5,17 +5,18 @@ import br.com.jiratorio.domain.vo.BoardStatusList;
 import br.com.jiratorio.domain.vo.JiraProject;
 import br.com.jiratorio.service.ProjectService;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProjectServiceImpl extends AbstractService implements ProjectService {
 
     private final ProjectClient projectClient;
+
+    public ProjectServiceImpl(final ProjectClient projectClient) {
+        this.projectClient = projectClient;
+    }
 
     @Override
     public List<JiraProject> findAllJiraProject() {

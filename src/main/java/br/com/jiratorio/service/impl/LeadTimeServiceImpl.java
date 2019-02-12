@@ -1,12 +1,12 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.repository.LeadTimeRepository;
 import br.com.jiratorio.aspect.annotation.ExecutionTime;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.Issue;
 import br.com.jiratorio.domain.LeadTime;
 import br.com.jiratorio.domain.LeadTimeConfig;
 import br.com.jiratorio.domain.embedded.Changelog;
+import br.com.jiratorio.repository.LeadTimeRepository;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.HolidayService;
 import br.com.jiratorio.service.LeadTimeConfigService;
@@ -18,15 +18,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class LeadTimeServiceImpl extends AbstractService implements LeadTimeService {
 
     private final LeadTimeConfigService leadTimeConfigService;
@@ -36,6 +33,16 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
     private final LeadTimeRepository leadTimeRepository;
 
     private final BoardService boardService;
+
+    public LeadTimeServiceImpl(final LeadTimeConfigService leadTimeConfigService,
+                               final HolidayService holidayService,
+                               final LeadTimeRepository leadTimeRepository,
+                               final BoardService boardService) {
+        this.leadTimeConfigService = leadTimeConfigService;
+        this.holidayService = holidayService;
+        this.leadTimeRepository = leadTimeRepository;
+        this.boardService = boardService;
+    }
 
     @Override
     @Transactional

@@ -3,8 +3,6 @@ package br.com.jiratorio.controller;
 import br.com.jiratorio.domain.vo.JiraProject;
 import br.com.jiratorio.service.ProjectService;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,10 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/projects")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProjectController {
 
     private final ProjectService projectService;
+
+    public ProjectController(final ProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     @GetMapping
     public List<JiraProject> findAll() {
