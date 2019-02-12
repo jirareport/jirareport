@@ -175,7 +175,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         jql.append(" project = {project} ");
         jql.append(" AND ( STATUS CHANGED TO {endColumn} DURING({startDate}, {endDate}) ");
         jql.append("       OR ( STATUS CHANGED TO {lastColumn} DURING ({startDate}, {endDate}) AND NOT STATUS CHANGED TO {endColumn} )");
-        jql.append("       OR ( resolutiondate >= {startDate} AND resolutiondate <= {endDate} AND NOT STATUS CHANGED TO {endColumn} ");
+        jql.append("       OR ( resolutiondate >= {startDate} AND resolutiondate <= {endDate} AND NOT STATUS CHANGED TO {lastColumn} ");
         jql.append("              AND NOT STATUS CHANGED TO {endColumn} )");
         jql.append("     ) ");
 
