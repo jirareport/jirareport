@@ -20,18 +20,18 @@ public interface HolidayMapper {
     @Mappings({ // @formatter:off
             @Mapping(target = "id",              ignore = true),
             @Mapping(target = "description",     source = "holidayVO.name"),
-            @Mapping(target = "board.id",        source = "boardId"),
+            @Mapping(target = "board.id",        source = "board.id"),
             @Mapping(target = "date",            source = "holidayVO.date", dateFormat = "dd/MM/yyyy"),
             @Mapping(target = "owner",           ignore = true),
             @Mapping(target = "lastEditor",      ignore = true),
             @Mapping(target = "createdAt",       ignore = true),
             @Mapping(target = "updatedAt",       ignore = true)
     }) // @formatter:on
-    Holiday fromVO(HolidayVO holidayVO, Long boardId);
+    Holiday fromVO(HolidayVO holidayVO, Board board);
 
-    default List<Holiday> fromVOS(List<HolidayVO> holidayVOS, Long boardId) {
+    default List<Holiday> fromVOS(List<HolidayVO> holidayVOS, Board board) {
         return holidayVOS.stream()
-                .map(holidayVO -> fromVO(holidayVO, boardId))
+                .map(holidayVO -> fromVO(holidayVO, board))
                 .collect(Collectors.toList());
     }
 

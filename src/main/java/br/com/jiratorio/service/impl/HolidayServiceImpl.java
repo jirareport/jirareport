@@ -3,7 +3,7 @@ package br.com.jiratorio.service.impl;
 import br.com.jiratorio.client.HolidayClient;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.Holiday;
-import br.com.jiratorio.domain.UserConfig;
+import br.com.jiratorio.domain.ImportHolidayInfo;
 import br.com.jiratorio.domain.request.HolidayRequest;
 import br.com.jiratorio.domain.response.HolidayResponse;
 import br.com.jiratorio.domain.vo.HolidayVO;
@@ -128,9 +128,10 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     public void createImported(final Long boardId) {
         log.info("Method=createImported, boardId={}", boardId);
 
-        List<Holiday> holidaysByBoard = holidayRepository.findAllByBoardId(boardId);
-        List<HolidayVO> allHolidaysVOInCity = findAllHolidaysInCity();
-        List<Holiday> allHolidaysInCity = holidayMapper.fromVOS(allHolidaysVOInCity, boardId);
+        Board board = boardService.findById(boardId);
+
+        List<Holiday> holidaysByBoard = holidayRepository.findAllByBoard(board);
+        List<Holiday> allHolidaysInCity = findAllHolidaysInCity(board);
 
         if (holidaysByBoard.containsAll(allHolidaysInCity)) {
             throw new HolidaysAlreadyImported();
@@ -147,9 +148,14 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
         }
     }
 
-    private List<HolidayVO> findAllHolidaysInCity() {
-        UserConfig userConfig = userService.findHolidayInfo();
-        return holidayClient.findAllHolidaysInCity(LocalDate.now().getYear(),
-                userConfig.getState(), userConfig.getCity(), userConfig.getHolidayToken());
+    private List<Holiday> findAllHolidaysInCity(final Board board) {
+        log.info("Method=findAllHolidaysInCity, board={}", board);
+
+        ImportHolidayInfo info = userService.retrieveHolidayInfo();
+
+        List<HolidayVO> allHolidaysInCity = holidayClient.findAllHolidaysInCity(
+                LocalDate.now().getYear(), info.getState(), info.getCity(), info.getHolidayToken());
+
+        return holidayMapper.fromVOS(allHolidaysInCity, board);
     }
 }

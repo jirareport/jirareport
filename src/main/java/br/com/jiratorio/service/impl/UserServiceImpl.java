@@ -1,13 +1,12 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.domain.ChartType;
+import br.com.jiratorio.domain.ImportHolidayInfo;
 import br.com.jiratorio.domain.UserConfig;
 import br.com.jiratorio.domain.form.UserConfigForm;
 import br.com.jiratorio.mapper.UserConfigMapper;
 import br.com.jiratorio.repository.UserConfigRepository;
 import br.com.jiratorio.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,9 +23,6 @@ public class UserServiceImpl extends AbstractService implements UserService {
     private final UserConfigMapper userConfigMapper;
 
     private final String holidayToken;
-
-    @Autowired
-    private UserService userService;
 
     public UserServiceImpl(final UserConfigRepository userConfigRepository,
                            final UserConfigMapper userConfigMapper,
@@ -64,38 +60,19 @@ public class UserServiceImpl extends AbstractService implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserConfig findHolidayInfo() {
-        log.info("Method=findHolidayInfo");
+    public ImportHolidayInfo retrieveHolidayInfo() {
+        log.info("Method=retrieveHolidayInfo");
 
         UserConfig userConfig = retrieveCurrentUserConfig();
-        if (userConfig == null || StringUtils.isEmpty(userConfig.getHolidayToken())) {
-            userConfig = new UserConfig();
-            userConfig.setCity("ARARAQUARA");
-            userConfig.setState("SP");
-            userConfig.setHolidayToken(holidayToken);
-
-            return userConfig;
+        if (dontHasHolidayToken(userConfig)) {
+            return ImportHolidayInfo.builder()
+                    .city("ARARAQUARA")
+                    .state("SP")
+                    .holidayToken(holidayToken)
+                    .build();
         }
 
-        return userConfig;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public ChartType retrieveFavoriteLeadTimeChartType() {
-        log.info("Method=retrieveFavoriteChartType");
-
-        UserConfig userConfig = userService.retrieveCurrentUserConfig();
-        return userConfig == null ? null : userConfig.getLeadTimeChartType();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public ChartType retrieveFavoriteThroughputChartType() {
-        log.info("Method=retrieveFavoriteChartType");
-
-        UserConfig userConfig = userService.retrieveCurrentUserConfig();
-        return userConfig == null ? null : userConfig.getThroughputChartType();
+        return userConfigMapper.toImportHolidayInfo(userConfig);
     }
 
     @Override
@@ -103,5 +80,9 @@ public class UserServiceImpl extends AbstractService implements UserService {
     @Cacheable("retrieveCurrentUserConfig")
     public UserConfig retrieveCurrentUserConfig() {
         return userConfigRepository.findByUsername(currentUser().getUsername());
+    }
+
+    private boolean dontHasHolidayToken(final UserConfig userConfig) {
+        return userConfig == null || StringUtils.isEmpty(userConfig.getHolidayToken());
     }
 }

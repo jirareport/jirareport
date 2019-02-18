@@ -1,6 +1,6 @@
 package br.com.jiratorio.service;
 
-import br.com.jiratorio.domain.ChartType;
+import br.com.jiratorio.domain.ImportHolidayInfo;
 import br.com.jiratorio.domain.UserConfig;
 import br.com.jiratorio.domain.form.UserConfigForm;
 
@@ -10,11 +10,7 @@ public interface UserService {
 
     UserConfigForm myInfo();
 
-    UserConfig findHolidayInfo();
-
-    ChartType retrieveFavoriteLeadTimeChartType();
-
-    ChartType retrieveFavoriteThroughputChartType();
+    ImportHolidayInfo retrieveHolidayInfo();
 
     UserConfig retrieveCurrentUserConfig();
 

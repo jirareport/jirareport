@@ -1,5 +1,6 @@
 package br.com.jiratorio.repository;
 
+import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.Holiday;
 import java.util.List;
 
@@ -14,5 +15,7 @@ public interface HolidayRepository extends CrudRepository<Holiday, Long> {
     List<Holiday> findAllByBoardId(Long id);
 
     Page<Holiday> findAllByBoardId(Long id, Pageable pageable);
+
+    List<Holiday> findAllByBoard(Board board);
 
 }

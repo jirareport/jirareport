@@ -2,7 +2,7 @@ jira:
   url: http://localhost:8888/jira
 
 holiday:
-  url: http://localhost:8888/holiday-api/?json=true
+  url: http://localhost:8888/holiday-api
   token: super-secret-token
 
 ssh-key:

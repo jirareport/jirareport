@@ -2,6 +2,7 @@ package br.com.jiratorio;
 
 import com.github.javafaker.Faker;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,8 @@ public class TestConfig {
                         .options()
                         .port(8888));
         wireMockServer.start();
+
+        WireMock.configureFor(wireMockServer.port());
 
         return wireMockServer;
     }
