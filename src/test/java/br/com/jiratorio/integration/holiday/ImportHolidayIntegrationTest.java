@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@LoadStubs("holidays")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ImportHolidayIntegrationTest extends BaseIntegrationTest {
@@ -38,7 +39,6 @@ public class ImportHolidayIntegrationTest extends BaseIntegrationTest {
     private UserConfigFactory userConfigFactory;
 
     @Test
-    @LoadStubs("holidays")
     public void importWithSuccess() {
         withDefaultUser(() -> boardFactory.create());
 
@@ -67,7 +67,6 @@ public class ImportHolidayIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @LoadStubs("holidays")
     public void importWithSuccessUserConfig() {
         UserConfig userConfig = withDefaultUser(() -> {
             boardFactory.create();
@@ -99,7 +98,6 @@ public class ImportHolidayIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @LoadStubs("holidays")
     public void alreadyBeenImported() {
         withDefaultUser(() -> {
             Board board = boardFactory.create();
