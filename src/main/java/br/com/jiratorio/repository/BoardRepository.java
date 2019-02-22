@@ -9,20 +9,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BoardRepository extends CrudRepository<Board, Long> {
 
+    @NonNull
     @Override
-    @EntityGraph(attributePaths = { "leadTimeConfigs" }, type = EntityGraph.EntityGraphType.LOAD)
-    Optional<Board> findById(Long id);
+    @EntityGraph(attributePaths = {"leadTimeConfigs"}, type = EntityGraph.EntityGraphType.LOAD)
+    Optional<Board> findById(@NonNull Long id);
 
     Page<Board> findAll(Example<Board> example, Pageable pageable);
 
     void deleteByIdAndOwner(Long id, String username);
 
-    @Query(value = "SELECT DISTINCT owner FROM BOARD", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT b.owner FROM Board b")
     List<String> findAllOwners();
 
 }
