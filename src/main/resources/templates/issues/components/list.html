@@ -11,24 +11,29 @@
             <th data-field="endDate" data-sortable="true" data-sorter="sortByDate">Data fim</th>
             <th data-field="leadTime" data-sortable="true">LeadTime</th>
             <th data-field="impedimentTime" data-sortable="true" th:if="${board.impedimentType}">Tempo em impedimento</th>
-            <th data-field="calcDueDate" data-sortable="true" th:if="${#bools.isTrue(board.calcDueDate)}">Desvio de estimativa</th>
+            <th:block th:unless="${#strings.isEmpty(board.dueDateCF)}">
+                <th data-field="dueDateCF" data-sortable="true">Desvio de estimativa</th>
+                <th data-field="dueDateChange" data-sortable="true">Alterações de estimativa</th>
+            </th:block>
             <th data-field="epic" data-sortable="true" th:unless="${#strings.isEmpty(board.epicCF)}">Epico</th>
             <th data-field="estimate" data-sortable="true" th:unless="${#strings.isEmpty(board.estimateCF)}">Estimativa</th>
             <th data-field="system" data-sortable="true" th:unless="${#strings.isEmpty(board.systemCF)}">Sistema</th>
             <th data-field="board" data-sortable="true" th:unless="${#strings.isEmpty(board.projectCF)}">Projeto</th>
             <th data-field="creator" data-sortable="true">Criador</th>
             <th data-field="priority" data-sortable="true">Prioridade</th>
-            <th th:each="dynamicField : ${board.dynamicFields}" th:attr="data-field=${dynamicField.field}" th:text="${dynamicField.name}" data-sortable="true"></th>
+            <th th:each="dynamicField : ${board.dynamicFields}" th:attr="data-field=${dynamicField.field}" th:text="${dynamicField.name}"
+                data-sortable="true"></th>
         </tr>
         </thead>
         <tbody>
         <th:block th:each="issue : ${issues}">
             <tr>
                 <td class="text-center">
-                    <button class="btn btn-xs btn-default" data-toggle="modal" th:attr="data-target=${'#' + issue.key}" title="Lead Times"><i class="fa fa-eye"></i></button>
+                    <button class="btn btn-xs btn-default" data-toggle="modal" th:attr="data-target=${'#' + issue.key}" title="Lead Times"><i
+                            class="fa fa-eye"></i></button>
                 </td>
                 <td th:attr="data-task=${issue.key}">
-                    <th:block th:text="${#applicationHelper.issueTitle(issue)}" />&nbsp;
+                    <th:block th:text="${#applicationHelper.issueTitle(issue)}"/>&nbsp;
                     <a target="_blank" th:href="${#jiraHelper.issueLink(issue.key)}" title="Ver issue no Jira"><i class="fa fa-external-link"></i></a>
                 </td>
                 <td th:text="${issue.issueType}"></td>
@@ -36,7 +41,10 @@
                 <td th:text="${#temporals.format(issue.endDate, 'dd/MM/yyyy')}"></td>
                 <td th:text="${issue.leadTime}"></td>
                 <td th:if="${board.impedimentType}" th:text="${issue.impedimentTime}"></td>
-                <td th:if="${#bools.isTrue(board.calcDueDate)}" th:text="${issue.differenceFirstAndLastDueDate}"></td>
+                <th:block th:unless="${#strings.isEmpty(board.dueDateCF)}">
+                    <td th:text="${issue.deviationOfEstimate}"></td>
+                    <td th:text="${#lists.size(issue.dueDateHistory)}"></td>
+                </th:block>
                 <td th:unless="${#strings.isEmpty(board.epicCF)}" th:text="${issue.epic}"></td>
                 <td th:unless="${#strings.isEmpty(board.estimateCF)}" th:text="${issue.estimated}"></td>
                 <td th:unless="${#strings.isEmpty(board.systemCF)}" th:text="${issue.system}"></td>
@@ -51,8 +59,12 @@
 
     <br>
     <div class="btn-group pull-right">
-        <button class="btn btn-default" onclick="$('#issue-table').tableExport({type:'csv', fileName: 'Listagem de issues'});">Exportar para CSV</button>
-        <button class="btn btn-default" onclick="$('#issue-table').tableExport({type:'excel', fileName: 'Listagem de issues'});">Exportar para Excel</button>
+        <button class="btn btn-default" onclick="$('#issue-table').tableExport({type:'csv', fileName: 'Listagem de issues'});">
+            Exportar para CSV
+        </button>
+        <button class="btn btn-default" onclick="$('#issue-table').tableExport({type:'excel', fileName: 'Listagem de issues'});">
+            Exportar para Excel
+        </button>
     </div>
 
     <th:block th:each="issue : ${issues}" th:include="issues/components/leadtime_modal :: modal(${issue}, ${board}, true)"/>
