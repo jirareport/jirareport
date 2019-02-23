@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.ObjectAssert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,17 +38,17 @@ public class DueDateServiceImplTest {
         List<DueDateHistory> dueDateHistories = dueDateService
                 .extractDueDateHistory("duedate", Collections.singletonList(jiraChangelogItem));
 
-        ObjectAssert<DueDateHistory> firstDueDate = Assertions.assertThat(dueDateHistories)
+        Assertions.assertThat(dueDateHistories)
                 .hasSize(1)
-                .first();
-
-        firstDueDate.extracting(DueDateHistory::getDueDate)
-                .isNotNull()
-                .isEqualTo(LocalDate.parse(jiraChangelogItem.getTo(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-
-        firstDueDate.extracting(DueDateHistory::getCreated)
-                .isNotNull()
-                .isEqualTo(jiraChangelogItem.getCreated());
+                .first()
+                .extracting(
+                        DueDateHistory::getDueDate,
+                        DueDateHistory::getCreated
+                )
+                .containsExactly(
+                        LocalDate.parse(jiraChangelogItem.getTo(), DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                        jiraChangelogItem.getCreated()
+                );
     }
 
     @Test

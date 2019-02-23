@@ -53,7 +53,7 @@ public class ApplicationHelper implements Helper {
     public String description(final DueDateType dueDateType) {
         switch (dueDateType) {
             case FIRST_AND_LAST_DUE_DATE:
-                return "Calcula a diferença entre o primeiro e o último due date";
+                return "Calcula a diferença entre o primeiro e o último dueDate";
             case FIRST_DUE_DATE_AND_END_DATE:
                 return "Calcula a diferença entre a primeira dueDate e a data de entrega";
             case LAST_DUE_DATE_AND_END_DATE:
