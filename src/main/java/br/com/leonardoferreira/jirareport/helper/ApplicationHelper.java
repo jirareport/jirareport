@@ -1,14 +1,14 @@
 package br.com.leonardoferreira.jirareport.helper;
 
 import br.com.leonardoferreira.jirareport.domain.ChartType;
+import br.com.leonardoferreira.jirareport.domain.DueDateType;
 import br.com.leonardoferreira.jirareport.domain.ImpedimentType;
 import br.com.leonardoferreira.jirareport.domain.Issue;
 import br.com.leonardoferreira.jirareport.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author lferreira on 31/05/18
@@ -48,5 +48,18 @@ public class ApplicationHelper implements Helper {
     public String retrieveFavoriteThroughputChartType() {
         ChartType chartType = userService.retrieveFavoriteThroughputChartType();
         return chartType == null ? "doughnut" : chartType.chartName();
+    }
+
+    public String description(final DueDateType dueDateType) {
+        switch (dueDateType) {
+            case FIRST_AND_LAST_DUE_DATE:
+                return "Calcula a diferença entre o primeiro e o último due date";
+            case FIRST_DUE_DATE_AND_END_DATE:
+                return "Calcula a diferença entre a primeira dueDate e a data de entrega";
+            case LAST_DUE_DATE_AND_END_DATE:
+                return "Calcula a diferença entre a última dueDate e a data de entrega";
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 }

@@ -67,7 +67,14 @@ dependencies {
 
     implementation "org.flywaydb:flyway-core"
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation "br.com.leonardoferreira:JBacon:1.2.1"
+    testImplementation "com.github.javafaker:javafaker:0.16"
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: "junit", module: "junit"
+    }
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine"
+    testImplementation "org.mockito:mockito-junit-jupiter"
 }
 
 dependencyManagement {
@@ -83,9 +90,12 @@ checkstyle {
 
 pmd {
     toolVersion = "6.7.0"
-    ruleSets = [ ]
+    ruleSets = []
     consoleOutput = true
     ruleSetFiles = files("pmd-ruleset.xml")
 }
 
+test {
+    useJUnitPlatform()
+}
 

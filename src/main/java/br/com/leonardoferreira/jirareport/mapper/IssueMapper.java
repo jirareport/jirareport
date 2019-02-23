@@ -9,6 +9,7 @@ import br.com.leonardoferreira.jirareport.domain.vo.DynamicFieldConfig;
 import br.com.leonardoferreira.jirareport.domain.vo.changelog.JiraChangelog;
 import br.com.leonardoferreira.jirareport.domain.vo.changelog.JiraChangelogHistory;
 import br.com.leonardoferreira.jirareport.domain.vo.changelog.JiraChangelogItem;
+import br.com.leonardoferreira.jirareport.service.DueDateService;
 import br.com.leonardoferreira.jirareport.service.HolidayService;
 import br.com.leonardoferreira.jirareport.util.CalcUtil;
 import br.com.leonardoferreira.jirareport.util.DateUtil;
@@ -20,10 +21,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +50,9 @@ public class IssueMapper {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private DueDateService dueDateService;
 
     private final JsonParser jsonParser = new JsonParser();
 
@@ -120,17 +121,12 @@ public class IssueMapper {
             author = getAsStringSafe(creator.get("displayName"));
         }
 
-        Long differenceFirstAndLastDueDate = null;
+        Long deviationOfEstimate = null;
         List<DueDateHistory> dueDateHistory = null;
 
-        if (Boolean.TRUE.equals(board.getCalcDueDate())) {
-            dueDateHistory = parseDueDateHistory(changelogItems);
-            if (!dueDateHistory.isEmpty()) {
-                LocalDate firstDueDate = dueDateHistory.get(0).getDueDate();
-                LocalDate finalDueDate = dueDateHistory.get(dueDateHistory.size() - 1).getDueDate();
-
-                differenceFirstAndLastDueDate = ChronoUnit.DAYS.between(firstDueDate, finalDueDate);
-            }
+        if (!StringUtils.isEmpty(board.getDueDateCF())) {
+            dueDateHistory = dueDateService.extractDueDateHistory(board.getDueDateCF(), changelogItems);
+            deviationOfEstimate = dueDateService.calcDeviationOfEstimate(dueDateHistory, endDate, board.getDueDateType());
         }
 
         Long timeInImpediment = ParseUtil.countTimeInImpediment(board, changelogItems, changelog, endDate, holidays);
@@ -168,7 +164,7 @@ public class IssueMapper {
                 .summary(fields.get("summary").getAsString())
                 .changelog(changelog)
                 .board(board)
-                .differenceFirstAndLastDueDate(differenceFirstAndLastDueDate)
+                .deviationOfEstimate(deviationOfEstimate)
                 .dueDateHistory(dueDateHistory)
                 .impedimentTime(timeInImpediment)
                 .priority(priority)
@@ -238,17 +234,6 @@ public class IssueMapper {
         }
 
         return jsonElement.getAsString();
-    }
-
-    private List<DueDateHistory> parseDueDateHistory(final List<JiraChangelogItem> changelogItems) {
-        return changelogItems.stream()
-                .filter(i -> "duedate".equals(i.getField()) && !StringUtils.isEmpty(i.getTo()))
-                .map(i -> DueDateHistory.builder()
-                        .created(i.getCreated())
-                        .dueDate(LocalDate.parse(i.getTo(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                        .build())
-                .sorted(Comparator.comparing(DueDateHistory::getCreated))
-                .collect(Collectors.toList());
     }
 
     private Map<String, String> parseDynamicFields(final Board board, final JsonObject fields) {
