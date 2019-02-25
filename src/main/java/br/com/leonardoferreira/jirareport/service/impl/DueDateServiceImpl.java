@@ -4,10 +4,10 @@ import br.com.leonardoferreira.jirareport.domain.DueDateType;
 import br.com.leonardoferreira.jirareport.domain.embedded.DueDateHistory;
 import br.com.leonardoferreira.jirareport.domain.vo.changelog.JiraChangelogItem;
 import br.com.leonardoferreira.jirareport.service.DueDateService;
+import br.com.leonardoferreira.jirareport.util.DateUtil;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,15 +28,17 @@ public class DueDateServiceImpl implements DueDateService {
                 .filter(i -> dueDateCF.equals(i.getField()) && !StringUtils.isEmpty(i.getTo()))
                 .map(i -> DueDateHistory.builder()
                         .created(i.getCreated())
-                        .dueDate(LocalDate.parse(i.getTo(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                        .dueDate(parseDueDate(i.getTo()))
                         .build())
                 .sorted(Comparator.comparing(DueDateHistory::getCreated))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Long calcDeviationOfEstimate(final List<DueDateHistory> dueDateHistories, final LocalDateTime endDate, final DueDateType dueDateType) {
-        log.info("Method=calcDeviationOfEstimate, dueDateHistories={}, endDate={}, dueDateType={}", dueDateHistories, endDate, dueDateType);
+    public Long calcDeviationOfEstimate(final List<DueDateHistory> dueDateHistories, final LocalDateTime endDate,
+                                        final DueDateType dueDateType, final Boolean ignoreWeekend, final List<LocalDate> holidays) {
+        log.info("Method=calcDeviationOfEstimate, dueDateHistories={}, endDate={}, dueDateType={}, ignoreWeekend={}, holidays={}",
+                dueDateHistories, endDate, dueDateType, ignoreWeekend, holidays);
 
         if (CollectionUtils.isEmpty(dueDateHistories) || dueDateType == null) {
             return null;
@@ -44,37 +46,57 @@ public class DueDateServiceImpl implements DueDateService {
 
         switch (dueDateType) {
             case FIRST_AND_LAST_DUE_DATE:
-                return calcDeviationOfEstimateBetweenFirstAndLastDueDate(dueDateHistories);
+                return calcDeviationOfEstimateBetweenFirstAndLastDueDate(dueDateHistories, ignoreWeekend, holidays);
             case FIRST_DUE_DATE_AND_END_DATE:
-                return calcDeviationOfEstimateBetweenFirstDueDateAndEndDate(dueDateHistories, endDate);
+                return calcDeviationOfEstimateBetweenFirstDueDateAndEndDate(dueDateHistories, endDate, ignoreWeekend, holidays);
             case LAST_DUE_DATE_AND_END_DATE:
-                return calcDeviationOfEstimateBetweenLastDueDateAndEndDate(dueDateHistories, endDate);
+                return calcDeviationOfEstimateBetweenLastDueDateAndEndDate(dueDateHistories, endDate, ignoreWeekend, holidays);
             default:
                 return null;
         }
     }
 
-    private Long calcDeviationOfEstimateBetweenFirstAndLastDueDate(final List<DueDateHistory> dueDateHistories) {
-        log.info("Method=calcDeviationOfEstimateBetweenFirstAndLastDueDate, dueDateHistories={}", dueDateHistories);
+    private Long calcDeviationOfEstimateBetweenFirstAndLastDueDate(final List<DueDateHistory> dueDateHistories,
+                                                                   final Boolean ignoreWeekend, final List<LocalDate> holidays) {
+        log.info("Method=calcDeviationOfEstimateBetweenFirstAndLastDueDate, dueDateHistories={}, ignoreWeekend={}, holidays={}",
+                dueDateHistories, ignoreWeekend, holidays);
 
         DueDateHistory first = dueDateHistories.get(0);
         DueDateHistory last = dueDateHistories.get(dueDateHistories.size() - 1);
 
-        return ChronoUnit.DAYS.between(first.getDueDate(), last.getDueDate());
+        return DateUtil.daysDiff(first.getDueDate(), last.getDueDate(), holidays, ignoreWeekend);
     }
 
-    private Long calcDeviationOfEstimateBetweenFirstDueDateAndEndDate(final List<DueDateHistory> dueDateHistories, final LocalDateTime endDate) {
-        log.info("Method=calcDeviationOfEstimateBetweenFirstDueDateAndEndDate, dueDateHistories={}, endDate={}", dueDateHistories, endDate);
+    private Long calcDeviationOfEstimateBetweenFirstDueDateAndEndDate(final List<DueDateHistory> dueDateHistories, final LocalDateTime endDate,
+                                                                      final Boolean ignoreWeekend, final List<LocalDate> holidays) {
+        log.info("Method=calcDeviationOfEstimateBetweenFirstDueDateAndEndDate, dueDateHistories={}, endDate={}, ignoreWeekend={}, holidays={}",
+                dueDateHistories, endDate, ignoreWeekend, holidays);
 
         DueDateHistory first = dueDateHistories.get(0);
-        return ChronoUnit.DAYS.between(first.getDueDate(), endDate.toLocalDate());
+        return DateUtil.daysDiff(first.getDueDate(), endDate.toLocalDate(), holidays, ignoreWeekend);
     }
 
-    private Long calcDeviationOfEstimateBetweenLastDueDateAndEndDate(final List<DueDateHistory> dueDateHistories, final LocalDateTime endDate) {
-        log.info("Method=calcDeviationOfEstimateBetweenLastDueDateAndEndDate, dueDateHistories={}, endDate={}", dueDateHistories, endDate);
+    private Long calcDeviationOfEstimateBetweenLastDueDateAndEndDate(final List<DueDateHistory> dueDateHistories, final LocalDateTime endDate,
+                                                                     final Boolean ignoreWeekend, final List<LocalDate> holidays) {
+        log.info("Method=calcDeviationOfEstimateBetweenLastDueDateAndEndDate, dueDateHistories={}, endDate={}",
+                dueDateHistories, endDate);
 
         DueDateHistory last = dueDateHistories.get(dueDateHistories.size() - 1);
-        return ChronoUnit.DAYS.between(last.getDueDate(), endDate.toLocalDate());
+        return DateUtil.daysDiff(last.getDueDate(), endDate.toLocalDate(), holidays, ignoreWeekend);
+    }
+
+    private LocalDate parseDueDate(final String dueDateStr) {
+        if (StringUtils.isEmpty(dueDateStr)) {
+            return null;
+        }
+
+        if (dueDateStr.length() > 19) {
+            LocalDateTime localDateTime = DateUtil.parseFromJira(dueDateStr);
+            return localDateTime.toLocalDate();
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[yyyy-MM-dd][dd/MM/yyyy]");
+        return LocalDate.parse(dueDateStr, formatter);
     }
 
 }

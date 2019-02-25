@@ -126,7 +126,8 @@ public class IssueMapper {
 
         if (!StringUtils.isEmpty(board.getDueDateCF())) {
             dueDateHistory = dueDateService.extractDueDateHistory(board.getDueDateCF(), changelogItems);
-            deviationOfEstimate = dueDateService.calcDeviationOfEstimate(dueDateHistory, endDate, board.getDueDateType());
+            deviationOfEstimate = dueDateService.calcDeviationOfEstimate(dueDateHistory, endDate,
+                    board.getDueDateType(), board.getIgnoreWeekend(), holidays);
         }
 
         Long timeInImpediment = ParseUtil.countTimeInImpediment(board, changelogItems, changelog, endDate, holidays);

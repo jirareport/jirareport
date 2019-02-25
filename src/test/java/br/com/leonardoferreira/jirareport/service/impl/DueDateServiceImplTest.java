@@ -65,7 +65,7 @@ public class DueDateServiceImplTest {
 
     @Test
     public void testCalcDeviationOfEstimateWithEmptyHistory() {
-        Long deviationOfEstimate = dueDateService.calcDeviationOfEstimate(null, null, null);
+        Long deviationOfEstimate = dueDateService.calcDeviationOfEstimate(null, null, null, null, null);
         Assertions.assertThat(deviationOfEstimate)
                 .isNull();
     }
@@ -77,10 +77,10 @@ public class DueDateServiceImplTest {
         DueDateHistory thirdDueDate = new DueDateHistory(null, LocalDate.of(2019, 2, 15));
         List<DueDateHistory> dueDateHistories = Arrays.asList(firstDueDate, secondDueDate, thirdDueDate);
 
-        Long deviationOfEstimate = dueDateService.calcDeviationOfEstimate(dueDateHistories, null, DueDateType.FIRST_AND_LAST_DUE_DATE);
+        Long deviationOfEstimate = dueDateService.calcDeviationOfEstimate(dueDateHistories, null, DueDateType.FIRST_AND_LAST_DUE_DATE, true, null);
 
         Assertions.assertThat(deviationOfEstimate)
-                .isEqualTo(10);
+                .isEqualTo(11);
     }
 
     @Test
@@ -90,10 +90,11 @@ public class DueDateServiceImplTest {
         List<DueDateHistory> dueDateHistories = Arrays.asList(firstDueDate, secondDueDate);
         LocalDateTime endDate = LocalDateTime.of(2019, 2, 13, 13, 30);
 
-        Long deviationOfEstimate = dueDateService.calcDeviationOfEstimate(dueDateHistories, endDate, DueDateType.FIRST_DUE_DATE_AND_END_DATE);
+        Long deviationOfEstimate = dueDateService.calcDeviationOfEstimate(dueDateHistories, endDate,
+                DueDateType.FIRST_DUE_DATE_AND_END_DATE, true, null);
 
         Assertions.assertThat(deviationOfEstimate)
-                .isEqualTo(8);
+                .isEqualTo(9);
     }
 
     @Test
@@ -103,9 +104,10 @@ public class DueDateServiceImplTest {
         List<DueDateHistory> dueDateHistories = Arrays.asList(firstDueDate, secondDueDate);
         LocalDateTime endDate = LocalDateTime.of(2019, 2, 15, 9, 40);
 
-        Long deviationOfEstimate = dueDateService.calcDeviationOfEstimate(dueDateHistories, endDate, DueDateType.LAST_DUE_DATE_AND_END_DATE);
+        Long deviationOfEstimate = dueDateService.calcDeviationOfEstimate(dueDateHistories, endDate,
+                DueDateType.LAST_DUE_DATE_AND_END_DATE, true, null);
 
         Assertions.assertThat(deviationOfEstimate)
-                .isEqualTo(5);
+                .isEqualTo(6);
     }
 }
