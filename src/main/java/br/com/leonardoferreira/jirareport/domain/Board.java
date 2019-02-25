@@ -56,6 +56,7 @@ public class Board extends BaseEntity {
 
     private String projectCF;
 
+    @Column(name = "DUE_DATE_CF")
     private String dueDateCF;
 
     private Boolean ignoreWeekend;
@@ -88,6 +89,7 @@ public class Board extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private List<String> waitingColumns;
 
+    @Enumerated(EnumType.STRING)
     private DueDateType dueDateType;
 
 }
