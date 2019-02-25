@@ -1,6 +1,7 @@
-package br.com.jiratorio.factory;
+package br.com.jiratorio.factory.entity;
 
 import br.com.jiratorio.domain.Board;
+import br.com.jiratorio.domain.DueDateType;
 import br.com.jiratorio.domain.vo.DynamicFieldConfig;
 import br.com.jiratorio.repository.BoardRepository;
 import br.com.leonardoferreira.jbacon.JBacon;
@@ -52,7 +53,6 @@ public class BoardFactory extends JBacon<Board> {
         board.setEstimateCF("customfield_124");
         board.setSystemCF("customfield_125");
         board.setProjectCF("customfield_126");
-        board.setCalcDueDate(false);
         board.setIgnoreWeekend(false);
         board.setImpedimentType(ImpedimentType.COLUMN);
         board.setImpedimentColumns(Arrays.asList("IMP_COLUMN1", "IMP_COLUMN2", "IMP_COLUMN3"));
@@ -60,6 +60,8 @@ public class BoardFactory extends JBacon<Board> {
                 new DynamicFieldConfig("dn_field2", "customfield_128")));
         board.setTouchingColumns(faker.lorem().words());
         board.setWaitingColumns(faker.lorem().words());
+        board.setDueDateCF("customfield_321");
+        board.setDueDateType(DueDateType.FIRST_DUE_DATE_AND_END_DATE);
 
         return board;
     }

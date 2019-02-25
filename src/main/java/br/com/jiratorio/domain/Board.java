@@ -1,11 +1,7 @@
 package br.com.jiratorio.domain;
 
 import br.com.jiratorio.domain.vo.DynamicFieldConfig;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.hibernate.annotations.Type;
-
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,11 +11,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.hibernate.annotations.Type;
 
 @Data
 @Entity
-@ToString(exclude = { "leadTimeConfigs", "holidays", "issues" })
+@ToString(exclude = {"leadTimeConfigs", "holidays", "issues"})
 @EqualsAndHashCode(of = "id", callSuper = false)
 public class Board extends BaseEntity {
 
@@ -53,7 +52,8 @@ public class Board extends BaseEntity {
 
     private String projectCF;
 
-    private Boolean calcDueDate;
+    @Column(name = "DUE_DATE_CF")
+    private String dueDateCF;
 
     private Boolean ignoreWeekend;
 
@@ -84,5 +84,8 @@ public class Board extends BaseEntity {
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private List<String> waitingColumns;
+
+    @Enumerated(EnumType.STRING)
+    private DueDateType dueDateType;
 
 }

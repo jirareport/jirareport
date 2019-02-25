@@ -2,7 +2,7 @@ package br.com.jiratorio.integration.holiday;
 
 import br.com.jiratorio.repository.HolidayRepository;
 import br.com.jiratorio.base.BaseIntegrationTest;
-import br.com.jiratorio.factory.HolidayFactory;
+import br.com.jiratorio.factory.entity.HolidayFactory;
 import io.restassured.RestAssured;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;

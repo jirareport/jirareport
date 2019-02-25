@@ -1,4 +1,4 @@
-package br.com.jiratorio.factory;
+package br.com.jiratorio.factory.entity;
 
 import br.com.jiratorio.repository.HolidayRepository;
 import br.com.leonardoferreira.jbacon.JBacon;

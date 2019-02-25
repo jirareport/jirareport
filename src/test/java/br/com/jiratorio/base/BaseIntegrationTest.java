@@ -1,7 +1,7 @@
 package br.com.jiratorio.base;
 
 import br.com.jiratorio.domain.vo.Account;
-import br.com.jiratorio.factory.AccountFactory;
+import br.com.jiratorio.factory.entity.AccountFactory;
 import io.restassured.RestAssured;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.Header;

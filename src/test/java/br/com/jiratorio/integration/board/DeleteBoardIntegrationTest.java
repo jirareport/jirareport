@@ -2,7 +2,7 @@ package br.com.jiratorio.integration.board;
 
 import br.com.jiratorio.repository.BoardRepository;
 import br.com.jiratorio.base.BaseIntegrationTest;
-import br.com.jiratorio.factory.BoardFactory;
+import br.com.jiratorio.factory.entity.BoardFactory;
 import io.restassured.RestAssured;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;

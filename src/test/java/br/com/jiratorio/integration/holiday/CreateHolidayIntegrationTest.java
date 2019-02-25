@@ -1,12 +1,12 @@
 package br.com.jiratorio.integration.holiday;
 
 import br.com.jiratorio.exception.ResourceNotFound;
-import br.com.jiratorio.factory.HolidayRequestFactory;
+import br.com.jiratorio.factory.domain.request.HolidayRequestFactory;
 import br.com.jiratorio.repository.HolidayRepository;
 import br.com.jiratorio.base.BaseIntegrationTest;
 import br.com.jiratorio.domain.Holiday;
 import br.com.jiratorio.domain.request.HolidayRequest;
-import br.com.jiratorio.factory.BoardFactory;
+import br.com.jiratorio.factory.entity.BoardFactory;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.format.DateTimeFormatter;

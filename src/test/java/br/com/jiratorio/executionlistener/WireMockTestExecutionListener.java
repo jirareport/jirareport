@@ -22,6 +22,10 @@ public class WireMockTestExecutionListener extends AbstractTestExecutionListener
 
     @Override
     public void beforeTestMethod(final TestContext testContext) throws Exception {
+        if (!testContext.getApplicationContext().containsBean("wireMockServer")) {
+            return;
+        }
+
         WireMockServer wireMockServer = testContext.getApplicationContext().getBean(WireMockServer.class);
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
@@ -40,6 +44,10 @@ public class WireMockTestExecutionListener extends AbstractTestExecutionListener
 
     @Override
     public void afterTestMethod(final TestContext testContext) throws Exception {
+        if (!testContext.getApplicationContext().containsBean("wireMockServer")) {
+            return;
+        }
+
         WireMockServer wireMockServer = testContext.getApplicationContext().getBean(WireMockServer.class);
         wireMockServer.getStubMappings()
                 .forEach(wireMockServer::removeStub);

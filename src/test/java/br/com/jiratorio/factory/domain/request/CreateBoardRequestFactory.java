@@ -1,4 +1,4 @@
-package br.com.jiratorio.factory;
+package br.com.jiratorio.factory.domain.request;
 
 import br.com.leonardoferreira.jbacon.JBacon;
 import br.com.jiratorio.domain.request.CreateBoardRequest;

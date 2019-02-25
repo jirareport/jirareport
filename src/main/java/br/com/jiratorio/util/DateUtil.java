@@ -18,8 +18,6 @@ public final class DateUtil {
 
     public static final Locale LOCALE_BR = new Locale("pt", "BR");
 
-    private static final String DEFAULT_FORMATTER = "yyyy-MM-dd";
-
     public static String displayFormat(final String date) {
         if (StringUtils.isEmpty(date)) {
             return null;
@@ -54,17 +52,23 @@ public final class DateUtil {
                                 final List<LocalDate> holidays, final Boolean ignoreWeekend) {
         LocalDate start = startDate.toLocalDate();
         LocalDate end = endDate.toLocalDate();
+        return daysDiff(start, end, holidays, ignoreWeekend);
+    }
+
+    public static Long daysDiff(final LocalDate startDate, final LocalDate endDate,
+                                final List<LocalDate> holidays, final Boolean ignoreWeekend) {
+        LocalDate cursor = startDate;
 
         long workingDays = 0L;
         if (Boolean.TRUE.equals(ignoreWeekend)) {
-            workingDays = ChronoUnit.DAYS.between(start, end) + 1;
+            workingDays = ChronoUnit.DAYS.between(cursor, endDate) + 1;
         } else {
-            while (!start.isAfter(end)) {
-                DayOfWeek day = start.getDayOfWeek();
-                if (isWorkDay(holidays, day, start)) {
+            while (!cursor.isAfter(endDate)) {
+                DayOfWeek day = cursor.getDayOfWeek();
+                if (isWorkDay(holidays, day, cursor)) {
                     workingDays++;
                 }
-                start = start.plusDays(1);
+                cursor = cursor.plusDays(1);
             }
         }
 

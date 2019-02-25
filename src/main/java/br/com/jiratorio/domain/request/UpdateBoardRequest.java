@@ -1,5 +1,6 @@
 package br.com.jiratorio.domain.request;
 
+import br.com.jiratorio.domain.DueDateType;
 import br.com.jiratorio.domain.ImpedimentType;
 import br.com.jiratorio.domain.vo.DynamicFieldConfig;
 import java.util.List;
@@ -26,8 +27,6 @@ public class UpdateBoardRequest {
 
     private String projectCF;
 
-    private Boolean calcDueDate;
-
     private Boolean ignoreWeekend;
 
     private ImpedimentType impedimentType;
@@ -39,5 +38,9 @@ public class UpdateBoardRequest {
     private List<String> touchingColumns;
 
     private List<String> waitingColumns;
+
+    private String dueDateCF;
+
+    private DueDateType dueDateType;
 
 }

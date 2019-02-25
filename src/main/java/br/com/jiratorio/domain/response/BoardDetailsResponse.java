@@ -40,4 +40,8 @@ public class BoardDetailsResponse {
 
     private List<DynamicFieldConfig> dynamicFields;
 
+    private String dueDateCF;
+
+    private String dueDateType;
+
 }

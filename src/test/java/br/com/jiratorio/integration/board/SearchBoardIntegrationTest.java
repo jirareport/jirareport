@@ -3,7 +3,7 @@ package br.com.jiratorio.integration.board;
 import br.com.jiratorio.matcher.IdMatcher;
 import br.com.jiratorio.base.BaseIntegrationTest;
 import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.factory.BoardFactory;
+import br.com.jiratorio.factory.entity.BoardFactory;
 import io.restassured.RestAssured;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
@@ -163,11 +163,12 @@ public class SearchBoardIntegrationTest extends BaseIntegrationTest {
                     .body("estimateCF", Matchers.is(board.getEstimateCF()))
                     .body("systemCF", Matchers.is(board.getSystemCF()))
                     .body("projectCF", Matchers.is(board.getProjectCF()))
-                    .body("calcDueDate", Matchers.is(board.getCalcDueDate()))
                     .body("ignoreWeekend", Matchers.is(board.getIgnoreWeekend()))
                     .body("impedimentType", Matchers.is(board.getImpedimentType().name()))
                     .body("impedimentColumns", Matchers.contains(board.getImpedimentColumns().toArray()))
-                    .body("dynamicFields", Matchers.hasSize(board.getDynamicFields().size()));
+                    .body("dynamicFields", Matchers.hasSize(board.getDynamicFields().size()))
+                    .body("dueDateCF", Matchers.is(board.getDueDateCF()))
+                    .body("dueDateType", Matchers.is(board.getDueDateType().name()));
         // @formatter:on
     }
 

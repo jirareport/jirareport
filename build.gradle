@@ -79,6 +79,7 @@ dependencies {
     }
     testImplementation "org.junit.jupiter:junit-jupiter-api"
     testImplementation "org.junit.jupiter:junit-jupiter-engine"
+    testImplementation "org.mockito:mockito-junit-jupiter"
 }
 
 test {
@@ -103,4 +104,7 @@ pmd {
     ruleSetFiles = files("pmd-ruleset.xml")
 }
 
+test {
+    useJUnitPlatform()
+}
 

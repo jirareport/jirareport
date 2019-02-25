@@ -78,7 +78,7 @@ public class Issue extends BaseEntity {
     @ManyToOne
     private Board board;
 
-    private Long differenceFirstAndLastDueDate;
+    private Long deviationOfEstimate;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")

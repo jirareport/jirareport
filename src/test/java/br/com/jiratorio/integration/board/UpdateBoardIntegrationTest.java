@@ -5,8 +5,8 @@ import br.com.jiratorio.repository.BoardRepository;
 import br.com.jiratorio.base.BaseIntegrationTest;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.request.UpdateBoardRequest;
-import br.com.jiratorio.factory.BoardFactory;
-import br.com.jiratorio.factory.UpdateBoardRequestFactory;
+import br.com.jiratorio.factory.entity.BoardFactory;
+import br.com.jiratorio.factory.domain.request.UpdateBoardRequestFactory;
 import br.com.jiratorio.util.DateUtil;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -69,7 +69,6 @@ public class UpdateBoardIntegrationTest extends BaseIntegrationTest {
                 () -> Assertions.assertEquals(request.getEstimateCF(), board.getEstimateCF()),
                 () -> Assertions.assertEquals(request.getSystemCF(), board.getSystemCF()),
                 () -> Assertions.assertEquals(request.getProjectCF(), board.getProjectCF()),
-                () -> Assertions.assertEquals(request.getCalcDueDate(), board.getCalcDueDate()),
                 () -> Assertions.assertEquals(request.getIgnoreWeekend(), board.getIgnoreWeekend()),
                 () -> Assertions.assertEquals(request.getImpedimentColumns().size(), board.getImpedimentColumns().size()),
                 () -> Assertions.assertEquals(request.getDynamicFields().size(), board.getDynamicFields().size()));

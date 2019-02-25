@@ -2,7 +2,7 @@ package br.com.jiratorio.integration.leadtimeconfig;
 
 import br.com.jiratorio.repository.LeadTimeConfigRepository;
 import br.com.jiratorio.base.BaseIntegrationTest;
-import br.com.jiratorio.factory.LeadTimeConfigFactory;
+import br.com.jiratorio.factory.entity.LeadTimeConfigFactory;
 import io.restassured.RestAssured;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;

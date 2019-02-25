@@ -5,7 +5,7 @@ import br.com.jiratorio.repository.BoardRepository;
 import br.com.jiratorio.base.BaseIntegrationTest;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.request.CreateBoardRequest;
-import br.com.jiratorio.factory.CreateBoardRequestFactory;
+import br.com.jiratorio.factory.domain.request.CreateBoardRequestFactory;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;

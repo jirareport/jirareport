@@ -1,5 +1,6 @@
-package br.com.jiratorio.factory;
+package br.com.jiratorio.factory.domain.request;
 
+import br.com.jiratorio.domain.DueDateType;
 import br.com.jiratorio.domain.vo.DynamicFieldConfig;
 import br.com.leonardoferreira.jbacon.JBacon;
 import br.com.jiratorio.domain.ImpedimentType;
@@ -28,7 +29,6 @@ public class UpdateBoardRequestFactory extends JBacon<UpdateBoardRequest> {
         updateBoardRequest.setEstimateCF(faker.expression("custom_field_#{number.number_between '1000','9999'}"));
         updateBoardRequest.setSystemCF(faker.expression("custom_field_#{number.number_between '1000','9999'}"));
         updateBoardRequest.setProjectCF(faker.expression("custom_field_#{number.number_between '1000','9999'}"));
-        updateBoardRequest.setCalcDueDate(faker.random().nextBoolean());
         updateBoardRequest.setIgnoreWeekend(faker.random().nextBoolean());
         updateBoardRequest.setImpedimentType(faker.options().option(ImpedimentType.class));
         updateBoardRequest.setImpedimentColumns(faker.lorem().words());
@@ -39,6 +39,8 @@ public class UpdateBoardRequestFactory extends JBacon<UpdateBoardRequest> {
         ));
         updateBoardRequest.setTouchingColumns(faker.lorem().words());
         updateBoardRequest.setWaitingColumns(faker.lorem().words());
+        updateBoardRequest.setDueDateCF(faker.expression("custom_field_#{number.number_between '1000','9999'}"));
+        updateBoardRequest.setDueDateType(faker.options().option(DueDateType.class));
 
         return updateBoardRequest;
     }
