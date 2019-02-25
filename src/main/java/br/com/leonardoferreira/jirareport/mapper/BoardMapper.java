@@ -14,7 +14,7 @@ import org.mapstruct.Mappings;
 @Mapper(componentModel = "spring")
 public interface BoardMapper {
 
-    @Mappings({
+    @Mappings({ // @formatter:off
             @Mapping(target = "id",              source = "board.id"),
             @Mapping(target = "name",            source = "board.name"),
             @Mapping(target = "startColumn",     source = "board.startColumn"),
@@ -26,11 +26,13 @@ public interface BoardMapper {
             @Mapping(target = "systemCF",        source = "board.systemCF"),
             @Mapping(target = "projectCF",       source = "board.projectCF"),
             @Mapping(target = "dynamicFields",   source = "board.dynamicFields"),
+            @Mapping(target = "dueDateCF",       source = "board.dueDateCF"),
+            @Mapping(target = "dueDateType",     source = "board.dueDateType"),
             @Mapping(target = "jiraProject",     source = "jiraProject")
-    })
+    }) // @formatter:on
     BoardForm toForm(Board board, JiraProject jiraProject);
 
-    @Mappings({
+    @Mappings({ // @formatter:off
             @Mapping(target = "id",              ignore = true),
             @Mapping(target = "externalId",      ignore = true),
             @Mapping(target = "leadTimeConfigs", ignore = true),
@@ -40,6 +42,6 @@ public interface BoardMapper {
             @Mapping(target = "lastEditor",      ignore = true),
             @Mapping(target = "createdAt",       ignore = true),
             @Mapping(target = "updatedAt",       ignore = true)
-    })
+    }) // @formatter:on
     void fromForm(@MappingTarget Board board, BoardForm boardForm);
 }

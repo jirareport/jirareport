@@ -55,7 +55,7 @@
                         </table>
                     </th:block>
 
-                    <th:block th:if="${#bools.isTrue(board.calcDueDate)}">
+                    <th:block th:unless="${#strings.isEmpty(board.dueDateCF)}">
                         <br/>
                         <h3 class="page-header" style="margin-top: 0">Atualização de estimativas</h3>
 

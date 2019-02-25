@@ -97,8 +97,20 @@
                     </select>
                 </div>
 
-                <div class="checkbox">
-                    <label><input type="checkbox" th:field="*{calcDueDate}">Utiliza calculo de DueDate?</label>
+                <div class="form-group">
+                    <label>Campo de Due Date</label>
+                    <select class="selectpicker" th:field="*{dueDateCF}" data-width="100%" data-live-search="true">
+                        <option value="">Selecione</option>
+                        <option th:each="jiraField : ${jiraFields}" th:value="${jiraField.id}">[[${jiraField.name}]] ([[${jiraField.id}]])</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de cálculo para desvio de estimativa</label>
+                    <select class="selectpicker" th:field="*{dueDateType}" data-width="100%" data-live-search="true" id="dueDateType-select">
+                        <option value="">Selecione</option>
+                        <option th:each="dueDateType : ${T(br.com.leonardoferreira.jirareport.domain.DueDateType).values()}" th:value="${dueDateType}" th:text="${#applicationHelper.description(dueDateType)}"></option>
+                    </select>
                 </div>
 
                 <div class="checkbox">

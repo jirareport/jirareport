@@ -1,5 +1,6 @@
 package br.com.leonardoferreira.jirareport.domain.form;
 
+import br.com.leonardoferreira.jirareport.domain.DueDateType;
 import br.com.leonardoferreira.jirareport.domain.ImpedimentType;
 import br.com.leonardoferreira.jirareport.domain.vo.DynamicFieldConfig;
 import br.com.leonardoferreira.jirareport.domain.vo.JiraProject;
@@ -38,7 +39,7 @@ public class BoardForm {
 
     private String projectCF;
 
-    private Boolean calcDueDate;
+    private String dueDateCF;
 
     private Boolean ignoreWeekend;
 
@@ -53,6 +54,8 @@ public class BoardForm {
     private List<String> touchingColumns;
 
     private List<String> waitingColumns;
+
+    private DueDateType dueDateType;
 
     public void setStartColumn(final String startColumn) {
         this.startColumn = startColumn == null ? null : startColumn.toUpperCase(DateUtil.LOCALE_BR);
