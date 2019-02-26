@@ -24,7 +24,7 @@ public interface BoardRepository extends CrudRepository<Board, Long> {
 
     void deleteByIdAndOwner(Long id, String username);
 
-    @Query(value = "SELECT DISTINCT b.owner FROM Board b")
+    @Query("SELECT DISTINCT b.owner FROM Board b")
     List<String> findAllOwners();
 
 }
