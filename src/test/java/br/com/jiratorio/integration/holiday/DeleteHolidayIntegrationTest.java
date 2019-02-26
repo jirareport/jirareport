@@ -1,9 +1,12 @@
 package br.com.jiratorio.integration.holiday;
 
-import br.com.jiratorio.repository.HolidayRepository;
-import br.com.jiratorio.base.BaseIntegrationTest;
+import br.com.jiratorio.base.Authenticator;
+import br.com.jiratorio.base.resolver.SpecificationResolver;
+import br.com.jiratorio.base.specification.NotFound;
 import br.com.jiratorio.factory.entity.HolidayFactory;
+import br.com.jiratorio.repository.HolidayRepository;
 import io.restassured.RestAssured;
+import io.restassured.specification.ResponseSpecification;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,25 +15,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class DeleteHolidayIntegrationTest extends BaseIntegrationTest {
+public class DeleteHolidayIntegrationTest {
+
+    private final HolidayFactory holidayFactory;
+
+    private final HolidayRepository holidayRepository;
+
+    private final Authenticator authenticator;
 
     @Autowired
-    private HolidayFactory holidayFactory;
-
-    @Autowired
-    private HolidayRepository holidayRepository;
+    public DeleteHolidayIntegrationTest(final HolidayFactory holidayFactory,
+                                        final HolidayRepository holidayRepository,
+                                        final Authenticator authenticator) {
+        this.holidayFactory = holidayFactory;
+        this.holidayRepository = holidayRepository;
+        this.authenticator = authenticator;
+    }
 
     @Test
     public void deleteHoliday() {
-        withDefaultUser(() -> holidayFactory.create());
+        authenticator.doWithDefaultUser(holidayFactory::create);
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .delete("/boards/1/holidays/1")
                 .then()
@@ -43,17 +55,17 @@ public class DeleteHolidayIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void deleteHolidayNotFound() {
+    public void deleteHolidayNotFound(@NotFound final ResponseSpecification spec) {
         // @formatter:off
         RestAssured
                 .given()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                     .log().all()
                 .when()
                     .delete("/boards/1/holidays/999")
                 .then()
                     .log().all()
-                    .spec(notFoundSpec());
+                    .spec(spec);
         // @formatter:on
     }
 }

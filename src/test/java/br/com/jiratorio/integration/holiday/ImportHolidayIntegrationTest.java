@@ -1,9 +1,9 @@
 package br.com.jiratorio.integration.holiday;
 
-import br.com.jiratorio.base.BaseIntegrationTest;
+import br.com.jiratorio.base.Authenticator;
+import br.com.jiratorio.base.annotation.LoadStubs;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.UserConfig;
-import br.com.jiratorio.executionlistener.LoadStubs;
 import br.com.jiratorio.factory.entity.BoardFactory;
 import br.com.jiratorio.factory.entity.HolidayFactory;
 import br.com.jiratorio.factory.entity.UserConfigFactory;
@@ -24,29 +24,40 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @LoadStubs("holidays")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ImportHolidayIntegrationTest extends BaseIntegrationTest {
+public class ImportHolidayIntegrationTest {
+
+    private final BoardFactory boardFactory;
+
+    private final HolidayRepository holidayRepository;
+
+    private final HolidayFactory holidayFactory;
+
+    private final UserConfigFactory userConfigFactory;
+
+    private final Authenticator authenticator;
 
     @Autowired
-    private BoardFactory boardFactory;
-
-    @Autowired
-    private HolidayRepository holidayRepository;
-
-    @Autowired
-    private HolidayFactory holidayFactory;
-
-    @Autowired
-    private UserConfigFactory userConfigFactory;
+    public ImportHolidayIntegrationTest(final BoardFactory boardFactory,
+                                        final HolidayRepository holidayRepository,
+                                        final HolidayFactory holidayFactory,
+                                        final UserConfigFactory userConfigFactory,
+                                        final Authenticator authenticator) {
+        this.boardFactory = boardFactory;
+        this.holidayRepository = holidayRepository;
+        this.holidayFactory = holidayFactory;
+        this.userConfigFactory = userConfigFactory;
+        this.authenticator = authenticator;
+    }
 
     @Test
     public void importWithSuccess() {
-        withDefaultUser(() -> boardFactory.create());
+        authenticator.doWithDefaultUser(boardFactory::create);
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .post("/boards/1/holidays/import")
                 .then()
@@ -68,7 +79,7 @@ public class ImportHolidayIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void importWithSuccessUserConfig() {
-        UserConfig userConfig = withDefaultUser(() -> {
+        UserConfig userConfig = authenticator.withDefaultUser(() -> {
             boardFactory.create();
             return userConfigFactory.create();
         });
@@ -77,7 +88,7 @@ public class ImportHolidayIntegrationTest extends BaseIntegrationTest {
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .post("/boards/1/holidays/import")
                 .then()
@@ -99,7 +110,7 @@ public class ImportHolidayIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void alreadyBeenImported() {
-        withDefaultUser(() -> {
+        authenticator.doWithDefaultUser(() -> {
             Board board = boardFactory.create();
             IntStream.range(1, 6).forEach(i ->
                     holidayFactory.create(empty -> {
@@ -113,7 +124,7 @@ public class ImportHolidayIntegrationTest extends BaseIntegrationTest {
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .post("/boards/1/holidays/import")
                 .then()

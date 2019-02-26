@@ -1,15 +1,18 @@
 package br.com.jiratorio.integration.leadtimeconfig;
 
-import br.com.jiratorio.exception.ResourceNotFound;
-import br.com.jiratorio.repository.LeadTimeConfigRepository;
-import br.com.jiratorio.base.BaseIntegrationTest;
+import br.com.jiratorio.base.Authenticator;
+import br.com.jiratorio.base.resolver.SpecificationResolver;
+import br.com.jiratorio.base.specification.NotFound;
 import br.com.jiratorio.domain.LeadTimeConfig;
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest;
-import br.com.jiratorio.factory.entity.LeadTimeConfigFactory;
+import br.com.jiratorio.exception.ResourceNotFound;
 import br.com.jiratorio.factory.domain.request.LeadTimeConfigRequestFactory;
+import br.com.jiratorio.factory.entity.LeadTimeConfigFactory;
+import br.com.jiratorio.repository.LeadTimeConfigRepository;
 import br.com.jiratorio.util.DateUtil;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.specification.ResponseSpecification;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -19,29 +22,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UpdateLeadTimeConfigIntegrationTest extends BaseIntegrationTest {
+public class UpdateLeadTimeConfigIntegrationTest {
+
+    private final LeadTimeConfigRequestFactory leadTimeConfigRequestFactory;
+
+    private final LeadTimeConfigFactory leadTimeConfigFactory;
+
+    private final LeadTimeConfigRepository leadTimeConfigRepository;
+
+    private final Authenticator authenticator;
 
     @Autowired
-    private LeadTimeConfigRequestFactory leadTimeConfigRequestFactory;
-
-    @Autowired
-    private LeadTimeConfigFactory leadTimeConfigFactory;
-
-    @Autowired
-    private LeadTimeConfigRepository leadTimeConfigRepository;
+    public UpdateLeadTimeConfigIntegrationTest(final LeadTimeConfigRequestFactory leadTimeConfigRequestFactory,
+                                               final LeadTimeConfigFactory leadTimeConfigFactory,
+                                               final LeadTimeConfigRepository leadTimeConfigRepository,
+                                               final Authenticator authenticator) {
+        this.leadTimeConfigRequestFactory = leadTimeConfigRequestFactory;
+        this.leadTimeConfigFactory = leadTimeConfigFactory;
+        this.leadTimeConfigRepository = leadTimeConfigRepository;
+        this.authenticator = authenticator;
+    }
 
     @Test
     public void updateLeadTimeConfig() {
-        withDefaultUser(() -> leadTimeConfigFactory.create());
+        authenticator.doWithDefaultUser(leadTimeConfigFactory::create);
         LeadTimeConfigRequest request = leadTimeConfigRequestFactory.build();
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                     .contentType(ContentType.JSON)
                     .body(request)
                 .when()
@@ -62,13 +75,13 @@ public class UpdateLeadTimeConfigIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void failInValidations() {
-        withDefaultUser(() -> leadTimeConfigFactory.create());
+        authenticator.doWithDefaultUser(leadTimeConfigFactory::create);
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                     .contentType(ContentType.JSON)
                     .body(new LeadTimeConfigRequest())
                 .when()
@@ -83,22 +96,22 @@ public class UpdateLeadTimeConfigIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void updateWithBoardNotFound() {
-        withDefaultUser(() -> leadTimeConfigFactory.create());
+    public void updateWithBoardNotFound(@NotFound final ResponseSpecification spec) {
+        authenticator.withDefaultUser(leadTimeConfigFactory::create);
         LeadTimeConfigRequest request = leadTimeConfigRequestFactory.build();
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                     .contentType(ContentType.JSON)
                     .body(request)
                 .when()
                     .put("/boards/999/lead-time-configs/1")
                 .then()
                     .log().all()
-                    .spec(notFoundSpec());
+                    .spec(spec);
         // @formatter:on
     }
 }

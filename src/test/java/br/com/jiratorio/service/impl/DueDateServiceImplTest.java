@@ -13,23 +13,31 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = UnitTestContext.class)
-@ExtendWith({SpringExtension.class, MockitoExtension.class})
 public class DueDateServiceImplTest {
 
-    @InjectMocks
     private DueDateServiceImpl dueDateService;
 
+    private final JiraChangelogItemFactory jiraChangelogItemFactory;
+
     @Autowired
-    private JiraChangelogItemFactory jiraChangelogItemFactory;
+    public DueDateServiceImplTest(final JiraChangelogItemFactory jiraChangelogItemFactory) {
+        this.jiraChangelogItemFactory = jiraChangelogItemFactory;
+    }
+
+    @BeforeEach
+    public void setUp() {
+        dueDateService = new DueDateServiceImpl();
+    }
 
     @Test
     public void testExtractDueDateHistoryWithOneItem() {

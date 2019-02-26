@@ -1,12 +1,15 @@
 package br.com.jiratorio.integration.holiday;
 
-import br.com.jiratorio.matcher.IdMatcher;
-import br.com.jiratorio.base.BaseIntegrationTest;
+import br.com.jiratorio.base.Authenticator;
+import br.com.jiratorio.base.resolver.SpecificationResolver;
+import br.com.jiratorio.base.specification.NotFound;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.Holiday;
 import br.com.jiratorio.factory.entity.BoardFactory;
 import br.com.jiratorio.factory.entity.HolidayFactory;
+import br.com.jiratorio.matcher.IdMatcher;
 import io.restassured.RestAssured;
+import io.restassured.specification.ResponseSpecification;
 import java.time.format.DateTimeFormatter;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
@@ -16,19 +19,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SearchHolidayIntegrationTest extends BaseIntegrationTest {
+public class SearchHolidayIntegrationTest {
+
+    private final HolidayFactory holidayFactory;
+
+    private final BoardFactory boardFactory;
+
+    private final Authenticator authenticator;
 
     @Autowired
-    private HolidayFactory holidayFactory;
-
-    @Autowired
-    private BoardFactory boardFactory;
+    public SearchHolidayIntegrationTest(final HolidayFactory holidayFactory,
+                                        final BoardFactory boardFactory,
+                                        final Authenticator authenticator) {
+        this.holidayFactory = holidayFactory;
+        this.boardFactory = boardFactory;
+        this.authenticator = authenticator;
+    }
 
     @Test
     public void findAllHolidays() {
-        Board board = withDefaultUser(() -> {
+        Board board = authenticator.withDefaultUser(() -> {
             Board boardExample = boardFactory.create();
             holidayFactory.create(10, example -> {
                 example.setBoard(boardExample);
@@ -41,7 +53,7 @@ public class SearchHolidayIntegrationTest extends BaseIntegrationTest {
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .get("/boards/{id}/holidays", board.getId())
                 .then()
@@ -59,13 +71,13 @@ public class SearchHolidayIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void findById() {
-        Holiday holiday = withDefaultUser(() -> holidayFactory.create());
+        Holiday holiday = authenticator.withDefaultUser(holidayFactory::create);
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .get("/boards/1/holidays/1")
                 .then()
@@ -79,17 +91,17 @@ public class SearchHolidayIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void findByIdNotFound() {
+    public void findByIdNotFound(@NotFound final ResponseSpecification spec) {
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .get("/boards/1/holidays/999")
                 .then()
                     .log().all()
-                    .spec(notFoundSpec());
+                    .spec(spec);
         // @formatter:on
     }
 

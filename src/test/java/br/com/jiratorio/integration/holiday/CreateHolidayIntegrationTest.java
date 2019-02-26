@@ -1,12 +1,12 @@
 package br.com.jiratorio.integration.holiday;
 
-import br.com.jiratorio.exception.ResourceNotFound;
-import br.com.jiratorio.factory.domain.request.HolidayRequestFactory;
-import br.com.jiratorio.repository.HolidayRepository;
-import br.com.jiratorio.base.BaseIntegrationTest;
+import br.com.jiratorio.base.Authenticator;
 import br.com.jiratorio.domain.Holiday;
 import br.com.jiratorio.domain.request.HolidayRequest;
+import br.com.jiratorio.exception.ResourceNotFound;
+import br.com.jiratorio.factory.domain.request.HolidayRequestFactory;
 import br.com.jiratorio.factory.entity.BoardFactory;
+import br.com.jiratorio.repository.HolidayRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.time.format.DateTimeFormatter;
@@ -21,21 +21,31 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CreateHolidayIntegrationTest extends BaseIntegrationTest {
+public class CreateHolidayIntegrationTest {
+
+    private final HolidayRequestFactory holidayRequestFactory;
+
+    private final BoardFactory boardFactory;
+
+    private final HolidayRepository holidayRepository;
+
+    private final Authenticator authenticator;
 
     @Autowired
-    private HolidayRequestFactory holidayRequestFactory;
-
-    @Autowired
-    private BoardFactory boardFactory;
-
-    @Autowired
-    private HolidayRepository holidayRepository;
+    public CreateHolidayIntegrationTest(final HolidayRequestFactory holidayRequestFactory,
+                                        final BoardFactory boardFactory,
+                                        final HolidayRepository holidayRepository,
+                                        final Authenticator authenticator) {
+        this.holidayRequestFactory = holidayRequestFactory;
+        this.boardFactory = boardFactory;
+        this.holidayRepository = holidayRepository;
+        this.authenticator = authenticator;
+    }
 
     @Test
     public void createHoliday() {
         HolidayRequest request = holidayRequestFactory.build();
-        withDefaultUser(() -> boardFactory.create());
+        authenticator.doWithDefaultUser(boardFactory::create);
 
         // @formatter:off
         RestAssured
@@ -43,7 +53,7 @@ public class CreateHolidayIntegrationTest extends BaseIntegrationTest {
                     .log().all()
                     .contentType(ContentType.JSON)
                     .body(request)
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .post("/boards/1/holidays")
                 .then()
@@ -67,7 +77,7 @@ public class CreateHolidayIntegrationTest extends BaseIntegrationTest {
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                     .contentType(ContentType.JSON)
                     .body(request)
                 .when()

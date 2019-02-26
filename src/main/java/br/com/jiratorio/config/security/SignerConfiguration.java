@@ -5,6 +5,7 @@ import java.nio.charset.Charset;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.jwt.crypto.sign.RsaSigner;
@@ -14,10 +15,11 @@ import org.springframework.security.jwt.crypto.sign.Signer;
 import org.springframework.util.StreamUtils;
 
 @Configuration
-public class RsaConfiguration {
+@Profile("!test")
+public class SignerConfiguration {
 
     @Bean
-    public Signer rsaSigner(final ResourceLoader resourceLoader,
+    public Signer signer(final ResourceLoader resourceLoader,
                             @Value("${ssh-key.private}") final String path) throws IOException {
         Resource resource = resourceLoader.getResource(path);
         return new RsaSigner(
@@ -25,7 +27,7 @@ public class RsaConfiguration {
     }
 
     @Bean
-    public SignatureVerifier rsaVerifier(final ResourceLoader resourceLoader,
+    public SignatureVerifier verifier(final ResourceLoader resourceLoader,
                                          @Value("${ssh-key.public}") final String path) throws IOException {
         Resource resource = resourceLoader.getResource(path);
         return new RsaVerifier(

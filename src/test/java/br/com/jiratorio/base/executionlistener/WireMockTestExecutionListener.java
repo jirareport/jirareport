@@ -1,5 +1,6 @@
-package br.com.jiratorio.executionlistener;
+package br.com.jiratorio.base.executionlistener;
 
+import br.com.jiratorio.base.annotation.LoadStubs;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 import java.io.IOException;

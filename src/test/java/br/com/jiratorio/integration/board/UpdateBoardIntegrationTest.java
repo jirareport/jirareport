@@ -1,15 +1,18 @@
 package br.com.jiratorio.integration.board;
 
-import br.com.jiratorio.exception.ResourceNotFound;
-import br.com.jiratorio.repository.BoardRepository;
-import br.com.jiratorio.base.BaseIntegrationTest;
+import br.com.jiratorio.base.Authenticator;
+import br.com.jiratorio.base.resolver.SpecificationResolver;
+import br.com.jiratorio.base.specification.NotFound;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.request.UpdateBoardRequest;
-import br.com.jiratorio.factory.entity.BoardFactory;
+import br.com.jiratorio.exception.ResourceNotFound;
 import br.com.jiratorio.factory.domain.request.UpdateBoardRequestFactory;
+import br.com.jiratorio.factory.entity.BoardFactory;
+import br.com.jiratorio.repository.BoardRepository;
 import br.com.jiratorio.util.DateUtil;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.specification.ResponseSpecification;
 import java.util.stream.Collectors;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
@@ -19,29 +22,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UpdateBoardIntegrationTest extends BaseIntegrationTest {
+public class UpdateBoardIntegrationTest {
+
+    private final BoardFactory boardFactory;
+
+    private final UpdateBoardRequestFactory updateBoardRequestFactory;
+
+    private final BoardRepository boardRepository;
+
+    private final Authenticator authenticator;
 
     @Autowired
-    private BoardFactory boardFactory;
-
-    @Autowired
-    private UpdateBoardRequestFactory updateBoardRequestFactory;
-
-    @Autowired
-    private BoardRepository boardRepository;
+    public UpdateBoardIntegrationTest(final BoardFactory boardFactory,
+                                      final UpdateBoardRequestFactory updateBoardRequestFactory,
+                                      final BoardRepository boardRepository,
+                                      final Authenticator authenticator) {
+        this.boardFactory = boardFactory;
+        this.updateBoardRequestFactory = updateBoardRequestFactory;
+        this.boardRepository = boardRepository;
+        this.authenticator = authenticator;
+    }
 
     @Test
     public void updateBoard() throws Exception {
-        withDefaultUser(() -> boardFactory.create());
+        authenticator.doWithDefaultUser(boardFactory::create);
         UpdateBoardRequest request = updateBoardRequestFactory.build();
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                     .contentType(ContentType.JSON)
                     .body(request)
                 .when()
@@ -75,19 +88,19 @@ public class UpdateBoardIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void updateNotFoundBoard() {
+    public void updateNotFoundBoard(@NotFound final ResponseSpecification spec) {
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                     .contentType(ContentType.JSON)
                     .body(new UpdateBoardRequest())
                 .when()
                     .put("/boards/999")
                 .then()
                     .log().all()
-                    .spec(notFoundSpec());
+                    .spec(spec);
         // @formatter:on
     }
 }

@@ -1,9 +1,12 @@
 package br.com.jiratorio.integration.leadtimeconfig;
 
-import br.com.jiratorio.repository.LeadTimeConfigRepository;
-import br.com.jiratorio.base.BaseIntegrationTest;
+import br.com.jiratorio.base.Authenticator;
+import br.com.jiratorio.base.resolver.SpecificationResolver;
+import br.com.jiratorio.base.specification.NotFound;
 import br.com.jiratorio.factory.entity.LeadTimeConfigFactory;
+import br.com.jiratorio.repository.LeadTimeConfigRepository;
 import io.restassured.RestAssured;
+import io.restassured.specification.ResponseSpecification;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,25 +15,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class DeleteLeadTimeConfigIntegrationTest extends BaseIntegrationTest {
+public class DeleteLeadTimeConfigIntegrationTest {
+
+    private final LeadTimeConfigFactory leadTimeConfigFactory;
+
+    private final LeadTimeConfigRepository leadTimeConfigRepository;
+
+    private final Authenticator authenticator;
 
     @Autowired
-    private LeadTimeConfigFactory leadTimeConfigFactory;
-
-    @Autowired
-    private LeadTimeConfigRepository leadTimeConfigRepository;
+    public DeleteLeadTimeConfigIntegrationTest(final LeadTimeConfigFactory leadTimeConfigFactory,
+                                               final LeadTimeConfigRepository leadTimeConfigRepository,
+                                               final Authenticator authenticator) {
+        this.leadTimeConfigFactory = leadTimeConfigFactory;
+        this.leadTimeConfigRepository = leadTimeConfigRepository;
+        this.authenticator = authenticator;
+    }
 
     @Test
     public void deleteLeadTimeConfig() {
-        withDefaultUser(() -> leadTimeConfigFactory.create());
+        authenticator.doWithDefaultUser(leadTimeConfigFactory::create);
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .delete("/boards/1/lead-time-configs/1")
                 .then()
@@ -43,19 +55,19 @@ public class DeleteLeadTimeConfigIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void deleteWithBoardNotFound() {
-        withDefaultUser(() -> leadTimeConfigFactory.create());
+    public void deleteWithBoardNotFound(@NotFound final ResponseSpecification spec) {
+        authenticator.doWithDefaultUser(leadTimeConfigFactory::create);
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .delete("/boards/999/lead-time-configs/1")
                 .then()
                     .log().all()
-                    .spec(notFoundSpec());
+                    .spec(spec);
         // @formatter:on
 
         long count = leadTimeConfigRepository.count();
@@ -63,19 +75,19 @@ public class DeleteLeadTimeConfigIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void deleteWithLeadTimeConfigNotFound() {
-        withDefaultUser(() -> leadTimeConfigFactory.create());
+    public void deleteWithLeadTimeConfigNotFound(@NotFound final ResponseSpecification spec) {
+        authenticator.doWithDefaultUser(leadTimeConfigFactory::create);
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .delete("/boards/1/lead-time-configs/9999")
                 .then()
                     .log().all()
-                    .spec(notFoundSpec());
+                    .spec(spec);
         // @formatter:on
 
         long count = leadTimeConfigRepository.count();

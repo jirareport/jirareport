@@ -1,12 +1,15 @@
 package br.com.jiratorio.integration.leadtimeconfig;
 
-import br.com.jiratorio.matcher.IdMatcher;
-import br.com.jiratorio.base.BaseIntegrationTest;
+import br.com.jiratorio.base.Authenticator;
+import br.com.jiratorio.base.resolver.SpecificationResolver;
+import br.com.jiratorio.base.specification.NotFound;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.LeadTimeConfig;
 import br.com.jiratorio.factory.entity.BoardFactory;
 import br.com.jiratorio.factory.entity.LeadTimeConfigFactory;
+import br.com.jiratorio.matcher.IdMatcher;
 import io.restassured.RestAssured;
+import io.restassured.specification.ResponseSpecification;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -15,19 +18,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SearchLeadTimeConfigIntegrationTest extends BaseIntegrationTest {
+public class SearchLeadTimeConfigIntegrationTest {
+
+    private final LeadTimeConfigFactory leadTimeConfigFactory;
+
+    private final BoardFactory boardFactory;
+
+    private final Authenticator authenticator;
 
     @Autowired
-    private LeadTimeConfigFactory leadTimeConfigFactory;
-
-    @Autowired
-    private BoardFactory boardFactory;
+    public SearchLeadTimeConfigIntegrationTest(final LeadTimeConfigFactory leadTimeConfigFactory,
+                                               final BoardFactory boardFactory,
+                                               final Authenticator authenticator) {
+        this.leadTimeConfigFactory = leadTimeConfigFactory;
+        this.boardFactory = boardFactory;
+        this.authenticator = authenticator;
+    }
 
     @Test
     public void findAllLeadTimeConfig() {
-        withDefaultUser(() -> {
+        authenticator.doWithDefaultUser(() -> {
             Board board = boardFactory.create();
             leadTimeConfigFactory.create(10, empty ->
                     empty.setBoard(board));
@@ -37,7 +49,7 @@ public class SearchLeadTimeConfigIntegrationTest extends BaseIntegrationTest {
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .get("/boards/1/lead-time-configs")
                 .then()
@@ -50,13 +62,13 @@ public class SearchLeadTimeConfigIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void findById() {
-        LeadTimeConfig leadTimeConfig = withDefaultUser(() -> leadTimeConfigFactory.create());
+        LeadTimeConfig leadTimeConfig = authenticator.withDefaultUser(leadTimeConfigFactory::create);
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .get("/boards/1/lead-time-configs/1")
                 .then()
@@ -72,19 +84,19 @@ public class SearchLeadTimeConfigIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void findByIdNotFound() {
-        withDefaultUser(() -> boardFactory.create());
+    public void findByIdNotFound(@NotFound final ResponseSpecification spec) {
+        authenticator.doWithDefaultUser(boardFactory::create);
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .get("/boards/1/lead-time-configs/1")
                 .then()
                     .log().all()
-                    .spec(notFoundSpec());
+                    .spec(spec);
         // @formatter:on
     }
 }

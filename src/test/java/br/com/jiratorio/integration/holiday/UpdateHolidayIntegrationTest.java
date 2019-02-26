@@ -1,15 +1,18 @@
 package br.com.jiratorio.integration.holiday;
 
-import br.com.jiratorio.exception.ResourceNotFound;
-import br.com.jiratorio.factory.domain.request.HolidayRequestFactory;
-import br.com.jiratorio.repository.HolidayRepository;
-import br.com.jiratorio.base.BaseIntegrationTest;
+import br.com.jiratorio.base.Authenticator;
+import br.com.jiratorio.base.resolver.SpecificationResolver;
+import br.com.jiratorio.base.specification.NotFound;
 import br.com.jiratorio.domain.Holiday;
 import br.com.jiratorio.domain.request.HolidayRequest;
+import br.com.jiratorio.exception.ResourceNotFound;
+import br.com.jiratorio.factory.domain.request.HolidayRequestFactory;
 import br.com.jiratorio.factory.entity.BoardFactory;
 import br.com.jiratorio.factory.entity.HolidayFactory;
+import br.com.jiratorio.repository.HolidayRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.specification.ResponseSpecification;
 import java.time.format.DateTimeFormatter;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
@@ -20,32 +23,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UpdateHolidayIntegrationTest extends BaseIntegrationTest {
+public class UpdateHolidayIntegrationTest {
+
+    private final HolidayFactory holidayFactory;
+
+    private final HolidayRequestFactory holidayRequestFactory;
+
+    private final BoardFactory boardFactory;
+
+    private final HolidayRepository holidayRepository;
+
+    private final Authenticator authenticator;
 
     @Autowired
-    private HolidayFactory holidayFactory;
-
-    @Autowired
-    private HolidayRequestFactory holidayRequestFactory;
-
-    @Autowired
-    private BoardFactory boardFactory;
-
-    @Autowired
-    private HolidayRepository holidayRepository;
+    public UpdateHolidayIntegrationTest(final HolidayFactory holidayFactory,
+                                        final HolidayRequestFactory holidayRequestFactory,
+                                        final BoardFactory boardFactory,
+                                        final HolidayRepository holidayRepository,
+                                        final Authenticator authenticator) {
+        this.holidayFactory = holidayFactory;
+        this.holidayRequestFactory = holidayRequestFactory;
+        this.boardFactory = boardFactory;
+        this.holidayRepository = holidayRepository;
+        this.authenticator = authenticator;
+    }
 
     @Test
     public void updateHoliday() {
-        withDefaultUser(() -> holidayFactory.create());
+        authenticator.doWithDefaultUser(holidayFactory::create);
         HolidayRequest request = holidayRequestFactory.build();
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                     .contentType(ContentType.JSON)
                     .body(request)
                 .when()
@@ -65,14 +79,14 @@ public class UpdateHolidayIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void failInValidations() {
-        withDefaultUser(() -> holidayFactory.create());
+        authenticator.doWithDefaultUser(holidayFactory::create);
         HolidayRequest request = new HolidayRequest();
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                     .contentType(ContentType.JSON)
                     .body(request)
                 .when()
@@ -86,22 +100,22 @@ public class UpdateHolidayIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void updateHolidayNotFound() {
-        withDefaultUser(() -> boardFactory.create());
+    public void updateHolidayNotFound(@NotFound final ResponseSpecification spec) {
+        authenticator.doWithDefaultUser(boardFactory::create);
         HolidayRequest request = holidayRequestFactory.build();
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                     .contentType(ContentType.JSON)
                     .body(request)
                 .when()
                     .put("/boards/1/holidays/999")
                 .then()
                     .log().all()
-                    .spec(notFoundSpec());
+                    .spec(spec);
         // @formatter:on
     }
 }

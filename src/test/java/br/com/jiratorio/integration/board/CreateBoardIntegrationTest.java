@@ -1,11 +1,11 @@
 package br.com.jiratorio.integration.board;
 
-import br.com.jiratorio.exception.ResourceNotFound;
-import br.com.jiratorio.repository.BoardRepository;
-import br.com.jiratorio.base.BaseIntegrationTest;
+import br.com.jiratorio.base.Authenticator;
 import br.com.jiratorio.domain.Board;
 import br.com.jiratorio.domain.request.CreateBoardRequest;
+import br.com.jiratorio.exception.ResourceNotFound;
 import br.com.jiratorio.factory.domain.request.CreateBoardRequestFactory;
+import br.com.jiratorio.repository.BoardRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
@@ -19,13 +19,22 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CreateBoardIntegrationTest extends BaseIntegrationTest {
+public class CreateBoardIntegrationTest {
+
+    private final BoardRepository boardRepository;
+
+    private final CreateBoardRequestFactory createBoardRequestFactory;
+
+    private final Authenticator authenticator;
 
     @Autowired
-    private BoardRepository boardRepository;
-
-    @Autowired
-    private CreateBoardRequestFactory createBoardRequestFactory;
+    public CreateBoardIntegrationTest(final BoardRepository boardRepository,
+                                      final CreateBoardRequestFactory createBoardRequestFactory,
+                                      final Authenticator authenticator) {
+        this.boardRepository = boardRepository;
+        this.createBoardRequestFactory = createBoardRequestFactory;
+        this.authenticator = authenticator;
+    }
 
     @Test
     public void createBoard() {
@@ -35,7 +44,7 @@ public class CreateBoardIntegrationTest extends BaseIntegrationTest {
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                     .contentType(ContentType.JSON)
                     .body(request)
                 .when()
@@ -61,7 +70,7 @@ public class CreateBoardIntegrationTest extends BaseIntegrationTest {
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                     .contentType(ContentType.JSON)
                     .body(new CreateBoardRequest())
                 .when()

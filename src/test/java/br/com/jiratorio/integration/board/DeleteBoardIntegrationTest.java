@@ -1,9 +1,12 @@
 package br.com.jiratorio.integration.board;
 
-import br.com.jiratorio.repository.BoardRepository;
-import br.com.jiratorio.base.BaseIntegrationTest;
+import br.com.jiratorio.base.Authenticator;
+import br.com.jiratorio.base.resolver.SpecificationResolver;
+import br.com.jiratorio.base.specification.NotFound;
 import br.com.jiratorio.factory.entity.BoardFactory;
+import br.com.jiratorio.repository.BoardRepository;
 import io.restassured.RestAssured;
+import io.restassured.specification.ResponseSpecification;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,25 +15,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class DeleteBoardIntegrationTest extends BaseIntegrationTest {
+public class DeleteBoardIntegrationTest {
+
+    private final BoardFactory boardFactory;
+
+    private final BoardRepository boardRepository;
+
+    private final Authenticator authenticator;
 
     @Autowired
-    private BoardFactory boardFactory;
-
-    @Autowired
-    private BoardRepository boardRepository;
+    public DeleteBoardIntegrationTest(final BoardFactory boardFactory,
+                                      final BoardRepository boardRepository,
+                                      final Authenticator authenticator) {
+        this.boardFactory = boardFactory;
+        this.boardRepository = boardRepository;
+        this.authenticator = authenticator;
+    }
 
     @Test
     public void deleteBord() {
-        withDefaultUser(() -> boardFactory.create());
+        authenticator.doWithDefaultUser(boardFactory::create);
 
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .delete("/boards/1")
                 .then()
@@ -48,7 +60,7 @@ public class DeleteBoardIntegrationTest extends BaseIntegrationTest {
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .delete("/boards/1")
                 .then()
@@ -58,17 +70,17 @@ public class DeleteBoardIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void deleteBoardNotFound() {
+    public void deleteBoardNotFound(@NotFound final ResponseSpecification notFoundSpec) {
         // @formatter:off
         RestAssured
                 .given()
                     .log().all()
-                    .header(defaultUserHeader())
+                    .header(authenticator.defaultUserHeader())
                 .when()
                     .delete("/boards/9999")
                 .then()
                     .log().all()
-                    .spec(notFoundSpec());
+                    .spec(notFoundSpec);
         // @formatter:on
     }
 }

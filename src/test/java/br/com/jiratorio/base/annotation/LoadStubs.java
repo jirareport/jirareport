@@ -1,4 +1,4 @@
-package br.com.jiratorio.executionlistener;
+package br.com.jiratorio.base.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

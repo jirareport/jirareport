@@ -5,10 +5,6 @@ holiday:
   url: http://localhost:8888/holiday-api
   token: super-secret-token
 
-ssh-key:
-  public: classpath:/ssh_key/jirareport.pub
-  private: classpath:/ssh_key/jirareport
-
 spring:
   application:
     name: jirareport
@@ -35,8 +31,9 @@ spring:
       - retrieveCurrentUserConfig
     caffeine:
       spec: expireAfterWrite=15m
-
   flyway:
     enabled: true
     out-of-order: true
     ignore-missing-migrations: true
+  profiles:
+    active: test
