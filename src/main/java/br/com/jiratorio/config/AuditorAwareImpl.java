@@ -1,6 +1,6 @@
 package br.com.jiratorio.config;
 
-import br.com.jiratorio.domain.vo.Account;
+import br.com.jiratorio.domain.Account;
 import java.util.Optional;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContextHolder;

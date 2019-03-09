@@ -1,15 +1,15 @@
 package br.com.jiratorio.service;
 
-import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.domain.Issue;
-import br.com.jiratorio.domain.IssuePeriod;
-import br.com.jiratorio.domain.embedded.Chart;
-import br.com.jiratorio.domain.embedded.ColumnTimeAvg;
-import br.com.jiratorio.domain.embedded.Histogram;
-import br.com.jiratorio.domain.vo.ChartAggregator;
-import br.com.jiratorio.domain.vo.DynamicChart;
-import br.com.jiratorio.domain.vo.IssueCountBySize;
-import br.com.jiratorio.domain.vo.LeadTimeCompareChart;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.Issue;
+import br.com.jiratorio.domain.entity.IssuePeriod;
+import br.com.jiratorio.domain.entity.embedded.Chart;
+import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg;
+import br.com.jiratorio.domain.entity.embedded.Histogram;
+import br.com.jiratorio.domain.ChartAggregator;
+import br.com.jiratorio.domain.DynamicChart;
+import br.com.jiratorio.domain.IssueCountBySize;
+import br.com.jiratorio.domain.LeadTimeCompareChart;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

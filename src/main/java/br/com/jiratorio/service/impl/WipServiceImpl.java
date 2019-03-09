@@ -1,6 +1,6 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.domain.Issue;
+import br.com.jiratorio.domain.entity.Issue;
 import br.com.jiratorio.service.WipService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

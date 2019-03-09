@@ -1,12 +1,12 @@
 package br.com.jiratorio.controller;
 
-import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.domain.Issue;
-import br.com.jiratorio.domain.IssuePeriod;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.Issue;
+import br.com.jiratorio.domain.entity.IssuePeriod;
 import br.com.jiratorio.domain.form.IssuePeriodForm;
 import br.com.jiratorio.domain.response.IssuePeriodDetailsResponse;
 import br.com.jiratorio.domain.response.ListIssuePeriodResponse;
-import br.com.jiratorio.domain.vo.IssuePeriodList;
+import br.com.jiratorio.domain.IssuePeriodList;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.IssuePeriodService;
 import br.com.jiratorio.service.IssueService;

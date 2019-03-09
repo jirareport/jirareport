@@ -1,6 +1,6 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.domain.vo.Account;
+import br.com.jiratorio.domain.Account;
 import br.com.jiratorio.exception.ParseTokenException;
 import br.com.jiratorio.service.TokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;

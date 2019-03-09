@@ -1,8 +1,8 @@
 package br.com.jiratorio.domain.response;
 
-import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.domain.Issue;
-import br.com.jiratorio.domain.IssuePeriod;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.Issue;
+import br.com.jiratorio.domain.entity.IssuePeriod;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;

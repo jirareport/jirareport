@@ -1,8 +1,8 @@
 package br.com.jiratorio.service;
 
 import br.com.jiratorio.domain.DueDateType;
-import br.com.jiratorio.domain.embedded.DueDateHistory;
-import br.com.jiratorio.domain.vo.changelog.JiraChangelogItem;
+import br.com.jiratorio.domain.entity.embedded.DueDateHistory;
+import br.com.jiratorio.domain.changelog.JiraChangelogItem;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;

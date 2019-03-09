@@ -3,7 +3,7 @@ package br.com.jiratorio.repository;
 import java.time.LocalDate;
 import java.util.List;
 
-import br.com.jiratorio.domain.IssuePeriod;
+import br.com.jiratorio.domain.entity.IssuePeriod;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

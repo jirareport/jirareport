@@ -1,7 +1,7 @@
 package br.com.jiratorio.client;
 
 import br.com.jiratorio.client.config.HolidayClientConfig;
-import br.com.jiratorio.domain.vo.HolidayVO;
+import br.com.jiratorio.domain.response.HolidayApiResponse;
 import java.util.List;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -17,8 +17,8 @@ public interface HolidayClient {
 
     @GetMapping
     @Cacheable("findAllHolidaysInCity")
-    List<HolidayVO> findAllHolidaysInCity(@RequestParam("ano") Integer year,
-                                          @RequestParam("estado") String state,
-                                          @RequestParam("cidade") String city,
-                                          @RequestParam("token") String token);
+    List<HolidayApiResponse> findAllHolidaysInCity(@RequestParam("ano") Integer year,
+                                                   @RequestParam("estado") String state,
+                                                   @RequestParam("cidade") String city,
+                                                   @RequestParam("token") String token);
 }

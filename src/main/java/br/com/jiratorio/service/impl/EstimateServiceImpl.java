@@ -1,17 +1,18 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.domain.Board;
+import br.com.jiratorio.domain.FluxColumn;
+import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.EstimateFieldReference;
 import br.com.jiratorio.domain.form.EstimateForm;
 import br.com.jiratorio.domain.form.IssueForm;
-import br.com.jiratorio.domain.vo.EstimateIssue;
-import br.com.jiratorio.domain.vo.Percentile;
+import br.com.jiratorio.domain.EstimateIssue;
+import br.com.jiratorio.domain.Percentile;
 import br.com.jiratorio.exception.InternalServerErrorException;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.EstimateService;
 import br.com.jiratorio.service.HolidayService;
 import br.com.jiratorio.service.IssueService;
-import br.com.jiratorio.util.CalcUtil;
+import br.com.jiratorio.service.PercentileService;
 import br.com.jiratorio.util.DateUtil;
 import br.com.jiratorio.util.StringUtil;
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 @Slf4j
 @Service
@@ -35,12 +37,16 @@ public class EstimateServiceImpl implements EstimateService {
 
     private final HolidayService holidayService;
 
+    private final PercentileService percentileService;
+
     public EstimateServiceImpl(final BoardService boardService,
                                final IssueService issueService,
-                               final HolidayService holidayService) {
+                               final HolidayService holidayService,
+                               final PercentileService percentileService) {
         this.boardService = boardService;
         this.issueService = issueService;
         this.holidayService = holidayService;
+        this.percentileService = percentileService;
     }
 
     @Override
@@ -90,7 +96,7 @@ public class EstimateServiceImpl implements EstimateService {
 
         List<Long> leadTimeList = issueService.findLeadTimeByExample(board.getId(), issueForm);
 
-        return CalcUtil.calculatePercentile(leadTimeList);
+        return percentileService.calculatePercentile(leadTimeList);
     }
 
     private IssueForm buildIssueFormByEstimateForm(final EstimateForm estimateForm, final String value) {
@@ -150,10 +156,13 @@ public class EstimateServiceImpl implements EstimateService {
     private String searchJQL(final Board board) {
         log.info("Method=searchJQL, board={}", board);
 
-        Set<String> fluxColumns = CalcUtil.calcWipColumns(board);
-        if (fluxColumns == null || fluxColumns.isEmpty()) {
+        FluxColumn fluxColumn = new FluxColumn(board);
+
+        Set<String> wipColumns = fluxColumn.getWipColumns();
+        if (CollectionUtils.isEmpty(wipColumns)) {
             throw new InternalServerErrorException("O fluxo de colunas não está configurado");
         }
+
         Map<String, Object> params = new HashMap<>();
 
         StringBuilder jql = new StringBuilder();
@@ -167,7 +176,7 @@ public class EstimateServiceImpl implements EstimateService {
         jql.append(" AND status IN ({fluxColumns}) ");
 
         params.put("project", board.getExternalId().toString());
-        params.put("fluxColumns", fluxColumns);
+        params.put("fluxColumns", wipColumns);
 
         return StringUtil.replaceParams(jql.toString(), params);
     }

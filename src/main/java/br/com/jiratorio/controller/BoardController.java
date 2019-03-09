@@ -1,6 +1,6 @@
 package br.com.jiratorio.controller;
 
-import br.com.jiratorio.domain.Board;
+import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.request.CreateBoardRequest;
 import br.com.jiratorio.domain.request.UpdateBoardRequest;
 import br.com.jiratorio.domain.response.BoardDetailsResponse;

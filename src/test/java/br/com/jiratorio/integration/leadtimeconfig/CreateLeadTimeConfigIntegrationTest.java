@@ -3,7 +3,7 @@ package br.com.jiratorio.integration.leadtimeconfig;
 import br.com.jiratorio.base.Authenticator;
 import br.com.jiratorio.base.resolver.SpecificationResolver;
 import br.com.jiratorio.base.specification.NotFound;
-import br.com.jiratorio.domain.LeadTimeConfig;
+import br.com.jiratorio.domain.entity.LeadTimeConfig;
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest;
 import br.com.jiratorio.exception.ResourceNotFound;
 import br.com.jiratorio.factory.domain.request.LeadTimeConfigRequestFactory;

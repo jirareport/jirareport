@@ -2,15 +2,16 @@ package br.com.jiratorio.service.impl;
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime;
 import br.com.jiratorio.client.IssueClient;
-import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.domain.Issue;
-import br.com.jiratorio.domain.embedded.Chart;
+import br.com.jiratorio.domain.FluxColumn;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.Issue;
+import br.com.jiratorio.domain.entity.embedded.Chart;
 import br.com.jiratorio.domain.form.IssueForm;
 import br.com.jiratorio.domain.form.IssuePeriodForm;
-import br.com.jiratorio.domain.vo.ChartAggregator;
-import br.com.jiratorio.domain.vo.EstimateIssue;
-import br.com.jiratorio.domain.vo.SandBox;
-import br.com.jiratorio.domain.vo.SandBoxFilter;
+import br.com.jiratorio.domain.ChartAggregator;
+import br.com.jiratorio.domain.EstimateIssue;
+import br.com.jiratorio.domain.SandBox;
+import br.com.jiratorio.domain.SandBoxFilter;
 import br.com.jiratorio.mapper.EstimateIssueMapper;
 import br.com.jiratorio.mapper.IssueMapper;
 import br.com.jiratorio.repository.IssueRepository;
@@ -18,7 +19,6 @@ import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.ChartService;
 import br.com.jiratorio.service.IssueService;
 import br.com.jiratorio.service.LeadTimeService;
-import br.com.jiratorio.util.CalcUtil;
 import br.com.jiratorio.util.DateUtil;
 import br.com.jiratorio.util.StringUtil;
 import java.time.LocalDate;
@@ -166,9 +166,6 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     public String searchJQL(final IssuePeriodForm issuePeriodForm, final Board board) {
         log.info("Method=searchJQL, issuePeriodForm={}, board={}", issuePeriodForm, board);
 
-        final List<String> fluxColumn = board.getFluxColumn();
-        String lastColumn = fluxColumn == null || fluxColumn.isEmpty() ? "Done" : fluxColumn.get(fluxColumn.size() - 1);
-
         Map<String, Object> params = new HashMap<>();
 
         StringBuilder jql = new StringBuilder();
@@ -187,13 +184,15 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         jql.append(" AND status WAS IN ({startColumns}) ");
         jql.append(" AND status IN ({endColumns}) ");
 
+        FluxColumn fluxColumn = new FluxColumn(board);
+
         params.put("project", board.getExternalId().toString());
         params.put("startDate", DateUtil.toENDate(issuePeriodForm.getStartDate()));
         params.put("endDate", DateUtil.toENDate(issuePeriodForm.getEndDate()) + " 23:59");
-        params.put("lastColumn", lastColumn);
+        params.put("lastColumn", fluxColumn.getLastColumn());
         params.put("endColumn", board.getEndColumn());
-        params.put("endColumns", CalcUtil.calcEndColumns(board));
-        params.put("startColumns", CalcUtil.calcStartColumns(board));
+        params.put("endColumns", fluxColumn.getEndColumns());
+        params.put("startColumns", fluxColumn.getStartColumns());
 
         return StringUtil.replaceParams(jql.toString(), params);
     }

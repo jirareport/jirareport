@@ -1,6 +1,6 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.domain.vo.Account;
+import br.com.jiratorio.domain.Account;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class AbstractService {

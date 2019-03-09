@@ -1,6 +1,6 @@
 package br.com.jiratorio.mapper;
 
-import br.com.jiratorio.domain.LeadTimeConfig;
+import br.com.jiratorio.domain.entity.LeadTimeConfig;
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest;
 import br.com.jiratorio.domain.response.LeadTimeConfigResponse;
 import br.com.jiratorio.mapper.util.StringTransformer;

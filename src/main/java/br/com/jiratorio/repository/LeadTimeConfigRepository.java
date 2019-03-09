@@ -2,7 +2,7 @@ package br.com.jiratorio.repository;
 
 import java.util.List;
 
-import br.com.jiratorio.domain.LeadTimeConfig;
+import br.com.jiratorio.domain.entity.LeadTimeConfig;
 import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

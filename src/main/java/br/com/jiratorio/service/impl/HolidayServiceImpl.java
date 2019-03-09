@@ -1,12 +1,12 @@
 package br.com.jiratorio.service.impl;
 
 import br.com.jiratorio.client.HolidayClient;
-import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.domain.Holiday;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.Holiday;
 import br.com.jiratorio.domain.ImportHolidayInfo;
 import br.com.jiratorio.domain.request.HolidayRequest;
 import br.com.jiratorio.domain.response.HolidayResponse;
-import br.com.jiratorio.domain.vo.HolidayVO;
+import br.com.jiratorio.domain.response.HolidayApiResponse;
 import br.com.jiratorio.exception.HolidaysAlreadyImported;
 import br.com.jiratorio.exception.ResourceNotFound;
 import br.com.jiratorio.mapper.HolidayMapper;
@@ -153,9 +153,9 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
 
         ImportHolidayInfo info = userService.retrieveHolidayInfo();
 
-        List<HolidayVO> allHolidaysInCity = holidayClient.findAllHolidaysInCity(
+        List<HolidayApiResponse> allHolidaysInCity = holidayClient.findAllHolidaysInCity(
                 LocalDate.now().getYear(), info.getState(), info.getCity(), info.getHolidayToken());
 
-        return holidayMapper.fromVOS(allHolidaysInCity, board);
+        return holidayMapper.fromApiResponse(allHolidaysInCity, board);
     }
 }

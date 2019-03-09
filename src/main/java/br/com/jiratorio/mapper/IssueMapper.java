@@ -1,17 +1,17 @@
 package br.com.jiratorio.mapper;
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime;
-import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.domain.Issue;
-import br.com.jiratorio.domain.embedded.Changelog;
-import br.com.jiratorio.domain.embedded.DueDateHistory;
-import br.com.jiratorio.domain.vo.DynamicFieldConfig;
-import br.com.jiratorio.domain.vo.changelog.JiraChangelog;
-import br.com.jiratorio.domain.vo.changelog.JiraChangelogHistory;
-import br.com.jiratorio.domain.vo.changelog.JiraChangelogItem;
+import br.com.jiratorio.domain.DynamicFieldConfig;
+import br.com.jiratorio.domain.FluxColumn;
+import br.com.jiratorio.domain.changelog.JiraChangelog;
+import br.com.jiratorio.domain.changelog.JiraChangelogHistory;
+import br.com.jiratorio.domain.changelog.JiraChangelogItem;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.Issue;
+import br.com.jiratorio.domain.entity.embedded.Changelog;
+import br.com.jiratorio.domain.entity.embedded.DueDateHistory;
 import br.com.jiratorio.service.DueDateService;
 import br.com.jiratorio.service.HolidayService;
-import br.com.jiratorio.util.CalcUtil;
 import br.com.jiratorio.util.DateUtil;
 import br.com.jiratorio.util.ParseUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,8 +63,9 @@ public class IssueMapper {
 
         List<LocalDate> holidays = holidayService.findDaysByBoard(board.getId());
 
-        Set<String> startColumns = CalcUtil.calcStartColumns(board);
-        Set<String> endColumns = CalcUtil.calcEndColumns(board);
+        FluxColumn fluxColumn = new FluxColumn(board);
+        Set<String> startColumns = fluxColumn.getStartColumns();
+        Set<String> endColumns = fluxColumn.getEndColumns();
 
         return StreamSupport.stream(issues.spliterator(), true)
                 .map(issueRaw -> {
@@ -141,7 +142,7 @@ public class IssueMapper {
 
         Long waitTime = 0L;
         Long touchTime = 0L;
-        Double pctEfficiency = 0D;
+        double pctEfficiency = 0;
 
         if (!CollectionUtils.isEmpty(board.getTouchingColumns()) && !CollectionUtils.isEmpty(board.getWaitingColumns())) {
             waitTime = calcWaitTime(changelog, board.getWaitingColumns(), holidays, board.getIgnoreWeekend());

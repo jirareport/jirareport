@@ -1,12 +1,12 @@
 package br.com.jiratorio.service;
 
-import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.domain.Issue;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.Issue;
 import br.com.jiratorio.domain.form.IssueForm;
 import br.com.jiratorio.domain.form.IssuePeriodForm;
-import br.com.jiratorio.domain.vo.EstimateIssue;
-import br.com.jiratorio.domain.vo.SandBox;
-import br.com.jiratorio.domain.vo.SandBoxFilter;
+import br.com.jiratorio.domain.EstimateIssue;
+import br.com.jiratorio.domain.SandBox;
+import br.com.jiratorio.domain.SandBoxFilter;
 
 import java.util.List;
 

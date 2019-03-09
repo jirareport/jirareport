@@ -1,6 +1,6 @@
 package br.com.jiratorio.controller;
 
-import br.com.jiratorio.domain.vo.JiraProject;
+import br.com.jiratorio.domain.JiraProject;
 import br.com.jiratorio.service.ProjectService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;

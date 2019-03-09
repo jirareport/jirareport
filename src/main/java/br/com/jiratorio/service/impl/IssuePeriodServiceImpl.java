@@ -1,15 +1,16 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.domain.Issue;
-import br.com.jiratorio.domain.IssuePeriod;
+import br.com.jiratorio.domain.FluxColumn;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.Issue;
+import br.com.jiratorio.domain.entity.IssuePeriod;
 import br.com.jiratorio.domain.form.IssuePeriodForm;
-import br.com.jiratorio.domain.vo.ChartAggregator;
-import br.com.jiratorio.domain.vo.IssueCountBySize;
-import br.com.jiratorio.domain.vo.IssuePeriodChart;
-import br.com.jiratorio.domain.vo.IssuePeriodDetails;
-import br.com.jiratorio.domain.vo.IssuePeriodList;
-import br.com.jiratorio.domain.vo.LeadTimeCompareChart;
+import br.com.jiratorio.domain.ChartAggregator;
+import br.com.jiratorio.domain.IssueCountBySize;
+import br.com.jiratorio.domain.IssuePeriodChart;
+import br.com.jiratorio.domain.IssuePeriodDetails;
+import br.com.jiratorio.domain.IssuePeriodList;
+import br.com.jiratorio.domain.LeadTimeCompareChart;
 import br.com.jiratorio.exception.ResourceNotFound;
 import br.com.jiratorio.mapper.IssuePeriodMapper;
 import br.com.jiratorio.repository.IssuePeriodRepository;
@@ -18,8 +19,7 @@ import br.com.jiratorio.service.ChartService;
 import br.com.jiratorio.service.IssuePeriodService;
 import br.com.jiratorio.service.IssueService;
 import br.com.jiratorio.service.WipService;
-import br.com.jiratorio.util.CalcUtil;
-import br.com.jiratorio.util.DateUtil;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
@@ -80,8 +80,9 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
         ChartAggregator chartAggregator = chartService.buildAllCharts(issues, board);
 
+        FluxColumn fluxColumn = new FluxColumn(board);
         Double wipAvg = wipService.calcAvgWip(issuePeriodForm.getStartDate(), issuePeriodForm.getEndDate(),
-                issues, CalcUtil.calcStartColumns(board));
+                issues, fluxColumn.getStartColumns());
 
         IssuePeriodDetails details = IssuePeriodDetails.builder()
                 .boardId(boardId)
@@ -106,7 +107,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         log.info("Method=findByBoardId, boardId={}", boardId);
 
         List<IssuePeriod> issuePeriods = issuePeriodRepository.findByBoardId(boardId);
-        issuePeriods.sort(DateUtil::sort);
+        issuePeriods.sort(Comparator.comparing(IssuePeriod::getStartDate));
 
         return issuePeriods;
     }

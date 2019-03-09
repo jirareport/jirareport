@@ -2,7 +2,7 @@ package br.com.jiratorio.factory.entity;
 
 import br.com.jiratorio.repository.LeadTimeConfigRepository;
 import br.com.leonardoferreira.jbacon.JBacon;
-import br.com.jiratorio.domain.LeadTimeConfig;
+import br.com.jiratorio.domain.entity.LeadTimeConfig;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

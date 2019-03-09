@@ -15,7 +15,7 @@ public final class StringUtil {
         String result = jql;
         for (Map.Entry<String, Object> obj : params.entrySet()) {
             String value = obj.getValue() instanceof Collection ? wrapList((Collection<?>) obj.getValue()) : wrap(obj.getValue());
-            result = result.replaceAll("\\{" + obj.getKey() + "\\}", value);
+            result = result.replaceAll("\\{" + obj.getKey() + "}", value);
         }
 
         return result;
@@ -26,7 +26,7 @@ public final class StringUtil {
     }
 
     public static String wrapList(final Collection<?> list) {
-        return String.join(",", list.stream().map(StringUtil::wrap).collect(Collectors.toList()));
+        return list.stream().map(StringUtil::wrap).collect(Collectors.joining(","));
     }
 
     public static String stripAccents(final String s) {

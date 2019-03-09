@@ -1,6 +1,6 @@
 package br.com.jiratorio.repository;
 
-import br.com.jiratorio.domain.Board;
+import br.com.jiratorio.domain.entity.Board;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Example;

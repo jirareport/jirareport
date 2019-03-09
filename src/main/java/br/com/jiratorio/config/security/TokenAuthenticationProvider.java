@@ -1,6 +1,6 @@
 package br.com.jiratorio.config.security;
 
-import br.com.jiratorio.domain.vo.Account;
+import br.com.jiratorio.domain.Account;
 import br.com.jiratorio.service.TokenService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;

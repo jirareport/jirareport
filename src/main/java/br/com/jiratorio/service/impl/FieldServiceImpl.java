@@ -1,7 +1,7 @@
 package br.com.jiratorio.service.impl;
 
 import br.com.jiratorio.client.FieldClient;
-import br.com.jiratorio.domain.vo.JiraField;
+import br.com.jiratorio.domain.JiraField;
 import br.com.jiratorio.service.FieldService;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;

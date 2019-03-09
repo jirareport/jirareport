@@ -1,13 +1,13 @@
 package br.com.jiratorio.mapper;
 
-import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.domain.embedded.Changelog;
-import br.com.jiratorio.domain.vo.EstimateIssue;
-import br.com.jiratorio.domain.vo.changelog.JiraChangelog;
-import br.com.jiratorio.domain.vo.changelog.JiraChangelogHistory;
-import br.com.jiratorio.domain.vo.changelog.JiraChangelogItem;
+import br.com.jiratorio.domain.EstimateIssue;
+import br.com.jiratorio.domain.FluxColumn;
+import br.com.jiratorio.domain.changelog.JiraChangelog;
+import br.com.jiratorio.domain.changelog.JiraChangelogHistory;
+import br.com.jiratorio.domain.changelog.JiraChangelogItem;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.embedded.Changelog;
 import br.com.jiratorio.service.HolidayService;
-import br.com.jiratorio.util.CalcUtil;
 import br.com.jiratorio.util.DateUtil;
 import br.com.jiratorio.util.ParseUtil;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -47,7 +47,8 @@ public class EstimateIssueMapper {
 
         List<LocalDate> holidays = holidayService.findDaysByBoard(board.getId());
 
-        Set<String> startColumns = CalcUtil.calcStartColumns(board);
+        FluxColumn fluxColumn = new FluxColumn(board);
+        Set<String> startColumns = fluxColumn.getStartColumns();
 
         Iterable<JsonNode> iterable = () -> issues;
         return StreamSupport.stream(iterable.spliterator(), false)

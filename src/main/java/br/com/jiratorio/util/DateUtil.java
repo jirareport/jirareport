@@ -1,6 +1,5 @@
 package br.com.jiratorio.util;
 
-import br.com.jiratorio.domain.IssuePeriod;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,21 +10,11 @@ import java.util.List;
 import java.util.Locale;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DateUtil {
 
     public static final Locale LOCALE_BR = new Locale("pt", "BR");
-
-    public static String displayFormat(final String date) {
-        if (StringUtils.isEmpty(date)) {
-            return null;
-        }
-
-        String[] split = date.split("-");
-        return split[2] + "/" + split[1] + "/" + split[0];
-    }
 
     public static LocalDate firstMonthDay() {
         return LocalDate.now()
@@ -42,10 +31,6 @@ public final class DateUtil {
     public static String toENDate(final LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return date.format(formatter);
-    }
-
-    public static int sort(final IssuePeriod issuePeriod, final IssuePeriod issuePeriod1) {
-        return issuePeriod.getStartDate().compareTo(issuePeriod1.getStartDate());
     }
 
     public static Long daysDiff(final LocalDateTime startDate, final LocalDateTime endDate,

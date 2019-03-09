@@ -2,11 +2,11 @@ package br.com.jiratorio.mapper;
 
 import java.util.List;
 
-import br.com.jiratorio.domain.Issue;
-import br.com.jiratorio.domain.IssuePeriod;
+import br.com.jiratorio.domain.entity.Issue;
+import br.com.jiratorio.domain.entity.IssuePeriod;
 import br.com.jiratorio.domain.form.IssuePeriodForm;
-import br.com.jiratorio.domain.vo.ChartAggregator;
-import br.com.jiratorio.domain.vo.IssuePeriodDetails;
+import br.com.jiratorio.domain.ChartAggregator;
+import br.com.jiratorio.domain.IssuePeriodDetails;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

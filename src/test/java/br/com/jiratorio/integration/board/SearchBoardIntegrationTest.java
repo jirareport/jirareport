@@ -3,7 +3,7 @@ package br.com.jiratorio.integration.board;
 import br.com.jiratorio.base.Authenticator;
 import br.com.jiratorio.base.resolver.SpecificationResolver;
 import br.com.jiratorio.base.specification.NotFound;
-import br.com.jiratorio.domain.Board;
+import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.factory.entity.BoardFactory;
 import br.com.jiratorio.matcher.IdMatcher;
 import io.restassured.RestAssured;

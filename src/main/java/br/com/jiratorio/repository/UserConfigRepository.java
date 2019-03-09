@@ -1,6 +1,6 @@
 package br.com.jiratorio.repository;
 
-import br.com.jiratorio.domain.UserConfig;
+import br.com.jiratorio.domain.entity.UserConfig;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

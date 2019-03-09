@@ -1,7 +1,7 @@
 package br.com.jiratorio.repository;
 
 import br.com.jiratorio.domain.DynamicFieldsValues;
-import br.com.jiratorio.domain.Issue;
+import br.com.jiratorio.domain.entity.Issue;
 import br.com.jiratorio.domain.form.IssueForm;
 import java.util.List;
 

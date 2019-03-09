@@ -1,12 +1,12 @@
 package br.com.jiratorio.service;
 
-import br.com.jiratorio.domain.Board;
+import br.com.jiratorio.domain.entity.Board;
 import java.util.List;
 
-import br.com.jiratorio.domain.IssuePeriod;
+import br.com.jiratorio.domain.entity.IssuePeriod;
 import br.com.jiratorio.domain.form.IssuePeriodForm;
-import br.com.jiratorio.domain.vo.IssuePeriodChart;
-import br.com.jiratorio.domain.vo.IssuePeriodList;
+import br.com.jiratorio.domain.IssuePeriodChart;
+import br.com.jiratorio.domain.IssuePeriodList;
 
 public interface IssuePeriodService {
 

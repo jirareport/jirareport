@@ -1,23 +1,23 @@
 package br.com.jiratorio.service.impl;
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime;
-import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.domain.Issue;
-import br.com.jiratorio.domain.IssuePeriod;
-import br.com.jiratorio.domain.LeadTime;
-import br.com.jiratorio.domain.LeadTimeConfig;
-import br.com.jiratorio.domain.embedded.Changelog;
-import br.com.jiratorio.domain.embedded.Chart;
-import br.com.jiratorio.domain.embedded.ColumnTimeAvg;
-import br.com.jiratorio.domain.embedded.Histogram;
-import br.com.jiratorio.domain.vo.ChartAggregator;
-import br.com.jiratorio.domain.vo.DynamicChart;
-import br.com.jiratorio.domain.vo.DynamicFieldConfig;
-import br.com.jiratorio.domain.vo.IssueCountBySize;
-import br.com.jiratorio.domain.vo.LeadTimeCompareChart;
-import br.com.jiratorio.domain.vo.Percentile;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.Issue;
+import br.com.jiratorio.domain.entity.IssuePeriod;
+import br.com.jiratorio.domain.entity.LeadTime;
+import br.com.jiratorio.domain.entity.LeadTimeConfig;
+import br.com.jiratorio.domain.entity.embedded.Changelog;
+import br.com.jiratorio.domain.entity.embedded.Chart;
+import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg;
+import br.com.jiratorio.domain.entity.embedded.Histogram;
+import br.com.jiratorio.domain.ChartAggregator;
+import br.com.jiratorio.domain.DynamicChart;
+import br.com.jiratorio.domain.DynamicFieldConfig;
+import br.com.jiratorio.domain.IssueCountBySize;
+import br.com.jiratorio.domain.LeadTimeCompareChart;
+import br.com.jiratorio.domain.Percentile;
 import br.com.jiratorio.service.ChartService;
-import br.com.jiratorio.util.CalcUtil;
+import br.com.jiratorio.service.PercentileService;
 import br.com.jiratorio.util.DateUtil;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,6 +47,12 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
     @Autowired
     private ChartService chartService;
 
+    private final PercentileService percentileService;
+
+    public ChartServiceImpl(final PercentileService percentileService) {
+        this.percentileService = percentileService;
+    }
+
     @Async
     @Override
     @ExecutionTime
@@ -54,7 +60,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=issueHistogram, issues={}", issues);
 
         List<Long> leadTimeList = issues.stream().map(Issue::getLeadTime).collect(Collectors.toList());
-        Percentile percentile = CalcUtil.calculatePercentile(leadTimeList);
+        Percentile percentile = percentileService.calculatePercentile(leadTimeList);
         Chart<Long, Long> chart = histogramChart(issues);
 
         Histogram histogram = Histogram.builder()

@@ -2,7 +2,7 @@ package br.com.jiratorio.factory.entity;
 
 import br.com.jiratorio.repository.HolidayRepository;
 import br.com.leonardoferreira.jbacon.JBacon;
-import br.com.jiratorio.domain.Holiday;
+import br.com.jiratorio.domain.entity.Holiday;
 import com.github.javafaker.Faker;
 import java.time.LocalDate;
 import java.time.ZoneId;

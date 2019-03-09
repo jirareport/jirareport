@@ -1,6 +1,6 @@
 package br.com.jiratorio.repository;
 
-import br.com.jiratorio.domain.Issue;
+import br.com.jiratorio.domain.entity.Issue;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

@@ -1,6 +1,6 @@
 package br.com.jiratorio.base;
 
-import br.com.jiratorio.domain.vo.Account;
+import br.com.jiratorio.domain.Account;
 import br.com.jiratorio.factory.entity.AccountFactory;
 import io.restassured.http.Header;
 import java.util.function.Supplier;

@@ -1,7 +1,7 @@
 package br.com.jiratorio.service;
 
-import br.com.jiratorio.domain.vo.BoardStatusList;
-import br.com.jiratorio.domain.vo.JiraProject;
+import br.com.jiratorio.domain.BoardStatusList;
+import br.com.jiratorio.domain.JiraProject;
 import java.util.List;
 
 public interface ProjectService {

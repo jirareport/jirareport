@@ -1,8 +1,8 @@
 package br.com.jiratorio.service.impl;
 
 import br.com.jiratorio.client.ProjectClient;
-import br.com.jiratorio.domain.vo.BoardStatusList;
-import br.com.jiratorio.domain.vo.JiraProject;
+import br.com.jiratorio.domain.BoardStatusList;
+import br.com.jiratorio.domain.JiraProject;
 import br.com.jiratorio.service.ProjectService;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;

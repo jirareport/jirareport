@@ -1,10 +1,10 @@
 package br.com.jiratorio.controller;
 
-import br.com.jiratorio.domain.Board;
+import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.form.IssueForm;
 import br.com.jiratorio.domain.response.ListIssueResponse;
-import br.com.jiratorio.domain.vo.SandBox;
-import br.com.jiratorio.domain.vo.SandBoxFilter;
+import br.com.jiratorio.domain.SandBox;
+import br.com.jiratorio.domain.SandBoxFilter;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.IssueService;
 import org.springframework.web.bind.annotation.GetMapping;

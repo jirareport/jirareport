@@ -1,6 +1,6 @@
 package br.com.jiratorio.service;
 
-import br.com.jiratorio.domain.vo.Account;
+import br.com.jiratorio.domain.Account;
 
 public interface TokenService {
 

@@ -1,6 +1,6 @@
 package br.com.jiratorio.service;
 
-import br.com.jiratorio.domain.LeadTimeConfig;
+import br.com.jiratorio.domain.entity.LeadTimeConfig;
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest;
 import br.com.jiratorio.domain.response.LeadTimeConfigResponse;
 import java.util.List;

@@ -2,7 +2,7 @@ package br.com.jiratorio.service;
 
 import java.util.List;
 
-import br.com.jiratorio.domain.Issue;
+import br.com.jiratorio.domain.entity.Issue;
 
 public interface LeadTimeService {
 

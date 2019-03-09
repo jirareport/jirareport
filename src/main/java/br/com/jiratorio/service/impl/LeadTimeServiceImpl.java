@@ -1,17 +1,17 @@
 package br.com.jiratorio.service.impl;
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime;
-import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.domain.Issue;
-import br.com.jiratorio.domain.LeadTime;
-import br.com.jiratorio.domain.LeadTimeConfig;
-import br.com.jiratorio.domain.embedded.Changelog;
+import br.com.jiratorio.domain.FluxColumn;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.Issue;
+import br.com.jiratorio.domain.entity.LeadTime;
+import br.com.jiratorio.domain.entity.LeadTimeConfig;
+import br.com.jiratorio.domain.entity.embedded.Changelog;
 import br.com.jiratorio.repository.LeadTimeRepository;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.HolidayService;
 import br.com.jiratorio.service.LeadTimeConfigService;
 import br.com.jiratorio.service.LeadTimeService;
-import br.com.jiratorio.util.CalcUtil;
 import br.com.jiratorio.util.DateUtil;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -69,8 +69,10 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
         LocalDateTime startDate = null;
         LocalDateTime endDate = null;
 
-        Set<String> startColumns = CalcUtil.calcStartColumns(leadTimeConfig.getStartColumn(), leadTimeConfig.getEndColumn(), board.getFluxColumn());
-        Set<String> endColumns = CalcUtil.calcEndColumns(leadTimeConfig.getEndColumn(), board.getFluxColumn());
+        FluxColumn fluxColumn = new FluxColumn(leadTimeConfig.getStartColumn(),
+                leadTimeConfig.getEndColumn(), board.getFluxColumn());
+        Set<String> startColumns = fluxColumn.getStartColumns();
+        Set<String> endColumns = fluxColumn.getEndColumns();
 
         for (Changelog cl : issue.getChangelog()) {
             if (startDate == null && startColumns.contains(cl.getTo())) {

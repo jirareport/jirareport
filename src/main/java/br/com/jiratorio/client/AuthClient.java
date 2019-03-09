@@ -1,6 +1,6 @@
 package br.com.jiratorio.client;
 
-import br.com.jiratorio.domain.vo.CurrentUser;
+import br.com.jiratorio.domain.CurrentUser;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;

@@ -1,6 +1,6 @@
 package br.com.jiratorio.config;
 
-import br.com.jiratorio.domain.vo.JiraError;
+import br.com.jiratorio.domain.JiraError;
 import br.com.jiratorio.exception.JiraException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;

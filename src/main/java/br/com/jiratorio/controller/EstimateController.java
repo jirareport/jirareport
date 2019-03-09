@@ -1,10 +1,10 @@
 package br.com.jiratorio.controller;
 
-import br.com.jiratorio.domain.Board;
+import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.EstimateFieldReference;
 import br.com.jiratorio.domain.form.EstimateForm;
 import br.com.jiratorio.domain.response.EstimateResponse;
-import br.com.jiratorio.domain.vo.EstimateIssue;
+import br.com.jiratorio.domain.EstimateIssue;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.EstimateService;
 import java.time.LocalDate;

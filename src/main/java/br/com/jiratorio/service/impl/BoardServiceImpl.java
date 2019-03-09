@@ -1,13 +1,13 @@
 package br.com.jiratorio.service.impl;
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime;
-import br.com.jiratorio.domain.Board;
+import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.request.CreateBoardRequest;
 import br.com.jiratorio.domain.request.UpdateBoardRequest;
 import br.com.jiratorio.domain.response.BoardDetailsResponse;
 import br.com.jiratorio.domain.response.BoardResponse;
-import br.com.jiratorio.domain.vo.BoardStatus;
-import br.com.jiratorio.domain.vo.BoardStatusList;
+import br.com.jiratorio.domain.BoardStatus;
+import br.com.jiratorio.domain.BoardStatusList;
 import br.com.jiratorio.exception.ResourceNotFound;
 import br.com.jiratorio.mapper.BoardMapper;
 import br.com.jiratorio.repository.BoardRepository;

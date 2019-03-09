@@ -1,7 +1,7 @@
 package br.com.jiratorio.factory.entity;
 
-import br.com.jiratorio.domain.vo.Account;
-import br.com.jiratorio.domain.vo.CurrentUser;
+import br.com.jiratorio.domain.Account;
+import br.com.jiratorio.domain.CurrentUser;
 import br.com.jiratorio.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

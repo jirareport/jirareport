@@ -1,9 +1,9 @@
 package br.com.jiratorio.util;
 
-import br.com.jiratorio.domain.Board;
+import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.ImpedimentType;
-import br.com.jiratorio.domain.embedded.Changelog;
-import br.com.jiratorio.domain.vo.changelog.JiraChangelogItem;
+import br.com.jiratorio.domain.entity.embedded.Changelog;
+import br.com.jiratorio.domain.changelog.JiraChangelogItem;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;

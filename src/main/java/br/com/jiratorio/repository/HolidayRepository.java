@@ -1,7 +1,7 @@
 package br.com.jiratorio.repository;
 
-import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.domain.Holiday;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.Holiday;
 import java.util.List;
 
 import org.springframework.data.domain.Page;

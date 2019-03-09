@@ -1,7 +1,7 @@
 package br.com.jiratorio.factory.domain.request;
 
 import br.com.jiratorio.domain.DueDateType;
-import br.com.jiratorio.domain.vo.DynamicFieldConfig;
+import br.com.jiratorio.domain.DynamicFieldConfig;
 import br.com.leonardoferreira.jbacon.JBacon;
 import br.com.jiratorio.domain.ImpedimentType;
 import br.com.jiratorio.domain.request.UpdateBoardRequest;

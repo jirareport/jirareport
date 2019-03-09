@@ -2,8 +2,8 @@ package br.com.jiratorio.integration.holiday;
 
 import br.com.jiratorio.base.Authenticator;
 import br.com.jiratorio.base.annotation.LoadStubs;
-import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.domain.UserConfig;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.UserConfig;
 import br.com.jiratorio.factory.entity.BoardFactory;
 import br.com.jiratorio.factory.entity.HolidayFactory;
 import br.com.jiratorio.factory.entity.UserConfigFactory;

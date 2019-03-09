@@ -1,10 +1,10 @@
 package br.com.jiratorio.mapper;
 
-import br.com.jiratorio.domain.Board;
-import br.com.jiratorio.domain.Holiday;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.Holiday;
 import br.com.jiratorio.domain.request.HolidayRequest;
 import br.com.jiratorio.domain.response.HolidayResponse;
-import br.com.jiratorio.domain.vo.HolidayVO;
+import br.com.jiratorio.domain.response.HolidayApiResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
@@ -19,19 +19,19 @@ public interface HolidayMapper {
 
     @Mappings({ // @formatter:off
             @Mapping(target = "id",              ignore = true),
-            @Mapping(target = "description",     source = "holidayVO.name"),
+            @Mapping(target = "description",     source = "holidayApiResponse.name"),
             @Mapping(target = "board.id",        source = "board.id"),
-            @Mapping(target = "date",            source = "holidayVO.date", dateFormat = "dd/MM/yyyy"),
+            @Mapping(target = "date",            source = "holidayApiResponse.date", dateFormat = "dd/MM/yyyy"),
             @Mapping(target = "owner",           ignore = true),
             @Mapping(target = "lastEditor",      ignore = true),
             @Mapping(target = "createdAt",       ignore = true),
             @Mapping(target = "updatedAt",       ignore = true)
     }) // @formatter:on
-    Holiday fromVO(HolidayVO holidayVO, Board board);
+    Holiday fromApiResponse(HolidayApiResponse holidayApiResponse, Board board);
 
-    default List<Holiday> fromVOS(List<HolidayVO> holidayVOS, Board board) {
-        return holidayVOS.stream()
-                .map(holidayVO -> fromVO(holidayVO, board))
+    default List<Holiday> fromApiResponse(List<HolidayApiResponse> holidayApiResponses, Board board) {
+        return holidayApiResponses.stream()
+                .map(holidayApiResponse -> fromApiResponse(holidayApiResponse, board))
                 .collect(Collectors.toList());
     }
 
@@ -62,7 +62,7 @@ public interface HolidayMapper {
 
     @Mappings({ // @formatter:off
             @Mapping(target = "id",              ignore = true),
-            @Mapping(target = "board.id",        ignore = true),
+            @Mapping(target = "board",           ignore = true),
             @Mapping(target = "date",            dateFormat = "dd/MM/yyyy"),
             @Mapping(target = "owner",           ignore = true),
             @Mapping(target = "lastEditor",      ignore = true),

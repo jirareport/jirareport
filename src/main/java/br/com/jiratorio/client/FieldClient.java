@@ -1,6 +1,6 @@
 package br.com.jiratorio.client;
 
-import br.com.jiratorio.domain.vo.JiraField;
+import br.com.jiratorio.domain.JiraField;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

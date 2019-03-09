@@ -1,7 +1,7 @@
 package br.com.jiratorio.integration.holiday;
 
 import br.com.jiratorio.base.Authenticator;
-import br.com.jiratorio.domain.Holiday;
+import br.com.jiratorio.domain.entity.Holiday;
 import br.com.jiratorio.domain.request.HolidayRequest;
 import br.com.jiratorio.exception.ResourceNotFound;
 import br.com.jiratorio.factory.domain.request.HolidayRequestFactory;

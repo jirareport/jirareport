@@ -1,9 +1,9 @@
 package br.com.jiratorio.service.impl;
 
 import br.com.jiratorio.client.AuthClient;
-import br.com.jiratorio.domain.form.LoginForm;
-import br.com.jiratorio.domain.vo.Account;
-import br.com.jiratorio.domain.vo.CurrentUser;
+import br.com.jiratorio.domain.request.LoginRequest;
+import br.com.jiratorio.domain.Account;
+import br.com.jiratorio.domain.CurrentUser;
 import br.com.jiratorio.service.AuthService;
 import java.util.Base64;
 import lombok.extern.slf4j.Slf4j;
@@ -20,16 +20,16 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Account login(final LoginForm loginForm) {
-        log.info("Method=login, loginForm={}", loginForm);
+    public Account login(final LoginRequest loginRequest) {
+        log.info("Method=login, loginRequest={}", loginRequest);
 
-        String usrPasswd = String.format("%s:%s", loginForm.getUsername(), loginForm.getPassword());
+        String usrPasswd = String.format("%s:%s", loginRequest.getUsername(), loginRequest.getPassword());
         String token = String.format("Basic %s", new String(Base64.getEncoder().encode(usrPasswd.getBytes())));
 
         CurrentUser currentUser = authClient.findCurrentUser(token);
 
         return Account.builder()
-                .username(loginForm.getUsername())
+                .username(loginRequest.getUsername())
                 .token(token)
                 .currentUser(currentUser)
                 .build();

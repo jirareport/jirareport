@@ -1,6 +1,6 @@
 package br.com.jiratorio.factory.domain;
 
-import br.com.jiratorio.domain.vo.changelog.JiraChangelogItem;
+import br.com.jiratorio.domain.changelog.JiraChangelogItem;
 import br.com.leonardoferreira.jbacon.JBacon;
 import com.github.javafaker.Faker;
 import java.time.LocalDateTime;

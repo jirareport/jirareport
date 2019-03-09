@@ -1,7 +1,7 @@
 package br.com.jiratorio.config.security;
 
-import br.com.jiratorio.domain.form.LoginForm;
-import br.com.jiratorio.domain.vo.Account;
+import br.com.jiratorio.domain.request.LoginRequest;
+import br.com.jiratorio.domain.Account;
 import br.com.jiratorio.service.AuthService;
 import br.com.jiratorio.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class JiraAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(final Authentication auth) {
         try {
-            Account account = authService.login(new LoginForm(auth.getName(), auth.getCredentials().toString()));
+            Account account = authService.login(new LoginRequest(auth.getName(), auth.getCredentials().toString()));
             if (account == null) {
                 throw new BadCredentialsException("External system authentication failed");
             }

@@ -1,8 +1,8 @@
 package br.com.jiratorio.factory.entity;
 
-import br.com.jiratorio.domain.Board;
+import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.DueDateType;
-import br.com.jiratorio.domain.vo.DynamicFieldConfig;
+import br.com.jiratorio.domain.DynamicFieldConfig;
 import br.com.jiratorio.repository.BoardRepository;
 import br.com.leonardoferreira.jbacon.JBacon;
 import br.com.leonardoferreira.jbacon.annotation.JBaconTemplate;

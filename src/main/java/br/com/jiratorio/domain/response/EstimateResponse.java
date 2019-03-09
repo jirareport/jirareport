@@ -1,9 +1,9 @@
 package br.com.jiratorio.domain.response;
 
-import br.com.jiratorio.domain.Board;
+import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.EstimateFieldReference;
 import br.com.jiratorio.domain.form.EstimateForm;
-import br.com.jiratorio.domain.vo.EstimateIssue;
+import br.com.jiratorio.domain.EstimateIssue;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
