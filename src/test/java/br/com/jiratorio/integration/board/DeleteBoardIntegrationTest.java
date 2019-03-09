@@ -17,7 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class DeleteBoardIntegrationTest {
+class DeleteBoardIntegrationTest {
 
     private final BoardFactory boardFactory;
 
@@ -26,7 +26,7 @@ public class DeleteBoardIntegrationTest {
     private final Authenticator authenticator;
 
     @Autowired
-    public DeleteBoardIntegrationTest(final BoardFactory boardFactory,
+    DeleteBoardIntegrationTest(final BoardFactory boardFactory,
                                       final BoardRepository boardRepository,
                                       final Authenticator authenticator) {
         this.boardFactory = boardFactory;
@@ -35,7 +35,7 @@ public class DeleteBoardIntegrationTest {
     }
 
     @Test
-    public void deleteBord() {
+    void deleteBord() {
         authenticator.doWithDefaultUser(boardFactory::create);
 
         // @formatter:off
@@ -55,7 +55,7 @@ public class DeleteBoardIntegrationTest {
     }
 
     @Test
-    public void deleteNonexistentBoard() {
+    void deleteNonexistentBoard() {
         // @formatter:off
         RestAssured
                 .given()
@@ -70,7 +70,7 @@ public class DeleteBoardIntegrationTest {
     }
 
     @Test
-    public void deleteBoardNotFound(@NotFound final ResponseSpecification notFoundSpec) {
+    void deleteBoardNotFound(@NotFound final ResponseSpecification notFoundSpec) {
         // @formatter:off
         RestAssured
                 .given()

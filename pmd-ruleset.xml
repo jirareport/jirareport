@@ -14,13 +14,6 @@
     <rule ref="category/java/bestpractices.xml/DefaultLabelNotLastInSwitchStmt"/>
     <rule ref="category/java/bestpractices.xml/ForLoopCanBeForeach"/>
 
-    <rule ref="category/java/bestpractices.xml/JUnit4SuitesShouldUseSuiteAnnotation"/>
-    <rule ref="category/java/bestpractices.xml/JUnit4TestShouldUseAfterAnnotation"/>
-    <rule ref="category/java/bestpractices.xml/JUnit4TestShouldUseBeforeAnnotation"/>
-    <rule ref="category/java/bestpractices.xml/JUnit4TestShouldUseTestAnnotation"/>
-    <rule ref="category/java/bestpractices.xml/JUnitAssertionsShouldIncludeMessage"/>
-    <rule ref="category/java/bestpractices.xml/JUnitTestContainsTooManyAsserts"/>
-    <rule ref="category/java/bestpractices.xml/JUnitUseExpected"/>
     <rule ref="category/java/bestpractices.xml/UseAssertEqualsInsteadOfAssertTrue"/>
     <rule ref="category/java/bestpractices.xml/UseAssertNullInsteadOfAssertTrue"/>
     <rule ref="category/java/bestpractices.xml/UseAssertSameInsteadOfAssertTrue"/>
@@ -55,10 +48,8 @@
     <rule ref="category/java/codestyle.xml/AvoidProtectedMethodInFinalClassNotExtending"/>
     <rule ref="category/java/codestyle.xml/AvoidUsingNativeCode"/>
     <rule ref="category/java/codestyle.xml/BooleanGetMethodName"/>
-    <rule ref="category/java/codestyle.xml/CommentDefaultAccessModifier"/>
     <rule ref="category/java/codestyle.xml/ConfusingTernary"/>
     <rule ref="category/java/codestyle.xml/ControlStatementBraces"/>
-    <rule ref="category/java/codestyle.xml/DefaultPackage"/>
     <rule ref="category/java/codestyle.xml/DontImportJavaLang"/>
     <rule ref="category/java/codestyle.xml/DuplicateImports"/>
     <rule ref="category/java/codestyle.xml/EmptyMethodInAbstractClassShouldBeAbstract"/>

@@ -18,21 +18,21 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SearchBoardIntegrationTest {
+class SearchBoardIntegrationTest {
 
     private final BoardFactory boardFactory;
 
     private final Authenticator authenticator;
 
     @Autowired
-    public SearchBoardIntegrationTest(final BoardFactory boardFactory,
+    SearchBoardIntegrationTest(final BoardFactory boardFactory,
                                       final Authenticator authenticator) {
         this.boardFactory = boardFactory;
         this.authenticator = authenticator;
     }
 
     @Test
-    public void findAllBoardsOfCurrentUser() {
+    void findAllBoardsOfCurrentUser() {
         authenticator.doWithDefaultUser(() -> boardFactory.create(10));
         authenticator.doWithUser("other_user", () -> boardFactory.create(5));
 
@@ -53,7 +53,7 @@ public class SearchBoardIntegrationTest {
     }
 
     @Test
-    public void findAllOwners() {
+    void findAllOwners() {
         authenticator.doWithDefaultUser(() -> boardFactory.create(5));
         authenticator.doWithUser("first_user", () -> boardFactory.create(5));
         authenticator.doWithUser("second_user", () -> boardFactory.create(5));
@@ -76,7 +76,7 @@ public class SearchBoardIntegrationTest {
     }
 
     @Test
-    public void filterBoardByName() {
+    void filterBoardByName() {
         authenticator.doWithDefaultUser(() -> {
             boardFactory.create(5, empty -> empty.setName("Uniq Start Name"));
             boardFactory.create(5);
@@ -100,7 +100,7 @@ public class SearchBoardIntegrationTest {
     }
 
     @Test
-    public void findBoardsOfAllOwners() {
+    void findBoardsOfAllOwners() {
         authenticator.doWithDefaultUser(() -> boardFactory.create(5));
         authenticator.doWithUser("user2", () -> boardFactory.create(5));
         authenticator.doWithUser("user3", () -> boardFactory.create(5));
@@ -127,7 +127,7 @@ public class SearchBoardIntegrationTest {
     }
 
     @Test
-    public void findBoardsByOwner() {
+    void findBoardsByOwner() {
         authenticator.doWithDefaultUser(() -> boardFactory.create(5));
         authenticator.doWithUser("user2", () -> boardFactory.create(5));
         authenticator.doWithUser("user3", () -> boardFactory.create(5));
@@ -151,7 +151,7 @@ public class SearchBoardIntegrationTest {
     }
 
     @Test
-    public void findBoardById() {
+    void findBoardById() {
         Board board = authenticator.withDefaultUser(() -> boardFactory.create("fullBoard"));
 
         // @formatter:off
@@ -184,7 +184,7 @@ public class SearchBoardIntegrationTest {
     }
 
     @Test
-    public void findByIdNotFound(@NotFound final ResponseSpecification spec) {
+    void findByIdNotFound(@NotFound final ResponseSpecification spec) {
         // @formatter:off
         RestAssured
                 .given()

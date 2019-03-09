@@ -21,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SearchHolidayIntegrationTest {
+class SearchHolidayIntegrationTest {
 
     private final HolidayFactory holidayFactory;
 
@@ -30,7 +30,7 @@ public class SearchHolidayIntegrationTest {
     private final Authenticator authenticator;
 
     @Autowired
-    public SearchHolidayIntegrationTest(final HolidayFactory holidayFactory,
+    SearchHolidayIntegrationTest(final HolidayFactory holidayFactory,
                                         final BoardFactory boardFactory,
                                         final Authenticator authenticator) {
         this.holidayFactory = holidayFactory;
@@ -39,7 +39,7 @@ public class SearchHolidayIntegrationTest {
     }
 
     @Test
-    public void findAllHolidays() {
+    void findAllHolidays() {
         Board board = authenticator.withDefaultUser(() -> {
             Board boardExample = boardFactory.create();
             holidayFactory.create(10, example -> {
@@ -70,7 +70,7 @@ public class SearchHolidayIntegrationTest {
     }
 
     @Test
-    public void findById() {
+    void findById() {
         Holiday holiday = authenticator.withDefaultUser(holidayFactory::create);
 
         // @formatter:off
@@ -91,7 +91,7 @@ public class SearchHolidayIntegrationTest {
     }
 
     @Test
-    public void findByIdNotFound(@NotFound final ResponseSpecification spec) {
+    void findByIdNotFound(@NotFound final ResponseSpecification spec) {
         // @formatter:off
         RestAssured
                 .given()

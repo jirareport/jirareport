@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = "2.1.2.RELEASE"
+        springBootVersion = "2.1.3.RELEASE"
     }
     repositories {
         mavenCentral()
@@ -50,8 +50,6 @@ dependencies {
     implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
     implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
 
-    implementation "org.springframework.boot:spring-boot-devtools"
-
     implementation "org.apache.httpcomponents:httpclient:${httpClientVersion}"
     implementation "com.google.code.gson:gson:${gsonVersion}"
 
@@ -69,11 +67,14 @@ dependencies {
 
     implementation "org.flywaydb:flyway-core"
 
-    testImplementation "br.com.leonardoferreira:JBacon:1.2.1"
+    implementation "org.springframework.boot:spring-boot-devtools"
+    compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+
+    testImplementation "br.com.leonardoferreira:JBacon:2.0.1"
     testImplementation "com.github.javafaker:javafaker:0.16"
-    testImplementation "io.rest-assured:rest-assured:3.1.0"
-    testImplementation "org.springframework.security:spring-security-test"
+    testImplementation "io.rest-assured:rest-assured"
     testImplementation "com.github.tomakehurst:wiremock:2.19.0"
+    testImplementation "org.springframework.security:spring-security-test"
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude group: "junit", module: "junit"
     }

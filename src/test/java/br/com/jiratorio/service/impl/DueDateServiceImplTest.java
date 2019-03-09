@@ -16,31 +16,30 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = UnitTestContext.class)
-public class DueDateServiceImplTest {
+class DueDateServiceImplTest {
 
     private DueDateServiceImpl dueDateService;
 
     private final JiraChangelogItemFactory jiraChangelogItemFactory;
 
     @Autowired
-    public DueDateServiceImplTest(final JiraChangelogItemFactory jiraChangelogItemFactory) {
+    DueDateServiceImplTest(final JiraChangelogItemFactory jiraChangelogItemFactory) {
         this.jiraChangelogItemFactory = jiraChangelogItemFactory;
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         dueDateService = new DueDateServiceImpl();
     }
 
     @Test
-    public void testExtractDueDateHistoryWithOneItem() {
+    void testExtractDueDateHistoryWithOneItem() {
         JiraChangelogItem jiraChangelogItem = jiraChangelogItemFactory.build();
 
         List<DueDateHistory> dueDateHistories = dueDateService
@@ -60,7 +59,7 @@ public class DueDateServiceImplTest {
     }
 
     @Test
-    public void testExtractDueDateHistoryWithManyItems() {
+    void testExtractDueDateHistoryWithManyItems() {
         jiraChangelogItemFactory.build(5, empty -> empty.setField("other_field"));
         List<JiraChangelogItem> jiraChangelogItems = jiraChangelogItemFactory.build(5);
 
@@ -72,14 +71,14 @@ public class DueDateServiceImplTest {
     }
 
     @Test
-    public void testCalcDeviationOfEstimateWithEmptyHistory() {
+    void testCalcDeviationOfEstimateWithEmptyHistory() {
         Long deviationOfEstimate = dueDateService.calcDeviationOfEstimate(null, null, null, null, null);
         Assertions.assertThat(deviationOfEstimate)
                 .isNull();
     }
 
     @Test
-    public void testCalcDeviationOfEstimateWithDueDateTypeFirstAndLastDueDate() {
+    void testCalcDeviationOfEstimateWithDueDateTypeFirstAndLastDueDate() {
         DueDateHistory firstDueDate = new DueDateHistory(null, LocalDate.of(2019, 2, 5));
         DueDateHistory secondDueDate = new DueDateHistory(null, LocalDate.of(2019, 2, 10));
         DueDateHistory thirdDueDate = new DueDateHistory(null, LocalDate.of(2019, 2, 15));
@@ -92,7 +91,7 @@ public class DueDateServiceImplTest {
     }
 
     @Test
-    public void testCalcDeviationOfEstimateWithDueDateTypeFirstAndEndDate() {
+    void testCalcDeviationOfEstimateWithDueDateTypeFirstAndEndDate() {
         DueDateHistory firstDueDate = new DueDateHistory(null, LocalDate.of(2019, 2, 5));
         DueDateHistory secondDueDate = new DueDateHistory(null, LocalDate.of(2019, 2, 10));
         List<DueDateHistory> dueDateHistories = Arrays.asList(firstDueDate, secondDueDate);
@@ -106,7 +105,7 @@ public class DueDateServiceImplTest {
     }
 
     @Test
-    public void testCalcDeviationOfEstimateWithDueDateTypeLastAndEndDate() {
+    void testCalcDeviationOfEstimateWithDueDateTypeLastAndEndDate() {
         DueDateHistory firstDueDate = new DueDateHistory(null, LocalDate.of(2019, 2, 5));
         DueDateHistory secondDueDate = new DueDateHistory(null, LocalDate.of(2019, 2, 10));
         List<DueDateHistory> dueDateHistories = Arrays.asList(firstDueDate, secondDueDate);

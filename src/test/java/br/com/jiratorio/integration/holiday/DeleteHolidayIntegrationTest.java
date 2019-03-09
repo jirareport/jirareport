@@ -17,7 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class DeleteHolidayIntegrationTest {
+class DeleteHolidayIntegrationTest {
 
     private final HolidayFactory holidayFactory;
 
@@ -26,7 +26,7 @@ public class DeleteHolidayIntegrationTest {
     private final Authenticator authenticator;
 
     @Autowired
-    public DeleteHolidayIntegrationTest(final HolidayFactory holidayFactory,
+    DeleteHolidayIntegrationTest(final HolidayFactory holidayFactory,
                                         final HolidayRepository holidayRepository,
                                         final Authenticator authenticator) {
         this.holidayFactory = holidayFactory;
@@ -35,7 +35,7 @@ public class DeleteHolidayIntegrationTest {
     }
 
     @Test
-    public void deleteHoliday() {
+    void deleteHoliday() {
         authenticator.doWithDefaultUser(holidayFactory::create);
 
         // @formatter:off
@@ -55,7 +55,7 @@ public class DeleteHolidayIntegrationTest {
     }
 
     @Test
-    public void deleteHolidayNotFound(@NotFound final ResponseSpecification spec) {
+    void deleteHolidayNotFound(@NotFound final ResponseSpecification spec) {
         // @formatter:off
         RestAssured
                 .given()

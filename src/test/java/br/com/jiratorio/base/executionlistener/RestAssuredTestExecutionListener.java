@@ -7,7 +7,7 @@ import org.springframework.test.context.support.AbstractTestExecutionListener;
 public class RestAssuredTestExecutionListener extends AbstractTestExecutionListener {
 
     @Override
-    public void beforeTestMethod(TestContext testContext) throws Exception {
+    public void beforeTestMethod(final TestContext testContext) throws Exception {
         String port = testContext.getApplicationContext()
                 .getEnvironment().getProperty("local.server.port");
         if (port != null) {

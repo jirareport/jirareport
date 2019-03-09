@@ -24,7 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @LoadStubs("holidays")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ImportHolidayIntegrationTest {
+class ImportHolidayIntegrationTest {
 
     private final BoardFactory boardFactory;
 
@@ -37,7 +37,7 @@ public class ImportHolidayIntegrationTest {
     private final Authenticator authenticator;
 
     @Autowired
-    public ImportHolidayIntegrationTest(final BoardFactory boardFactory,
+    ImportHolidayIntegrationTest(final BoardFactory boardFactory,
                                         final HolidayRepository holidayRepository,
                                         final HolidayFactory holidayFactory,
                                         final UserConfigFactory userConfigFactory,
@@ -50,7 +50,7 @@ public class ImportHolidayIntegrationTest {
     }
 
     @Test
-    public void importWithSuccess() {
+    void importWithSuccess() {
         authenticator.doWithDefaultUser(boardFactory::create);
 
         // @formatter:off
@@ -78,7 +78,7 @@ public class ImportHolidayIntegrationTest {
     }
 
     @Test
-    public void importWithSuccessUserConfig() {
+    void importWithSuccessUserConfig() {
         UserConfig userConfig = authenticator.withDefaultUser(() -> {
             boardFactory.create();
             return userConfigFactory.create();
@@ -109,7 +109,7 @@ public class ImportHolidayIntegrationTest {
     }
 
     @Test
-    public void alreadyBeenImported() {
+    void alreadyBeenImported() {
         authenticator.doWithDefaultUser(() -> {
             Board board = boardFactory.create();
             IntStream.range(1, 6).forEach(i ->

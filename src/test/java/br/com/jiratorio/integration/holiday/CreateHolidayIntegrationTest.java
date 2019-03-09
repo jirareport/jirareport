@@ -21,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CreateHolidayIntegrationTest {
+class CreateHolidayIntegrationTest {
 
     private final HolidayRequestFactory holidayRequestFactory;
 
@@ -32,7 +32,7 @@ public class CreateHolidayIntegrationTest {
     private final Authenticator authenticator;
 
     @Autowired
-    public CreateHolidayIntegrationTest(final HolidayRequestFactory holidayRequestFactory,
+    CreateHolidayIntegrationTest(final HolidayRequestFactory holidayRequestFactory,
                                         final BoardFactory boardFactory,
                                         final HolidayRepository holidayRepository,
                                         final Authenticator authenticator) {
@@ -43,7 +43,7 @@ public class CreateHolidayIntegrationTest {
     }
 
     @Test
-    public void createHoliday() {
+    void createHoliday() {
         HolidayRequest request = holidayRequestFactory.build();
         authenticator.doWithDefaultUser(boardFactory::create);
 
@@ -70,7 +70,7 @@ public class CreateHolidayIntegrationTest {
     }
 
     @Test
-    public void failInValidations() {
+    void failInValidations() {
         HolidayRequest request = new HolidayRequest();
 
         // @formatter:off

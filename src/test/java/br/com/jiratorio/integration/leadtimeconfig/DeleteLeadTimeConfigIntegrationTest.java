@@ -17,7 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class DeleteLeadTimeConfigIntegrationTest {
+class DeleteLeadTimeConfigIntegrationTest {
 
     private final LeadTimeConfigFactory leadTimeConfigFactory;
 
@@ -26,7 +26,7 @@ public class DeleteLeadTimeConfigIntegrationTest {
     private final Authenticator authenticator;
 
     @Autowired
-    public DeleteLeadTimeConfigIntegrationTest(final LeadTimeConfigFactory leadTimeConfigFactory,
+    DeleteLeadTimeConfigIntegrationTest(final LeadTimeConfigFactory leadTimeConfigFactory,
                                                final LeadTimeConfigRepository leadTimeConfigRepository,
                                                final Authenticator authenticator) {
         this.leadTimeConfigFactory = leadTimeConfigFactory;
@@ -35,7 +35,7 @@ public class DeleteLeadTimeConfigIntegrationTest {
     }
 
     @Test
-    public void deleteLeadTimeConfig() {
+    void deleteLeadTimeConfig() {
         authenticator.doWithDefaultUser(leadTimeConfigFactory::create);
 
         // @formatter:off
@@ -55,7 +55,7 @@ public class DeleteLeadTimeConfigIntegrationTest {
     }
 
     @Test
-    public void deleteWithBoardNotFound(@NotFound final ResponseSpecification spec) {
+    void deleteWithBoardNotFound(@NotFound final ResponseSpecification spec) {
         authenticator.doWithDefaultUser(leadTimeConfigFactory::create);
 
         // @formatter:off
@@ -75,7 +75,7 @@ public class DeleteLeadTimeConfigIntegrationTest {
     }
 
     @Test
-    public void deleteWithLeadTimeConfigNotFound(@NotFound final ResponseSpecification spec) {
+    void deleteWithLeadTimeConfigNotFound(@NotFound final ResponseSpecification spec) {
         authenticator.doWithDefaultUser(leadTimeConfigFactory::create);
 
         // @formatter:off

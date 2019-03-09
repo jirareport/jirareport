@@ -37,3 +37,6 @@ spring:
     ignore-missing-migrations: true
   profiles:
     active: test
+
+security:
+  key: test-security-key

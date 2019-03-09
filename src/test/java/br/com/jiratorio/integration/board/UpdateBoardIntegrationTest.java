@@ -24,7 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UpdateBoardIntegrationTest {
+class UpdateBoardIntegrationTest {
 
     private final BoardFactory boardFactory;
 
@@ -35,7 +35,7 @@ public class UpdateBoardIntegrationTest {
     private final Authenticator authenticator;
 
     @Autowired
-    public UpdateBoardIntegrationTest(final BoardFactory boardFactory,
+    UpdateBoardIntegrationTest(final BoardFactory boardFactory,
                                       final UpdateBoardRequestFactory updateBoardRequestFactory,
                                       final BoardRepository boardRepository,
                                       final Authenticator authenticator) {
@@ -46,7 +46,7 @@ public class UpdateBoardIntegrationTest {
     }
 
     @Test
-    public void updateBoard() throws Exception {
+    void updateBoard() throws Exception {
         authenticator.doWithDefaultUser(boardFactory::create);
         UpdateBoardRequest request = updateBoardRequestFactory.build();
 
@@ -88,7 +88,7 @@ public class UpdateBoardIntegrationTest {
     }
 
     @Test
-    public void updateNotFoundBoard(@NotFound final ResponseSpecification spec) {
+    void updateNotFoundBoard(@NotFound final ResponseSpecification spec) {
         // @formatter:off
         RestAssured
                 .given()

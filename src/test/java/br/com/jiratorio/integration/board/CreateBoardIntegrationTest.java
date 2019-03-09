@@ -19,7 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CreateBoardIntegrationTest {
+class CreateBoardIntegrationTest {
 
     private final BoardRepository boardRepository;
 
@@ -28,7 +28,7 @@ public class CreateBoardIntegrationTest {
     private final Authenticator authenticator;
 
     @Autowired
-    public CreateBoardIntegrationTest(final BoardRepository boardRepository,
+    CreateBoardIntegrationTest(final BoardRepository boardRepository,
                                       final CreateBoardRequestFactory createBoardRequestFactory,
                                       final Authenticator authenticator) {
         this.boardRepository = boardRepository;
@@ -37,7 +37,7 @@ public class CreateBoardIntegrationTest {
     }
 
     @Test
-    public void createBoard() {
+    void createBoard() {
         CreateBoardRequest request = createBoardRequestFactory.build();
 
         // @formatter:off
@@ -65,7 +65,7 @@ public class CreateBoardIntegrationTest {
     }
 
     @Test
-    public void failInValidations() {
+    void failInValidations() {
         // @formatter:off
         RestAssured
                 .given()

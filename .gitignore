@@ -22,6 +22,5 @@ node_modules
 data
 
 src/main/resources/application-*.yml
-src/main/resources/ssh_key
 
 yarn.lock

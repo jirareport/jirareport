@@ -24,7 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({SpringExtension.class, SpecificationResolver.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CreateLeadTimeConfigIntegrationTest {
+class CreateLeadTimeConfigIntegrationTest {
 
     private final BoardFactory boardFactory;
 
@@ -35,7 +35,7 @@ public class CreateLeadTimeConfigIntegrationTest {
     private final Authenticator authenticator;
 
     @Autowired
-    public CreateLeadTimeConfigIntegrationTest(final BoardFactory boardFactory,
+    CreateLeadTimeConfigIntegrationTest(final BoardFactory boardFactory,
                                                final LeadTimeConfigRequestFactory leadTimeConfigRequestFactory,
                                                final LeadTimeConfigRepository leadTimeConfigRepository,
                                                final Authenticator authenticator) {
@@ -46,7 +46,7 @@ public class CreateLeadTimeConfigIntegrationTest {
     }
 
     @Test
-    public void createLeadTimeConfig() {
+    void createLeadTimeConfig() {
         LeadTimeConfigRequest request = authenticator.withDefaultUser(() -> {
             boardFactory.create();
             return leadTimeConfigRequestFactory.build();
@@ -77,7 +77,7 @@ public class CreateLeadTimeConfigIntegrationTest {
     }
 
     @Test
-    public void failInValidations() {
+    void failInValidations() {
         authenticator.doWithDefaultUser(boardFactory::create);
 
         // @formatter:off
@@ -99,7 +99,7 @@ public class CreateLeadTimeConfigIntegrationTest {
     }
 
     @Test
-    public void createWithBoardNotFound(@NotFound final ResponseSpecification spec) {
+    void createWithBoardNotFound(@NotFound final ResponseSpecification spec) {
         LeadTimeConfigRequest request = leadTimeConfigRequestFactory.build();
 
         // @formatter:off

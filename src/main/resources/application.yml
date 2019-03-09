@@ -5,16 +5,16 @@ holiday:
   url: https://api.calendario.com.br
   token: seuToken
 
+security:
+  key: super-secret-key
+
 spring:
   application:
     name: jirareport
-  profiles:
-    active: dev
   datasource:
     url: jdbc:postgresql://localhost:5432/jirareport
     username: ${USER}
     password: ${PASSWORD:123123}
-
   main:
     allow-bean-definition-overriding: true
   cache:
@@ -24,7 +24,6 @@ spring:
     - retrieveCurrentUserConfig
     caffeine:
       spec: expireAfterWrite=15m
-
   flyway:
     enabled: true
     out-of-order: true
