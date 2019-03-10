@@ -2,30 +2,30 @@ package br.com.jiratorio.mapper;
 
 import br.com.jiratorio.domain.ImportHolidayInfo;
 import br.com.jiratorio.domain.entity.UserConfig;
-import br.com.jiratorio.domain.form.UserConfigForm;
-import org.mapstruct.InheritConfiguration;
+import br.com.jiratorio.domain.request.UpdateUserConfigRequest;
+import br.com.jiratorio.domain.response.UserConfigResponse;
+import br.com.jiratorio.mapper.transformer.CityTransformer;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        uses = CityTransformer.class)
 public interface UserConfigMapper {
 
-    UserConfigForm userConfigToForm(UserConfig userConfig);
+    UserConfigResponse userConfigToResponse(UserConfig userConfig);
 
     @Mappings({ // @formatter:off
             @Mapping(target = "id",         ignore = true),
+            @Mapping(target = "city",       qualifiedByName = "normalizeCity"),
             @Mapping(target = "updatedAt",  ignore = true),
             @Mapping(target = "createdAt",  ignore = true),
             @Mapping(target = "owner",      ignore = true),
             @Mapping(target = "lastEditor", ignore = true),
             @Mapping(target = "username",   ignore = true),
     }) // @formatter:on
-    UserConfig formToUserConfig(UserConfigForm userConfigForm);
-
-    @InheritConfiguration
-    void updateFromForm(@MappingTarget UserConfig userConfig, UserConfigForm userConfigForm);
+    void updateFromRequest(@MappingTarget UserConfig userConfig, UpdateUserConfigRequest updateUserConfigRequest);
 
     ImportHolidayInfo toImportHolidayInfo(UserConfig userConfig);
 

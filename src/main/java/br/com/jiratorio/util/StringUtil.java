@@ -1,12 +1,10 @@
 package br.com.jiratorio.util;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-import java.text.Normalizer;
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StringUtil {
@@ -29,9 +27,4 @@ public final class StringUtil {
         return list.stream().map(StringUtil::wrap).collect(Collectors.joining(","));
     }
 
-    public static String stripAccents(final String s) {
-        String str = Normalizer.normalize(s, Normalizer.Form.NFD);
-        str = str.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-        return str;
-    }
 }

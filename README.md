@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/jirareport/jirareport.svg?branch=master)](https://travis-ci.org/jirareport/jirareport)
-
 # Jiratório
 
 O projeto é uma aplicação web para extração de métricas do jira.

@@ -4,8 +4,4 @@ public enum ChartType {
     BAR,
     DOUGHNUT,
     PIE;
-
-    public String chartName() {
-        return name().toLowerCase();
-    }
 }

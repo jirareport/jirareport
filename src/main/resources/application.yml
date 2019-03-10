@@ -21,7 +21,6 @@ spring:
     cache-names:
     - findAllHolidaysInCity
     - findAllFields
-    - retrieveCurrentUserConfig
     caffeine:
       spec: expireAfterWrite=15m
   flyway:

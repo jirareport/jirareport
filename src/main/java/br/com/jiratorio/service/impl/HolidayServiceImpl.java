@@ -13,7 +13,7 @@ import br.com.jiratorio.mapper.HolidayMapper;
 import br.com.jiratorio.repository.HolidayRepository;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.HolidayService;
-import br.com.jiratorio.service.UserService;
+import br.com.jiratorio.service.UserConfigService;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -38,18 +38,18 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
 
     private final HolidayMapper holidayMapper;
 
-    private final UserService userService;
+    private final UserConfigService userConfigService;
 
     public HolidayServiceImpl(final HolidayRepository holidayRepository,
                               final BoardService boardService,
                               final HolidayClient holidayClient,
                               final HolidayMapper holidayMapper,
-                              final UserService userService) {
+                              final UserConfigService userConfigService) {
         this.holidayRepository = holidayRepository;
         this.boardService = boardService;
         this.holidayClient = holidayClient;
         this.holidayMapper = holidayMapper;
-        this.userService = userService;
+        this.userConfigService = userConfigService;
     }
 
     @Override
@@ -151,7 +151,7 @@ public class HolidayServiceImpl extends AbstractService implements HolidayServic
     private List<Holiday> findAllHolidaysInCity(final Board board) {
         log.info("Method=findAllHolidaysInCity, board={}", board);
 
-        ImportHolidayInfo info = userService.retrieveHolidayInfo();
+        ImportHolidayInfo info = userConfigService.retrieveHolidayInfo(currentUser().getUsername());
 
         List<HolidayApiResponse> allHolidaysInCity = holidayClient.findAllHolidaysInCity(
                 LocalDate.now().getYear(), info.getState(), info.getCity(), info.getHolidayToken());

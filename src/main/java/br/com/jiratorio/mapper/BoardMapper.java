@@ -5,7 +5,7 @@ import br.com.jiratorio.domain.request.CreateBoardRequest;
 import br.com.jiratorio.domain.request.UpdateBoardRequest;
 import br.com.jiratorio.domain.response.BoardDetailsResponse;
 import br.com.jiratorio.domain.response.BoardResponse;
-import br.com.jiratorio.mapper.util.StringTransformer;
+import br.com.jiratorio.mapper.transformer.StringTransformer;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

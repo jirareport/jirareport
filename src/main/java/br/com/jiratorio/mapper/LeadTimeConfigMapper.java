@@ -3,7 +3,7 @@ package br.com.jiratorio.mapper;
 import br.com.jiratorio.domain.entity.LeadTimeConfig;
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest;
 import br.com.jiratorio.domain.response.LeadTimeConfigResponse;
-import br.com.jiratorio.mapper.util.StringTransformer;
+import br.com.jiratorio.mapper.transformer.StringTransformer;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
