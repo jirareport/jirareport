@@ -1,6 +1,5 @@
 package br.com.jiratorio.domain;
 
-import br.com.jiratorio.context.UnitTestContext;
 import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.Assertions;
@@ -8,13 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @Tag("unit")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = UnitTestContext.class)
 class FluxColumnTest {
 
     private FluxColumn fluxColumn;

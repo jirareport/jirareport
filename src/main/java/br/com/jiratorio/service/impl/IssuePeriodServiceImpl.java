@@ -18,6 +18,7 @@ import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.ChartService;
 import br.com.jiratorio.service.IssuePeriodService;
 import br.com.jiratorio.service.IssueService;
+import br.com.jiratorio.service.JQLService;
 import br.com.jiratorio.service.WipService;
 import java.util.Comparator;
 import java.util.List;
@@ -42,18 +43,22 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
     private final WipService wipService;
 
+    private final JQLService jqlService;
+
     public IssuePeriodServiceImpl(final IssueService issueService,
                                   final IssuePeriodRepository issuePeriodRepository,
                                   final ChartService chartService,
                                   final BoardService boardService,
                                   final IssuePeriodMapper issuePeriodMapper,
-                                  final WipService wipService) {
+                                  final WipService wipService,
+                                  final JQLService jqlService) {
         this.issueService = issueService;
         this.issuePeriodRepository = issuePeriodRepository;
         this.chartService = chartService;
         this.boardService = boardService;
         this.issuePeriodMapper = issuePeriodMapper;
         this.wipService = wipService;
+        this.jqlService = jqlService;
     }
 
     @Override
@@ -65,7 +70,7 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
         Board board = boardService.findById(boardId);
 
-        String jql = issueService.searchJQL(issuePeriodForm, board);
+        String jql = jqlService.finalizedIssues(board, issuePeriodForm.getStartDate(), issuePeriodForm.getEndDate());
         List<Issue> issues = issueService.createByJql(jql, board);
 
         Double avgLeadTime = issues.parallelStream()

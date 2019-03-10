@@ -2,16 +2,14 @@ package br.com.jiratorio.service.impl;
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime;
 import br.com.jiratorio.client.IssueClient;
-import br.com.jiratorio.domain.FluxColumn;
-import br.com.jiratorio.domain.entity.Board;
-import br.com.jiratorio.domain.entity.Issue;
-import br.com.jiratorio.domain.entity.embedded.Chart;
-import br.com.jiratorio.domain.form.IssueForm;
-import br.com.jiratorio.domain.form.IssuePeriodForm;
 import br.com.jiratorio.domain.ChartAggregator;
 import br.com.jiratorio.domain.EstimateIssue;
 import br.com.jiratorio.domain.SandBox;
 import br.com.jiratorio.domain.SandBoxFilter;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.Issue;
+import br.com.jiratorio.domain.entity.embedded.Chart;
+import br.com.jiratorio.domain.form.IssueForm;
 import br.com.jiratorio.mapper.EstimateIssueMapper;
 import br.com.jiratorio.mapper.IssueMapper;
 import br.com.jiratorio.repository.IssueRepository;
@@ -19,16 +17,12 @@ import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.ChartService;
 import br.com.jiratorio.service.IssueService;
 import br.com.jiratorio.service.LeadTimeService;
-import br.com.jiratorio.util.DateUtil;
-import br.com.jiratorio.util.StringUtil;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
@@ -159,42 +153,6 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
         log.info("Method=findByIssuePeriodId, issuePeriodId={}", issuePeriodId);
 
         return issueRepository.findByIssuePeriodId(issuePeriodId);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public String searchJQL(final IssuePeriodForm issuePeriodForm, final Board board) {
-        log.info("Method=searchJQL, issuePeriodForm={}, board={}", issuePeriodForm, board);
-
-        Map<String, Object> params = new HashMap<>();
-
-        StringBuilder jql = new StringBuilder();
-        jql.append(" project = {project} ");
-        jql.append(" AND ( STATUS CHANGED TO {endColumn} DURING({startDate}, {endDate}) ");
-        jql.append("       OR ( STATUS CHANGED TO {lastColumn} DURING ({startDate}, {endDate}) AND NOT STATUS CHANGED TO {endColumn} )");
-        jql.append("       OR ( resolutiondate >= {startDate} AND resolutiondate <= {endDate} AND NOT STATUS CHANGED TO {lastColumn} ");
-        jql.append("              AND NOT STATUS CHANGED TO {endColumn} )");
-        jql.append("     ) ");
-
-        if (board.getIgnoreIssueType() != null && !board.getIgnoreIssueType().isEmpty()) {
-            jql.append(" AND issueType NOT IN ({issueTypes}) ");
-            params.put("issueTypes", board.getIgnoreIssueType());
-        }
-
-        jql.append(" AND status WAS IN ({startColumns}) ");
-        jql.append(" AND status IN ({endColumns}) ");
-
-        FluxColumn fluxColumn = new FluxColumn(board);
-
-        params.put("project", board.getExternalId().toString());
-        params.put("startDate", DateUtil.toENDate(issuePeriodForm.getStartDate()));
-        params.put("endDate", DateUtil.toENDate(issuePeriodForm.getEndDate()) + " 23:59");
-        params.put("lastColumn", fluxColumn.getLastColumn());
-        params.put("endColumn", board.getEndColumn());
-        params.put("endColumns", fluxColumn.getEndColumns());
-        params.put("startColumns", fluxColumn.getStartColumns());
-
-        return StringUtil.replaceParams(jql.toString(), params);
     }
 
     @Override

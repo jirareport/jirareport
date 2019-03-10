@@ -28,11 +28,6 @@ public final class DateUtil {
                 .minus(1, ChronoUnit.DAYS);
     }
 
-    public static String toENDate(final LocalDate date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return date.format(formatter);
-    }
-
     public static Long daysDiff(final LocalDateTime startDate, final LocalDateTime endDate,
                                 final List<LocalDate> holidays, final Boolean ignoreWeekend) {
         LocalDate start = startDate.toLocalDate();
