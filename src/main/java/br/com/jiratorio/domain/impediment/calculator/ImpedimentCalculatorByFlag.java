@@ -6,22 +6,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@AllArgsConstructor
 public class ImpedimentCalculatorByFlag {
 
-    private List<JiraChangelogItem> changelogItems;
-
-    private LocalDateTime endDate;
-
-    private List<LocalDate> holidays;
-
-    private Boolean ignoreWeekend;
-
-    public Long timeInImpediment() {
+    public Long timeInImpediment(final List<JiraChangelogItem> changelogItems, final LocalDateTime endDate,
+                                 final List<LocalDate> holidays, final Boolean ignoreWeekend) {
         List<LocalDateTime> beginnings = new ArrayList<>();
         List<LocalDateTime> terms = new ArrayList<>();
 

@@ -4,9 +4,17 @@ import br.com.jiratorio.domain.entity.embedded.Changelog;
 import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ImpedimentCalculatorByColumnTest {
+
+    private ImpedimentCalculatorByColumn calculator;
+
+    @BeforeEach
+    void setUp() {
+        calculator = new ImpedimentCalculatorByColumn();
+    }
 
     @Test
     void testTimeInImpediment() {
@@ -20,9 +28,8 @@ class ImpedimentCalculatorByColumnTest {
                 new Changelog(null, null, "COLUMN_FOUR", 7L, null)
         );
         List<String> columns = Arrays.asList("IMP_COLUMN_ONE", "IMP_COLUMN_TWO", "IMP_COLUMN_THREE");
-        var calculator = new ImpedimentCalculatorByColumn(changelogs, columns);
 
-        Assertions.assertThat(calculator.timeInImpediment())
+        Assertions.assertThat(calculator.timeInImpediment(changelogs, columns))
                 .isEqualTo(12);
     }
 

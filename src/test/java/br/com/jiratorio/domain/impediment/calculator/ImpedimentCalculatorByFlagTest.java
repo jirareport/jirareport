@@ -6,9 +6,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ImpedimentCalculatorByFlagTest {
+
+    private ImpedimentCalculatorByFlag calculator;
+
+    @BeforeEach
+    void setUp() {
+        calculator = new ImpedimentCalculatorByFlag();
+    }
 
     @Test
     void testTimeInImpediment() {
@@ -22,10 +30,8 @@ class ImpedimentCalculatorByFlagTest {
                 new JiraChangelogItem("other", null, null, null, null, null, null),
                 new JiraChangelogItem("flagged", null, null, null, null, null, LocalDateTime.of(2019, 1, 19, 12, 0))
         );
-        ImpedimentCalculatorByFlag calculator = new ImpedimentCalculatorByFlag(changelogItems, LocalDateTime.now(),
-                Collections.emptyList(), Boolean.TRUE);
 
-        Assertions.assertThat(calculator.timeInImpediment())
+        Assertions.assertThat(calculator.timeInImpediment(changelogItems, LocalDateTime.now(), Collections.emptyList(), Boolean.TRUE))
                 .isEqualTo(15);
     }
 
@@ -40,10 +46,9 @@ class ImpedimentCalculatorByFlagTest {
                 new JiraChangelogItem("bla", null, null, null, null, null, null),
                 new JiraChangelogItem("other", null, null, null, null, null, null)
         );
-        ImpedimentCalculatorByFlag calculator = new ImpedimentCalculatorByFlag(changelogItems, LocalDateTime.of(2019, 1, 19, 12, 0),
-                Collections.emptyList(), Boolean.TRUE);
 
-        Assertions.assertThat(calculator.timeInImpediment())
+        LocalDateTime endDate = LocalDateTime.of(2019, 1, 19, 12, 0);
+        Assertions.assertThat(calculator.timeInImpediment(changelogItems, endDate, Collections.emptyList(), Boolean.TRUE))
                 .isEqualTo(10);
     }
 }

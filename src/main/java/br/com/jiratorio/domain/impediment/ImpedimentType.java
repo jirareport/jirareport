@@ -11,22 +11,25 @@ import java.util.List;
 public enum ImpedimentType {
 
     COLUMN {
+        private ImpedimentCalculatorByColumn calculator = new ImpedimentCalculatorByColumn();
+
         @Override
         public Long timeInImpediment(final List<String> impedimentColumns, final List<JiraChangelogItem> changelogItems,
                                      final List<Changelog> changelog, final LocalDateTime endDate, final List<LocalDate> holidays,
                                      final Boolean ignoreWeekend) {
-            var calculator = new ImpedimentCalculatorByColumn(changelog, impedimentColumns);
-            return calculator.timeInImpediment();
+            return calculator.timeInImpediment(changelog, impedimentColumns);
         }
     },
 
     FLAG {
+        private ImpedimentCalculatorByFlag calculator = new ImpedimentCalculatorByFlag();
+
         @Override
         public Long timeInImpediment(final List<String> impedimentColumns, final List<JiraChangelogItem> changelogItems,
                                      final List<Changelog> changelog, final LocalDateTime endDate, final List<LocalDate> holidays,
                                      final Boolean ignoreWeekend) {
-            var calculator = new ImpedimentCalculatorByFlag(changelogItems, endDate, holidays, ignoreWeekend);
-            return calculator.timeInImpediment();
+
+            return calculator.timeInImpediment(changelogItems, endDate, holidays, ignoreWeekend);
         }
     };
 
