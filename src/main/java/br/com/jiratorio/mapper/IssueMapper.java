@@ -130,7 +130,8 @@ public class IssueMapper {
                     board.getDueDateType(), board.getIgnoreWeekend(), holidays);
         }
 
-        Long timeInImpediment = ParseUtil.countTimeInImpediment(board, changelogItems, changelog, endDate, holidays);
+        Long timeInImpediment = board.getImpedimentType() == null ? 0L : board.getImpedimentType()
+                .timeInImpediment(board.getImpedimentColumns(), changelogItems, changelog, endDate, holidays, board.getIgnoreWeekend());
 
         String priority = null;
         if (fields.has("priority") && !fields.get("priority").isJsonNull() && fields.get("priority").isJsonObject()) {

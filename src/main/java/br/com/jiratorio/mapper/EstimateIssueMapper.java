@@ -85,7 +85,9 @@ public class EstimateIssueMapper {
 
                     Long leadTime = DateUtil.daysDiff(startDate, LocalDateTime.now(), holidays, board.getIgnoreWeekend());
 
-                    Long timeInImpediment = ParseUtil.countTimeInImpediment(board, changelogItems, changelog, LocalDateTime.now(), holidays);
+                    Long timeInImpediment = board.getImpedimentType() == null ? 0L : board.getImpedimentType()
+                            .timeInImpediment(board.getImpedimentColumns(), changelogItems, changelog, LocalDateTime.now(),
+                                    holidays, board.getIgnoreWeekend());
 
                     String author = null;
                     JsonNode creator = fields.path("creator");

@@ -3,7 +3,7 @@ package br.com.jiratorio.factory.domain.request;
 import br.com.jiratorio.domain.DueDateType;
 import br.com.jiratorio.domain.DynamicFieldConfig;
 import br.com.leonardoferreira.jbacon.JBacon;
-import br.com.jiratorio.domain.ImpedimentType;
+import br.com.jiratorio.domain.impediment.ImpedimentType;
 import br.com.jiratorio.domain.request.UpdateBoardRequest;
 import com.github.javafaker.Faker;
 import java.util.Arrays;

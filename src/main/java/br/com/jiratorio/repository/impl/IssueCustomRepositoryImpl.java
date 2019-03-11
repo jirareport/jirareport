@@ -5,8 +5,9 @@ import br.com.jiratorio.domain.DynamicFieldsValues;
 import br.com.jiratorio.domain.entity.Issue;
 import br.com.jiratorio.domain.form.IssueForm;
 import br.com.jiratorio.repository.IssueCustomRepository;
-import br.com.jiratorio.util.ParseUtil;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -145,12 +146,17 @@ public class IssueCustomRepositoryImpl implements IssueCustomRepository {
             List<DynamicFieldsValues> dynamicFieldsValues = new ArrayList<>();
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 String columnLabel = metaData.getColumnLabel(i);
-                List<String> values = ParseUtil.toStringArray(objectMapper, rs.getString(columnLabel));
-
+                List<String> values = parseList(rs, columnLabel);
                 dynamicFieldsValues.add(new DynamicFieldsValues(columnLabel, values));
             }
             return dynamicFieldsValues;
         }, boardId);
+    }
+
+    @SneakyThrows
+    private List<String> parseList(final ResultSet rs, final String columnLabel) {
+        return objectMapper.readValue(rs.getString(columnLabel), new TypeReference<List<String>>() {
+        });
     }
 
     private List<String> findAllDynamicFieldsByBoardId(final Long boardId) {

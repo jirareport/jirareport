@@ -1,7 +1,7 @@
 package br.com.jiratorio.domain.response;
 
 import br.com.jiratorio.domain.DynamicFieldConfig;
-import br.com.jiratorio.domain.ImpedimentType;
+import br.com.jiratorio.domain.impediment.ImpedimentType;
 import java.util.List;
 import lombok.Data;
 import lombok.ToString;

@@ -1,7 +1,7 @@
 package br.com.jiratorio.domain.request;
 
 import br.com.jiratorio.domain.DueDateType;
-import br.com.jiratorio.domain.ImpedimentType;
+import br.com.jiratorio.domain.impediment.ImpedimentType;
 import br.com.jiratorio.domain.DynamicFieldConfig;
 import java.util.List;
 import lombok.Data;

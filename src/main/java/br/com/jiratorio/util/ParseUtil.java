@@ -1,22 +1,15 @@
 package br.com.jiratorio.util;
 
-import br.com.jiratorio.domain.entity.Board;
-import br.com.jiratorio.domain.ImpedimentType;
-import br.com.jiratorio.domain.entity.embedded.Changelog;
 import br.com.jiratorio.domain.changelog.JiraChangelogItem;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import br.com.jiratorio.domain.entity.embedded.Changelog;
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -32,9 +25,8 @@ public final class ParseUtil {
                         .to(i.getToString())
                         .created(i.getCreated())
                         .build())
+                .sorted(Comparator.comparing(Changelog::getCreated))
                 .collect(Collectors.toList());
-
-        collect.sort(Comparator.comparing(Changelog::getCreated));
 
         for (int i = 0; i < collect.size(); i++) {
             Changelog current = collect.get(i);
@@ -50,68 +42,6 @@ public final class ParseUtil {
         }
 
         return collect;
-    }
-
-    public static Long countTimeInImpediment(final Board board, final List<JiraChangelogItem> changelogItems,
-                                             final List<Changelog> changelog, final LocalDateTime endDate, final List<LocalDate> holidays) {
-        Long timeInImpediment;
-        if (ImpedimentType.FLAG.equals(board.getImpedimentType())) {
-            timeInImpediment = countTimeInImpedimentByFlag(changelogItems, endDate, holidays, board.getIgnoreWeekend());
-        } else if (ImpedimentType.COLUMN.equals(board.getImpedimentType())) {
-            List<String> impedimentColumns = board.getImpedimentColumns();
-            timeInImpediment = impedimentColumns == null ? 0L : countTimeInImpedimentByColumn(changelog, impedimentColumns);
-        } else {
-            timeInImpediment = 0L;
-        }
-
-        return timeInImpediment;
-    }
-
-    @SneakyThrows
-    public static List<String> toStringArray(final ObjectMapper objectMapper, final String array) {
-        return objectMapper.readValue(array, new TypeReference<List<String>>() { });
-    }
-
-    private static Long countTimeInImpedimentByFlag(final List<JiraChangelogItem> changelogItems, final LocalDateTime endDate,
-                                                    final List<LocalDate> holidays, final Boolean ignoreWeekend) {
-        List<LocalDateTime> beginnings = new ArrayList<>();
-        List<LocalDateTime> terms = new ArrayList<>();
-
-        changelogItems.stream()
-                .filter(i -> "flagged".equalsIgnoreCase(i.getField()))
-                .forEach(i -> {
-                    if ("impediment".equalsIgnoreCase(i.getToString())) {
-                        beginnings.add(i.getCreated());
-                    } else {
-                        terms.add(i.getCreated());
-                    }
-                });
-
-        if (beginnings.size() == terms.size() - 1) {
-            terms.add(endDate);
-        }
-
-        if (beginnings.size() != terms.size()) {
-            log.info("Method=countTimeInImpedimentByFlag, Info=tamanhos diferentes, beginnings={}, terms={}", beginnings.size(), terms.size());
-            return 0L;
-        }
-
-        beginnings.sort(LocalDateTime::compareTo);
-        terms.sort(LocalDateTime::compareTo);
-
-        Long timeInImpediment = 0L;
-        for (int i = 0; i < terms.size(); i++) {
-            timeInImpediment += DateUtil.daysDiff(beginnings.get(i), terms.get(i), holidays, ignoreWeekend);
-        }
-
-        return timeInImpediment;
-    }
-
-    private static Long countTimeInImpedimentByColumn(final List<Changelog> changelog, final List<String> impedimentColumns) {
-        return changelog.stream()
-                .filter(cl -> impedimentColumns.contains(cl.getTo()) && cl.getLeadTime() != null)
-                .mapToLong(Changelog::getLeadTime)
-                .sum();
     }
 
 }

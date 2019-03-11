@@ -6,7 +6,7 @@ import br.com.jiratorio.domain.DynamicFieldConfig;
 import br.com.jiratorio.repository.BoardRepository;
 import br.com.leonardoferreira.jbacon.JBacon;
 import br.com.leonardoferreira.jbacon.annotation.JBaconTemplate;
-import br.com.jiratorio.domain.ImpedimentType;
+import br.com.jiratorio.domain.impediment.ImpedimentType;
 import com.github.javafaker.Faker;
 import java.util.Arrays;
 import java.util.Collections;
