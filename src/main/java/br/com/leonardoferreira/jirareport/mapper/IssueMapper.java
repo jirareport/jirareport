@@ -209,7 +209,8 @@ public class IssueMapper {
         }
 
         if (jsonElement.isJsonObject()) {
-            return getAsStringSafe(jsonElement.getAsJsonObject().get("value"));
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            return getAsStringSafe(jsonObject.has("value") ? jsonObject.get("value") : jsonObject.get("name"));
         }
 
         return jsonElement.getAsString();

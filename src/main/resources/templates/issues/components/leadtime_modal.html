@@ -75,7 +75,7 @@
                         </table>
                     </th:block>
 
-                    <th:block th:unless="${#lists.isEmpty(board.touchingColumns) or #lists.isEmpty(board.waitingColumns)}">
+                    <th:block th:unless="${#lists.isEmpty(board.touchingColumns) or #lists.isEmpty(board.waitingColumns) or issue instanceof T(br.com.leonardoferreira.jirareport.domain.vo.EstimateIssue)}">
                         <br/>
                         <h3 class="page-header" style="margin-top: 0">Eficiência</h3>
 
