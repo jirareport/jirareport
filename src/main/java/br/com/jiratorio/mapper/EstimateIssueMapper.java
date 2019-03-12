@@ -148,7 +148,8 @@ public class EstimateIssueMapper {
         }
 
         if (jsonElement.isContainerNode()) {
-            return jsonElement.get("value").asText(null);
+            JsonNode jsonNode = jsonElement.has("value") ? jsonElement.get("value") : jsonElement.get("name");
+            return jsonNode == null ? null : jsonNode.asText(null);
         }
 
         return jsonElement.asText(null);
