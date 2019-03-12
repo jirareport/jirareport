@@ -9,7 +9,7 @@ import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.EstimateService;
 import java.time.LocalDate;
 import java.util.List;
-import org.apache.commons.lang.StringUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,10 +36,10 @@ public class EstimateController {
         List<EstimateIssue> estimateIssueList = estimateService.findEstimateIssues(boardId, estimateForm);
 
         List<EstimateFieldReference> estimateFieldReferenceList = EstimateFieldReference.retrieveCustomList(
-                StringUtils.isNotEmpty(board.getSystemCF()),
-                StringUtils.isNotEmpty(board.getEstimateCF()),
-                StringUtils.isNotEmpty(board.getEpicCF()),
-                StringUtils.isNotEmpty(board.getProjectCF()));
+                !StringUtils.isEmpty(board.getSystemCF()),
+                !StringUtils.isEmpty(board.getEstimateCF()),
+                !StringUtils.isEmpty(board.getEpicCF()),
+                !StringUtils.isEmpty(board.getProjectCF()));
 
         if (estimateForm.getStartDate() == null || estimateForm.getEndDate() == null) {
             estimateForm.setStartDate(LocalDate.now().minusMonths(4));
