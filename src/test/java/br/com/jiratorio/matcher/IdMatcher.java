@@ -10,6 +10,10 @@ public class IdMatcher extends BaseMatcher<Long> {
 
     private Long expected;
 
+    public static IdMatcher equalTo(final Long expected) {
+        return new IdMatcher(expected);
+    }
+
     public static IdMatcher is(final Long expected) {
         return new IdMatcher(expected);
     }

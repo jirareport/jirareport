@@ -53,7 +53,7 @@ class ImportHolidayIntegrationTest {
 
     @Test
     void importWithSuccess() {
-        authenticator.doWithDefaultUser(boardFactory::create);
+        authenticator.withDefaultUser(boardFactory::create);
 
         // @formatter:off
         RestAssured
@@ -112,7 +112,7 @@ class ImportHolidayIntegrationTest {
 
     @Test
     void alreadyBeenImported() {
-        authenticator.doWithDefaultUser(() -> {
+        authenticator.withDefaultUser(() -> {
             Board board = boardFactory.create();
             IntStream.range(1, 6).forEach(i ->
                     holidayFactory.create(empty -> {
@@ -120,6 +120,7 @@ class ImportHolidayIntegrationTest {
                         empty.setBoard(board);
                     })
             );
+            return null;
         });
 
         // @formatter:off

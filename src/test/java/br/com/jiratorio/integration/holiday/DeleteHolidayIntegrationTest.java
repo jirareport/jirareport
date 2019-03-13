@@ -38,7 +38,7 @@ class DeleteHolidayIntegrationTest {
 
     @Test
     void deleteHoliday() {
-        authenticator.doWithDefaultUser(holidayFactory::create);
+        authenticator.withDefaultUser(holidayFactory::create);
 
         // @formatter:off
         RestAssured

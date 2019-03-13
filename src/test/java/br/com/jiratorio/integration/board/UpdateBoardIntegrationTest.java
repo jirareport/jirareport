@@ -49,7 +49,7 @@ class UpdateBoardIntegrationTest {
 
     @Test
     void updateBoard() throws Exception {
-        authenticator.doWithDefaultUser(boardFactory::create);
+        authenticator.withDefaultUser(boardFactory::create);
         UpdateBoardRequest request = updateBoardRequestFactory.build();
 
         // @formatter:off

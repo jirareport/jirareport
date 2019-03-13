@@ -47,7 +47,7 @@ class CreateHolidayIntegrationTest {
     @Test
     void createHoliday() {
         HolidayRequest request = holidayRequestFactory.build();
-        authenticator.doWithDefaultUser(boardFactory::create);
+        authenticator.withDefaultUser(boardFactory::create);
 
         // @formatter:off
         RestAssured

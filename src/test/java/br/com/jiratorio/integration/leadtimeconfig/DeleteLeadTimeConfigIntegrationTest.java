@@ -38,7 +38,7 @@ class DeleteLeadTimeConfigIntegrationTest {
 
     @Test
     void deleteLeadTimeConfig() {
-        authenticator.doWithDefaultUser(leadTimeConfigFactory::create);
+        authenticator.withDefaultUser(leadTimeConfigFactory::create);
 
         // @formatter:off
         RestAssured
@@ -58,7 +58,7 @@ class DeleteLeadTimeConfigIntegrationTest {
 
     @Test
     void deleteWithBoardNotFound(@NotFound final ResponseSpecification spec) {
-        authenticator.doWithDefaultUser(leadTimeConfigFactory::create);
+        authenticator.withDefaultUser(leadTimeConfigFactory::create);
 
         // @formatter:off
         RestAssured
@@ -78,7 +78,7 @@ class DeleteLeadTimeConfigIntegrationTest {
 
     @Test
     void deleteWithLeadTimeConfigNotFound(@NotFound final ResponseSpecification spec) {
-        authenticator.doWithDefaultUser(leadTimeConfigFactory::create);
+        authenticator.withDefaultUser(leadTimeConfigFactory::create);
 
         // @formatter:off
         RestAssured

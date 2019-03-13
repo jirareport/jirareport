@@ -54,7 +54,7 @@ class UpdateHolidayIntegrationTest {
 
     @Test
     void updateHoliday() {
-        authenticator.doWithDefaultUser(holidayFactory::create);
+        authenticator.withDefaultUser(holidayFactory::create);
         HolidayRequest request = holidayRequestFactory.build();
 
         // @formatter:off
@@ -81,7 +81,7 @@ class UpdateHolidayIntegrationTest {
 
     @Test
     void failInValidations() {
-        authenticator.doWithDefaultUser(holidayFactory::create);
+        authenticator.withDefaultUser(holidayFactory::create);
         HolidayRequest request = new HolidayRequest();
 
         // @formatter:off
@@ -103,7 +103,7 @@ class UpdateHolidayIntegrationTest {
 
     @Test
     void updateHolidayNotFound(@NotFound final ResponseSpecification spec) {
-        authenticator.doWithDefaultUser(boardFactory::create);
+        authenticator.withDefaultUser(boardFactory::create);
         HolidayRequest request = holidayRequestFactory.build();
 
         // @formatter:off

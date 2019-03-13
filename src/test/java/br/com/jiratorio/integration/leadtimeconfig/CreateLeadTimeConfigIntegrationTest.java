@@ -80,7 +80,7 @@ class CreateLeadTimeConfigIntegrationTest {
 
     @Test
     void failInValidations() {
-        authenticator.doWithDefaultUser(boardFactory::create);
+        authenticator.withDefaultUser(boardFactory::create);
 
         // @formatter:off
         RestAssured

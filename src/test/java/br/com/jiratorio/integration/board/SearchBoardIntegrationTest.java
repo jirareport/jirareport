@@ -35,8 +35,8 @@ class SearchBoardIntegrationTest {
 
     @Test
     void findAllBoardsOfCurrentUser() {
-        authenticator.doWithDefaultUser(() -> boardFactory.create(10));
-        authenticator.doWithUser("other_user", () -> boardFactory.create(5));
+        authenticator.withDefaultUser(() -> boardFactory.create(10));
+        authenticator.withUser("other_user", () -> boardFactory.create(5));
 
         // @formatter:off
         RestAssured
@@ -56,9 +56,9 @@ class SearchBoardIntegrationTest {
 
     @Test
     void findAllOwners() {
-        authenticator.doWithDefaultUser(() -> boardFactory.create(5));
-        authenticator.doWithUser("first_user", () -> boardFactory.create(5));
-        authenticator.doWithUser("second_user", () -> boardFactory.create(5));
+        authenticator.withDefaultUser(() -> boardFactory.create(5));
+        authenticator.withUser("first_user", () -> boardFactory.create(5));
+        authenticator.withUser("second_user", () -> boardFactory.create(5));
 
         // @formatter:off
         RestAssured
@@ -79,9 +79,10 @@ class SearchBoardIntegrationTest {
 
     @Test
     void filterBoardByName() {
-        authenticator.doWithDefaultUser(() -> {
+        authenticator.withDefaultUser(() -> {
             boardFactory.create(5, empty -> empty.setName("Uniq Start Name"));
             boardFactory.create(5);
+            return null;
         });
 
         // @formatter:off
@@ -103,10 +104,10 @@ class SearchBoardIntegrationTest {
 
     @Test
     void findBoardsOfAllOwners() {
-        authenticator.doWithDefaultUser(() -> boardFactory.create(5));
-        authenticator.doWithUser("user2", () -> boardFactory.create(5));
-        authenticator.doWithUser("user3", () -> boardFactory.create(5));
-        authenticator.doWithUser("user4", () -> boardFactory.create(5));
+        authenticator.withDefaultUser(() -> boardFactory.create(5));
+        authenticator.withUser("user2", () -> boardFactory.create(5));
+        authenticator.withUser("user3", () -> boardFactory.create(5));
+        authenticator.withUser("user4", () -> boardFactory.create(5));
 
         // @formatter:off
         RestAssured
@@ -130,10 +131,10 @@ class SearchBoardIntegrationTest {
 
     @Test
     void findBoardsByOwner() {
-        authenticator.doWithDefaultUser(() -> boardFactory.create(5));
-        authenticator.doWithUser("user2", () -> boardFactory.create(5));
-        authenticator.doWithUser("user3", () -> boardFactory.create(5));
-        authenticator.doWithUser("user4", () -> boardFactory.create(5));
+        authenticator.withDefaultUser(() -> boardFactory.create(5));
+        authenticator.withUser("user2", () -> boardFactory.create(5));
+        authenticator.withUser("user3", () -> boardFactory.create(5));
+        authenticator.withUser("user4", () -> boardFactory.create(5));
 
         // @formatter:off
         RestAssured

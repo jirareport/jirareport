@@ -38,7 +38,7 @@ class DeleteBoardIntegrationTest {
 
     @Test
     void deleteBord() {
-        authenticator.doWithDefaultUser(boardFactory::create);
+        authenticator.withDefaultUser(boardFactory::create);
 
         // @formatter:off
         RestAssured

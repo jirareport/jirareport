@@ -49,7 +49,7 @@ class UpdateLeadTimeConfigIntegrationTest {
 
     @Test
     void updateLeadTimeConfig() {
-        authenticator.doWithDefaultUser(leadTimeConfigFactory::create);
+        authenticator.withDefaultUser(leadTimeConfigFactory::create);
         LeadTimeConfigRequest request = leadTimeConfigRequestFactory.build();
 
         // @formatter:off
@@ -77,7 +77,7 @@ class UpdateLeadTimeConfigIntegrationTest {
 
     @Test
     void failInValidations() {
-        authenticator.doWithDefaultUser(leadTimeConfigFactory::create);
+        authenticator.withDefaultUser(leadTimeConfigFactory::create);
 
         // @formatter:off
         RestAssured
