@@ -2,12 +2,11 @@ package br.com.jiratorio.integration.userconfig
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.domain.ChartType
-import br.com.jiratorio.domain.entity.UserConfig
 import br.com.jiratorio.factory.entity.UserConfigFactory
 import io.restassured.RestAssured
 import org.apache.http.HttpStatus
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

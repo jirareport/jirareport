@@ -19,7 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @Tag("integration")
 @ExtendWith(SpringExtension::class, SpecificationResolver::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class SearchLeadTimeConfigIntegrationTest @Autowired constructor(
+internal class SearchLeadTimeConfigIntegrationTest @Autowired constructor(
         private val leadTimeConfigFactory: LeadTimeConfigFactory,
         private val boardFactory: BoardFactory,
         private val authenticator: Authenticator
