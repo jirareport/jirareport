@@ -33,8 +33,8 @@ class SearchHolidayIntegrationTest {
 
     @Autowired
     SearchHolidayIntegrationTest(final HolidayFactory holidayFactory,
-                                        final BoardFactory boardFactory,
-                                        final Authenticator authenticator) {
+                                 final BoardFactory boardFactory,
+                                 final Authenticator authenticator) {
         this.holidayFactory = holidayFactory;
         this.boardFactory = boardFactory;
         this.authenticator = authenticator;
@@ -66,7 +66,7 @@ class SearchHolidayIntegrationTest {
                     .body("content[0].id", Matchers.notNullValue())
                     .body("content[0].date", Matchers.notNullValue())
                     .body("content[0].description", Matchers.notNullValue())
-                    .body("content[0].boardId", IdMatcher.is(board.getId()))
+                    .body("content[0].boardId", new IdMatcher(board.getId()))
                     .body("content.findAll { it.boardId == 1 }", Matchers.hasSize(10));
         // @formatter:on
     }
@@ -85,10 +85,10 @@ class SearchHolidayIntegrationTest {
                 .then()
                     .log().all()
                     .statusCode(HttpStatus.SC_OK)
-                    .body("id", IdMatcher.is(holiday.getId()))
+                    .body("id", new IdMatcher(holiday.getId()))
                     .body("date", Matchers.is(holiday.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
                     .body("description", Matchers.is(holiday.getDescription()))
-                    .body("boardId", IdMatcher.is(holiday.getBoard().getId()));
+                    .body("boardId", new IdMatcher(holiday.getBoard().getId()));
         // @formatter:on
     }
 
