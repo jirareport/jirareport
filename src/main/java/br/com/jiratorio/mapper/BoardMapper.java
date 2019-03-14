@@ -32,11 +32,12 @@ public interface BoardMapper {
     }
 
     @Mappings({ // @formatter:off
-        @Mapping(target = "startColumn",     qualifiedByName = "toUpperCase"),
-        @Mapping(target = "endColumn",       qualifiedByName = "toUpperCase"),
-        @Mapping(target = "fluxColumn",      qualifiedByName = "listToUpperCase"),
-        @Mapping(target = "touchingColumns", qualifiedByName = "listToUpperCase"),
-        @Mapping(target = "waitingColumns",  qualifiedByName = "listToUpperCase")
+        @Mapping(target = "startColumn",        qualifiedByName = "toUpperCase"),
+        @Mapping(target = "endColumn",          qualifiedByName = "toUpperCase"),
+        @Mapping(target = "fluxColumn",         qualifiedByName = "listToUpperCase"),
+        @Mapping(target = "touchingColumns",    qualifiedByName = "listToUpperCase"),
+        @Mapping(target = "waitingColumns",     qualifiedByName = "listToUpperCase"),
+        @Mapping(target = "impedimentColumns",  qualifiedByName = "listToUpperCase")
     }) // @formatter:on
     void fromUpdateBoardRequest(@MappingTarget Board board, UpdateBoardRequest updateBoardRequest);
 }

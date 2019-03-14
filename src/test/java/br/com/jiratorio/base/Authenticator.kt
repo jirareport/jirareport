@@ -11,10 +11,10 @@ class Authenticator(
         private val accountFactory: AccountFactory
 ) {
 
-    fun <T> withDefaultUser(supplier: () -> T?) =
+    fun <T> withDefaultUser(supplier: () -> T) =
             this.withUser(accountFactory.defaultUserName(), supplier)
 
-    fun <T> withUser(username: String, supplier: () -> T?): T? {
+    fun <T> withUser(username: String, supplier: () -> T): T {
         val oldContext = TestSecurityContextHolder.getContext()
 
         TestSecurityContextHolder.clearContext()
