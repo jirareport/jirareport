@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component
 
 @Component
 class LeadTimeConfigFactory(
-        val faker: Faker,
-        val leadTimeConfigRepository: LeadTimeConfigRepository,
-        val boardFactory: BoardFactory
+        private val faker: Faker,
+        private val leadTimeConfigRepository: LeadTimeConfigRepository,
+        private val boardFactory: BoardFactory
 ) : JBacon<LeadTimeConfig>() {
 
     override fun getDefault() =

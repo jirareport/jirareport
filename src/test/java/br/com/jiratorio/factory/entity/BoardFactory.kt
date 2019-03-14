@@ -15,7 +15,7 @@ import java.util.Arrays.asList
 
 @Component
 class BoardFactory(
-        val faker: Faker,
+        private val faker: Faker,
         val boardRepository: BoardRepository
 ) : JBacon<Board>() {
 

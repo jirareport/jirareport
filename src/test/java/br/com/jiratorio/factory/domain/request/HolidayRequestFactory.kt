@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 
 @Component
 class HolidayRequestFactory(
-        val faker: Faker
+        private val faker: Faker
 ) : JBacon<HolidayRequest>() {
 
     override fun getDefault() =

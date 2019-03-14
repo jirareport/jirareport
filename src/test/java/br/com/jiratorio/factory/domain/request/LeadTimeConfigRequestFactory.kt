@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class LeadTimeConfigRequestFactory(
-        val faker: Faker
+        private val faker: Faker
 ) : JBacon<LeadTimeConfigRequest>() {
 
     override fun getDefault() =

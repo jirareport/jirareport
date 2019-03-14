@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 @Component
 class JiraChangelogItemFactory(
-        val faker: Faker
+        private val faker: Faker
 ) : JBacon<JiraChangelogItem>() {
 
     override fun getDefault() =

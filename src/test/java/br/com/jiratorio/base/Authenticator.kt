@@ -7,7 +7,9 @@ import org.springframework.security.test.context.TestSecurityContextHolder
 import org.springframework.stereotype.Component
 
 @Component
-class Authenticator(val accountFactory: AccountFactory) {
+class Authenticator(
+        private val accountFactory: AccountFactory
+) {
 
     fun <T> withDefaultUser(supplier: () -> T?) =
             this.withUser(accountFactory.defaultUserName(), supplier)

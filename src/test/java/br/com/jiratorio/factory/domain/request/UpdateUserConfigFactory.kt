@@ -7,7 +7,9 @@ import com.github.javafaker.Faker
 import org.springframework.stereotype.Component
 
 @Component
-class UpdateUserConfigFactory(private val faker: Faker) : JBacon<UpdateUserConfigRequest>() {
+class UpdateUserConfigFactory(
+        private val faker: Faker
+) : JBacon<UpdateUserConfigRequest>() {
 
     override fun getDefault() =
             UpdateUserConfigRequest().apply {

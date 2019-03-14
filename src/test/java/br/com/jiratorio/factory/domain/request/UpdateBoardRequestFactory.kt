@@ -12,7 +12,7 @@ import java.util.Arrays.asList
 
 @Component
 class UpdateBoardRequestFactory(
-        val faker: Faker
+        private val faker: Faker
 ) : JBacon<UpdateBoardRequest>() {
 
     override fun getDefault() =

@@ -6,7 +6,9 @@ import br.com.jiratorio.service.TokenService
 import org.springframework.stereotype.Component
 
 @Component
-class AccountFactory(val tokenService: TokenService) {
+class AccountFactory(
+        private val tokenService: TokenService
+) {
 
     fun defaultUser() =
             buildUser(defaultUserName())

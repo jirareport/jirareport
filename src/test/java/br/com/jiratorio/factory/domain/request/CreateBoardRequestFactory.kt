@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class CreateBoardRequestFactory(
-        val faker: Faker
+        private val faker: Faker
 ) : JBacon<CreateBoardRequest>() {
 
     override fun getDefault() =

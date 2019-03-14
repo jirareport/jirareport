@@ -6,7 +6,9 @@ import java.sql.Statement
 import javax.sql.DataSource
 
 @Component
-class CleanDatabase(val dataSource: DataSource) {
+class CleanDatabase(
+        private val dataSource: DataSource
+) {
 
     fun clean() {
         dataSource.connection.use { connection ->

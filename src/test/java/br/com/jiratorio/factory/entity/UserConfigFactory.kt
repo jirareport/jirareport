@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class UserConfigFactory(
-        val userConfigRepository: UserConfigRepository,
-        val faker: Faker
+        private val userConfigRepository: UserConfigRepository,
+        private val faker: Faker
 ) : JBacon<UserConfig>() {
 
     override fun getDefault() =
