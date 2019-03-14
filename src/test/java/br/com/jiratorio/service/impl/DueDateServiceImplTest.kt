@@ -25,10 +25,10 @@ internal class DueDateServiceImplTest @Autowired constructor(
         private val jiraChangelogItemFactory: JiraChangelogItemFactory
 ) {
 
-    private var dueDateService = DueDateServiceImpl()
+    private val dueDateService = DueDateServiceImpl()
 
     @Test
-    fun testExtractDueDateHistoryWithOneItem() {
+    fun `extract due date history with one item`() {
         val jiraChangelogItem = jiraChangelogItemFactory.build()
 
         val dueDateHistories = dueDateService.extractDueDateHistory("duedate", listOf(jiraChangelogItem))
@@ -43,7 +43,7 @@ internal class DueDateServiceImplTest @Autowired constructor(
     }
 
     @Test
-    fun testExtractDueDateHistoryWithManyItems() {
+    fun `extract due date history with many items`() {
         jiraChangelogItemFactory.build(5) { empty -> empty.field = "other_field" }
         val jiraChangelogItems = jiraChangelogItemFactory.build(5)
 
@@ -55,14 +55,14 @@ internal class DueDateServiceImplTest @Autowired constructor(
     }
 
     @Test
-    fun testCalcDeviationOfEstimateWithEmptyHistory() {
+    fun `calc deviation of estimate with empty history`() {
         val deviationOfEstimate: Long? =
                 dueDateService.calcDeviationOfEstimate(null, null, null, null, null)
         assertThat(deviationOfEstimate).isNull()
     }
 
     @Test
-    fun testCalcDeviationOfEstimateWithDueDateTypeFirstAndLastDueDate() {
+    fun `calc deviation of estimate with due date type first and last due date`() {
         val firstDueDate = DueDateHistory(null, LocalDate.of(2019, 2, 5))
         val secondDueDate = DueDateHistory(null, LocalDate.of(2019, 2, 10))
         val thirdDueDate = DueDateHistory(null, LocalDate.of(2019, 2, 15))
@@ -74,7 +74,7 @@ internal class DueDateServiceImplTest @Autowired constructor(
     }
 
     @Test
-    fun testCalcDeviationOfEstimateWithDueDateTypeFirstAndEndDate() {
+    fun `calc deviation of estimate with due date type first and end date`() {
         val firstDueDate = DueDateHistory(null, LocalDate.of(2019, 2, 5))
         val secondDueDate = DueDateHistory(null, LocalDate.of(2019, 2, 10))
         val dueDateHistories = Arrays.asList(firstDueDate, secondDueDate)
@@ -87,7 +87,7 @@ internal class DueDateServiceImplTest @Autowired constructor(
     }
 
     @Test
-    fun testCalcDeviationOfEstimateWithDueDateTypeLastAndEndDate() {
+    fun `calc deviation of estimate with due date type last and end date`() {
         val firstDueDate = DueDateHistory(null, LocalDate.of(2019, 2, 5))
         val secondDueDate = DueDateHistory(null, LocalDate.of(2019, 2, 10))
         val dueDateHistories = Arrays.asList(firstDueDate, secondDueDate)

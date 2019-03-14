@@ -7,7 +7,7 @@ import java.util.Arrays.asList
 
 internal class ImpedimentCalculatorByColumnTest {
 
-    private var calculator: ImpedimentCalculatorByColumn = ImpedimentCalculatorByColumn()
+    private val calculator: ImpedimentCalculatorByColumn = ImpedimentCalculatorByColumn()
 
     @Test
     fun `time in impediment`() {

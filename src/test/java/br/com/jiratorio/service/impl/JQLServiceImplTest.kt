@@ -12,14 +12,14 @@ import java.util.Arrays
 @Tag("unit")
 internal class JQLServiceImplTest {
 
-    private var jqlService: JQLServiceImpl = JQLServiceImpl()
+    private val jqlService: JQLServiceImpl = JQLServiceImpl()
 
     @Nested
     inner class FinalizedIssues {
 
-        private var startDate: LocalDate = LocalDate.of(2019, 1, 1)
+        private val startDate: LocalDate = LocalDate.of(2019, 1, 1)
 
-        private var endDate: LocalDate = LocalDate.of(2019, 1, 31)
+        private val endDate: LocalDate = LocalDate.of(2019, 1, 31)
 
         @Test
         fun `finalized issues with ignore issue type`() {

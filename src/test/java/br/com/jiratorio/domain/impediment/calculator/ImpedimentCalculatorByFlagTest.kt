@@ -9,7 +9,7 @@ import java.util.Arrays.asList
 
 internal class ImpedimentCalculatorByFlagTest {
 
-    private var calculator: ImpedimentCalculatorByFlag = ImpedimentCalculatorByFlag()
+    private val calculator: ImpedimentCalculatorByFlag = ImpedimentCalculatorByFlag()
 
     @Test
     fun `time in impediment`() {
