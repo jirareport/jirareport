@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain.entity;
+package br.com.jiratorio.domain.entity
 
 import br.com.jiratorio.domain.DueDateType
 import br.com.jiratorio.domain.DynamicFieldConfig

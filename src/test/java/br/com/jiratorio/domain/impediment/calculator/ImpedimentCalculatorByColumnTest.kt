@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain.impediment.calculator;
+package br.com.jiratorio.domain.impediment.calculator
 
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import org.assertj.core.api.Assertions.assertThat
@@ -24,7 +24,7 @@ internal class ImpedimentCalculatorByColumnTest {
 
         val timeInImpediment = calculator.timeInImpediment(changelog, columns)
 
-        assertThat(timeInImpediment).isEqualTo(12);
+        assertThat(timeInImpediment).isEqualTo(12)
     }
 
     private fun createChangelog(column: String, leadTime: Long) =

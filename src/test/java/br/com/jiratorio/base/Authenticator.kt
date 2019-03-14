@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 class Authenticator(val accountFactory: AccountFactory) {
 
     fun <T> withDefaultUser(supplier: () -> T?) =
-            this.withUser(AccountFactory.DEFAULT_USER, supplier)
+            this.withUser(accountFactory.defaultUserName(), supplier)
 
     fun <T> withUser(username: String, supplier: () -> T?): T? {
         val oldContext = TestSecurityContextHolder.getContext()
@@ -30,4 +30,6 @@ class Authenticator(val accountFactory: AccountFactory) {
 
     fun defaultUserHeader() =
             Header("X-Auth-Token", accountFactory.defaultUserToken())
+
+    fun defaultUserName() = accountFactory.defaultUserName()
 }

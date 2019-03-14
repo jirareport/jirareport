@@ -1,25 +1,25 @@
 package br.com.jiratorio.factory.domain.request
 
-import br.com.jiratorio.domain.request.CreateBoardRequest
+import br.com.jiratorio.domain.request.LeadTimeConfigRequest
 import br.com.leonardoferreira.jbacon.JBacon
 import com.github.javafaker.Faker
 import org.springframework.stereotype.Component
 
 @Component
-class CreateBoardRequestFactory(
+class LeadTimeConfigRequestFactory(
         val faker: Faker
-) : JBacon<CreateBoardRequest>() {
+) : JBacon<LeadTimeConfigRequest>() {
 
     override fun getDefault() =
-            CreateBoardRequest().apply {
+            LeadTimeConfigRequest().apply {
                 name = faker.lorem().word()
-                externalId = faker.number().randomNumber()
+                startColumn = faker.lorem().word()
+                endColumn = faker.lorem().word()
             }
 
     override fun getEmpty() =
-            CreateBoardRequest()
+            LeadTimeConfigRequest()
 
-    override fun persist(createBoardRequest: CreateBoardRequest) =
+    override fun persist(leadTimeConfigRequest: LeadTimeConfigRequest) =
             throw UnsupportedOperationException()
-
 }

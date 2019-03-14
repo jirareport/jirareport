@@ -1,4 +1,4 @@
-package br.com.jiratorio.base.specification;
+package br.com.jiratorio.base.specification
 
 import io.restassured.builder.ResponseSpecBuilder
 import org.apache.http.HttpStatus

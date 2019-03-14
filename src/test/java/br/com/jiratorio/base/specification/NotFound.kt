@@ -1,4 +1,4 @@
-package br.com.jiratorio.base.specification;
+package br.com.jiratorio.base.specification
 
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.VALUE_PARAMETER)

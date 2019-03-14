@@ -70,4 +70,5 @@ internal class FluxColumnTest {
         }
 
     }
+
 }

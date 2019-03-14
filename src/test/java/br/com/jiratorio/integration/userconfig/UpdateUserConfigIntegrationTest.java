@@ -58,7 +58,7 @@ class UpdateUserConfigIntegrationTest {
                     .statusCode(HttpStatus.SC_NO_CONTENT);
         // @formatter:on
 
-        UserConfig userConfig = userConfigRepository.findByUsername(AccountFactory.DEFAULT_USER)
+        UserConfig userConfig = userConfigRepository.findByUsername(authenticator.defaultUserName())
                 .orElseThrow(ResourceNotFound::new);
 
         Assertions.assertThat(userConfig.getHolidayToken())
