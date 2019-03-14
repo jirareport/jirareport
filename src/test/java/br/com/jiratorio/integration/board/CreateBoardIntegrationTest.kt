@@ -8,9 +8,9 @@ import br.com.jiratorio.repository.BoardRepository
 import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
-import org.assertj.core.api.AbstractStringAssert
 import org.assertj.core.api.Assertions.assertThat
-import org.hamcrest.Matchers
+import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -43,7 +43,7 @@ internal class CreateBoardIntegrationTest @Autowired constructor(
             .then()
                 .log().all()
                 .statusCode(HttpStatus.SC_CREATED)
-                .header("location", Matchers.containsString("/boards/1"))
+                .header("location", containsString("/boards/1"))
          // @formatter:on
 
         val board = boardRepository.findById(1L)
@@ -70,8 +70,8 @@ internal class CreateBoardIntegrationTest @Autowired constructor(
             .then()
                 .log().all()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("errors.find { it.field == 'externalId' }.defaultMessage", Matchers.equalTo("must not be null"))
-                .body("errors.find { it.field == 'name' }.defaultMessage", Matchers.equalTo("must not be blank"))
+                .body("errors.find { it.field == 'externalId' }.defaultMessage", equalTo("must not be null"))
+                .body("errors.find { it.field == 'name' }.defaultMessage", equalTo("must not be blank"))
         // @formatter:on
     }
 }

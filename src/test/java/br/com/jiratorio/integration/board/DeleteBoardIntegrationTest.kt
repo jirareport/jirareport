@@ -2,12 +2,10 @@ package br.com.jiratorio.integration.board
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.resolver.SpecificationResolver
-import br.com.jiratorio.base.specification.NotFound
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.repository.BoardRepository
 import io.restassured.RestAssured
-import io.restassured.specification.ResponseSpecification
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
