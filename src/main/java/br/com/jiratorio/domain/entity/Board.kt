@@ -17,11 +17,11 @@ import javax.persistence.OneToMany
 
 @Data
 @Entity
-class Board() : BaseEntity() {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
+data class Board(
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        var id: Long? = null
+) : BaseEntity() {
 
     @Column(nullable = false)
     var externalId: Long? = null
@@ -34,11 +34,11 @@ class Board() : BaseEntity() {
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var fluxColumn: List<String>? = null
+    var fluxColumn: MutableList<String>? = null
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var ignoreIssueType: List<String>? = null
+    var ignoreIssueType: MutableList<String>? = null
 
     var epicCF: String? = null
 
@@ -54,32 +54,32 @@ class Board() : BaseEntity() {
     var ignoreWeekend: Boolean? = null
 
     @OneToMany(mappedBy = "board", cascade = [CascadeType.ALL])
-    var leadTimeConfigs: List<LeadTimeConfig>? = null
+    var leadTimeConfigs: MutableList<LeadTimeConfig>? = null
 
     @OneToMany(mappedBy = "board", cascade = [CascadeType.ALL])
-    var holidays: List<Holiday>? = null
+    var holidays: MutableList<Holiday>? = null
 
     @OneToMany(mappedBy = "board", cascade = [CascadeType.ALL])
-    var issues: List<Issue>? = null
+    var issues: MutableList<Issue>? = null
 
     @Enumerated(EnumType.STRING)
     var impedimentType: ImpedimentType? = null
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var impedimentColumns: List<String>? = null
+    var impedimentColumns: MutableList<String>? = null
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var dynamicFields: List<DynamicFieldConfig>? = null
+    var dynamicFields: MutableList<DynamicFieldConfig>? = null
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var touchingColumns: List<String>? = null
+    var touchingColumns: MutableList<String>? = null
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var waitingColumns: List<String>? = null
+    var waitingColumns: MutableList<String>? = null
 
     @Enumerated(EnumType.STRING)
     var dueDateType: DueDateType? = null

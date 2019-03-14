@@ -3,6 +3,7 @@ package br.com.jiratorio.integration.userconfig;
 import br.com.jiratorio.base.Authenticator;
 import br.com.jiratorio.domain.entity.UserConfig;
 import br.com.jiratorio.domain.request.UpdateUserConfigRequest;
+import br.com.jiratorio.exception.ResourceNotFound;
 import br.com.jiratorio.factory.domain.request.UpdateUserConfigFactory;
 import br.com.jiratorio.factory.entity.AccountFactory;
 import br.com.jiratorio.repository.UserConfigRepository;
@@ -58,7 +59,7 @@ class UpdateUserConfigIntegrationTest {
         // @formatter:on
 
         UserConfig userConfig = userConfigRepository.findByUsername(AccountFactory.DEFAULT_USER)
-                .orElseThrow();
+                .orElseThrow(ResourceNotFound::new);
 
         Assertions.assertThat(userConfig.getHolidayToken())
                 .isEqualTo(request.getHolidayToken());

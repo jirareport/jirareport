@@ -11,8 +11,8 @@ plugins {
 apply plugin: 'io.spring.dependency-management'
 apply from: "gradle/tasks/CreateMigration.gradle"
 
-sourceCompatibility = 1.11
-targetCompatibility = 1.11
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -68,10 +68,10 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude group: "junit", module: "junit"
     }
-    
+
     testImplementation "org.junit.jupiter:junit-jupiter-api"
     testImplementation "org.junit.jupiter:junit-jupiter-engine"
-    
+
     testImplementation "org.mockito:mockito-junit-jupiter"
 }
 
