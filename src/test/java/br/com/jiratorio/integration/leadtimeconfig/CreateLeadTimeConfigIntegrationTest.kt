@@ -2,7 +2,7 @@ package br.com.jiratorio.integration.leadtimeconfig
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.resolver.SpecificationResolver
-import br.com.jiratorio.base.specification.NotFound
+import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.LeadTimeConfigRequestFactory
@@ -10,7 +10,6 @@ import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import io.restassured.RestAssured
 import io.restassured.http.ContentType
-import io.restassured.specification.ResponseSpecification
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.containsString
@@ -92,7 +91,7 @@ internal class CreateLeadTimeConfigIntegrationTest @Autowired constructor(
     }
 
     @Test
-    fun createWithBoardNotFound(@NotFound spec: ResponseSpecification) {
+    fun createWithBoardNotFound() {
         val request = leadTimeConfigRequestFactory.build()
 
         // @formatter:off
@@ -106,7 +105,7 @@ internal class CreateLeadTimeConfigIntegrationTest @Autowired constructor(
                 .post("/boards/999/lead-time-configs")
             .then()
                 .log().all()
-                .spec(spec)
+                .spec(notFound())
          // @formatter:on
     }
 }

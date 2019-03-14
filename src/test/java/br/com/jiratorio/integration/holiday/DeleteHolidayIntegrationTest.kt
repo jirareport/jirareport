@@ -2,16 +2,12 @@ package br.com.jiratorio.integration.holiday
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.resolver.SpecificationResolver
-import br.com.jiratorio.base.specification.NotFound
 import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.domain.entity.Holiday
 import br.com.jiratorio.factory.entity.HolidayFactory
 import br.com.jiratorio.repository.HolidayRepository
 import io.restassured.RestAssured
-import io.restassured.specification.ResponseSpecification
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
