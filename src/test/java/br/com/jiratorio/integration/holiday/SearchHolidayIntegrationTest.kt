@@ -2,6 +2,7 @@ package br.com.jiratorio.integration.holiday
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.factory.entity.HolidayFactory
 import br.com.jiratorio.matcher.IdMatcher
@@ -28,7 +29,7 @@ internal class SearchHolidayIntegrationTest @Autowired constructor(
 ) {
 
     @Test
-    fun findAllHolidays() {
+    fun `find all holidays`() {
         val (id) = authenticator.withDefaultUser {
             val boardExample = boardFactory.create()
             holidayFactory.create(10) { it.board = boardExample }
@@ -36,60 +37,66 @@ internal class SearchHolidayIntegrationTest @Autowired constructor(
             boardExample
         }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .get("/boards/{id}/holidays", id)
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_OK)
-                .body("numberOfElements", equalTo(10))
-                .body("totalPages", equalTo(1))
-                .body("content[0].id", notNullValue())
-                .body("content[0].date", notNullValue())
-                .body("content[0].description", notNullValue())
-                .body("content[0].boardId", IdMatcher(id!!))
-                .body("content.findAll { it.boardId == 1 }", hasSize<Any>(10))
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+
+            on {
+                get("/boards/{id}/holidays", id)
+            }
+
+            then {
+                statusCode(HttpStatus.SC_OK)
+                body("numberOfElements", equalTo(10))
+                body("totalPages", equalTo(1))
+                body("content[0].id", notNullValue())
+                body("content[0].date", notNullValue())
+                body("content[0].description", notNullValue())
+                body("content[0].boardId", IdMatcher(id!!))
+                body("content.findAll { it.boardId == 1 }", hasSize<Any>(10))
+            }
+        }
     }
 
     @Test
-    fun findById() {
+    fun `find by id`() {
         val holiday = authenticator.withDefaultUser { holidayFactory.create() }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .get("/boards/1/holidays/1")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_OK)
-                .body("id", IdMatcher(holiday.id!!))
-                .body("date", equalTo(holiday.date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
-                .body("description", equalTo(holiday.description))
-                .body("boardId", IdMatcher(holiday.board.id!!))
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+
+            on {
+                get("/boards/1/holidays/1")
+            }
+
+            then {
+                statusCode(HttpStatus.SC_OK)
+                body("id", IdMatcher(holiday.id!!))
+                body("date", equalTo(holiday.date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                body("description", equalTo(holiday.description))
+                body("boardId", IdMatcher(holiday.board.id!!))
+            }
+        }
     }
 
     @Test
-    fun findByIdNotFound() {
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .get("/boards/1/holidays/999")
-            .then()
-                .log().all()
-                .spec(notFound())
-         // @formatter:on
+    fun `find by id not found`() {
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+
+            on {
+                get("/boards/1/holidays/999")
+            }
+
+            then {
+                spec(notFound())
+            }
+        }
     }
 
 }

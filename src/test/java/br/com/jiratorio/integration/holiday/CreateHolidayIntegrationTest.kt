@@ -6,7 +6,7 @@ import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.HolidayRequestFactory
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.repository.HolidayRepository
-import io.restassured.RestAssured
+import br.com.jiratorio.dsl.restAssured
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
@@ -30,24 +30,26 @@ internal class CreateHolidayIntegrationTest @Autowired constructor(
 ) {
 
     @Test
-    fun createHoliday() {
+    fun `create holiday`() {
         val request = holidayRequestFactory.build()
         authenticator.withDefaultUser { boardFactory.create() }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .contentType(ContentType.JSON)
-                .body(request)
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .post("/boards/1/holidays")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_CREATED)
-                .header("location", Matchers.containsString("/boards/1/holidays/1"))
-         // @formatter:on
+        restAssured {
+            given {
+                contentType(ContentType.JSON)
+                body(request)
+                header(authenticator.defaultUserHeader())
+            }
+
+            on {
+                post("/boards/1/holidays")
+            }
+
+            then {
+                statusCode(HttpStatus.SC_CREATED)
+                header("location", Matchers.containsString("/boards/1/holidays/1"))
+            }
+        }
 
         val holiday = holidayRepository.findById(1L)
                 .orElseThrow(::ResourceNotFound)
@@ -60,23 +62,23 @@ internal class CreateHolidayIntegrationTest @Autowired constructor(
     }
 
     @Test
-    fun failInValidations() {
+    fun `fail in validations`() {
         val request = HolidayRequest()
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-                .contentType(ContentType.JSON)
-                .body(request)
-            .`when`()
-                .post("/boards/1/holidays")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("errors.find { it.field == 'date' }.defaultMessage", Matchers.`is`("must not be blank"))
-                .body("errors.find { it.field == 'description' }.defaultMessage", Matchers.`is`("must not be blank"))
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+                contentType(ContentType.JSON)
+                body(request)
+            }
+            on {
+                post("/boards/1/holidays")
+            }
+            then {
+                statusCode(HttpStatus.SC_BAD_REQUEST)
+                body("errors.find { it.field == 'date' }.defaultMessage", Matchers.`is`("must not be blank"))
+                body("errors.find { it.field == 'description' }.defaultMessage", Matchers.`is`("must not be blank"))
+            }
+        }
     }
 }

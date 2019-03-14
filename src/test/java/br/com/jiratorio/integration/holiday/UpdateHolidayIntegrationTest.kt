@@ -3,12 +3,12 @@ package br.com.jiratorio.integration.holiday
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.request.HolidayRequest
+import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.HolidayRequestFactory
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.factory.entity.HolidayFactory
 import br.com.jiratorio.repository.HolidayRepository
-import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
@@ -33,23 +33,25 @@ internal class UpdateHolidayIntegrationTest @Autowired constructor(
 ) {
 
     @Test
-    fun updateHoliday() {
+    fun `update holiday`() {
         authenticator.withDefaultUser { holidayFactory.create() }
         val request = holidayRequestFactory.build()
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-                .contentType(ContentType.JSON)
-                .body(request)
-            .`when`()
-                .put("/boards/1/holidays/1")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_NO_CONTENT)
-        // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+                contentType(ContentType.JSON)
+                body(request)
+            }
+
+            on {
+                put("/boards/1/holidays/1")
+            }
+
+            then {
+                statusCode(HttpStatus.SC_NO_CONTENT)
+            }
+        }
 
         val holiday = holidayRepository.findById(1L)
                 .orElseThrow(::ResourceNotFound)
@@ -63,43 +65,47 @@ internal class UpdateHolidayIntegrationTest @Autowired constructor(
     }
 
     @Test
-    fun failInValidations() {
+    fun `fail in validations`() {
         authenticator.withDefaultUser { holidayFactory.create() }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-                .contentType(ContentType.JSON)
-                .body(HolidayRequest())
-            .`when`()
-                .put("/boards/1/holidays/1")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("errors.find { it.field == 'date' }.defaultMessage", Matchers.`is`("must not be blank"))
-                .body("errors.find { it.field == 'description' }.defaultMessage", Matchers.`is`("must not be blank"))
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+                contentType(ContentType.JSON)
+                body(HolidayRequest())
+            }
+
+            on {
+                put("/boards/1/holidays/1")
+            }
+
+            then {
+                statusCode(HttpStatus.SC_BAD_REQUEST)
+                body("errors.find { it.field == 'date' }.defaultMessage", Matchers.`is`("must not be blank"))
+                body("errors.find { it.field == 'description' }.defaultMessage", Matchers.`is`("must not be blank"))
+            }
+        }
     }
 
     @Test
-    fun updateHolidayNotFound() {
+    fun `update holiday not found`() {
         authenticator.withDefaultUser { boardFactory.create() }
         val request = holidayRequestFactory.build()
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-                .contentType(ContentType.JSON)
-                .body(request)
-            .`when`()
-                .put("/boards/1/holidays/999")
-            .then()
-                .log().all()
-                .spec(notFound())
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+                contentType(ContentType.JSON)
+                body(request)
+            }
+
+            on {
+                put("/boards/1/holidays/999")
+            }
+
+            then {
+                spec(notFound())
+            }
+        }
     }
 }

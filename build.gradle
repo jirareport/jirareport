@@ -4,8 +4,6 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "1.3.21"
     id "org.jetbrains.kotlin.plugin.spring" version "1.3.21"
     id "java"
-    id "checkstyle"
-    id "pmd"
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -75,26 +73,10 @@ dependencies {
     testImplementation "org.mockito:mockito-junit-jupiter"
 }
 
-test {
-    useJUnitPlatform()
-}
-
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
-}
-
-checkstyle {
-    toolVersion = "8.15"
-    configFile = new File(rootDir, "checkstyle.xml")
-}
-
-pmd {
-    toolVersion = "6.10.0"
-    ruleSets = []
-    consoleOutput = true
-    ruleSetFiles = files("pmd-ruleset.xml")
 }
 
 test {
