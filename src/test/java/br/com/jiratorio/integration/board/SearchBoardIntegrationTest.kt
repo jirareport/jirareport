@@ -1,7 +1,6 @@
 package br.com.jiratorio.integration.board
 
 import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.resolver.SpecificationResolver
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.matcher.IdMatcher
@@ -20,7 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @Tag("integration")
-@ExtendWith(SpringExtension::class, SpecificationResolver::class)
+@ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class SearchBoardIntegrationTest @Autowired constructor(
         private val boardFactory: BoardFactory,

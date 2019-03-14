@@ -1,7 +1,6 @@
 package br.com.jiratorio.integration.holiday
 
 import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.resolver.SpecificationResolver
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.request.HolidayRequest
 import br.com.jiratorio.exception.ResourceNotFound
@@ -23,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.format.DateTimeFormatter
 
 @Tag("integration")
-@ExtendWith(SpringExtension::class, SpecificationResolver::class)
+@ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class UpdateHolidayIntegrationTest @Autowired constructor(
         private val holidayFactory: HolidayFactory,
