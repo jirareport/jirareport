@@ -12,13 +12,13 @@ internal class ImpedimentCalculatorByColumnTest {
     @Test
     fun `time in impediment`() {
         val changelog = asList(
-                createChangelog("COLUMN_ONE", 1),
-                createChangelog("IMP_COLUMN_ONE", 2),
-                createChangelog("COLUMN_TWO", 3),
-                createChangelog("IMP_COLUMN_TWO", 4),
-                createChangelog("COLUMN_THREE", 5),
-                createChangelog("IMP_COLUMN_THREE", 6),
-                createChangelog("COLUMN_FOUR", 7)
+                Changelog(to = "COLUMN_ONE", leadTime = 1),
+                Changelog(to = "IMP_COLUMN_ONE", leadTime = 2),
+                Changelog(to = "COLUMN_TWO", leadTime = 3),
+                Changelog(to = "IMP_COLUMN_TWO", leadTime = 4),
+                Changelog(to = "COLUMN_THREE", leadTime = 5),
+                Changelog(to = "IMP_COLUMN_THREE", leadTime = 6),
+                Changelog(to = "COLUMN_FOUR", leadTime = 7)
         )
         val columns = asList("IMP_COLUMN_ONE", "IMP_COLUMN_TWO", "IMP_COLUMN_THREE")
 
@@ -26,8 +26,5 @@ internal class ImpedimentCalculatorByColumnTest {
 
         assertThat(timeInImpediment).isEqualTo(12)
     }
-
-    private fun createChangelog(column: String, leadTime: Long) =
-            Changelog(null, null, column, leadTime, null)
 
 }

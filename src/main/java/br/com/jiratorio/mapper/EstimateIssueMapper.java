@@ -7,9 +7,9 @@ import br.com.jiratorio.domain.changelog.JiraChangelogHistory;
 import br.com.jiratorio.domain.changelog.JiraChangelogItem;
 import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.entity.embedded.Changelog;
+import br.com.jiratorio.service.ChangelogService;
 import br.com.jiratorio.service.HolidayService;
 import br.com.jiratorio.util.DateUtil;
-import br.com.jiratorio.util.ParseUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
@@ -34,10 +34,14 @@ public class EstimateIssueMapper {
 
     private final ObjectMapper objectMapper;
 
+    private final ChangelogService changelogService;
+
     public EstimateIssueMapper(final HolidayService holidayService,
-                               final ObjectMapper objectMapper) {
+                               final ObjectMapper objectMapper,
+                               final ChangelogService changelogService) {
         this.holidayService = holidayService;
         this.objectMapper = objectMapper;
+        this.changelogService = changelogService;
     }
 
     @SneakyThrows
@@ -56,7 +60,7 @@ public class EstimateIssueMapper {
                     JsonNode fields = issue.path("fields");
 
                     List<JiraChangelogItem> changelogItems = extractChangelogItems(issue);
-                    List<Changelog> changelog = ParseUtil.parseChangelog(changelogItems, holidays, board.getIgnoreWeekend());
+                    List<Changelog> changelog = changelogService.parseChangelog(changelogItems, holidays, board.getIgnoreWeekend());
                     if (!changelog.isEmpty()) {
                         Changelog changelogItem = changelog.get(changelog.size() - 1);
                         changelogItem.setLeadTime(DateUtil.daysDiff(changelogItem.getCreated(), LocalDateTime.now(),

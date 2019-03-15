@@ -10,10 +10,10 @@ import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.entity.Issue;
 import br.com.jiratorio.domain.entity.embedded.Changelog;
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory;
+import br.com.jiratorio.service.ChangelogService;
 import br.com.jiratorio.service.DueDateService;
 import br.com.jiratorio.service.HolidayService;
 import br.com.jiratorio.util.DateUtil;
-import br.com.jiratorio.util.ParseUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -46,12 +46,16 @@ public class IssueMapper {
 
     private final DueDateService dueDateService;
 
+    private final ChangelogService changelogService;
+
     public IssueMapper(final HolidayService holidayService,
                        final ObjectMapper objectMapper,
-                       final DueDateService dueDateService) {
+                       final DueDateService dueDateService,
+                       final ChangelogService changelogService) {
         this.holidayService = holidayService;
         this.objectMapper = objectMapper;
         this.dueDateService = dueDateService;
+        this.changelogService = changelogService;
     }
 
     @ExecutionTime
@@ -88,7 +92,7 @@ public class IssueMapper {
         JsonObject fields = issue.get("fields").getAsJsonObject();
 
         List<JiraChangelogItem> changelogItems = extractChangelogItems(issue);
-        List<Changelog> changelog = ParseUtil.parseChangelog(changelogItems, holidays, board.getIgnoreWeekend());
+        List<Changelog> changelog = changelogService.parseChangelog(changelogItems, holidays, board.getIgnoreWeekend());
 
         LocalDateTime created = DateUtil.parseFromJira(fields.get("created").getAsString());
 
