@@ -7,8 +7,6 @@ import java.util.Arrays.asList
 
 internal class ImpedimentCalculatorByColumnTest {
 
-    private val calculator: ImpedimentCalculatorByColumn = ImpedimentCalculatorByColumn()
-
     @Test
     fun `time in impediment`() {
         val changelog = asList(
@@ -22,7 +20,7 @@ internal class ImpedimentCalculatorByColumnTest {
         )
         val columns = asList("IMP_COLUMN_ONE", "IMP_COLUMN_TWO", "IMP_COLUMN_THREE")
 
-        val timeInImpediment = calculator.timeInImpediment(changelog, columns)
+        val timeInImpediment = ImpedimentCalculatorByColumn.timeInImpediment(changelog, columns)
 
         assertThat(timeInImpediment).isEqualTo(12)
     }
