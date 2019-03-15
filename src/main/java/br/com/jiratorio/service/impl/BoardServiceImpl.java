@@ -82,11 +82,12 @@ public class BoardServiceImpl extends AbstractService implements BoardService {
 
     @Override
     @Transactional
-    public void delete(final Long id) {
-        log.info("Method=delete, id={}", id);
+    public void delete(final Long id, final String username) {
+        log.info("Method=delete, id={}, username={}", id, username);
 
-        Board board = findById(id);
-        boardRepository.deleteByIdAndOwner(board.getId(), currentUser().getUsername());
+        Board board = boardRepository.findByIdAndOwner(id, username)
+                .orElseThrow(ResourceNotFound::new);
+        boardRepository.delete(board);
     }
 
     @Override

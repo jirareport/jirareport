@@ -2,9 +2,9 @@ package br.com.jiratorio.integration.board
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.repository.BoardRepository
-import io.restassured.RestAssured
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
@@ -24,51 +24,53 @@ internal class DeleteBoardIntegrationTest @Autowired constructor(
 ) {
 
     @Test
-    fun deleteBord() {
+    fun `delete board`() {
         authenticator.withDefaultUser { boardFactory.create() }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .delete("/boards/1")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_NO_CONTENT)
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                delete("/boards/1")
+            }
+            then {
+                statusCode(HttpStatus.SC_NO_CONTENT)
+            }
+        }
 
         assertThat(boardRepository.count()).isZero()
     }
 
     @Test
-    fun deleteNonexistentBoard() {
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .delete("/boards/1")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_NOT_FOUND)
-         // @formatter:on
+    fun `delete other owner board`() {
+        authenticator.withUser("other", boardFactory::create)
+
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                delete("/boards/1")
+            }
+            then {
+                spec(notFound())
+            }
+        }
     }
 
     @Test
-    fun deleteBoardNotFound() {
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .delete("/boards/9999")
-            .then()
-                .log().all()
-                .spec(notFound())
-         // @formatter:on
+    fun `delete board not found`() {
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                delete("/boards/9999")
+            }
+            then {
+                spec(notFound())
+            }
+        }
     }
 }

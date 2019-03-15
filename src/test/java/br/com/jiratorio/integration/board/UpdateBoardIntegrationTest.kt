@@ -3,11 +3,11 @@ package br.com.jiratorio.integration.board
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.request.UpdateBoardRequest
+import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.UpdateBoardRequestFactory
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.repository.BoardRepository
-import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
@@ -30,23 +30,23 @@ internal class UpdateBoardIntegrationTest @Autowired constructor(
 
     @Test
     @Throws(Exception::class)
-    fun updateBoard() {
+    fun `update board`() {
         authenticator.withDefaultUser { boardFactory.create() }
         val request = updateBoardRequestFactory.build()
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-                .contentType(ContentType.JSON)
-                .body(request)
-            .`when`()
-                .put("/boards/1")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_NO_CONTENT)
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+                contentType(ContentType.JSON)
+                body(request)
+            }
+            on {
+                put("/boards/1")
+            }
+            then {
+                statusCode(HttpStatus.SC_NO_CONTENT)
+            }
+        }
 
         boardRepository.findById(1L)
                 .orElseThrow(::ResourceNotFound).apply {
@@ -84,19 +84,19 @@ internal class UpdateBoardIntegrationTest @Autowired constructor(
     }
 
     @Test
-    fun updateNotFoundBoard() {
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-                .contentType(ContentType.JSON)
-                .body(UpdateBoardRequest())
-            .`when`()
-                .put("/boards/999")
-            .then()
-                .log().all()
-                .spec(notFound())
-         // @formatter:on
+    fun `update not found board`() {
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+                contentType(ContentType.JSON)
+                body(UpdateBoardRequest())
+            }
+            on {
+                put("/boards/999")
+            }
+            then {
+                spec(notFound())
+            }
+        }
     }
 }

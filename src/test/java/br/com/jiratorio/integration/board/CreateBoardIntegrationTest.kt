@@ -2,10 +2,10 @@ package br.com.jiratorio.integration.board
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.domain.request.CreateBoardRequest
+import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.CreateBoardRequestFactory
 import br.com.jiratorio.repository.BoardRepository
-import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
@@ -28,23 +28,23 @@ internal class CreateBoardIntegrationTest @Autowired constructor(
 ) {
 
     @Test
-    fun createBoard() {
+    fun `create board`() {
         val request = createBoardRequestFactory.build()
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-                .contentType(ContentType.JSON)
-                .body(request)
-            .`when`()
-                .post("/boards")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_CREATED)
-                .header("location", containsString("/boards/1"))
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+                contentType(ContentType.JSON)
+                body(request)
+            }
+            on {
+                post("/boards")
+            }
+            then {
+                statusCode(HttpStatus.SC_CREATED)
+                header("location", containsString("/boards/1"))
+            }
+        }
 
         val board = boardRepository.findById(1L)
                 .orElseThrow(::ResourceNotFound)
@@ -57,21 +57,22 @@ internal class CreateBoardIntegrationTest @Autowired constructor(
     }
 
     @Test
-    fun failInValidations() {
-        // @formatter:off
-        RestAssured
-                .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-                .contentType(ContentType.JSON)
-                .body(CreateBoardRequest())
-            .`when`()
-                .post("/boards")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("errors.find { it.field == 'externalId' }.defaultMessage", equalTo("must not be null"))
-                .body("errors.find { it.field == 'name' }.defaultMessage", equalTo("must not be blank"))
-        // @formatter:on
+    fun `fail in validations`() {
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+                contentType(ContentType.JSON)
+                body(CreateBoardRequest())
+            }
+            on {
+                post("/boards")
+            }
+            then {
+                statusCode(HttpStatus.SC_BAD_REQUEST)
+                body("errors.find { it.field == 'externalId' }.defaultMessage", equalTo("must not be null"))
+                body("errors.find { it.field == 'name' }.defaultMessage", equalTo("must not be blank"))
+            }
+        }
+
     }
 }

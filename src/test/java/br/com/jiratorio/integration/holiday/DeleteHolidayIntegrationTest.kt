@@ -31,11 +31,9 @@ internal class DeleteHolidayIntegrationTest @Autowired constructor(
             given {
                 header(authenticator.defaultUserHeader())
             }
-
             on {
                 delete("/boards/1/holidays/1")
             }
-
             then {
                 statusCode(HttpStatus.SC_NO_CONTENT)
             }
@@ -50,11 +48,9 @@ internal class DeleteHolidayIntegrationTest @Autowired constructor(
             given {
                 header(authenticator.defaultUserHeader())
             }
-
             on {
                 delete("/boards/1/holidays/999")
             }
-
             then {
                 spec(notFound())
             }

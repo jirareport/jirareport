@@ -3,11 +3,11 @@ package br.com.jiratorio.integration.leadtimeconfig
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest
+import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.LeadTimeConfigRequestFactory
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.repository.LeadTimeConfigRepository
-import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
@@ -31,25 +31,26 @@ internal class CreateLeadTimeConfigIntegrationTest @Autowired constructor(
 ) {
 
     @Test
-    fun createLeadTimeConfig() {
+    fun `create lead time config`() {
         val request = authenticator.withDefaultUser {
             boardFactory.create()
             leadTimeConfigRequestFactory.build()
         }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-                .contentType(ContentType.JSON)
-                .body(request)
-            .`when`()
-                .post("/boards/1/lead-time-configs")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_CREATED)
-                .header("location", containsString("/boards/1/lead-time-configs/1"))
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+                contentType(ContentType.JSON)
+                body(request)
+            }
+            on {
+                post("/boards/1/lead-time-configs")
+            }
+            then {
+                statusCode(HttpStatus.SC_CREATED)
+                header("location", containsString("/boards/1/lead-time-configs/1"))
+            }
+        }
         // @formatter:on
 
         val leadTimeConfig = leadTimeConfigRepository.findById(1L)
@@ -68,43 +69,43 @@ internal class CreateLeadTimeConfigIntegrationTest @Autowired constructor(
     }
 
     @Test
-    fun failInValidations() {
+    fun `fail in validations`() {
         authenticator.withDefaultUser { boardFactory.create() }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-                .contentType(ContentType.JSON)
-                .body(LeadTimeConfigRequest())
-            .`when`()
-                .post("/boards/1/lead-time-configs")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("errors.find { it.field == 'name' }.defaultMessage", equalTo("must not be blank"))
-                .body("errors.find { it.field == 'startColumn' }.defaultMessage", equalTo("must not be blank"))
-                .body("errors.find { it.field == 'endColumn' }.defaultMessage", equalTo("must not be blank"))
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+                contentType(ContentType.JSON)
+                body(LeadTimeConfigRequest())
+            }
+            on {
+                post("/boards/1/lead-time-configs")
+            }
+            then {
+                statusCode(HttpStatus.SC_BAD_REQUEST)
+                body("errors.find { it.field == 'name' }.defaultMessage", equalTo("must not be blank"))
+                body("errors.find { it.field == 'startColumn' }.defaultMessage", equalTo("must not be blank"))
+                body("errors.find { it.field == 'endColumn' }.defaultMessage", equalTo("must not be blank"))
+            }
+        }
     }
 
     @Test
-    fun createWithBoardNotFound() {
+    fun `create with board not found`() {
         val request = leadTimeConfigRequestFactory.build()
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-                .contentType(ContentType.JSON)
-                .body(request)
-            .`when`()
-                .post("/boards/999/lead-time-configs")
-            .then()
-                .log().all()
-                .spec(notFound())
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+                contentType(ContentType.JSON)
+                body(request)
+            }
+            on {
+                post("/boards/999/lead-time-configs")
+            }
+            then {
+                spec(notFound())
+            }
+        }
     }
 }

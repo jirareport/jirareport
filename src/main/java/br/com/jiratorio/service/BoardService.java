@@ -16,7 +16,7 @@ public interface BoardService {
 
     Long create(CreateBoardRequest board);
 
-    void delete(Long id);
+    void delete(Long id, String username);
 
     Board findById(Long id);
 

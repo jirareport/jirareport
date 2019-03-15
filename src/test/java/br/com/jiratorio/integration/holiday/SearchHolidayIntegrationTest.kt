@@ -6,7 +6,6 @@ import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.factory.entity.HolidayFactory
 import br.com.jiratorio.matcher.IdMatcher
-import io.restassured.RestAssured
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -41,11 +40,9 @@ internal class SearchHolidayIntegrationTest @Autowired constructor(
             given {
                 header(authenticator.defaultUserHeader())
             }
-
             on {
                 get("/boards/{id}/holidays", id)
             }
-
             then {
                 statusCode(HttpStatus.SC_OK)
                 body("numberOfElements", equalTo(10))
@@ -67,11 +64,9 @@ internal class SearchHolidayIntegrationTest @Autowired constructor(
             given {
                 header(authenticator.defaultUserHeader())
             }
-
             on {
                 get("/boards/1/holidays/1")
             }
-
             then {
                 statusCode(HttpStatus.SC_OK)
                 body("id", IdMatcher(holiday.id!!))
@@ -88,11 +83,9 @@ internal class SearchHolidayIntegrationTest @Autowired constructor(
             given {
                 header(authenticator.defaultUserHeader())
             }
-
             on {
                 get("/boards/1/holidays/999")
             }
-
             then {
                 spec(notFound())
             }

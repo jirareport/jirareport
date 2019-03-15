@@ -2,10 +2,10 @@ package br.com.jiratorio.integration.leadtimeconfig
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.factory.entity.LeadTimeConfigFactory
 import br.com.jiratorio.matcher.IdMatcher
-import io.restassured.RestAssured
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Tag
@@ -25,7 +25,7 @@ internal class SearchLeadTimeConfigIntegrationTest @Autowired constructor(
 ) {
 
     @Test
-    fun findAllLeadTimeConfig() {
+    fun `find all lead time config`() {
         authenticator.withDefaultUser {
             val board = boardFactory.create()
             leadTimeConfigFactory.create(10) {
@@ -33,59 +33,57 @@ internal class SearchLeadTimeConfigIntegrationTest @Autowired constructor(
             }
         }
 
-        // @formatter:off
-        RestAssured
-                .given()
-                    .log().all()
-                    .header(authenticator.defaultUserHeader())
-                .`when`()
-                    .get("/boards/1/lead-time-configs")
-                .then()
-                    .log().all()
-                    .statusCode(HttpStatus.SC_OK)
-                    .body("$", Matchers.hasSize<Int>(10))
-                    .body("findAll { it.boardId == 1 }", Matchers.hasSize<Int>(10))
-        // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                get("/boards/1/lead-time-configs")
+            }
+            then {
+                statusCode(HttpStatus.SC_OK)
+                body("$", Matchers.hasSize<Int>(10))
+                body("findAll { it.boardId == 1 }", Matchers.hasSize<Int>(10))
+            }
+        }
     }
 
     @Test
-    fun findById() {
-        val leadTimeConfig = authenticator.withDefaultUser {
-            leadTimeConfigFactory.create()
-        }!!
+    fun `find by id`() {
+        val leadTimeConfig = authenticator.withDefaultUser(leadTimeConfigFactory::create)
 
-        // @formatter:off
-        RestAssured
-                .given()
-                    .log().all()
-                    .header(authenticator.defaultUserHeader())
-                .`when`()
-                    .get("/boards/1/lead-time-configs/1")
-                .then()
-                    .log().all()
-                    .statusCode(HttpStatus.SC_OK)
-                    .body("id", IdMatcher(leadTimeConfig.id))
-                    .body("boardId", IdMatcher(leadTimeConfig.board.id!!))
-                    .body("name", Matchers.equalTo(leadTimeConfig.name))
-                    .body("startColumn", Matchers.equalTo(leadTimeConfig.startColumn))
-                    .body("endColumn", Matchers.equalTo(leadTimeConfig.endColumn))
-        // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                get("/boards/1/lead-time-configs/1")
+            }
+            then {
+                statusCode(HttpStatus.SC_OK)
+                body("id", IdMatcher(leadTimeConfig.id))
+                body("boardId", IdMatcher(leadTimeConfig.board.id!!))
+                body("name", Matchers.equalTo(leadTimeConfig.name))
+                body("startColumn", Matchers.equalTo(leadTimeConfig.startColumn))
+                body("endColumn", Matchers.equalTo(leadTimeConfig.endColumn))
+            }
+        }
     }
 
     @Test
-    fun findByIdNotFound() {
+    fun `find by id not found`() {
         authenticator.withDefaultUser(boardFactory::create)
 
-        // @formatter:off
-        RestAssured
-                .given()
-                    .log().all()
-                    .header(authenticator.defaultUserHeader())
-                .`when`()
-                    .get("/boards/1/lead-time-configs/1")
-                .then()
-                    .log().all()
-                    .spec(notFound())
-        // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                get("/boards/1/lead-time-configs/1")
+            }
+            then {
+                spec(notFound())
+            }
+        }
     }
 }

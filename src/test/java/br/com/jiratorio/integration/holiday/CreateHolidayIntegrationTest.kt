@@ -2,11 +2,11 @@ package br.com.jiratorio.integration.holiday
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.domain.request.HolidayRequest
+import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.HolidayRequestFactory
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.repository.HolidayRepository
-import br.com.jiratorio.dsl.restAssured
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
@@ -40,11 +40,9 @@ internal class CreateHolidayIntegrationTest @Autowired constructor(
                 body(request)
                 header(authenticator.defaultUserHeader())
             }
-
             on {
                 post("/boards/1/holidays")
             }
-
             then {
                 statusCode(HttpStatus.SC_CREATED)
                 header("location", Matchers.containsString("/boards/1/holidays/1"))

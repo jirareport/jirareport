@@ -1,5 +1,6 @@
 package br.com.jiratorio.controller;
 
+import br.com.jiratorio.domain.Account;
 import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.request.CreateBoardRequest;
 import br.com.jiratorio.domain.request.UpdateBoardRequest;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,8 +62,9 @@ public class BoardController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable final Long id) {
-        boardService.delete(id);
+    public ResponseEntity<?> delete(@PathVariable final Long id,
+                                    @AuthenticationPrincipal final Account currentUser) {
+        boardService.delete(id, currentUser.getUsername());
         return ResponseEntity.noContent().build();
     }
 

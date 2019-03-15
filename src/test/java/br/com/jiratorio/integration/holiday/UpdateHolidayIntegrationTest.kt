@@ -43,11 +43,9 @@ internal class UpdateHolidayIntegrationTest @Autowired constructor(
                 contentType(ContentType.JSON)
                 body(request)
             }
-
             on {
                 put("/boards/1/holidays/1")
             }
-
             then {
                 statusCode(HttpStatus.SC_NO_CONTENT)
             }
@@ -74,11 +72,9 @@ internal class UpdateHolidayIntegrationTest @Autowired constructor(
                 contentType(ContentType.JSON)
                 body(HolidayRequest())
             }
-
             on {
                 put("/boards/1/holidays/1")
             }
-
             then {
                 statusCode(HttpStatus.SC_BAD_REQUEST)
                 body("errors.find { it.field == 'date' }.defaultMessage", Matchers.`is`("must not be blank"))
@@ -98,11 +94,9 @@ internal class UpdateHolidayIntegrationTest @Autowired constructor(
                 contentType(ContentType.JSON)
                 body(request)
             }
-
             on {
                 put("/boards/1/holidays/999")
             }
-
             then {
                 spec(notFound())
             }

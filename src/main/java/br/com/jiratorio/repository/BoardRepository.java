@@ -20,9 +20,9 @@ public interface BoardRepository extends CrudRepository<Board, Long> {
     @EntityGraph(attributePaths = {"leadTimeConfigs"}, type = EntityGraph.EntityGraphType.LOAD)
     Optional<Board> findById(@NonNull Long id);
 
-    Page<Board> findAll(Example<Board> example, Pageable pageable);
+    Optional<Board> findByIdAndOwner(Long id, String owner);
 
-    void deleteByIdAndOwner(Long id, String username);
+    Page<Board> findAll(Example<Board> example, Pageable pageable);
 
     @Query("SELECT DISTINCT b.owner FROM Board b")
     List<String> findAllOwners();

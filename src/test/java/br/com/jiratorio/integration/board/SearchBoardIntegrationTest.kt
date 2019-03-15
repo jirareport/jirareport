@@ -2,9 +2,9 @@ package br.com.jiratorio.integration.board
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.matcher.IdMatcher
-import io.restassured.RestAssured
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.equalTo
@@ -27,169 +27,169 @@ internal class SearchBoardIntegrationTest @Autowired constructor(
 ) {
 
     @Test
-    fun findAllBoardsOfCurrentUser() {
+    fun `find all boards of current user`() {
         authenticator.withDefaultUser { boardFactory.create(10) }
         authenticator.withUser("other_user") { boardFactory.create(5) }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .get("/boards")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_OK)
-                .body("totalPages", equalTo(1))
-                .body("totalElements", equalTo(10))
-                .body("content.findAll { it.owner == 'default_user'}", hasSize<Int>(10))
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                get("/boards")
+            }
+            then {
+                statusCode(HttpStatus.SC_OK)
+                body("totalPages", equalTo(1))
+                body("totalElements", equalTo(10))
+                body("content.findAll { it.owner == 'default_user'}", hasSize<Int>(10))
+            }
+        }
     }
 
     @Test
-    fun findAllOwners() {
+    fun `find all owners`() {
         authenticator.withDefaultUser { boardFactory.create(5) }
         authenticator.withUser("first_user") { boardFactory.create(5) }
         authenticator.withUser("second_user") { boardFactory.create(5) }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .get("/boards/owners")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_OK)
-                .body("$", hasSize<Int>(3))
-                .body("find { it == 'default_user' }", not(isEmptyOrNullString()))
-                .body("find { it == 'first_user' }", not(isEmptyOrNullString()))
-                .body("find { it == 'second_user' }", not(isEmptyOrNullString()))
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                get("/boards/owners")
+            }
+            then {
+                statusCode(HttpStatus.SC_OK)
+                body("$", hasSize<Int>(3))
+                body("find { it == 'default_user' }", not(isEmptyOrNullString()))
+                body("find { it == 'first_user' }", not(isEmptyOrNullString()))
+                body("find { it == 'second_user' }", not(isEmptyOrNullString()))
+            }
+        }
     }
 
     @Test
-    fun filterBoardByName() {
+    fun `filter board by name`() {
         authenticator.withDefaultUser {
             boardFactory.create(5) { empty -> empty.name = "Uniq Start Name" }
             boardFactory.create(5)
         }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-                .param("name", "start")
-            .`when`()
-                .get("/boards")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_OK)
-                .body("totalPages", equalTo(1))
-                .body("totalElements", equalTo(5))
-                .body("content.findAll { it.name == 'Uniq Start Name' }", hasSize<Any>(5))
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+                param("name", "start")
+            }
+            on {
+                get("/boards")
+            }
+            then {
+                statusCode(HttpStatus.SC_OK)
+                body("totalPages", equalTo(1))
+                body("totalElements", equalTo(5))
+                body("content.findAll { it.name == 'Uniq Start Name' }", hasSize<Any>(5))
+            }
+        }
     }
 
     @Test
-    fun findBoardsOfAllOwners() {
+    fun `find boards of all owners`() {
         authenticator.withDefaultUser { boardFactory.create(5) }
         authenticator.withUser("user2") { boardFactory.create(5) }
         authenticator.withUser("user3") { boardFactory.create(5) }
         authenticator.withUser("user4") { boardFactory.create(5) }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .param("owner", "all")
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .get("/boards")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_OK)
-                .body("totalElements", equalTo(20))
-                .body("totalPages", equalTo(1))
-                .body("content.findAll { it.owner == 'default_user' }", hasSize<Int>(5))
-                .body("content.findAll { it.owner == 'user2' }", hasSize<Int>(5))
-                .body("content.findAll { it.owner == 'user3' }", hasSize<Int>(5))
-                .body("content.findAll { it.owner == 'user4' }", hasSize<Int>(5))
-        // @formatter:on
+        restAssured {
+            given {
+                param("owner", "all")
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                get("/boards")
+            }
+            then {
+                statusCode(HttpStatus.SC_OK)
+                body("totalElements", equalTo(20))
+                body("totalPages", equalTo(1))
+                body("content.findAll { it.owner == 'default_user' }", hasSize<Int>(5))
+                body("content.findAll { it.owner == 'user2' }", hasSize<Int>(5))
+                body("content.findAll { it.owner == 'user3' }", hasSize<Int>(5))
+                body("content.findAll { it.owner == 'user4' }", hasSize<Int>(5))
+            }
+        }
     }
 
     @Test
-    fun findBoardsByOwner() {
+    fun `find boards by owner`() {
         authenticator.withDefaultUser { boardFactory.create(5) }
         authenticator.withUser("user2") { boardFactory.create(5) }
         authenticator.withUser("user3") { boardFactory.create(5) }
         authenticator.withUser("user4") { boardFactory.create(5) }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .param("owner", "user3")
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .get("/boards")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_OK)
-                .body("totalElements", equalTo(5))
-                .body("totalPages", equalTo(1))
-                .body("content.findAll { it.owner == 'user3' }", hasSize<Any>(5))
-         // @formatter:on
+        restAssured {
+            given {
+                param("owner", "user3")
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                get("/boards")
+            }
+            then {
+                statusCode(HttpStatus.SC_OK)
+                body("totalElements", equalTo(5))
+                body("totalPages", equalTo(1))
+                body("content.findAll { it.owner == 'user3' }", hasSize<Any>(5))
+            }
+        }
     }
 
     @Test
-    fun findBoardById() {
+    fun `find board by id`() {
         val board = authenticator.withDefaultUser { boardFactory.create("fullBoard") }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .get("/boards/{id}", board.id)
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_OK)
-                .body("name", equalTo(board.name))
-                .body("externalId", IdMatcher(board.externalId!!))
-                .body("startColumn", equalTo(board.startColumn))
-                .body("endColumn", equalTo(board.endColumn))
-                .body("fluxColumn", contains<Any>(*board.fluxColumn!!.toTypedArray()))
-                .body("ignoreIssueType", contains<Any>(*board.ignoreIssueType!!.toTypedArray()))
-                .body("epicCF", equalTo(board.epicCF))
-                .body("estimateCF", equalTo(board.estimateCF))
-                .body("systemCF", equalTo(board.systemCF))
-                .body("projectCF", equalTo(board.projectCF))
-                .body("ignoreWeekend", equalTo(board.ignoreWeekend))
-                .body("impedimentType", equalTo(board.impedimentType!!.name))
-                .body("impedimentColumns", contains<Any>(*board.impedimentColumns!!.toTypedArray()))
-                .body("dynamicFields", hasSize<Any>(board.dynamicFields!!.size))
-                .body("dueDateCF", equalTo(board.dueDateCF))
-                .body("dueDateType", equalTo(board.dueDateType!!.name))
-             // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                get("/boards/{id}", board.id)
+            }
+            then {
+                statusCode(HttpStatus.SC_OK)
+                body("name", equalTo(board.name))
+                body("externalId", IdMatcher(board.externalId!!))
+                body("startColumn", equalTo(board.startColumn))
+                body("endColumn", equalTo(board.endColumn))
+                body("fluxColumn", contains<Any>(*board.fluxColumn!!.toTypedArray()))
+                body("ignoreIssueType", contains<Any>(*board.ignoreIssueType!!.toTypedArray()))
+                body("epicCF", equalTo(board.epicCF))
+                body("estimateCF", equalTo(board.estimateCF))
+                body("systemCF", equalTo(board.systemCF))
+                body("projectCF", equalTo(board.projectCF))
+                body("ignoreWeekend", equalTo(board.ignoreWeekend))
+                body("impedimentType", equalTo(board.impedimentType!!.name))
+                body("impedimentColumns", contains<Any>(*board.impedimentColumns!!.toTypedArray()))
+                body("dynamicFields", hasSize<Any>(board.dynamicFields!!.size))
+                body("dueDateCF", equalTo(board.dueDateCF))
+                body("dueDateType", equalTo(board.dueDateType!!.name))
+            }
+        }
     }
 
     @Test
-    fun findByIdNotFound() {
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .get("/boards/9999")
-            .then()
-                .log().all()
-                .spec(notFound())
-         // @formatter:on
+    fun `find by id not found`() {
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                get("/boards/9999")
+            }
+            then {
+                notFound()
+            }
+        }
     }
 }

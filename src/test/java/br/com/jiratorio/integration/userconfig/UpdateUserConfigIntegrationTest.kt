@@ -1,10 +1,10 @@
 package br.com.jiratorio.integration.userconfig
 
 import br.com.jiratorio.base.Authenticator
+import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.UpdateUserConfigFactory
 import br.com.jiratorio.repository.UserConfigRepository
-import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
@@ -25,22 +25,22 @@ internal class UpdateUserConfigIntegrationTest @Autowired constructor(
 ) {
 
     @Test
-    fun updateUserConfig() {
+    fun `update user config`() {
         val request = updateUserConfigFactory.build { it.city = "São Paulo" }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-                .contentType(ContentType.JSON)
-                .body(request)
-            .`when`()
-                .put("/users/me/configs")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_NO_CONTENT)
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+                contentType(ContentType.JSON)
+                body(request)
+            }
+            on {
+                put("/users/me/configs")
+            }
+            then {
+                statusCode(HttpStatus.SC_NO_CONTENT)
+            }
+        }
 
         val userConfig = userConfigRepository.findByUsername(authenticator.defaultUserName())
                 .orElseThrow(::ResourceNotFound)
@@ -57,6 +57,5 @@ internal class UpdateUserConfigIntegrationTest @Autowired constructor(
             assertThat(userConfig.throughputChartType)
                     .isEqualTo(request.throughputChartType)
         }
-
     }
 }

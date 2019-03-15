@@ -2,9 +2,9 @@ package br.com.jiratorio.integration.leadtimeconfig
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.entity.LeadTimeConfigFactory
 import br.com.jiratorio.repository.LeadTimeConfigRepository
-import io.restassured.RestAssured
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
@@ -24,62 +24,58 @@ internal class DeleteLeadTimeConfigIntegrationTest @Autowired constructor(
 ) {
 
     @Test
-    fun deleteLeadTimeConfig() {
+    fun `delete lead time config`() {
         authenticator.withDefaultUser { leadTimeConfigFactory.create() }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .delete("/boards/1/lead-time-configs/1")
-            .then()
-                .log().all()
-                .statusCode(HttpStatus.SC_NO_CONTENT)
-         // @formatter:on
-
-        assertThat(leadTimeConfigRepository.count())
-                .isZero()
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                delete("/boards/1/lead-time-configs/1")
+            }
+            then {
+                statusCode(HttpStatus.SC_NO_CONTENT)
+            }
+        }
+        assertThat(leadTimeConfigRepository.count()).isZero()
     }
 
     @Test
-    fun deleteWithBoardNotFound() {
+    fun `delete with board not found`() {
         authenticator.withDefaultUser { leadTimeConfigFactory.create() }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .delete("/boards/999/lead-time-configs/1")
-            .then()
-                .log().all()
-                .spec(notFound())
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                delete("/boards/999/lead-time-configs/1")
+            }
+            then {
+                spec(notFound())
+            }
 
-        assertThat(leadTimeConfigRepository.count())
-                .isOne()
+            assertThat(leadTimeConfigRepository.count()).isOne()
+        }
     }
 
     @Test
-    fun deleteWithLeadTimeConfigNotFound() {
+    fun `delete with lead time config not found`() {
         authenticator.withDefaultUser { leadTimeConfigFactory.create() }
 
-        // @formatter:off
-        RestAssured
-            .given()
-                .log().all()
-                .header(authenticator.defaultUserHeader())
-            .`when`()
-                .delete("/boards/1/lead-time-configs/9999")
-            .then()
-                .log().all()
-                .spec(notFound())
-         // @formatter:on
+        restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                delete("/boards/1/lead-time-configs/9999")
+            }
+            then {
+                spec(notFound())
+            }
+        }
 
-        assertThat(leadTimeConfigRepository.count())
-                .isOne()
+        assertThat(leadTimeConfigRepository.count()).isOne()
     }
 }

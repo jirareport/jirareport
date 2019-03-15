@@ -43,11 +43,9 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
             given {
                 header(authenticator.defaultUserHeader())
             }
-
             on {
                 post("/boards/1/holidays/import")
             }
-
             then {
                 statusCode(HttpStatus.SC_CREATED)
             }
@@ -76,11 +74,9 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
             given {
                 header(authenticator.defaultUserHeader())
             }
-
             on {
                 post("/boards/1/holidays/import")
             }
-
             then {
                 statusCode(HttpStatus.SC_CREATED)
             }
@@ -113,11 +109,9 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
             given {
                 header(authenticator.defaultUserHeader())
             }
-
             on {
                 post("/boards/1/holidays/import")
             }
-
             then {
                 statusCode(HttpStatus.SC_BAD_REQUEST)
                 body("message", Matchers.equalTo("Holidays already imported"))

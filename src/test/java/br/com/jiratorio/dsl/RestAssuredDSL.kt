@@ -1,10 +1,13 @@
 package br.com.jiratorio.dsl
 
 import io.restassured.RestAssured
+import io.restassured.http.ContentType
 import io.restassured.response.Response
 import io.restassured.response.ValidatableResponse
 import io.restassured.specification.RequestSender
 import io.restassured.specification.RequestSpecification
+import org.hamcrest.Matchers
+import org.junit.jupiter.api.Test
 
 class RestAssuredBuilder {
 
@@ -36,7 +39,7 @@ class RestAssuredBuilder {
                     .run(blockOn)
                 .then()
                     .log().all()
-                    .apply(blockThen)
+                    .run(blockThen)
         // @formatter:on
     }
 
@@ -45,4 +48,3 @@ class RestAssuredBuilder {
 fun restAssured(block: RestAssuredBuilder.() -> Unit) {
     RestAssuredBuilder().apply(block).build()
 }
-
