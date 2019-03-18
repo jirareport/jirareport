@@ -50,7 +50,7 @@ internal class UpdateLeadTimeConfigIntegrationTest @Autowired constructor(
         }
 
         val leadTimeConfig = leadTimeConfigRepository.findById(1L)
-                .orElseThrow()
+                .orElseThrow(::ResourceNotFound)
 
         LeadTimeConfigAssert(leadTimeConfig).assertThat {
             hasName(request.name)

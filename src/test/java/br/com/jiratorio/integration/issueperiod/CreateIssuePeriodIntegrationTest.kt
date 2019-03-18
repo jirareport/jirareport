@@ -7,6 +7,7 @@ import br.com.jiratorio.base.annotation.LoadStubs
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
 import br.com.jiratorio.dsl.restAssured
+import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
 import br.com.jiratorio.factory.entity.BoardFactory
@@ -14,6 +15,7 @@ import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.repository.IssueRepository
 import io.restassured.http.ContentType
 import org.hamcrest.Matchers.containsString
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import javax.servlet.http.HttpServletResponse
 
+@Tag("integration")
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class CreateIssuePeriodIntegrationTest @Autowired constructor(
@@ -58,7 +61,7 @@ internal class CreateIssuePeriodIntegrationTest @Autowired constructor(
         }
 
         val issuePeriod = issuePeriodRepository.findById(1L)
-                .orElseThrow()
+                .orElseThrow(::ResourceNotFound)
 
         IssuePeriodAssert(issuePeriod).assertThat {
             hasStartDate(request.startDate.toLocalDate())
@@ -108,7 +111,7 @@ internal class CreateIssuePeriodIntegrationTest @Autowired constructor(
         }
 
         val issue = issueRepository.findById(1L)
-                .orElseThrow()
+                .orElseThrow(::ResourceNotFound)
 
         IssueAssert(issue).assertThat {
             hasKey("JIRAT-1")

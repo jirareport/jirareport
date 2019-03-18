@@ -23,6 +23,9 @@ data class Board(
         var id: Long? = null
 ) : BaseEntity() {
 
+    constructor() : this(null) {
+    }
+
     @Column(nullable = false)
     var externalId: Long? = null
 

@@ -34,7 +34,7 @@ class IssueAssert(actual: Issue) :
     }
 
     fun hasEstimated(estimated: String?) = assertAll {
-        objects.assertEqual(field("issue.estimated"), actual.estimated, null)
+        objects.assertEqual(field("issue.estimated"), actual.estimated, estimated)
     }
 
     fun hasProject(project: String?) = assertAll {

@@ -50,7 +50,7 @@ internal class CreateHolidayIntegrationTest @Autowired constructor(
         }
 
         val holiday = holidayRepository.findById(1L)
-                .orElseThrow()
+                .orElseThrow(::ResourceNotFound)
 
         HolidayAssert(holiday).assertThat {
             hasDescription(request.description)

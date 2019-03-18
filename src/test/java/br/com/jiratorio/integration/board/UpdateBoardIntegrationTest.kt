@@ -5,6 +5,7 @@ import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.dsl.restAssured
+import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.UpdateBoardRequestFactory
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.repository.BoardRepository
@@ -47,7 +48,8 @@ internal class UpdateBoardIntegrationTest @Autowired constructor(
             }
         }
 
-        val board = boardRepository.findById(1L).orElseThrow()
+        val board = boardRepository.findById(1L)
+                .orElseThrow(::ResourceNotFound)
 
         BoardAssert(board).assertThat {
             hasName(request.name)

@@ -48,7 +48,7 @@ internal class CreateBoardIntegrationTest @Autowired constructor(
         }
 
         val board = boardRepository.findById(1L)
-                .orElseThrow()
+                .orElseThrow(::ResourceNotFound)
 
         BoardAssert(board).assertThat {
             hasName(request.name)
