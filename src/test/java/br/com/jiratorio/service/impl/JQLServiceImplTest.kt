@@ -1,6 +1,7 @@
 package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.extension.toLocalDate
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -17,9 +18,9 @@ internal class JQLServiceImplTest {
     @Nested
     inner class FinalizedIssues {
 
-        private val startDate: LocalDate = LocalDate.of(2019, 1, 1)
+        private val startDate: LocalDate = "01/01/2019".toLocalDate()
 
-        private val endDate: LocalDate = LocalDate.of(2019, 1, 31)
+        private val endDate: LocalDate = "31/01/2019".toLocalDate()
 
         @Test
         fun `finalized issues with ignore issue type`() {

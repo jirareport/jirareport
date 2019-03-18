@@ -38,6 +38,7 @@ internal class DeleteLeadTimeConfigIntegrationTest @Autowired constructor(
                 statusCode(HttpStatus.SC_NO_CONTENT)
             }
         }
+
         assertThat(leadTimeConfigRepository.count()).isZero()
     }
 
@@ -55,9 +56,9 @@ internal class DeleteLeadTimeConfigIntegrationTest @Autowired constructor(
             then {
                 spec(notFound())
             }
-
-            assertThat(leadTimeConfigRepository.count()).isOne()
         }
+
+        assertThat(leadTimeConfigRepository.count()).isOne()
     }
 
     @Test

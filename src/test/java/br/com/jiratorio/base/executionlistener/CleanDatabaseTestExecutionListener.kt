@@ -8,7 +8,7 @@ import org.springframework.test.context.support.AbstractTestExecutionListener
 
 class CleanDatabaseTestExecutionListener : AbstractTestExecutionListener() {
 
-    val log = logger()
+    private val log = logger()
 
     override fun beforeTestMethod(testContext: TestContext) {
         try {

@@ -1,5 +1,6 @@
 package br.com.jiratorio.integration.userconfig
 
+import br.com.jiratorio.assert.UserConfigAssert
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
@@ -45,17 +46,13 @@ internal class UpdateUserConfigIntegrationTest @Autowired constructor(
         val userConfig = userConfigRepository.findByUsername(authenticator.defaultUserName())
                 .orElseThrow(::ResourceNotFound)
 
-        userConfig.apply {
-            assertThat(holidayToken)
-                    .isEqualTo(request.holidayToken)
-            assertThat(state)
-                    .isEqualTo(request.state)
-            assertThat(city)
-                    .isEqualTo("SAO_PAULO")
-            assertThat(userConfig.leadTimeChartType)
-                    .isEqualTo(request.leadTimeChartType)
-            assertThat(userConfig.throughputChartType)
-                    .isEqualTo(request.throughputChartType)
+        UserConfigAssert(userConfig).assertThat {
+            hasHolidayToken(request.holidayToken)
+            hasState(request.state)
+            hasCity("SAO_PAULO")
+
+            hasLeadTimeChartType(request.leadTimeChartType)
+            hasThroughputChartType(request.throughputChartType)
         }
     }
 }

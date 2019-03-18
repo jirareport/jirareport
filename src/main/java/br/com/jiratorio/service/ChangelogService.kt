@@ -6,6 +6,6 @@ import java.time.LocalDate
 
 interface ChangelogService {
 
-    fun parseChangelog(changelogItems: List<JiraChangelogItem>, holidays: List<LocalDate>, ignoreWeekend: Boolean): List<Changelog>
+    fun parseChangelog(changelogItems: List<JiraChangelogItem>, holidays: List<LocalDate>, ignoreWeekend: Boolean?): List<Changelog>
 
 }

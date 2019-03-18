@@ -1,5 +1,6 @@
 package br.com.jiratorio.integration.leadtimeconfig
 
+import br.com.jiratorio.assert.LeadTimeConfigAssert
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest
@@ -10,7 +11,6 @@ import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
-import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Tag
@@ -51,20 +51,15 @@ internal class CreateLeadTimeConfigIntegrationTest @Autowired constructor(
                 header("location", containsString("/boards/1/lead-time-configs/1"))
             }
         }
-        // @formatter:on
 
         val leadTimeConfig = leadTimeConfigRepository.findById(1L)
                 .orElseThrow(::ResourceNotFound)
 
-        leadTimeConfig.apply {
-            assertThat(name)
-                    .isEqualTo(request.name)
-            assertThat(startColumn)
-                    .isUpperCase()
-                    .isEqualToIgnoringCase(request.startColumn)
-            assertThat(endColumn)
-                    .isUpperCase()
-                    .isEqualToIgnoringCase(request.endColumn)
+        LeadTimeConfigAssert(leadTimeConfig).assertThat {
+            hasName(request.name)
+
+            hasStartColumn(request.startColumn)
+            hasEndColumn(request.endColumn)
         }
     }
 

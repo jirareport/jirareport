@@ -1,5 +1,6 @@
 package br.com.jiratorio.integration.leadtimeconfig
 
+import br.com.jiratorio.assert.LeadTimeConfigAssert
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest
@@ -49,17 +50,13 @@ internal class UpdateLeadTimeConfigIntegrationTest @Autowired constructor(
         }
 
         val leadTimeConfig = leadTimeConfigRepository.findById(1L)
-                .orElseThrow(::ResourceNotFound)
+                .orElseThrow()
 
-        leadTimeConfig.apply {
-            assertThat(name)
-                    .isEqualTo(request.name)
-            assertThat(startColumn)
-                    .isUpperCase()
-                    .isEqualToIgnoringCase(request.startColumn)
-            assertThat(endColumn)
-                    .isUpperCase()
-                    .isEqualToIgnoringCase(request.endColumn)
+        LeadTimeConfigAssert(leadTimeConfig).assertThat {
+            hasName(request.name)
+
+            hasStartColumn(request.startColumn)
+            hasEndColumn(request.endColumn)
         }
     }
 

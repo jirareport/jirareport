@@ -1,5 +1,6 @@
 package br.com.jiratorio.integration.board
 
+import br.com.jiratorio.assert.BoardAssert
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.domain.request.CreateBoardRequest
 import br.com.jiratorio.dsl.restAssured
@@ -47,12 +48,12 @@ internal class CreateBoardIntegrationTest @Autowired constructor(
         }
 
         val board = boardRepository.findById(1L)
-                .orElseThrow(::ResourceNotFound)
+                .orElseThrow()
 
-        board.apply {
-            assertThat(name).isEqualTo(request.name)
-            assertThat(externalId).isEqualTo(request.externalId)
-            assertThat(owner).isEqualTo("default_user")
+        BoardAssert(board).assertThat {
+            hasName(request.name)
+            hasExternalId(request.externalId)
+            hasOwner("default_user")
         }
     }
 
@@ -73,6 +74,5 @@ internal class CreateBoardIntegrationTest @Autowired constructor(
                 body("errors.find { it.field == 'name' }.defaultMessage", equalTo("must not be blank"))
             }
         }
-
     }
 }

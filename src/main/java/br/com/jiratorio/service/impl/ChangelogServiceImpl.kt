@@ -13,7 +13,7 @@ class ChangelogServiceImpl : ChangelogService {
 
     private val log = logger()
 
-    override fun parseChangelog(changelogItems: List<JiraChangelogItem>, holidays: List<LocalDate>, ignoreWeekend: Boolean): List<Changelog> {
+    override fun parseChangelog(changelogItems: List<JiraChangelogItem>, holidays: List<LocalDate>, ignoreWeekend: Boolean?): List<Changelog> {
         log.info("Method=parseChangelog, changelogItems={}, holidays={}, ignoreWeekend={}", changelogItems, holidays, ignoreWeekend)
 
         val changelog = changelogItems

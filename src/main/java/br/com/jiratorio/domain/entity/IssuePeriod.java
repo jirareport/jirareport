@@ -68,6 +68,10 @@ public class IssuePeriod extends BaseEntity {
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
+    private Chart<String, Double> leadTimeBySize;
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
     private Chart<String, Long> estimated;
 
     @Type(type = "jsonb")
@@ -77,14 +81,6 @@ public class IssuePeriod extends BaseEntity {
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private Chart<String, Long> tasksBySystem;
-
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    private Chart<String, Double> leadTimeBySize;
-
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    private List<ColumnTimeAvg> columnTimeAvgs;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -104,15 +100,19 @@ public class IssuePeriod extends BaseEntity {
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    private Chart<String, Double> leadTimeCompareChart;
-
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
     private Chart<String, Double> leadTimeByPriority;
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private Chart<String, Long> throughputByPriority;
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private List<ColumnTimeAvg> columnTimeAvgs;
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private Chart<String, Double> leadTimeCompareChart;
 
     private Integer issuesCount;
 

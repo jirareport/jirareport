@@ -2,7 +2,7 @@ package br.com.jiratorio.factory.entity
 
 import br.com.jiratorio.domain.entity.Holiday
 import br.com.jiratorio.extension.toLocalDate
-import br.com.jiratorio.util.lazyInitBy
+import br.com.jiratorio.factory.lazyInitBy
 import br.com.jiratorio.repository.HolidayRepository
 import br.com.leonardoferreira.jbacon.JBacon
 import com.github.javafaker.Faker

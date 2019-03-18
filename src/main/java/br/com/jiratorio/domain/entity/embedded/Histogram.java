@@ -1,6 +1,5 @@
 package br.com.jiratorio.domain.entity.embedded;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,10 +18,5 @@ public class Histogram {
     private Long percentile75;
 
     private Long percentile90;
-
-    @JsonIgnore
-    public Boolean getHasPercentile() {
-        return median != null && percentile75 != null && percentile90 != null;
-    }
 
 }

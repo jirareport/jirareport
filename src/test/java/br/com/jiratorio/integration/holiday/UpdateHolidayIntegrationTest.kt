@@ -1,17 +1,17 @@
 package br.com.jiratorio.integration.holiday
 
+import br.com.jiratorio.assert.HolidayAssert
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.request.HolidayRequest
 import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.exception.ResourceNotFound
+import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.domain.request.HolidayRequestFactory
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.factory.entity.HolidayFactory
 import br.com.jiratorio.repository.HolidayRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
-import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -19,7 +19,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.time.format.DateTimeFormatter
 
 @Tag("integration")
 @ExtendWith(SpringExtension::class)
@@ -52,13 +51,10 @@ internal class UpdateHolidayIntegrationTest @Autowired constructor(
         }
 
         val holiday = holidayRepository.findById(1L)
-                .orElseThrow(::ResourceNotFound)
-
-        holiday.apply {
-            assertThat(description)
-                    .isEqualTo(request.description)
-            assertThat(date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-                    .isEqualTo(request.date)
+                .orElseThrow()
+        HolidayAssert(holiday).assertThat {
+            hasDescription(request.description)
+            hasDate(request.date.toLocalDate())
         }
     }
 

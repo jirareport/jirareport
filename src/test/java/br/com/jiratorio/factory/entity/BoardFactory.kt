@@ -55,4 +55,12 @@ class BoardFactory(
                 dueDateType = DueDateType.FIRST_DUE_DATE_AND_END_DATE
             }
 
+    @JBaconTemplate
+    protected fun withSimpleConfiguration() =
+            default.apply {
+                startColumn = "TODO"
+                endColumn = "DONE"
+                fluxColumn = asList("BACKLOG", "TODO", "WIP", "ACCOMPANIMENT", "DONE")
+            }
+
 }

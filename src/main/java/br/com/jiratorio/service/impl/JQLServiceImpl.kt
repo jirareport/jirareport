@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter
 @Service
 class JQLServiceImpl : JQLService {
 
-    val log = logger()
+    private val log = logger()
 
     override fun finalizedIssues(board: Board, start: LocalDate, end: LocalDate): String {
         log.info("Method=finalizedIssues, board={}, startDate={}, endDate={}", board, start, end)

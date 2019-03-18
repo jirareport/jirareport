@@ -1,16 +1,15 @@
 package br.com.jiratorio.integration.board
 
+import br.com.jiratorio.assert.BoardAssert
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.UpdateBoardRequestFactory
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.repository.BoardRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -48,39 +47,24 @@ internal class UpdateBoardIntegrationTest @Autowired constructor(
             }
         }
 
-        boardRepository.findById(1L)
-                .orElseThrow(::ResourceNotFound).apply {
-                    assertThat(name)
-                            .isEqualTo(request.name)
-                    assertThat(startColumn)
-                            .isUpperCase()
-                            .isEqualToIgnoringCase(request.startColumn);
-                    assertThat(endColumn)
-                            .isUpperCase()
-                            .isEqualToIgnoringCase(request.endColumn)
-                    assertThat(fluxColumn)
-                            .containsAll(request.fluxColumn.map { it.toUpperCase() })
-                    assertThat(touchingColumns)
-                            .containsAll(request.touchingColumns.map { it.toUpperCase() })
-                    assertThat(waitingColumns)
-                            .containsAll(request.waitingColumns.map { it.toUpperCase() })
-                    assertThat(ignoreIssueType)
-                            .containsAll(request.ignoreIssueType)
-                    assertThat(epicCF)
-                            .isEqualTo(request.epicCF)
-                    assertThat(estimateCF)
-                            .isEqualTo(request.estimateCF)
-                    assertThat(systemCF)
-                            .isEqualTo(request.systemCF)
-                    assertThat(projectCF)
-                            .isEqualTo(request.projectCF)
-                    assertThat(ignoreWeekend)
-                            .isEqualTo(request.ignoreWeekend)
-                    assertThat(impedimentColumns)
-                            .containsAll(request.impedimentColumns.map { it.toUpperCase() })
-                    assertThat(dynamicFields)
-                            .hasSize(request.dynamicFields.size)
-                }
+        val board = boardRepository.findById(1L).orElseThrow()
+
+        BoardAssert(board).assertThat {
+            hasName(request.name)
+            hasStartColumn(request.startColumn)
+            hasEndColumn(request.endColumn)
+            hasFluxColumn(request.fluxColumn)
+            hasTouchingColumns(request.touchingColumns)
+            hasWaitingColumns(request.waitingColumns)
+            hasIgnoreIssueType(request.ignoreIssueType)
+            hasEpicCF(request.epicCF)
+            hasEstimateCF(request.estimateCF)
+            hasSystemCF(request.systemCF)
+            hasProjectCF(request.projectCF)
+            hasIgnoreWeekend(request.ignoreWeekend)
+            hasImpedimentColumns(request.impedimentColumns)
+            dynamicFieldsHasSize(request.dynamicFields.size)
+        }
     }
 
     @Test

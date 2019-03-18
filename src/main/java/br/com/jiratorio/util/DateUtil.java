@@ -16,18 +16,6 @@ public final class DateUtil {
 
     public static final Locale LOCALE_BR = new Locale("pt", "BR");
 
-    public static LocalDate firstMonthDay() {
-        return LocalDate.now()
-                .withDayOfMonth(1);
-    }
-
-    public static LocalDate lastMonthDay() {
-        return LocalDate.now()
-                .plus(1, ChronoUnit.MONTHS)
-                .withDayOfMonth(1)
-                .minus(1, ChronoUnit.DAYS);
-    }
-
     public static Long daysDiff(final LocalDateTime startDate, final LocalDateTime endDate,
                                 final List<LocalDate> holidays, final Boolean ignoreWeekend) {
         LocalDate start = startDate.toLocalDate();
