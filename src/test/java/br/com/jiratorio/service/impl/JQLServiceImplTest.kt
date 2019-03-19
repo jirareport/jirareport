@@ -3,7 +3,6 @@ package br.com.jiratorio.service.impl
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.extension.toLocalDate
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -28,7 +27,8 @@ internal class JQLServiceImplTest {
 
             val jql = jqlService.finalizedIssues(board, startDate, endDate)
 
-            assertThat(jql).isEqualTo("""
+            assertThat(jql).isEqualTo(
+                """
                | project = '123123'
                | AND (
                |      STATUS CHANGED TO 'DONE' DURING('2019-01-01', '2019-01-31 23:59')
@@ -45,7 +45,8 @@ internal class JQLServiceImplTest {
                | AND issueType NOT IN ('IT_1')
                | AND status WAS IN ('TODO','WIP','DONE')
                | AND status IN ('DONE')
-                """.trimMargin())
+                """.trimMargin()
+            )
         }
 
         @Test
@@ -53,7 +54,8 @@ internal class JQLServiceImplTest {
             val board = createBoard()
             val jql = jqlService.finalizedIssues(board, startDate, endDate)
 
-            assertThat(jql).isEqualTo("""
+            assertThat(jql).isEqualTo(
+                """
                | project = '123123'
                | AND (
                |      STATUS CHANGED TO 'DONE' DURING('2019-01-01', '2019-01-31 23:59')
@@ -70,7 +72,8 @@ internal class JQLServiceImplTest {
                | ${""}
                | AND status WAS IN ('TODO','WIP','DONE')
                | AND status IN ('DONE')
-                """.trimMargin())
+                """.trimMargin()
+            )
         }
     }
 
@@ -84,9 +87,9 @@ internal class JQLServiceImplTest {
             val jql = jqlService.openedIssues(board)
 
             assertThat(jql)
-                    .contains("project = '123123'")
-                    .contains("AND issueType NOT IN ('IT_1')")
-                    .contains("AND status IN ('TODO','WIP')")
+                .contains("project = '123123'")
+                .contains("AND issueType NOT IN ('IT_1')")
+                .contains("AND status IN ('TODO','WIP')")
         }
 
         @Test
@@ -95,17 +98,17 @@ internal class JQLServiceImplTest {
             val jql = jqlService.openedIssues(board)
 
             assertThat(jql)
-                    .contains("project = '123123'")
-                    .contains("AND status IN ('TODO','WIP')")
+                .contains("project = '123123'")
+                .contains("AND status IN ('TODO','WIP')")
         }
     }
 
     private fun createBoard(ignoreIssueType: MutableList<String>? = null) =
-            Board().apply {
-                externalId = 123123L
-                startColumn = "TODO"
-                endColumn = "DONE"
-                fluxColumn = Arrays.asList("TODO", "WIP", "DONE")
-                this.ignoreIssueType = ignoreIssueType
-            }
+        Board().apply {
+            externalId = 123123L
+            startColumn = "TODO"
+            endColumn = "DONE"
+            fluxColumn = Arrays.asList("TODO", "WIP", "DONE")
+            this.ignoreIssueType = ignoreIssueType
+        }
 }

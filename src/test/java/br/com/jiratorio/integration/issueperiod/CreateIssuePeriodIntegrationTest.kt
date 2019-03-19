@@ -27,10 +27,10 @@ import javax.servlet.http.HttpServletResponse
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class CreateIssuePeriodIntegrationTest @Autowired constructor(
-        private val boardFactory: BoardFactory,
-        private val authenticator: Authenticator,
-        private val issuePeriodRepository: IssuePeriodRepository,
-        private val issueRepository: IssueRepository
+    private val boardFactory: BoardFactory,
+    private val authenticator: Authenticator,
+    private val issuePeriodRepository: IssuePeriodRepository,
+    private val issueRepository: IssueRepository
 ) {
 
     @Test
@@ -61,7 +61,7 @@ internal class CreateIssuePeriodIntegrationTest @Autowired constructor(
         }
 
         val issuePeriod = issuePeriodRepository.findById(1L)
-                .orElseThrow(::ResourceNotFound)
+            .orElseThrow(::ResourceNotFound)
 
         IssuePeriodAssert(issuePeriod).assertThat {
             hasStartDate(request.startDate.toLocalDate())
@@ -73,8 +73,10 @@ internal class CreateIssuePeriodIntegrationTest @Autowired constructor(
                 hasMedian(11)
                 hasPercentile75(18)
                 hasPercentile90(18)
-                hasChart(1L to 0L, 2L to 0L, 3L to 0L, 4L to 0L, 5L to 0L, 6L to 0L, 7L to 0L, 8L to 0L, 9L to 0L, 10L to 0L,
-                        11L to 1L, 12L to 0L, 13L to 0L, 14L to 0L, 15L to 0L, 16L to 0L, 17L to 0L, 18L to 1L)
+                hasChart(
+                    1L to 0L, 2L to 0L, 3L to 0L, 4L to 0L, 5L to 0L, 6L to 0L, 7L to 0L, 8L to 0L, 9L to 0L, 10L to 0L,
+                    11L to 1L, 12L to 0L, 13L to 0L, 14L to 0L, 15L to 0L, 16L to 0L, 17L to 0L, 18L to 1L
+                )
             }
 
             hasLeadTimeBySize("Não informado" to 14.5)
@@ -101,17 +103,18 @@ internal class CreateIssuePeriodIntegrationTest @Autowired constructor(
             hasEmptyDynamicCharts()
 
             containsColumnTimeAvgs(
-                    ColumnTimeAvg(columnName = "BACKLOG", avgTime = 4.0),
-                    ColumnTimeAvg(columnName = "TODO", avgTime = 2.0),
-                    ColumnTimeAvg(columnName = "WIP", avgTime = 10.0),
-                    ColumnTimeAvg(columnName = "ACCOMPANIMENT", avgTime = 4.0),
-                    ColumnTimeAvg(columnName = "DONE", avgTime = 0.0))
+                ColumnTimeAvg(columnName = "BACKLOG", avgTime = 4.0),
+                ColumnTimeAvg(columnName = "TODO", avgTime = 2.0),
+                ColumnTimeAvg(columnName = "WIP", avgTime = 10.0),
+                ColumnTimeAvg(columnName = "ACCOMPANIMENT", avgTime = 4.0),
+                ColumnTimeAvg(columnName = "DONE", avgTime = 0.0)
+            )
 
             hasEmptyLeadTimeCompareChart()
         }
 
         val issue = issueRepository.findById(1L)
-                .orElseThrow(::ResourceNotFound)
+            .orElseThrow(::ResourceNotFound)
 
         IssueAssert(issue).assertThat {
             hasKey("JIRAT-1")
@@ -129,11 +132,41 @@ internal class CreateIssuePeriodIntegrationTest @Autowired constructor(
             hasPriority("Major")
 
             hasChangelog(
-                    Changelog(from = null, to = "BACKLOG", created = "25/12/2018 11:49:35".toLocalDateTime(), leadTime = 6, endDate = "01/01/2019 10:15".toLocalDateTime()),
-                    Changelog(from = "BACKLOG", to = "TODO", created = "01/01/2019 10:15".toLocalDateTime(), leadTime = 1, endDate = "01/01/2019 16:30".toLocalDateTime()),
-                    Changelog(from = "TODO", to = "WIP", created = "01/01/2019 16:30".toLocalDateTime(), leadTime = 8, endDate = "10/01/2019 13:45".toLocalDateTime()),
-                    Changelog(from = "WIP", to = "ACCOMPANIMENT", created = "10/01/2019 13:45".toLocalDateTime(), leadTime = 4, endDate = "15/01/2019 11:20".toLocalDateTime()),
-                    Changelog(from = "ACCOMPANIMENT", to = "DONE", created = "15/01/2019 11:20".toLocalDateTime(), leadTime = 0, endDate = "15/01/2019 11:20".toLocalDateTime())
+                Changelog(
+                    from = null,
+                    to = "BACKLOG",
+                    created = "25/12/2018 11:49:35".toLocalDateTime(),
+                    leadTime = 6,
+                    endDate = "01/01/2019 10:15".toLocalDateTime()
+                ),
+                Changelog(
+                    from = "BACKLOG",
+                    to = "TODO",
+                    created = "01/01/2019 10:15".toLocalDateTime(),
+                    leadTime = 1,
+                    endDate = "01/01/2019 16:30".toLocalDateTime()
+                ),
+                Changelog(
+                    from = "TODO",
+                    to = "WIP",
+                    created = "01/01/2019 16:30".toLocalDateTime(),
+                    leadTime = 8,
+                    endDate = "10/01/2019 13:45".toLocalDateTime()
+                ),
+                Changelog(
+                    from = "WIP",
+                    to = "ACCOMPANIMENT",
+                    created = "10/01/2019 13:45".toLocalDateTime(),
+                    leadTime = 4,
+                    endDate = "15/01/2019 11:20".toLocalDateTime()
+                ),
+                Changelog(
+                    from = "ACCOMPANIMENT",
+                    to = "DONE",
+                    created = "15/01/2019 11:20".toLocalDateTime(),
+                    leadTime = 0,
+                    endDate = "15/01/2019 11:20".toLocalDateTime()
+                )
             )
 
             hasDeviationOfEstimate(null)

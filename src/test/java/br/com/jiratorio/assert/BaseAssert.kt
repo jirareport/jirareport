@@ -10,7 +10,7 @@ import org.assertj.core.internal.Strings
 import kotlin.reflect.KClass
 
 open class BaseAssert<SELF : AbstractAssert<SELF, ACTUAL>?, ACTUAL>(actual: ACTUAL, self: KClass<*>) :
-        AbstractAssert<SELF, ACTUAL>(actual, self.java) {
+    AbstractAssert<SELF, ACTUAL>(actual, self.java) {
 
     companion object {
         val objects = Objects.instance()
@@ -21,7 +21,7 @@ open class BaseAssert<SELF : AbstractAssert<SELF, ACTUAL>?, ACTUAL>(actual: ACTU
     }
 
     fun assertThat(block: SELF.() -> Unit) =
-            myself.apply(block)
+        myself.apply(block)
 
     fun assertAll(function: () -> Unit) {
         try {
@@ -40,15 +40,15 @@ open class BaseAssert<SELF : AbstractAssert<SELF, ACTUAL>?, ACTUAL>(actual: ACTU
 
     private fun cleanStacktrace(stackTrace: Array<StackTraceElement>): Array<StackTraceElement> {
         return stackTrace
-                .filter { !isElementOfCustomAssert(it) }
-                .toTypedArray()
+            .filter { !isElementOfCustomAssert(it) }
+            .toTypedArray()
     }
 
     private fun isElementOfCustomAssert(stackTraceElement: StackTraceElement): Boolean {
         var currentAssertClass: Class<*> = javaClass
         while (currentAssertClass != AbstractAssert::class.java) {
-            if (stackTraceElement.className == currentAssertClass.name
-                    || stackTraceElement.className.startsWith("br.com.jiratorio.assert")) {
+            val className = stackTraceElement.className
+            if (className == currentAssertClass.name || className.startsWith("br.com.jiratorio.assert")) {
                 return true
             }
             currentAssertClass = currentAssertClass.superclass

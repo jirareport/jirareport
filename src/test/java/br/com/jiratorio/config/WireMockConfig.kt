@@ -12,9 +12,10 @@ class WireMockConfig {
     @Bean
     fun wireMockServer(): WireMockServer {
         val wireMockServer = WireMockServer(
-                WireMockConfiguration
-                        .options()
-                        .port(8888))
+            WireMockConfiguration
+                .options()
+                .port(8888)
+        )
         wireMockServer.start()
 
         WireMock.configureFor(wireMockServer.port())

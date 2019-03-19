@@ -11,28 +11,33 @@ object ImpedimentCalculatorByFlag {
 
     private val log = logger()
 
-    fun timeInImpediment(changelogItems: List<JiraChangelogItem>, endDate: LocalDateTime,
-                         holidays: List<LocalDate>, ignoreWeekend: Boolean?): Long {
+    fun timeInImpediment(
+        changelogItems: List<JiraChangelogItem>, endDate: LocalDateTime,
+        holidays: List<LocalDate>, ignoreWeekend: Boolean?
+    ): Long {
         val beginnings = ArrayList<LocalDateTime>()
         val terms = ArrayList<LocalDateTime>()
 
         changelogItems
-                .filter { it.field?.equals("flagged", ignoreCase = true) == true }
-                .forEach {
-                    if (it.toString?.equals("impediment", ignoreCase = true) == true) {
-                        beginnings.add(it.created!!)
-                    } else {
-                        terms.add(it.created!!)
-                    }
+            .filter { it.field?.equals("flagged", ignoreCase = true) == true }
+            .forEach {
+                if (it.toString?.equals("impediment", ignoreCase = true) == true) {
+                    beginnings.add(it.created!!)
+                } else {
+                    terms.add(it.created!!)
                 }
-
+            }
 
         if (beginnings.size - 1 == terms.size) {
             terms.add(endDate)
         }
 
         if (beginnings.size != terms.size) {
-            log.info("Method=countTimeInImpedimentByFlag, Info=tamanhos diferentes, beginnings={}, terms={}", beginnings.size, terms.size)
+            log.info(
+                "Method=countTimeInImpedimentByFlag, Info=tamanhos diferentes, beginnings={}, terms={}",
+                beginnings.size,
+                terms.size
+            )
             return 0
         }
 

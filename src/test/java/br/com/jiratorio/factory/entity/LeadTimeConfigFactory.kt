@@ -8,18 +8,18 @@ import org.springframework.stereotype.Component
 
 @Component
 class LeadTimeConfigFactory(
-        private val faker: Faker,
-        private val leadTimeConfigRepository: LeadTimeConfigRepository,
-        private val boardFactory: BoardFactory
+    private val faker: Faker,
+    private val leadTimeConfigRepository: LeadTimeConfigRepository,
+    private val boardFactory: BoardFactory
 ) : JBacon<LeadTimeConfig>() {
 
     override fun getDefault() =
-            LeadTimeConfig().apply {
-                board = boardFactory.create()
-                name = faker.lorem().word()
-                startColumn = faker.lorem().word()
-                endColumn = faker.lorem().word()
-            }
+        LeadTimeConfig().apply {
+            board = boardFactory.create()
+            name = faker.lorem().word()
+            startColumn = faker.lorem().word()
+            endColumn = faker.lorem().word()
+        }
 
     override fun getEmpty() = LeadTimeConfig()
 

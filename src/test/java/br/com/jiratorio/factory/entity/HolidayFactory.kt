@@ -11,17 +11,17 @@ import java.util.concurrent.TimeUnit
 
 @Component
 class HolidayFactory(
-        private val faker: Faker,
-        private val holidayRepository: HolidayRepository,
-        private val boardFactory: BoardFactory
+    private val faker: Faker,
+    private val holidayRepository: HolidayRepository,
+    private val boardFactory: BoardFactory
 ) : JBacon<Holiday>() {
 
     override fun getDefault() =
-            Holiday().apply {
-                date = faker.date().future(5, TimeUnit.DAYS).toLocalDate()
-                description = faker.lorem().word()
-                board = lazyInitBy { boardFactory.create() }
-            }
+        Holiday().apply {
+            date = faker.date().future(5, TimeUnit.DAYS).toLocalDate()
+            description = faker.lorem().word()
+            board = lazyInitBy { boardFactory.create() }
+        }
 
     override fun getEmpty() = Holiday()
 

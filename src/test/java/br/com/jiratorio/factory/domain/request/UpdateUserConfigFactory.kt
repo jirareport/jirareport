@@ -8,22 +8,22 @@ import org.springframework.stereotype.Component
 
 @Component
 class UpdateUserConfigFactory(
-        private val faker: Faker
+    private val faker: Faker
 ) : JBacon<UpdateUserConfigRequest>() {
 
     override fun getDefault() =
-            UpdateUserConfigRequest().apply {
-                state = faker.address().state()
-                city = faker.address().city()
-                holidayToken = faker.crypto().md5()
-                leadTimeChartType = faker.options().option(ChartType::class.java)
-                throughputChartType = faker.options().option(ChartType::class.java)
-            }
+        UpdateUserConfigRequest().apply {
+            state = faker.address().state()
+            city = faker.address().city()
+            holidayToken = faker.crypto().md5()
+            leadTimeChartType = faker.options().option(ChartType::class.java)
+            throughputChartType = faker.options().option(ChartType::class.java)
+        }
 
     override fun getEmpty() =
-            UpdateUserConfigRequest()
+        UpdateUserConfigRequest()
 
     override fun persist(updateUserConfigRequest: UpdateUserConfigRequest) =
-            throw UnsupportedOperationException()
+        throw UnsupportedOperationException()
 
 }

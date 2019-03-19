@@ -8,19 +8,23 @@ import org.springframework.stereotype.Component
 
 @Component
 class Authenticator(
-        private val accountFactory: AccountFactory
+    private val accountFactory: AccountFactory
 ) {
 
     fun <T> withDefaultUser(supplier: () -> T) =
-            this.withUser(accountFactory.defaultUserName(), supplier)
+        this.withUser(accountFactory.defaultUserName(), supplier)
 
     fun <T> withUser(username: String, supplier: () -> T): T {
         val oldContext = TestSecurityContextHolder.getContext()
 
         TestSecurityContextHolder.clearContext()
         val principal = accountFactory.buildUser(username)
-        TestSecurityContextHolder.setAuthentication(UsernamePasswordAuthenticationToken(principal,
-                principal.password, principal.authorities))
+        TestSecurityContextHolder.setAuthentication(
+            UsernamePasswordAuthenticationToken(
+                principal,
+                principal.password, principal.authorities
+            )
+        )
 
         val result = supplier()
 
@@ -31,7 +35,7 @@ class Authenticator(
     }
 
     fun defaultUserHeader() =
-            Header("X-Auth-Token", accountFactory.defaultUserToken())
+        Header("X-Auth-Token", accountFactory.defaultUserToken())
 
     fun defaultUserName() = accountFactory.defaultUserName()
 }

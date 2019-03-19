@@ -18,13 +18,10 @@ import javax.persistence.OneToMany
 @Data
 @Entity
 data class Board(
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        var id: Long? = null
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
 ) : BaseEntity() {
-
-    constructor() : this(null) {
-    }
 
     @Column(nullable = false)
     var externalId: Long? = null

@@ -7,9 +7,9 @@ import lombok.ToString
 @ToString
 @AllArgsConstructor
 data class FluxColumn(
-        val startLeadTimeColumn: String,
-        val endLeadTimeColumn: String,
-        val orderedColumns: List<String>?
+    val startLeadTimeColumn: String,
+    val endLeadTimeColumn: String,
+    val orderedColumns: List<String>?
 ) {
 
     constructor(board: Board) : this(board.startColumn!!, board.endColumn!!, board.fluxColumn)

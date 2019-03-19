@@ -12,38 +12,38 @@ import java.util.Arrays.asList
 
 @Component
 class UpdateBoardRequestFactory(
-        private val faker: Faker
+    private val faker: Faker
 ) : JBacon<UpdateBoardRequest>() {
 
     override fun getDefault() =
-            UpdateBoardRequest().apply {
-                startColumn = faker.lorem().word()
-                endColumn = faker.lorem().word()
-                fluxColumn = faker.lorem().words()
-                name = faker.lorem().word()
-                ignoreIssueType = faker.lorem().words()
-                epicCF = faker.jira().customField()
-                estimateCF = faker.jira().customField()
-                systemCF = faker.jira().customField()
-                projectCF = faker.jira().customField()
-                ignoreWeekend = faker.random().nextBoolean()
-                impedimentType = faker.options().option(ImpedimentType::class.java)
-                impedimentColumns = faker.lorem().words()
-                dynamicFields = asList(
-                        DynamicFieldConfig("dnf_1", faker.jira().customField()),
-                        DynamicFieldConfig("dnf_2", faker.jira().customField()),
-                        DynamicFieldConfig("dnf_3", faker.jira().customField())
-                )
-                touchingColumns = faker.lorem().words()
-                waitingColumns = faker.lorem().words()
-                dueDateCF = faker.jira().customField()
-                dueDateType = faker.options().option(DueDateType::class.java)
-            }
+        UpdateBoardRequest().apply {
+            startColumn = faker.lorem().word()
+            endColumn = faker.lorem().word()
+            fluxColumn = faker.lorem().words()
+            name = faker.lorem().word()
+            ignoreIssueType = faker.lorem().words()
+            epicCF = faker.jira().customField()
+            estimateCF = faker.jira().customField()
+            systemCF = faker.jira().customField()
+            projectCF = faker.jira().customField()
+            ignoreWeekend = faker.random().nextBoolean()
+            impedimentType = faker.options().option(ImpedimentType::class.java)
+            impedimentColumns = faker.lorem().words()
+            dynamicFields = asList(
+                DynamicFieldConfig("dnf_1", faker.jira().customField()),
+                DynamicFieldConfig("dnf_2", faker.jira().customField()),
+                DynamicFieldConfig("dnf_3", faker.jira().customField())
+            )
+            touchingColumns = faker.lorem().words()
+            waitingColumns = faker.lorem().words()
+            dueDateCF = faker.jira().customField()
+            dueDateType = faker.options().option(DueDateType::class.java)
+        }
 
     override fun getEmpty() =
-            UpdateBoardRequest()
+        UpdateBoardRequest()
 
     override fun persist(updateBoardRequest: UpdateBoardRequest) =
-            throw UnsupportedOperationException()
+        throw UnsupportedOperationException()
 
 }

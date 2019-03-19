@@ -34,7 +34,8 @@ class WireMockTestExecutionListener : AbstractTestExecutionListener() {
     }
 
     private fun findStubs(testContext: TestContext): Array<String>? {
-        val methodStubs = AnnotationUtils.findAnnotation(testContext.testMethod as AnnotatedElement, LoadStubs::class.java)
+        val methodStubs =
+            AnnotationUtils.findAnnotation(testContext.testMethod as AnnotatedElement, LoadStubs::class.java)
         val classStubs = AnnotationUtils.findAnnotation(testContext.testClass, LoadStubs::class.java)
 
         if (methodStubs == null && classStubs == null) {
@@ -45,9 +46,9 @@ class WireMockTestExecutionListener : AbstractTestExecutionListener() {
     }
 
     private fun loadStubs(wireMockServer: WireMockServer, resolver: PathMatchingResourcePatternResolver, stub: String) =
-            resolver.getResources("classpath:/stubs/$stub/**/*.json").forEach {
-                wireMockServer.addStubMapping(StubMapping.buildFrom(StreamUtils.copyToString(it.inputStream, charset)))
-            }
+        resolver.getResources("classpath:/stubs/$stub/**/*.json").forEach {
+            wireMockServer.addStubMapping(StubMapping.buildFrom(StreamUtils.copyToString(it.inputStream, charset)))
+        }
 
     override fun afterTestMethod(testContext: TestContext) {
         if (!testContext.applicationContext.containsBean("wireMockServer")) {

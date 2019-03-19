@@ -23,9 +23,9 @@ import org.springframework.util.StringUtils
 
 @Service
 class BoardServiceImpl(
-        private val projectService: ProjectService,
-        private val boardRepository: BoardRepository,
-        private val boardMapper: BoardMapper
+    private val projectService: ProjectService,
+    private val boardRepository: BoardRepository,
+    private val boardMapper: BoardMapper
 ) : BoardService {
 
     private val log = logger()
@@ -43,10 +43,10 @@ class BoardServiceImpl(
         }
 
         val matcher = ExampleMatcher.matching()
-                .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains())
-                .withMatcher("owner", ExampleMatcher.GenericPropertyMatchers.exact())
-                .withIgnoreNullValues()
-                .withIgnoreCase()
+            .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains())
+            .withMatcher("owner", ExampleMatcher.GenericPropertyMatchers.exact())
+            .withIgnoreNullValues()
+            .withIgnoreCase()
 
         val example = Example.of(board, matcher)
 
@@ -69,7 +69,7 @@ class BoardServiceImpl(
         log.info("Method=delete, id={}, username={}", id, username)
 
         val board = boardRepository.findByIdAndOwner(id, username)
-                .orElseThrow(::ResourceNotFound)
+            .orElseThrow(::ResourceNotFound)
         boardRepository.delete(board)
     }
 
@@ -78,7 +78,7 @@ class BoardServiceImpl(
         log.info("Method=findById, id={}", id)
 
         return boardRepository.findById(id)
-                .orElseThrow(::ResourceNotFound)
+            .orElseThrow(::ResourceNotFound)
     }
 
     @Transactional
@@ -103,8 +103,8 @@ class BoardServiceImpl(
 
         val listStatusesBoard = projectService.findStatusFromProject(board.externalId)
         return listStatusesBoard
-                .map { it.statuses }.flatten()
-                .map { it.name }.toSet()
+            .map { it.statuses }.flatten()
+            .map { it.name }.toSet()
     }
 
     @Transactional(readOnly = true)

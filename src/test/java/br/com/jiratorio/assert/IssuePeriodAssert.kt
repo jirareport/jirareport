@@ -4,7 +4,7 @@ import br.com.jiratorio.domain.entity.IssuePeriod
 import java.time.LocalDate
 
 class IssuePeriodAssert(actual: IssuePeriod) :
-        BaseAssert<IssuePeriodAssert, IssuePeriod>(actual, IssuePeriodAssert::class) {
+    BaseAssert<IssuePeriodAssert, IssuePeriod>(actual, IssuePeriodAssert::class) {
 
     fun hasStartDate(startDate: LocalDate) = assertAll {
         objects.assertEqual(field("issuePeriod.startDate"), actual.startDate, startDate)
@@ -19,7 +19,7 @@ class IssuePeriodAssert(actual: IssuePeriod) :
     }
 
     fun histogram() =
-            HistogramAssert(actual.histogram)
+        HistogramAssert(actual.histogram)
 
     fun hasLeadTimeBySize(vararg leadTimeBySize: Pair<String, Double>) = assertAll {
         objects.assertEqual(field("issuePeriod.leadTimeBySize"), actual.leadTimeBySize.data, mapOf(*leadTimeBySize))
@@ -30,7 +30,11 @@ class IssuePeriodAssert(actual: IssuePeriod) :
     }
 
     fun hasLeadTimeBySystem(vararg leadTimeBySystem: Pair<String, Double>) = assertAll {
-        objects.assertEqual(field("issuePeriod.leadTimeBySystem"), actual.leadTimeBySystem.data, mapOf(*leadTimeBySystem))
+        objects.assertEqual(
+            field("issuePeriod.leadTimeBySystem"),
+            actual.leadTimeBySystem.data,
+            mapOf(*leadTimeBySystem)
+        )
     }
 
     fun hasTasksBySystem(vararg tasksBySystem: Pair<String, Long>) = assertAll {
@@ -46,7 +50,11 @@ class IssuePeriodAssert(actual: IssuePeriod) :
     }
 
     fun hasLeadTimeByProject(vararg leadTimeByProject: Pair<String, Double>) = assertAll {
-        objects.assertEqual(field("issuePeriod.leadTimeByProject"), actual.leadTimeByProject.data, mapOf(*leadTimeByProject))
+        objects.assertEqual(
+            field("issuePeriod.leadTimeByProject"),
+            actual.leadTimeByProject.data,
+            mapOf(*leadTimeByProject)
+        )
     }
 
     fun hasTasksByProject(vararg tasksByProject: Pair<String, Long>) = assertAll {
@@ -54,11 +62,19 @@ class IssuePeriodAssert(actual: IssuePeriod) :
     }
 
     fun hasLeadTimeByPriority(vararg leadTimeByPriority: Pair<String, Double>) = assertAll {
-        objects.assertEqual(field("issuePeriod.leadTimeByPriority"), actual.leadTimeByPriority.data, mapOf(*leadTimeByPriority))
+        objects.assertEqual(
+            field("issuePeriod.leadTimeByPriority"),
+            actual.leadTimeByPriority.data,
+            mapOf(*leadTimeByPriority)
+        )
     }
 
     fun hasThroughputByPriority(vararg throughputByPriority: Pair<String, Long>) = assertAll {
-        objects.assertEqual(field("issuePeriod.throughputByPriority"), actual.throughputByPriority.data, mapOf(*throughputByPriority))
+        objects.assertEqual(
+            field("issuePeriod.throughputByPriority"),
+            actual.throughputByPriority.data,
+            mapOf(*throughputByPriority)
+        )
     }
 
     fun hasIssuesCount(issuesCount: Int) = assertAll {

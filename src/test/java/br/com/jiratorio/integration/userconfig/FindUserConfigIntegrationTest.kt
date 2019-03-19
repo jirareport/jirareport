@@ -18,8 +18,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class FindUserConfigIntegrationTest @Autowired constructor(
-        private val authenticator: Authenticator,
-        private val userConfigFactory: UserConfigFactory
+    private val authenticator: Authenticator,
+    private val userConfigFactory: UserConfigFactory
 ) {
 
     @Test

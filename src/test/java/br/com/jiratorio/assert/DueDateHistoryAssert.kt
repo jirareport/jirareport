@@ -5,7 +5,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 class DueDateHistoryAssert(actual: DueDateHistory) :
-        BaseAssert<DueDateHistoryAssert, DueDateHistory>(actual, DueDateHistoryAssert::class) {
+    BaseAssert<DueDateHistoryAssert, DueDateHistory>(actual, DueDateHistoryAssert::class) {
 
     fun hasDueDate(dueDate: LocalDate?) = assertAll {
         objects.assertEqual(field("dueDateHistory.dueDate"), actual.dueDate, dueDate)

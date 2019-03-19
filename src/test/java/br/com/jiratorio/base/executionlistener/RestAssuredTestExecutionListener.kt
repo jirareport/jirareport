@@ -8,7 +8,7 @@ class RestAssuredTestExecutionListener : AbstractTestExecutionListener() {
 
     override fun beforeTestMethod(testContext: TestContext) {
         RestAssured.port = testContext.applicationContext.environment
-                .getProperty("local.server.port")?.toInt() ?: 0
+            .getProperty("local.server.port")?.toInt() ?: 0
     }
 
 }

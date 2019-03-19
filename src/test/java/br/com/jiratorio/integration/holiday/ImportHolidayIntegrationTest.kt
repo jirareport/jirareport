@@ -28,11 +28,11 @@ import java.util.stream.IntStream
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class ImportHolidayIntegrationTest @Autowired constructor(
-        private val boardFactory: BoardFactory,
-        private val holidayRepository: HolidayRepository,
-        private val holidayFactory: HolidayFactory,
-        private val userConfigFactory: UserConfigFactory,
-        private val authenticator: Authenticator
+    private val boardFactory: BoardFactory,
+    private val holidayRepository: HolidayRepository,
+    private val holidayFactory: HolidayFactory,
+    private val userConfigFactory: UserConfigFactory,
+    private val authenticator: Authenticator
 ) {
 
     @Test
@@ -52,15 +52,17 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
         }
 
         assertThat(holidayRepository.count())
-                .isEqualTo(5)
+            .isEqualTo(5)
 
-        verify(1,
-                getRequestedFor(urlPathEqualTo("/holiday-api/"))
-                        .withQueryParam("json", equalTo("true"))
-                        .withQueryParam("ano", equalTo(LocalDate.now().year.toString()))
-                        .withQueryParam("estado", equalTo("SP"))
-                        .withQueryParam("cidade", equalTo("ARARAQUARA"))
-                        .withQueryParam("token", equalTo("super-secret-token")))
+        verify(
+            1,
+            getRequestedFor(urlPathEqualTo("/holiday-api/"))
+                .withQueryParam("json", equalTo("true"))
+                .withQueryParam("ano", equalTo(LocalDate.now().year.toString()))
+                .withQueryParam("estado", equalTo("SP"))
+                .withQueryParam("cidade", equalTo("ARARAQUARA"))
+                .withQueryParam("token", equalTo("super-secret-token"))
+        )
     }
 
     @Test
@@ -84,13 +86,15 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
 
         assertThat(holidayRepository.count()).isEqualTo(5)
 
-        verify(1,
-                getRequestedFor(urlPathEqualTo("/holiday-api/"))
-                        .withQueryParam("json", equalTo("true"))
-                        .withQueryParam("ano", equalTo(LocalDate.now().year.toString()))
-                        .withQueryParam("estado", equalTo(userConfig.state))
-                        .withQueryParam("cidade", equalTo(userConfig.city))
-                        .withQueryParam("token", equalTo(userConfig.holidayToken)))
+        verify(
+            1,
+            getRequestedFor(urlPathEqualTo("/holiday-api/"))
+                .withQueryParam("json", equalTo("true"))
+                .withQueryParam("ano", equalTo(LocalDate.now().year.toString()))
+                .withQueryParam("estado", equalTo(userConfig.state))
+                .withQueryParam("cidade", equalTo(userConfig.city))
+                .withQueryParam("token", equalTo(userConfig.holidayToken))
+        )
     }
 
     @Test
@@ -120,13 +124,15 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
 
         assertThat(holidayRepository.count()).isEqualTo(5)
 
-        verify(1,
-                getRequestedFor(urlPathEqualTo("/holiday-api/"))
-                        .withQueryParam("json", equalTo("true"))
-                        .withQueryParam("ano", equalTo(LocalDate.now().year.toString()))
-                        .withQueryParam("estado", equalTo("SP"))
-                        .withQueryParam("cidade", equalTo("ARARAQUARA"))
-                        .withQueryParam("token", equalTo("super-secret-token")))
+        verify(
+            1,
+            getRequestedFor(urlPathEqualTo("/holiday-api/"))
+                .withQueryParam("json", equalTo("true"))
+                .withQueryParam("ano", equalTo(LocalDate.now().year.toString()))
+                .withQueryParam("estado", equalTo("SP"))
+                .withQueryParam("cidade", equalTo("ARARAQUARA"))
+                .withQueryParam("token", equalTo("super-secret-token"))
+        )
     }
 
 }

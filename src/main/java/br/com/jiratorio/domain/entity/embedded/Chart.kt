@@ -2,13 +2,9 @@ package br.com.jiratorio.domain.entity.embedded
 
 import java.io.Serializable
 import java.util.LinkedHashMap
-import lombok.AllArgsConstructor
-import lombok.Data
 
-@Data
-@AllArgsConstructor
 class Chart<L, V>(
-        val data: MutableMap<L, V> = LinkedHashMap()
+    val data: MutableMap<L, V> = LinkedHashMap()
 ) : Serializable {
     companion object {
         private const val serialVersionUID = 7550041573002395950L

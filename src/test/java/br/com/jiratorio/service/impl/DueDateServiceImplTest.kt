@@ -22,7 +22,7 @@ import java.util.Comparator
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(classes = [UnitTestContext::class])
 internal class DueDateServiceImplTest @Autowired constructor(
-        private val jiraChangelogItemFactory: JiraChangelogItemFactory
+    private val jiraChangelogItemFactory: JiraChangelogItemFactory
 ) {
 
     private val dueDateService = DueDateServiceImpl()
@@ -48,17 +48,17 @@ internal class DueDateServiceImplTest @Autowired constructor(
         val dueDateHistories = dueDateService.extractDueDateHistory("duedate", jiraChangelogItems)
 
         assertThat(dueDateHistories)
-                .hasSize(5)
-                .isSortedAccordingTo(Comparator.comparing(DueDateHistory::getCreated))
+            .hasSize(5)
+            .isSortedAccordingTo(Comparator.comparing(DueDateHistory::getCreated))
     }
 
     @Test
     fun `calc deviation of estimate with empty history`() {
         val deviationOfEstimate: Long? =
-                dueDateService.calcDeviationOfEstimate(null, null, null, null, null)
+            dueDateService.calcDeviationOfEstimate(null, null, null, null, null)
 
         assertThat(deviationOfEstimate)
-                .isNull()
+            .isNull()
     }
 
     @Test
@@ -68,10 +68,16 @@ internal class DueDateServiceImplTest @Autowired constructor(
         val thirdDueDate = DueDateHistory(null, "15/02/2019".toLocalDate())
         val dueDateHistories = asList(firstDueDate, secondDueDate, thirdDueDate)
 
-        val deviationOfEstimate = dueDateService.calcDeviationOfEstimate(dueDateHistories, null, DueDateType.FIRST_AND_LAST_DUE_DATE, true, null)
+        val deviationOfEstimate = dueDateService.calcDeviationOfEstimate(
+            dueDateHistories,
+            null,
+            DueDateType.FIRST_AND_LAST_DUE_DATE,
+            true,
+            null
+        )
 
         assertThat(deviationOfEstimate)
-                .isEqualTo(11)
+            .isEqualTo(11)
     }
 
     @Test
@@ -81,11 +87,13 @@ internal class DueDateServiceImplTest @Autowired constructor(
         val dueDateHistories = Arrays.asList(firstDueDate, secondDueDate)
         val endDate = "13/02/2019 13:30".toLocalDateTime()
 
-        val deviationOfEstimate = dueDateService.calcDeviationOfEstimate(dueDateHistories, endDate,
-                DueDateType.FIRST_DUE_DATE_AND_END_DATE, true, null)
+        val deviationOfEstimate = dueDateService.calcDeviationOfEstimate(
+            dueDateHistories, endDate,
+            DueDateType.FIRST_DUE_DATE_AND_END_DATE, true, null
+        )
 
         assertThat(deviationOfEstimate)
-                .isEqualTo(9)
+            .isEqualTo(9)
     }
 
     @Test
@@ -95,10 +103,12 @@ internal class DueDateServiceImplTest @Autowired constructor(
         val dueDateHistories = Arrays.asList(firstDueDate, secondDueDate)
         val endDate = "15/02/2019 09:40".toLocalDateTime()
 
-        val deviationOfEstimate = dueDateService.calcDeviationOfEstimate(dueDateHistories, endDate,
-                DueDateType.LAST_DUE_DATE_AND_END_DATE, true, null)
+        val deviationOfEstimate = dueDateService.calcDeviationOfEstimate(
+            dueDateHistories, endDate,
+            DueDateType.LAST_DUE_DATE_AND_END_DATE, true, null
+        )
 
         assertThat(deviationOfEstimate)
-                .isEqualTo(6)
+            .isEqualTo(6)
     }
 }

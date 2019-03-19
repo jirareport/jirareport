@@ -7,19 +7,19 @@ import org.springframework.stereotype.Component
 
 @Component
 class LeadTimeConfigRequestFactory(
-        private val faker: Faker
+    private val faker: Faker
 ) : JBacon<LeadTimeConfigRequest>() {
 
     override fun getDefault() =
-            LeadTimeConfigRequest().apply {
-                name = faker.lorem().word()
-                startColumn = faker.lorem().word()
-                endColumn = faker.lorem().word()
-            }
+        LeadTimeConfigRequest().apply {
+            name = faker.lorem().word()
+            startColumn = faker.lorem().word()
+            endColumn = faker.lorem().word()
+        }
 
     override fun getEmpty() =
-            LeadTimeConfigRequest()
+        LeadTimeConfigRequest()
 
     override fun persist(leadTimeConfigRequest: LeadTimeConfigRequest) =
-            throw UnsupportedOperationException()
+        throw UnsupportedOperationException()
 }

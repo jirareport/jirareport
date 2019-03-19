@@ -3,7 +3,7 @@ package br.com.jiratorio.assert
 import br.com.jiratorio.domain.entity.Board
 
 class BoardAssert(actual: Board) :
-        BaseAssert<BoardAssert, Board>(actual, BoardAssert::class) {
+    BaseAssert<BoardAssert, Board>(actual, BoardAssert::class) {
 
     fun hasName(name: String?) = assertAll {
         objects.assertEqual(field("board.name"), actual.name, name)
@@ -34,11 +34,17 @@ class BoardAssert(actual: Board) :
     }
 
     fun hasTouchingColumns(touchingColumns: List<String>) = assertAll {
-        iterables.assertContainsAll(field("board.touchingColumns"), actual.touchingColumns, touchingColumns.map { it.toUpperCase() })
+        iterables.assertContainsAll(
+            field("board.touchingColumns"),
+            actual.touchingColumns,
+            touchingColumns.map { it.toUpperCase() })
     }
 
     fun hasWaitingColumns(waitingColumns: List<String>) = assertAll {
-        iterables.assertContainsAll(field("board.waitingColumns"), actual.waitingColumns, waitingColumns.map { it.toUpperCase() })
+        iterables.assertContainsAll(
+            field("board.waitingColumns"),
+            actual.waitingColumns,
+            waitingColumns.map { it.toUpperCase() })
     }
 
     fun hasIgnoreIssueType(ignoreIssueType: List<String>) = assertAll {
@@ -66,7 +72,10 @@ class BoardAssert(actual: Board) :
     }
 
     fun hasImpedimentColumns(impedimentColumns: List<String>) = assertAll {
-        objects.assertEqual(field("board.impedimentColumns"), actual.impedimentColumns, impedimentColumns.map { it.toUpperCase() })
+        objects.assertEqual(
+            field("board.impedimentColumns"),
+            actual.impedimentColumns,
+            impedimentColumns.map { it.toUpperCase() })
     }
 
     fun dynamicFieldsHasSize(size: Int) = assertAll {

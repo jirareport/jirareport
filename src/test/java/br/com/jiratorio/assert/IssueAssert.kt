@@ -1,13 +1,12 @@
 package br.com.jiratorio.assert
 
-import br.com.jiratorio.domain.DynamicFieldsValues
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import java.time.LocalDateTime
 
 class IssueAssert(actual: Issue) :
-        BaseAssert<IssueAssert, Issue>(actual, IssueAssert::class) {
+    BaseAssert<IssueAssert, Issue>(actual, IssueAssert::class) {
 
     fun hasKey(key: String) = assertAll {
         objects.assertEqual(field("issue.key"), actual.key, key)

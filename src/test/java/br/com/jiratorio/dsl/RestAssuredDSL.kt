@@ -1,15 +1,12 @@
 package br.com.jiratorio.dsl
 
 import io.restassured.RestAssured
-import io.restassured.http.ContentType
 import io.restassured.response.Response
 import io.restassured.response.ValidatableResponse
 import io.restassured.specification.RequestSender
 import io.restassured.specification.RequestSpecification
-import org.hamcrest.Matchers
-import org.junit.jupiter.api.Test
 
-class RestAssuredBuilder {
+class RestAssuredDSL {
 
     private lateinit var blockGiven: RequestSpecification.() -> Unit
 
@@ -32,19 +29,19 @@ class RestAssuredBuilder {
     fun build() {
         // @formatter:off
         RestAssured
-                .given()
-                    .log().all()
-                    .apply(blockGiven)
-                .`when`()
-                    .run(blockOn)
-                .then()
-                    .log().all()
-                    .run(blockThen)
+            .given()
+            .log().all()
+            .apply(blockGiven)
+            .`when`()
+            .run(blockOn)
+            .then()
+            .log().all()
+            .run(blockThen)
         // @formatter:on
     }
 
 }
 
-fun restAssured(block: RestAssuredBuilder.() -> Unit) {
-    RestAssuredBuilder().apply(block).build()
+fun restAssured(block: RestAssuredDSL.() -> Unit) {
+    RestAssuredDSL().apply(block).build()
 }

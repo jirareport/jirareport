@@ -22,10 +22,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class UpdateBoardIntegrationTest @Autowired constructor(
-        private val boardFactory: BoardFactory,
-        private val updateBoardRequestFactory: UpdateBoardRequestFactory,
-        private val boardRepository: BoardRepository,
-        private val authenticator: Authenticator
+    private val boardFactory: BoardFactory,
+    private val updateBoardRequestFactory: UpdateBoardRequestFactory,
+    private val boardRepository: BoardRepository,
+    private val authenticator: Authenticator
 ) {
 
     @Test
@@ -49,7 +49,7 @@ internal class UpdateBoardIntegrationTest @Autowired constructor(
         }
 
         val board = boardRepository.findById(1L)
-                .orElseThrow(::ResourceNotFound)
+            .orElseThrow(::ResourceNotFound)
 
         BoardAssert(board).assertThat {
             hasName(request.name)

@@ -13,13 +13,22 @@ class ChangelogServiceImpl : ChangelogService {
 
     private val log = logger()
 
-    override fun parseChangelog(changelogItems: List<JiraChangelogItem>, holidays: List<LocalDate>, ignoreWeekend: Boolean?): List<Changelog> {
-        log.info("Method=parseChangelog, changelogItems={}, holidays={}, ignoreWeekend={}", changelogItems, holidays, ignoreWeekend)
+    override fun parseChangelog(
+        changelogItems: List<JiraChangelogItem>,
+        holidays: List<LocalDate>,
+        ignoreWeekend: Boolean?
+    ): List<Changelog> {
+        log.info(
+            "Method=parseChangelog, changelogItems={}, holidays={}, ignoreWeekend={}",
+            changelogItems,
+            holidays,
+            ignoreWeekend
+        )
 
         val changelog = changelogItems
-                .filter { it.field == "status" }
-                .map { Changelog(from = it.fromString, to = it.toString, created = it.created) }
-                .sortedBy { it.created }
+            .filter { it.field == "status" }
+            .map { Changelog(from = it.fromString, to = it.toString, created = it.created) }
+            .sortedBy { it.created }
 
         changelog.forEachIndexed { i, current ->
             if (i + 1 == changelog.size) {

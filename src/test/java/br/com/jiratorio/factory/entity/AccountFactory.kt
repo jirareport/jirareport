@@ -7,19 +7,19 @@ import org.springframework.stereotype.Component
 
 @Component
 class AccountFactory(
-        private val tokenService: TokenService
+    private val tokenService: TokenService
 ) {
 
     fun defaultUser() =
-            buildUser(defaultUserName())
+        buildUser(defaultUserName())
 
     fun buildUser(username: String) =
-            Account(username, "secret-token", CurrentUser("name", "email@company.com"))
+        Account(username, "secret-token", CurrentUser("name", "email@company.com"))
 
     fun defaultUserToken() =
-            tokenService.encode(defaultUser())
+        tokenService.encode(defaultUser())
 
     fun defaultUserName() =
-            "default_user"
+        "default_user"
 
 }

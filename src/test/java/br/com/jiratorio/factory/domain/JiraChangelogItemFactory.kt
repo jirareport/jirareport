@@ -10,20 +10,20 @@ import java.util.concurrent.TimeUnit
 
 @Component
 class JiraChangelogItemFactory(
-        private val faker: Faker
+    private val faker: Faker
 ) : JBacon<JiraChangelogItem>() {
 
     override fun getDefault() =
-            JiraChangelogItem().apply {
-                field = "duedate"
-                to = faker.date().future(3, TimeUnit.DAYS).format("yyyy-MM-dd")
-                created = faker.date().past(3, TimeUnit.DAYS).toLocalDateTime()
-            }
+        JiraChangelogItem().apply {
+            field = "duedate"
+            to = faker.date().future(3, TimeUnit.DAYS).format("yyyy-MM-dd")
+            created = faker.date().past(3, TimeUnit.DAYS).toLocalDateTime()
+        }
 
     override fun getEmpty() =
-            JiraChangelogItem()
+        JiraChangelogItem()
 
     override fun persist(jiraChangelogItem: JiraChangelogItem) =
-            throw UnsupportedOperationException()
+        throw UnsupportedOperationException()
 
 }

@@ -4,7 +4,7 @@ import br.com.jiratorio.domain.entity.Holiday
 import java.time.LocalDate
 
 class HolidayAssert(actual: Holiday) :
-        BaseAssert<HolidayAssert, Holiday>(actual, HolidayAssert::class) {
+    BaseAssert<HolidayAssert, Holiday>(actual, HolidayAssert::class) {
 
     fun hasDescription(description: String) = assertAll {
         objects.assertEqual(field("holiday.description"), actual.description, description)

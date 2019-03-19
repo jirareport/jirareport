@@ -9,21 +9,21 @@ import javax.validation.constraints.NotNull
 
 class IssuePeriodForm(
 
-        @JsonFormat(pattern = "dd/MM/yyyy")
-        @field:NotNull(message = "Data de inicio é obrigatória")
-        var startDate: LocalDate? = null,
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    @field:NotNull(message = "Data de inicio é obrigatória")
+    var startDate: LocalDate? = null,
 
-        @JsonFormat(pattern = "dd/MM/yyyy")
-        @field:NotNull(message = "Data de fim é obrigatória")
-        var endDate: LocalDate? = null
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    @field:NotNull(message = "Data de fim é obrigatória")
+    var endDate: LocalDate? = null
 ) {
 
     @AssertFalse(message = "O período não pode ser maior que 31 dias. Para maiores períodos utilize o SandBox")
     fun isValidRange() =
-            endDate != null && ChronoUnit.DAYS.between(startDate, endDate) > 31
+        endDate != null && ChronoUnit.DAYS.between(startDate, endDate) > 31
 
     @AssertTrue(message = "A data de inicio deve ser anterior a data fim.")
     fun isStartDateIsBeforeEndDate() =
-            startDate?.isBefore(endDate) == true || startDate?.isEqual(endDate) == true
+        startDate?.isBefore(endDate) == true || startDate?.isEqual(endDate) == true
 
 }

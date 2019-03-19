@@ -24,10 +24,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class CreateLeadTimeConfigIntegrationTest @Autowired constructor(
-        private val boardFactory: BoardFactory,
-        private val leadTimeConfigRequestFactory: LeadTimeConfigRequestFactory,
-        private val leadTimeConfigRepository: LeadTimeConfigRepository,
-        private val authenticator: Authenticator
+    private val boardFactory: BoardFactory,
+    private val leadTimeConfigRequestFactory: LeadTimeConfigRequestFactory,
+    private val leadTimeConfigRepository: LeadTimeConfigRepository,
+    private val authenticator: Authenticator
 ) {
 
     @Test
@@ -53,7 +53,7 @@ internal class CreateLeadTimeConfigIntegrationTest @Autowired constructor(
         }
 
         val leadTimeConfig = leadTimeConfigRepository.findById(1L)
-                .orElseThrow(::ResourceNotFound)
+            .orElseThrow(::ResourceNotFound)
 
         LeadTimeConfigAssert(leadTimeConfig).assertThat {
             hasName(request.name)

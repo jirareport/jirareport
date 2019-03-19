@@ -4,7 +4,7 @@ import br.com.jiratorio.domain.ChartType
 import br.com.jiratorio.domain.entity.UserConfig
 
 class UserConfigAssert(actual: UserConfig) :
-        BaseAssert<UserConfigAssert, UserConfig>(actual, UserConfigAssert::class) {
+    BaseAssert<UserConfigAssert, UserConfig>(actual, UserConfigAssert::class) {
 
     fun hasHolidayToken(holidayToken: String) = assertAll {
         objects.assertEqual(field("userConfig.holidayToken"), actual.holidayToken, holidayToken)

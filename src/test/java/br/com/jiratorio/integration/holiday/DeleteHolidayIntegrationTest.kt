@@ -18,9 +18,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class DeleteHolidayIntegrationTest @Autowired constructor(
-        private val holidayFactory: HolidayFactory,
-        private val holidayRepository: HolidayRepository,
-        private val authenticator: Authenticator
+    private val holidayFactory: HolidayFactory,
+    private val holidayRepository: HolidayRepository,
+    private val authenticator: Authenticator
 ) {
 
     @Test

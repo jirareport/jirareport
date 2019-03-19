@@ -9,7 +9,6 @@ import br.com.jiratorio.factory.domain.request.CreateBoardRequestFactory
 import br.com.jiratorio.repository.BoardRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
-import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Tag
@@ -23,9 +22,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class CreateBoardIntegrationTest @Autowired constructor(
-        private val boardRepository: BoardRepository,
-        private val createBoardRequestFactory: CreateBoardRequestFactory,
-        private val authenticator: Authenticator
+    private val boardRepository: BoardRepository,
+    private val createBoardRequestFactory: CreateBoardRequestFactory,
+    private val authenticator: Authenticator
 ) {
 
     @Test
@@ -48,7 +47,7 @@ internal class CreateBoardIntegrationTest @Autowired constructor(
         }
 
         val board = boardRepository.findById(1L)
-                .orElseThrow(::ResourceNotFound)
+            .orElseThrow(::ResourceNotFound)
 
         BoardAssert(board).assertThat {
             hasName(request.name)

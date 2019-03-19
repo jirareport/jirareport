@@ -11,7 +11,6 @@ import br.com.jiratorio.factory.entity.LeadTimeConfigFactory
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
-import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -24,10 +23,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class UpdateLeadTimeConfigIntegrationTest @Autowired constructor(
-        private val leadTimeConfigRequestFactory: LeadTimeConfigRequestFactory,
-        private val leadTimeConfigFactory: LeadTimeConfigFactory,
-        private val leadTimeConfigRepository: LeadTimeConfigRepository,
-        private val authenticator: Authenticator
+    private val leadTimeConfigRequestFactory: LeadTimeConfigRequestFactory,
+    private val leadTimeConfigFactory: LeadTimeConfigFactory,
+    private val leadTimeConfigRepository: LeadTimeConfigRepository,
+    private val authenticator: Authenticator
 ) {
 
     @Test
@@ -50,7 +49,7 @@ internal class UpdateLeadTimeConfigIntegrationTest @Autowired constructor(
         }
 
         val leadTimeConfig = leadTimeConfigRepository.findById(1L)
-                .orElseThrow(::ResourceNotFound)
+            .orElseThrow(::ResourceNotFound)
 
         LeadTimeConfigAssert(leadTimeConfig).assertThat {
             hasName(request.name)

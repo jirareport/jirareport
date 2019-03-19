@@ -4,6 +4,8 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "1.3.21"
     id "org.jetbrains.kotlin.plugin.spring" version "1.3.21"
     id "java"
+
+    id "io.gitlab.arturbosch.detekt" version "1.0.0-RC14"
 }
 
 apply plugin: "io.spring.dependency-management"
@@ -14,6 +16,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 ext {
@@ -73,6 +76,8 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-engine"
 
     testImplementation "org.mockito:mockito-junit-jupiter"
+
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0-RC14"
 }
 
 dependencyManagement {
@@ -97,4 +102,12 @@ compileTestKotlin {
         freeCompilerArgs = ["-Xjsr305=strict"]
         jvmTarget = "1.8"
     }
+}
+
+detekt {
+    input = files(
+            "src/main/java",
+            "src/test/java"
+    )
+    config = files("$projectDir/detekt-config.yml")
 }

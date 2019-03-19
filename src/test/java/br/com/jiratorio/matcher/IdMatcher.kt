@@ -4,7 +4,7 @@ import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
 
 class IdMatcher(
-        private val expected: Long
+    private val expected: Long
 ) : BaseMatcher<Long>() {
 
     override fun matches(item: Any?): Boolean {

@@ -10,21 +10,27 @@ import java.time.LocalDateTime
 enum class ImpedimentType {
 
     COLUMN {
-        override fun timeInImpediment(impedimentColumns: List<String>, changelogItems: List<JiraChangelogItem>,
-                                      changelog: List<Changelog>, endDate: LocalDateTime, holidays: List<LocalDate>,
-                                      ignoreWeekend: Boolean?) =
-                ImpedimentCalculatorByColumn.timeInImpediment(changelog, impedimentColumns)
+        override fun timeInImpediment(
+            impedimentColumns: List<String>, changelogItems: List<JiraChangelogItem>,
+            changelog: List<Changelog>, endDate: LocalDateTime, holidays: List<LocalDate>,
+            ignoreWeekend: Boolean?
+        ) =
+            ImpedimentCalculatorByColumn.timeInImpediment(changelog, impedimentColumns)
     },
 
     FLAG {
-        override fun timeInImpediment(impedimentColumns: List<String>, changelogItems: List<JiraChangelogItem>,
-                                      changelog: List<Changelog>, endDate: LocalDateTime, holidays: List<LocalDate>,
-                                      ignoreWeekend: Boolean?) =
-                ImpedimentCalculatorByFlag.timeInImpediment(changelogItems, endDate, holidays, ignoreWeekend)
+        override fun timeInImpediment(
+            impedimentColumns: List<String>, changelogItems: List<JiraChangelogItem>,
+            changelog: List<Changelog>, endDate: LocalDateTime, holidays: List<LocalDate>,
+            ignoreWeekend: Boolean?
+        ) =
+            ImpedimentCalculatorByFlag.timeInImpediment(changelogItems, endDate, holidays, ignoreWeekend)
     };
 
-    abstract fun timeInImpediment(impedimentColumns: List<String>, changelogItems: List<JiraChangelogItem>,
-                                  changelog: List<Changelog>, endDate: LocalDateTime, holidays: List<LocalDate>,
-                                  ignoreWeekend: Boolean?): Long
+    abstract fun timeInImpediment(
+        impedimentColumns: List<String>, changelogItems: List<JiraChangelogItem>,
+        changelog: List<Changelog>, endDate: LocalDateTime, holidays: List<LocalDate>,
+        ignoreWeekend: Boolean?
+    ): Long
 
 }

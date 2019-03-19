@@ -23,10 +23,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class CreateHolidayIntegrationTest @Autowired constructor(
-        private val holidayRequestFactory: HolidayRequestFactory,
-        private val boardFactory: BoardFactory,
-        private val holidayRepository: HolidayRepository,
-        private val authenticator: Authenticator
+    private val holidayRequestFactory: HolidayRequestFactory,
+    private val boardFactory: BoardFactory,
+    private val holidayRepository: HolidayRepository,
+    private val authenticator: Authenticator
 ) {
 
     @Test
@@ -50,7 +50,7 @@ internal class CreateHolidayIntegrationTest @Autowired constructor(
         }
 
         val holiday = holidayRepository.findById(1L)
-                .orElseThrow(::ResourceNotFound)
+            .orElseThrow(::ResourceNotFound)
 
         HolidayAssert(holiday).assertThat {
             hasDescription(request.description)

@@ -7,19 +7,19 @@ import org.springframework.stereotype.Component
 
 @Component
 class CreateBoardRequestFactory(
-        private val faker: Faker
+    private val faker: Faker
 ) : JBacon<CreateBoardRequest>() {
 
     override fun getDefault() =
-            CreateBoardRequest().apply {
-                name = faker.lorem().word()
-                externalId = faker.number().randomNumber()
-            }
+        CreateBoardRequest().apply {
+            name = faker.lorem().word()
+            externalId = faker.number().randomNumber()
+        }
 
     override fun getEmpty() =
-            CreateBoardRequest()
+        CreateBoardRequest()
 
     override fun persist(createBoardRequest: CreateBoardRequest) =
-            throw UnsupportedOperationException()
+        throw UnsupportedOperationException()
 
 }

@@ -22,9 +22,9 @@ import java.time.format.DateTimeFormatter
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class SearchHolidayIntegrationTest @Autowired constructor(
-        private val holidayFactory: HolidayFactory,
-        private val boardFactory: BoardFactory,
-        private val authenticator: Authenticator
+    private val holidayFactory: HolidayFactory,
+    private val boardFactory: BoardFactory,
+    private val authenticator: Authenticator
 ) {
 
     @Test

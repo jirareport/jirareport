@@ -18,9 +18,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class DeleteLeadTimeConfigIntegrationTest @Autowired constructor(
-        private val leadTimeConfigFactory: LeadTimeConfigFactory,
-        private val leadTimeConfigRepository: LeadTimeConfigRepository,
-        private val authenticator: Authenticator
+    private val leadTimeConfigFactory: LeadTimeConfigFactory,
+    private val leadTimeConfigRepository: LeadTimeConfigRepository,
+    private val authenticator: Authenticator
 ) {
 
     @Test

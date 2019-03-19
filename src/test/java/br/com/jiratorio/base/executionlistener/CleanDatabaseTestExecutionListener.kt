@@ -13,8 +13,8 @@ class CleanDatabaseTestExecutionListener : AbstractTestExecutionListener() {
     override fun beforeTestMethod(testContext: TestContext) {
         try {
             testContext.applicationContext
-                    .getBean(CleanDatabase::class.java)
-                    .clean()
+                .getBean(CleanDatabase::class.java)
+                .clean()
         } catch (e: NoSuchBeanDefinitionException) {
             log.info("Method=beforeTestMethod, Info=Not a integration test")
         }

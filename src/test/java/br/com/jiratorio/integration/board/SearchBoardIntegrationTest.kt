@@ -22,8 +22,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class SearchBoardIntegrationTest @Autowired constructor(
-        private val boardFactory: BoardFactory,
-        private val authenticator: Authenticator
+    private val boardFactory: BoardFactory,
+    private val authenticator: Authenticator
 ) {
 
     @Test

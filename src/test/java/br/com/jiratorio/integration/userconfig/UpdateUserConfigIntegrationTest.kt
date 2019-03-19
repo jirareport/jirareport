@@ -8,7 +8,6 @@ import br.com.jiratorio.factory.domain.request.UpdateUserConfigFactory
 import br.com.jiratorio.repository.UserConfigRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -20,9 +19,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class UpdateUserConfigIntegrationTest @Autowired constructor(
-        private val updateUserConfigFactory: UpdateUserConfigFactory,
-        private val userConfigRepository: UserConfigRepository,
-        private val authenticator: Authenticator
+    private val updateUserConfigFactory: UpdateUserConfigFactory,
+    private val userConfigRepository: UserConfigRepository,
+    private val authenticator: Authenticator
 ) {
 
     @Test
@@ -44,7 +43,7 @@ internal class UpdateUserConfigIntegrationTest @Autowired constructor(
         }
 
         val userConfig = userConfigRepository.findByUsername(authenticator.defaultUserName())
-                .orElseThrow(::ResourceNotFound)
+            .orElseThrow(::ResourceNotFound)
 
         UserConfigAssert(userConfig).assertThat {
             hasHolidayToken(request.holidayToken)

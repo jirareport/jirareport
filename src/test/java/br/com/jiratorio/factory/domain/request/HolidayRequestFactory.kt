@@ -9,18 +9,18 @@ import java.util.concurrent.TimeUnit
 
 @Component
 class HolidayRequestFactory(
-        private val faker: Faker
+    private val faker: Faker
 ) : JBacon<HolidayRequest>() {
 
     override fun getDefault() =
-            HolidayRequest().apply {
-                date = faker.date().future(5, TimeUnit.DAYS).format("dd/MM/yyyy")
-                description = faker.lorem().word()
-            }
+        HolidayRequest().apply {
+            date = faker.date().future(5, TimeUnit.DAYS).format("dd/MM/yyyy")
+            description = faker.lorem().word()
+        }
 
     override fun getEmpty() =
-            HolidayRequest()
+        HolidayRequest()
 
     override fun persist(holidayRequest: HolidayRequest) =
-            throw UnsupportedOperationException()
+        throw UnsupportedOperationException()
 }

@@ -7,7 +7,7 @@ import javax.sql.DataSource
 
 @Component
 class CleanDatabase(
-        private val dataSource: DataSource
+    private val dataSource: DataSource
 ) {
 
     fun clean() {

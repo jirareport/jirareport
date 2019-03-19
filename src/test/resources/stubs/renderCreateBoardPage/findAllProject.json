@@ -1,5 +1,5 @@
 {
-  "request" : {
+  "request": {
     "urlPath": "/jira/rest/api/2/project",
     "headers": {
       "Authorization": {

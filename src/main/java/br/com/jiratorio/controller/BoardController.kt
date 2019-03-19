@@ -27,8 +27,11 @@ import javax.validation.Valid
 class BoardController(private val boardService: BoardService) {
 
     @GetMapping
-    fun index(pageable: Pageable, board: Board,
-              @AuthenticationPrincipal currentUser: Account): Page<BoardResponse> {
+    fun index(
+        pageable: Pageable,
+        board: Board,
+        @AuthenticationPrincipal currentUser: Account
+    ): Page<BoardResponse> {
         return boardService.findAll(pageable, board, currentUser)
     }
 
@@ -47,9 +50,9 @@ class BoardController(private val boardService: BoardService) {
         val boardId = boardService.create(board)
 
         val location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .build(boardId)
+            .fromCurrentRequest()
+            .path("/{id}")
+            .build(boardId)
 
         return ResponseEntity.created(location).build<Any>()
     }
