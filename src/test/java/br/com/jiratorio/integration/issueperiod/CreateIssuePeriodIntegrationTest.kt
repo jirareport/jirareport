@@ -35,7 +35,7 @@ internal class CreateIssuePeriodIntegrationTest @Autowired constructor(
 
     @Test
     @LoadStubs(["issues/simple-issues"])
-    fun `create simple period`() {
+    fun `create simple issue period`() {
         val board = authenticator.withDefaultUser {
             boardFactory.create("withSimpleConfiguration")
         }
