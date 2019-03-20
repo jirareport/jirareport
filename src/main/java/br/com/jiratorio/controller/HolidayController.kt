@@ -27,23 +27,23 @@ class HolidayController(private val holidayService: HolidayService) {
 
     @GetMapping
     fun index(
-            @PathVariable boardId: Long,
-            @PageableDefault(sort = ["date"]) pageable: Pageable
+        @PathVariable boardId: Long,
+        @PageableDefault(sort = ["date"]) pageable: Pageable
     ): Page<HolidayResponse> {
         return holidayService.findByBoard(boardId, pageable)
     }
 
     @PostMapping
     fun create(
-            @PathVariable boardId: Long,
-            @Valid @RequestBody holiday: HolidayRequest
+        @PathVariable boardId: Long,
+        @Valid @RequestBody holiday: HolidayRequest
     ): ResponseEntity<*> {
         val id = holidayService.create(boardId, holiday)
 
         val location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .build(id)
+            .fromCurrentRequest()
+            .path("/{id}")
+            .build(id)
 
         return ResponseEntity.created(location).build<Any>()
     }
@@ -56,8 +56,8 @@ class HolidayController(private val holidayService: HolidayService) {
 
     @PostMapping("/import")
     fun importFromAPI(
-            @PathVariable boardId: Long,
-            @AuthenticationPrincipal account: Account
+        @PathVariable boardId: Long,
+        @AuthenticationPrincipal account: Account
     ): ResponseEntity<*> {
         holidayService.createImported(boardId, account)
         return ResponseEntity<Any>(HttpStatus.CREATED)
@@ -70,9 +70,9 @@ class HolidayController(private val holidayService: HolidayService) {
 
     @PutMapping("/{holidayId}")
     fun update(
-            @PathVariable boardId: Long,
-            @PathVariable holidayId: Long,
-            @Valid @RequestBody holidayRequest: HolidayRequest
+        @PathVariable boardId: Long,
+        @PathVariable holidayId: Long,
+        @Valid @RequestBody holidayRequest: HolidayRequest
     ): ResponseEntity<*> {
         holidayService.update(boardId, holidayId, holidayRequest)
         return ResponseEntity.noContent().build<Any>()

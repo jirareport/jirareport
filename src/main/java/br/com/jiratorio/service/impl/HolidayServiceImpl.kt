@@ -24,11 +24,11 @@ import java.util.HashSet
 
 @Service
 class HolidayServiceImpl(
-        private val holidayRepository: HolidayRepository,
-        private val boardService: BoardService,
-        private val holidayClient: HolidayClient,
-        private val holidayMapper: HolidayMapper,
-        private val userConfigService: UserConfigService
+    private val holidayRepository: HolidayRepository,
+    private val boardService: BoardService,
+    private val holidayClient: HolidayClient,
+    private val holidayMapper: HolidayMapper,
+    private val userConfigService: UserConfigService
 ) : HolidayService {
 
     private val log = logger()
@@ -46,7 +46,7 @@ class HolidayServiceImpl(
         log.info("Method=findDaysByBoard, boardId={}", boardId)
 
         return holidayRepository.findAllByBoardId(boardId)
-                .map { it.date!! }
+            .map { it.date!! }
     }
 
     @Transactional
@@ -66,7 +66,7 @@ class HolidayServiceImpl(
         log.info("Method=delete, id={}", id)
 
         val holiday = holidayRepository.findById(id)
-                .orElseThrow(::ResourceNotFound)
+            .orElseThrow(::ResourceNotFound)
 
         holidayRepository.delete(holiday)
     }
@@ -76,7 +76,7 @@ class HolidayServiceImpl(
         log.info("Method=findById, id={}", id)
 
         val holiday = holidayRepository.findById(id)
-                .orElseThrow(::ResourceNotFound)
+            .orElseThrow(::ResourceNotFound)
 
         return holidayMapper.toHolidayResponse(holiday)
     }
@@ -88,8 +88,8 @@ class HolidayServiceImpl(
         val board = boardService.findById(boardId)
 
         val holiday = holidayRepository.findById(holidayId)
-                .filter { it.board == board }
-                .orElseThrow(::ResourceNotFound)
+            .filter { it.board == board }
+            .orElseThrow(::ResourceNotFound)
 
         holidayMapper.updateFromRequest(holiday, holidayRequest)
 
@@ -126,7 +126,8 @@ class HolidayServiceImpl(
         val info = userConfigService.retrieveHolidayInfo(currentUser.username)
 
         val allHolidaysInCity = holidayClient.findAllHolidaysInCity(
-                LocalDate.now().year, info.state, info.city, info.holidayToken)
+            LocalDate.now().year, info.state, info.city, info.holidayToken
+        )
 
         return holidayMapper.fromApiResponse(allHolidaysInCity, board)
     }

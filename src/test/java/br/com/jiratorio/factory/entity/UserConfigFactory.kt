@@ -16,8 +16,7 @@ class UserConfigFactory(
 ) : JBacon<UserConfig>() {
 
     override fun getDefault() =
-        UserConfig().apply {
-            username = usernameFromSecurity
+        UserConfig(usernameFromSecurity).apply {
             state = faker.address().state()
             city = faker.address().city()
             holidayToken = faker.crypto().md5()
@@ -32,7 +31,7 @@ class UserConfigFactory(
             return account.username
         }
 
-    override fun getEmpty() = UserConfig()
+    override fun getEmpty() = UserConfig(usernameFromSecurity)
 
     override fun persist(userConfig: UserConfig) {
         userConfigRepository.save(userConfig)

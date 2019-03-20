@@ -46,12 +46,12 @@ internal class UpdateUserConfigIntegrationTest @Autowired constructor(
             .orElseThrow(::ResourceNotFound)
 
         UserConfigAssert(userConfig).assertThat {
-            hasHolidayToken(request.holidayToken)
-            hasState(request.state)
+            hasHolidayToken(request.holidayToken!!)
+            hasState(request.state!!)
             hasCity("SAO_PAULO")
 
-            hasLeadTimeChartType(request.leadTimeChartType)
-            hasThroughputChartType(request.throughputChartType)
+            hasLeadTimeChartType(request.leadTimeChartType!!)
+            hasThroughputChartType(request.throughputChartType!!)
         }
     }
 }
