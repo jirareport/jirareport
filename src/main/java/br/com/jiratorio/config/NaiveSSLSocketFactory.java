@@ -24,8 +24,7 @@ public class NaiveSSLSocketFactory extends SSLSocketFactory {
 
     private final Set<String> naivelyTrustedHostnames;
 
-    public NaiveSSLSocketFactory(final String... naivelyTrustedHostnames) throws NoSuchAlgorithmException,
-            KeyManagementException {
+    public NaiveSSLSocketFactory(final String... naivelyTrustedHostnames) throws NoSuchAlgorithmException, KeyManagementException {
         this.naivelyTrustedHostnames =
                 Collections.unmodifiableSet(new HashSet<>(Arrays.asList(naivelyTrustedHostnames)));
         alwaysAllowSslContext = SSLContext.getInstance("TLS");
