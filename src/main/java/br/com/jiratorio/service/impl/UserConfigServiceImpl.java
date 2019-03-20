@@ -56,11 +56,7 @@ public class UserConfigServiceImpl implements UserConfigService {
         return userConfigRepository.findByUsername(username)
                 .filter(uc -> !StringUtils.isEmpty(uc.getHolidayToken()))
                 .map(userConfigMapper::toImportHolidayInfo)
-                .orElse(ImportHolidayInfo.builder()
-                        .city("ARARAQUARA")
-                        .state("SP")
-                        .holidayToken(holidayToken)
-                        .build());
+                .orElse(new ImportHolidayInfo("SP", "ARARAQUARA", holidayToken));
     }
 
     @Override

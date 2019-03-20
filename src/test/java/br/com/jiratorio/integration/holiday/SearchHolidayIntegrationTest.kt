@@ -22,9 +22,9 @@ import java.time.format.DateTimeFormatter
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class SearchHolidayIntegrationTest @Autowired constructor(
-    private val holidayFactory: HolidayFactory,
-    private val boardFactory: BoardFactory,
-    private val authenticator: Authenticator
+        private val holidayFactory: HolidayFactory,
+        private val boardFactory: BoardFactory,
+        private val authenticator: Authenticator
 ) {
 
     @Test
@@ -70,9 +70,9 @@ internal class SearchHolidayIntegrationTest @Autowired constructor(
             then {
                 statusCode(HttpStatus.SC_OK)
                 body("id", IdMatcher(holiday.id!!))
-                body("date", equalTo(holiday.date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                body("date", equalTo(holiday.date?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
                 body("description", equalTo(holiday.description))
-                body("boardId", IdMatcher(holiday.board.id!!))
+                body("boardId", IdMatcher(holiday.board?.id!!))
             }
         }
     }

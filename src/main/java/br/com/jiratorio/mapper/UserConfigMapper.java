@@ -27,6 +27,8 @@ public interface UserConfigMapper {
     }) // @formatter:on
     void updateFromRequest(@MappingTarget UserConfig userConfig, UpdateUserConfigRequest updateUserConfigRequest);
 
-    ImportHolidayInfo toImportHolidayInfo(UserConfig userConfig);
+    default ImportHolidayInfo toImportHolidayInfo(UserConfig userConfig) {
+        return new ImportHolidayInfo(userConfig.getState(), userConfig.getCity(), userConfig.getHolidayToken());
+    }
 
 }
