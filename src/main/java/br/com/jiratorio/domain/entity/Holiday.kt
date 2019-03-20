@@ -29,15 +29,18 @@ class Holiday : BaseEntity() {
     @ManyToOne
     var board: Board? = null
 
+
+    override fun toString(): String {
+        return "Holiday(id=$id, date=$date, description=$description)"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
         other as Holiday
 
-        if (id != other.id) return false
         if (date != other.date) return false
-        if (description != other.description) return false
         if (board != other.board) return false
 
         return true
@@ -47,10 +50,6 @@ class Holiday : BaseEntity() {
         var result = date?.hashCode() ?: 0
         result = 31 * result + (board?.hashCode() ?: 0)
         return result
-    }
-
-    override fun toString(): String {
-        return "Holiday(id=$id, date=$date, description=$description)"
     }
 
 }
