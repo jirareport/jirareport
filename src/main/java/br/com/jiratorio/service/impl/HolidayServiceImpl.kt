@@ -13,7 +13,7 @@ import br.com.jiratorio.repository.HolidayRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.HolidayService
 import br.com.jiratorio.service.UserConfigService
-import br.com.jiratorio.util.logger
+import br.com.jiratorio.extension.logger
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

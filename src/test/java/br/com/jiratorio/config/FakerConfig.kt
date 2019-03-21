@@ -1,6 +1,6 @@
 package br.com.jiratorio.config
 
-import br.com.jiratorio.util.logger
+import br.com.jiratorio.extension.logger
 import com.github.javafaker.Faker
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

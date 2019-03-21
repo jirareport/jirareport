@@ -3,7 +3,7 @@ package br.com.jiratorio.service.impl
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.service.JQLService
-import br.com.jiratorio.util.logger
+import br.com.jiratorio.extension.logger
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

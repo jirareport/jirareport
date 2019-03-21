@@ -7,7 +7,7 @@ import br.com.jiratorio.domain.response.UserConfigResponse
 import br.com.jiratorio.mapper.UserConfigMapper
 import br.com.jiratorio.repository.UserConfigRepository
 import br.com.jiratorio.service.UserConfigService
-import br.com.jiratorio.util.logger
+import br.com.jiratorio.extension.logger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

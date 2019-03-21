@@ -8,7 +8,7 @@ import br.com.jiratorio.mapper.LeadTimeConfigMapper
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.LeadTimeConfigService
-import br.com.jiratorio.util.logger
+import br.com.jiratorio.extension.logger
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

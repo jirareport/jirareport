@@ -12,7 +12,7 @@ import br.com.jiratorio.mapper.BoardMapper
 import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.ProjectService
-import br.com.jiratorio.util.logger
+import br.com.jiratorio.extension.logger
 import org.springframework.data.domain.Example
 import org.springframework.data.domain.ExampleMatcher
 import org.springframework.data.domain.Page

@@ -1,6 +1,5 @@
 package br.com.jiratorio.extension
 
-import br.com.jiratorio.util.logger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

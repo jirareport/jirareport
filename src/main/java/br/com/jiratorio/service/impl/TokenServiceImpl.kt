@@ -2,7 +2,7 @@ package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.domain.Account
 import br.com.jiratorio.service.TokenService
-import br.com.jiratorio.util.logger
+import br.com.jiratorio.extension.logger
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.security.jwt.JwtHelper
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier

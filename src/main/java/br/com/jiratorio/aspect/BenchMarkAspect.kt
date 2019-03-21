@@ -1,6 +1,6 @@
 package br.com.jiratorio.aspect
 
-import br.com.jiratorio.util.logger
+import br.com.jiratorio.extension.logger
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect

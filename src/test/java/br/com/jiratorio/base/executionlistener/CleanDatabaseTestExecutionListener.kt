@@ -1,7 +1,7 @@
 package br.com.jiratorio.base.executionlistener
 
 import br.com.jiratorio.base.CleanDatabase
-import br.com.jiratorio.util.logger
+import br.com.jiratorio.extension.logger
 import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.test.context.TestContext
 import org.springframework.test.context.support.AbstractTestExecutionListener

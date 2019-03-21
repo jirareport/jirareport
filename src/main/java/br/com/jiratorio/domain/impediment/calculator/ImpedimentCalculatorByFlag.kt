@@ -2,7 +2,7 @@ package br.com.jiratorio.domain.impediment.calculator
 
 import br.com.jiratorio.domain.changelog.JiraChangelogItem
 import br.com.jiratorio.util.DateUtil
-import br.com.jiratorio.util.logger
+import br.com.jiratorio.extension.logger
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.ArrayList

@@ -1,4 +1,4 @@
-package br.com.jiratorio.util
+package br.com.jiratorio.extension
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

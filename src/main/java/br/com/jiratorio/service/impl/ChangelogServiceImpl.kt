@@ -4,7 +4,7 @@ import br.com.jiratorio.domain.changelog.JiraChangelogItem
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.service.ChangelogService
 import br.com.jiratorio.util.DateUtil
-import br.com.jiratorio.util.logger
+import br.com.jiratorio.extension.logger
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 

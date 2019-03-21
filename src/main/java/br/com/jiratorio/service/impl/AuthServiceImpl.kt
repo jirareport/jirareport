@@ -5,7 +5,7 @@ import br.com.jiratorio.domain.Account
 import br.com.jiratorio.domain.request.LoginRequest
 import br.com.jiratorio.extension.toBase64
 import br.com.jiratorio.service.AuthService
-import br.com.jiratorio.util.logger
+import br.com.jiratorio.extension.logger
 import org.springframework.stereotype.Service
 
 @Service
