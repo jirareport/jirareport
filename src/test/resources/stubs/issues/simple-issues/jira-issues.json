@@ -161,11 +161,6 @@
             "aggregateprogress": {
               "progress": 0,
               "total": 0
-            },
-            "customfield_1000": {
-              "self": "http://localhost:8888/jira/rest/api/2/customFieldOption/1000",
-              "value": "M",
-              "id": "1000"
             }
           },
           "changelog": {
@@ -462,11 +457,6 @@
             "aggregateprogress": {
               "progress": 0,
               "total": 0
-            },
-            "customfield_1000": {
-              "self": "http://localhost:8888/jira/rest/api/2/customFieldOption/1000",
-              "value": "M",
-              "id": "1000"
             }
           },
           "changelog": {

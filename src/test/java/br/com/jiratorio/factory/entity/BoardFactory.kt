@@ -62,4 +62,29 @@ class BoardFactory(
             fluxColumn = asList("BACKLOG", "TODO", "WIP", "ACCOMPANIMENT", "DONE")
         }
 
+    @JBaconTemplate
+    protected fun withCompleteConfiguration() =
+        default.apply {
+            startColumn = "ANALYSIS"
+            endColumn = "DONE"
+            fluxColumn = asList(
+                "BACKLOG", "ANALYSIS", "DEV WIP", "DEV DONE", "TEST WIP", "TEST DONE", "ACCOMPANIMENT", "DONE"
+            )
+            ignoreIssueType = mutableListOf("SubTask")
+            epicCF = "customfield_1000"
+            estimateCF = "customfield_2000"
+            systemCF = "customfield_3000"
+            projectCF = "customfield_4000"
+            ignoreWeekend = false
+            impedimentType = ImpedimentType.FLAG
+            touchingColumns = asList(
+                "ANALYSIS", "DEV WIP", "TEST WIP", "ACCOMPANIMENT"
+            )
+            waitingColumns = asList(
+                "BACKLOG", "DEV DONE", "TEST DONE"
+            )
+            dueDateCF = "customfield_5000"
+            dueDateType = DueDateType.FIRST_DUE_DATE_AND_END_DATE
+        }
+
 }
