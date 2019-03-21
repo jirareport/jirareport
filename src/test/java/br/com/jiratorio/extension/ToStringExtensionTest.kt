@@ -13,7 +13,8 @@ internal class ToStringExtensionTest {
         class Phone(
             private val number: String
         ) {
-            override fun toString() = toStringBuilder(Phone::number)
+            override fun toString() =
+                toStringBuilder(Phone::number)
         }
 
         class Person(
@@ -21,7 +22,8 @@ internal class ToStringExtensionTest {
             private val age: Int,
             private var phones: List<Phone>
         ) {
-            override fun toString() = toStringBuilder(Person::name, Person::age, Person::phones)
+            override fun toString() =
+                toStringBuilder(Person::name, Person::age, Person::phones)
         }
 
         val phones = listOf(Phone("123"), Phone("321"), Phone("543"))

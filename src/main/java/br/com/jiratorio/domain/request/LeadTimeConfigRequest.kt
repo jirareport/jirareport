@@ -2,15 +2,13 @@ package br.com.jiratorio.domain.request
 
 import javax.validation.constraints.NotBlank
 
-class LeadTimeConfigRequest {
+data class LeadTimeConfigRequest(
+    @field:NotBlank
+    var name: String? = null,
 
-    @NotBlank
-    var name: String? = null
+    @field:NotBlank
+    var startColumn: String? = null,
 
-    @NotBlank
-    var startColumn: String? = null
-
-    @NotBlank
+    @field:NotBlank
     var endColumn: String? = null
-
-}
+)

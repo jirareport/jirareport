@@ -32,7 +32,7 @@ class BoardServiceImpl(
 
     @Transactional(readOnly = true)
     override fun findAll(pageable: Pageable, board: Board, currentUser: Account): Page<BoardResponse> {
-        log.info("Method=findAll")
+        log.info("Method=findAll, board={}, currentUser={}", board, currentUser)
 
         if (StringUtils.isEmpty(board.owner)) {
             board.owner = currentUser.username
