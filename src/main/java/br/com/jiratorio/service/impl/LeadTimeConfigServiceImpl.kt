@@ -41,7 +41,7 @@ class LeadTimeConfigServiceImpl(
         log.info("Method=create, boardId={}, leadTimeConfigRequest={}", boardId, leadTimeConfigRequest)
 
         val (id) = boardService.findById(boardId)
-        val leadTimeConfig = leadTimeConfigMapper.toLeadTimeConfig(leadTimeConfigRequest, id)
+        val leadTimeConfig = leadTimeConfigMapper.toLeadTimeConfig(leadTimeConfigRequest, id!!)
 
         leadTimeConfigRepository.save(leadTimeConfig)
 
