@@ -37,7 +37,8 @@ data class UserConfig(
     var throughputChartType: ChartType? = null
 
     override fun toString(): String {
-        return "UserConfig(username='$username', id=$id, state=$state, city=$city, holidayToken=$holidayToken, leadTimeChartType=$leadTimeChartType, throughputChartType=$throughputChartType)"
+        return "UserConfig(username='$username', id=$id, state=$state, city=$city, holidayToken=$holidayToken, " +
+                "leadTimeChartType=$leadTimeChartType, throughputChartType=$throughputChartType)"
     }
 
 }

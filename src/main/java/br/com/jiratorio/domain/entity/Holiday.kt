@@ -29,7 +29,6 @@ class Holiday : BaseEntity() {
     @ManyToOne
     var board: Board? = null
 
-
     override fun toString(): String {
         return "Holiday(id=$id, date=$date, description=$description)"
     }
