@@ -7,7 +7,7 @@ import javax.validation.constraints.AssertFalse
 import javax.validation.constraints.AssertTrue
 import javax.validation.constraints.NotNull
 
-class IssuePeriodForm(
+data class IssuePeriodForm(
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @field:NotNull(message = "Data de inicio é obrigatória")
@@ -16,6 +16,7 @@ class IssuePeriodForm(
     @JsonFormat(pattern = "dd/MM/yyyy")
     @field:NotNull(message = "Data de fim é obrigatória")
     var endDate: LocalDate? = null
+
 ) {
 
     @AssertFalse(message = "O período não pode ser maior que 31 dias. Para maiores períodos utilize o SandBox")

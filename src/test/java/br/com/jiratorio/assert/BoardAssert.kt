@@ -17,37 +17,37 @@ class BoardAssert(actual: Board) :
         objects.assertEqual(field("board.owner"), actual.owner, owner)
     }
 
-    fun hasStartColumn(startColumn: String) = assertAll {
+    fun hasStartColumn(startColumn: String?) = assertAll {
         val field = field("board.startColumn")
         strings.assertUpperCase(field, actual.startColumn)
-        objects.assertEqual(field, actual.startColumn, startColumn.toUpperCase())
+        objects.assertEqual(field, actual.startColumn, startColumn?.toUpperCase())
     }
 
-    fun hasEndColumn(endColumn: String) = assertAll {
+    fun hasEndColumn(endColumn: String?) = assertAll {
         val field = field("board.endColumn")
         strings.assertUpperCase(field, actual.endColumn)
-        objects.assertEqual(field, actual.endColumn, endColumn.toUpperCase())
+        objects.assertEqual(field, actual.endColumn, endColumn?.toUpperCase())
     }
 
-    fun hasFluxColumn(fluxColumn: List<String>) = assertAll {
-        objects.assertEqual(field("board.fluxColumn"), actual.fluxColumn, fluxColumn.map { it.toUpperCase() })
+    fun hasFluxColumn(fluxColumn: List<String>?) = assertAll {
+        objects.assertEqual(field("board.fluxColumn"), actual.fluxColumn, fluxColumn?.map { it.toUpperCase() })
     }
 
-    fun hasTouchingColumns(touchingColumns: List<String>) = assertAll {
+    fun hasTouchingColumns(touchingColumns: List<String>?) = assertAll {
         iterables.assertContainsAll(
             field("board.touchingColumns"),
             actual.touchingColumns,
-            touchingColumns.map { it.toUpperCase() })
+            touchingColumns?.map { it.toUpperCase() })
     }
 
-    fun hasWaitingColumns(waitingColumns: List<String>) = assertAll {
+    fun hasWaitingColumns(waitingColumns: List<String>?) = assertAll {
         iterables.assertContainsAll(
             field("board.waitingColumns"),
             actual.waitingColumns,
-            waitingColumns.map { it.toUpperCase() })
+            waitingColumns?.map { it.toUpperCase() })
     }
 
-    fun hasIgnoreIssueType(ignoreIssueType: List<String>) = assertAll {
+    fun hasIgnoreIssueType(ignoreIssueType: List<String>?) = assertAll {
         iterables.assertContainsAll(field("board.ignoreIssueType"), actual.ignoreIssueType, ignoreIssueType)
     }
 
@@ -71,15 +71,15 @@ class BoardAssert(actual: Board) :
         objects.assertEqual(field("board.ignoreWeekend"), actual.ignoreWeekend, ignoreWeekend)
     }
 
-    fun hasImpedimentColumns(impedimentColumns: List<String>) = assertAll {
+    fun hasImpedimentColumns(impedimentColumns: List<String>?) = assertAll {
         objects.assertEqual(
             field("board.impedimentColumns"),
             actual.impedimentColumns,
-            impedimentColumns.map { it.toUpperCase() })
+            impedimentColumns?.map { it.toUpperCase() })
     }
 
-    fun dynamicFieldsHasSize(size: Int) = assertAll {
-        iterables.assertHasSize(field("board.dynamicFields"), actual.dynamicFields, size)
+    fun dynamicFieldsHasSize(size: Int?) = assertAll {
+        iterables.assertHasSize(field("board.dynamicFields"), actual.dynamicFields, size ?: 0)
     }
 
 }

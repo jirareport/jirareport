@@ -1,11 +1,7 @@
 package br.com.jiratorio.domain
 
 import br.com.jiratorio.domain.entity.Board
-import lombok.AllArgsConstructor
-import lombok.ToString
 
-@ToString
-@AllArgsConstructor
 data class FluxColumn(
     val startLeadTimeColumn: String,
     val endLeadTimeColumn: String,

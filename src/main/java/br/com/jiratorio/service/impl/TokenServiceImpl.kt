@@ -4,13 +4,11 @@ import br.com.jiratorio.domain.Account
 import br.com.jiratorio.service.TokenService
 import br.com.jiratorio.util.logger
 import com.fasterxml.jackson.databind.ObjectMapper
-import lombok.extern.slf4j.Slf4j
 import org.springframework.security.jwt.JwtHelper
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier
 import org.springframework.security.jwt.crypto.sign.Signer
 import org.springframework.stereotype.Service
 
-@Slf4j
 @Service
 class TokenServiceImpl(
     private val objectMapper: ObjectMapper,

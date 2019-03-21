@@ -55,7 +55,7 @@ internal class UpdateHolidayIntegrationTest @Autowired constructor(
             .orElseThrow(::ResourceNotFound)
         HolidayAssert(holiday).assertThat {
             hasDescription(request.description)
-            hasDate(request.date.toLocalDate())
+            hasDate(request.date?.toLocalDate())
         }
     }
 

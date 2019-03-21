@@ -1,16 +1,12 @@
 package br.com.jiratorio.domain.request
 
-import lombok.Data
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
-@Data
-class CreateBoardRequest {
+data class CreateBoardRequest(
+    @field:NotBlank
+    var name: String? = null,
 
-    @NotBlank
-    var name: String? = null
-
-    @NotNull
+    @field:NotNull
     var externalId: Long? = null
-
-}
+)

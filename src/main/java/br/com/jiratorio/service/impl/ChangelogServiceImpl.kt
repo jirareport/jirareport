@@ -20,9 +20,7 @@ class ChangelogServiceImpl : ChangelogService {
     ): List<Changelog> {
         log.info(
             "Method=parseChangelog, changelogItems={}, holidays={}, ignoreWeekend={}",
-            changelogItems,
-            holidays,
-            ignoreWeekend
+            changelogItems, holidays, ignoreWeekend
         )
 
         val changelog = changelogItems

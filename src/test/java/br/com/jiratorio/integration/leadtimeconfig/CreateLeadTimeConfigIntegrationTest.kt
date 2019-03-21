@@ -56,10 +56,10 @@ internal class CreateLeadTimeConfigIntegrationTest @Autowired constructor(
             .orElseThrow(::ResourceNotFound)
 
         LeadTimeConfigAssert(leadTimeConfig).assertThat {
-            hasName(request.name)
+            hasName(request.name!!)
 
-            hasStartColumn(request.startColumn)
-            hasEndColumn(request.endColumn)
+            hasStartColumn(request.startColumn!!)
+            hasEndColumn(request.endColumn!!)
         }
     }
 

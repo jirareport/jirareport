@@ -54,7 +54,7 @@ internal class CreateHolidayIntegrationTest @Autowired constructor(
 
         HolidayAssert(holiday).assertThat {
             hasDescription(request.description)
-            hasDate(request.date.toLocalDate())
+            hasDate(request.date?.toLocalDate())
         }
     }
 
