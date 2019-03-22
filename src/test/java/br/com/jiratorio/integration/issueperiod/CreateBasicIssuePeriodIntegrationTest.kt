@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse
 @Tag("integration")
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class CreateIssuePeriodIntegrationTest @Autowired constructor(
+internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
     private val boardFactory: BoardFactory,
     private val authenticator: Authenticator,
     private val issuePeriodRepository: IssuePeriodRepository,
@@ -34,10 +34,10 @@ internal class CreateIssuePeriodIntegrationTest @Autowired constructor(
 ) {
 
     @Test
-    @LoadStubs(["issues/simple-issues"])
-    fun `create simple issue period`() {
+    @LoadStubs(["issues/basic-issues"])
+    fun `create basic issue period`() {
         val board = authenticator.withDefaultUser {
-            boardFactory.create("withSimpleConfiguration")
+            boardFactory.create("withBasicConfiguration")
         }
 
         val request = object {
