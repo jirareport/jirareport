@@ -23,11 +23,8 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
 ) {
 
     @Test
-    @LoadStubs(["issues/complex-issues"])
+    @LoadStubs(["issues/complete-issues"])
     fun `create complete issue period`() {
-        authenticator.withDefaultUser {
-            boardFactory.create("withCompleteConfiguration")
-        }
+        authenticator.withDefaultUser { boardFactory.create("withCompleteConfiguration") }
     }
-
 }

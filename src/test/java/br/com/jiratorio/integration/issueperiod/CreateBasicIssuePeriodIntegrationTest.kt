@@ -3,14 +3,13 @@ package br.com.jiratorio.integration.issueperiod
 import br.com.jiratorio.assert.IssueAssert
 import br.com.jiratorio.assert.IssuePeriodAssert
 import br.com.jiratorio.base.Authenticator
+import br.com.jiratorio.base.annotation.LoadStubs
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
-import br.com.jiratorio.dsl.jira.JiraIssue
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
-import br.com.jiratorio.factory.JiraIssueFactory
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.repository.IssueRepository
@@ -31,27 +30,14 @@ internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
     private val boardFactory: BoardFactory,
     private val authenticator: Authenticator,
     private val issuePeriodRepository: IssuePeriodRepository,
-    private val issueRepository: IssueRepository,
-    private val jiraIssueFactory: JiraIssueFactory
+    private val issueRepository: IssueRepository
 ) {
 
     @Test
-    fun `create simple issue period`() {
+    @LoadStubs(["issues/basic-issues"])
+    fun `create basic issue period`() {
         val board = authenticator.withDefaultUser {
-            boardFactory.create("withSimpleConfiguration")
-        }
-
-        jiraIssueFactory.createIssue {
-            arrayOf(
-                JiraIssue(1, "JIRAT-1").apply {
-                    fields = arrayOf(
-
-                    )
-                },
-                JiraIssue(2, "JIRAT-2").apply {
-
-                }
-            )
+            boardFactory.create("withBasicConfiguration")
         }
 
         val request = object {
