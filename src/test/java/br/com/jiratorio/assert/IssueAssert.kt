@@ -64,7 +64,7 @@ class IssueAssert(actual: Issue) :
         iterables.assertContains(field("issue.changelog"), actual.changelog, changelog)
     }
 
-    fun hasDeviationOfEstimate(deviationOfEstimate: String?) = assertAll {
+    fun hasDeviationOfEstimate(deviationOfEstimate: Long?) = assertAll {
         objects.assertEqual(field("issue.deviationOfEstimate"), actual.deviationOfEstimate, deviationOfEstimate)
     }
 

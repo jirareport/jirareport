@@ -1,20 +1,21 @@
 package br.com.jiratorio.service.impl;
 
 import br.com.jiratorio.domain.DueDateType;
-import br.com.jiratorio.domain.entity.embedded.DueDateHistory;
 import br.com.jiratorio.domain.changelog.JiraChangelogItem;
+import br.com.jiratorio.domain.entity.embedded.DueDateHistory;
 import br.com.jiratorio.service.DueDateService;
 import br.com.jiratorio.util.DateUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
@@ -26,10 +27,7 @@ public class DueDateServiceImpl implements DueDateService {
 
         return changelogItems.stream()
                 .filter(i -> dueDateCF.equals(i.getField()) && !StringUtils.isEmpty(i.getTo()))
-                .map(i -> DueDateHistory.builder()
-                        .created(i.getCreated())
-                        .dueDate(parseDueDate(i.getTo()))
-                        .build())
+                .map(i -> new DueDateHistory(i.getCreated(), parseDueDate(i.getTo())))
                 .sorted(Comparator.comparing(DueDateHistory::getCreated))
                 .collect(Collectors.toList());
     }

@@ -1,3 +1,7 @@
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import kotlin.random.Random
+
 fun generate(vararg issueData: IssueData): String {
     val issues = issueData.map {
         with(it) {
@@ -264,16 +268,356 @@ data class IssueData(
     val issueType: IssueType,
     val priority: Priority,
     val dueDate: String,
-    val customFields: Array<CustomField> = emptyArray(),
-    val histories: Array<History> = emptyArray()
+    val customFields: MutableList<CustomField> = mutableListOf(),
+    val histories: MutableList<History> = mutableListOf()
 ) {
     val issueKey: String
         get() = "JIRAT-$issueId"
 }
 
-// fun main() {
-//    basicIssues()
-// }
+/*
+fun main() {
+    completeIssue()
+}
+*/
+
+fun completeIssue() {
+    val task = IssueType(1, "Task")
+    val attendance = IssueType(1, "Attendance")
+    val subTask = IssueType(2, "SubTask")
+
+    val major = Priority(1, "Major")
+    val expedite = Priority(2, "Expedite")
+    val medium = Priority(2, "Medium")
+
+    val epicSandBox = CustomField(1000, "SandBox")
+    val epicPeriod = CustomField(1000, "Period")
+
+    val estimateP = CustomField(2000, "P")
+    val estimateM = CustomField(2000, "M")
+    val estimateG = CustomField(2000, "G")
+
+    val systemJiraReport = CustomField(3000, "JiraReport")
+    val systemJiraWeb = CustomField(3000, "JiraWeb")
+
+    val projectMetric = CustomField(4000, "Metric")
+    val projectEstimate = CustomField(4000, "Estimate")
+
+    val issues = arrayOf(
+        IssueData(
+            issueId = 1,
+            issueDescription = "Calcular diferença de data de entrega com o primeiro due date",
+
+            created = "2019-01-01T12:00:00.000-0300",
+
+            issueType = task,
+            priority = major,
+
+            dueDate = "2019-01-19",
+
+            customFields = mutableListOf(
+                epicPeriod,
+                estimateP,
+                systemJiraReport,
+                projectMetric
+            )
+        ),
+        IssueData(
+            issueId = 2,
+            issueDescription = "Calcular diferença de data de entrega com o primeiro due date",
+
+            created = "2019-01-02T12:10:00.000-0300",
+
+            issueType = task,
+            priority = major,
+
+            dueDate = "2019-01-19",
+
+            customFields = mutableListOf(
+                epicPeriod,
+                estimateP,
+                systemJiraReport,
+                projectMetric
+            )
+        ),
+        IssueData(
+            issueId = 3,
+            issueDescription = "Permitir escolher tipo do gráfico",
+
+            created = "2019-01-03T12:20:00.000-0300",
+
+            issueType = task,
+            priority = major,
+
+            dueDate = "2019-01-19",
+
+            customFields = mutableListOf(
+                epicPeriod,
+                estimateP,
+                systemJiraReport,
+                projectMetric
+            )
+        ),
+        IssueData(
+            issueId = 4,
+            issueDescription = "Criar opção de adicionar campos dinâmicos para extração de métricas",
+
+            created = "2019-01-04T12:30:00.000-0300",
+
+            issueType = task,
+            priority = expedite,
+
+            dueDate = "2019-01-19",
+
+            customFields = mutableListOf(
+                epicPeriod,
+                estimateM,
+                systemJiraReport,
+                projectMetric
+            )
+        ),
+        IssueData(
+            issueId = 5,
+            issueDescription = "Calcular diferença de data de entrega com o primeiro due date",
+
+            created = "2019-01-05T12:40:00.000-0300",
+
+            issueType = task,
+            priority = expedite,
+
+            dueDate = "2019-01-19",
+
+            customFields = mutableListOf(
+                epicSandBox,
+                estimateM,
+                systemJiraReport,
+                projectMetric
+            )
+        ),
+        IssueData(
+            issueId = 6,
+            issueDescription = "Tratar prioridade como um campo opcional",
+
+            created = "2019-01-06T12:50:00.000-0300",
+
+            issueType = attendance,
+            priority = expedite,
+
+            dueDate = "2019-01-19",
+
+            customFields = mutableListOf(
+                epicSandBox,
+                estimateM,
+                systemJiraWeb,
+                projectMetric
+            )
+        ),
+        IssueData(
+            issueId = 7,
+            issueDescription = "Alterar lead time quando tem issues vinculadas",
+
+            created = "2019-01-07T13:00:00.000-0300",
+
+            issueType = attendance,
+            priority = medium,
+
+            dueDate = "2019-01-19",
+
+            customFields = mutableListOf(
+                epicSandBox,
+                estimateG,
+                systemJiraWeb,
+                projectMetric
+            )
+        ),
+        IssueData(
+            issueId = 8,
+            issueDescription = "Correção do GuiChart (parar de usar set)",
+
+            created = "2019-01-08T13:10:00.000-0300",
+
+            issueType = attendance,
+            priority = medium,
+
+            dueDate = "2019-01-19",
+
+            customFields = mutableListOf(
+                epicSandBox,
+                estimateG,
+                systemJiraWeb,
+                projectEstimate
+            )
+        ),
+        IssueData(
+            issueId = 9,
+            issueDescription = "Adicionar opção de begin at 0 nos gráficos",
+
+            created = "2019-01-09T13:20:00.000-0300",
+
+            issueType = subTask,
+            priority = medium,
+
+            dueDate = "2019-01-19",
+
+            customFields = mutableListOf(
+                epicPeriod,
+                estimateP,
+                systemJiraWeb,
+                projectEstimate
+            )
+        ),
+        IssueData(
+            issueId = 10,
+            issueDescription = "Calcular WIP Médio",
+
+            created = "2019-01-10T13:30:00.000-0300",
+
+            issueType = subTask,
+            priority = medium,
+
+            dueDate = "2019-01-19",
+
+            customFields = mutableListOf(
+                epicSandBox,
+                estimateM,
+                systemJiraWeb,
+                projectEstimate
+            )
+        )
+    )
+
+    val random = Random(System.currentTimeMillis())
+
+    val addDay: (str: String) -> String = {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        LocalDate.parse(it.substring(0, 10), formatter)
+            .plusDays(random.nextLong(5) + 1)
+            .format(formatter) + "T12:00:00.000-0300"
+    }
+
+    issues.forEach {
+        val backlog = History(
+            id = 1,
+            created = addDay(it.created),
+            items = arrayOf(
+                HistoryItem(
+                    from = null,
+                    fromString = null,
+                    to = "1",
+                    toString = "BACKLOG"
+                )
+            )
+        )
+
+        val analysis = History(
+            id = 2,
+            created = addDay(backlog.created),
+            items = arrayOf(
+                HistoryItem(
+                    from = "1",
+                    fromString = "BACKLOG",
+                    to = "2",
+                    toString = "ANALYSIS"
+                )
+            )
+        )
+
+        val devWip = History(
+            id = 3,
+            created = addDay(analysis.created),
+            items = arrayOf(
+                HistoryItem(
+                    from = "2",
+                    fromString = "ANALYSIS",
+                    to = "3",
+                    toString = "DEV WIP"
+                )
+            )
+        )
+
+        val devDone = History(
+            id = 4,
+            created = addDay(devWip.created),
+            items = arrayOf(
+                HistoryItem(
+                    from = "3",
+                    fromString = "DEV WIP",
+                    to = "4",
+                    toString = "DEV DONE"
+                )
+            )
+        )
+
+        val testWip = History(
+            id = 5,
+            created = addDay(devDone.created),
+            items = arrayOf(
+                HistoryItem(
+                    from = "4",
+                    fromString = "DEV DONE",
+                    to = "5",
+                    toString = "TEST WIP"
+                )
+            )
+        )
+
+        val testDone = History(
+            id = 6,
+            created = addDay(testWip.created),
+            items = arrayOf(
+                HistoryItem(
+                    from = "5",
+                    fromString = "TEST WIP",
+                    to = "6",
+                    toString = "TEST DONE"
+                )
+            )
+        )
+
+        val review = History(
+            id = 7,
+            created = addDay(testDone.created),
+            items = arrayOf(
+                HistoryItem(
+                    from = "6",
+                    fromString = "TEST DONE",
+                    to = "7",
+                    toString = "REVIEW"
+                )
+            )
+        )
+
+        val accompaniment = History(
+            id = 8,
+            created = addDay(review.created),
+            items = arrayOf(
+                HistoryItem(
+                    from = "7",
+                    fromString = "REVIEW",
+                    to = "8",
+                    toString = "ACCOMPANIMENT"
+                )
+            )
+        )
+
+        val done = History(
+            id = 9,
+            created = addDay(accompaniment.created),
+            items = arrayOf(
+                HistoryItem(
+                    from = "8",
+                    fromString = "ACCOMPANIMENT",
+                    to = "99",
+                    toString = "DONE"
+                )
+            )
+        )
+
+        it.histories.addAll(arrayOf(backlog, analysis, devWip, devDone, testWip, testDone, review, accompaniment, done))
+    }
+
+    println(generate(*issues))
+}
 
 fun basicIssues() {
     val task = IssueType(1, "Task")
@@ -292,7 +636,7 @@ fun basicIssues() {
 
                 dueDate = "2019-01-19",
 
-                histories = arrayOf(
+                histories = mutableListOf(
                     History(
                         id = 1,
                         created = "2018-12-25T11:49:35.000-0300",
@@ -366,7 +710,7 @@ fun basicIssues() {
 
                 dueDate = "2019-01-31",
 
-                histories = arrayOf(
+                histories = mutableListOf(
                     History(
                         id = 1,
                         created = "2019-01-05T14:00:35.000-0300",

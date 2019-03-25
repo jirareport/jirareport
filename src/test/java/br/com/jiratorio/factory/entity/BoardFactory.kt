@@ -65,7 +65,7 @@ class BoardFactory(
     @JBaconTemplate
     protected fun withCompleteConfiguration() =
         default.apply {
-            startColumn = "TODO"
+            startColumn = "ANALYSIS"
             endColumn = "DONE"
             fluxColumn = asList(
                 "BACKLOG", "ANALYSIS", "DEV WIP", "DEV DONE", "TEST WIP", "TEST DONE", "REVIEW", "ACCOMPANIMENT", "DONE"
@@ -77,6 +77,7 @@ class BoardFactory(
             projectCF = "customfield_4000"
             ignoreWeekend = false
             impedimentType = ImpedimentType.FLAG
+            impedimentColumns = mutableListOf()
             touchingColumns = asList(
                 "ANALYSIS", "DEV WIP", "TEST WIP", "REVIEW", "ACCOMPANIMENT"
             )
