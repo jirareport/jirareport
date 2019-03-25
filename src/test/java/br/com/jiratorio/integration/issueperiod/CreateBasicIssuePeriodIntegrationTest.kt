@@ -119,7 +119,7 @@ internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
         IssueAssert(issue).assertThat {
             hasKey("JIRAT-1")
             hasIssueType("Task")
-            hasCreator("PO User")
+            hasCreator("Leonardo Ferreira")
             hasSystem(null)
             hasEpic(null)
             hasSummary("Calcular diferença de data de entrega com o primeiro due date")
