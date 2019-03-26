@@ -3,7 +3,7 @@ package br.com.jiratorio.domain.entity.embedded
 import java.io.Serializable
 import java.util.LinkedHashMap
 
-class Chart<L, V>(
+data class Chart<L, V>(
     val data: MutableMap<L, V> = LinkedHashMap()
 ) : Serializable {
     companion object {

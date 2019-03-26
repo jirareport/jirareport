@@ -1,5 +1,6 @@
 package br.com.jiratorio.assert
 
+import br.com.jiratorio.domain.DynamicChart
 import br.com.jiratorio.domain.entity.IssuePeriod
 import java.time.LocalDate
 
@@ -91,6 +92,10 @@ class IssuePeriodAssert(actual: IssuePeriod) :
 
     fun hasEmptyDynamicCharts() = assertAll {
         iterables.assertEmpty(field("issuePeriod.dynamicCharts"), actual.dynamicCharts)
+    }
+
+    fun hasDynamicCharts(dynamicCharts: List<DynamicChart>? = null) = assertAll {
+        objects.assertEqual(field("issuePeriod.dynamicCharts"), actual.dynamicCharts, dynamicCharts)
     }
 
     fun hasEmptyLeadTimeCompareChart() = assertAll {

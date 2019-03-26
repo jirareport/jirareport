@@ -88,4 +88,19 @@ class BoardFactory(
             dueDateType = DueDateType.FIRST_DUE_DATE_AND_END_DATE
         }
 
+    @JBaconTemplate
+    protected fun withDynamicFields() =
+            withCompleteConfiguration().apply {
+                dynamicFields = mutableListOf(
+                    DynamicFieldConfig(
+                        name = "Team",
+                        field = "customfield_5000"
+                    ),
+                    DynamicFieldConfig(
+                        name = "Level Of Dependency",
+                        field = "customfield_6000"
+                    )
+                )
+            }
+
 }

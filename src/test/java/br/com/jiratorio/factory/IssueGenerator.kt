@@ -2,7 +2,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
-fun generate(vararg issueData: IssueData): String {
+fun generate(issueData: Array<IssueData>): String {
     val issues = issueData.map {
         with(it) {
             """
@@ -267,21 +267,16 @@ data class IssueData(
     val created: String,
     val issueType: IssueType,
     val priority: Priority,
-    val dueDate: String,
     val customFields: MutableList<CustomField> = mutableListOf(),
     val histories: MutableList<History> = mutableListOf()
 ) {
+    var dueDate: String = "2019-01-01"
+
     val issueKey: String
         get() = "JIRAT-$issueId"
 }
 
-/*
-fun main() {
-    completeIssue()
-}
-*/
-
-fun completeIssue() {
+fun main2() {
     val task = IssueType(1, "Task")
     val attendance = IssueType(1, "Attendance")
     val subTask = IssueType(2, "SubTask")
@@ -303,6 +298,16 @@ fun completeIssue() {
     val projectMetric = CustomField(4000, "Metric")
     val projectEstimate = CustomField(4000, "Estimate")
 
+    val dynamicFieldTeamA = CustomField(5000, "Team A")
+    val dynamicFieldTeamB = CustomField(5000, "Team B")
+    val dynamicFieldTeamC = CustomField(5000, "Team C")
+
+    val dynamicFieldLevelOfDependency1 = CustomField(6000, "1")
+    val dynamicFieldLevelOfDependency2 = CustomField(6000, "2")
+    val dynamicFieldLevelOfDependency3 = CustomField(6000, "3")
+    val dynamicFieldLevelOfDependency4 = CustomField(6000, "3")
+    val dynamicFieldLevelOfDependency5 = CustomField(6000, "3")
+
     val issues = arrayOf(
         IssueData(
             issueId = 1,
@@ -313,13 +318,13 @@ fun completeIssue() {
             issueType = task,
             priority = major,
 
-            dueDate = "2019-01-19",
-
             customFields = mutableListOf(
                 epicPeriod,
                 estimateP,
                 systemJiraReport,
-                projectMetric
+                projectMetric,
+                dynamicFieldTeamA,
+                dynamicFieldLevelOfDependency1
             )
         ),
         IssueData(
@@ -331,13 +336,13 @@ fun completeIssue() {
             issueType = task,
             priority = major,
 
-            dueDate = "2019-01-19",
-
             customFields = mutableListOf(
                 epicPeriod,
                 estimateP,
                 systemJiraReport,
-                projectMetric
+                projectMetric,
+                dynamicFieldTeamA,
+                dynamicFieldLevelOfDependency2
             )
         ),
         IssueData(
@@ -349,13 +354,13 @@ fun completeIssue() {
             issueType = task,
             priority = major,
 
-            dueDate = "2019-01-19",
-
             customFields = mutableListOf(
                 epicPeriod,
                 estimateP,
                 systemJiraReport,
-                projectMetric
+                projectMetric,
+                dynamicFieldTeamA,
+                dynamicFieldLevelOfDependency3
             )
         ),
         IssueData(
@@ -367,13 +372,13 @@ fun completeIssue() {
             issueType = task,
             priority = expedite,
 
-            dueDate = "2019-01-19",
-
             customFields = mutableListOf(
                 epicPeriod,
                 estimateM,
                 systemJiraReport,
-                projectMetric
+                projectMetric,
+                dynamicFieldTeamA,
+                dynamicFieldLevelOfDependency4
             )
         ),
         IssueData(
@@ -385,13 +390,13 @@ fun completeIssue() {
             issueType = task,
             priority = expedite,
 
-            dueDate = "2019-01-19",
-
             customFields = mutableListOf(
                 epicSandBox,
                 estimateM,
                 systemJiraReport,
-                projectMetric
+                projectMetric,
+                dynamicFieldTeamB,
+                dynamicFieldLevelOfDependency5
             )
         ),
         IssueData(
@@ -403,13 +408,13 @@ fun completeIssue() {
             issueType = attendance,
             priority = expedite,
 
-            dueDate = "2019-01-19",
-
             customFields = mutableListOf(
                 epicSandBox,
                 estimateM,
                 systemJiraWeb,
-                projectMetric
+                projectMetric,
+                dynamicFieldTeamB,
+                dynamicFieldLevelOfDependency1
             )
         ),
         IssueData(
@@ -421,13 +426,13 @@ fun completeIssue() {
             issueType = attendance,
             priority = medium,
 
-            dueDate = "2019-01-19",
-
             customFields = mutableListOf(
                 epicSandBox,
                 estimateG,
                 systemJiraWeb,
-                projectMetric
+                projectMetric,
+                dynamicFieldTeamB,
+                dynamicFieldLevelOfDependency2
             )
         ),
         IssueData(
@@ -439,13 +444,13 @@ fun completeIssue() {
             issueType = attendance,
             priority = medium,
 
-            dueDate = "2019-01-19",
-
             customFields = mutableListOf(
                 epicSandBox,
                 estimateG,
                 systemJiraWeb,
-                projectEstimate
+                projectEstimate,
+                dynamicFieldTeamC,
+                dynamicFieldLevelOfDependency3
             )
         ),
         IssueData(
@@ -457,13 +462,13 @@ fun completeIssue() {
             issueType = subTask,
             priority = medium,
 
-            dueDate = "2019-01-19",
-
             customFields = mutableListOf(
                 epicPeriod,
                 estimateP,
                 systemJiraWeb,
-                projectEstimate
+                projectEstimate,
+                dynamicFieldTeamC,
+                dynamicFieldLevelOfDependency4
             )
         ),
         IssueData(
@@ -475,24 +480,30 @@ fun completeIssue() {
             issueType = subTask,
             priority = medium,
 
-            dueDate = "2019-01-19",
-
             customFields = mutableListOf(
                 epicSandBox,
                 estimateM,
                 systemJiraWeb,
-                projectEstimate
+                projectEstimate,
+                dynamicFieldTeamC,
+                dynamicFieldLevelOfDependency5
             )
         )
     )
 
     val random = Random(System.currentTimeMillis())
-
     val addDay: (str: String) -> String = {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         LocalDate.parse(it.substring(0, 10), formatter)
             .plusDays(random.nextLong(5) + 1)
             .format(formatter) + "T12:00:00.000-0300"
+    }
+
+    val addDayStartZero: (str: String) -> String = {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        LocalDate.parse(it.substring(0, 10), formatter)
+            .plusDays(random.nextLong(5))
+            .format(formatter)
     }
 
     issues.forEach {
@@ -613,166 +624,52 @@ fun completeIssue() {
             )
         )
 
-        it.histories.addAll(arrayOf(backlog, analysis, devWip, devDone, testWip, testDone, review, accompaniment, done))
-    }
+        it.dueDate = addDayStartZero(it.created)
 
-    println(generate(*issues))
-}
+        val dueDates = mutableListOf<History>()
+        for (i in 1..random.nextInt(1, 3)) {
+            val from: String? = if (dueDates.isEmpty()) {
+                null
+            } else {
+                dueDates.last().items.first().to
+            }
 
-fun basicIssues() {
-    val task = IssueType(1, "Task")
-    val major = Priority(1, "Major")
+            if (false) {
+                println(i)
+            }
 
-    println(
-        generate(
-            IssueData(
-                issueId = 1,
-                issueDescription = "Calcular diferença de data de entrega com o primeiro due date",
+            val to: String = if (dueDates.isEmpty()) {
+                it.dueDate.substring(0, 10)
+            } else {
+                addDayStartZero(from!!)
+            }
 
-                created = "2018-12-25T11:49:35.000-0300",
+            val created: String = if (dueDates.isEmpty()) {
+                addDay(it.created)
+            } else {
+                addDay(dueDates.last().created)
+            }
 
-                issueType = task,
-                priority = major,
-
-                dueDate = "2019-01-19",
-
-                histories = mutableListOf(
-                    History(
-                        id = 1,
-                        created = "2018-12-25T11:49:35.000-0300",
-                        items = arrayOf(
-                            HistoryItem(
-                                from = null,
-                                fromString = null,
-                                to = "1",
-                                toString = "BACKLOG"
-                            )
-                        )
-                    ),
-                    History(
-                        id = 2,
-                        created = "2019-01-01T10:15:00.000-0300",
-                        items = arrayOf(
-                            HistoryItem(
-                                from = "2",
-                                fromString = "BACKLOG",
-                                to = "2",
-                                toString = "TODO"
-                            )
-                        )
-                    ),
-                    History(
-                        id = 3,
-                        created = "2019-01-01T16:30:00.000-0300",
-                        items = arrayOf(
-                            HistoryItem(
-                                from = "2",
-                                fromString = "TODO",
-                                to = "3",
-                                toString = "WIP"
-                            )
-                        )
-                    ),
-                    History(
-                        id = 4,
-                        created = "2019-01-10T13:45:00.000-0300",
-                        items = arrayOf(
-                            HistoryItem(
-                                from = "3",
-                                fromString = "WIP",
-                                to = "4",
-                                toString = "ACCOMPANIMENT"
-                            )
-                        )
-                    ),
-                    History(
-                        id = 5,
-                        created = "2019-01-15T11:20:00.000-0300",
-                        items = arrayOf(
-                            HistoryItem(
-                                from = "4",
-                                fromString = "ACCOMPANIMENT",
-                                to = "99",
-                                toString = "DONE"
-                            )
-                        )
-                    )
-                )
-            ),
-            IssueData(
-                issueId = 2,
-                issueDescription = "Filtro por campo dinâmico",
-
-                created = "2019-01-05T14:00:35.000-0300",
-
-                issueType = task,
-                priority = major,
-
-                dueDate = "2019-01-31",
-
-                histories = mutableListOf(
-                    History(
-                        id = 1,
-                        created = "2019-01-05T14:00:35.000-0300",
-                        items = arrayOf(
-                            HistoryItem(
-                                from = null,
-                                fromString = null,
-                                to = "1",
-                                toString = "BACKLOG"
-                            )
-                        )
-                    ),
-                    History(
-                        id = 2,
-                        created = "2019-01-08T16:15:00.000-0300",
-                        items = arrayOf(
-                            HistoryItem(
-                                from = "2",
-                                fromString = "BACKLOG",
-                                to = "2",
-                                toString = "TODO"
-                            )
-                        )
-                    ),
-                    History(
-                        id = 3,
-                        created = "2019-01-10T15:03:00.000-0300",
-                        items = arrayOf(
-                            HistoryItem(
-                                from = "2",
-                                fromString = "TODO",
-                                to = "3",
-                                toString = "WIP"
-                            )
-                        )
-                    ),
-                    History(
-                        id = 4,
-                        created = "2019-01-26T17:45:00.000-0300",
-                        items = arrayOf(
-                            HistoryItem(
-                                from = "3",
-                                fromString = "WIP",
-                                to = "4",
-                                toString = "ACCOMPANIMENT"
-                            )
-                        )
-                    ),
-                    History(
-                        id = 5,
-                        created = "2019-01-31T10:12:00.000-0300",
-                        items = arrayOf(
-                            HistoryItem(
-                                from = "4",
-                                fromString = "ACCOMPANIMENT",
-                                to = "99",
-                                toString = "DONE"
-                            )
+            dueDates.add(
+                History(
+                    id = 10,
+                    created = created,
+                    items = arrayOf(
+                        HistoryItem(
+                            field = "duedate",
+                            from = from,
+                            fromString = from,
+                            to = to,
+                            toString = to
                         )
                     )
                 )
             )
-        )
-    )
+        }
+
+        it.histories.addAll(arrayOf(backlog, analysis, devWip, devDone, testWip, testDone, review, accompaniment, done))
+        it.histories.addAll(dueDates)
+    }
+
+    println(generate(issues))
 }
