@@ -6,6 +6,7 @@ import br.com.jiratorio.domain.FluxColumn;
 import br.com.jiratorio.domain.changelog.JiraChangelog;
 import br.com.jiratorio.domain.changelog.JiraChangelogHistory;
 import br.com.jiratorio.domain.changelog.JiraChangelogItem;
+import br.com.jiratorio.domain.duedate.DueDateType;
 import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.entity.Issue;
 import br.com.jiratorio.domain.entity.embedded.Changelog;
@@ -19,22 +20,18 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Component
@@ -128,10 +125,12 @@ public class IssueMapper {
         Long deviationOfEstimate = null;
         List<DueDateHistory> dueDateHistory = null;
 
-        if (!StringUtils.isEmpty(board.getDueDateCF())) {
+        DueDateType dueDateType = board.getDueDateType();
+        if (!StringUtils.isEmpty(board.getDueDateCF()) && dueDateType != null) {
             dueDateHistory = dueDateService.extractDueDateHistory(board.getDueDateCF(), changelogItems);
-            deviationOfEstimate = dueDateService.calcDeviationOfEstimate(dueDateHistory, endDate,
-                    board.getDueDateType(), board.getIgnoreWeekend(), holidays);
+            if (!dueDateHistory.isEmpty()) {
+                deviationOfEstimate = dueDateType.calcDeviationOfEstimate(dueDateHistory, endDate, board.getIgnoreWeekend(), holidays);
+            }
         }
 
         Long timeInImpediment = board.getImpedimentType() == null ? 0L : board.getImpedimentType()

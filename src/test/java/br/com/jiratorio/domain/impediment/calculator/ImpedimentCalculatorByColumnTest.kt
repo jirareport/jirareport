@@ -3,6 +3,7 @@ package br.com.jiratorio.domain.impediment.calculator
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.time.LocalDateTime
 import java.util.Arrays.asList
 
 internal class ImpedimentCalculatorByColumnTest {
@@ -20,7 +21,14 @@ internal class ImpedimentCalculatorByColumnTest {
         )
         val columns = asList("IMP_COLUMN_ONE", "IMP_COLUMN_TWO", "IMP_COLUMN_THREE")
 
-        val timeInImpediment = ImpedimentCalculatorByColumn.timeInImpediment(changelog, columns)
+        val timeInImpediment = ImpedimentCalculatorByColumn.timeInImpediment(
+            columns,
+            emptyList(),
+            changelog,
+            LocalDateTime.now(),
+            null,
+            true
+        )
 
         assertThat(timeInImpediment).isEqualTo(12)
     }

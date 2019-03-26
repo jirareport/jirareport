@@ -29,8 +29,14 @@ internal class ImpedimentCalculatorByFlagTest {
             JiraChangelogItem(field = "flagged", created = "19/01/2019 12:00".toLocalDateTime())
         )
 
-        val timeInImpediment =
-            ImpedimentCalculatorByFlag.timeInImpediment(changelogItems, LocalDateTime.now(), emptyList(), true)
+        val timeInImpediment = ImpedimentCalculatorByFlag.timeInImpediment(
+            null,
+            changelogItems,
+            emptyList(),
+            LocalDateTime.now(),
+            null,
+            true
+        )
         assertThat(timeInImpediment).isEqualTo(15)
     }
 
@@ -55,11 +61,14 @@ internal class ImpedimentCalculatorByFlagTest {
         )
 
         val timeInImpediment = ImpedimentCalculatorByFlag.timeInImpediment(
+            null,
             changelogItems,
+            emptyList(),
             "19/01/2019 12:00".toLocalDateTime(),
             emptyList(),
             true
         )
+
         assertThat(timeInImpediment).isEqualTo(10)
     }
 
