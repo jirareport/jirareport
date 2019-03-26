@@ -13,7 +13,7 @@ import br.com.jiratorio.domain.entity.embedded.Histogram;
 import br.com.jiratorio.domain.chart.ChartAggregator;
 import br.com.jiratorio.domain.dynamicfield.DynamicChart;
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig;
-import br.com.jiratorio.domain.IssueCountBySize;
+import br.com.jiratorio.domain.chart.IssueCountBySize;
 import br.com.jiratorio.domain.chart.LeadTimeCompareChart;
 import br.com.jiratorio.domain.Percentile;
 import br.com.jiratorio.service.ChartService;
@@ -317,10 +317,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
             });
         }
 
-        return IssueCountBySize.builder()
-                .labels(periodsSize.keySet())
-                .datasources(datasources)
-                .build();
+        return new IssueCountBySize(periodsSize.keySet(), datasources);
     }
 
     @Async

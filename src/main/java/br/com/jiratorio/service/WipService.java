@@ -8,7 +8,6 @@ import java.util.Set;
 
 public interface WipService {
 
-    Double calcAvgWip(LocalDate start, LocalDate end,
-                    List<Issue> issues, Set<String> wipColumns);
+    Double calcAvgWip(LocalDate start, LocalDate end, List<Issue> issues, Set<String> wipColumns);
 
 }

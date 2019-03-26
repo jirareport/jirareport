@@ -154,30 +154,29 @@ public class IssueMapper {
             pctEfficiency = calcPctEfficiency(waitTime, touchTime);
         }
 
-        return Issue.builder()
-                .creator(author)
-                .key(getAsStringSafe(issue.get("key")))
-                .issueType(getAsStringSafe(fields.getAsJsonObject("issuetype").get("name")))
-                .created(created)
-                .startDate(startDate)
-                .endDate(endDate)
-                .leadTime(leadTime)
-                .system(parseElement(fields, board.getSystemCF()))
-                .epic(parseElement(fields, board.getEpicCF()))
-                .estimated(parseElement(fields, board.getEstimateCF()))
-                .project(parseElement(fields, board.getProjectCF()))
-                .summary(fields.get("summary").getAsString())
-                .changelog(changelog)
-                .board(board)
-                .deviationOfEstimate(deviationOfEstimate)
-                .dueDateHistory(dueDateHistory)
-                .impedimentTime(timeInImpediment)
-                .priority(priority)
-                .dynamicFields(dynamicFields)
-                .waitTime(waitTime)
-                .touchTime(touchTime)
-                .pctEfficiency(pctEfficiency)
-                .build();
+        return new Issue(
+                author,
+                getAsStringSafe(issue.get("key")),
+                getAsStringSafe(fields.getAsJsonObject("issuetype").get("name")),
+                created,
+                startDate,
+                endDate,
+                leadTime,
+                parseElement(fields, board.getSystemCF()),
+                parseElement(fields, board.getEpicCF()),
+                parseElement(fields, board.getEstimateCF()),
+                parseElement(fields, board.getProjectCF()),
+                fields.get("summary").getAsString(),
+                changelog,
+                board,
+                deviationOfEstimate,
+                dueDateHistory,
+                timeInImpediment,
+                priority,
+                dynamicFields,
+                waitTime,
+                touchTime,
+                pctEfficiency)
     }
 
     @SneakyThrows

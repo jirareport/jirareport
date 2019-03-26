@@ -11,20 +11,20 @@ data class CreateIssuePeriodRequest(
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @field:NotNull(message = "Data de inicio é obrigatória")
-    var startDate: LocalDate? = null,
+    var startDate: LocalDate,
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @field:NotNull(message = "Data de fim é obrigatória")
-    var endDate: LocalDate? = null
+    var endDate: LocalDate
 
 ) {
 
     @AssertFalse(message = "O período não pode ser maior que 31 dias. Para maiores períodos utilize o SandBox")
     fun isValidRange() =
-        endDate != null && ChronoUnit.DAYS.between(startDate, endDate) > 31
+        ChronoUnit.DAYS.between(startDate, endDate) > 31
 
     @AssertTrue(message = "A data de inicio deve ser anterior a data fim.")
     fun isStartDateIsBeforeEndDate() =
-        startDate?.isBefore(endDate) == true || startDate?.isEqual(endDate) == true
+        startDate.isBefore(endDate) || startDate.isEqual(endDate)
 
 }
