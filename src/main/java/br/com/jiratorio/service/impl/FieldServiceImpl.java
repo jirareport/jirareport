@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-public class FieldServiceImpl extends AbstractService implements FieldService {
+public class FieldServiceImpl implements FieldService {
 
     private final FieldClient fieldClient;
 
@@ -24,7 +24,7 @@ public class FieldServiceImpl extends AbstractService implements FieldService {
     @Transactional(readOnly = true)
     public List<JiraField> findAllJiraFields() {
         log.info("Method=findAllJiraFields");
-        return fieldClient.findAll(currentToken());
+        return fieldClient.findAll();
     }
 
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class ProjectServiceImpl extends AbstractService implements ProjectService {
+public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectClient projectClient;
 
@@ -21,19 +21,19 @@ public class ProjectServiceImpl extends AbstractService implements ProjectServic
     @Override
     public List<JiraProject> findAllJiraProject() {
         log.info("Method=findAllJiraProject");
-        return projectClient.findAll(currentToken());
+        return projectClient.findAll();
     }
 
     @Override
     public List<BoardStatusList> findStatusFromProject(final Long projectId) {
         log.info("Method=findStatusFromProject, projectId={}", projectId);
-        return projectClient.findStatusFromProject(currentToken(), projectId);
+        return projectClient.findStatusFromProject(projectId);
     }
 
     @Override
     public JiraProject findById(final Long projectId) {
         log.info("Method=findById, projectId={}", projectId);
-        return projectClient.findById(currentToken(), projectId);
+        return projectClient.findById(projectId);
     }
 
 }

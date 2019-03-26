@@ -11,6 +11,11 @@
       "jql": {
         "matches": "(.*)"
       }
+    },
+    "headers" : {
+      "Authorization" : {
+        "equalTo" : "secret-token"
+      }
     }
   },
   "response": {

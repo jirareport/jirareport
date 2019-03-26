@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-public class IssueServiceImpl extends AbstractService implements IssueService {
+public class IssueServiceImpl implements IssueService {
 
     private final IssueClient issueClient;
 
@@ -69,7 +69,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     public List<Issue> createByJql(final String jql, final Board board) {
         log.info("Method=createByJql, jql={}, board={}", jql, board);
 
-        String issuesStr = issueClient.findAll(currentToken(), jql);
+        String issuesStr = issueClient.findByJql(jql);
 
         List<Issue> issues = issueMapper.parse(issuesStr, board);
 
@@ -82,7 +82,7 @@ public class IssueServiceImpl extends AbstractService implements IssueService {
     @Override
     public List<EstimateIssue> findEstimateByJql(final String jql, final Board board) {
         log.info("Method=findEstimateByJql, jql={}, board={}", jql, board);
-        String issuesStr = issueClient.findAll(currentToken(), jql);
+        String issuesStr = issueClient.findByJql(jql);
 
         return estimateIssueMapper.parseEstimate(issuesStr, board);
     }
