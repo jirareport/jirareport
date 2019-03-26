@@ -21,6 +21,10 @@ object FirstDueDateAndEndDateCalculator : DueDateCalculator {
             dueDateHistories, endDate, ignoreWeekend, holidays
         )
 
+        if (dueDateHistories.isEmpty()) {
+            return 0
+        }
+
         val first = dueDateHistories.first()
         return DateUtil.daysDiff(first.dueDate, endDate.toLocalDate(), holidays, ignoreWeekend)
     }

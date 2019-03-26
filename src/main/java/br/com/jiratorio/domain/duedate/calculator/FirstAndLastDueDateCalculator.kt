@@ -21,6 +21,10 @@ object FirstAndLastDueDateCalculator : DueDateCalculator {
             dueDateHistories, ignoreWeekend, holidays
         )
 
+        if (dueDateHistories.isEmpty()) {
+            return 0
+        }
+
         val first = dueDateHistories.first()
         val last = dueDateHistories.last()
 

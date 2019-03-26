@@ -27,9 +27,11 @@ data class IssuePeriod(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    var startDate: LocalDate? = null,
+    @Column(nullable = false)
+    var startDate: LocalDate,
 
-    var endDate: LocalDate? = null,
+    @Column(nullable = false)
+    var endDate: LocalDate,
 
     var boardId: Long? = null,
 
@@ -96,7 +98,8 @@ data class IssuePeriod(
     @Column(columnDefinition = "jsonb")
     var leadTimeCompareChart: Chart<String, Double>? = null,
 
-    var issuesCount: Int? = null,
+    @Column(nullable = false)
+    var issuesCount: Int,
 
     var jql: String? = null,
 
@@ -115,7 +118,7 @@ data class IssuePeriod(
     val dates: String
         get() {
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-            return String.format("[%s - %s]", this.startDate!!.format(formatter), this.endDate!!.format(formatter))
+            return String.format("[%s - %s]", this.startDate.format(formatter), this.endDate.format(formatter))
         }
 
     override fun toString() =

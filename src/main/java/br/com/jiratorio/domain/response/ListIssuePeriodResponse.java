@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.response;
 
-import br.com.jiratorio.domain.IssuePeriodChart;
+import br.com.jiratorio.domain.chart.IssuePeriodChartResponse;
 import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.entity.IssuePeriod;
 import java.util.List;
@@ -13,7 +13,7 @@ public class ListIssuePeriodResponse {
 
     private List<IssuePeriod> issuePeriods;
 
-    private IssuePeriodChart issuePeriodChart;
+    private IssuePeriodChartResponse issuePeriodChart;
 
     private Board board;
 

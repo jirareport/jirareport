@@ -8,7 +8,7 @@ import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg;
 import br.com.jiratorio.domain.entity.embedded.Histogram;
 import br.com.jiratorio.domain.chart.ChartAggregator;
 import br.com.jiratorio.domain.dynamicfield.DynamicChart;
-import br.com.jiratorio.domain.IssueCountBySize;
+import br.com.jiratorio.domain.chart.IssueCountBySize;
 import br.com.jiratorio.domain.chart.LeadTimeCompareChart;
 
 import java.util.List;

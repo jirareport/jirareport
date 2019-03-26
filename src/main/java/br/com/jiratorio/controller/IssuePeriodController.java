@@ -44,11 +44,11 @@ public class IssuePeriodController {
 
     @GetMapping
     public ListIssuePeriodResponse index(@PathVariable final Long boardId) {
-        IssuePeriodResponse issuePeriodResponse = issuePeriodService.findIssuePeriodsAndCharts(boardId);
+        IssuePeriodResponse issuePeriodResponse = issuePeriodService.findIssuePeriodByBoard(boardId);
 
         return ListIssuePeriodResponse.builder()
                 .issuePeriods(issuePeriodResponse.getIssuePeriods())
-                .issuePeriodChart(issuePeriodResponse.getIssuePeriodChart())
+                .issuePeriodChart(issuePeriodResponse.getIssuePeriodChartResponse())
                 .board(boardService.findById(boardId))
                 .build();
     }
