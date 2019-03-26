@@ -4,13 +4,13 @@ import br.com.jiratorio.domain.FluxColumn;
 import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.entity.Issue;
 import br.com.jiratorio.domain.entity.IssuePeriod;
-import br.com.jiratorio.domain.form.IssuePeriodForm;
-import br.com.jiratorio.domain.ChartAggregator;
+import br.com.jiratorio.domain.request.CreateIssuePeriodRequest;
+import br.com.jiratorio.domain.chart.ChartAggregator;
 import br.com.jiratorio.domain.IssueCountBySize;
 import br.com.jiratorio.domain.IssuePeriodChart;
 import br.com.jiratorio.domain.IssuePeriodDetails;
-import br.com.jiratorio.domain.IssuePeriodList;
-import br.com.jiratorio.domain.LeadTimeCompareChart;
+import br.com.jiratorio.domain.response.IssuePeriodResponse;
+import br.com.jiratorio.domain.chart.LeadTimeCompareChart;
 import br.com.jiratorio.exception.ResourceNotFound;
 import br.com.jiratorio.mapper.IssuePeriodMapper;
 import br.com.jiratorio.repository.IssuePeriodRepository;
@@ -63,14 +63,14 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
 
     @Override
     @Transactional
-    public Long create(final IssuePeriodForm issuePeriodForm, final Long boardId) {
-        log.info("Method=create, issuePeriodForm={}, boardId={}", issuePeriodForm, boardId);
+    public Long create(final CreateIssuePeriodRequest createIssuePeriodRequest, final Long boardId) {
+        log.info("Method=create, createIssuePeriodRequest={}, boardId={}", createIssuePeriodRequest, boardId);
 
-        delete(issuePeriodForm, boardId);
+        delete(createIssuePeriodRequest, boardId);
 
         Board board = boardService.findById(boardId);
 
-        String jql = jqlService.finalizedIssues(board, issuePeriodForm.getStartDate(), issuePeriodForm.getEndDate());
+        String jql = jqlService.finalizedIssues(board, createIssuePeriodRequest.getStartDate(), createIssuePeriodRequest.getEndDate());
         List<Issue> issues = issueService.createByJql(jql, board);
 
         Double avgLeadTime = issues.parallelStream()
@@ -86,19 +86,12 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         ChartAggregator chartAggregator = chartService.buildAllCharts(issues, board);
 
         FluxColumn fluxColumn = new FluxColumn(board);
-        Double wipAvg = wipService.calcAvgWip(issuePeriodForm.getStartDate(), issuePeriodForm.getEndDate(),
+        Double wipAvg = wipService.calcAvgWip(createIssuePeriodRequest.getStartDate(), createIssuePeriodRequest.getEndDate(),
                 issues, fluxColumn.getStartColumns());
 
-        IssuePeriodDetails details = IssuePeriodDetails.builder()
-                .boardId(boardId)
-                .jql(jql)
-                .wipAvg(wipAvg)
-                .avgLeadTime(avgLeadTime)
-                .issueCount(issues.size())
-                .avgPctEfficiency(avgPctEfficiency)
-                .build();
+        IssuePeriodDetails details = new IssuePeriodDetails(avgLeadTime, issues.size(), boardId, jql, wipAvg, avgPctEfficiency);
 
-        IssuePeriod issuePeriod = issuePeriodMapper.fromJiraData(issuePeriodForm, issues,
+        IssuePeriod issuePeriod = issuePeriodMapper.fromJiraData(createIssuePeriodRequest, issues,
                 chartAggregator, details);
 
         issuePeriodRepository.save(issuePeriod);
@@ -161,29 +154,29 @@ public class IssuePeriodServiceImpl extends AbstractService implements IssuePeri
         log.info("Method=update, issuePeriodId={}", issuePeriodId);
 
         IssuePeriod issuePeriod = findById(issuePeriodId);
-        IssuePeriodForm issuePeriodForm = new IssuePeriodForm(issuePeriod.getStartDate(), issuePeriod.getEndDate());
+        CreateIssuePeriodRequest createIssuePeriodRequest = new CreateIssuePeriodRequest(issuePeriod.getStartDate(), issuePeriod.getEndDate());
 
-        create(issuePeriodForm, issuePeriod.getBoardId());
+        create(createIssuePeriodRequest, issuePeriod.getBoardId());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public IssuePeriodList findIssuePeriodsAndCharts(final Long boardId) {
+    public IssuePeriodResponse findIssuePeriodsAndCharts(final Long boardId) {
         Board board = boardService.findById(boardId);
         List<IssuePeriod> issuePeriods = findByBoardId(boardId);
         IssuePeriodChart issuePeriodChart = buildCharts(issuePeriods, board);
 
-        return IssuePeriodList.builder()
+        return IssuePeriodResponse.builder()
                 .issuePeriods(issuePeriods)
                 .issuePeriodChart(issuePeriodChart)
                 .build();
     }
 
-    private void delete(final IssuePeriodForm issuePeriodForm, final Long boardId) {
-        log.info("Method=delete, issuePeriodForm={}, boardId={}", issuePeriodForm, boardId);
+    private void delete(final CreateIssuePeriodRequest createIssuePeriodRequest, final Long boardId) {
+        log.info("Method=delete, createIssuePeriodRequest={}, boardId={}", createIssuePeriodRequest, boardId);
 
-        IssuePeriod issuePeriod = issuePeriodRepository.findByStartDateAndEndDateAndBoardId(issuePeriodForm.getStartDate(),
-                issuePeriodForm.getEndDate(), boardId);
+        IssuePeriod issuePeriod = issuePeriodRepository.findByStartDateAndEndDateAndBoardId(createIssuePeriodRequest.getStartDate(),
+                createIssuePeriodRequest.getEndDate(), boardId);
 
         if (issuePeriod != null) {
             delete(issuePeriod);

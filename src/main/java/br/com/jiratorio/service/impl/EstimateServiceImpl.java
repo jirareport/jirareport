@@ -1,7 +1,7 @@
 package br.com.jiratorio.service.impl;
 
-import br.com.jiratorio.domain.EstimateFieldReference;
-import br.com.jiratorio.domain.EstimateIssue;
+import br.com.jiratorio.domain.estimate.EstimateFieldReference;
+import br.com.jiratorio.domain.estimate.EstimateIssue;
 import br.com.jiratorio.domain.Percentile;
 import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.form.EstimateForm;

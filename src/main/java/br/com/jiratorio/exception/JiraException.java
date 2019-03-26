@@ -1,6 +1,6 @@
 package br.com.jiratorio.exception;
 
-import br.com.jiratorio.domain.JiraError;
+import br.com.jiratorio.domain.jira.JiraError;
 import lombok.Getter;
 
 public class JiraException extends RuntimeException {

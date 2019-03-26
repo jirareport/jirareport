@@ -1,7 +1,7 @@
 package br.com.jiratorio.factory.entity
 
 import br.com.jiratorio.domain.Account
-import br.com.jiratorio.domain.ChartType
+import br.com.jiratorio.domain.chart.ChartType
 import br.com.jiratorio.domain.entity.UserConfig
 import br.com.jiratorio.repository.UserConfigRepository
 import br.com.leonardoferreira.jbacon.JBacon

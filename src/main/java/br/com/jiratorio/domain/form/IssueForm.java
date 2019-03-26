@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.form;
 
-import br.com.jiratorio.domain.DynamicFieldsValues;
+import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues;
 import lombok.Data;
 
 import java.time.LocalDate;

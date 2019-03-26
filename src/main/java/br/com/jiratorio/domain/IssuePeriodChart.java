@@ -1,5 +1,6 @@
 package br.com.jiratorio.domain;
 
+import br.com.jiratorio.domain.chart.LeadTimeCompareChart;
 import br.com.jiratorio.domain.entity.embedded.Chart;
 import br.com.jiratorio.domain.entity.IssuePeriod;
 import lombok.AllArgsConstructor;

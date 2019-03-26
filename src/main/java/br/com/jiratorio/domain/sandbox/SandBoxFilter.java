@@ -1,5 +1,6 @@
-package br.com.jiratorio.domain;
+package br.com.jiratorio.domain.sandbox;
 
+import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

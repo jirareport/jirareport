@@ -2,7 +2,7 @@ package br.com.jiratorio.service;
 
 import java.util.List;
 
-import br.com.jiratorio.domain.JiraField;
+import br.com.jiratorio.domain.jira.JiraField;
 
 public interface FieldService {
 

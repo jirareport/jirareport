@@ -2,10 +2,10 @@ package br.com.jiratorio.service.impl;
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime;
 import br.com.jiratorio.client.IssueClient;
-import br.com.jiratorio.domain.ChartAggregator;
-import br.com.jiratorio.domain.EstimateIssue;
-import br.com.jiratorio.domain.SandBox;
-import br.com.jiratorio.domain.SandBoxFilter;
+import br.com.jiratorio.domain.chart.ChartAggregator;
+import br.com.jiratorio.domain.estimate.EstimateIssue;
+import br.com.jiratorio.domain.sandbox.SandBox;
+import br.com.jiratorio.domain.sandbox.SandBoxFilter;
 import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.entity.Issue;
 import br.com.jiratorio.domain.entity.embedded.Chart;

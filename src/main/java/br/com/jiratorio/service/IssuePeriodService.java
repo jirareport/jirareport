@@ -4,13 +4,13 @@ import br.com.jiratorio.domain.entity.Board;
 import java.util.List;
 
 import br.com.jiratorio.domain.entity.IssuePeriod;
-import br.com.jiratorio.domain.form.IssuePeriodForm;
+import br.com.jiratorio.domain.request.CreateIssuePeriodRequest;
 import br.com.jiratorio.domain.IssuePeriodChart;
-import br.com.jiratorio.domain.IssuePeriodList;
+import br.com.jiratorio.domain.response.IssuePeriodResponse;
 
 public interface IssuePeriodService {
 
-    Long create(IssuePeriodForm issuePeriodForm, Long boardId);
+    Long create(CreateIssuePeriodRequest createIssuePeriodRequest, Long boardId);
 
     List<IssuePeriod> findByBoardId(Long boardId);
 
@@ -22,6 +22,6 @@ public interface IssuePeriodService {
 
     void update(Long issuePeriodId);
 
-    IssuePeriodList findIssuePeriodsAndCharts(Long boardId);
+    IssuePeriodResponse findIssuePeriodsAndCharts(Long boardId);
 
 }

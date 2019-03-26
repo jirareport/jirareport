@@ -10,11 +10,11 @@ import br.com.jiratorio.domain.entity.embedded.Changelog;
 import br.com.jiratorio.domain.entity.embedded.Chart;
 import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg;
 import br.com.jiratorio.domain.entity.embedded.Histogram;
-import br.com.jiratorio.domain.ChartAggregator;
-import br.com.jiratorio.domain.DynamicChart;
-import br.com.jiratorio.domain.DynamicFieldConfig;
+import br.com.jiratorio.domain.chart.ChartAggregator;
+import br.com.jiratorio.domain.dynamicfield.DynamicChart;
+import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig;
 import br.com.jiratorio.domain.IssueCountBySize;
-import br.com.jiratorio.domain.LeadTimeCompareChart;
+import br.com.jiratorio.domain.chart.LeadTimeCompareChart;
 import br.com.jiratorio.domain.Percentile;
 import br.com.jiratorio.service.ChartService;
 import br.com.jiratorio.service.PercentileService;
@@ -63,12 +63,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         Percentile percentile = percentileService.calculatePercentile(leadTimeList);
         Chart<Long, Long> chart = histogramChart(issues);
 
-        Histogram histogram = Histogram.builder()
-                .chart(chart)
-                .median(percentile.getMedian())
-                .percentile75(percentile.getPercentile75())
-                .percentile90(percentile.getPercentile90())
-                .build();
+        Histogram histogram = new Histogram(chart, percentile.getMedian(), percentile.getPercentile75(), percentile.getPercentile90());
 
         return CompletableFuture.completedFuture(histogram);
     }
@@ -222,22 +217,22 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         CompletableFuture<Chart<String, Long>> throughputByPriority = chartService.throughputByPriority(issues);
         CompletableFuture<List<DynamicChart>> dynamicCharts = chartService.buildDynamicCharts(board, issues);
 
-        return ChartAggregator.builder()
-                .histogram(histogram.get())
-                .estimated(estimated.get())
-                .leadTimeBySystem(leadTimeBySystem.get())
-                .tasksBySystem(tasksBySystem.get())
-                .leadTimeBySize(leadTimeBySize.get())
-                .columnTimeAvg(columnTimeAvg.get())
-                .leadTimeByType(leadTimeByType.get())
-                .tasksByType(tasksByType.get())
-                .leadTimeByProject(leadTimeByProject.get())
-                .tasksByProject(tasksByProject.get())
-                .leadTimeCompareChart(leadTimeCompareChart.get())
-                .leadTimeByPriority(leadTimeByPriority.get())
-                .throughputByPriority(throughputByPriority.get())
-                .dynamicCharts(dynamicCharts.get())
-                .build();
+        return new ChartAggregator(
+                histogram.get(),
+                estimated.get(),
+                leadTimeBySystem.get(),
+                tasksBySystem.get(),
+                leadTimeBySize.get(),
+                columnTimeAvg.get(),
+                leadTimeByType.get(),
+                tasksByType.get(),
+                leadTimeByProject.get(),
+                tasksByProject.get(),
+                leadTimeCompareChart.get(),
+                leadTimeByPriority.get(),
+                throughputByPriority.get(),
+                dynamicCharts.get()
+        );
     }
 
     @Async

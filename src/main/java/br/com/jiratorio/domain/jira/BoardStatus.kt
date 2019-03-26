@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain
+package br.com.jiratorio.domain.jira
 
 data class BoardStatus(
     val self: String,

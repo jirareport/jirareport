@@ -1,6 +1,6 @@
 package br.com.jiratorio.mapper;
 
-import br.com.jiratorio.domain.EstimateIssue;
+import br.com.jiratorio.domain.estimate.EstimateIssue;
 import br.com.jiratorio.domain.FluxColumn;
 import br.com.jiratorio.domain.changelog.JiraChangelog;
 import br.com.jiratorio.domain.changelog.JiraChangelogHistory;

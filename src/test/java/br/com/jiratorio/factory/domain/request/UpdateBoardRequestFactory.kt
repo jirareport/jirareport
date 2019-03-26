@@ -1,7 +1,7 @@
 package br.com.jiratorio.factory.domain.request
 
 import br.com.jiratorio.domain.duedate.DueDateType
-import br.com.jiratorio.domain.DynamicFieldConfig
+import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig
 import br.com.jiratorio.domain.impediment.ImpedimentType
 import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.extension.faker.jira

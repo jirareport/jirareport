@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.request
 
-import br.com.jiratorio.domain.ChartType
+import br.com.jiratorio.domain.chart.ChartType
 
 data class UpdateUserConfigRequest(
 

@@ -1,6 +1,6 @@
 package br.com.jiratorio.factory.domain.request
 
-import br.com.jiratorio.domain.ChartType
+import br.com.jiratorio.domain.chart.ChartType
 import br.com.jiratorio.domain.request.UpdateUserConfigRequest
 import br.com.leonardoferreira.jbacon.JBacon
 import com.github.javafaker.Faker

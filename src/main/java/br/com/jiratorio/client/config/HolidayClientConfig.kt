@@ -7,7 +7,7 @@ class HolidayClientConfig {
 
     @Bean
     fun requestInterceptor() = RequestInterceptor {
-        it.query("json", "true");
+        it.query("json", "true")
     }
 
 }

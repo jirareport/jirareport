@@ -1,6 +1,6 @@
 package br.com.jiratorio.controller;
 
-import br.com.jiratorio.domain.JiraField;
+import br.com.jiratorio.domain.jira.JiraField;
 import br.com.jiratorio.service.FieldService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;

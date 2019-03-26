@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain.form
+package br.com.jiratorio.domain.request
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDate
@@ -7,7 +7,7 @@ import javax.validation.constraints.AssertFalse
 import javax.validation.constraints.AssertTrue
 import javax.validation.constraints.NotNull
 
-data class IssuePeriodForm(
+data class CreateIssuePeriodRequest(
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @field:NotNull(message = "Data de inicio é obrigatória")

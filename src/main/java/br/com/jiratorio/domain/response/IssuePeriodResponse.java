@@ -1,5 +1,6 @@
-package br.com.jiratorio.domain;
+package br.com.jiratorio.domain.response;
 
+import br.com.jiratorio.domain.IssuePeriodChart;
 import java.util.List;
 
 import br.com.jiratorio.domain.entity.IssuePeriod;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class IssuePeriodList {
+public class IssuePeriodResponse {
 
     private List<IssuePeriod> issuePeriods;
 

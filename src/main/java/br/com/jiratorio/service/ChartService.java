@@ -6,10 +6,10 @@ import br.com.jiratorio.domain.entity.IssuePeriod;
 import br.com.jiratorio.domain.entity.embedded.Chart;
 import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg;
 import br.com.jiratorio.domain.entity.embedded.Histogram;
-import br.com.jiratorio.domain.ChartAggregator;
-import br.com.jiratorio.domain.DynamicChart;
+import br.com.jiratorio.domain.chart.ChartAggregator;
+import br.com.jiratorio.domain.dynamicfield.DynamicChart;
 import br.com.jiratorio.domain.IssueCountBySize;
-import br.com.jiratorio.domain.LeadTimeCompareChart;
+import br.com.jiratorio.domain.chart.LeadTimeCompareChart;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

@@ -1,7 +1,7 @@
 package br.com.jiratorio.repository.impl;
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime;
-import br.com.jiratorio.domain.DynamicFieldsValues;
+import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues;
 import br.com.jiratorio.domain.entity.Issue;
 import br.com.jiratorio.domain.form.IssueForm;
 import br.com.jiratorio.repository.IssueCustomRepository;

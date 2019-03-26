@@ -1,7 +1,7 @@
 package br.com.jiratorio.service;
 
 import br.com.jiratorio.domain.form.EstimateForm;
-import br.com.jiratorio.domain.EstimateIssue;
+import br.com.jiratorio.domain.estimate.EstimateIssue;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package br.com.jiratorio.assert
 
-import br.com.jiratorio.domain.DynamicChart
+import br.com.jiratorio.domain.dynamicfield.DynamicChart
 import br.com.jiratorio.domain.entity.IssuePeriod
 import java.time.LocalDate
 
@@ -20,52 +20,52 @@ class IssuePeriodAssert(actual: IssuePeriod) :
     }
 
     fun histogram() =
-        HistogramAssert(actual.histogram)
+        HistogramAssert(actual.histogram!!)
 
     fun hasLeadTimeBySize(vararg leadTimeBySize: Pair<String, Double>) = assertAll {
-        objects.assertEqual(field("issuePeriod.leadTimeBySize"), actual.leadTimeBySize.data, mapOf(*leadTimeBySize))
+        objects.assertEqual(field("issuePeriod.leadTimeBySize"), actual.leadTimeBySize?.data, mapOf(*leadTimeBySize))
     }
 
     fun hasEstimated(vararg estimated: Pair<String, Long>) = assertAll {
-        objects.assertEqual(field("issuePeriod.Estimated"), actual.estimated.data, mapOf(*estimated))
+        objects.assertEqual(field("issuePeriod.Estimated"), actual.estimated?.data, mapOf(*estimated))
     }
 
     fun hasLeadTimeBySystem(vararg leadTimeBySystem: Pair<String, Double>) = assertAll {
         objects.assertEqual(
             field("issuePeriod.leadTimeBySystem"),
-            actual.leadTimeBySystem.data,
+            actual.leadTimeBySystem?.data,
             mapOf(*leadTimeBySystem)
         )
     }
 
     fun hasTasksBySystem(vararg tasksBySystem: Pair<String, Long>) = assertAll {
-        objects.assertEqual(field("issuePeriod.tasksBySystem"), actual.tasksBySystem.data, mapOf(*tasksBySystem))
+        objects.assertEqual(field("issuePeriod.tasksBySystem"), actual.tasksBySystem?.data, mapOf(*tasksBySystem))
     }
 
     fun hasLeadTimeByType(vararg leadTimeByType: Pair<String, Double>) = assertAll {
-        objects.assertEqual(field("issuePeriod.leadTimeByType"), actual.leadTimeByType.data, mapOf(*leadTimeByType))
+        objects.assertEqual(field("issuePeriod.leadTimeByType"), actual.leadTimeByType?.data, mapOf(*leadTimeByType))
     }
 
     fun hasTasksByType(vararg tasksByType: Pair<String, Long>) = assertAll {
-        objects.assertEqual(field("issuePeriod.tasksByType"), actual.tasksByType.data, mapOf(*tasksByType))
+        objects.assertEqual(field("issuePeriod.tasksByType"), actual.tasksByType?.data, mapOf(*tasksByType))
     }
 
     fun hasLeadTimeByProject(vararg leadTimeByProject: Pair<String, Double>) = assertAll {
         objects.assertEqual(
             field("issuePeriod.leadTimeByProject"),
-            actual.leadTimeByProject.data,
+            actual.leadTimeByProject?.data,
             mapOf(*leadTimeByProject)
         )
     }
 
     fun hasTasksByProject(vararg tasksByProject: Pair<String, Long>) = assertAll {
-        objects.assertEqual(field("issuePeriod.tasksByProject"), actual.tasksByProject.data, mapOf(*tasksByProject))
+        objects.assertEqual(field("issuePeriod.tasksByProject"), actual.tasksByProject?.data, mapOf(*tasksByProject))
     }
 
     fun hasLeadTimeByPriority(vararg leadTimeByPriority: Pair<String, Double>) = assertAll {
         objects.assertEqual(
             field("issuePeriod.leadTimeByPriority"),
-            actual.leadTimeByPriority.data,
+            actual.leadTimeByPriority?.data,
             mapOf(*leadTimeByPriority)
         )
     }
@@ -73,7 +73,7 @@ class IssuePeriodAssert(actual: IssuePeriod) :
     fun hasThroughputByPriority(vararg throughputByPriority: Pair<String, Long>) = assertAll {
         objects.assertEqual(
             field("issuePeriod.throughputByPriority"),
-            actual.throughputByPriority.data,
+            actual.throughputByPriority?.data,
             mapOf(*throughputByPriority)
         )
     }
@@ -99,13 +99,13 @@ class IssuePeriodAssert(actual: IssuePeriod) :
     }
 
     fun hasEmptyLeadTimeCompareChart() = assertAll {
-        maps.assertEmpty(field("issuePeriod.leadTimeCompareChart"), actual.leadTimeCompareChart.data)
+        maps.assertEmpty(field("issuePeriod.leadTimeCompareChart"), actual.leadTimeCompareChart?.data)
     }
 
     fun hasLeadTimeCompareChart(leadTimeCompareChart: Map<String, Double>) = assertAll {
         objects.assertEqual(
             field("issuePeriod.leadTimeCompareChart"),
-            actual.leadTimeCompareChart.data,
+            actual.leadTimeCompareChart?.data,
             leadTimeCompareChart
         )
     }

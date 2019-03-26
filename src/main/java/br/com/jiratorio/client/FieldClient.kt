@@ -1,10 +1,9 @@
 package br.com.jiratorio.client
 
 import br.com.jiratorio.client.config.JiraClientConfiguration
-import br.com.jiratorio.domain.JiraField
+import br.com.jiratorio.domain.jira.JiraField
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestHeader
 
 @FeignClient(
     name = "field-client",

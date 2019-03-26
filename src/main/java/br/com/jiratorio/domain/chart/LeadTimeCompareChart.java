@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain;
+package br.com.jiratorio.domain.chart;
 
 import java.io.Serializable;
 import java.util.ArrayList;

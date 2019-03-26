@@ -1,6 +1,6 @@
 package br.com.jiratorio.assert
 
-import br.com.jiratorio.domain.ChartType
+import br.com.jiratorio.domain.chart.ChartType
 import br.com.jiratorio.domain.entity.UserConfig
 
 class UserConfigAssert(actual: UserConfig) :

@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain
+package br.com.jiratorio.domain.dynamicfield
 
 import java.io.Serializable
 

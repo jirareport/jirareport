@@ -1,9 +1,9 @@
 package br.com.jiratorio.domain.response;
 
 import br.com.jiratorio.domain.form.IssueForm;
-import br.com.jiratorio.domain.SandBoxFilter;
+import br.com.jiratorio.domain.sandbox.SandBoxFilter;
 import br.com.jiratorio.domain.entity.Board;
-import br.com.jiratorio.domain.SandBox;
+import br.com.jiratorio.domain.sandbox.SandBox;
 import lombok.Builder;
 import lombok.Data;
 

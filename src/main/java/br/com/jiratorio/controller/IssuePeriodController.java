@@ -1,19 +1,19 @@
 package br.com.jiratorio.controller;
 
+import br.com.jiratorio.domain.response.IssuePeriodResponse;
 import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.entity.Issue;
 import br.com.jiratorio.domain.entity.IssuePeriod;
-import br.com.jiratorio.domain.form.IssuePeriodForm;
+import br.com.jiratorio.domain.request.CreateIssuePeriodRequest;
 import br.com.jiratorio.domain.response.IssuePeriodDetailsResponse;
 import br.com.jiratorio.domain.response.ListIssuePeriodResponse;
-import br.com.jiratorio.domain.IssuePeriodList;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.IssuePeriodService;
 import br.com.jiratorio.service.IssueService;
 import java.net.URI;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,11 +44,11 @@ public class IssuePeriodController {
 
     @GetMapping
     public ListIssuePeriodResponse index(@PathVariable final Long boardId) {
-        IssuePeriodList issuePeriodList = issuePeriodService.findIssuePeriodsAndCharts(boardId);
+        IssuePeriodResponse issuePeriodResponse = issuePeriodService.findIssuePeriodsAndCharts(boardId);
 
         return ListIssuePeriodResponse.builder()
-                .issuePeriods(issuePeriodList.getIssuePeriods())
-                .issuePeriodChart(issuePeriodList.getIssuePeriodChart())
+                .issuePeriods(issuePeriodResponse.getIssuePeriods())
+                .issuePeriodChart(issuePeriodResponse.getIssuePeriodChart())
                 .board(boardService.findById(boardId))
                 .build();
     }
@@ -70,8 +70,8 @@ public class IssuePeriodController {
 
     @PostMapping
     public ResponseEntity<?> create(@PathVariable final Long boardId,
-                                    @Validated @RequestBody final IssuePeriodForm issuePeriodForm) {
-        Long id = issuePeriodService.create(issuePeriodForm, boardId);
+                                    @Valid @RequestBody final CreateIssuePeriodRequest createIssuePeriodRequest) {
+        Long id = issuePeriodService.create(createIssuePeriodRequest, boardId);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

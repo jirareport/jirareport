@@ -1,7 +1,7 @@
 package br.com.jiratorio.mapper;
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime;
-import br.com.jiratorio.domain.DynamicFieldConfig;
+import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig;
 import br.com.jiratorio.domain.FluxColumn;
 import br.com.jiratorio.domain.changelog.JiraChangelog;
 import br.com.jiratorio.domain.changelog.JiraChangelogHistory;

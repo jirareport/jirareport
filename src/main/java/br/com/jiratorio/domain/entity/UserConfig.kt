@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.entity
 
-import br.com.jiratorio.domain.ChartType
+import br.com.jiratorio.domain.chart.ChartType
 import br.com.jiratorio.extension.equalsBuilder
 import br.com.jiratorio.extension.toStringBuilder
 import java.util.Objects

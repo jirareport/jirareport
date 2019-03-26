@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.response
 
-import br.com.jiratorio.domain.DynamicFieldConfig
+import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig
 import br.com.jiratorio.domain.impediment.ImpedimentType
 
 data class BoardDetailsResponse(

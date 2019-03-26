@@ -1,7 +1,7 @@
 package br.com.jiratorio.domain.entity
 
 import br.com.jiratorio.domain.duedate.DueDateType
-import br.com.jiratorio.domain.DynamicFieldConfig
+import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig
 import br.com.jiratorio.domain.impediment.ImpedimentType
 import br.com.jiratorio.extension.equalsBuilder
 import br.com.jiratorio.extension.toStringBuilder

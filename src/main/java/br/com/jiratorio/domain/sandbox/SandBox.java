@@ -1,5 +1,6 @@
-package br.com.jiratorio.domain;
+package br.com.jiratorio.domain.sandbox;
 
+import br.com.jiratorio.domain.chart.ChartAggregator;
 import br.com.jiratorio.domain.entity.embedded.Chart;
 import br.com.jiratorio.domain.entity.Issue;
 import java.util.ArrayList;
