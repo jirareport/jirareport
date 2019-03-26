@@ -4,6 +4,8 @@ import br.com.jiratorio.assert.IssueAssert
 import br.com.jiratorio.assert.IssuePeriodAssert
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.annotation.LoadStubs
+import br.com.jiratorio.domain.entity.LeadTime
+import br.com.jiratorio.domain.entity.LeadTimeConfig
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
@@ -12,6 +14,7 @@ import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
 import br.com.jiratorio.factory.entity.BoardFactory
+import br.com.jiratorio.factory.entity.LeadTimeConfigFactory
 import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.repository.IssueRepository
 import io.restassured.http.ContentType
@@ -22,6 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.transaction.support.TransactionTemplate
 import javax.servlet.http.HttpServletResponse
 
 @Tag("integration")
@@ -31,14 +35,32 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
     private val boardFactory: BoardFactory,
     private val authenticator: Authenticator,
     private val issuePeriodRepository: IssuePeriodRepository,
-    private val issueRepository: IssueRepository
+    private val issueRepository: IssueRepository,
+    private val leadTimeConfigFactory: LeadTimeConfigFactory,
+    private val transactionTemplate: TransactionTemplate
 ) {
 
     @Test
     @LoadStubs(["issues/complete-issues"])
     fun `create complete issue period`() {
         val board = authenticator.withDefaultUser {
-            boardFactory.create("withCompleteConfiguration")
+            val board = boardFactory.create("withCompleteConfiguration")
+
+            leadTimeConfigFactory.create {
+                it.name = "Dev Lead Time"
+                it.startColumn = "DEV WIP"
+                it.endColumn = "DEV DONE"
+                it.board = board
+            }
+
+            leadTimeConfigFactory.create {
+                it.name = "Test Lead Time"
+                it.startColumn = "TEST WIP"
+                it.endColumn = "TEST DONE"
+                it.board = board
+            }
+
+            return@withDefaultUser board
         }
 
         val request = object {
@@ -75,9 +97,28 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
                 hasPercentile75(19)
                 hasPercentile90(20)
                 hasChart(
-                    1L to 0L, 2L to 0L, 3L to 0L, 4L to 0L, 5L to 0L, 6L to 0L, 7L to 0L, 8L to 0L, 9L to 0L, 10L to 0L,
-                    11L to 1L, 12L to 1L, 13L to 0L, 14L to 2L, 15L to 2L, 16L to 0L, 17L to 1L, 18L to 0L, 19L to 1L,
-                    20L to 1L, 21L to 0L, 22L to 1L
+                    1L to 0L,
+                    2L to 0L,
+                    3L to 0L,
+                    4L to 0L,
+                    5L to 0L,
+                    6L to 0L,
+                    7L to 0L,
+                    8L to 0L,
+                    9L to 0L,
+                    10L to 0L,
+                    11L to 1L,
+                    12L to 1L,
+                    13L to 0L,
+                    14L to 2L,
+                    15L to 2L,
+                    16L to 0L,
+                    17L to 1L,
+                    18L to 0L,
+                    19L to 1L,
+                    20L to 1L,
+                    21L to 0L,
+                    22L to 1L
                 )
             }
 
@@ -116,108 +157,140 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
                 ColumnTimeAvg(columnName = "DONE", avgTime = 0.0)
             )
 
-            hasEmptyLeadTimeCompareChart()
-        }
-
-        val issue = issueRepository.findById(1L)
-            .orElseThrow(::ResourceNotFound)
-
-        IssueAssert(issue).assertThat {
-            hasKey("JIRAT-1")
-            hasIssueType("Task")
-            hasCreator("Leonardo Ferreira")
-            hasSystem("JiraReport")
-            hasEpic("Period")
-            hasSummary("Calcular diferença de data de entrega com o primeiro due date")
-            hasEstimated("P")
-            hasProject("Metric")
-            hasStartDate("04/01/2019 12:00".toLocalDateTime())
-            hasEndDate("30/01/2019 12:00".toLocalDateTime())
-            hasLeadTime(19)
-            hasCreated("01/01/2019 12:00".toLocalDateTime())
-            hasPriority("Major")
-
-            hasChangelog(
-                Changelog(
-                    from = null,
-                    to = "BACKLOG",
-                    created = "03/01/2019 12:00".toLocalDateTime(),
-                    leadTime = 2,
-                    endDate = "04/01/2019 12:00".toLocalDateTime()
-                ),
-                Changelog(
-                    from = "BACKLOG",
-                    to = "ANALYSIS",
-                    created = "04/01/2019 12:00".toLocalDateTime(),
-                    leadTime = 2,
-                    endDate = "07/01/2019 12:00".toLocalDateTime()
-                ),
-                Changelog(
-                    from = "ANALYSIS",
-                    to = "DEV WIP",
-                    created = "07/01/2019 12:00".toLocalDateTime(),
-                    leadTime = 5,
-                    endDate = "12/01/2019 12:00".toLocalDateTime()
-                ),
-                Changelog(
-                    from = "DEV WIP",
-                    to = "DEV DONE",
-                    created = "12/01/2019 12:00".toLocalDateTime(),
-                    leadTime = 2,
-                    endDate = "15/01/2019 12:00".toLocalDateTime()
-                ),
-                Changelog(
-                    from = "DEV DONE",
-                    to = "TEST WIP",
-                    created = "15/01/2019 12:00".toLocalDateTime(),
-                    leadTime = 4,
-                    endDate = "20/01/2019 12:00".toLocalDateTime()
-                ),
-                Changelog(
-                    from = "TEST WIP",
-                    to = "TEST DONE",
-                    created = "20/01/2019 12:00".toLocalDateTime(),
-                    leadTime = 4,
-                    endDate = "24/01/2019 12:00".toLocalDateTime()
-                ),
-                Changelog(
-                    from = "TEST DONE",
-                    to = "REVIEW",
-                    created = "24/01/2019 12:00".toLocalDateTime(),
-                    leadTime = 3,
-                    endDate = "28/01/2019 12:00".toLocalDateTime()
-                ),
-                Changelog(
-                    from = "REVIEW",
-                    to = "ACCOMPANIMENT",
-                    created = "28/01/2019 12:00".toLocalDateTime(),
-                    leadTime = 3,
-                    endDate = "30/01/2019 12:00".toLocalDateTime()
-                ),
-                Changelog(
-                    from = "ACCOMPANIMENT",
-                    to = "DONE",
-                    created = "30/01/2019 12:00".toLocalDateTime(),
-                    leadTime = 0,
-                    endDate = "30/01/2019 12:00".toLocalDateTime()
+            hasLeadTimeCompareChart(
+                mapOf(
+                    "Dev Lead Time" to 3.7,
+                    "Test Lead Time" to 2.8
                 )
             )
-
-            hasDeviationOfEstimate(8)
-            hasDueDateHistory(
-                listOf(
-                    DueDateHistory(created = "04/01/2019 12:00".toLocalDateTime(), dueDate = "19/01/2019".toLocalDate())
-                )
-            )
-
-            hasImpedimentTime(3)
-
-            hasDynamicFields(null)
-
-            hasWaitTime(8635)
-            hasTouchTime(18706)
-            hasPctEfficiency(68.42)
         }
 
+        transactionTemplate.execute {
+            val issue = issueRepository.findById(1L)
+                .orElseThrow(::ResourceNotFound)
+
+            IssueAssert(issue).assertThat {
+                hasKey("JIRAT-1")
+                hasIssueType("Task")
+                hasCreator("Leonardo Ferreira")
+                hasSystem("JiraReport")
+                hasEpic("Period")
+                hasSummary("Calcular diferença de data de entrega com o primeiro due date")
+                hasEstimated("P")
+                hasProject("Metric")
+                hasStartDate("04/01/2019 12:00".toLocalDateTime())
+                hasEndDate("30/01/2019 12:00".toLocalDateTime())
+                hasLeadTime(19)
+                hasCreated("01/01/2019 12:00".toLocalDateTime())
+                hasPriority("Major")
+
+                hasChangelog(
+                    Changelog(
+                        from = null,
+                        to = "BACKLOG",
+                        created = "03/01/2019 12:00".toLocalDateTime(),
+                        leadTime = 2,
+                        endDate = "04/01/2019 12:00".toLocalDateTime()
+                    ),
+                    Changelog(
+                        from = "BACKLOG",
+                        to = "ANALYSIS",
+                        created = "04/01/2019 12:00".toLocalDateTime(),
+                        leadTime = 2,
+                        endDate = "07/01/2019 12:00".toLocalDateTime()
+                    ),
+                    Changelog(
+                        from = "ANALYSIS",
+                        to = "DEV WIP",
+                        created = "07/01/2019 12:00".toLocalDateTime(),
+                        leadTime = 5,
+                        endDate = "12/01/2019 12:00".toLocalDateTime()
+                    ),
+                    Changelog(
+                        from = "DEV WIP",
+                        to = "DEV DONE",
+                        created = "12/01/2019 12:00".toLocalDateTime(),
+                        leadTime = 2,
+                        endDate = "15/01/2019 12:00".toLocalDateTime()
+                    ),
+                    Changelog(
+                        from = "DEV DONE",
+                        to = "TEST WIP",
+                        created = "15/01/2019 12:00".toLocalDateTime(),
+                        leadTime = 4,
+                        endDate = "20/01/2019 12:00".toLocalDateTime()
+                    ),
+                    Changelog(
+                        from = "TEST WIP",
+                        to = "TEST DONE",
+                        created = "20/01/2019 12:00".toLocalDateTime(),
+                        leadTime = 4,
+                        endDate = "24/01/2019 12:00".toLocalDateTime()
+                    ),
+                    Changelog(
+                        from = "TEST DONE",
+                        to = "REVIEW",
+                        created = "24/01/2019 12:00".toLocalDateTime(),
+                        leadTime = 3,
+                        endDate = "28/01/2019 12:00".toLocalDateTime()
+                    ),
+                    Changelog(
+                        from = "REVIEW",
+                        to = "ACCOMPANIMENT",
+                        created = "28/01/2019 12:00".toLocalDateTime(),
+                        leadTime = 3,
+                        endDate = "30/01/2019 12:00".toLocalDateTime()
+                    ),
+                    Changelog(
+                        from = "ACCOMPANIMENT",
+                        to = "DONE",
+                        created = "30/01/2019 12:00".toLocalDateTime(),
+                        leadTime = 0,
+                        endDate = "30/01/2019 12:00".toLocalDateTime()
+                    )
+                )
+
+                hasDeviationOfEstimate(8)
+                hasDueDateHistory(
+                    listOf(
+                        DueDateHistory(
+                            created = "04/01/2019 12:00".toLocalDateTime(),
+                            dueDate = "19/01/2019".toLocalDate()
+                        )
+                    )
+                )
+
+                hasImpedimentTime(3)
+
+                hasDynamicFields(null)
+
+                hasWaitTime(8635)
+                hasTouchTime(18706)
+                hasPctEfficiency(68.42)
+
+                hasLeadTimes(
+                    setOf(
+                        LeadTime(
+                            leadTimeConfig = LeadTimeConfig(
+                                name = "Test Lead Time", startColumn = "TEST WIP", endColumn = "TEST DONE"
+                            ),
+                            leadTime = 4,
+                            startDate = "15/01/2019 12:00".toLocalDateTime(),
+                            endDate = "20/01/2019 12:00".toLocalDateTime()
+                        ),
+                        LeadTime(
+                            leadTimeConfig = LeadTimeConfig(
+                                name = "Dev Lead Time",
+                                startColumn = "DEV WIP",
+                                endColumn = "DEV DONE"
+                            ),
+                            leadTime = 5,
+                            startDate = "07/01/2019 12:00".toLocalDateTime(),
+                            endDate = "12/01/2019 12:00".toLocalDateTime()
+                        )
+                    )
+                )
+            }
+        }
     }
 }

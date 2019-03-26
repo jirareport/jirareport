@@ -1,6 +1,7 @@
 package br.com.jiratorio.assert
 
 import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import java.time.LocalDateTime
@@ -92,4 +93,7 @@ class IssueAssert(actual: Issue) :
         objects.assertEqual(field("issue.pctEfficiency"), actual.pctEfficiency, pctEfficiency)
     }
 
+    fun hasLeadTimes(leadTimes: Set<LeadTime>) = assertAll {
+        objects.assertEqual(field("issue.leadTimes"), actual.leadTimes, leadTimes)
+    }
 }

@@ -102,6 +102,14 @@ class IssuePeriodAssert(actual: IssuePeriod) :
         maps.assertEmpty(field("issuePeriod.leadTimeCompareChart"), actual.leadTimeCompareChart.data)
     }
 
+    fun hasLeadTimeCompareChart(leadTimeCompareChart: Map<String, Double>) = assertAll {
+        objects.assertEqual(
+            field("issuePeriod.leadTimeCompareChart"),
+            actual.leadTimeCompareChart.data,
+            leadTimeCompareChart
+        )
+    }
+
     fun containsColumnTimeAvgs(vararg args: Any?) = assertAll {
         iterables.assertContains(field("issuePeriod.columnTimeAvgs"), actual.columnTimeAvgs, args)
     }

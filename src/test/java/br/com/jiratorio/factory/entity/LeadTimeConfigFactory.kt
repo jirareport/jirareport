@@ -1,6 +1,7 @@
 package br.com.jiratorio.factory.entity
 
 import br.com.jiratorio.domain.entity.LeadTimeConfig
+import br.com.jiratorio.factory.lazyInitBy
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import br.com.leonardoferreira.jbacon.JBacon
 import com.github.javafaker.Faker
@@ -15,7 +16,9 @@ class LeadTimeConfigFactory(
 
     override fun getDefault() =
         LeadTimeConfig().apply {
-            board = boardFactory.create()
+            board = lazyInitBy {
+                boardFactory.create()
+            }
             name = faker.lorem().word()
             startColumn = faker.lorem().word()
             endColumn = faker.lorem().word()
