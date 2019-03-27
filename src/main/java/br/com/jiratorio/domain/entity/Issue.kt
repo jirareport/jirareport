@@ -21,7 +21,7 @@ data class Issue(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    var id: Long = 0,
 
     @Column(nullable = false)
     var key: String,
@@ -50,7 +50,8 @@ data class Issue(
     @Column(nullable = false)
     val leadTime: Long,
 
-    var created: LocalDateTime? = null,
+    @Column(nullable = false)
+    var created: LocalDateTime,
 
     var priority: String? = null,
 
@@ -64,8 +65,8 @@ data class Issue(
     @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     var leadTimes: Set<LeadTime>? = null,
 
-    @ManyToOne
-    var board: Board? = null,
+    @ManyToOne(optional = false)
+    var board: Board,
 
     var deviationOfEstimate: Long? = null,
 
@@ -79,11 +80,14 @@ data class Issue(
     @Column(columnDefinition = "jsonb")
     var dynamicFields: Map<String, String?>? = null,
 
-    var waitTime: Long? = null,
+    @Column(nullable = false)
+    var waitTime: Long,
 
-    var touchTime: Long? = null,
+    @Column(nullable = false)
+    var touchTime: Long,
 
-    var pctEfficiency: Double? = null
+    @Column(nullable = false)
+    var pctEfficiency: Double
 ) : BaseEntity() {
     companion object {
         private val serialVersionUID = -1084659211505084402L

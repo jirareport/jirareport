@@ -6,6 +6,6 @@ class Jira(
     private val faker: Faker
 ) {
 
-    fun customField() = faker.expression("custom_field_#{number.number_between '1000','9999'}")!!
+    fun customField() = faker.expression("custom_field_#{number.number_between '1000','9999'}")
 
 }

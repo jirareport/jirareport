@@ -159,7 +159,7 @@ internal class SearchBoardIntegrationTest @Autowired constructor(
             then {
                 statusCode(HttpStatus.SC_OK)
                 body("name", equalTo(board.name))
-                body("externalId", IdMatcher(board.externalId!!))
+                body("externalId", IdMatcher(board.externalId))
                 body("startColumn", equalTo(board.startColumn))
                 body("endColumn", equalTo(board.endColumn))
                 body("fluxColumn", contains<Any>(*board.fluxColumn!!.toTypedArray()))

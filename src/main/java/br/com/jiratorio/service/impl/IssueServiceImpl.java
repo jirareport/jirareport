@@ -183,7 +183,7 @@ public class IssueServiceImpl implements IssueService {
                     .count();
 
             String week = String.format("[%s - %s]", startWeek.format(formatter), endWeek.format(formatter));
-            chart.add(week, issuesCount);
+            chart.set(week, issuesCount);
         }
 
         return chart;

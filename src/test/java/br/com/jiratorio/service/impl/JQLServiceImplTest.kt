@@ -104,11 +104,12 @@ internal class JQLServiceImplTest {
     }
 
     private fun createBoard(ignoreIssueType: MutableList<String>? = null) =
-        Board().apply {
-            externalId = 123123L
-            startColumn = "TODO"
-            endColumn = "DONE"
-            fluxColumn = Arrays.asList("TODO", "WIP", "DONE")
-            this.ignoreIssueType = ignoreIssueType
-        }
+        Board(
+            name = "test board",
+            externalId = 123123L,
+            startColumn = "TODO",
+            endColumn = "DONE",
+            fluxColumn = Arrays.asList("TODO", "WIP", "DONE"),
+            ignoreIssueType = ignoreIssueType
+        )
 }

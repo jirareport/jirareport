@@ -2,15 +2,14 @@ package br.com.jiratorio.integration.board
 
 import br.com.jiratorio.assert.BoardAssert
 import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.domain.request.CreateBoardRequest
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.CreateBoardRequestFactory
 import br.com.jiratorio.repository.BoardRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
+import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsString
-import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -58,19 +57,24 @@ internal class CreateBoardIntegrationTest @Autowired constructor(
 
     @Test
     fun `fail in validations`() {
+        val createBoardRequest = object {
+            val name: String = ""
+            val externalId: Long = 0
+        }
+
         restAssured {
             given {
                 header(authenticator.defaultUserHeader())
                 contentType(ContentType.JSON)
-                body(CreateBoardRequest())
+                body(createBoardRequest)
             }
             on {
                 post("/boards")
             }
             then {
                 statusCode(HttpStatus.SC_BAD_REQUEST)
-                body("errors.find { it.field == 'externalId' }.defaultMessage", equalTo("must not be null"))
-                body("errors.find { it.field == 'name' }.defaultMessage", equalTo("must not be blank"))
+                body("errors.find { it.field == 'externalId' }.messages", contains("must be greater than or equal to 1"))
+                body("errors.find { it.field == 'name' }.messages", contains("must not be blank"))
             }
         }
     }

@@ -42,7 +42,7 @@ class IssueMapper(
     @ExecutionTime
     @Transactional(readOnly = true)
     fun parse(rawText: String, board: Board): List<Issue> {
-        val holidays = holidayService.findDaysByBoard(board.id!!)
+        val holidays = holidayService.findDaysByBoard(board.id)
 
         val fluxColumn = FluxColumn(board)
         val startColumns = fluxColumn.startColumns

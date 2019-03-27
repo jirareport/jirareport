@@ -3,6 +3,7 @@ package br.com.jiratorio.service
 import br.com.jiratorio.domain.Account
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.request.CreateBoardRequest
+import br.com.jiratorio.domain.request.SearchBoardRequest
 import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.domain.response.BoardDetailsResponse
 import br.com.jiratorio.domain.response.BoardResponse
@@ -11,7 +12,7 @@ import org.springframework.data.domain.Pageable
 
 interface BoardService {
 
-    fun findAll(pageable: Pageable, board: Board, currentUser: Account): Page<BoardResponse>
+    fun findAll(pageable: Pageable, searchBoardRequest: SearchBoardRequest, currentUser: Account): Page<BoardResponse>
 
     fun create(createBoardRequest: CreateBoardRequest): Long
 

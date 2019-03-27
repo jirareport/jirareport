@@ -1,8 +1,8 @@
 package br.com.jiratorio.controller
 
 import br.com.jiratorio.domain.Account
-import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.request.CreateBoardRequest
+import br.com.jiratorio.domain.request.SearchBoardRequest
 import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.domain.response.BoardDetailsResponse
 import br.com.jiratorio.domain.response.BoardResponse
@@ -29,10 +29,10 @@ class BoardController(private val boardService: BoardService) {
     @GetMapping
     fun index(
         pageable: Pageable,
-        board: Board,
+        searchBoardRequest: SearchBoardRequest,
         @AuthenticationPrincipal currentUser: Account
     ): Page<BoardResponse> {
-        return boardService.findAll(pageable, board, currentUser)
+        return boardService.findAll(pageable, searchBoardRequest, currentUser)
     }
 
     @GetMapping("/owners")
@@ -64,7 +64,7 @@ class BoardController(private val boardService: BoardService) {
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody updateBoardRequest: UpdateBoardRequest): ResponseEntity<*> {
+    fun update(@PathVariable id: Long, @Valid @RequestBody updateBoardRequest: UpdateBoardRequest): ResponseEntity<*> {
         boardService.update(id, updateBoardRequest)
         return ResponseEntity.noContent().build<Any>()
     }

@@ -10,4 +10,4 @@ fun notFound() =
         .expectBody("error", equalTo("Not Found"))
         .expectBody("message", equalTo("Resource Not Found"))
         .expectBody("status", equalTo(404))
-        .build()!!
+        .build()

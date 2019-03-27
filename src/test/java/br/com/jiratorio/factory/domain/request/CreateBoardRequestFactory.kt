@@ -11,13 +11,16 @@ class CreateBoardRequestFactory(
 ) : JBacon<CreateBoardRequest>() {
 
     override fun getDefault() =
-        CreateBoardRequest().apply {
-            name = faker.lorem().word()
+        CreateBoardRequest(
+            name = faker.lorem().word(),
             externalId = faker.number().randomNumber()
-        }
+        )
 
     override fun getEmpty() =
-        CreateBoardRequest()
+        CreateBoardRequest(
+            name = faker.lorem().word(),
+            externalId = faker.number().randomNumber()
+        )
 
     override fun persist(createBoardRequest: CreateBoardRequest) =
         throw UnsupportedOperationException()

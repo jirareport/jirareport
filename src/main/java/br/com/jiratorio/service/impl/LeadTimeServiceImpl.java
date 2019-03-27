@@ -94,7 +94,7 @@ public class LeadTimeServiceImpl extends AbstractService implements LeadTimeServ
             leadTime = DateUtil.daysDiff(startDate, endDate, holidays, board.getIgnoreWeekend());
         }
 
-        return leadTimeRepository.save(new LeadTime(null, leadTimeConfig,
+        return leadTimeRepository.save(new LeadTime(0, leadTimeConfig,
                 issue, leadTime, startDate, endDate));
 
     }

@@ -34,15 +34,15 @@ open class BaseEntity : Serializable {
     }
 
     @CreatedBy
-    var owner: String? = null
+    var owner: String = ""
 
     @CreationTimestamp
-    var createdAt: LocalDateTime? = null
+    var createdAt: LocalDateTime = LocalDateTime.now()
 
     @UpdateTimestamp
-    var updatedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime = LocalDateTime.now()
 
     @LastModifiedBy
-    var lastEditor: String? = null
+    var lastEditor: String = ""
 
 }

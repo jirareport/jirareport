@@ -75,7 +75,7 @@ internal class UpdateBoardIntegrationTest @Autowired constructor(
             given {
                 header(authenticator.defaultUserHeader())
                 contentType(ContentType.JSON)
-                body(UpdateBoardRequest())
+                body(UpdateBoardRequest("name"))
             }
             on {
                 put("/boards/999")

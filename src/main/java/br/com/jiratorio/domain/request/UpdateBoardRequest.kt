@@ -3,10 +3,12 @@ package br.com.jiratorio.domain.request
 import br.com.jiratorio.domain.duedate.DueDateType
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig
 import br.com.jiratorio.domain.impediment.ImpedimentType
+import javax.validation.constraints.NotBlank
 
 data class UpdateBoardRequest(
 
-    var name: String? = null,
+    @NotBlank
+    var name: String,
 
     var startColumn: String? = null,
 

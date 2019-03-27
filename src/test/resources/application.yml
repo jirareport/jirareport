@@ -40,3 +40,5 @@ spring:
 
 security:
   key: test-security-key
+
+debug: true

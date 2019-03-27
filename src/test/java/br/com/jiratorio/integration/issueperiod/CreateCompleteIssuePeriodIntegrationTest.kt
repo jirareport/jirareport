@@ -272,21 +272,27 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
                     setOf(
                         LeadTime(
                             leadTimeConfig = LeadTimeConfig(
-                                name = "Test Lead Time", startColumn = "TEST WIP", endColumn = "TEST DONE"
+                                board = board,
+                                name = "Test Lead Time",
+                                startColumn = "TEST WIP",
+                                endColumn = "TEST DONE"
                             ),
                             leadTime = 4,
                             startDate = "15/01/2019 12:00".toLocalDateTime(),
-                            endDate = "20/01/2019 12:00".toLocalDateTime()
+                            endDate = "20/01/2019 12:00".toLocalDateTime(),
+                            issue = issue
                         ),
                         LeadTime(
                             leadTimeConfig = LeadTimeConfig(
+                                board = board,
                                 name = "Dev Lead Time",
                                 startColumn = "DEV WIP",
                                 endColumn = "DEV DONE"
                             ),
                             leadTime = 5,
                             startDate = "07/01/2019 12:00".toLocalDateTime(),
-                            endDate = "12/01/2019 12:00".toLocalDateTime()
+                            endDate = "12/01/2019 12:00".toLocalDateTime(),
+                            issue = issue
                         )
                     )
                 )

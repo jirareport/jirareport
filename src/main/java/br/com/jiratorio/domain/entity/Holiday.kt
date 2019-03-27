@@ -4,6 +4,7 @@ import br.com.jiratorio.extension.equalsBuilder
 import br.com.jiratorio.extension.toStringBuilder
 import java.time.LocalDate
 import java.util.Objects
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -13,20 +14,31 @@ import javax.persistence.Table
 import javax.persistence.UniqueConstraint
 
 @Entity
-@Table(uniqueConstraints = [UniqueConstraint(columnNames = ["date", "board_id"])])
-class Holiday(
+@Table(
+    uniqueConstraints = [
+        UniqueConstraint(
+            columnNames = [
+                "date", "board_id"
+            ]
+        )
+    ]
+)
+data class Holiday(
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    var id: Long = 0,
 
-    var date: LocalDate? = null,
+    @Column(nullable = false)
+    var date: LocalDate,
 
-    var description: String? = null,
+    @Column(nullable = false)
+    var description: String,
 
-    @ManyToOne
-    var board: Board? = null
+    @ManyToOne(optional = false)
+    var board: Board
+
 ) : BaseEntity() {
-
     companion object {
         private val serialVersionUID = 18640912961216513L
     }

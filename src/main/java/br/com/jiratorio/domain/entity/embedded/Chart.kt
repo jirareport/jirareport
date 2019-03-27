@@ -10,7 +10,7 @@ data class Chart<L, V>(
         private const val serialVersionUID = 7550041573002395950L
     }
 
-    fun add(x: L, y: V) {
+    operator fun set(x: L, y: V) {
         data[x] = y
     }
 

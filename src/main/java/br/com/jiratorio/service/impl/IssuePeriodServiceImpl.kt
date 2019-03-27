@@ -4,6 +4,7 @@ import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.chart.IssuePeriodChartResponse
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.IssuePeriod
+import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.request.CreateIssuePeriodRequest
 import br.com.jiratorio.domain.response.IssuePeriodResponse
 import br.com.jiratorio.exception.ResourceNotFound
@@ -49,8 +50,7 @@ class IssuePeriodServiceImpl(
             .average()
 
         val avgPctEfficiency = issues
-            .filter { it.pctEfficiency != null }
-            .map { it.pctEfficiency!! }
+            .map { it.pctEfficiency }
             .average()
 
         val chartAggregator = chartService.buildAllCharts(issues, board)
@@ -86,17 +86,14 @@ class IssuePeriodServiceImpl(
 
         issuePeriodRepository.save(issuePeriod)
 
-        return issuePeriod.id!!
+        return issuePeriod.id
     }
 
     private fun delete(startDate: LocalDate, endDate: LocalDate, boardId: Long) {
         log.info("Method=delete, startDate={}, endDate={}, boardId={}", startDate, endDate, boardId)
 
-        val issuePeriod = issuePeriodRepository.findByStartDateAndEndDateAndBoardId(startDate, endDate, boardId)
-
-        if (issuePeriod != null) {
-            delete(issuePeriod)
-        }
+        issuePeriodRepository.findByStartDateAndEndDateAndBoardId(startDate, endDate, boardId)
+            .ifPresent { delete(it) }
     }
 
     private fun delete(issuePeriod: IssuePeriod) {
@@ -127,7 +124,7 @@ class IssuePeriodServiceImpl(
         val issuePeriod = findById(issuePeriodId)
         val createIssuePeriodRequest = CreateIssuePeriodRequest(issuePeriod.startDate, issuePeriod.endDate)
 
-        create(createIssuePeriodRequest, issuePeriod.boardId!!)
+        create(createIssuePeriodRequest, issuePeriod.boardId)
     }
 
     @Transactional(readOnly = true)
@@ -147,16 +144,23 @@ class IssuePeriodServiceImpl(
     private fun buildCharts(issuePeriods: List<IssuePeriod>, board: Board): IssuePeriodChartResponse {
         log.info("Method=buildCharts, issuePeriods={}, board={}", issuePeriods, board)
 
+        val leadTime: Chart<String, String> = Chart()
+        val issuesCount: Chart<String, Int> = Chart()
+
+        for (issuePeriod in issuePeriods) {
+            leadTime[issuePeriod.dates] = "%.2f".format(issuePeriod.avgLeadTime)
+            issuesCount[issuePeriod.dates] = issuePeriod.issuesCount
+        }
+
         val issueCountBySize = chartService.buildIssueCountBySize(issuePeriods)
         val leadTimeCompareChart = chartService.calcLeadTimeCompareByPeriod(issuePeriods, board)
 
-        val issuePeriodChart = IssuePeriodChartResponse(issueCountBySize, leadTimeCompareChart)
-        for (issuePeriod in issuePeriods) {
-            issuePeriodChart.addLeadTime(issuePeriod)
-            issuePeriodChart.addIssuesCount(issuePeriod)
-        }
-
-        return issuePeriodChart
+        return IssuePeriodChartResponse(
+            issueCountBySize = issueCountBySize,
+            leadTimeCompareChart = leadTimeCompareChart,
+            leadTime = leadTime,
+            issuesCount = issuesCount
+        )
     }
 
 }

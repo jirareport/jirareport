@@ -40,12 +40,12 @@ class LeadTimeConfigServiceImpl(
     override fun create(boardId: Long, leadTimeConfigRequest: LeadTimeConfigRequest): Long {
         log.info("Method=create, boardId={}, leadTimeConfigRequest={}", boardId, leadTimeConfigRequest)
 
-        val (id) = boardService.findById(boardId)
-        val leadTimeConfig = leadTimeConfigMapper.toLeadTimeConfig(leadTimeConfigRequest, id!!)
+        val board = boardService.findById(boardId)
+        val leadTimeConfig = leadTimeConfigMapper.toLeadTimeConfig(leadTimeConfigRequest, board)
 
         leadTimeConfigRepository.save(leadTimeConfig)
 
-        return leadTimeConfig.id!!
+        return leadTimeConfig.id
     }
 
     @Transactional(readOnly = true)

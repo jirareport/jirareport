@@ -1,15 +1,15 @@
 package br.com.jiratorio.domain.request
 
+import com.fasterxml.jackson.annotation.JsonFormat
+import java.time.LocalDate
 import javax.validation.constraints.NotBlank
-import javax.validation.constraints.Pattern
 
 data class HolidayRequest(
 
-    @field:NotBlank
-    @field:Pattern(regexp = "[0-9]{0,2}/[0-9]{0,2}/[0-9]{0,4}")
-    var date: String? = null,
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    var date: LocalDate,
 
     @field:NotBlank
-    var description: String? = null
+    var description: String
 
 )

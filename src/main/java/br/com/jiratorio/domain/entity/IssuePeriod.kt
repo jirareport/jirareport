@@ -25,7 +25,7 @@ data class IssuePeriod(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    var id: Long = 0,
 
     @Column(nullable = false)
     var startDate: LocalDate,
@@ -33,8 +33,10 @@ data class IssuePeriod(
     @Column(nullable = false)
     var endDate: LocalDate,
 
-    var boardId: Long? = null,
+    @Column(nullable = false)
+    var boardId: Long,
 
+    @Column(nullable = false)
     @OrderBy("key asc")
     @ManyToMany(cascade = [CascadeType.DETACH], fetch = FetchType.LAZY)
     @JoinTable(
@@ -42,9 +44,10 @@ data class IssuePeriod(
         joinColumns = [JoinColumn(name = "issue_period_id")],
         inverseJoinColumns = [JoinColumn(name = "issue_id")]
     )
-    var issues: MutableList<Issue>? = null,
+    var issues: MutableList<Issue>,
 
-    var avgLeadTime: Double? = null,
+    @Column(nullable = false)
+    var avgLeadTime: Double,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -101,15 +104,19 @@ data class IssuePeriod(
     @Column(nullable = false)
     var issuesCount: Int,
 
-    var jql: String? = null,
+    @Column(nullable = false)
+    var jql: String,
 
-    var wipAvg: Double? = null,
+    @Column(nullable = false)
+    var wipAvg: Double,
 
-    var avgPctEfficiency: Double? = null,
+    @Column(nullable = false)
+    var avgPctEfficiency: Double,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     var dynamicCharts: MutableList<DynamicChart>? = null
+
 ) : BaseEntity() {
     companion object {
         private val serialVersionUID = 7188140641247774389L

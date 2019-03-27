@@ -1,7 +1,6 @@
 package br.com.jiratorio.factory.entity
 
 import br.com.jiratorio.domain.entity.LeadTimeConfig
-import br.com.jiratorio.factory.lazyInitBy
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import br.com.leonardoferreira.jbacon.JBacon
 import com.github.javafaker.Faker
@@ -15,16 +14,19 @@ class LeadTimeConfigFactory(
 ) : JBacon<LeadTimeConfig>() {
 
     override fun getDefault() =
-        LeadTimeConfig().apply {
-            board = lazyInitBy {
-                boardFactory.create()
-            }
-            name = faker.lorem().word()
-            startColumn = faker.lorem().word()
+        LeadTimeConfig(
+            board = boardFactory.create(),
+            name = faker.lorem().word(),
+            startColumn = faker.lorem().word(),
             endColumn = faker.lorem().word()
-        }
+        )
 
-    override fun getEmpty() = LeadTimeConfig()
+    override fun getEmpty() = LeadTimeConfig(
+        board = boardFactory.create(),
+        name = faker.lorem().word(),
+        startColumn = faker.lorem().word(),
+        endColumn = faker.lorem().word()
+    )
 
     override fun persist(leadTimeConfig: LeadTimeConfig) {
         leadTimeConfigRepository.save(leadTimeConfig)

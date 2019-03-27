@@ -11,14 +11,18 @@ class LeadTimeConfigRequestFactory(
 ) : JBacon<LeadTimeConfigRequest>() {
 
     override fun getDefault() =
-        LeadTimeConfigRequest().apply {
-            name = faker.lorem().word()
-            startColumn = faker.lorem().word()
+        LeadTimeConfigRequest(
+            name = faker.lorem().word(),
+            startColumn = faker.lorem().word(),
             endColumn = faker.lorem().word()
-        }
+        )
 
     override fun getEmpty() =
-        LeadTimeConfigRequest()
+        LeadTimeConfigRequest(
+            name = faker.lorem().word(),
+            startColumn = faker.lorem().word(),
+            endColumn = faker.lorem().word()
+        )
 
     override fun persist(leadTimeConfigRequest: LeadTimeConfigRequest) =
         throw UnsupportedOperationException()

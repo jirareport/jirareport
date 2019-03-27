@@ -15,20 +15,20 @@ import java.time.format.DateTimeFormatter.ofPattern
 class HolidayMapper {
 
     fun fromApiResponse(holidayApiResponse: HolidayApiResponse, board: Board) =
-        Holiday().apply {
-            description = holidayApiResponse.name
-            this.board = Board(board.id)
+        Holiday(
+            description = holidayApiResponse.name,
+            board = board,
             date = LocalDate.parse(holidayApiResponse.date, ofPattern("dd/MM/yyyy"))
-        }
+        )
 
     fun fromApiResponse(holidayApiResponses: List<HolidayApiResponse>, board: Board) =
         holidayApiResponses.map { fromApiResponse(it, board) }
 
     fun toHolidayResponse(holiday: Holiday) = HolidayResponse(
-        id = holiday.id!!,
-        date = holiday.date?.format(ofPattern("dd/MM/yyyy"))!!,
-        description = holiday.description!!,
-        boardId = holiday.board?.id!!
+        id = holiday.id,
+        date = holiday.date.format(ofPattern("dd/MM/yyyy")),
+        description = holiday.description,
+        boardId = holiday.board.id
     )
 
     fun toHolidayResponse(holidays: List<Holiday>) =
@@ -42,15 +42,15 @@ class HolidayMapper {
         )
 
     fun toHoliday(holidayRequest: HolidayRequest, board: Board): Holiday =
-        Holiday().apply {
-            description = holidayRequest.description
-            this.board = Board(board.id)
-            date = LocalDate.parse(holidayRequest.date, ofPattern("dd/MM/yyyy"))
-        }
+        Holiday(
+            description = holidayRequest.description,
+            board = board,
+            date = holidayRequest.date
+        )
 
     fun updateFromRequest(holiday: Holiday, holidayRequest: HolidayRequest) = holiday.apply {
         description = holidayRequest.description
-        date = LocalDate.parse(holidayRequest.date, ofPattern("dd/MM/yyyy"))
+        date = holidayRequest.date
     }
 
 }

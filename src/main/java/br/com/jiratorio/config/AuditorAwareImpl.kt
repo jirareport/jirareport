@@ -12,6 +12,6 @@ class AuditorAwareImpl : AuditorAware<String> {
     override fun getCurrentAuditor() =
         Optional.ofNullable(SecurityContextHolder.getContext().authentication)
             .map { it.principal as Account }
-            .map { it.username }!!
+            .map { it.username }
 
 }

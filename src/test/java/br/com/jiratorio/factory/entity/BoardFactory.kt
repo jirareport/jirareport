@@ -19,12 +19,16 @@ class BoardFactory(
 ) : JBacon<Board>() {
 
     override fun getDefault() =
-        Board().apply {
-            externalId = faker.number().randomNumber()
+        Board(
+            externalId = faker.number().randomNumber(),
             name = faker.lorem().word()
-        }
+        )
 
-    override fun getEmpty() = Board()
+    override fun getEmpty() =
+        Board(
+            externalId = faker.number().randomNumber(),
+            name = faker.lorem().word()
+        )
 
     override fun persist(board: Board) {
         boardRepository.save(board)
@@ -90,17 +94,17 @@ class BoardFactory(
 
     @JBaconTemplate
     protected fun withDynamicFields() =
-            withCompleteConfiguration().apply {
-                dynamicFields = mutableListOf(
-                    DynamicFieldConfig(
-                        name = "Team",
-                        field = "customfield_5000"
-                    ),
-                    DynamicFieldConfig(
-                        name = "Level Of Dependency",
-                        field = "customfield_6000"
-                    )
+        withCompleteConfiguration().apply {
+            dynamicFields = mutableListOf(
+                DynamicFieldConfig(
+                    name = "Team",
+                    field = "customfield_5000"
+                ),
+                DynamicFieldConfig(
+                    name = "Level Of Dependency",
+                    field = "customfield_6000"
                 )
-            }
+            )
+        }
 
 }

@@ -50,7 +50,7 @@ internal class SearchHolidayIntegrationTest @Autowired constructor(
                 body("content[0].id", notNullValue())
                 body("content[0].date", notNullValue())
                 body("content[0].description", notNullValue())
-                body("content[0].boardId", IdMatcher(id!!))
+                body("content[0].boardId", IdMatcher(id))
                 body("content.findAll { it.boardId == 1 }", hasSize<Any>(10))
             }
         }
@@ -69,10 +69,10 @@ internal class SearchHolidayIntegrationTest @Autowired constructor(
             }
             then {
                 statusCode(HttpStatus.SC_OK)
-                body("id", IdMatcher(holiday.id!!))
-                body("date", equalTo(holiday.date?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                body("id", IdMatcher(holiday.id))
+                body("date", equalTo(holiday.date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
                 body("description", equalTo(holiday.description))
-                body("boardId", IdMatcher(holiday.board?.id!!))
+                body("boardId", IdMatcher(holiday.board.id))
             }
         }
     }

@@ -3,6 +3,7 @@ package br.com.jiratorio.domain.entity
 import br.com.jiratorio.extension.equalsBuilder
 import br.com.jiratorio.extension.toStringBuilder
 import java.util.Objects
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -11,20 +12,24 @@ import javax.persistence.ManyToOne
 
 @Entity
 data class LeadTimeConfig(
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    var id: Long = 0,
 
-    @ManyToOne
-    var board: Board? = null,
+    @ManyToOne(optional = false)
+    var board: Board,
 
-    var name: String? = null,
+    @Column(nullable = false)
+    var name: String,
 
-    var startColumn: String? = null,
+    @Column(nullable = false)
+    var startColumn: String,
 
-    var endColumn: String? = null
+    @Column(nullable = false)
+    var endColumn: String
+
 ) : BaseEntity() {
-
     companion object {
         private val serialVersionUID = -1181175426509346889L
     }

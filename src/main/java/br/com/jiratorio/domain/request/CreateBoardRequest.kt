@@ -1,12 +1,14 @@
 package br.com.jiratorio.domain.request
 
+import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
 data class CreateBoardRequest(
     @field:NotBlank
-    var name: String? = null,
+    var name: String,
 
     @field:NotNull
-    var externalId: Long? = null
+    @field:Min(1)
+    var externalId: Long
 )

@@ -46,7 +46,7 @@ class HolidayServiceImpl(
         log.info("Method=findDaysByBoard, boardId={}", boardId)
 
         return holidayRepository.findAllByBoardId(boardId)
-            .map { it.date!! }
+            .map { it.date }
     }
 
     @Transactional
@@ -58,7 +58,7 @@ class HolidayServiceImpl(
         val holiday = holidayMapper.toHoliday(holidayRequest, board)
         holidayRepository.save(holiday)
 
-        return holiday.id!!
+        return holiday.id
     }
 
     @Transactional

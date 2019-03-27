@@ -15,11 +15,12 @@ import javax.persistence.Id
 @Entity
 data class UserConfig(
 
+    @Column(nullable = false)
     val username: String,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    var id: Long = 0,
 
     @Column(unique = true)
     var state: String? = null,
@@ -33,6 +34,7 @@ data class UserConfig(
 
     @Enumerated(EnumType.STRING)
     var throughputChartType: ChartType? = null
+
 ) : BaseEntity() {
     companion object {
         private val serialVersionUID = -9168105728096346993L

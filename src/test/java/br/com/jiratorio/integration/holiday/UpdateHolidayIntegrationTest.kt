@@ -3,10 +3,8 @@ package br.com.jiratorio.integration.holiday
 import br.com.jiratorio.assert.HolidayAssert
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.domain.request.HolidayRequest
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
-import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.domain.request.HolidayRequestFactory
 import br.com.jiratorio.factory.entity.BoardFactory
 import br.com.jiratorio.factory.entity.HolidayFactory
@@ -20,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.time.LocalDate
 
 @Tag("integration")
 @ExtendWith(SpringExtension::class)
@@ -55,7 +54,7 @@ internal class UpdateHolidayIntegrationTest @Autowired constructor(
             .orElseThrow(::ResourceNotFound)
         HolidayAssert(holiday).assertThat {
             hasDescription(request.description)
-            hasDate(request.date?.toLocalDate())
+            hasDate(request.date)
         }
     }
 
@@ -63,19 +62,23 @@ internal class UpdateHolidayIntegrationTest @Autowired constructor(
     fun `fail in validations`() {
         authenticator.withDefaultUser { holidayFactory.create() }
 
+        val request = object {
+            val description: String = ""
+            val date: LocalDate = LocalDate.now()
+        }
+
         restAssured {
             given {
                 header(authenticator.defaultUserHeader())
                 contentType(ContentType.JSON)
-                body(HolidayRequest())
+                body(request)
             }
             on {
                 put("/boards/1/holidays/1")
             }
             then {
                 statusCode(HttpStatus.SC_BAD_REQUEST)
-                body("errors.find { it.field == 'date' }.defaultMessage", Matchers.`is`("must not be blank"))
-                body("errors.find { it.field == 'description' }.defaultMessage", Matchers.`is`("must not be blank"))
+                body("errors.find { it.field == 'description' }.messages", Matchers.contains("must not be blank"))
             }
         }
     }

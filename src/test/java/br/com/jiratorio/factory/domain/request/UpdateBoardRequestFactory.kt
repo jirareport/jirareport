@@ -16,11 +16,10 @@ class UpdateBoardRequestFactory(
 ) : JBacon<UpdateBoardRequest>() {
 
     override fun getDefault() =
-        UpdateBoardRequest().apply {
+        UpdateBoardRequest(name = faker.lorem().word()).apply {
             startColumn = faker.lorem().word()
             endColumn = faker.lorem().word()
             fluxColumn = faker.lorem().words()
-            name = faker.lorem().word()
             ignoreIssueType = faker.lorem().words()
             epicCF = faker.jira().customField()
             estimateCF = faker.jira().customField()
@@ -41,7 +40,7 @@ class UpdateBoardRequestFactory(
         }
 
     override fun getEmpty() =
-        UpdateBoardRequest()
+        UpdateBoardRequest(name = faker.lorem().word())
 
     override fun persist(updateBoardRequest: UpdateBoardRequest) =
         throw UnsupportedOperationException()

@@ -61,8 +61,8 @@ internal class SearchLeadTimeConfigIntegrationTest @Autowired constructor(
             }
             then {
                 statusCode(HttpStatus.SC_OK)
-                body("id", IdMatcher(leadTimeConfig.id!!))
-                body("boardId", IdMatcher(leadTimeConfig.board?.id!!))
+                body("id", IdMatcher(leadTimeConfig.id))
+                body("boardId", IdMatcher(leadTimeConfig.board.id))
                 body("name", Matchers.equalTo(leadTimeConfig.name))
                 body("startColumn", Matchers.equalTo(leadTimeConfig.startColumn))
                 body("endColumn", Matchers.equalTo(leadTimeConfig.endColumn))

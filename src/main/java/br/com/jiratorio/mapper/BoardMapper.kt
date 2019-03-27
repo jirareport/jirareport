@@ -36,15 +36,15 @@ class BoardMapper(
         )
 
     fun boardFromCreateBoardRequest(request: CreateBoardRequest) =
-        Board().apply {
-            name = request.name
+        Board(
+            name = request.name,
             externalId = request.externalId
-        }
+        )
 
     fun toBoardResponse(board: Board) = BoardResponse(
-        id = board.id!!,
-        name = board.name!!,
-        owner = board.owner!!
+        id = board.id,
+        name = board.name,
+        owner = board.owner
     )
 
     fun toBoardResponse(boards: List<Board>) =
