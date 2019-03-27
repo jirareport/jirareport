@@ -1,5 +1,8 @@
 package br.com.jiratorio.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,8 +11,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DateUtil {

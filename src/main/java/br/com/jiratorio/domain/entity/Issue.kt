@@ -2,14 +2,9 @@ package br.com.jiratorio.domain.entity
 
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
-import lombok.AllArgsConstructor
-import lombok.Builder
-import lombok.Data
-import lombok.EqualsAndHashCode
-import lombok.NoArgsConstructor
-import lombok.ToString
+import br.com.jiratorio.extension.toStringBuilder
 import org.hibernate.annotations.Type
-
+import java.time.LocalDateTime
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -20,15 +15,16 @@ import javax.persistence.Id
 import javax.persistence.ManyToMany
 import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
-import java.time.LocalDateTime
 
 @Entity
 data class Issue(
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    var key: String? = null,
+    @Column(nullable = false)
+    var key: String,
 
     var issueType: String? = null,
 
@@ -38,18 +34,21 @@ data class Issue(
 
     var epic: String? = null,
 
-    var summary: String? = null,
+    @Column(nullable = false)
+    var summary: String,
 
     var estimated: String? = null,
 
     var project: String? = null,
 
-    var startDate: LocalDateTime? = null,
-
-    var endDate: LocalDateTime? = null,
+    @Column(nullable = false)
+    var startDate: LocalDateTime,
 
     @Column(nullable = false)
-    val leadTime: Long? = null,
+    var endDate: LocalDateTime,
+
+    @Column(nullable = false)
+    val leadTime: Long,
 
     var created: LocalDateTime? = null,
 
@@ -78,7 +77,7 @@ data class Issue(
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var dynamicFields: Map<String, String>? = null,
+    var dynamicFields: Map<String, String?>? = null,
 
     var waitTime: Long? = null,
 
@@ -89,5 +88,8 @@ data class Issue(
     companion object {
         private val serialVersionUID = -1084659211505084402L
     }
+
+    override fun toString() =
+        toStringBuilder(Issue::id)
 
 }

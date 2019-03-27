@@ -103,7 +103,6 @@ public class IssueServiceImpl implements IssueService {
         ChartAggregator chartAggregator = chartService.buildAllCharts(issues, board);
 
         Double avgLeadTime = issues.parallelStream()
-                .filter(i -> i.getLeadTime() != null)
                 .mapToLong(Issue::getLeadTime)
                 .average().orElse(0D);
 

@@ -1,36 +1,20 @@
 package br.com.jiratorio.service.impl;
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime;
-import br.com.jiratorio.domain.entity.Board;
-import br.com.jiratorio.domain.entity.Issue;
-import br.com.jiratorio.domain.entity.IssuePeriod;
-import br.com.jiratorio.domain.entity.LeadTime;
-import br.com.jiratorio.domain.entity.LeadTimeConfig;
+import br.com.jiratorio.domain.Percentile;
+import br.com.jiratorio.domain.chart.ChartAggregator;
+import br.com.jiratorio.domain.chart.IssueCountBySize;
+import br.com.jiratorio.domain.chart.LeadTimeCompareChart;
+import br.com.jiratorio.domain.dynamicfield.DynamicChart;
+import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig;
+import br.com.jiratorio.domain.entity.*;
 import br.com.jiratorio.domain.entity.embedded.Changelog;
 import br.com.jiratorio.domain.entity.embedded.Chart;
 import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg;
 import br.com.jiratorio.domain.entity.embedded.Histogram;
-import br.com.jiratorio.domain.chart.ChartAggregator;
-import br.com.jiratorio.domain.dynamicfield.DynamicChart;
-import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig;
-import br.com.jiratorio.domain.chart.IssueCountBySize;
-import br.com.jiratorio.domain.chart.LeadTimeCompareChart;
-import br.com.jiratorio.domain.Percentile;
 import br.com.jiratorio.service.ChartService;
 import br.com.jiratorio.service.PercentileService;
 import br.com.jiratorio.util.DateUtil;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -88,7 +76,6 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=leadTimeBySystem, issues={}", issues);
 
         Map<String, Double> collect = issues.stream()
-                .filter(i -> i.getLeadTime() != null)
                 .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getSystem()).orElse("Não informado"),
                         Collectors.averagingLong(Issue::getLeadTime)));
 
@@ -115,7 +102,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=leadTimeBySize, issues={}", issues);
 
         Map<String, Double> collect = issues.stream()
-                .filter(i -> i.getLeadTime() != null)
+
                 .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getEstimated()).orElse("Não informado"),
                         Collectors.averagingLong(Issue::getLeadTime)));
 
@@ -150,7 +137,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=leadTimeByType, issues={}", issues);
 
         Map<String, Double> collect = issues.stream()
-                .filter(i -> !StringUtils.isEmpty(i.getIssueType()) && i.getLeadTime() != null)
+                .filter(i -> !StringUtils.isEmpty(i.getIssueType()))
                 .collect(Collectors.groupingBy(Issue::getIssueType, Collectors.averagingLong(Issue::getLeadTime)));
 
         return CompletableFuture.completedFuture(new Chart<>(collect));
@@ -176,7 +163,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=leadTimeByProject, issues={}", issues);
 
         Map<String, Double> collect = issues.stream()
-                .filter(i -> i.getLeadTime() != null)
+
                 .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getProject()).orElse("Não informado"),
                         Collectors.averagingLong(Issue::getLeadTime)));
 
@@ -326,7 +313,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=leadTimeByPriority, issues={}", issues);
 
         Map<String, Double> collect = issues.stream()
-                .filter(i -> i.getLeadTime() != null && !StringUtils.isEmpty(i.getPriority()))
+                .filter(i -> !StringUtils.isEmpty(i.getPriority()))
                 .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getPriority()).orElse("Não informado"),
                         Collectors.averagingDouble(Issue::getLeadTime)));
 
@@ -339,7 +326,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
         log.info("Method=throughputByPriority, issues={}", issues);
 
         Map<String, Long> collect = issues.stream()
-                .filter(i -> i.getLeadTime() != null && !StringUtils.isEmpty(i.getPriority()))
+                .filter(i -> !StringUtils.isEmpty(i.getPriority()))
                 .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getPriority()).orElse("Não informado"),
                         Collectors.counting()));
 
@@ -369,7 +356,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     private Chart<String, Long> buildDynamicThroughput(final DynamicFieldConfig config, final List<Issue> issues) {
         Map<String, Long> collect = issues.stream()
-                .filter(i -> i.getLeadTime() != null && !CollectionUtils.isEmpty(i.getDynamicFields()))
+                .filter(i -> !CollectionUtils.isEmpty(i.getDynamicFields()))
                 .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getDynamicFields().get(config.getName())).orElse("Não informado"),
                         Collectors.counting()));
 
@@ -378,7 +365,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     private Chart<String, Double> buildDynamicLeadTime(final DynamicFieldConfig config, final List<Issue> issues) {
         Map<String, Double> collect = issues.stream()
-                .filter(i -> i.getLeadTime() != null && !CollectionUtils.isEmpty(i.getDynamicFields()))
+                .filter(i -> !CollectionUtils.isEmpty(i.getDynamicFields()))
                 .collect(Collectors.groupingBy(i -> Optional.ofNullable(i.getDynamicFields().get(config.getName())).orElse("Não informado"),
                         Collectors.averagingDouble(Issue::getLeadTime)));
         return new Chart<>(collect);
@@ -386,7 +373,7 @@ public class ChartServiceImpl extends AbstractService implements ChartService {
 
     private Chart<Long, Long> histogramChart(final List<Issue> issues) {
         Map<Long, Long> collect = issues.stream()
-                .filter(i -> i.getLeadTime() != null)
+
                 .collect(Collectors.groupingBy(Issue::getLeadTime, Collectors.counting()));
 
         Long max = collect.keySet().stream().max(Long::compare).orElse(1L);

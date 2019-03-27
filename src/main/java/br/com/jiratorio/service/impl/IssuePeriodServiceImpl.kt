@@ -45,7 +45,7 @@ class IssuePeriodServiceImpl(
         val issues = issueService.createByJql(jql, board)
 
         val avgLeadTime = issues
-            .map { it.leadTime!! }
+            .map { it.leadTime }
             .average()
 
         val avgPctEfficiency = issues

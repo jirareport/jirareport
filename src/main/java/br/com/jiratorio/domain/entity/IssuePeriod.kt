@@ -118,7 +118,7 @@ data class IssuePeriod(
     val dates: String
         get() {
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-            return String.format("[%s - %s]", this.startDate!!.format(formatter), this.endDate!!.format(formatter))
+            return String.format("[%s - %s]", this.startDate.format(formatter), this.endDate.format(formatter))
         }
 
     override fun toString() =
