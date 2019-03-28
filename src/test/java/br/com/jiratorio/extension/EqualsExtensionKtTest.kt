@@ -1,10 +1,12 @@
 package br.com.jiratorio.extension
 
 import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.util.Objects
 
-class EqualsExtensionKtTest {
+@Tag("unit")
+internal class EqualsExtensionKtTest {
 
     @Test
     fun `test complex equals, results true`() {

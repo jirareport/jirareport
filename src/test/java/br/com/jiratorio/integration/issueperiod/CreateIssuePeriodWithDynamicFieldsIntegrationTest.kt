@@ -238,8 +238,8 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired cons
                 )
             )
 
-            hasWaitTime(12231)
-            hasTouchTime(22305)
+            hasWaitTime(12242)
+            hasTouchTime(22324)
             hasPctEfficiency(64.58)
         }
     }

@@ -77,32 +77,6 @@ public final class DateUtil {
         return LocalDateTime.parse(date.substring(0, 19), DateTimeFormatter.ISO_DATE_TIME);
     }
 
-    public static Long minutesDiff(final LocalDateTime startDate, final LocalDateTime endDate,
-                                   final List<LocalDate> holidays, final Boolean ignoreWeekend) {
-        LocalDateTime start = startDate;
-
-        long workingHours = 0L;
-        if (Boolean.TRUE.equals(ignoreWeekend)) {
-            workingHours = ChronoUnit.MINUTES.between(startDate, endDate);
-        } else {
-            while (!start.isAfter(endDate)) {
-                if (isWorkDay(holidays, start.getDayOfWeek(), start.toLocalDate())) {
-                    LocalDateTime endOfDay = start.toLocalDate().atTime(LocalTime.MAX);
-
-                    if (endOfDay.isBefore(endDate)) {
-                        workingHours += ChronoUnit.MINUTES.between(start, endOfDay);
-                    } else {
-                        workingHours += ChronoUnit.MINUTES.between(start, endDate);
-                    }
-                }
-
-                start = start.plusDays(1).truncatedTo(ChronoUnit.DAYS);
-            }
-        }
-
-        return workingHours;
-    }
-
     private static boolean isWorkDay(final List<LocalDate> holidays, final DayOfWeek day, final LocalDate localDate) {
         return !DayOfWeek.SATURDAY.equals(day) && !DayOfWeek.SUNDAY.equals(day) && !isHoliday(localDate, holidays);
     }

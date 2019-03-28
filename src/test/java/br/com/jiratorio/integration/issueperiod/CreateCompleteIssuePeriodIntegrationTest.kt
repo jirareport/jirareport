@@ -264,8 +264,8 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
 
                 hasDynamicFields(null)
 
-                hasWaitTime(8635)
-                hasTouchTime(18706)
+                hasWaitTime(8643)
+                hasTouchTime(18723)
                 hasPctEfficiency(68.42)
 
                 hasLeadTimes(

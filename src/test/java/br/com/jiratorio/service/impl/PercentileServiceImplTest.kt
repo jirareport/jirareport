@@ -2,9 +2,11 @@ package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.assert.PercentileAssert
 import br.com.jiratorio.domain.Percentile
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+@Tag("unit")
 internal class PercentileServiceImplTest {
 
     private val percentileServiceImpl = PercentileServiceImpl()

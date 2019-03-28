@@ -3,8 +3,8 @@ package br.com.jiratorio.service.impl
 import br.com.jiratorio.domain.Efficiency
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.minutesDiff
 import br.com.jiratorio.service.EfficiencyService
-import br.com.jiratorio.util.DateUtil
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
@@ -56,7 +56,7 @@ class EfficiencyServiceImpl : EfficiencyService {
     ): Long {
         return changelog
             .filter { columns.contains(it.to?.toUpperCase()) }
-            .map { DateUtil.minutesDiff(it.created, it.endDate, holidays, ignoreWeekend) }
+            .map { it.created.minutesDiff(it.endDate, holidays, ignoreWeekend) }
             .sum()
     }
 

@@ -1,8 +1,10 @@
 package br.com.jiratorio.extension
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 
+@Tag("unit")
 internal class ToStringExtensionTest {
 
     private val log = logger()
