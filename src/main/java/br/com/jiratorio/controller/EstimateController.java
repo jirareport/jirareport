@@ -2,12 +2,11 @@ package br.com.jiratorio.controller;
 
 import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.estimate.EstimateFieldReference;
+import br.com.jiratorio.domain.estimate.EstimateIssue;
 import br.com.jiratorio.domain.form.EstimateForm;
 import br.com.jiratorio.domain.response.EstimateResponse;
-import br.com.jiratorio.domain.estimate.EstimateIssue;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.EstimateService;
-import java.time.LocalDate;
 import java.util.List;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,16 +34,11 @@ public class EstimateController {
 
         List<EstimateIssue> estimateIssueList = estimateService.findEstimateIssues(boardId, estimateForm);
 
-        List<EstimateFieldReference> estimateFieldReferenceList = EstimateFieldReference.retrieveCustomList(
+        List<EstimateFieldReference> estimateFieldReferenceList = EstimateFieldReference.Companion.retrieveCustomList(
                 !StringUtils.isEmpty(board.getSystemCF()),
                 !StringUtils.isEmpty(board.getEstimateCF()),
                 !StringUtils.isEmpty(board.getEpicCF()),
                 !StringUtils.isEmpty(board.getProjectCF()));
-
-        if (estimateForm.getStartDate() == null || estimateForm.getEndDate() == null) {
-            estimateForm.setStartDate(LocalDate.now().minusMonths(4));
-            estimateForm.setEndDate(LocalDate.now());
-        }
 
         return EstimateResponse.builder()
                 .estimateForm(estimateForm)

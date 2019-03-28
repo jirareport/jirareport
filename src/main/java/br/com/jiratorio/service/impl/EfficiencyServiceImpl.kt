@@ -25,7 +25,11 @@ class EfficiencyServiceImpl : EfficiencyService {
             touchingColumns, waitingColumns, changelog, holidays, ignoreWeekend
         )
 
-        if (touchingColumns == null || waitingColumns == null) {
+        if (touchingColumns == null || touchingColumns.isEmpty()) {
+            return Efficiency()
+        }
+
+        if (waitingColumns == null || waitingColumns.isEmpty()) {
             return Efficiency()
         }
 
@@ -45,12 +49,12 @@ class EfficiencyServiceImpl : EfficiencyService {
     }
 
     private fun calcDurationInColumns(
-        changelogItems: List<Changelog>,
+        changelog: List<Changelog>,
         columns: List<String>,
         holidays: List<LocalDate>?,
         ignoreWeekend: Boolean?
     ): Long {
-        return changelogItems
+        return changelog
             .filter { columns.contains(it.to?.toUpperCase()) }
             .map { DateUtil.minutesDiff(it.created, it.endDate, holidays, ignoreWeekend) }
             .sum()

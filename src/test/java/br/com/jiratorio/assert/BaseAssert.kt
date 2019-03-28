@@ -23,7 +23,7 @@ open class BaseAssert<SELF : AbstractAssert<SELF, ACTUAL>?, ACTUAL>(actual: ACTU
     fun assertThat(block: SELF.() -> Unit) =
         myself.apply(block)
 
-    fun assertAll(function: () -> Unit) {
+    protected fun assertAll(function: () -> Unit) {
         try {
             function()
         } catch (assertionError: AssertionError) {
