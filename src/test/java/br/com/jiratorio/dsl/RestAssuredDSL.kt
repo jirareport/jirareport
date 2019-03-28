@@ -31,6 +31,7 @@ class RestAssuredDSL {
         RestAssured
             .given()
             .log().all()
+            .header("Accept-Language", "en")
             .apply(blockGiven)
             .`when`()
             .run(blockOn)

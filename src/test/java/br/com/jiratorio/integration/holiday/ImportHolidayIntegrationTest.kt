@@ -13,7 +13,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.client.WireMock.verify
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
-import org.hamcrest.Matchers
+import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -118,7 +118,7 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
             }
             then {
                 statusCode(HttpStatus.SC_BAD_REQUEST)
-                body("message", Matchers.equalTo("Holidays already imported"))
+                body("message", equalTo<String>("The holidays have already been imported into this board"))
             }
         }
 

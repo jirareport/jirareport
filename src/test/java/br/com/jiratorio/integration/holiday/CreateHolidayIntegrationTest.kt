@@ -16,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.time.LocalDate
 
 @Tag("integration")
 @ExtendWith(SpringExtension::class)
@@ -60,7 +59,7 @@ internal class CreateHolidayIntegrationTest @Autowired constructor(
     @Test
     fun `fail in validations`() {
         val request = object {
-            val date: LocalDate = LocalDate.now()
+            val date: String = "26/12/1995"
             val description: String = ""
         }
 

@@ -13,19 +13,18 @@ import br.com.jiratorio.service.HolidayService;
 import br.com.jiratorio.service.LeadTimeConfigService;
 import br.com.jiratorio.service.LeadTimeService;
 import br.com.jiratorio.util.DateUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-public class LeadTimeServiceImpl extends AbstractService implements LeadTimeService {
+public class LeadTimeServiceImpl implements LeadTimeService {
 
     private final LeadTimeConfigService leadTimeConfigService;
 

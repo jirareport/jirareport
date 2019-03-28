@@ -1,6 +1,7 @@
 package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.client.HolidayClient
+import br.com.jiratorio.config.internationalization.MessageResolver
 import br.com.jiratorio.domain.Account
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Holiday
@@ -8,12 +9,12 @@ import br.com.jiratorio.domain.request.HolidayRequest
 import br.com.jiratorio.domain.response.HolidayResponse
 import br.com.jiratorio.exception.HolidaysAlreadyImported
 import br.com.jiratorio.exception.ResourceNotFound
+import br.com.jiratorio.extension.logger
 import br.com.jiratorio.mapper.HolidayMapper
 import br.com.jiratorio.repository.HolidayRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.HolidayService
 import br.com.jiratorio.service.UserConfigService
-import br.com.jiratorio.extension.logger
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -28,7 +29,8 @@ class HolidayServiceImpl(
     private val boardService: BoardService,
     private val holidayClient: HolidayClient,
     private val holidayMapper: HolidayMapper,
-    private val userConfigService: UserConfigService
+    private val userConfigService: UserConfigService,
+    private val messageResolver: MessageResolver
 ) : HolidayService {
 
     private val log = logger()
@@ -106,7 +108,7 @@ class HolidayServiceImpl(
         val allHolidaysInCity = findAllHolidaysInCity(board, currentUser)
 
         if (holidaysByBoard.containsAll(allHolidaysInCity)) {
-            throw HolidaysAlreadyImported()
+            throw HolidaysAlreadyImported(messageResolver.resolve("errors.holiday-already-imported"))
         }
 
         val holidays = HashSet(holidaysByBoard)
@@ -116,7 +118,7 @@ class HolidayServiceImpl(
             holidayRepository.saveAll(holidays)
         } catch (e: DataIntegrityViolationException) {
             log.error("Method=createImported, e={}", e.message, e)
-            throw HolidaysAlreadyImported(e)
+            throw HolidaysAlreadyImported(cause = e)
         }
     }
 

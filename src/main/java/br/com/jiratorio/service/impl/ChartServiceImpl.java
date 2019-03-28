@@ -7,7 +7,11 @@ import br.com.jiratorio.domain.chart.IssueCountBySize;
 import br.com.jiratorio.domain.chart.LeadTimeCompareChart;
 import br.com.jiratorio.domain.dynamicfield.DynamicChart;
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig;
-import br.com.jiratorio.domain.entity.*;
+import br.com.jiratorio.domain.entity.Board;
+import br.com.jiratorio.domain.entity.Issue;
+import br.com.jiratorio.domain.entity.IssuePeriod;
+import br.com.jiratorio.domain.entity.LeadTime;
+import br.com.jiratorio.domain.entity.LeadTimeConfig;
 import br.com.jiratorio.domain.entity.embedded.Changelog;
 import br.com.jiratorio.domain.entity.embedded.Chart;
 import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg;
@@ -15,6 +19,18 @@ import br.com.jiratorio.domain.entity.embedded.Histogram;
 import br.com.jiratorio.service.ChartService;
 import br.com.jiratorio.service.PercentileService;
 import br.com.jiratorio.util.DateUtil;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +40,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-
 @Slf4j
 @Service
-public class ChartServiceImpl extends AbstractService implements ChartService {
+public class ChartServiceImpl implements ChartService {
 
     @Autowired
     private ChartService chartService;

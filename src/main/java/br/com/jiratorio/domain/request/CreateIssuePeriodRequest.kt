@@ -10,20 +10,20 @@ import javax.validation.constraints.NotNull
 data class CreateIssuePeriodRequest(
 
     @JsonFormat(pattern = "dd/MM/yyyy")
-    @field:NotNull(message = "Data de inicio é obrigatória")
+    @field:NotNull(message = "{validations.required-start-date}")
     var startDate: LocalDate,
 
     @JsonFormat(pattern = "dd/MM/yyyy")
-    @field:NotNull(message = "Data de fim é obrigatória")
+    @field:NotNull(message = "{validations.required-end-date}")
     var endDate: LocalDate
 
 ) {
 
-    @AssertFalse(message = "O período não pode ser maior que 31 dias. Para maiores períodos utilize o SandBox")
+    @AssertFalse(message = "{validations.invalid-period-range}")
     fun isValidRange() =
         ChronoUnit.DAYS.between(startDate, endDate) > 31
 
-    @AssertTrue(message = "A data de inicio deve ser anterior a data fim.")
+    @AssertTrue(message = "{validations.start-date-cant-be-before-end-date}")
     fun isStartDateIsBeforeEndDate() =
         startDate.isBefore(endDate) || startDate.isEqual(endDate)
 

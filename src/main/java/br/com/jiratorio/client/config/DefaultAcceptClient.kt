@@ -1,4 +1,4 @@
-package br.com.jiratorio.config
+package br.com.jiratorio.client.config
 
 import feign.RequestInterceptor
 import feign.RequestTemplate

@@ -1,5 +1,6 @@
 package br.com.jiratorio.config
 
+import br.com.jiratorio.config.internationalization.MessageResolver
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
 @ControllerAdvice
-class ErrorHandler {
+class ErrorHandler(
+    private val messageResolver: MessageResolver
+) {
 
     @ExceptionHandler(MissingKotlinParameterException::class)
     fun handleMissingKotlinParameterException(
@@ -20,7 +23,7 @@ class ErrorHandler {
                 "errors" to listOf(
                     mapOf(
                         "field" to e.parameter.name!!,
-                        "messages" to listOf("must not be null")
+                        "messages" to listOf(messageResolver.resolve("javax.validation.constraints.NotNull.message"))
                     )
                 )
             ), HttpStatus.BAD_REQUEST
