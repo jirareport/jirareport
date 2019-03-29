@@ -118,10 +118,10 @@ class IssuePeriodServiceImpl(
     }
 
     @Transactional
-    override fun update(issuePeriodId: Long) {
-        log.info("Method=update, issuePeriodId={}", issuePeriodId)
+    override fun update(id: Long) {
+        log.info("Method=update, id={}", id)
 
-        val issuePeriod = findById(issuePeriodId)
+        val issuePeriod = findById(id)
         val createIssuePeriodRequest = CreateIssuePeriodRequest(issuePeriod.startDate, issuePeriod.endDate)
 
         create(createIssuePeriodRequest, issuePeriod.boardId)

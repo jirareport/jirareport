@@ -17,6 +17,7 @@ import br.com.jiratorio.service.ProjectService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.criteria.Predicate
@@ -75,7 +76,8 @@ class BoardServiceImpl(
         log.info("Method=delete, id={}, username={}", id, username)
 
         val board = boardRepository.findByIdAndOwner(id, username)
-            .orElseThrow(::ResourceNotFound)
+            ?: throw ResourceNotFound()
+
         boardRepository.delete(board)
     }
 
@@ -83,8 +85,8 @@ class BoardServiceImpl(
     override fun findById(id: Long): Board {
         log.info("Method=findById, id={}", id)
 
-        return boardRepository.findById(id)
-            .orElseThrow(::ResourceNotFound)
+        return boardRepository.findByIdOrNull(id)
+            ?: throw ResourceNotFound()
     }
 
     @Transactional

@@ -3,10 +3,12 @@ package br.com.jiratorio.domain.impediment.calculator
 import br.com.jiratorio.domain.changelog.JiraChangelogItem
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.Arrays.asList
 
+@Tag("unit")
 internal class ImpedimentCalculatorByFlagTest {
 
     @Test

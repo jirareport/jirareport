@@ -4,9 +4,11 @@ import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.util.Arrays
 
+@Tag("unit")
 internal class FirstDueDateAndEndDateCalculatorTest {
 
     @Test

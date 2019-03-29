@@ -57,7 +57,7 @@ data class Issue(
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var changelog: List<Changelog>? = null,
+    var changelog: List<Changelog>,
 
     @ManyToMany(mappedBy = "issues", cascade = [CascadeType.DETACH])
     var issuePeriods: List<IssuePeriod>? = null,
@@ -81,13 +81,13 @@ data class Issue(
     var dynamicFields: Map<String, String?>? = null,
 
     @Column(nullable = false)
-    var waitTime: Long,
+    var waitTime: Long = 0L,
 
     @Column(nullable = false)
-    var touchTime: Long,
+    var touchTime: Long = 0L,
 
     @Column(nullable = false)
-    var pctEfficiency: Double
+    var pctEfficiency: Double = 0.0
 ) : BaseEntity() {
     companion object {
         private val serialVersionUID = -1084659211505084402L

@@ -24,7 +24,6 @@ import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.concurrent.Executors
 
 @Component
@@ -45,15 +44,12 @@ class IssueMapper(
         val holidays = holidayService.findDaysByBoard(board.id)
 
         val fluxColumn = FluxColumn(board)
-        val startColumns = fluxColumn.startColumns
-        val endColumns = fluxColumn.endColumns
-
         val issues = objectMapper.readTree(rawText).path("issues")
 
         return runBlocking {
             issues.map {
                 try {
-                    async(dispatcher) { parseIssue(it, board, holidays, startColumns, endColumns) }
+                    async(dispatcher) { parseIssue(it, board, holidays, fluxColumn) }
                 } catch (e: Exception) {
                     log.error(
                         "Method=parse, info=Error parsing issue, issue={}, err={}",
@@ -73,8 +69,7 @@ class IssueMapper(
         issue: JsonNode,
         board: Board,
         holidays: List<LocalDate>?,
-        startColumns: Set<String>,
-        endColumns: Set<String>
+        fluxColumn: FluxColumn
     ): Issue? {
         log.info("Method=parseIssue, Info=parsing, key={}", issue.path("key").extractValue())
 
@@ -83,23 +78,12 @@ class IssueMapper(
         val changelogItems = extractChangelogItems(issue)
         val changelog = changelogService.parseChangelog(changelogItems, holidays, board.ignoreWeekend)
 
-        var startDate: LocalDateTime? = null
-        var endDate: LocalDateTime? = null
-
-        for (item in changelog) {
-            if (startDate == null && startColumns.contains(item.to)) {
-                startDate = item.created
-            }
-
-            if (endDate == null && endColumns.contains(item.to)) {
-                endDate = item.created
-            }
-        }
-
         val created = DateUtil.parseFromJira(fields.path("created").extractValue())
-        if ("BACKLOG" == board.startColumn) {
-            startDate = created
-        }
+
+        val (
+            startDate,
+            endDate
+        ) = fluxColumn.calcStartAndEndDate(changelog, created)
 
         if (startDate == null || endDate == null) {
             return null

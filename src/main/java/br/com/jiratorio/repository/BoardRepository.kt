@@ -16,7 +16,7 @@ interface BoardRepository : CrudRepository<Board, Long> {
     @EntityGraph(attributePaths = ["leadTimeConfigs"], type = EntityGraph.EntityGraphType.LOAD)
     override fun findById(id: Long): Optional<Board>
 
-    fun findByIdAndOwner(id: Long, owner: String): Optional<Board>
+    fun findByIdAndOwner(id: Long, owner: String): Board?
 
     fun findAll(specification: Specification<Board>, pageable: Pageable): Page<Board>
 
