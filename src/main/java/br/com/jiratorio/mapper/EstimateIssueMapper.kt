@@ -11,12 +11,10 @@ import br.com.jiratorio.service.HolidayService
 import br.com.jiratorio.util.DateUtil
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import lombok.extern.slf4j.Slf4j
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-@Slf4j
 @Component
 class EstimateIssueMapper(
     private val holidayService: HolidayService,
