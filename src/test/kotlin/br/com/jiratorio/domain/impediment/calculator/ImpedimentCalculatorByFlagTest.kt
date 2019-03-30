@@ -46,7 +46,7 @@ internal class ImpedimentCalculatorByFlagTest {
             changelogItems,
             emptyList(),
             LocalDateTime.now(),
-            null,
+            emptyList(),
             true
         )
         assertThat(timeInImpediment).isEqualTo(15)

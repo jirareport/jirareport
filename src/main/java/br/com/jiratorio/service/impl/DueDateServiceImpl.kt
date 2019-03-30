@@ -2,9 +2,9 @@ package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.domain.changelog.JiraChangelogItem
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
+import br.com.jiratorio.extension.fromJiraToLocalDateTime
 import br.com.jiratorio.extension.logger
 import br.com.jiratorio.service.DueDateService
-import br.com.jiratorio.util.DateUtil
 import org.springframework.stereotype.Service
 import org.springframework.util.StringUtils
 import java.time.LocalDate
@@ -33,7 +33,7 @@ class DueDateServiceImpl : DueDateService {
         }
 
         if (dueDateStr.length > 19) {
-            val localDateTime = DateUtil.parseFromJira(dueDateStr)
+            val localDateTime = dueDateStr.fromJiraToLocalDateTime()
             return localDateTime.toLocalDate()
         }
 

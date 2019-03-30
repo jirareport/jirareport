@@ -22,7 +22,7 @@ internal class LastDueDateAndEndDateCalculatorTest {
             dueDateHistories,
             endDate,
             true,
-            null
+            emptyList()
         )
 
         assertThat(deviationOfEstimate)

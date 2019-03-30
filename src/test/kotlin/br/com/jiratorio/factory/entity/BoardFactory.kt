@@ -20,13 +20,13 @@ class BoardFactory(
 
     override fun getDefault() =
         Board(
-            externalId = faker.number().randomNumber(),
+            externalId = faker.number().randomNumber(5, true),
             name = faker.lorem().word()
         )
 
     override fun getEmpty() =
         Board(
-            externalId = faker.number().randomNumber(),
+            externalId = faker.number().randomNumber(5, true),
             name = faker.lorem().word()
         )
 

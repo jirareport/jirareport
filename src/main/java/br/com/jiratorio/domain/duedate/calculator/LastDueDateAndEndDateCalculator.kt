@@ -1,8 +1,8 @@
 package br.com.jiratorio.domain.duedate.calculator
 
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
+import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.extension.logger
-import br.com.jiratorio.util.DateUtil
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -14,7 +14,7 @@ object LastDueDateAndEndDateCalculator : DueDateCalculator {
         dueDateHistories: List<DueDateHistory>,
         endDate: LocalDateTime,
         ignoreWeekend: Boolean?,
-        holidays: List<LocalDate>?
+        holidays: List<LocalDate>
     ): Long {
         log.info(
             "Method=calcDeviationOfEstimateBetweenLastDueDateAndEndDate, dueDateHistories={}, endDate={}",
@@ -26,7 +26,7 @@ object LastDueDateAndEndDateCalculator : DueDateCalculator {
         }
 
         val last = dueDateHistories.last()
-        return DateUtil.daysDiff(last.dueDate, endDate.toLocalDate(), holidays, ignoreWeekend)
+        return last.dueDate.daysDiff(endDate.toLocalDate(), holidays, ignoreWeekend)
     }
 
 }

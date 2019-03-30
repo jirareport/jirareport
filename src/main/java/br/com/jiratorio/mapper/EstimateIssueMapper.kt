@@ -6,9 +6,11 @@ import br.com.jiratorio.domain.changelog.JiraChangelogItem
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.estimate.EstimateIssue
 import br.com.jiratorio.extension.extractValue
+import br.com.jiratorio.extension.extractValueNotNull
+import br.com.jiratorio.extension.fromJiraToLocalDateTime
+import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.service.ChangelogService
 import br.com.jiratorio.service.HolidayService
-import br.com.jiratorio.util.DateUtil
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
@@ -46,15 +48,15 @@ class EstimateIssueMapper(
         if (!changelog.isEmpty()) {
             val changelogItem = changelog[changelog.size - 1]
             changelogItem.leadTime =
-                DateUtil.daysDiff(
-                    changelogItem.created,
+                changelogItem.created.daysDiff(
                     LocalDateTime.now(),
                     holidays,
                     board.ignoreWeekend
                 )
             changelogItem.endDate = LocalDateTime.now()
         }
-        val created = DateUtil.parseFromJira(fields.get("created").asText())
+        val created = fields.get("created")
+            .extractValueNotNull().fromJiraToLocalDateTime()
 
         var startDate: LocalDateTime? = null
 
@@ -78,7 +80,7 @@ class EstimateIssueMapper(
                 null
             }
 
-        val leadTime = DateUtil.daysDiff(startDate, LocalDateTime.now(), holidays, board.ignoreWeekend)
+        val leadTime = startDate.daysDiff(LocalDateTime.now(), holidays, board.ignoreWeekend)
 
         val timeInImpediment = board.impedimentType?.timeInImpediment(
             board.impedimentColumns,

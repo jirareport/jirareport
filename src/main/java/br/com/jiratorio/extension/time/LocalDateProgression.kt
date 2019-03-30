@@ -1,4 +1,4 @@
-package br.com.jiratorio.extension
+package br.com.jiratorio.extension.time
 
 import java.time.LocalDate
 

@@ -3,7 +3,7 @@ package br.com.jiratorio.service.impl
 import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.extension.logger
-import br.com.jiratorio.extension.rangeTo
+import br.com.jiratorio.extension.time.rangeTo
 import br.com.jiratorio.service.WipService
 import org.springframework.stereotype.Service
 import java.time.LocalDate

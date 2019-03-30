@@ -9,13 +9,13 @@ import br.com.jiratorio.domain.form.EstimateForm
 import br.com.jiratorio.domain.form.IssueForm
 import br.com.jiratorio.exception.BadRequestException
 import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.time.plusDays
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.EstimateService
 import br.com.jiratorio.service.HolidayService
 import br.com.jiratorio.service.IssueService
 import br.com.jiratorio.service.JQLService
 import br.com.jiratorio.service.PercentileService
-import br.com.jiratorio.util.DateUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.CollectionUtils
@@ -64,23 +64,19 @@ class EstimateServiceImpl(
                 fieldPercentileMap[value] = percentile
             }
 
-            issue.estimateDateAvg = DateUtil.addDays(
-                issue.startDate,
+            issue.estimateDateAvg = issue.startDate.plusDays(
                 percentile.average.toLong(), holidays, board.ignoreWeekend
             )
 
-            issue.estimateDatePercentile50 = DateUtil.addDays(
-                issue.startDate,
+            issue.estimateDatePercentile50 = issue.startDate.plusDays(
                 percentile.median, holidays, board.ignoreWeekend
             )
 
-            issue.estimateDatePercentile75 = DateUtil.addDays(
-                issue.startDate,
+            issue.estimateDatePercentile75 = issue.startDate.plusDays(
                 percentile.percentile75, holidays, board.ignoreWeekend
             )
 
-            issue.estimateDatePercentile90 = DateUtil.addDays(
-                issue.startDate,
+            issue.estimateDatePercentile90 = issue.startDate.plusDays(
                 percentile.percentile90, holidays, board.ignoreWeekend
             )
         }

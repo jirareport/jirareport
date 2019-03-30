@@ -3,7 +3,7 @@ package br.com.jiratorio.service.impl
 import br.com.jiratorio.domain.Efficiency
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.extension.logger
-import br.com.jiratorio.extension.minutesDiff
+import br.com.jiratorio.extension.time.minutesDiff
 import br.com.jiratorio.service.EfficiencyService
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -17,7 +17,7 @@ class EfficiencyServiceImpl : EfficiencyService {
         changelog: List<Changelog>,
         touchingColumns: MutableList<String>?,
         waitingColumns: MutableList<String>?,
-        holidays: List<LocalDate>?,
+        holidays: List<LocalDate>,
         ignoreWeekend: Boolean?
     ): Efficiency {
         log.info(
@@ -51,7 +51,7 @@ class EfficiencyServiceImpl : EfficiencyService {
     private fun calcDurationInColumns(
         changelog: List<Changelog>,
         columns: List<String>,
-        holidays: List<LocalDate>?,
+        holidays: List<LocalDate>,
         ignoreWeekend: Boolean?
     ): Long {
         return changelog

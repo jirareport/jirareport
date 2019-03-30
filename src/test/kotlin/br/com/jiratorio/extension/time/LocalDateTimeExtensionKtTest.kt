@@ -1,9 +1,12 @@
-package br.com.jiratorio.extension
+package br.com.jiratorio.extension.time
 
+import br.com.jiratorio.extension.toLocalDate
+import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -55,12 +58,6 @@ internal class LocalDateTimeExtensionKtTest {
             )
         }
 
-        private fun commonHolidays(): List<LocalDate> {
-            return listOf(
-                "01/01/2019".toLocalDate(),
-                "01/05/2019".toLocalDate()
-            )
-        }
     }
 
     @Nested
@@ -106,6 +103,47 @@ internal class LocalDateTimeExtensionKtTest {
                 )
             )
         }
+    }
+
+    @Nested
+    inner class PlusDaysTest {
+
+        @ParameterizedTest
+        @CsvSource(
+            "01/01/2019, 1, 01/01/2019",
+            "01/01/2019, 5, 05/01/2019",
+            "01/01/2019, 31, 31/01/2019",
+            "29/04/2019, 5, 03/05/2019"
+        )
+        fun `test plus days without rest days`(start: String, days: Long, expected: String) {
+            val result = start.toLocalDateTime().plusDays(days, emptyList(), true)
+
+            assertThat(result)
+                .isEqualTo(expected.toLocalDate())
+        }
+
+        @ParameterizedTest
+        @CsvSource(
+            "01/01/2019, 1, 01/01/2019",
+            "01/01/2019, 5, 07/01/2019",
+            "01/01/2019, 31, 12/02/2019",
+            "29/04/2019, 5, 06/05/2019"
+        )
+        fun `test plus days with rest days`(start: String, days: Long, expected: String) {
+            val result = start.toLocalDateTime().plusDays(days, commonHolidays(), false)
+
+            assertThat(result)
+                .isEqualTo(expected.toLocalDate())
+        }
+
+    }
+
+    private fun commonHolidays(): List<LocalDate> {
+        return listOf(
+            "01/01/2019".toLocalDate(),
+            "01/05/2019".toLocalDate(),
+            "25/12/2019".toLocalDate()
+        )
     }
 
 }

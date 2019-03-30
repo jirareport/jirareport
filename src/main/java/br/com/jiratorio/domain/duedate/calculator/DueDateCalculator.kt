@@ -10,7 +10,7 @@ interface DueDateCalculator {
         dueDateHistories: List<DueDateHistory>,
         endDate: LocalDateTime,
         ignoreWeekend: Boolean?,
-        holidays: List<LocalDate>?
+        holidays: List<LocalDate>
     ): Long
 
 }

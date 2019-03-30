@@ -13,7 +13,7 @@ data class EstimateIssue(
     var summary: String? = null,
     var estimated: String? = null,
     var project: String? = null,
-    var startDate: LocalDateTime? = null,
+    var startDate: LocalDateTime,
     var estimateDateAvg: LocalDate? = null,
     var estimateDatePercentile50: LocalDate? = null,
     var estimateDatePercentile75: LocalDate? = null,

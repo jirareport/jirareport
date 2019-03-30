@@ -10,7 +10,7 @@ interface EfficiencyService {
         changelog: List<Changelog>,
         touchingColumns: MutableList<String>?,
         waitingColumns: MutableList<String>?,
-        holidays: List<LocalDate>?,
+        holidays: List<LocalDate>,
         ignoreWeekend: Boolean?
     ): Efficiency
 

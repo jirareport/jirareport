@@ -21,7 +21,7 @@ internal class FirstDueDateAndEndDateCalculatorTest {
         val deviationOfEstimate = FirstDueDateAndEndDateCalculator.calcDeviationOfEstimate(
             dueDateHistories, endDate,
             true,
-            null
+            emptyList()
         )
 
         assertThat(deviationOfEstimate)

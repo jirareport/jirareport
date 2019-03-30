@@ -15,7 +15,7 @@ object ImpedimentCalculatorByColumn : ImpedimentCalculator {
         changelogItems: List<JiraChangelogItem>,
         changelog: List<Changelog>,
         endDate: LocalDateTime,
-        holidays: List<LocalDate>?,
+        holidays: List<LocalDate>,
         ignoreWeekend: Boolean?
     ): Long {
         log.info(

@@ -1,7 +1,7 @@
 package br.com.jiratorio.domain.entity.embedded
 
-import br.com.jiratorio.extension.LocalDateProgression
-import br.com.jiratorio.extension.rangeTo
+import br.com.jiratorio.extension.time.LocalDateProgression
+import br.com.jiratorio.extension.time.rangeTo
 import java.io.Serializable
 import java.time.LocalDateTime
 

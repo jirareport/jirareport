@@ -7,12 +7,12 @@ import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.entity.LeadTimeConfig
 import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.repository.LeadTimeRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.HolidayService
 import br.com.jiratorio.service.LeadTimeConfigService
 import br.com.jiratorio.service.LeadTimeService
-import br.com.jiratorio.util.DateUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -67,7 +67,7 @@ class LeadTimeServiceImpl(
             return null
         }
 
-        val leadTime = DateUtil.daysDiff(startDate, endDate, holidays, board.ignoreWeekend)
+        val leadTime = startDate.daysDiff(endDate, holidays, board.ignoreWeekend)
 
         return leadTimeRepository.save(
             LeadTime(

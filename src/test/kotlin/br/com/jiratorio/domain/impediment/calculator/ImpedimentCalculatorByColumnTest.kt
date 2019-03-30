@@ -28,7 +28,7 @@ internal class ImpedimentCalculatorByColumnTest {
             emptyList(),
             changelog,
             LocalDateTime.now(),
-            null,
+            emptyList(),
             true
         )
 

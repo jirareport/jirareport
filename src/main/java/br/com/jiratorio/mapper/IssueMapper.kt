@@ -9,12 +9,13 @@ import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.extension.extractValueNotNull
+import br.com.jiratorio.extension.fromJiraToLocalDateTime
 import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.service.ChangelogService
 import br.com.jiratorio.service.DueDateService
 import br.com.jiratorio.service.EfficiencyService
 import br.com.jiratorio.service.HolidayService
-import br.com.jiratorio.util.DateUtil
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.ExecutorCoroutineDispatcher
@@ -78,7 +79,8 @@ class IssueMapper(
         val changelogItems = extractChangelogItems(issue)
         val changelog = changelogService.parseChangelog(changelogItems, holidays, board.ignoreWeekend)
 
-        val created = DateUtil.parseFromJira(fields.path("created").extractValue())
+        val created = fields.path("created")
+            .extractValueNotNull().fromJiraToLocalDateTime()
 
         val (
             startDate,
@@ -89,7 +91,7 @@ class IssueMapper(
             return null
         }
 
-        val leadTime = DateUtil.daysDiff(startDate, endDate, holidays, board.ignoreWeekend)
+        val leadTime = startDate.daysDiff(endDate, holidays, board.ignoreWeekend)
 
         val author: String? =
             if (fields.hasNonNull("creator")) {

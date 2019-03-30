@@ -22,7 +22,7 @@ internal class FirstAndLastDueDateCalculatorTest {
             dueDateHistories,
             LocalDateTime.now(),
             true,
-            null
+            emptyList()
         )
 
         assertThat(deviationOfEstimate)
