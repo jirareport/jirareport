@@ -29,7 +29,7 @@ object ImpedimentCalculatorByColumn : ImpedimentCalculator {
 
         return changelog
             .filter { impedimentColumns.contains(it.to) }
-            .map { it.leadTime ?: 0 }
+            .map { it.leadTime }
             .sum()
     }
 

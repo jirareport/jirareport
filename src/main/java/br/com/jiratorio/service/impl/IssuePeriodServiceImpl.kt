@@ -56,7 +56,7 @@ class IssuePeriodServiceImpl(
         val chartAggregator = chartService.buildAllCharts(issues, board)
 
         val fluxColumn = FluxColumn(board)
-        val wipAvg = wipService.calcAvgWip(startDate, endDate, issues, fluxColumn.startColumns)
+        val wipAvg = wipService.calcAvgWip(startDate, endDate, issues, fluxColumn.wipColumns)
 
         val issuePeriod = IssuePeriod(
             startDate = startDate,

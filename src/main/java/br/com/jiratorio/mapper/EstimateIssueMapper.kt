@@ -47,7 +47,7 @@ class EstimateIssueMapper(
             val changelogItem = changelog[changelog.size - 1]
             changelogItem.leadTime =
                 DateUtil.daysDiff(
-                    changelogItem.created!!,
+                    changelogItem.created,
                     LocalDateTime.now(),
                     holidays,
                     board.ignoreWeekend

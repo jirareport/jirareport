@@ -13,13 +13,13 @@ internal class ImpedimentCalculatorByColumnTest {
     @Test
     fun `time in impediment`() {
         val changelog = asList(
-            Changelog(to = "COLUMN_ONE", leadTime = 1),
-            Changelog(to = "IMP_COLUMN_ONE", leadTime = 2),
-            Changelog(to = "COLUMN_TWO", leadTime = 3),
-            Changelog(to = "IMP_COLUMN_TWO", leadTime = 4),
-            Changelog(to = "COLUMN_THREE", leadTime = 5),
-            Changelog(to = "IMP_COLUMN_THREE", leadTime = 6),
-            Changelog(to = "COLUMN_FOUR", leadTime = 7)
+            Changelog(to = "COLUMN_ONE", leadTime = 1, created = LocalDateTime.now()),
+            Changelog(to = "IMP_COLUMN_ONE", leadTime = 2, created = LocalDateTime.now()),
+            Changelog(to = "COLUMN_TWO", leadTime = 3, created = LocalDateTime.now()),
+            Changelog(to = "IMP_COLUMN_TWO", leadTime = 4, created = LocalDateTime.now()),
+            Changelog(to = "COLUMN_THREE", leadTime = 5, created = LocalDateTime.now()),
+            Changelog(to = "IMP_COLUMN_THREE", leadTime = 6, created = LocalDateTime.now()),
+            Changelog(to = "COLUMN_FOUR", leadTime = 7, created = LocalDateTime.now())
         )
         val columns = asList("IMP_COLUMN_ONE", "IMP_COLUMN_TWO", "IMP_COLUMN_THREE")
 

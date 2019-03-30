@@ -19,16 +19,26 @@ internal class ImpedimentCalculatorByFlagTest {
                 toString = "impediment",
                 created = "01/01/2019 12:00".toLocalDateTime()
             ),
-            JiraChangelogItem(field = "customfield_123"),
-            JiraChangelogItem(field = "flagged", created = "10/01/2019 12:00".toLocalDateTime()),
-            JiraChangelogItem(field = "xablau"),
+            JiraChangelogItem(
+                field = "customfield_123"
+            ),
+            JiraChangelogItem(
+                field = "flagged", created = "10/01/2019 12:00".toLocalDateTime()
+            ),
+            JiraChangelogItem(
+                field = "xablau"
+            ),
             JiraChangelogItem(
                 field = "flagged",
                 toString = "impediment",
                 created = "15/01/2019 12:00".toLocalDateTime()
             ),
-            JiraChangelogItem(field = "other"),
-            JiraChangelogItem(field = "flagged", created = "19/01/2019 12:00".toLocalDateTime())
+            JiraChangelogItem(
+                field = "other"
+            ),
+            JiraChangelogItem(
+                field = "flagged", created = "19/01/2019 12:00".toLocalDateTime()
+            )
         )
 
         val timeInImpediment = ImpedimentCalculatorByFlag.timeInImpediment(

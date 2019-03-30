@@ -119,7 +119,7 @@ public class ChartServiceImpl implements ChartService {
         issues.stream()
                 .map(Issue::getChangelog)
                 .flatMap(Collection::stream)
-                .filter(changelog -> changelog.getTo() != null && changelog.getLeadTime() != null)
+                .filter(changelog -> changelog.getTo() != null)
                 .collect(Collectors.groupingBy(Changelog::getTo, Collectors.summingDouble(Changelog::getLeadTime)))
                 .forEach((k, v) -> collect.add(new ColumnTimeAvg(k, v / issues.size())));
 

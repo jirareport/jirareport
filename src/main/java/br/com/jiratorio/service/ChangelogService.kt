@@ -8,7 +8,7 @@ interface ChangelogService {
 
     fun parseChangelog(
         changelogItems: List<JiraChangelogItem>,
-        holidays: List<LocalDate>?,
+        holidays: List<LocalDate>,
         ignoreWeekend: Boolean?
     ): List<Changelog>
 

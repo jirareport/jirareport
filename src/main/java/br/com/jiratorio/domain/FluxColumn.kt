@@ -18,13 +18,11 @@ data class FluxColumn(
             orderedColumns.takeLastWhile { it != endLeadTimeColumn }.toSet() + endLeadTimeColumn
 
     val startColumns: Set<String>
-        get() = if (orderedColumns == null)
-            setOf(startLeadTimeColumn)
-        else orderedColumns.run {
+        get() = orderedColumns?.run {
             takeWhile { it != endLeadTimeColumn } - takeWhile { it != startLeadTimeColumn } + endLeadTimeColumn
-        }.toSet()
+        }?.toSet() ?: setOf(startLeadTimeColumn)
 
-    val wipColumns: Set<String?>
+    val wipColumns: Set<String>
         get() = startColumns - endLeadTimeColumn
 
     val lastColumn: String

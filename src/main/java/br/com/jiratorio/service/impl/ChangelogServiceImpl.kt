@@ -15,7 +15,7 @@ class ChangelogServiceImpl : ChangelogService {
 
     override fun parseChangelog(
         changelogItems: List<JiraChangelogItem>,
-        holidays: List<LocalDate>?,
+        holidays: List<LocalDate>,
         ignoreWeekend: Boolean?
     ): List<Changelog> {
         log.info(
@@ -24,15 +24,12 @@ class ChangelogServiceImpl : ChangelogService {
         )
 
         val changelog = changelogItems
-            .filter { it.field == "status" }
-            .map { Changelog(from = it.fromString, to = it.toString, created = it.created) }
+            .filter { it.field == "status" && it.created != null }
+            .map { Changelog(from = it.fromString, to = it.toString, created = it.created!!) }
             .sortedBy { it.created }
 
         changelog.forEachIndexed { i, current ->
-            if (i + 1 == changelog.size) {
-                current.leadTime = 0L
-                current.endDate = current.created
-            } else {
+            if (i + 1 != changelog.size) {
                 val next = changelog[i + 1]
                 current.leadTime = DateUtil.daysDiff(current.created, next.created, holidays, ignoreWeekend)
                 current.endDate = next.created

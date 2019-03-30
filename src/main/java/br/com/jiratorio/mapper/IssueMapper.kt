@@ -68,7 +68,7 @@ class IssueMapper(
     private fun parseIssue(
         issue: JsonNode,
         board: Board,
-        holidays: List<LocalDate>?,
+        holidays: List<LocalDate>,
         fluxColumn: FluxColumn
     ): Issue? {
         log.info("Method=parseIssue, Info=parsing, key={}", issue.path("key").extractValue())
