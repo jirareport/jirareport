@@ -11,8 +11,9 @@ class Authenticator(
     private val accountFactory: AccountFactory
 ) {
 
-    fun <T> withDefaultUser(supplier: () -> T) =
-        this.withUser(accountFactory.defaultUserName(), supplier)
+    fun <T> withDefaultUser(supplier: () -> T): T {
+        return this.withUser(accountFactory.defaultUserName(), supplier)
+    }
 
     fun <T> withUser(username: String, supplier: () -> T): T {
         val oldContext = TestSecurityContextHolder.getContext()
@@ -34,8 +35,11 @@ class Authenticator(
         return result
     }
 
-    fun defaultUserHeader() =
-        Header("X-Auth-Token", accountFactory.defaultUserToken())
+    fun defaultUserHeader(): Header {
+        return Header("X-Auth-Token", accountFactory.defaultUserToken())
+    }
 
-    fun defaultUserName() = accountFactory.defaultUserName()
+    fun defaultUserName(): String {
+        return accountFactory.defaultUserName()
+    }
 }

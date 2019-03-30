@@ -12,30 +12,40 @@ class UserConfigMapper(
     private val cityTransformer: CityTransformer
 ) {
 
-    fun userConfigToResponse(userConfig: UserConfig) = UserConfigResponse(
-        state = userConfig.state,
-        city = userConfig.city,
-        holidayToken = userConfig.holidayToken
-    ).apply {
-        leadTimeChartType = userConfig.leadTimeChartType?.name ?: leadTimeChartType
-        throughputChartType = userConfig.throughputChartType?.name ?: throughputChartType
+    fun userConfigToResponse(userConfig: UserConfig): UserConfigResponse {
+        return UserConfigResponse(
+            state = userConfig.state,
+            city = userConfig.city,
+            holidayToken = userConfig.holidayToken,
+            leadTimeChartType = userConfig.leadTimeChartType.name,
+            throughputChartType = userConfig.throughputChartType.name
+        )
     }
 
-    fun updateFromRequest(
-        userConfig: UserConfig,
-        updateUserConfigRequest: UpdateUserConfigRequest
-    ) = userConfig.apply {
-        state = updateUserConfigRequest.state
-        city = cityTransformer.normalizeCity(updateUserConfigRequest.city)
-        holidayToken = updateUserConfigRequest.holidayToken
-        leadTimeChartType = updateUserConfigRequest.leadTimeChartType
-        throughputChartType = updateUserConfigRequest.throughputChartType
+    fun updateFromRequest(userConfig: UserConfig, updateUserConfigRequest: UpdateUserConfigRequest): UserConfig {
+        return userConfig.apply {
+            state = updateUserConfigRequest.state
+            city = cityTransformer.normalizeCity(updateUserConfigRequest.city)
+            holidayToken = updateUserConfigRequest.holidayToken
+
+            val leadTimeChartType = updateUserConfigRequest.leadTimeChartType
+            if (leadTimeChartType != null) {
+                this.leadTimeChartType = leadTimeChartType
+            }
+
+            val throughputChartType = updateUserConfigRequest.throughputChartType
+            if (throughputChartType != null) {
+                this.throughputChartType = throughputChartType
+            }
+        }
     }
 
-    fun toImportHolidayInfo(userConfig: UserConfig) = ImportHolidayInfo(
-        state = userConfig.state!!,
-        city = userConfig.city!!,
-        holidayToken = userConfig.holidayToken!!
-    )
+    fun toImportHolidayInfo(userConfig: UserConfig): ImportHolidayInfo {
+        return ImportHolidayInfo(
+            state = userConfig.state!!,
+            city = userConfig.city!!,
+            holidayToken = userConfig.holidayToken!!
+        )
+    }
 
 }

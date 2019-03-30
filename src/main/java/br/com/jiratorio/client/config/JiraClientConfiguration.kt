@@ -19,7 +19,7 @@ class JiraClientConfiguration(
 
     @Bean
     fun requestInterceptor() = RequestInterceptor {
-        val principal: Account? = SecurityContextHolder.getContext().account()
+        val principal: Account? = SecurityContextHolder.getContext().account
         if (principal != null) {
             it.header("Authorization", principal.token)
         }

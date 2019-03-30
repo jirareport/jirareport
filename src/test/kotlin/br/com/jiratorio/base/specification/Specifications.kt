@@ -1,10 +1,11 @@
 package br.com.jiratorio.base.specification
 
 import io.restassured.builder.ResponseSpecBuilder
+import io.restassured.specification.ResponseSpecification
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers.equalTo
 
-fun notFound() =
+fun notFound(): ResponseSpecification =
     ResponseSpecBuilder()
         .expectStatusCode(HttpStatus.SC_NOT_FOUND)
         .expectBody("error", equalTo("Not Found"))

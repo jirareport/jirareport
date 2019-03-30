@@ -8,6 +8,7 @@ holiday:
 security:
   key: super-secret-key
 
+
 spring:
   application:
     name: jirareport
@@ -27,3 +28,6 @@ spring:
     enabled: true
     out-of-order: true
     ignore-missing-migrations: true
+  sleuth:
+    sampler:
+      probability: 1.0

@@ -1,17 +1,15 @@
 package br.com.jiratorio.config
 
-import br.com.jiratorio.domain.Account
-import java.util.Optional
+import br.com.jiratorio.extension.account
 import org.springframework.data.domain.AuditorAware
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
+import java.util.Optional
 
 @Component
 class AuditorAwareImpl : AuditorAware<String> {
 
-    override fun getCurrentAuditor() =
-        Optional.ofNullable(SecurityContextHolder.getContext().authentication)
-            .map { it.principal as Account }
-            .map { it.username }
+    override fun getCurrentAuditor(): Optional<String> =
+        Optional.ofNullable(SecurityContextHolder.getContext().account?.username)
 
 }

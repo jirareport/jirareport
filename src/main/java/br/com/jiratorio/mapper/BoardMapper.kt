@@ -15,8 +15,8 @@ class BoardMapper(
     private val stringTransformer: StringTransformer
 ) {
 
-    fun toBoardResponseDetails(board: Board) =
-        BoardDetailsResponse(
+    fun toBoardResponseDetails(board: Board): BoardDetailsResponse {
+        return BoardDetailsResponse(
             externalId = board.externalId,
             name = board.name,
             startColumn = board.startColumn,
@@ -34,31 +34,37 @@ class BoardMapper(
             dueDateCF = board.dueDateCF,
             dueDateType = board.dueDateType?.name
         )
+    }
 
-    fun boardFromCreateBoardRequest(request: CreateBoardRequest) =
-        Board(
+    fun boardFromCreateBoardRequest(request: CreateBoardRequest): Board {
+        return Board(
             name = request.name,
             externalId = request.externalId
         )
+    }
 
-    fun toBoardResponse(board: Board) = BoardResponse(
-        id = board.id,
-        name = board.name,
-        owner = board.owner
-    )
+    fun toBoardResponse(board: Board): BoardResponse {
+        return BoardResponse(
+            id = board.id,
+            name = board.name,
+            owner = board.owner
+        )
+    }
 
-    fun toBoardResponse(boards: List<Board>) =
-        boards.map { toBoardResponse(it) }
+    fun toBoardResponse(boards: List<Board>): List<BoardResponse> {
+        return boards.map { toBoardResponse(it) }
+    }
 
-    fun toBoardResponse(boards: Page<Board>) =
-        PageImpl(
+    fun toBoardResponse(boards: Page<Board>): PageImpl<BoardResponse> {
+        return PageImpl(
             toBoardResponse(boards.content),
             boards.pageable,
             boards.totalElements
         )
+    }
 
-    fun fromUpdateBoardRequest(board: Board, updateBoardRequest: UpdateBoardRequest) =
-        board.apply {
+    fun fromUpdateBoardRequest(board: Board, updateBoardRequest: UpdateBoardRequest): Board {
+        return board.apply {
             name = updateBoardRequest.name
             startColumn = stringTransformer.toUpperCase(updateBoardRequest.startColumn)
             endColumn = stringTransformer.toUpperCase(updateBoardRequest.endColumn)
@@ -77,4 +83,5 @@ class BoardMapper(
             dueDateCF = updateBoardRequest.dueDateCF
             dueDateType = updateBoardRequest.dueDateType
         }
+    }
 }

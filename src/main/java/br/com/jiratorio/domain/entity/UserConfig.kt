@@ -15,25 +15,26 @@ import javax.persistence.Id
 @Entity
 data class UserConfig(
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     val username: String,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0,
 
-    @Column(unique = true)
     var state: String? = null,
 
     var city: String? = null,
 
     var holidayToken: String? = null,
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    var leadTimeChartType: ChartType? = null,
+    var leadTimeChartType: ChartType = ChartType.BAR,
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    var throughputChartType: ChartType? = null
+    var throughputChartType: ChartType = ChartType.DOUGHNUT
 
 ) : BaseEntity() {
     companion object {

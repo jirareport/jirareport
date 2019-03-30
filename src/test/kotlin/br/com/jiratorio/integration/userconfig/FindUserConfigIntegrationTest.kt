@@ -38,8 +38,8 @@ internal class FindUserConfigIntegrationTest @Autowired constructor(
                 body("state", equalTo(userConfig.state))
                 body("city", equalTo(userConfig.city))
                 body("holidayToken", equalTo(userConfig.holidayToken))
-                body("leadTimeChartType", equalTo(userConfig.leadTimeChartType?.name))
-                body("throughputChartType", equalTo(userConfig.throughputChartType?.name))
+                body("leadTimeChartType", equalTo(userConfig.leadTimeChartType.name))
+                body("throughputChartType", equalTo(userConfig.throughputChartType.name))
             }
         }
     }

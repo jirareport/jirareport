@@ -27,7 +27,6 @@ class RestAssuredDSL {
     }
 
     fun build() {
-        // @formatter:off
         RestAssured
             .given()
             .log().all()
@@ -38,7 +37,6 @@ class RestAssuredDSL {
             .then()
             .log().all()
             .run(blockThen)
-        // @formatter:on
     }
 
 }
