@@ -22,10 +22,6 @@ interface BoardService {
 
     fun update(boardId: Long, updateBoardRequest: UpdateBoardRequest)
 
-    fun findStatusFromBoardInJira(board: Board): Set<String>
-
-    fun findStatusFromBoardInJira(boardId: Long): Set<String>
-
     fun findDetailsById(id: Long): BoardDetailsResponse
 
     fun findAllOwners(): Set<String>

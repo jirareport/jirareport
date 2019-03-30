@@ -13,7 +13,6 @@ import br.com.jiratorio.extension.logger
 import br.com.jiratorio.mapper.BoardMapper
 import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.service.BoardService
-import br.com.jiratorio.service.ProjectService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
@@ -24,7 +23,6 @@ import javax.persistence.criteria.Predicate
 
 @Service
 class BoardServiceImpl(
-    private val projectService: ProjectService,
     private val boardRepository: BoardRepository,
     private val boardMapper: BoardMapper
 ) : BoardService {
@@ -97,22 +95,6 @@ class BoardServiceImpl(
         boardMapper.fromUpdateBoardRequest(board, updateBoardRequest)
 
         boardRepository.save(board)
-    }
-
-    @Transactional(readOnly = true)
-    override fun findStatusFromBoardInJira(boardId: Long): Set<String> {
-        val board = findById(boardId)
-        return findStatusFromBoardInJira(board)
-    }
-
-    @Transactional(readOnly = true)
-    override fun findStatusFromBoardInJira(board: Board): Set<String> {
-        log.info("Method=findStatusFromBoardInJira, board={}", board)
-
-        val listStatusesBoard = projectService.findStatusFromProject(board.externalId)
-        return listStatusesBoard
-            .map { it.statuses }.flatten()
-            .map { it.name }.toSet()
     }
 
     @Transactional(readOnly = true)
