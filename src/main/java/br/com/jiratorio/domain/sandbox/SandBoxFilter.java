@@ -1,11 +1,13 @@
 package br.com.jiratorio.domain.sandbox;
 
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -13,19 +15,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SandBoxFilter {
 
-    private List<String> keys;
+    private Set<String> keys;
 
-    private List<String> estimatives;
+    private Set<String> estimatives;
 
-    private List<String> systems;
+    private Set<String> systems;
 
-    private List<String> epics;
+    private Set<String> epics;
 
-    private List<String> issueTypes;
+    private Set<String> issueTypes;
 
-    private List<String> projects;
+    private Set<String> projects;
 
-    private List<String> priorities;
+    private Set<String> priorities;
 
     private List<DynamicFieldsValues> dynamicFieldsValues;
 

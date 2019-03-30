@@ -10,54 +10,49 @@ import org.springframework.stereotype.Repository
 interface IssueRepository : CrudRepository<Issue, Long>, IssueCustomRepository {
 
     @Query(
-        value = """
-            SELECT DISTINCT issue.estimated FROM issue
-            WHERE issue.board_id = :boardId
-            AND issue.estimated IS NOT NULL
-            """,
-        nativeQuery = true
+        """
+            SELECT DISTINCT estimated FROM Issue
+            WHERE board.id = :boardId
+            AND estimated IS NOT NULL
+        """
     )
-    fun findAllEstimativesByBoardId(@Param("boardId") boardId: Long?): List<String>
+    fun findAllEstimatesByBoardId(@Param("boardId") boardId: Long): Set<String>
 
     @Query(
-        value = """
-            SELECT DISTINCT issue.system FROM issue
-            WHERE issue.board_id = :boardId
-            AND issue.system IS NOT NULL
-            """,
-        nativeQuery = true
+        """
+            SELECT DISTINCT system FROM Issue
+            WHERE board.id = :boardId
+            AND system IS NOT NULL
+            """
     )
-    fun findAllSystemsByBoardId(@Param("boardId") boardId: Long?): List<String>
+    fun findAllSystemsByBoardId(@Param("boardId") boardId: Long): Set<String>
 
     @Query(
-        value = """
-            SELECT DISTINCT issue.epic FROM issue
-            WHERE issue.board_id = :boardId
-            AND issue.epic IS NOT NULL
-            """,
-        nativeQuery = true
+        """
+            SELECT DISTINCT epic FROM Issue
+            WHERE board.id = :boardId
+            AND epic IS NOT NULL
+        """
     )
-    fun findAllEpicsByBoardId(@Param("boardId") boardId: Long?): List<String>
+    fun findAllEpicsByBoardId(@Param("boardId") boardId: Long): Set<String>
 
     @Query(
-        value = """
-            SELECT DISTINCT issue.issue_type FROM issue
-            WHERE issue.board_id = :boardId
-            AND issue.issue_type IS NOT NULL
-            """,
-        nativeQuery = true
+        """
+            SELECT DISTINCT issueType FROM Issue
+            WHERE board.id = :boardId
+            AND issueType IS NOT NULL
+        """
     )
-    fun findAllIssueTypesByBoardId(@Param("boardId") boardId: Long?): List<String>
+    fun findAllIssueTypesByBoardId(@Param("boardId") boardId: Long): Set<String>
 
     @Query(
-        value = """
-            SELECT DISTINCT issue.project FROM issue
-            WHERE issue.board_id = :boardId
-            AND issue.project IS NOT NULL
-            """,
-        nativeQuery = true
+        """
+            SELECT DISTINCT project FROM Issue
+            WHERE board.id = :boardId
+            AND project IS NOT NULL
+        """
     )
-    fun findAllIssueProjectsByBoardId(@Param("boardId") boardId: Long?): List<String>
+    fun findAllIssueProjectsByBoardId(@Param("boardId") boardId: Long): Set<String>
 
     @Query(
         """
@@ -68,16 +63,15 @@ interface IssueRepository : CrudRepository<Issue, Long>, IssueCustomRepository {
            WHERE ip.id = :issuePeriodId
     """
     )
-    fun findByIssuePeriodId(@Param("issuePeriodId") issuePeriodId: Long?): List<Issue>
+    fun findByIssuePeriodId(@Param("issuePeriodId") issuePeriodId: Long): List<Issue>
 
     @Query(
-        value = """
-            SELECT DISTINCT issue.priority FROM issue
-            WHERE issue.board_id = :boardId
-            AND issue.priority IS NOT NULL
-            """,
-        nativeQuery = true
+        """
+            SELECT DISTINCT priority FROM Issue
+            WHERE board.id = :boardId
+            AND priority IS NOT NULL
+        """
     )
-    fun findAllIssuePrioritiesByBoardId(@Param("boardId") boardId: Long?): List<String>
+    fun findAllIssuePrioritiesByBoardId(@Param("boardId") boardId: Long): Set<String>
 
 }

@@ -23,6 +23,7 @@ import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
@@ -135,7 +136,7 @@ public class IssueServiceImpl implements IssueService {
         log.info("Method=findSandBoxFilters, boardId={}, sandBox={}, issueForm={}", boardId, sandBox, issueForm);
 
         return SandBoxFilter.builder()
-                .estimatives(issueRepository.findAllEstimativesByBoardId(boardId))
+                .estimatives(issueRepository.findAllEstimatesByBoardId(boardId))
                 .keys(findAllKeys(sandBox, issueForm))
                 .systems(issueRepository.findAllSystemsByBoardId(boardId))
                 .epics(issueRepository.findAllEpicsByBoardId(boardId))
@@ -161,9 +162,9 @@ public class IssueServiceImpl implements IssueService {
         issueRepository.deleteAll(issues);
     }
 
-    private List<String> findAllKeys(final SandBox sandBox, final IssueForm issueForm) {
+    private Set<String> findAllKeys(final SandBox sandBox, final IssueForm issueForm) {
         return Stream.concat(sandBox.getIssues().stream().map(Issue::getKey), issueForm.getKeys().stream())
-                .distinct().sorted().collect(Collectors.toList());
+                .distinct().sorted().collect(Collectors.toSet());
     }
 
     private Chart<String, Long> calcWeeklyThroughput(final IssueForm issueForm, final List<Issue> issues) {
