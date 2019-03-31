@@ -2,7 +2,7 @@ package br.com.jiratorio.service
 
 import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.domain.request.CreateIssuePeriodRequest
-import br.com.jiratorio.domain.response.IssuePeriodResponse
+import br.com.jiratorio.domain.response.IssuePeriodByBoardResponse
 
 interface IssuePeriodService {
 
@@ -14,6 +14,6 @@ interface IssuePeriodService {
 
     fun update(id: Long)
 
-    fun findIssuePeriodByBoard(boardId: Long): IssuePeriodResponse
+    fun findIssuePeriodByBoard(boardId: Long): IssuePeriodByBoardResponse
 
 }

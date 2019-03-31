@@ -1,4 +1,4 @@
-package br.com.jiratorio.integration.issueperiod
+package br.com.jiratorio.integration.issueperiod.create
 
 import br.com.jiratorio.assert.IssueAssert
 import br.com.jiratorio.assert.IssuePeriodAssert
@@ -37,7 +37,7 @@ internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
     @LoadStubs(["issues/basic-issues"])
     fun `create basic issue period`() {
         val board = authenticator.withDefaultUser {
-            boardFactory.create("withBasicConfiguration")
+            boardFactory.create(boardFactory::withBasicConfigurationBuilder)
         }
 
         val request = object {

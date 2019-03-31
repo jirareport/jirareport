@@ -1,4 +1,4 @@
-package br.com.jiratorio.integration.issueperiod
+package br.com.jiratorio.integration.issueperiod.create
 
 import br.com.jiratorio.assert.IssueAssert
 import br.com.jiratorio.assert.IssuePeriodAssert
@@ -44,7 +44,7 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
     @LoadStubs(["issues/complete-issues"])
     fun `create complete issue period`() {
         val board = authenticator.withDefaultUser {
-            val board = boardFactory.create("withCompleteConfiguration")
+            val board = boardFactory.create(boardFactory::withCompleteConfigurationBuilder)
 
             leadTimeConfigFactory.create {
                 it.name = "Dev Lead Time"

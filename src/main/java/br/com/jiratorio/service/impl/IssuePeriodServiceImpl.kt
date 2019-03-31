@@ -6,9 +6,10 @@ import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.request.CreateIssuePeriodRequest
-import br.com.jiratorio.domain.response.IssuePeriodResponse
+import br.com.jiratorio.domain.response.IssuePeriodByBoardResponse
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.logger
+import br.com.jiratorio.mapper.IssuePeriodMapper
 import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.ChartService
@@ -27,7 +28,8 @@ class IssuePeriodServiceImpl(
     private val chartService: ChartService,
     private val boardService: BoardService,
     private val wipService: WipService,
-    private val jqlService: JQLService
+    private val jqlService: JQLService,
+    private val issuePeriodMapper: IssuePeriodMapper
 ) : IssuePeriodService {
 
     private val log = logger()
@@ -128,7 +130,7 @@ class IssuePeriodServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun findIssuePeriodByBoard(boardId: Long): IssuePeriodResponse {
+    override fun findIssuePeriodByBoard(boardId: Long): IssuePeriodByBoardResponse {
         log.info("Method=findIssuePeriodByBoard, boardId={}", boardId)
 
         val board = boardService.findById(boardId)
@@ -136,9 +138,10 @@ class IssuePeriodServiceImpl(
         val issuePeriods = issuePeriodRepository.findByBoardId(boardId)
             .sortedBy { it.startDate }
 
-        val issuePeriodChart = buildCharts(issuePeriods, board)
-
-        return IssuePeriodResponse(issuePeriods, issuePeriodChart)
+        return IssuePeriodByBoardResponse(
+            periods = issuePeriodMapper.issuePeriodToIssuePeriodResponse(issuePeriods),
+            charts = buildCharts(issuePeriods, board)
+        )
     }
 
     private fun buildCharts(issuePeriods: List<IssuePeriod>, board: Board): IssuePeriodChartResponse {

@@ -1,18 +1,14 @@
 package br.com.jiratorio.controller;
 
-import br.com.jiratorio.domain.response.IssuePeriodResponse;
 import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.entity.Issue;
 import br.com.jiratorio.domain.entity.IssuePeriod;
 import br.com.jiratorio.domain.request.CreateIssuePeriodRequest;
+import br.com.jiratorio.domain.response.IssuePeriodByBoardResponse;
 import br.com.jiratorio.domain.response.IssuePeriodDetailsResponse;
-import br.com.jiratorio.domain.response.ListIssuePeriodResponse;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.IssuePeriodService;
 import br.com.jiratorio.service.IssueService;
-import java.net.URI;
-import java.util.List;
-import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/boards/{boardId}/issue-periods")
@@ -43,14 +43,8 @@ public class IssuePeriodController {
     }
 
     @GetMapping
-    public ListIssuePeriodResponse index(@PathVariable final Long boardId) {
-        IssuePeriodResponse issuePeriodResponse = issuePeriodService.findIssuePeriodByBoard(boardId);
-
-        return ListIssuePeriodResponse.builder()
-                .issuePeriods(issuePeriodResponse.getIssuePeriods())
-                .issuePeriodChart(issuePeriodResponse.getIssuePeriodChartResponse())
-                .board(boardService.findById(boardId))
-                .build();
+    public IssuePeriodByBoardResponse index(@PathVariable final Long boardId) {
+        return issuePeriodService.findIssuePeriodByBoard(boardId);
     }
 
     @GetMapping("/{issuePeriodId}")

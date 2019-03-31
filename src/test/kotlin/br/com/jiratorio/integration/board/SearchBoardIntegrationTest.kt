@@ -73,7 +73,9 @@ internal class SearchBoardIntegrationTest @Autowired constructor(
     @Test
     fun `filter board by name`() {
         authenticator.withDefaultUser {
-            boardFactory.create(5) { empty -> empty.name = "Uniq Start Name" }
+            boardFactory.create(5) {
+                it.name = "Uniq Start Name"
+            }
             boardFactory.create(5)
         }
 
@@ -147,7 +149,9 @@ internal class SearchBoardIntegrationTest @Autowired constructor(
 
     @Test
     fun `find board by id`() {
-        val board = authenticator.withDefaultUser { boardFactory.create("fullBoard") }
+        val board = authenticator.withDefaultUser {
+            boardFactory.create(boardFactory::fullBoardBuilder)
+        }
 
         restAssured {
             given {

@@ -1,4 +1,4 @@
-package br.com.jiratorio.integration.issueperiod
+package br.com.jiratorio.integration.issueperiod.create
 
 import br.com.jiratorio.assert.IssueAssert
 import br.com.jiratorio.assert.IssuePeriodAssert
@@ -40,7 +40,7 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired cons
     @LoadStubs(["issues/with-dynamic-fields"])
     fun `create issue period with dynamic fields`() {
         val board = authenticator.withDefaultUser {
-            boardFactory.create("withDynamicFields")
+            boardFactory.create(boardFactory::withDynamicFieldsBuilder)
         }
 
         val request = object {

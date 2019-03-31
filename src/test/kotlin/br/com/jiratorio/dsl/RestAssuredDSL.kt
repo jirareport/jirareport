@@ -5,6 +5,7 @@ import io.restassured.response.Response
 import io.restassured.response.ValidatableResponse
 import io.restassured.specification.RequestSender
 import io.restassured.specification.RequestSpecification
+import kotlin.reflect.KClass
 
 class RestAssuredDSL {
 
@@ -26,21 +27,26 @@ class RestAssuredDSL {
         blockThen = block
     }
 
-    fun build() {
-        RestAssured
+    fun build(): Response {
+        return RestAssured
             .given()
-            .log().all()
-            .header("Accept-Language", "en")
-            .apply(blockGiven)
+                .log().all()
+                .header("Accept-Language", "en")
+                .apply(blockGiven)
             .`when`()
-            .run(blockOn)
+                .run(blockOn)
             .then()
-            .log().all()
-            .run(blockThen)
+                .log().all()
+                .apply(blockThen)
+                .extract().response()
     }
 
 }
 
-fun restAssured(block: RestAssuredDSL.() -> Unit) {
-    RestAssuredDSL().apply(block).build()
+inline fun restAssured(block: RestAssuredDSL.() -> Unit): Response {
+    return RestAssuredDSL().apply(block).build()
+}
+
+infix fun <T : Any> Response.extractAs(type: KClass<T>): T {
+    return this.`as`<T>(type.java)
 }

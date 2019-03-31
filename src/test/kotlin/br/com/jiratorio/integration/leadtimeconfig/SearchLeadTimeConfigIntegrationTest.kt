@@ -72,7 +72,9 @@ internal class SearchLeadTimeConfigIntegrationTest @Autowired constructor(
 
     @Test
     fun `find by id not found`() {
-        authenticator.withDefaultUser(boardFactory::create)
+        authenticator.withDefaultUser {
+            boardFactory.create()
+        }
 
         restAssured {
             given {

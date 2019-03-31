@@ -258,12 +258,8 @@ public class ChartServiceImpl implements ChartService {
         LeadTimeCompareChart leadTimeCompareChart = new LeadTimeCompareChart();
 
         for (IssuePeriod issuePeriod : issuePeriods) {
-            Map<String, Double> collect = issuePeriod.getIssues()
-                    .stream()
-                    .map(Issue::getLeadTimes)
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.groupingBy(i -> i.getLeadTimeConfig().getName(),
-                            Collectors.averagingDouble(LeadTime::getLeadTime)));
+            Map<String, Double> collect =
+                    issuePeriod.getLeadTimeCompareChart().getData();
 
             if (collect.size() < board.getLeadTimeConfigs().size()) {
                 for (LeadTimeConfig leadTimeConfig : board.getLeadTimeConfigs()) {

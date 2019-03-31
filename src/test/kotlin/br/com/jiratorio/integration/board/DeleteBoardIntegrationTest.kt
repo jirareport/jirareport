@@ -44,7 +44,9 @@ internal class DeleteBoardIntegrationTest @Autowired constructor(
 
     @Test
     fun `delete other owner board`() {
-        authenticator.withUser("other", boardFactory::create)
+        authenticator.withUser("other") {
+            boardFactory.create()
+        }
 
         restAssured {
             given {

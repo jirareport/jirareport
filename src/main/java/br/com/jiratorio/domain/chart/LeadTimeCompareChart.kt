@@ -2,11 +2,11 @@ package br.com.jiratorio.domain.chart
 
 import java.io.Serializable
 import java.util.ArrayList
-import java.util.HashMap
+import java.util.LinkedHashMap
 
 class LeadTimeCompareChart(
     val labels: MutableList<String> = ArrayList(),
-    val datasources: MutableMap<String, MutableList<Double>> = HashMap()
+    val datasources: MutableMap<String, MutableList<Double>> = LinkedHashMap()
 ) : Serializable {
     companion object {
         private const val serialVersionUID = -1501002922104599319L
