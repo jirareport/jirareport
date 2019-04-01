@@ -75,8 +75,11 @@ public class IssuePeriodController {
     }
 
     @PutMapping("/{issuePeriodId}")
-    public ResponseEntity<?> update(@PathVariable final Long issuePeriodId) {
-        issuePeriodService.update(issuePeriodId);
+    public ResponseEntity<?> update(
+            @PathVariable final Long boardId,
+            @PathVariable final Long issuePeriodId
+    ) {
+        issuePeriodService.update(boardId, issuePeriodId);
         return ResponseEntity.noContent().build();
     }
 

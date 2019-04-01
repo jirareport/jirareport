@@ -12,7 +12,7 @@ interface IssuePeriodService {
 
     fun removeByBoardAndId(boardId: Long, id: Long)
 
-    fun update(id: Long)
+    fun update(boardId: Long, id: Long)
 
     fun findIssuePeriodByBoard(boardId: Long): IssuePeriodByBoardResponse
 
