@@ -104,10 +104,12 @@ class IssuePeriodServiceImpl(
     }
 
     @Transactional
-    override fun remove(id: Long) {
-        log.info("Method=remove, id={}", id)
+    override fun removeByBoardAndId(boardId: Long, id: Long) {
+        log.info("Method=removeByBoardAndId, boardId={}, id={}", boardId, id)
 
-        val issuePeriod = findById(id)
+        val issuePeriod = issuePeriodRepository.findByBoardIdAndId(boardId, id)
+            ?: throw ResourceNotFound()
+
         delete(issuePeriod)
     }
 

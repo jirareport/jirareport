@@ -81,8 +81,11 @@ public class IssuePeriodController {
     }
 
     @DeleteMapping("/{issuePeriodId}")
-    public ResponseEntity<?> remove(@PathVariable final Long issuePeriodId) {
-        issuePeriodService.remove(issuePeriodId);
+    public ResponseEntity<?> remove(
+            @PathVariable final Long boardId,
+            @PathVariable final Long issuePeriodId
+    ) {
+        issuePeriodService.removeByBoardAndId(boardId, issuePeriodId);
 
         return ResponseEntity.noContent().build();
     }

@@ -17,6 +17,12 @@ interface IssuePeriodRepository : CrudRepository<IssuePeriod, Long> {
     fun findByBoardId(boardId: Long): List<IssuePeriod>
 
     @EntityGraph(attributePaths = ["issues"])
-    fun findByStartDateAndEndDateAndBoardId(startDate: LocalDate, endDate: LocalDate, boardId: Long): Optional<IssuePeriod>
+    fun findByStartDateAndEndDateAndBoardId(
+        startDate: LocalDate,
+        endDate: LocalDate,
+        boardId: Long
+    ): Optional<IssuePeriod>
+
+    fun findByBoardIdAndId(boardId: Long, id: Long): IssuePeriod?
 
 }
