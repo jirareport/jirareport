@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain.response
+package br.com.jiratorio.domain.response.board
 
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig
 import br.com.jiratorio.domain.impediment.ImpedimentType

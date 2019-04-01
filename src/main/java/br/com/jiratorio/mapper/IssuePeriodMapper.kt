@@ -1,7 +1,8 @@
 package br.com.jiratorio.mapper
 
 import br.com.jiratorio.domain.entity.IssuePeriod
-import br.com.jiratorio.domain.response.IssuePeriodResponse
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodDetailResponse
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodResponse
 import org.springframework.stereotype.Component
 
 @Component
@@ -20,6 +21,29 @@ class IssuePeriodMapper {
             avgPctEfficiency = issuePeriod.avgPctEfficiency,
             jql = issuePeriod.jql,
             issuesCount = issuePeriod.issuesCount
+        )
+    }
+
+    fun issuePeriodToIssuePeriodDetailResponse(
+        issuePeriod: IssuePeriod
+    ): IssuePeriodDetailResponse {
+        return IssuePeriodDetailResponse(
+            dates = issuePeriod.dates,
+            leadTime = issuePeriod.avgLeadTime,
+            issuesCount = issuePeriod.issuesCount,
+            leadTimeByEstimate = issuePeriod.leadTimeBySize,
+            throughputByEstimate = issuePeriod.estimated,
+            leadTimeBySystem = issuePeriod.leadTimeBySystem,
+            throughputBySystem = issuePeriod.tasksBySystem,
+            leadTimeByType = issuePeriod.leadTimeByType,
+            throughputByType = issuePeriod.tasksByType,
+            leadTimeByProject = issuePeriod.leadTimeByProject,
+            throughputByProject = issuePeriod.tasksByProject,
+            leadTimeByPriority = issuePeriod.leadTimeByPriority,
+            throughputByPriority = issuePeriod.throughputByPriority,
+            columnTimeAvg = issuePeriod.columnTimeAvgs,
+            leadTimeCompareChart = issuePeriod.leadTimeCompareChart,
+            dynamicCharts = issuePeriod.dynamicCharts
         )
     }
 

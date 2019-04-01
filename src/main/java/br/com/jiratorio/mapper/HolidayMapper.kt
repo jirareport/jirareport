@@ -3,8 +3,8 @@ package br.com.jiratorio.mapper
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Holiday
 import br.com.jiratorio.domain.request.HolidayRequest
-import br.com.jiratorio.domain.response.HolidayApiResponse
-import br.com.jiratorio.domain.response.HolidayResponse
+import br.com.jiratorio.domain.response.holiday.HolidayApiResponse
+import br.com.jiratorio.domain.response.holiday.HolidayResponse
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.stereotype.Component

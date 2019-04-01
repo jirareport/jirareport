@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.impediment.calculator
 
-import br.com.jiratorio.domain.changelog.JiraChangelogItem
+import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import java.time.LocalDate
 import java.time.LocalDateTime

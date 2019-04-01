@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain.changelog
+package br.com.jiratorio.domain.jira.changelog
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDateTime

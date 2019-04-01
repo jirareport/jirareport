@@ -6,9 +6,11 @@ import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.request.CreateIssuePeriodRequest
-import br.com.jiratorio.domain.response.IssuePeriodByBoardResponse
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByBoardResponse
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.logger
+import br.com.jiratorio.mapper.IssueMapper
 import br.com.jiratorio.mapper.IssuePeriodMapper
 import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.service.BoardService
@@ -29,7 +31,8 @@ class IssuePeriodServiceImpl(
     private val boardService: BoardService,
     private val wipService: WipService,
     private val jqlService: JQLService,
-    private val issuePeriodMapper: IssuePeriodMapper
+    private val issuePeriodMapper: IssuePeriodMapper,
+    private val issueMapper: IssueMapper
 ) : IssuePeriodService {
 
     private val log = logger()
@@ -114,11 +117,16 @@ class IssuePeriodServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun findById(id: Long): IssuePeriod {
+    override fun findById(boardId: Long, id: Long): IssuePeriodByIdResponse {
         log.info("Method=findById, id={}", id)
 
-        return issuePeriodRepository.findById(id)
-            .orElseThrow(::ResourceNotFound)
+        val issuePeriod = issuePeriodRepository.findByBoardIdAndId(boardId, id)
+            ?: throw ResourceNotFound()
+
+        return IssuePeriodByIdResponse(
+            detail = issuePeriodMapper.issuePeriodToIssuePeriodDetailResponse(issuePeriod),
+            issues = issueMapper.issueToIssueResponse(issuePeriod.issues)
+        )
     }
 
     @Transactional

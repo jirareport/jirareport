@@ -2,7 +2,7 @@ package br.com.jiratorio.service
 
 import br.com.jiratorio.domain.Account
 import br.com.jiratorio.domain.request.HolidayRequest
-import br.com.jiratorio.domain.response.HolidayResponse
+import br.com.jiratorio.domain.response.holiday.HolidayResponse
 import java.time.LocalDate
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

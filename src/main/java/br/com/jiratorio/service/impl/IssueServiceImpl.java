@@ -10,8 +10,8 @@ import br.com.jiratorio.domain.entity.Board;
 import br.com.jiratorio.domain.entity.Issue;
 import br.com.jiratorio.domain.entity.embedded.Chart;
 import br.com.jiratorio.domain.form.IssueForm;
-import br.com.jiratorio.mapper.EstimateIssueMapper;
-import br.com.jiratorio.mapper.IssueMapper;
+import br.com.jiratorio.parser.EstimateIssueParser;
+import br.com.jiratorio.parser.IssueParser;
 import br.com.jiratorio.repository.IssueRepository;
 import br.com.jiratorio.service.BoardService;
 import br.com.jiratorio.service.ChartService;
@@ -36,9 +36,9 @@ public class IssueServiceImpl implements IssueService {
 
     private final IssueClient issueClient;
 
-    private final IssueMapper issueMapper;
+    private final IssueParser issueParser;
 
-    private final EstimateIssueMapper estimateIssueMapper;
+    private final EstimateIssueParser estimateIssueParser;
 
     private final IssueRepository issueRepository;
 
@@ -49,15 +49,15 @@ public class IssueServiceImpl implements IssueService {
     private final BoardService boardService;
 
     public IssueServiceImpl(final IssueClient issueClient,
-                            final IssueMapper issueMapper,
-                            final EstimateIssueMapper estimateIssueMapper,
+                            final IssueParser issueParser,
+                            final EstimateIssueParser estimateIssueParser,
                             final IssueRepository issueRepository,
                             final ChartService chartService,
                             final LeadTimeService leadTimeService,
                             final BoardService boardService) {
         this.issueClient = issueClient;
-        this.issueMapper = issueMapper;
-        this.estimateIssueMapper = estimateIssueMapper;
+        this.issueParser = issueParser;
+        this.estimateIssueParser = estimateIssueParser;
         this.issueRepository = issueRepository;
         this.chartService = chartService;
         this.leadTimeService = leadTimeService;
@@ -72,7 +72,7 @@ public class IssueServiceImpl implements IssueService {
 
         String issuesStr = issueClient.findByJql(jql);
 
-        List<Issue> issues = issueMapper.parse(issuesStr, board);
+        List<Issue> issues = issueParser.parse(issuesStr, board);
 
         issueRepository.saveAll(issues);
         leadTimeService.createLeadTimes(issues, board.getId());
@@ -85,7 +85,7 @@ public class IssueServiceImpl implements IssueService {
         log.info("Method=findEstimateByJql, jql={}, board={}", jql, board);
         String issuesStr = issueClient.findByJql(jql);
 
-        return estimateIssueMapper.parseEstimate(issuesStr, board);
+        return estimateIssueParser.parseEstimate(issuesStr, board);
     }
 
     @Override

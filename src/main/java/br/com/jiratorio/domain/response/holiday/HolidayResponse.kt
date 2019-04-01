@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain.response
+package br.com.jiratorio.domain.response.holiday
 
 data class HolidayResponse(
     var id: Long,

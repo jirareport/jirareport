@@ -3,17 +3,15 @@ package br.com.jiratorio.mapper
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.request.CreateBoardRequest
 import br.com.jiratorio.domain.request.UpdateBoardRequest
-import br.com.jiratorio.domain.response.BoardDetailsResponse
-import br.com.jiratorio.domain.response.BoardResponse
-import br.com.jiratorio.mapper.transformer.StringTransformer
+import br.com.jiratorio.domain.response.board.BoardDetailsResponse
+import br.com.jiratorio.domain.response.board.BoardResponse
+import br.com.jiratorio.extension.toUpperCase
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.stereotype.Component
 
 @Component
-class BoardMapper(
-    private val stringTransformer: StringTransformer
-) {
+class BoardMapper {
 
     fun toBoardResponseDetails(board: Board): BoardDetailsResponse {
         return BoardDetailsResponse(
@@ -66,9 +64,9 @@ class BoardMapper(
     fun fromUpdateBoardRequest(board: Board, updateBoardRequest: UpdateBoardRequest): Board {
         return board.apply {
             name = updateBoardRequest.name
-            startColumn = stringTransformer.toUpperCase(updateBoardRequest.startColumn)
-            endColumn = stringTransformer.toUpperCase(updateBoardRequest.endColumn)
-            fluxColumn = stringTransformer.listToUpperCase(updateBoardRequest.fluxColumn)
+            startColumn = updateBoardRequest.startColumn?.toUpperCase()
+            endColumn = updateBoardRequest.endColumn?.toUpperCase()
+            fluxColumn = updateBoardRequest.fluxColumn?.toUpperCase()?.toMutableList()
             ignoreIssueType = updateBoardRequest.ignoreIssueType
             epicCF = updateBoardRequest.epicCF
             estimateCF = updateBoardRequest.estimateCF
@@ -76,10 +74,10 @@ class BoardMapper(
             projectCF = updateBoardRequest.projectCF
             ignoreWeekend = updateBoardRequest.ignoreWeekend
             impedimentType = updateBoardRequest.impedimentType
-            impedimentColumns = stringTransformer.listToUpperCase(updateBoardRequest.impedimentColumns)
+            impedimentColumns = updateBoardRequest.impedimentColumns?.toUpperCase()?.toMutableList()
             dynamicFields = updateBoardRequest.dynamicFields
-            touchingColumns = stringTransformer.listToUpperCase(updateBoardRequest.touchingColumns)
-            waitingColumns = stringTransformer.listToUpperCase(updateBoardRequest.waitingColumns)
+            touchingColumns = updateBoardRequest.touchingColumns?.toUpperCase()?.toMutableList()
+            waitingColumns = updateBoardRequest.waitingColumns?.toUpperCase()?.toMutableList()
             dueDateCF = updateBoardRequest.dueDateCF
             dueDateType = updateBoardRequest.dueDateType
         }

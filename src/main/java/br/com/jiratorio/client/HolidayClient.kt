@@ -1,7 +1,7 @@
 package br.com.jiratorio.client
 
 import br.com.jiratorio.client.config.HolidayClientConfig
-import br.com.jiratorio.domain.response.HolidayApiResponse
+import br.com.jiratorio.domain.response.holiday.HolidayApiResponse
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping

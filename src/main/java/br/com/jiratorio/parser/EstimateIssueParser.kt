@@ -1,8 +1,8 @@
-package br.com.jiratorio.mapper
+package br.com.jiratorio.parser
 
 import br.com.jiratorio.domain.FluxColumn
-import br.com.jiratorio.domain.changelog.JiraChangelog
-import br.com.jiratorio.domain.changelog.JiraChangelogItem
+import br.com.jiratorio.domain.jira.changelog.JiraChangelog
+import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.estimate.EstimateIssue
 import br.com.jiratorio.extension.extractValue
@@ -18,7 +18,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Component
-class EstimateIssueMapper(
+class EstimateIssueParser(
     private val holidayService: HolidayService,
     private val objectMapper: ObjectMapper,
     private val changelogService: ChangelogService

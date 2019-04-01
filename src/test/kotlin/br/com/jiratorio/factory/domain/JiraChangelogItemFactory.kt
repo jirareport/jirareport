@@ -1,6 +1,6 @@
 package br.com.jiratorio.factory.domain
 
-import br.com.jiratorio.domain.changelog.JiraChangelogItem
+import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.extension.format
 import br.com.jiratorio.extension.toLocalDateTime
 import br.com.leonardoferreira.jbacon.JBacon

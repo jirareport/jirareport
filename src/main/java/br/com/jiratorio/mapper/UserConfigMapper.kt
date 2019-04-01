@@ -4,13 +4,11 @@ import br.com.jiratorio.domain.ImportHolidayInfo
 import br.com.jiratorio.domain.entity.UserConfig
 import br.com.jiratorio.domain.request.UpdateUserConfigRequest
 import br.com.jiratorio.domain.response.UserConfigResponse
-import br.com.jiratorio.mapper.transformer.CityTransformer
+import br.com.jiratorio.extension.stripAccents
 import org.springframework.stereotype.Component
 
 @Component
-class UserConfigMapper(
-    private val cityTransformer: CityTransformer
-) {
+class UserConfigMapper {
 
     fun userConfigToResponse(userConfig: UserConfig): UserConfigResponse {
         return UserConfigResponse(
@@ -24,9 +22,12 @@ class UserConfigMapper(
 
     fun updateFromRequest(userConfig: UserConfig, updateUserConfigRequest: UpdateUserConfigRequest): UserConfig {
         return userConfig.apply {
-            state = updateUserConfigRequest.state
-            city = cityTransformer.normalizeCity(updateUserConfigRequest.city)
             holidayToken = updateUserConfigRequest.holidayToken
+            state = updateUserConfigRequest.state
+            city = updateUserConfigRequest.city
+                ?.stripAccents()
+                ?.replace(" ", "")
+                ?.toUpperCase()
 
             val leadTimeChartType = updateUserConfigRequest.leadTimeChartType
             if (leadTimeChartType != null) {

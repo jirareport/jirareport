@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain.changelog
+package br.com.jiratorio.domain.jira.changelog
 
 class JiraChangelog(
     val startAt: Long,

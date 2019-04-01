@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.impediment.calculator
 
-import br.com.jiratorio.domain.changelog.JiraChangelogItem
+import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag

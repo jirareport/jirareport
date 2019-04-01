@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain.response
+package br.com.jiratorio.domain.response.board
 
 data class BoardResponse(
     val id: Long,

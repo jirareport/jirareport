@@ -1,14 +1,14 @@
 package br.com.jiratorio.service
 
-import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.domain.request.CreateIssuePeriodRequest
-import br.com.jiratorio.domain.response.IssuePeriodByBoardResponse
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByBoardResponse
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
 
 interface IssuePeriodService {
 
     fun create(createIssuePeriodRequest: CreateIssuePeriodRequest, boardId: Long): Long?
 
-    fun findById(id: Long): IssuePeriod
+    fun findById(boardId: Long, id: Long): IssuePeriodByIdResponse
 
     fun removeByBoardAndId(boardId: Long, id: Long)
 

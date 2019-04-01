@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain.response
+package br.com.jiratorio.domain.response.issueperiod
 
 import br.com.jiratorio.domain.chart.IssuePeriodChartResponse
 

@@ -3,7 +3,7 @@ package br.com.jiratorio.integration.issueperiod
 import br.com.jiratorio.assert.response.IssuePeriodResponseAssert
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.domain.response.IssuePeriodByBoardResponse
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByBoardResponse
 import br.com.jiratorio.dsl.extractAs
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.extension.toLocalDate
@@ -22,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @Tag("integration")
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class SearchIssuePeriodIntegrationTest @Autowired constructor(
+internal class ListIssuePeriodIntegrationTest @Autowired constructor(
     private val authenticator: Authenticator,
     private val boardFactory: BoardFactory,
     private val issuePeriodFactory: IssuePeriodFactory

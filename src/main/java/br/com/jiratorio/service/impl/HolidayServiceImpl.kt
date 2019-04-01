@@ -6,7 +6,7 @@ import br.com.jiratorio.domain.Account
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Holiday
 import br.com.jiratorio.domain.request.HolidayRequest
-import br.com.jiratorio.domain.response.HolidayResponse
+import br.com.jiratorio.domain.response.holiday.HolidayResponse
 import br.com.jiratorio.exception.HolidaysAlreadyImported
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.logger
