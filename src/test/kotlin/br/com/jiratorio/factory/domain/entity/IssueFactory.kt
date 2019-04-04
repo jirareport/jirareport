@@ -1,4 +1,4 @@
-package br.com.jiratorio.factory.entity
+package br.com.jiratorio.factory.domain.entity
 
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.extension.faker.jira
@@ -14,9 +14,9 @@ import java.util.concurrent.TimeUnit
 class IssueFactory(
     private val faker: Faker,
     private val boardFactory: BoardFactory,
-    private val issueRepository: IssueRepository,
-    private val changelogFactory: ChangelogFactory
-) : KBacon<Issue>() {
+    private val changelogFactory: ChangelogFactory,
+    issueRepository: IssueRepository?
+) : KBacon<Issue>(issueRepository) {
 
     override fun builder(): Issue {
         return Issue(
@@ -25,7 +25,7 @@ class IssueFactory(
             creator = faker.gameOfThrones().character(),
             system = faker.jira().system(),
             epic = faker.jira().epic(),
-            summary = faker.lorem().paragraph(),
+            summary = faker.lorem().word(),
             estimated = faker.jira().estimate(),
             project = faker.jira().project(),
             startDate = faker.date().past(30, TimeUnit.DAYS).toLocalDateTime(),
@@ -33,20 +33,13 @@ class IssueFactory(
             leadTime = faker.number().randomNumber(),
             created = faker.date().past(40, TimeUnit.DAYS).toLocalDateTime(),
             priority = faker.jira().priority(),
-            changelog = changelogFactory.create(20, persist = false),
+            changelog = changelogFactory.create(20),
             board = boardFactory.create(),
             waitTime = faker.number().randomNumber(),
             touchTime = faker.number().randomNumber(),
             pctEfficiency = faker.number().randomDouble(2, 10, 20),
-            dynamicFields = mapOf(
-
-            )
+            dynamicFields = mapOf()
         )
     }
-
-    override fun persist(entity: Issue) {
-        issueRepository.save(entity)
-    }
-
 
 }

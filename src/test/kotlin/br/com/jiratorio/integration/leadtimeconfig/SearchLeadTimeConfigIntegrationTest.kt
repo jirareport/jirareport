@@ -3,8 +3,8 @@ package br.com.jiratorio.integration.leadtimeconfig
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.entity.BoardFactory
-import br.com.jiratorio.factory.entity.LeadTimeConfigFactory
+import br.com.jiratorio.factory.domain.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.LeadTimeConfigFactory
 import br.com.jiratorio.matcher.IdMatcher
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
@@ -27,9 +27,9 @@ internal class SearchLeadTimeConfigIntegrationTest @Autowired constructor(
     @Test
     fun `find all lead time config`() {
         authenticator.withDefaultUser {
-            val board = boardFactory.create()
+            val defaultBoard = boardFactory.create()
             leadTimeConfigFactory.create(10) {
-                it.board = board
+                board = defaultBoard
             }
         }
 
@@ -50,7 +50,9 @@ internal class SearchLeadTimeConfigIntegrationTest @Autowired constructor(
 
     @Test
     fun `find by id`() {
-        val leadTimeConfig = authenticator.withDefaultUser(leadTimeConfigFactory::create)
+        val leadTimeConfig = authenticator.withDefaultUser {
+            leadTimeConfigFactory.create()
+        }
 
         restAssured {
             given {

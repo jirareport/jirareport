@@ -3,8 +3,8 @@ package br.com.jiratorio.integration.holiday
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.entity.BoardFactory
-import br.com.jiratorio.factory.entity.HolidayFactory
+import br.com.jiratorio.factory.domain.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.HolidayFactory
 import br.com.jiratorio.matcher.IdMatcher
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers.equalTo
@@ -31,7 +31,9 @@ internal class SearchHolidayIntegrationTest @Autowired constructor(
     fun `find all holidays`() {
         val (id) = authenticator.withDefaultUser {
             val boardExample = boardFactory.create()
-            holidayFactory.create(10) { it.board = boardExample }
+            holidayFactory.create(10) {
+                board = boardExample
+            }
 
             boardExample
         }

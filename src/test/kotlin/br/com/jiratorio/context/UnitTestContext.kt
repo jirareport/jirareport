@@ -7,5 +7,5 @@ import org.springframework.context.annotation.Import
 
 @Configuration
 @Import(FakerConfig::class)
-@ComponentScan("br.com.jiratorio.factory.domain")
+@ComponentScan("br.com.jiratorio.factory")
 class UnitTestContext

@@ -3,7 +3,7 @@ package br.com.jiratorio.integration.userconfig
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.domain.chart.ChartType
 import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.entity.UserConfigFactory
+import br.com.jiratorio.factory.domain.entity.UserConfigFactory
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue

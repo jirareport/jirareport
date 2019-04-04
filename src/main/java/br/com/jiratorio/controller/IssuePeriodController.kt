@@ -44,7 +44,7 @@ class IssuePeriodController(
         val location = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{id}")
-            .build(id!!)
+            .build(id)
 
         return ResponseEntity.created(location).build<Any>()
     }

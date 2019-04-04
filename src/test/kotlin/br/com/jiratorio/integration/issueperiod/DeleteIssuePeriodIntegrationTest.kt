@@ -3,7 +3,7 @@ package br.com.jiratorio.integration.issueperiod
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.entity.IssuePeriodFactory
+import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
 import br.com.jiratorio.repository.IssuePeriodRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag

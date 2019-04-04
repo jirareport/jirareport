@@ -7,7 +7,7 @@ import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.UpdateBoardRequestFactory
-import br.com.jiratorio.factory.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.repository.BoardRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
@@ -32,7 +32,7 @@ internal class UpdateBoardIntegrationTest @Autowired constructor(
     @Throws(Exception::class)
     fun `update board`() {
         authenticator.withDefaultUser { boardFactory.create() }
-        val request = updateBoardRequestFactory.build()
+        val request = updateBoardRequestFactory.create()
 
         restAssured {
             given {

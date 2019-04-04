@@ -6,7 +6,7 @@ import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
 
 interface IssuePeriodService {
 
-    fun create(createIssuePeriodRequest: CreateIssuePeriodRequest, boardId: Long): Long?
+    fun create(createIssuePeriodRequest: CreateIssuePeriodRequest, boardId: Long): Long
 
     fun findById(boardId: Long, id: Long): IssuePeriodByIdResponse
 

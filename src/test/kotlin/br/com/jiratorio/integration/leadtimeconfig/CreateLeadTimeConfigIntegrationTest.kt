@@ -6,7 +6,7 @@ import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.LeadTimeConfigRequestFactory
-import br.com.jiratorio.factory.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
@@ -33,7 +33,7 @@ internal class CreateLeadTimeConfigIntegrationTest @Autowired constructor(
     fun `create lead time config`() {
         val request = authenticator.withDefaultUser {
             boardFactory.create()
-            leadTimeConfigRequestFactory.build()
+            leadTimeConfigRequestFactory.create()
         }
 
         restAssured {
@@ -92,7 +92,7 @@ internal class CreateLeadTimeConfigIntegrationTest @Autowired constructor(
 
     @Test
     fun `create with board not found`() {
-        val request = leadTimeConfigRequestFactory.build()
+        val request = leadTimeConfigRequestFactory.create()
 
         restAssured {
             given {

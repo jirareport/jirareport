@@ -1,16 +1,16 @@
 package br.com.jiratorio.factory
 
+import org.springframework.data.repository.CrudRepository
 import kotlin.reflect.KFunction0
 
-abstract class KBacon<T> {
-
-    val default: T
-        get() = builder()
+abstract class KBacon<T>(
+    val repository: CrudRepository<T, *>? = null
+) {
 
     fun create(
         builder: KFunction0<T> = ::builder,
-        persist: Boolean = true,
-        modifier: (T) -> Unit = {}
+        persist: Boolean = repository != null,
+        modifier: T.() -> Unit = {}
     ): T {
         return builder().also {
             modifier(it)
@@ -20,19 +20,19 @@ abstract class KBacon<T> {
         }
     }
 
+    private fun persist(entity: T) {
+        repository?.save(entity) ?: throw UnsupportedOperationException()
+    }
+
     fun create(
         quantity: Int,
         builder: KFunction0<T> = ::builder,
-        persist: Boolean = true,
-        modifier: (T) -> Unit = {}
-    ): List<T> {
-        return (1..quantity).map { create(builder, persist, modifier) }
+        persist: Boolean = repository != null,
+        modifier: T.() -> Unit = {}
+    ): List<T> = (1..quantity).map {
+        create(builder, persist, modifier)
     }
 
-    protected abstract fun builder(): T
-
-    protected open fun persist(entity: T) {
-        throw UnsupportedOperationException()
-    }
+    abstract fun builder(): T
 
 }

@@ -59,7 +59,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}"
 
-    testImplementation "br.com.leonardoferreira:JBacon:2.0.1"
     testImplementation "com.github.javafaker:javafaker:0.16"
     testImplementation "io.rest-assured:rest-assured"
     testImplementation "com.github.tomakehurst:wiremock:2.19.0"
@@ -104,7 +103,7 @@ compileTestKotlin {
 detekt {
     input = files(
             "src/main/java",
-            "src/test/java"
+            "src/test/kotlin"
     )
     config = files("$projectDir/detekt-config.yml")
 }

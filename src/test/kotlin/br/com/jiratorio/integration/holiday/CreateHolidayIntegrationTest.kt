@@ -5,7 +5,7 @@ import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.HolidayRequestFactory
-import br.com.jiratorio.factory.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.repository.HolidayRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
@@ -29,7 +29,7 @@ internal class CreateHolidayIntegrationTest @Autowired constructor(
 
     @Test
     fun `create holiday`() {
-        val request = holidayRequestFactory.build()
+        val request = holidayRequestFactory.create()
         authenticator.withDefaultUser { boardFactory.create() }
 
         restAssured {

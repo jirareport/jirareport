@@ -13,7 +13,7 @@ import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
-import br.com.jiratorio.factory.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.repository.IssueRepository
 import io.restassured.http.ContentType

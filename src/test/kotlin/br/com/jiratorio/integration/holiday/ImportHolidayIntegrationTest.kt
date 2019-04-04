@@ -3,9 +3,9 @@ package br.com.jiratorio.integration.holiday
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.annotation.LoadStubs
 import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.entity.BoardFactory
-import br.com.jiratorio.factory.entity.HolidayFactory
-import br.com.jiratorio.factory.entity.UserConfigFactory
+import br.com.jiratorio.factory.domain.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.HolidayFactory
+import br.com.jiratorio.factory.domain.entity.UserConfigFactory
 import br.com.jiratorio.repository.HolidayRepository
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.LocalDate
-import java.util.stream.IntStream
 
 @Tag("integration")
 @LoadStubs(["holidays"])
@@ -100,11 +99,11 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
     @Test
     fun `already been imported`() {
         authenticator.withDefaultUser {
-            val board = boardFactory.create()
-            IntStream.range(1, 6).forEach { i ->
-                holidayFactory.create { empty ->
-                    empty.date = LocalDate.of(2019, i, 1)
-                    empty.board = board
+            val defaultBoard = boardFactory.create()
+            for (i in 1..5) {
+                holidayFactory.create {
+                    date = LocalDate.of(2019, i, 1)
+                    board = defaultBoard
                 }
             }
         }

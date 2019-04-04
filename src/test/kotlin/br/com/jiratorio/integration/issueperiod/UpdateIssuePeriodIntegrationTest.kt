@@ -5,8 +5,8 @@ import br.com.jiratorio.base.annotation.LoadStubs
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.extension.toLocalDate
-import br.com.jiratorio.factory.entity.BoardFactory
-import br.com.jiratorio.factory.entity.IssuePeriodFactory
+import br.com.jiratorio.factory.domain.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
 import br.com.jiratorio.repository.IssuePeriodRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
@@ -34,9 +34,9 @@ internal class UpdateIssuePeriodIntegrationTest @Autowired constructor(
         authenticator.withDefaultUser {
             val board = boardFactory.create(boardFactory::withBasicConfigurationBuilder)
             issuePeriodFactory.create {
-                it.startDate = "01/01/2019".toLocalDate()
-                it.endDate = "31/01/2019".toLocalDate()
-                it.boardId = board.id
+                startDate = "01/01/2019".toLocalDate()
+                endDate = "31/01/2019".toLocalDate()
+                boardId = board.id
             }
         }
 

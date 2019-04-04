@@ -1,6 +1,5 @@
 package br.com.jiratorio.domain.response
 
-import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 
 data class IssueResponse(

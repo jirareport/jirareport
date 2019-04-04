@@ -26,7 +26,7 @@ class UserConfigMapper {
             state = updateUserConfigRequest.state
             city = updateUserConfigRequest.city
                 ?.stripAccents()
-                ?.replace(" ", "")
+                ?.replace(" ", "_")
                 ?.toUpperCase()
 
             val leadTimeChartType = updateUserConfigRequest.leadTimeChartType

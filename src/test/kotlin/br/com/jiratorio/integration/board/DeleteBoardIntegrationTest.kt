@@ -3,7 +3,7 @@ package br.com.jiratorio.integration.board
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.repository.BoardRepository
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat

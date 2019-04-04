@@ -28,7 +28,7 @@ internal class CreateBoardIntegrationTest @Autowired constructor(
 
     @Test
     fun `create board`() {
-        val request = createBoardRequestFactory.build()
+        val request = createBoardRequestFactory.create()
 
         restAssured {
             given {
@@ -73,7 +73,10 @@ internal class CreateBoardIntegrationTest @Autowired constructor(
             }
             then {
                 statusCode(HttpStatus.SC_BAD_REQUEST)
-                body("errors.find { it.field == 'externalId' }.messages", contains("must be greater than or equal to 1"))
+                body(
+                    "errors.find { it.field == 'externalId' }.messages",
+                    contains("must be greater than or equal to 1")
+                )
                 body("errors.find { it.field == 'name' }.messages", contains("must not be blank"))
             }
         }

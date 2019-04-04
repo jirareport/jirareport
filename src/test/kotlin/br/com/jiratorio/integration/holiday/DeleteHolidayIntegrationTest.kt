@@ -3,7 +3,7 @@ package br.com.jiratorio.integration.holiday
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.entity.HolidayFactory
+import br.com.jiratorio.factory.domain.entity.HolidayFactory
 import br.com.jiratorio.repository.HolidayRepository
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat

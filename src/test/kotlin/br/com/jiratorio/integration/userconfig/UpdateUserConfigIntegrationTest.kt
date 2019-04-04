@@ -26,7 +26,9 @@ internal class UpdateUserConfigIntegrationTest @Autowired constructor(
 
     @Test
     fun `update user config`() {
-        val request = updateUserConfigFactory.build { it.city = "São Paulo" }
+        val request = updateUserConfigFactory.create {
+            city = "São Paulo"
+        }
 
         restAssured {
             given {

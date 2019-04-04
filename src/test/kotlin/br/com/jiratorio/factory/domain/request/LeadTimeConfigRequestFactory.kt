@@ -1,29 +1,21 @@
 package br.com.jiratorio.factory.domain.request
 
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest
-import br.com.leonardoferreira.jbacon.JBacon
+import br.com.jiratorio.factory.KBacon
 import com.github.javafaker.Faker
 import org.springframework.stereotype.Component
 
 @Component
 class LeadTimeConfigRequestFactory(
     private val faker: Faker
-) : JBacon<LeadTimeConfigRequest>() {
+) : KBacon<LeadTimeConfigRequest>() {
 
-    override fun getDefault() =
-        LeadTimeConfigRequest(
+    override fun builder(): LeadTimeConfigRequest {
+        return LeadTimeConfigRequest(
             name = faker.lorem().word(),
             startColumn = faker.lorem().word(),
             endColumn = faker.lorem().word()
         )
+    }
 
-    override fun getEmpty() =
-        LeadTimeConfigRequest(
-            name = faker.lorem().word(),
-            startColumn = faker.lorem().word(),
-            endColumn = faker.lorem().word()
-        )
-
-    override fun persist(leadTimeConfigRequest: LeadTimeConfigRequest) =
-        throw UnsupportedOperationException()
 }

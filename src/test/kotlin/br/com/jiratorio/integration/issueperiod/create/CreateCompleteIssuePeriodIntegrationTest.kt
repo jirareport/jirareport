@@ -13,8 +13,8 @@ import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
-import br.com.jiratorio.factory.entity.BoardFactory
-import br.com.jiratorio.factory.entity.LeadTimeConfigFactory
+import br.com.jiratorio.factory.domain.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.LeadTimeConfigFactory
 import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.repository.IssueRepository
 import io.restassured.http.ContentType
@@ -44,23 +44,23 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
     @LoadStubs(["issues/complete-issues"])
     fun `create complete issue period`() {
         val board = authenticator.withDefaultUser {
-            val board = boardFactory.create(boardFactory::withCompleteConfigurationBuilder)
+            val defaultBoard = boardFactory.create(boardFactory::withCompleteConfigurationBuilder)
 
             leadTimeConfigFactory.create {
-                it.name = "Dev Lead Time"
-                it.startColumn = "DEV WIP"
-                it.endColumn = "DEV DONE"
-                it.board = board
+                name = "Dev Lead Time"
+                startColumn = "DEV WIP"
+                endColumn = "DEV DONE"
+                board = defaultBoard
             }
 
             leadTimeConfigFactory.create {
-                it.name = "Test Lead Time"
-                it.startColumn = "TEST WIP"
-                it.endColumn = "TEST DONE"
-                it.board = board
+                name = "Test Lead Time"
+                startColumn = "TEST WIP"
+                endColumn = "TEST DONE"
+                board = defaultBoard
             }
 
-            return@withDefaultUser board
+            defaultBoard
         }
 
         val request = object {

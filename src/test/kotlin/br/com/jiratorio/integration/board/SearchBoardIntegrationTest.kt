@@ -3,7 +3,7 @@ package br.com.jiratorio.integration.board
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.matcher.IdMatcher
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers.contains
@@ -74,7 +74,7 @@ internal class SearchBoardIntegrationTest @Autowired constructor(
     fun `filter board by name`() {
         authenticator.withDefaultUser {
             boardFactory.create(5) {
-                it.name = "Uniq Start Name"
+                name = "Uniq Start Name"
             }
             boardFactory.create(5)
         }

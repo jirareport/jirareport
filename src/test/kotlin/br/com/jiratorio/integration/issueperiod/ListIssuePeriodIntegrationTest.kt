@@ -7,8 +7,8 @@ import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByBoardResponse
 import br.com.jiratorio.dsl.extractAs
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.extension.toLocalDate
-import br.com.jiratorio.factory.entity.BoardFactory
-import br.com.jiratorio.factory.entity.IssuePeriodFactory
+import br.com.jiratorio.factory.domain.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
 import org.apache.http.HttpStatus.SC_OK
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers
@@ -34,29 +34,29 @@ internal class ListIssuePeriodIntegrationTest @Autowired constructor(
             val board = boardFactory.create()
 
             issuePeriodFactory.create {
-                it.boardId = board.id
-                it.startDate = "01/01/2019".toLocalDate()
-                it.endDate = "31/01/2019".toLocalDate()
+                boardId = board.id
+                startDate = "01/01/2019".toLocalDate()
+                endDate = "31/01/2019".toLocalDate()
             }
             issuePeriodFactory.create {
-                it.boardId = board.id
-                it.startDate = "01/02/2019".toLocalDate()
-                it.endDate = "28/02/2019".toLocalDate()
+                boardId = board.id
+                startDate = "01/02/2019".toLocalDate()
+                endDate = "28/02/2019".toLocalDate()
             }
             issuePeriodFactory.create {
-                it.boardId = board.id
-                it.startDate = "01/03/2019".toLocalDate()
-                it.endDate = "31/03/2019".toLocalDate()
+                boardId = board.id
+                startDate = "01/03/2019".toLocalDate()
+                endDate = "31/03/2019".toLocalDate()
             }
             issuePeriodFactory.create {
-                it.boardId = board.id
-                it.startDate = "01/04/2019".toLocalDate()
-                it.endDate = "30/04/2019".toLocalDate()
+                boardId = board.id
+                startDate = "01/04/2019".toLocalDate()
+                endDate = "30/04/2019".toLocalDate()
             }
             issuePeriodFactory.create {
-                it.boardId = board.id
-                it.startDate = "01/05/2019".toLocalDate()
-                it.endDate = "31/05/2019".toLocalDate()
+                boardId = board.id
+                startDate = "01/05/2019".toLocalDate()
+                endDate = "31/05/2019".toLocalDate()
             }
         }
 
@@ -151,5 +151,3 @@ internal class ListIssuePeriodIntegrationTest @Autowired constructor(
         }
     }
 }
-
-

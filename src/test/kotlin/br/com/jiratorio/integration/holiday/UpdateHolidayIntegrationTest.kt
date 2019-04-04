@@ -6,8 +6,8 @@ import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.HolidayRequestFactory
-import br.com.jiratorio.factory.entity.BoardFactory
-import br.com.jiratorio.factory.entity.HolidayFactory
+import br.com.jiratorio.factory.domain.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.HolidayFactory
 import br.com.jiratorio.repository.HolidayRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
@@ -33,7 +33,7 @@ internal class UpdateHolidayIntegrationTest @Autowired constructor(
     @Test
     fun `update holiday`() {
         authenticator.withDefaultUser { holidayFactory.create() }
-        val request = holidayRequestFactory.build()
+        val request = holidayRequestFactory.create()
 
         restAssured {
             given {
@@ -85,7 +85,7 @@ internal class UpdateHolidayIntegrationTest @Autowired constructor(
     @Test
     fun `update holiday not found`() {
         authenticator.withDefaultUser { boardFactory.create() }
-        val request = holidayRequestFactory.build()
+        val request = holidayRequestFactory.create()
 
         restAssured {
             given {

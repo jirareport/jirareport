@@ -1,4 +1,4 @@
-package br.com.jiratorio.factory.entity
+package br.com.jiratorio.factory.domain.entity
 
 import br.com.jiratorio.domain.duedate.DueDateType
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig
@@ -14,8 +14,8 @@ import java.util.Arrays.asList
 @Component
 class BoardFactory(
     private val faker: Faker,
-    private val boardRepository: BoardRepository
-) : KBacon<Board>() {
+    boardRepository: BoardRepository?
+) : KBacon<Board>(boardRepository) {
 
     override fun builder(): Board {
         return Board(
@@ -24,12 +24,8 @@ class BoardFactory(
         )
     }
 
-    override fun persist(entity: Board) {
-        boardRepository.save(entity)
-    }
-
     fun fullBoardBuilder(): Board {
-        return default.apply {
+        return builder().apply {
             startColumn = "TODO"
             endColumn = "DONE"
             fluxColumn = asList("TODO", "WIP", "DONE")
@@ -53,7 +49,7 @@ class BoardFactory(
     }
 
     fun withBasicConfigurationBuilder(): Board {
-        return default.apply {
+        return builder().apply {
             startColumn = "TODO"
             endColumn = "DONE"
             fluxColumn = asList("BACKLOG", "TODO", "WIP", "ACCOMPANIMENT", "DONE")
@@ -61,7 +57,7 @@ class BoardFactory(
     }
 
     fun withCompleteConfigurationBuilder(): Board {
-        return default.apply {
+        return builder().apply {
             startColumn = "ANALYSIS"
             endColumn = "DONE"
             fluxColumn = asList(

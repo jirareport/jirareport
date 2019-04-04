@@ -2,9 +2,9 @@ package br.com.jiratorio.integration.issueperiod
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.entity.BoardFactory
-import br.com.jiratorio.factory.entity.IssueFactory
-import br.com.jiratorio.factory.entity.IssuePeriodFactory
+import br.com.jiratorio.factory.domain.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.IssueFactory
+import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -26,13 +26,14 @@ internal class FindIssuePeriodIntegrationTest @Autowired constructor(
     @Test
     fun `test find by id`() {
         authenticator.withDefaultUser {
-            val board = boardFactory.create()
-            val issues = issueFactory.create(20) {
-                it.board = board
-            }
+            val defaultBoard = boardFactory.create()
+            val mutableIssues = issueFactory.create(20) {
+                board = defaultBoard
+            }.toMutableList()
+
             issuePeriodFactory.create {
-                it.boardId = board.id
-                it.issues = issues.toMutableList()
+                boardId = defaultBoard.id
+                issues = mutableIssues
             }
         }
 

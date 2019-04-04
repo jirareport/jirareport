@@ -1,4 +1,4 @@
-package br.com.jiratorio.factory.entity
+package br.com.jiratorio.factory.domain.entity
 
 import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.domain.entity.embedded.Chart
@@ -11,10 +11,10 @@ import java.util.concurrent.TimeUnit
 
 @Component
 class IssuePeriodFactory(
-    private val issuePeriodRepository: IssuePeriodRepository,
     private val faker: Faker,
-    private val boardFactory: BoardFactory
-) : KBacon<IssuePeriod>() {
+    private val boardFactory: BoardFactory,
+    issuePeriodRepository: IssuePeriodRepository?
+) : KBacon<IssuePeriod>(issuePeriodRepository) {
 
     override fun builder(): IssuePeriod {
         return IssuePeriod(
@@ -42,10 +42,6 @@ class IssuePeriodFactory(
                 )
             )
         )
-    }
-
-    override fun persist(entity: IssuePeriod) {
-        issuePeriodRepository.save(entity)
     }
 
 }

@@ -1,28 +1,20 @@
 package br.com.jiratorio.factory.domain.request
 
 import br.com.jiratorio.domain.request.CreateBoardRequest
-import br.com.leonardoferreira.jbacon.JBacon
+import br.com.jiratorio.factory.KBacon
 import com.github.javafaker.Faker
 import org.springframework.stereotype.Component
 
 @Component
 class CreateBoardRequestFactory(
     private val faker: Faker
-) : JBacon<CreateBoardRequest>() {
+) : KBacon<CreateBoardRequest>() {
 
-    override fun getDefault() =
-        CreateBoardRequest(
+    override fun builder(): CreateBoardRequest {
+        return CreateBoardRequest(
             name = faker.lorem().word(),
             externalId = faker.number().randomNumber()
         )
-
-    override fun getEmpty() =
-        CreateBoardRequest(
-            name = faker.lorem().word(),
-            externalId = faker.number().randomNumber()
-        )
-
-    override fun persist(createBoardRequest: CreateBoardRequest) =
-        throw UnsupportedOperationException()
+    }
 
 }
