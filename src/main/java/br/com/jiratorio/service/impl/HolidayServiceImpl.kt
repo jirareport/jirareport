@@ -9,7 +9,7 @@ import br.com.jiratorio.domain.request.HolidayRequest
 import br.com.jiratorio.domain.response.holiday.HolidayResponse
 import br.com.jiratorio.exception.HolidaysAlreadyImported
 import br.com.jiratorio.exception.ResourceNotFound
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import br.com.jiratorio.mapper.HolidayMapper
 import br.com.jiratorio.repository.HolidayRepository
 import br.com.jiratorio.service.BoardService
@@ -32,8 +32,6 @@ class HolidayServiceImpl(
     private val userConfigService: UserConfigService,
     private val messageResolver: MessageResolver
 ) : HolidayService {
-
-    private val log = logger()
 
     @Transactional(readOnly = true)
     override fun findByBoard(boardId: Long, pageable: Pageable): Page<HolidayResponse> {

@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test
 @Tag("unit")
 internal class ToStringExtensionTest {
 
-    private val log = logger()
-
     @Test
     fun `test complex toString`() {
         class Phone(

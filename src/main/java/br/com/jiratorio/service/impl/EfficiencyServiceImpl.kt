@@ -2,7 +2,7 @@ package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.domain.Efficiency
 import br.com.jiratorio.domain.entity.embedded.Changelog
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.minutesDiff
 import br.com.jiratorio.service.EfficiencyService
 import org.springframework.stereotype.Service
@@ -10,8 +10,6 @@ import java.time.LocalDate
 
 @Service
 class EfficiencyServiceImpl : EfficiencyService {
-
-    private val log = logger()
 
     override fun calcEfficiency(
         changelog: List<Changelog>,

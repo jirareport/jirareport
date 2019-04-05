@@ -2,7 +2,7 @@ package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.domain.Account
 import br.com.jiratorio.service.TokenService
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.security.jwt.JwtHelper
 import org.springframework.security.jwt.crypto.sign.SignatureVerifier
@@ -15,8 +15,6 @@ class TokenServiceImpl(
     private val signatureVerifier: SignatureVerifier,
     private val signer: Signer
 ) : TokenService {
-
-    private val log = logger()
 
     override fun encode(account: Account): String {
         log.info("Method=encode, account={}", account)

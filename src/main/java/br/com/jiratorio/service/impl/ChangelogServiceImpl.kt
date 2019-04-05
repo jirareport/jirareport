@@ -2,7 +2,7 @@ package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.domain.entity.embedded.Changelog
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.service.ChangelogService
 import org.springframework.stereotype.Service
@@ -10,8 +10,6 @@ import java.time.LocalDate
 
 @Service
 class ChangelogServiceImpl : ChangelogService {
-
-    private val log = logger()
 
     override fun parseChangelog(
         changelogItems: List<JiraChangelogItem>,

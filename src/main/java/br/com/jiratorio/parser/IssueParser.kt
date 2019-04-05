@@ -10,7 +10,7 @@ import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.service.ChangelogService
 import br.com.jiratorio.service.DueDateService
@@ -36,8 +36,6 @@ class IssueParser(
     private val efficiencyService: EfficiencyService,
     private val dispatcher: ExecutorCoroutineDispatcher = Executors.newFixedThreadPool(10).asCoroutineDispatcher()
 ) {
-
-    private val log = logger()
 
     @ExecutionTime
     @Transactional(readOnly = true)

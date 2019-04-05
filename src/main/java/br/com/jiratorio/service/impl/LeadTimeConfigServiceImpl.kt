@@ -8,7 +8,7 @@ import br.com.jiratorio.mapper.LeadTimeConfigMapper
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.LeadTimeConfigService
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,8 +18,6 @@ class LeadTimeConfigServiceImpl(
     private val boardService: BoardService,
     private val leadTimeConfigMapper: LeadTimeConfigMapper
 ) : LeadTimeConfigService {
-
-    private val log = logger()
 
     @Transactional(readOnly = true)
     override fun findAllByBoardId(boardId: Long): List<LeadTimeConfig> {

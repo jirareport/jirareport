@@ -3,7 +3,7 @@ package br.com.jiratorio.service.impl
 import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import br.com.jiratorio.service.DueDateService
 import org.springframework.stereotype.Service
 import org.springframework.util.StringUtils
@@ -12,8 +12,6 @@ import java.time.format.DateTimeFormatter
 
 @Service
 class DueDateServiceImpl : DueDateService {
-
-    private val log = logger()
 
     override fun extractDueDateHistory(
         dueDateCF: String,

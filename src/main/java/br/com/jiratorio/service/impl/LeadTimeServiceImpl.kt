@@ -6,7 +6,7 @@ import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.entity.LeadTimeConfig
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.repository.LeadTimeRepository
 import br.com.jiratorio.service.BoardService
@@ -24,8 +24,6 @@ class LeadTimeServiceImpl(
     private val leadTimeRepository: LeadTimeRepository,
     private val boardService: BoardService
 ) : LeadTimeService {
-
-    private val log = logger()
 
     @Transactional
     @ExecutionTime

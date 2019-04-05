@@ -1,6 +1,6 @@
 package br.com.jiratorio.aspect
 
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
@@ -10,8 +10,6 @@ import org.springframework.util.StopWatch
 @Aspect
 @Component
 class BenchMarkAspect {
-
-    private val log = logger()
 
     @Around("@annotation(br.com.jiratorio.aspect.annotation.ExecutionTime)")
     fun around(proceedingJoinPoint: ProceedingJoinPoint): Any? {

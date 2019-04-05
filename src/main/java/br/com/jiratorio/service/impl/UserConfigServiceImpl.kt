@@ -7,7 +7,7 @@ import br.com.jiratorio.domain.response.UserConfigResponse
 import br.com.jiratorio.mapper.UserConfigMapper
 import br.com.jiratorio.repository.UserConfigRepository
 import br.com.jiratorio.service.UserConfigService
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -19,8 +19,6 @@ class UserConfigServiceImpl(
     private val userConfigMapper: UserConfigMapper,
     @param:Value("\${holiday.token}") private val holidayToken: String
 ) : UserConfigService {
-
-    private val log = logger()
 
     @Transactional
     override fun update(username: String, updateUserConfigRequest: UpdateUserConfigRequest) {

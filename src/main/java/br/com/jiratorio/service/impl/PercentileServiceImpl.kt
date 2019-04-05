@@ -1,15 +1,13 @@
 package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.domain.Percentile
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import br.com.jiratorio.service.PercentileService
 import org.springframework.stereotype.Service
 import kotlin.math.ceil
 
 @Service
 class PercentileServiceImpl : PercentileService {
-
-    private val log = logger()
 
     override fun calculatePercentile(leadTimes: List<Long>): Percentile {
         log.info("Method=calculatePercentile, leadTimes={}", leadTimes)

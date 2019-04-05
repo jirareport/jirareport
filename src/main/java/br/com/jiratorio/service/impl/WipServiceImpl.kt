@@ -2,7 +2,7 @@ package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.domain.entity.Issue
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.rangeTo
 import br.com.jiratorio.service.WipService
 import org.springframework.stereotype.Service
@@ -10,8 +10,6 @@ import java.time.LocalDate
 
 @Service
 class WipServiceImpl : WipService {
-
-    private val log = logger()
 
     @ExecutionTime
     override fun calcAvgWip(start: LocalDate, end: LocalDate, issues: List<Issue>, wipColumns: Set<String>): Double {

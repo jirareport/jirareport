@@ -3,7 +3,7 @@ package br.com.jiratorio.config.security
 import br.com.jiratorio.domain.request.LoginRequest
 import br.com.jiratorio.service.AuthService
 import br.com.jiratorio.service.TokenService
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -15,8 +15,6 @@ class JiraAuthenticationProvider(
     private val authService: AuthService,
     private val tokenService: TokenService
 ) : AuthenticationProvider {
-
-    private val log = logger()
 
     override fun authenticate(auth: Authentication): Authentication {
         try {

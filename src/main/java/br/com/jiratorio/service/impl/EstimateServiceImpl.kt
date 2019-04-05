@@ -8,7 +8,7 @@ import br.com.jiratorio.domain.estimate.EstimateIssue
 import br.com.jiratorio.domain.form.EstimateForm
 import br.com.jiratorio.domain.form.IssueForm
 import br.com.jiratorio.exception.BadRequestException
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.plusDays
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.EstimateService
@@ -31,8 +31,6 @@ class EstimateServiceImpl(
     private val jqlService: JQLService,
     private val messageResolver: MessageResolver
 ) : EstimateService {
-
-    private val log = logger()
 
     @Transactional(readOnly = true)
     override fun findEstimateIssues(boardId: Long, estimateForm: EstimateForm): List<EstimateIssue> {

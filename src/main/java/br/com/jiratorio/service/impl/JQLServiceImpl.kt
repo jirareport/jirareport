@@ -3,15 +3,13 @@ package br.com.jiratorio.service.impl
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.service.JQLService
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Service
 class JQLServiceImpl : JQLService {
-
-    private val log = logger()
 
     override fun finalizedIssues(board: Board, start: LocalDate, end: LocalDate): String {
         log.info("Method=finalizedIssues, board={}, startDate={}, endDate={}", board, start, end)

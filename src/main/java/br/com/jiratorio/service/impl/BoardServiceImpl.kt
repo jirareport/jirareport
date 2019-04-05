@@ -9,7 +9,7 @@ import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.domain.response.board.BoardDetailsResponse
 import br.com.jiratorio.domain.response.board.BoardResponse
 import br.com.jiratorio.exception.ResourceNotFound
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import br.com.jiratorio.mapper.BoardMapper
 import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.service.BoardService
@@ -26,8 +26,6 @@ class BoardServiceImpl(
     private val boardRepository: BoardRepository,
     private val boardMapper: BoardMapper
 ) : BoardService {
-
-    private val log = logger()
 
     @Transactional(readOnly = true)
     override fun findAll(

@@ -4,7 +4,7 @@ import br.com.jiratorio.client.ProjectClient
 import br.com.jiratorio.domain.jira.JiraProjectDetails
 import br.com.jiratorio.domain.jira.JiraProject
 import br.com.jiratorio.exception.ResourceNotFound
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.ProjectService
 import org.springframework.stereotype.Service
@@ -14,8 +14,6 @@ class ProjectServiceImpl(
     private val projectClient: ProjectClient,
     private val boardService: BoardService
 ) : ProjectService {
-
-    private val log = logger()
 
     override fun findAllJiraProject(): List<JiraProject> {
         log.info("Method=findAllJiraProject")

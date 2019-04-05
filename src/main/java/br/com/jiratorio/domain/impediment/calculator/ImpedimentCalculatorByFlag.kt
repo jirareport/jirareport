@@ -2,15 +2,13 @@ package br.com.jiratorio.domain.impediment.calculator
 
 import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.domain.entity.embedded.Changelog
-import br.com.jiratorio.extension.logger
+import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.daysDiff
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.ArrayList
 
 object ImpedimentCalculatorByFlag : ImpedimentCalculator {
-
-    private val log = logger()
 
     override fun timeInImpediment(
         impedimentColumns: List<String>?,
