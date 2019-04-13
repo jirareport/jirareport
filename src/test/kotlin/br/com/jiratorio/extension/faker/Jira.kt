@@ -46,4 +46,12 @@ class Jira(
         )
     }
 
+    fun leadTime(): Double {
+        return faker.number().randomDouble(2, 1, 10)
+    }
+
+    fun throughput(): Int {
+        return faker.number().numberBetween(1, 15)
+    }
+
 }

@@ -38,7 +38,10 @@ class IssueFactory(
             waitTime = faker.number().randomNumber(),
             touchTime = faker.number().randomNumber(),
             pctEfficiency = faker.number().randomDouble(2, 10, 20),
-            dynamicFields = mapOf()
+            dynamicFields = mapOf(
+                "dnf_1" to faker.lorem().word(),
+                "dnf_2" to faker.lorem().word()
+            )
         )
     }
 
