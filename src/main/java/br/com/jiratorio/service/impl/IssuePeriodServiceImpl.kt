@@ -14,11 +14,12 @@ import br.com.jiratorio.mapper.IssueMapper
 import br.com.jiratorio.mapper.IssuePeriodMapper
 import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.service.BoardService
-import br.com.jiratorio.service.ChartService
 import br.com.jiratorio.service.IssuePeriodService
 import br.com.jiratorio.service.IssueService
 import br.com.jiratorio.service.JQLService
 import br.com.jiratorio.service.WipService
+import br.com.jiratorio.service.chart.ChartService
+import br.com.jiratorio.service.chart.IssuePeriodChartService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -28,6 +29,7 @@ class IssuePeriodServiceImpl(
     private val issueService: IssueService,
     private val issuePeriodRepository: IssuePeriodRepository,
     private val chartService: ChartService,
+    private val leadTimeChartService: IssuePeriodChartService,
     private val boardService: BoardService,
     private val wipService: WipService,
     private val jqlService: JQLService,
@@ -48,13 +50,8 @@ class IssuePeriodServiceImpl(
         val jql = jqlService.finalizedIssues(board, startDate, endDate)
         val issues = issueService.createByJql(jql, board)
 
-        val avgLeadTime = issues
-            .map { it.leadTime }
-            .average()
-
-        val avgPctEfficiency = issues
-            .map { it.pctEfficiency }
-            .average()
+        val avgLeadTime = issues.map { it.leadTime }.average()
+        val avgPctEfficiency = issues.map { it.pctEfficiency }.average()
 
         val chartAggregator = chartService.buildAllCharts(issues, board)
 
@@ -65,22 +62,22 @@ class IssuePeriodServiceImpl(
             startDate = startDate,
             endDate = endDate,
             boardId = boardId,
-            issues = issues,
+            issues = issues.toMutableList(),
             avgLeadTime = avgLeadTime,
             histogram = chartAggregator.histogram,
-            estimated = chartAggregator.estimated,
+            estimated = chartAggregator.leadTimeByEstimate,
+            leadTimeBySize = chartAggregator.throughputByEstimate,
             leadTimeBySystem = chartAggregator.leadTimeBySystem,
-            tasksBySystem = chartAggregator.tasksBySystem,
-            leadTimeBySize = chartAggregator.leadTimeBySize,
-            columnTimeAvgs = chartAggregator.columnTimeAvg,
+            tasksBySystem = chartAggregator.throughputBySystem,
+            columnTimeAvgs = chartAggregator.columnTimeAvg.toMutableList(),
             leadTimeByType = chartAggregator.leadTimeByType,
-            tasksByType = chartAggregator.tasksByType,
+            tasksByType = chartAggregator.throughputByType,
             leadTimeByProject = chartAggregator.leadTimeByProject,
-            tasksByProject = chartAggregator.tasksByProject,
+            tasksByProject = chartAggregator.throughputByProject,
             leadTimeCompareChart = chartAggregator.leadTimeCompareChart,
             leadTimeByPriority = chartAggregator.leadTimeByPriority,
             throughputByPriority = chartAggregator.throughputByPriority,
-            dynamicCharts = chartAggregator.dynamicCharts,
+            dynamicCharts = chartAggregator.dynamicCharts.toMutableList(),
             issuesCount = issues.size,
             jql = jql,
             wipAvg = wipAvg,
@@ -165,8 +162,8 @@ class IssuePeriodServiceImpl(
             issuesCount[issuePeriod.dates] = issuePeriod.issuesCount
         }
 
-        val issueCountBySize = chartService.buildIssueCountBySize(issuePeriods)
-        val leadTimeCompareChart = chartService.calcLeadTimeCompareByPeriod(issuePeriods, board)
+        val issueCountBySize = leadTimeChartService.issueCountBySize(issuePeriods)
+        val leadTimeCompareChart = leadTimeChartService.leadTimeCompareByPeriod(issuePeriods, board)
 
         return IssuePeriodChartResponse(
             issueCountBySize = issueCountBySize,

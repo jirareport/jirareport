@@ -1,15 +1,17 @@
 package br.com.jiratorio.service.impl
 
+import br.com.jiratorio.client.IssueClient
 import br.com.jiratorio.config.internationalization.MessageResolver
 import br.com.jiratorio.domain.Percentile
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.estimate.EstimateFieldReference
 import br.com.jiratorio.domain.estimate.EstimateIssue
 import br.com.jiratorio.domain.form.EstimateForm
-import br.com.jiratorio.domain.form.IssueForm
+import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.exception.BadRequestException
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.plusDays
+import br.com.jiratorio.parser.EstimateIssueParser
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.EstimateService
 import br.com.jiratorio.service.HolidayService
@@ -19,13 +21,14 @@ import br.com.jiratorio.service.PercentileService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.CollectionUtils
-import org.springframework.util.StringUtils
 import java.util.HashMap
 
 @Service
 class EstimateServiceImpl(
     private val boardService: BoardService,
     private val issueService: IssueService,
+    private val issueClient: IssueClient,
+    private val estimateIssueParser: EstimateIssueParser,
     private val holidayService: HolidayService,
     private val percentileService: PercentileService,
     private val jqlService: JQLService,
@@ -43,7 +46,7 @@ class EstimateServiceImpl(
         }
 
         val jql = jqlService.openedIssues(board)
-        val issueList = issueService.findEstimateByJql(jql, board)
+        val issueList = findEstimateByJql(jql, board)
 
         val holidays = if (board.ignoreWeekend == true)
             emptyList()
@@ -82,6 +85,11 @@ class EstimateServiceImpl(
         return issueList
     }
 
+    private fun findEstimateByJql(jql: String, board: Board): List<EstimateIssue> {
+        val issues = issueClient.findByJql(jql)
+        return estimateIssueParser.parseEstimate(issues, board)
+    }
+
     private fun calculatePercentile(board: Board, estimateForm: EstimateForm, value: String?): Percentile {
         log.info("Method=calculatePercentile, board={}, estimateForm={}, value={}", board, estimateForm, value)
 
@@ -92,56 +100,40 @@ class EstimateServiceImpl(
         return percentileService.calculatePercentile(leadTimeList)
     }
 
-    private fun buildIssueFormByEstimateForm(estimateForm: EstimateForm, value: String?): IssueForm {
+    private fun buildIssueFormByEstimateForm(estimateForm: EstimateForm, value: String?): SearchIssueRequest {
         log.info("Method=buildIssueFormByEstimateForm, estimateForm={}, value={}", estimateForm, value)
 
-        val issueForm = IssueForm()
-        issueForm.startDate = estimateForm.startDate
-        issueForm.endDate = estimateForm.endDate
-        val filter = estimateForm.filter
-        if (StringUtils.isEmpty(value)) {
-            return issueForm
+        val searchIssueRequest = SearchIssueRequest(
+            startDate = estimateForm.startDate,
+            endDate = estimateForm.endDate
+        )
+
+        if (value.isNullOrBlank()) {
+            return searchIssueRequest
         }
 
-        if (filter == EstimateFieldReference.ISSUE_TYPE) {
-            issueForm.issueTypes.add(value)
-        } else if (filter == EstimateFieldReference.SYSTEM) {
-            issueForm.systems.add(value)
-        } else if (filter == EstimateFieldReference.TASK_SIZE) {
-            issueForm.taskSize.add(value)
-        } else if (filter == EstimateFieldReference.EPIC) {
-            issueForm.epics.add(value)
-        } else if (filter == EstimateFieldReference.PROJECT) {
-            issueForm.projects.add(value)
-        } else if (filter == EstimateFieldReference.PRIORITY) {
-            issueForm.priorities.add(value)
+        when (estimateForm.filter) {
+            EstimateFieldReference.ISSUE_TYPE -> searchIssueRequest.issueTypes.add(value)
+            EstimateFieldReference.SYSTEM -> searchIssueRequest.systems.add(value)
+            EstimateFieldReference.TASK_SIZE -> searchIssueRequest.taskSize.add(value)
+            EstimateFieldReference.EPIC -> searchIssueRequest.epics.add(value)
+            EstimateFieldReference.PROJECT -> searchIssueRequest.projects.add(value)
+            EstimateFieldReference.PRIORITY -> searchIssueRequest.priorities.add(value)
         }
-        return issueForm
+
+        return searchIssueRequest
     }
 
     private fun retrieveByFilter(issue: EstimateIssue, filter: EstimateFieldReference): String? {
         log.info("Method=retrieveByFilter, issue={}, filter={}", issue, filter)
-
-        if (filter == EstimateFieldReference.ISSUE_TYPE) {
-            return issue.issueType
+        return when (filter) {
+            EstimateFieldReference.ISSUE_TYPE -> issue.issueType
+            EstimateFieldReference.SYSTEM -> issue.system
+            EstimateFieldReference.TASK_SIZE -> issue.estimated
+            EstimateFieldReference.EPIC -> issue.epic
+            EstimateFieldReference.PROJECT -> issue.project
+            EstimateFieldReference.PRIORITY -> issue.priority
         }
-        if (filter == EstimateFieldReference.SYSTEM) {
-            return issue.system
-        }
-        if (filter == EstimateFieldReference.TASK_SIZE) {
-            return issue.estimated
-        }
-        if (filter == EstimateFieldReference.EPIC) {
-            return issue.epic
-        }
-        if (filter == EstimateFieldReference.PROJECT) {
-            return issue.project
-        }
-        if (filter == EstimateFieldReference.PRIORITY) {
-            return issue.priority
-        }
-
-        return null
     }
 
 }

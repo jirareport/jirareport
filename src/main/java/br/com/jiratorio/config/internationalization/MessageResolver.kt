@@ -6,18 +6,19 @@ import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.stereotype.Component
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.servlet.LocaleResolver
+import java.util.Locale
 import javax.servlet.http.HttpServletRequest
 
 @Component
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 class MessageResolver(
-    private val messageSource: MessageSource,
-    private val localeResolver: LocaleResolver,
-    private val request: HttpServletRequest
+    localeResolver: LocaleResolver,
+    request: HttpServletRequest,
+    private val locale: Locale = localeResolver.resolveLocale(request),
+    private val messageSource: MessageSource
 ) {
 
     fun resolve(key: String, vararg args: Any?): String {
-        val locale = localeResolver.resolveLocale(request)
         return messageSource.getMessage(key, args, locale)
     }
 

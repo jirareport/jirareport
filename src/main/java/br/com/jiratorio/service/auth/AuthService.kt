@@ -1,4 +1,4 @@
-package br.com.jiratorio.service
+package br.com.jiratorio.service.auth
 
 import br.com.jiratorio.domain.request.LoginRequest
 import br.com.jiratorio.domain.Account

@@ -1,8 +1,8 @@
 package br.com.jiratorio.config.security
 
 import br.com.jiratorio.domain.request.LoginRequest
-import br.com.jiratorio.service.AuthService
-import br.com.jiratorio.service.TokenService
+import br.com.jiratorio.service.auth.AuthService
+import br.com.jiratorio.service.auth.TokenService
 import br.com.jiratorio.extension.log
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException

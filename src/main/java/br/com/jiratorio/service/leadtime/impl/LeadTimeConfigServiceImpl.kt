@@ -1,4 +1,4 @@
-package br.com.jiratorio.service.impl
+package br.com.jiratorio.service.leadtime.impl
 
 import br.com.jiratorio.domain.entity.LeadTimeConfig
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest
@@ -7,7 +7,7 @@ import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.mapper.LeadTimeConfigMapper
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import br.com.jiratorio.service.BoardService
-import br.com.jiratorio.service.LeadTimeConfigService
+import br.com.jiratorio.service.leadtime.LeadTimeConfigService
 import br.com.jiratorio.extension.log
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

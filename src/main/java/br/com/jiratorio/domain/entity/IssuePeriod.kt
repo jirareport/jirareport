@@ -59,7 +59,7 @@ data class IssuePeriod(
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var estimated: Chart<String, Long>? = null,
+    var estimated: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -67,7 +67,7 @@ data class IssuePeriod(
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var tasksBySystem: Chart<String, Long>? = null,
+    var tasksBySystem: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -75,7 +75,7 @@ data class IssuePeriod(
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var tasksByType: Chart<String, Long>? = null,
+    var tasksByType: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -83,7 +83,7 @@ data class IssuePeriod(
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var tasksByProject: Chart<String, Long>? = null,
+    var tasksByProject: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -91,7 +91,7 @@ data class IssuePeriod(
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var throughputByPriority: Chart<String, Long>? = null,
+    var throughputByPriority: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")

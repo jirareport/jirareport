@@ -77,9 +77,9 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired cons
                 hasPercentile75(15)
                 hasPercentile90(18)
                 hasChart(
-                    1L to 0L, 2L to 0L, 3L to 0L, 4L to 0L, 5L to 0L, 6L to 0L, 7L to 0L, 8L to 0L, 9L to 0L, 10L to 0L,
-                    11L to 0L, 12L to 2L, 13L to 2L, 14L to 1L, 15L to 3L, 16L to 0L, 17L to 0L, 18L to 1L, 19L to 0L,
-                    20L to 0L, 21L to 0L, 22L to 0L, 23L to 0L, 24L to 1L
+                    1L to 0, 2L to 0, 3L to 0, 4L to 0, 5L to 0, 6L to 0, 7L to 0, 8L to 0, 9L to 0, 10L to 0,
+                    11L to 0, 12L to 2, 13L to 2, 14L to 1, 15L to 3, 16L to 0, 17L to 0, 18L to 1, 19L to 0,
+                    20L to 0, 21L to 0, 22L to 0, 23L to 0, 24L to 1
                 )
             }
 
@@ -117,9 +117,9 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired cons
                         ),
                         throughput = Chart(
                             mutableMapOf(
-                                "Team A" to 4L,
-                                "Team B" to 3L,
-                                "Team C" to 3L
+                                "Team A" to 4,
+                                "Team B" to 3,
+                                "Team C" to 3
                             )
                         )
                     ),
@@ -134,9 +134,9 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired cons
                         ),
                         throughput = Chart(
                             mutableMapOf(
-                                "1" to 2L,
-                                "2" to 2L,
-                                "3" to 6L
+                                "1" to 2,
+                                "2" to 2,
+                                "3" to 6
                             )
                         )
                     )

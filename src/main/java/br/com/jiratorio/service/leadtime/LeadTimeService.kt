@@ -1,4 +1,4 @@
-package br.com.jiratorio.service
+package br.com.jiratorio.service.leadtime
 
 import br.com.jiratorio.domain.entity.Issue
 

@@ -22,8 +22,8 @@ class InternationalizationConfig {
 
     @Bean
     fun localeValidatorFactoryBean(messageSource: MessageSource): LocalValidatorFactoryBean {
-        return LocalValidatorFactoryBean().apply {
-            setValidationMessageSource(messageSource)
+        return LocalValidatorFactoryBean().also {
+            it.setValidationMessageSource(messageSource)
         }
     }
 

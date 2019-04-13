@@ -2,6 +2,8 @@ package br.com.jiratorio.extension.time
 
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 
 fun LocalDate.isHoliday(holidays: List<LocalDate>): Boolean {
@@ -26,4 +28,8 @@ fun LocalDate?.daysDiff(endDate: LocalDate?, holidays: List<LocalDate>, ignoreWe
             it.isWorkday(holidays)
         }.toLong()
     }
+}
+
+fun LocalDate.atEndOfDay(): LocalDateTime {
+    return this.atTime(LocalTime.MAX)
 }

@@ -74,25 +74,25 @@ internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
                 hasPercentile75(18)
                 hasPercentile90(18)
                 hasChart(
-                    1L to 0L, 2L to 0L, 3L to 0L, 4L to 0L, 5L to 0L, 6L to 0L, 7L to 0L, 8L to 0L, 9L to 0L, 10L to 0L,
-                    11L to 1L, 12L to 0L, 13L to 0L, 14L to 0L, 15L to 0L, 16L to 0L, 17L to 0L, 18L to 1L
+                    1L to 0, 2L to 0, 3L to 0, 4L to 0, 5L to 0, 6L to 0, 7L to 0, 8L to 0, 9L to 0, 10L to 0,
+                    11L to 1, 12L to 0, 13L to 0, 14L to 0, 15L to 0, 16L to 0, 17L to 0, 18L to 1
                 )
             }
 
-            hasLeadTimeBySize("Não informado" to 14.5)
-            hasEstimated("Não informado" to 2)
+            hasLeadTimeBySize("Uninformed" to 14.5)
+            hasEstimated("Uninformed" to 2)
 
-            hasLeadTimeBySystem("Não informado" to 14.5)
-            hasTasksBySystem("Não informado" to 2L)
+            hasLeadTimeBySystem("Uninformed" to 14.5)
+            hasTasksBySystem("Uninformed" to 2)
 
             hasLeadTimeByType("Task" to 14.5)
-            hasTasksByType("Task" to 2L)
+            hasTasksByType("Task" to 2)
 
-            hasLeadTimeByProject("Não informado" to 14.5)
-            hasTasksByProject("Não informado" to 2L)
+            hasLeadTimeByProject("Uninformed" to 14.5)
+            hasTasksByProject("Uninformed" to 2)
 
             hasLeadTimeByPriority("Major" to 14.5)
-            hasThroughputByPriority("Major" to 2L)
+            hasThroughputByPriority("Major" to 2)
 
             hasIssuesCount(2)
 

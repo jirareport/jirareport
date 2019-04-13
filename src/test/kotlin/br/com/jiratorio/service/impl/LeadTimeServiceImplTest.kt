@@ -12,7 +12,8 @@ import br.com.jiratorio.extension.toLocalDateTime
 import br.com.jiratorio.repository.LeadTimeRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.HolidayService
-import br.com.jiratorio.service.LeadTimeConfigService
+import br.com.jiratorio.service.leadtime.LeadTimeConfigService
+import br.com.jiratorio.service.leadtime.impl.LeadTimeServiceImpl
 import io.mockk.called
 import io.mockk.clearAllMocks
 import io.mockk.every

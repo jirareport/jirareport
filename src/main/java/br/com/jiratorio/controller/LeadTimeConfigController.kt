@@ -2,7 +2,7 @@ package br.com.jiratorio.controller
 
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest
 import br.com.jiratorio.domain.response.LeadTimeConfigResponse
-import br.com.jiratorio.service.LeadTimeConfigService
+import br.com.jiratorio.service.leadtime.LeadTimeConfigService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping

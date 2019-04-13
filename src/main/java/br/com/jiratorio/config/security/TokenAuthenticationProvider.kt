@@ -1,6 +1,6 @@
 package br.com.jiratorio.config.security
 
-import br.com.jiratorio.service.TokenService
+import br.com.jiratorio.service.auth.TokenService
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken

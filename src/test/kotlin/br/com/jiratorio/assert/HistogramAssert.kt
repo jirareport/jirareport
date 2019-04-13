@@ -17,8 +17,8 @@ class HistogramAssert(actual: Histogram) :
         objects.assertEqual(field("histogram.percentile90"), actual.percentile90, percentile90)
     }
 
-    fun hasChart(vararg chart: Pair<Long, Long>) = assertAll {
-        objects.assertEqual(field("histogram.chart"), actual.chart?.data, mapOf(*chart))
+    fun hasChart(vararg chart: Pair<Long, Int>) = assertAll {
+        objects.assertEqual(field("histogram.chart"), actual.chart.data, mapOf(*chart))
     }
 
 }

@@ -29,9 +29,9 @@ class IssuePeriodFactory(
             issuesCount = faker.number().randomNumber().toInt(),
             estimated = Chart(
                 data = mutableMapOf(
-                    "P" to faker.number().randomNumber(),
-                    "M" to faker.number().randomNumber(),
-                    "G" to faker.number().randomNumber()
+                    "P" to faker.number().randomNumber().toInt(),
+                    "M" to faker.number().randomNumber().toInt(),
+                    "G" to faker.number().randomNumber().toInt()
                 )
             ),
             leadTimeCompareChart = Chart(

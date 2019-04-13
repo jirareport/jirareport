@@ -6,18 +6,18 @@ import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
 import br.com.jiratorio.domain.entity.embedded.Histogram
 
 data class ChartAggregator(
-    var histogram: Histogram? = null,
-    var estimated: Chart<String, Long>? = null,
-    var leadTimeBySystem: Chart<String, Double>? = null,
-    var tasksBySystem: Chart<String, Long>? = null,
-    var leadTimeBySize: Chart<String, Double>? = null,
-    var columnTimeAvg: MutableList<ColumnTimeAvg>? = null,
-    var leadTimeByType: Chart<String, Double>? = null,
-    var tasksByType: Chart<String, Long>? = null,
-    var leadTimeByProject: Chart<String, Double>? = null,
-    var tasksByProject: Chart<String, Long>? = null,
-    var leadTimeCompareChart: Chart<String, Double>? = null,
-    var leadTimeByPriority: Chart<String, Double>? = null,
-    var throughputByPriority: Chart<String, Long>? = null,
-    var dynamicCharts: MutableList<DynamicChart>? = null
+    var histogram: Histogram,
+    var leadTimeByEstimate: Chart<String, Int>,
+    var throughputByEstimate: Chart<String, Double>,
+    var leadTimeBySystem: Chart<String, Double>,
+    var throughputBySystem: Chart<String, Int>,
+    var leadTimeByType: Chart<String, Double>,
+    var throughputByType: Chart<String, Int>,
+    var leadTimeByProject: Chart<String, Double>,
+    var throughputByProject: Chart<String, Int>,
+    var leadTimeByPriority: Chart<String, Double>,
+    var throughputByPriority: Chart<String, Int>,
+    var columnTimeAvg: List<ColumnTimeAvg>,
+    var leadTimeCompareChart: Chart<String, Double>,
+    var dynamicCharts: List<DynamicChart>
 )

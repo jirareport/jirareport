@@ -26,7 +26,7 @@ class IssuePeriodAssert(actual: IssuePeriod) :
         objects.assertEqual(field("issuePeriod.leadTimeBySize"), actual.leadTimeBySize?.data, mapOf(*leadTimeBySize))
     }
 
-    fun hasEstimated(vararg estimated: Pair<String, Long>) = assertAll {
+    fun hasEstimated(vararg estimated: Pair<String, Int>) = assertAll {
         objects.assertEqual(field("issuePeriod.Estimated"), actual.estimated?.data, mapOf(*estimated))
     }
 
@@ -38,7 +38,7 @@ class IssuePeriodAssert(actual: IssuePeriod) :
         )
     }
 
-    fun hasTasksBySystem(vararg tasksBySystem: Pair<String, Long>) = assertAll {
+    fun hasTasksBySystem(vararg tasksBySystem: Pair<String, Int>) = assertAll {
         objects.assertEqual(field("issuePeriod.tasksBySystem"), actual.tasksBySystem?.data, mapOf(*tasksBySystem))
     }
 
@@ -46,7 +46,7 @@ class IssuePeriodAssert(actual: IssuePeriod) :
         objects.assertEqual(field("issuePeriod.leadTimeByType"), actual.leadTimeByType?.data, mapOf(*leadTimeByType))
     }
 
-    fun hasTasksByType(vararg tasksByType: Pair<String, Long>) = assertAll {
+    fun hasTasksByType(vararg tasksByType: Pair<String, Int>) = assertAll {
         objects.assertEqual(field("issuePeriod.tasksByType"), actual.tasksByType?.data, mapOf(*tasksByType))
     }
 
@@ -58,7 +58,7 @@ class IssuePeriodAssert(actual: IssuePeriod) :
         )
     }
 
-    fun hasTasksByProject(vararg tasksByProject: Pair<String, Long>) = assertAll {
+    fun hasTasksByProject(vararg tasksByProject: Pair<String, Int>) = assertAll {
         objects.assertEqual(field("issuePeriod.tasksByProject"), actual.tasksByProject?.data, mapOf(*tasksByProject))
     }
 
@@ -70,7 +70,7 @@ class IssuePeriodAssert(actual: IssuePeriod) :
         )
     }
 
-    fun hasThroughputByPriority(vararg throughputByPriority: Pair<String, Long>) = assertAll {
+    fun hasThroughputByPriority(vararg throughputByPriority: Pair<String, Int>) = assertAll {
         objects.assertEqual(
             field("issuePeriod.throughputByPriority"),
             actual.throughputByPriority?.data,

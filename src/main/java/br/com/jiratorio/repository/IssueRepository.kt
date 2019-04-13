@@ -23,7 +23,7 @@ interface IssueRepository : CrudRepository<Issue, Long>, IssueCustomRepository {
             SELECT DISTINCT system FROM Issue
             WHERE board.id = :boardId
             AND system IS NOT NULL
-            """
+        """
     )
     fun findAllSystemsByBoardId(@Param("boardId") boardId: Long): Set<String>
 
@@ -53,17 +53,6 @@ interface IssueRepository : CrudRepository<Issue, Long>, IssueCustomRepository {
         """
     )
     fun findAllIssueProjectsByBoardId(@Param("boardId") boardId: Long): Set<String>
-
-    @Query(
-        """
-           SELECT DISTINCT i FROM Issue i
-           JOIN i.issuePeriods ip
-           LEFT JOIN FETCH i.leadTimes leadTimes
-           LEFT JOIN FETCH leadTimes.leadTimeConfig
-           WHERE ip.id = :issuePeriodId
-    """
-    )
-    fun findByIssuePeriodId(@Param("issuePeriodId") issuePeriodId: Long): List<Issue>
 
     @Query(
         """

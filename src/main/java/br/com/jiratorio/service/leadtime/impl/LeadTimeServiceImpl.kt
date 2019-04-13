@@ -1,4 +1,4 @@
-package br.com.jiratorio.service.impl
+package br.com.jiratorio.service.leadtime.impl
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.domain.FluxColumn
@@ -11,8 +11,8 @@ import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.repository.LeadTimeRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.HolidayService
-import br.com.jiratorio.service.LeadTimeConfigService
-import br.com.jiratorio.service.LeadTimeService
+import br.com.jiratorio.service.leadtime.LeadTimeConfigService
+import br.com.jiratorio.service.leadtime.LeadTimeService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate

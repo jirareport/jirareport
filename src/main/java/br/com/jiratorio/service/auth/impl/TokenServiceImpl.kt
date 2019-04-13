@@ -1,7 +1,7 @@
-package br.com.jiratorio.service.impl
+package br.com.jiratorio.service.auth.impl
 
 import br.com.jiratorio.domain.Account
-import br.com.jiratorio.service.TokenService
+import br.com.jiratorio.service.auth.TokenService
 import br.com.jiratorio.extension.log
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.security.jwt.JwtHelper

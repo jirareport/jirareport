@@ -126,7 +126,7 @@ class IssueParser(
             }
 
         val dynamicFields = board.dynamicFields?.map {
-            it.name!! to fields.path(it.field).extractValue()
+            it.name to fields.path(it.field).extractValue()
         }?.toMap()
 
         val efficiency = efficiencyService.calcEfficiency(

@@ -1,7 +1,7 @@
 package br.com.jiratorio.base
 
 import br.com.jiratorio.factory.domain.entity.AccountFactory
-import br.com.jiratorio.service.TokenService
+import br.com.jiratorio.service.auth.TokenService
 import io.restassured.http.Header
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.test.context.TestSecurityContextHolder

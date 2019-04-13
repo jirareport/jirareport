@@ -1,11 +1,11 @@
-package br.com.jiratorio.service.impl
+package br.com.jiratorio.service.auth.impl
 
 import br.com.jiratorio.client.AuthClient
 import br.com.jiratorio.domain.Account
 import br.com.jiratorio.domain.request.LoginRequest
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.toBase64
-import br.com.jiratorio.service.AuthService
+import br.com.jiratorio.service.auth.AuthService
 import org.springframework.stereotype.Service
 
 @Service
