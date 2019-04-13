@@ -16,7 +16,7 @@ class EstimateChartServiceImpl(
     override fun leadTimeChart(issues: List<Issue>): Chart<String, Double> {
         log.info("Method=leadTimeChart, issues={}", issues)
 
-        return issues.groupBy { it.estimated ?: messageResolver.resolve("uninformed") }
+        return issues.groupBy { it.estimate ?: messageResolver.resolve("uninformed") }
             .mapValues { (_, value) -> value.map { it.leadTime }.average() }
             .toChart()
     }
@@ -24,7 +24,7 @@ class EstimateChartServiceImpl(
     override fun throughputChart(issues: List<Issue>): Chart<String, Int> {
         log.info("Method=throughputChart, issues={}", issues)
 
-        return issues.groupingBy { it.estimated ?: messageResolver.resolve("uninformed") }
+        return issues.groupingBy { it.estimate ?: messageResolver.resolve("uninformed") }
             .eachCount()
             .toChart()
     }

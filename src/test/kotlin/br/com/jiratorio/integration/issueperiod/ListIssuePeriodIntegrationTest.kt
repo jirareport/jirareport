@@ -75,24 +75,24 @@ internal class ListIssuePeriodIntegrationTest @Autowired constructor(
         IssuePeriodResponseAssert(response.periods.last()).assertThat {
             hasId(period.id)
             hasDates(period.dates)
-            hasLeadTime(period.avgLeadTime)
+            hasLeadTime(period.leadTime)
             hasAvgPctEfficiency(period.avgPctEfficiency)
             hasWipAvg(period.wipAvg)
             hasJql(period.jql)
             hasIssuesCount(period.issuesCount)
         }
 
-        assertThat(response.charts.issueCountBySize.labels)
+        assertThat(response.charts.issueCountByEstimate.labels)
             .hasSize(5)
-        assertThat(response.charts.issueCountBySize.datasources["P"])
+        assertThat(response.charts.issueCountByEstimate.datasources["P"])
             .hasSize(5)
-        assertThat(response.charts.issueCountBySize.datasources["M"])
+        assertThat(response.charts.issueCountByEstimate.datasources["M"])
             .hasSize(5)
-        assertThat(response.charts.issueCountBySize.datasources["G"])
+        assertThat(response.charts.issueCountByEstimate.datasources["G"])
             .hasSize(5)
-        assertThat(response.charts.issueCountBySize.datasources["M"])
+        assertThat(response.charts.issueCountByEstimate.datasources["M"])
             .hasSize(5)
-        assertThat(response.charts.issueCountBySize.datasources["G"])
+        assertThat(response.charts.issueCountByEstimate.datasources["G"])
             .hasSize(5)
 
         assertThat(response.charts.leadTimeCompareChart.labels)
@@ -113,7 +113,7 @@ internal class ListIssuePeriodIntegrationTest @Autowired constructor(
             .isEqualTo(period.leadTimeCompareChart?.data!!["Delivery Lead Time"])
 
         assertThat(response.charts.leadTime.data[period.dates])
-            .isEqualTo("%.2f".format(period.avgLeadTime))
+            .isEqualTo("%.2f".format(period.leadTime))
         assertThat(response.charts.issuesCount.data[period.dates])
             .isEqualTo(period.issuesCount)
     }

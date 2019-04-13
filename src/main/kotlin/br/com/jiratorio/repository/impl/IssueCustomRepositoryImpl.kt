@@ -5,13 +5,13 @@ import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.extension.log
+import br.com.jiratorio.extension.time.atEndOfDay
 import br.com.jiratorio.repository.IssueCustomRepository
 import br.com.jiratorio.repository.impl.rowmapper.DynamicFieldsValuesRowMapper
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalTime
 import java.util.HashMap
 import javax.persistence.EntityManager
 import javax.persistence.Query
@@ -42,9 +42,9 @@ class IssueCustomRepositoryImpl(
             params["keys"] = searchIssueRequest.keys
         }
 
-        if (searchIssueRequest.taskSize.isNotEmpty()) {
-            query.append(" AND issue.estimated IN (:taskSize) ")
-            params["taskSize"] = searchIssueRequest.taskSize
+        if (searchIssueRequest.estimates.isNotEmpty()) {
+            query.append(" AND issue.estimated IN (:estimates) ")
+            params["estimates"] = searchIssueRequest.estimates
         }
 
         if (searchIssueRequest.systems.isNotEmpty()) {
@@ -82,7 +82,7 @@ class IssueCustomRepositoryImpl(
 
         params["boardId"] = boardId
         params["startDate"] = searchIssueRequest.startDate.atStartOfDay()
-        params["endDate"] = searchIssueRequest.endDate.atTime(LocalTime.of(23, 59, 59))
+        params["endDate"] = searchIssueRequest.endDate.atEndOfDay()
 
         query.append(" ORDER BY issue.key ")
 

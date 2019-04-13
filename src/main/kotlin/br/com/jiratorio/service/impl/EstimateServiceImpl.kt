@@ -55,14 +55,11 @@ class EstimateServiceImpl(
 
         val fieldPercentileMap = HashMap<String, Percentile>()
 
-        issueList.forEach { issue ->
-            val value = retrieveByFilter(issue, estimateForm.filter)!!
+        for (issue in issueList) {
+            val value = retrieveByFilter(issue, estimateForm.filter) ?: continue
 
-            var percentile: Percentile? = fieldPercentileMap[value]
-
-            if (percentile == null) {
-                percentile = calculatePercentile(board, estimateForm, value)
-                fieldPercentileMap[value] = percentile
+            val percentile: Percentile = fieldPercentileMap.getOrPut(value) {
+                calculatePercentile(board, estimateForm, value)
             }
 
             issue.estimateDateAvg = issue.startDate.plusDays(
@@ -90,7 +87,7 @@ class EstimateServiceImpl(
         return estimateIssueParser.parseEstimate(issues, board)
     }
 
-    private fun calculatePercentile(board: Board, estimateForm: EstimateForm, value: String?): Percentile {
+    private fun calculatePercentile(board: Board, estimateForm: EstimateForm, value: String): Percentile {
         log.info("Method=calculatePercentile, board={}, estimateForm={}, value={}", board, estimateForm, value)
 
         val issueForm = buildIssueFormByEstimateForm(estimateForm, value)
@@ -100,7 +97,7 @@ class EstimateServiceImpl(
         return percentileService.calculatePercentile(leadTimeList)
     }
 
-    private fun buildIssueFormByEstimateForm(estimateForm: EstimateForm, value: String?): SearchIssueRequest {
+    private fun buildIssueFormByEstimateForm(estimateForm: EstimateForm, value: String): SearchIssueRequest {
         log.info("Method=buildIssueFormByEstimateForm, estimateForm={}, value={}", estimateForm, value)
 
         val searchIssueRequest = SearchIssueRequest(
@@ -108,14 +105,10 @@ class EstimateServiceImpl(
             endDate = estimateForm.endDate
         )
 
-        if (value.isNullOrBlank()) {
-            return searchIssueRequest
-        }
-
         when (estimateForm.filter) {
             EstimateFieldReference.ISSUE_TYPE -> searchIssueRequest.issueTypes.add(value)
             EstimateFieldReference.SYSTEM -> searchIssueRequest.systems.add(value)
-            EstimateFieldReference.TASK_SIZE -> searchIssueRequest.taskSize.add(value)
+            EstimateFieldReference.ESTIMATE -> searchIssueRequest.estimates.add(value)
             EstimateFieldReference.EPIC -> searchIssueRequest.epics.add(value)
             EstimateFieldReference.PROJECT -> searchIssueRequest.projects.add(value)
             EstimateFieldReference.PRIORITY -> searchIssueRequest.priorities.add(value)
@@ -129,7 +122,7 @@ class EstimateServiceImpl(
         return when (filter) {
             EstimateFieldReference.ISSUE_TYPE -> issue.issueType
             EstimateFieldReference.SYSTEM -> issue.system
-            EstimateFieldReference.TASK_SIZE -> issue.estimated
+            EstimateFieldReference.ESTIMATE -> issue.estimated
             EstimateFieldReference.EPIC -> issue.epic
             EstimateFieldReference.PROJECT -> issue.project
             EstimateFieldReference.PRIORITY -> issue.priority

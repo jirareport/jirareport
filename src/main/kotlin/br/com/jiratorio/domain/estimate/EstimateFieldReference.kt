@@ -6,7 +6,7 @@ enum class EstimateFieldReference(val description: String) {
 
     ISSUE_TYPE("Tipo de issue"),
     SYSTEM("Sistema"),
-    TASK_SIZE("Tamanho/estimativa"),
+    ESTIMATE("Tamanho/estimativa"),
     EPIC("Épico"),
     PROJECT("Projeto"),
     PRIORITY("Prioridade");
@@ -24,7 +24,7 @@ enum class EstimateFieldReference(val description: String) {
                 list.add(SYSTEM)
             }
             if (taskSize) {
-                list.add(TASK_SIZE)
+                list.add(ESTIMATE)
             }
             if (epic) {
                 list.add(EPIC)

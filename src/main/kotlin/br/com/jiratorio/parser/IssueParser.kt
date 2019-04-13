@@ -152,7 +152,7 @@ class IssueParser(
             leadTime = leadTime,
             system = fields.path(board.systemCF).extractValue(),
             epic = fields.path(board.epicCF).extractValue(),
-            estimated = fields.path(board.estimateCF).extractValue(),
+            estimate = fields.path(board.estimateCF).extractValue(),
             project = fields.path(board.projectCF).extractValue(),
             summary = fields.path("summary").extractValueNotNull(),
             changelog = changelog,

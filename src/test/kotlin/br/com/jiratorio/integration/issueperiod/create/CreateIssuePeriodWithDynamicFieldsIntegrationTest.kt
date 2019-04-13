@@ -70,7 +70,7 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired cons
             hasStartDate(request.startDate.toLocalDate())
             hasEndDate(request.endDate.toLocalDate())
 
-            hasAvgLeadTime(15.1)
+            hasLeadTime(15.1)
 
             histogram().assertThat {
                 hasMedian(14)
@@ -83,17 +83,17 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired cons
                 )
             }
 
-            hasLeadTimeBySize("P" to 16.25, "M" to 14.0, "G" to 15.0)
-            hasEstimated("P" to 4, "M" to 4, "G" to 2)
+            hasLeadTimeByEstimate("P" to 16.25, "M" to 14.0, "G" to 15.0)
+            hasThroughputByEstimate("P" to 4, "M" to 4, "G" to 2)
 
             hasLeadTimeBySystem("JiraReport" to 15.4, "JiraWeb" to 14.8)
-            hasTasksBySystem("JiraReport" to 5, "JiraWeb" to 5)
+            hasThroughputBySystem("JiraReport" to 5, "JiraWeb" to 5)
 
             hasLeadTimeByType("Task" to 15.4, "Story" to 14.5, "Attendance" to 15.0)
-            hasTasksByType("Task" to 5, "Story" to 2, "Attendance" to 3)
+            hasThroughputByType("Task" to 5, "Story" to 2, "Attendance" to 3)
 
             hasLeadTimeByProject("Metric" to 15.714285714285714, "Estimate" to 13.666666666666666)
-            hasTasksByProject("Metric" to 7, "Estimate" to 3)
+            hasThroughputByProject("Metric" to 7, "Estimate" to 3)
 
             hasLeadTimeByPriority("Major" to 17.0, "Medium" to 14.75, "Expedite" to 13.666666666666666)
             hasThroughputByPriority("Major" to 3, "Medium" to 4, "Expedite" to 3)
@@ -143,7 +143,7 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired cons
                 )
             )
 
-            containsColumnTimeAvgs(
+            containsColumnTimeAvg(
                 ColumnTimeAvg(columnName = "BACKLOG", avgTime = 3.0),
                 ColumnTimeAvg(columnName = "ANALYSIS", avgTime = 3.2),
                 ColumnTimeAvg(columnName = "DEV WIP", avgTime = 2.4),
@@ -168,7 +168,7 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired cons
             hasSystem("JiraReport")
             hasEpic("Period")
             hasSummary("Calcular diferença de data de entrega com o primeiro due date")
-            hasEstimated("P")
+            hasEstimate("P")
             hasProject("Metric")
             hasStartDate("07/01/2019 12:00".toLocalDateTime())
             hasEndDate("07/02/2019 12:00".toLocalDateTime())

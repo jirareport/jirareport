@@ -26,7 +26,7 @@ class IssueFactory(
             system = faker.jira().system(),
             epic = faker.jira().epic(),
             summary = faker.lorem().word(),
-            estimated = faker.jira().estimate(),
+            estimate = faker.jira().estimate(),
             project = faker.jira().project(),
             startDate = faker.date().past(30, TimeUnit.DAYS).toLocalDateTime(),
             endDate = faker.date().past(10, TimeUnit.DAYS).toLocalDateTime(),

@@ -19,7 +19,7 @@ class IssuePeriodFactory(
     override fun builder(): IssuePeriod {
         return IssuePeriod(
             boardId = boardFactory.create().id,
-            avgLeadTime = faker.number().randomDouble(2, 1, 10),
+            leadTime = faker.number().randomDouble(2, 1, 10),
             wipAvg = faker.number().randomDouble(2, 1, 10),
             avgPctEfficiency = faker.number().randomDouble(2, 1, 10),
             startDate = faker.date().past(30, TimeUnit.DAYS).toLocalDate(),
@@ -27,7 +27,7 @@ class IssuePeriodFactory(
             jql = faker.lorem().paragraph(),
             issues = mutableListOf(),
             issuesCount = faker.number().randomNumber().toInt(),
-            estimated = Chart(
+            throughputByEstimate = Chart(
                 data = mutableMapOf(
                     "P" to faker.number().randomNumber().toInt(),
                     "M" to faker.number().randomNumber().toInt(),

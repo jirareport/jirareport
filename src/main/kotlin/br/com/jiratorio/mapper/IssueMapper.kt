@@ -20,7 +20,7 @@ class IssueMapper {
             creator = issue.creator,
             summary = issue.summary,
             issueType = issue.issueType,
-            estimate = issue.estimated,
+            estimate = issue.estimate,
             project = issue.project,
             epic = issue.epic,
             system = issue.system,

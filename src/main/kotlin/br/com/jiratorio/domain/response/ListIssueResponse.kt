@@ -6,7 +6,7 @@ import br.com.jiratorio.domain.entity.embedded.Chart
 data class ListIssueResponse(
     val issues: List<IssueResponse>,
     val charts: ChartAggregator,
-    val avgLeadTime: Double,
+    val leadTime: Double,
     val weeklyThroughput: Chart<String, Int>,
     val filters: IssueFilterResponse
 )

@@ -46,44 +46,44 @@ data class IssuePeriod(
     )
     var issues: MutableList<Issue>,
 
-    @Column(nullable = false)
-    var avgLeadTime: Double,
+    @Column(name = "avg_lead_time", nullable = false)
+    var leadTime: Double,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     var histogram: Histogram? = null,
 
     @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    var leadTimeBySize: Chart<String, Double>? = null,
+    @Column(name = "lead_time_by_size", columnDefinition = "jsonb")
+    var leadTimeByEstimate: Chart<String, Double>? = null,
 
     @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    var estimated: Chart<String, Int>? = null,
+    @Column(name = "estimated", columnDefinition = "jsonb")
+    var throughputByEstimate: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     var leadTimeBySystem: Chart<String, Double>? = null,
 
     @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    var tasksBySystem: Chart<String, Int>? = null,
+    @Column(name = "tasks_by_system", columnDefinition = "jsonb")
+    var throughputBySystem: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     var leadTimeByType: Chart<String, Double>? = null,
 
     @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    var tasksByType: Chart<String, Int>? = null,
+    @Column(name = "tasks_by_type", columnDefinition = "jsonb")
+    var throughputByType: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     var leadTimeByProject: Chart<String, Double>? = null,
 
     @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    var tasksByProject: Chart<String, Int>? = null,
+    @Column(name = "tasks_by_project", columnDefinition = "jsonb")
+    var throughputByProject: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -94,8 +94,8 @@ data class IssuePeriod(
     var throughputByPriority: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    var columnTimeAvgs: MutableList<ColumnTimeAvg>? = null,
+    @Column(name = "column_time_avgs", columnDefinition = "jsonb")
+    var columnTimeAvg: MutableList<ColumnTimeAvg>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -134,19 +134,19 @@ data class IssuePeriod(
             IssuePeriod::startDate,
             IssuePeriod::endDate,
             IssuePeriod::boardId,
-            IssuePeriod::avgLeadTime,
+            IssuePeriod::leadTime,
             IssuePeriod::histogram,
-            IssuePeriod::leadTimeBySize,
-            IssuePeriod::estimated,
+            IssuePeriod::leadTimeByEstimate,
+            IssuePeriod::throughputByEstimate,
             IssuePeriod::leadTimeBySystem,
-            IssuePeriod::tasksBySystem,
+            IssuePeriod::throughputBySystem,
             IssuePeriod::leadTimeByType,
-            IssuePeriod::tasksByType,
+            IssuePeriod::throughputByType,
             IssuePeriod::leadTimeByProject,
-            IssuePeriod::tasksByProject,
+            IssuePeriod::throughputByProject,
             IssuePeriod::leadTimeByPriority,
             IssuePeriod::throughputByPriority,
-            IssuePeriod::columnTimeAvgs,
+            IssuePeriod::columnTimeAvg,
             IssuePeriod::leadTimeCompareChart,
             IssuePeriod::issuesCount,
             IssuePeriod::jql,

@@ -50,7 +50,7 @@ class IssuePeriodServiceImpl(
         val jql = jqlService.finalizedIssues(board, startDate, endDate)
         val issues = issueService.createByJql(jql, board)
 
-        val avgLeadTime = issues.map { it.leadTime }.average()
+        val leadTime = issues.map { it.leadTime }.average()
         val avgPctEfficiency = issues.map { it.pctEfficiency }.average()
 
         val chartAggregator = chartService.buildAllCharts(issues, board)
@@ -63,17 +63,17 @@ class IssuePeriodServiceImpl(
             endDate = endDate,
             boardId = boardId,
             issues = issues.toMutableList(),
-            avgLeadTime = avgLeadTime,
+            leadTime = leadTime,
             histogram = chartAggregator.histogram,
-            estimated = chartAggregator.leadTimeByEstimate,
-            leadTimeBySize = chartAggregator.throughputByEstimate,
+            leadTimeByEstimate = chartAggregator.throughputByEstimate,
+            throughputByEstimate = chartAggregator.leadTimeByEstimate,
             leadTimeBySystem = chartAggregator.leadTimeBySystem,
-            tasksBySystem = chartAggregator.throughputBySystem,
-            columnTimeAvgs = chartAggregator.columnTimeAvg.toMutableList(),
+            throughputBySystem = chartAggregator.throughputBySystem,
+            columnTimeAvg = chartAggregator.columnTimeAvg.toMutableList(),
             leadTimeByType = chartAggregator.leadTimeByType,
-            tasksByType = chartAggregator.throughputByType,
+            throughputByType = chartAggregator.throughputByType,
             leadTimeByProject = chartAggregator.leadTimeByProject,
-            tasksByProject = chartAggregator.throughputByProject,
+            throughputByProject = chartAggregator.throughputByProject,
             leadTimeCompareChart = chartAggregator.leadTimeCompareChart,
             leadTimeByPriority = chartAggregator.leadTimeByPriority,
             throughputByPriority = chartAggregator.throughputByPriority,
@@ -158,15 +158,15 @@ class IssuePeriodServiceImpl(
         val issuesCount: Chart<String, Int> = Chart()
 
         for (issuePeriod in issuePeriods) {
-            leadTime[issuePeriod.dates] = "%.2f".format(issuePeriod.avgLeadTime)
+            leadTime[issuePeriod.dates] = "%.2f".format(issuePeriod.leadTime)
             issuesCount[issuePeriod.dates] = issuePeriod.issuesCount
         }
 
-        val issueCountBySize = leadTimeChartService.issueCountBySize(issuePeriods)
+        val issueCountByEstimate = leadTimeChartService.issueCountByEstimate(issuePeriods)
         val leadTimeCompareChart = leadTimeChartService.leadTimeCompareByPeriod(issuePeriods, board)
 
         return IssuePeriodChartResponse(
-            issueCountBySize = issueCountBySize,
+            issueCountByEstimate = issueCountByEstimate,
             leadTimeCompareChart = leadTimeCompareChart,
             leadTime = leadTime,
             issuesCount = issuesCount

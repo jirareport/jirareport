@@ -90,7 +90,7 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
             hasStartDate(request.startDate.toLocalDate())
             hasEndDate(request.endDate.toLocalDate())
 
-            hasAvgLeadTime(15.9)
+            hasLeadTime(15.9)
 
             histogram().assertThat {
                 hasMedian(15)
@@ -122,17 +122,17 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
                 )
             }
 
-            hasLeadTimeBySize("P" to 19.5, "M" to 12.75, "G" to 15.0)
-            hasEstimated("P" to 4, "M" to 4, "G" to 2)
+            hasLeadTimeByEstimate("P" to 19.5, "M" to 12.75, "G" to 15.0)
+            hasThroughputByEstimate("P" to 4, "M" to 4, "G" to 2)
 
             hasLeadTimeBySystem("JiraReport" to 16.2, "JiraWeb" to 15.6)
-            hasTasksBySystem("JiraReport" to 5, "JiraWeb" to 5)
+            hasThroughputBySystem("JiraReport" to 5, "JiraWeb" to 5)
 
             hasLeadTimeByType("Task" to 16.2, "Story" to 17.0, "Attendance" to 14.666666666666666)
-            hasTasksByType("Task" to 5, "Story" to 2, "Attendance" to 3)
+            hasThroughputByType("Task" to 5, "Story" to 2, "Attendance" to 3)
 
             hasLeadTimeByProject("Metric" to 15.714285714285714, "Estimate" to 16.333333333333332)
-            hasTasksByProject("Metric" to 7, "Estimate" to 3)
+            hasThroughputByProject("Metric" to 7, "Estimate" to 3)
 
             hasLeadTimeByPriority("Major" to 19.333333333333332, "Medium" to 16.0, "Expedite" to 12.333333333333334)
             hasThroughputByPriority("Major" to 3, "Medium" to 4, "Expedite" to 3)
@@ -145,7 +145,7 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
 
             hasEmptyDynamicCharts()
 
-            containsColumnTimeAvgs(
+            containsColumnTimeAvg(
                 ColumnTimeAvg(columnName = "BACKLOG", avgTime = 2.1),
                 ColumnTimeAvg(columnName = "ANALYSIS", avgTime = 3.0),
                 ColumnTimeAvg(columnName = "DEV WIP", avgTime = 3.7),
@@ -176,7 +176,7 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
                 hasSystem("JiraReport")
                 hasEpic("Period")
                 hasSummary("Calcular diferença de data de entrega com o primeiro due date")
-                hasEstimated("P")
+                hasEstimate("P")
                 hasProject("Metric")
                 hasStartDate("04/01/2019 12:00".toLocalDateTime())
                 hasEndDate("30/01/2019 12:00".toLocalDateTime())

@@ -17,7 +17,7 @@ class IssuePeriodMapper {
             id = issuePeriod.id,
             dates = issuePeriod.dates,
             wipAvg = issuePeriod.wipAvg,
-            leadTime = issuePeriod.avgLeadTime,
+            leadTime = issuePeriod.leadTime,
             avgPctEfficiency = issuePeriod.avgPctEfficiency,
             jql = issuePeriod.jql,
             issuesCount = issuePeriod.issuesCount
@@ -29,19 +29,19 @@ class IssuePeriodMapper {
     ): IssuePeriodDetailResponse {
         return IssuePeriodDetailResponse(
             dates = issuePeriod.dates,
-            leadTime = issuePeriod.avgLeadTime,
+            leadTime = issuePeriod.leadTime,
             issuesCount = issuePeriod.issuesCount,
-            leadTimeByEstimate = issuePeriod.leadTimeBySize,
-            throughputByEstimate = issuePeriod.estimated,
+            leadTimeByEstimate = issuePeriod.leadTimeByEstimate,
+            throughputByEstimate = issuePeriod.throughputByEstimate,
             leadTimeBySystem = issuePeriod.leadTimeBySystem,
-            throughputBySystem = issuePeriod.tasksBySystem,
+            throughputBySystem = issuePeriod.throughputBySystem,
             leadTimeByType = issuePeriod.leadTimeByType,
-            throughputByType = issuePeriod.tasksByType,
+            throughputByType = issuePeriod.throughputByType,
             leadTimeByProject = issuePeriod.leadTimeByProject,
-            throughputByProject = issuePeriod.tasksByProject,
+            throughputByProject = issuePeriod.throughputByProject,
             leadTimeByPriority = issuePeriod.leadTimeByPriority,
             throughputByPriority = issuePeriod.throughputByPriority,
-            columnTimeAvg = issuePeriod.columnTimeAvgs,
+            columnTimeAvg = issuePeriod.columnTimeAvg,
             leadTimeCompareChart = issuePeriod.leadTimeCompareChart,
             dynamicCharts = issuePeriod.dynamicCharts
         )

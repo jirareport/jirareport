@@ -55,7 +55,7 @@ class IssueServiceImpl(
         val board = boardService.findById(boardId)
         val chartAggregator = chartService.buildAllCharts(issues, board)
 
-        val avgLeadTime = issues
+        val leadTime = issues
             .map { it.leadTime }
             .average()
 
@@ -79,7 +79,7 @@ class IssueServiceImpl(
         return ListIssueResponse(
             issues = issueMapper.issueToIssueResponse(issues),
             charts = chartAggregator,
-            avgLeadTime = avgLeadTime,
+            leadTime = leadTime,
             weeklyThroughput = weeklyThroughput,
             filters = filters
         )

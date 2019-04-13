@@ -100,7 +100,7 @@ class EstimateIssueParser(
 
         return EstimateIssue(
             creator = author,
-            key = issue.get("key").extractValue(),
+            key = issue.get("key").extractValueNotNull(),
             issueType = fields.path("issuetype").extractValue(),
             created = created,
             startDate = startDate,
@@ -109,7 +109,7 @@ class EstimateIssueParser(
             epic = fields.path(board.epicCF).extractValue(),
             estimated = fields.path(board.estimateCF).extractValue(),
             project = fields.path(board.projectCF).extractValue(),
-            summary = fields.get("summary").extractValue(),
+            summary = fields.get("summary").extractValueNotNull(),
             changelog = changelog,
             impedimentTime = timeInImpediment,
             priority = priority

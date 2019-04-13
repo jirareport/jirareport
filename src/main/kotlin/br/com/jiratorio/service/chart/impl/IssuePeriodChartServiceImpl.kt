@@ -1,6 +1,6 @@
 package br.com.jiratorio.service.chart.impl
 
-import br.com.jiratorio.domain.chart.IssueCountBySize
+import br.com.jiratorio.domain.chart.IssueCountByEstimate
 import br.com.jiratorio.domain.chart.LeadTimeCompareChart
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.IssuePeriod
@@ -38,13 +38,13 @@ class IssuePeriodChartServiceImpl : IssuePeriodChartService {
         return leadTimeCompareChart
     }
 
-    override fun issueCountBySize(issuePeriods: List<IssuePeriod>): IssueCountBySize {
-        log.info("Method=issueCountBySize, issuePeriods={}", issuePeriods)
+    override fun issueCountByEstimate(issuePeriods: List<IssuePeriod>): IssueCountByEstimate {
+        log.info("Method=issueCountByEstimate, issuePeriods={}", issuePeriods)
 
         val sizes = HashSet<String>()
         val periodsSize: MutableMap<String, MutableMap<String, Int>> = LinkedHashMap()
         for (issuePeriod in issuePeriods) {
-            val throughputByEstimate = issuePeriod.estimated ?: continue
+            val throughputByEstimate = issuePeriod.throughputByEstimate ?: continue
             val estimated = throughputByEstimate.data.toMutableMap()
             sizes.addAll(estimated.keys)
             periodsSize[issuePeriod.dates] = estimated
@@ -67,6 +67,6 @@ class IssuePeriodChartServiceImpl : IssuePeriodChartService {
             }
         }
 
-        return IssueCountBySize(periodsSize.keys, datasources)
+        return IssueCountByEstimate(periodsSize.keys, datasources)
     }
 }

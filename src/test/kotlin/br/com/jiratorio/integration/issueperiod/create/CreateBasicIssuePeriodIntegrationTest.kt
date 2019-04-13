@@ -67,7 +67,7 @@ internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
             hasStartDate(request.startDate.toLocalDate())
             hasEndDate(request.endDate.toLocalDate())
 
-            hasAvgLeadTime(14.5)
+            hasLeadTime(14.5)
 
             histogram().assertThat {
                 hasMedian(11)
@@ -79,17 +79,17 @@ internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
                 )
             }
 
-            hasLeadTimeBySize("Uninformed" to 14.5)
-            hasEstimated("Uninformed" to 2)
+            hasLeadTimeByEstimate("Uninformed" to 14.5)
+            hasThroughputByEstimate("Uninformed" to 2)
 
             hasLeadTimeBySystem("Uninformed" to 14.5)
-            hasTasksBySystem("Uninformed" to 2)
+            hasThroughputBySystem("Uninformed" to 2)
 
             hasLeadTimeByType("Task" to 14.5)
-            hasTasksByType("Task" to 2)
+            hasThroughputByType("Task" to 2)
 
             hasLeadTimeByProject("Uninformed" to 14.5)
-            hasTasksByProject("Uninformed" to 2)
+            hasThroughputByProject("Uninformed" to 2)
 
             hasLeadTimeByPriority("Major" to 14.5)
             hasThroughputByPriority("Major" to 2)
@@ -102,7 +102,7 @@ internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
 
             hasEmptyDynamicCharts()
 
-            containsColumnTimeAvgs(
+            containsColumnTimeAvg(
                 ColumnTimeAvg(columnName = "BACKLOG", avgTime = 4.0),
                 ColumnTimeAvg(columnName = "TODO", avgTime = 2.0),
                 ColumnTimeAvg(columnName = "WIP", avgTime = 10.0),
@@ -123,7 +123,7 @@ internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
             hasSystem(null)
             hasEpic(null)
             hasSummary("Calcular diferença de data de entrega com o primeiro due date")
-            hasEstimated(null)
+            hasEstimate(null)
             hasProject(null)
             hasStartDate("01/01/2019 10:15".toLocalDateTime())
             hasEndDate("15/01/2019 11:20".toLocalDateTime())

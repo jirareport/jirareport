@@ -11,7 +11,7 @@ interface IssueRepository : CrudRepository<Issue, Long>, IssueCustomRepository {
 
     @Query(
         """
-            SELECT DISTINCT estimated FROM Issue
+            SELECT DISTINCT estimate FROM Issue
             WHERE board.id = :boardId
             AND estimated IS NOT NULL
         """

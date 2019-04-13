@@ -8,7 +8,7 @@ data class SearchIssueRequest(
     val endDate: LocalDate,
     val keys: MutableList<String> = mutableListOf(),
     val systems: MutableList<String> = mutableListOf(),
-    val taskSize: MutableList<String> = mutableListOf(),
+    val estimates: MutableList<String> = mutableListOf(),
     val epics: MutableList<String> = mutableListOf(),
     val issueTypes: MutableList<String> = mutableListOf(),
     val projects: MutableList<String> = mutableListOf(),

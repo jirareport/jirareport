@@ -15,19 +15,19 @@ class IssuePeriodAssert(actual: IssuePeriod) :
         objects.assertEqual(field("issuePeriod.endDate"), actual.endDate, endDate)
     }
 
-    fun hasAvgLeadTime(avgLeadTime: Double) = assertAll {
-        objects.assertEqual(field("issuePeriod.avgLeadTime"), actual.avgLeadTime, avgLeadTime)
+    fun hasLeadTime(leadTime: Double) = assertAll {
+        objects.assertEqual(field("issuePeriod.leadTime"), actual.leadTime, leadTime)
     }
 
     fun histogram() =
         HistogramAssert(actual.histogram!!)
 
-    fun hasLeadTimeBySize(vararg leadTimeBySize: Pair<String, Double>) = assertAll {
-        objects.assertEqual(field("issuePeriod.leadTimeBySize"), actual.leadTimeBySize?.data, mapOf(*leadTimeBySize))
+    fun hasLeadTimeByEstimate(vararg leadTimeByEstimate: Pair<String, Double>) = assertAll {
+        objects.assertEqual(field("issuePeriod.leadTimeByEstimate"), actual.leadTimeByEstimate?.data, mapOf(*leadTimeByEstimate))
     }
 
-    fun hasEstimated(vararg estimated: Pair<String, Int>) = assertAll {
-        objects.assertEqual(field("issuePeriod.Estimated"), actual.estimated?.data, mapOf(*estimated))
+    fun hasThroughputByEstimate(vararg throughputByEstimate: Pair<String, Int>) = assertAll {
+        objects.assertEqual(field("issuePeriod.throughputByEstimate"), actual.throughputByEstimate?.data, mapOf(*throughputByEstimate))
     }
 
     fun hasLeadTimeBySystem(vararg leadTimeBySystem: Pair<String, Double>) = assertAll {
@@ -38,16 +38,16 @@ class IssuePeriodAssert(actual: IssuePeriod) :
         )
     }
 
-    fun hasTasksBySystem(vararg tasksBySystem: Pair<String, Int>) = assertAll {
-        objects.assertEqual(field("issuePeriod.tasksBySystem"), actual.tasksBySystem?.data, mapOf(*tasksBySystem))
+    fun hasThroughputBySystem(vararg throughputBySystem: Pair<String, Int>) = assertAll {
+        objects.assertEqual(field("issuePeriod.throughputBySystem"), actual.throughputBySystem?.data, mapOf(*throughputBySystem))
     }
 
     fun hasLeadTimeByType(vararg leadTimeByType: Pair<String, Double>) = assertAll {
         objects.assertEqual(field("issuePeriod.leadTimeByType"), actual.leadTimeByType?.data, mapOf(*leadTimeByType))
     }
 
-    fun hasTasksByType(vararg tasksByType: Pair<String, Int>) = assertAll {
-        objects.assertEqual(field("issuePeriod.tasksByType"), actual.tasksByType?.data, mapOf(*tasksByType))
+    fun hasThroughputByType(vararg throughputByType: Pair<String, Int>) = assertAll {
+        objects.assertEqual(field("issuePeriod.throughputByType"), actual.throughputByType?.data, mapOf(*throughputByType))
     }
 
     fun hasLeadTimeByProject(vararg leadTimeByProject: Pair<String, Double>) = assertAll {
@@ -58,8 +58,8 @@ class IssuePeriodAssert(actual: IssuePeriod) :
         )
     }
 
-    fun hasTasksByProject(vararg tasksByProject: Pair<String, Int>) = assertAll {
-        objects.assertEqual(field("issuePeriod.tasksByProject"), actual.tasksByProject?.data, mapOf(*tasksByProject))
+    fun hasThroughputByProject(vararg throughputByProject: Pair<String, Int>) = assertAll {
+        objects.assertEqual(field("issuePeriod.throughputByProject"), actual.throughputByProject?.data, mapOf(*throughputByProject))
     }
 
     fun hasLeadTimeByPriority(vararg leadTimeByPriority: Pair<String, Double>) = assertAll {
@@ -110,8 +110,8 @@ class IssuePeriodAssert(actual: IssuePeriod) :
         )
     }
 
-    fun containsColumnTimeAvgs(vararg args: Any?) = assertAll {
-        iterables.assertContains(field("issuePeriod.columnTimeAvgs"), actual.columnTimeAvgs, args)
+    fun containsColumnTimeAvg(vararg args: Any?) = assertAll {
+        iterables.assertContains(field("issuePeriod.columnTimeAvg"), actual.columnTimeAvg, args)
     }
 
 }

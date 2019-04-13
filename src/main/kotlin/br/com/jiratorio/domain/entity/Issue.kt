@@ -37,7 +37,8 @@ data class Issue(
     @Column(nullable = false)
     var summary: String,
 
-    var estimated: String? = null,
+    @Column(name = "estimated")
+    var estimate: String? = null,
 
     var project: String? = null,
 
@@ -74,7 +75,8 @@ data class Issue(
     @Column(columnDefinition = "jsonb")
     var dueDateHistory: List<DueDateHistory>? = null,
 
-    var impedimentTime: Long? = null,
+    @Column(nullable = false)
+    var impedimentTime: Long = 0,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
