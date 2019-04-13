@@ -24,8 +24,10 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+
     implementation "org.springframework.boot:spring-boot-starter-cache"
     implementation "com.github.ben-manes.caffeine:caffeine"
+
     implementation "org.springframework.boot:spring-boot-starter-actuator"
 
     implementation "org.springframework.security:spring-security-jwt:1.0.10.RELEASE"
@@ -38,9 +40,6 @@ dependencies {
     implementation "org.postgresql:postgresql"
 
     implementation "com.vladmihalcea:hibernate-types-52:2.2.0"
-
-    implementation "org.projectlombok:lombok"
-    annotationProcessor "org.projectlombok:lombok"
 
     implementation "org.flywaydb:flyway-core"
 
@@ -94,7 +93,7 @@ compileTestKotlin {
 
 detekt {
     input = files(
-            "src/main/java",
+            "src/main/kotlin",
             "src/test/kotlin"
     )
     config = files("$projectDir/detekt-config.yml")
