@@ -24,7 +24,7 @@ class TokenServiceImpl(
     }
 
     override fun decode(token: String): Account {
-        log.info("Method=decode, token={}", token)
+        log.info("Method=decode")
 
         val jwt = JwtHelper.decodeAndVerify(token, signatureVerifier)
         return objectMapper.readValue(jwt.claims, Account::class.java)
