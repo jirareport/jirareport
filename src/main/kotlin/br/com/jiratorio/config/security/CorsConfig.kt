@@ -1,0 +1,36 @@
+package br.com.jiratorio.config.security
+
+import org.springframework.boot.web.servlet.FilterRegistrationBean
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import org.springframework.web.filter.CorsFilter
+
+@Configuration
+class CorsConfig {
+
+    @Bean
+    fun corsConfiguration(): CorsConfiguration {
+        val corsConfiguration = CorsConfiguration()
+        corsConfiguration.allowCredentials = true
+        corsConfiguration.addAllowedOrigin("*")
+        corsConfiguration.addAllowedHeader("*")
+        corsConfiguration.addExposedHeader("X-Auth-Token")
+        corsConfiguration.addAllowedMethod("*")
+
+        return corsConfiguration
+    }
+
+    @Bean
+    fun corsFilter(corsConfiguration: CorsConfiguration): FilterRegistrationBean<CorsFilter> {
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", corsConfiguration)
+
+        val filter = FilterRegistrationBean<CorsFilter>(CorsFilter(source))
+        filter.order = 0
+
+        return filter
+    }
+
+}

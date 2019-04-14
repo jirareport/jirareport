@@ -1,25 +1,30 @@
 package br.com.jiratorio.config.security
 
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
 import javax.servlet.http.HttpServletResponse
 
 @Configuration
 @EnableWebSecurity
 class WebSecurityConfig(
     private val jiraAuthenticationProvider: JiraAuthenticationProvider,
-    private val tokenAuthenticationProvider: TokenAuthenticationProvider
+    private val tokenAuthenticationProvider: TokenAuthenticationProvider,
+    private val corsConfiguration: CorsConfiguration
 ) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         // @formatter:off
         http
             .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
             .and()
             .sessionManagement()
@@ -47,9 +52,14 @@ class WebSecurityConfig(
             .csrf()
                 .disable()
             .cors()
-                .disable()
+                .configurationSource { corsConfiguration }
+            .and()
             .addFilterBefore(AuthenticationFilter(authenticationManager()), BasicAuthenticationFilter::class.java)
         // @formatter:on
+    }
+
+    override fun configure(web: WebSecurity) {
+        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**")
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
