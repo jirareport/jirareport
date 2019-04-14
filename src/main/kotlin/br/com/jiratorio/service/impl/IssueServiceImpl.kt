@@ -91,7 +91,7 @@ class IssueServiceImpl(
     @Transactional(readOnly = true)
     override fun findFilters(boardId: Long, startDate: LocalDate, endDate: LocalDate): IssueFilterResponse {
         log.info("Method=findFilters, boardId={}, startDate={}, endDate={}", boardId, startDate, endDate)
-        
+
         return IssueFilterResponse(
             estimates = issueRepository.findAllEstimatesByBoardId(boardId),
             keys = issueRepository.findAllKeysByBoardIdAndDates(

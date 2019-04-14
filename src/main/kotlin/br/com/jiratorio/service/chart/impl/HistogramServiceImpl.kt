@@ -32,9 +32,7 @@ class HistogramServiceImpl(
         log.info("Method=histogramChart, issues={}", issues)
 
         val collect: MutableMap<Long, Int> = issues
-            .groupingBy {
-                it.leadTime
-            }
+            .groupingBy { it.leadTime }
             .eachCount()
             .toMutableMap()
 

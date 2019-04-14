@@ -50,6 +50,10 @@ class Jira(
         return faker.number().randomDouble(2, 1, 10)
     }
 
+    fun issueLeadTime(): Long {
+        return faker.number().numberBetween(1, 10).toLong()
+    }
+
     fun throughput(): Int {
         return faker.number().numberBetween(1, 15)
     }

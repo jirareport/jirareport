@@ -30,7 +30,7 @@ class IssueFactory(
             project = faker.jira().project(),
             startDate = faker.date().past(30, TimeUnit.DAYS).toLocalDateTime(),
             endDate = faker.date().past(10, TimeUnit.DAYS).toLocalDateTime(),
-            leadTime = faker.number().randomNumber(),
+            leadTime = faker.jira().issueLeadTime(),
             created = faker.date().past(40, TimeUnit.DAYS).toLocalDateTime(),
             priority = faker.jira().priority(),
             changelog = changelogFactory.create(20),

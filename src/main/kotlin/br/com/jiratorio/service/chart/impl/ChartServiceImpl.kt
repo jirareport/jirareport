@@ -32,7 +32,7 @@ class ChartServiceImpl(
 
     @ExecutionTime
     override fun buildAllCharts(issues: List<Issue>, board: Board): ChartAggregator {
-        log.info("Method=buildAllCharts, issues={}", issues)
+        log.info("Method=buildAllCharts, issues={}, board={}", issues, board)
 
         return ChartAggregator(
             histogram = histogramService.issueHistogram(issues),
