@@ -1,33 +1,35 @@
 package br.com.jiratorio.service.chart.impl
 
-import br.com.jiratorio.config.internationalization.MessageResolver
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.toChart
 import br.com.jiratorio.service.chart.SystemChartService
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import org.springframework.stereotype.Service
 
 @Service
-class SystemChartServiceImpl(
-    private val messageResolver: MessageResolver
-) : SystemChartService {
+class SystemChartServiceImpl : SystemChartService {
 
-    override fun leadTimeBySystem(issues: List<Issue>): Chart<String, Double> {
-        log.info("Method=leadTimeBySystem, issues={}", issues)
+    override fun leadTimeBySystemAsync(issues: List<Issue>, uninformed: String): Deferred<Chart<String, Double>> =
+        GlobalScope.async {
+            log.info("Method=leadTimeBySystem, issues={}", issues)
 
-        return issues
-            .groupBy { it.system ?: messageResolver.resolve("uninformed") }
-            .mapValues { (_, value) -> value.map { it.leadTime }.average() }
-            .toChart()
-    }
+            issues
+                .groupBy { it.system ?: uninformed }
+                .mapValues { (_, value) -> value.map { it.leadTime }.average() }
+                .toChart()
+        }
 
-    override fun throughputBySystem(issues: List<Issue>): Chart<String, Int> {
-        log.info("Method=throughputBySystem, issues={}", issues)
+    override fun throughputBySystemAsync(issues: List<Issue>, uninformed: String): Deferred<Chart<String, Int>> =
+        GlobalScope.async {
+            log.info("Method=throughputBySystem, issues={}", issues)
 
-        return issues
-            .groupingBy { it.system ?: messageResolver.resolve("uninformed") }
-            .eachCount()
-            .toChart()
-    }
+            issues
+                .groupingBy { it.system ?: uninformed }
+                .eachCount()
+                .toChart()
+        }
 }

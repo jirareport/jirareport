@@ -14,6 +14,9 @@ import br.com.jiratorio.service.ChangelogService
 import br.com.jiratorio.service.HolidayService
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import kotlinx.coroutines.ExecutorCoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -22,7 +25,8 @@ import java.time.LocalDateTime
 class EstimateIssueParser(
     private val holidayService: HolidayService,
     private val objectMapper: ObjectMapper,
-    private val changelogService: ChangelogService
+    private val changelogService: ChangelogService,
+    private val issueParserCoroutineDispatcher: ExecutorCoroutineDispatcher
 ) {
 
     @ExecutionTime
@@ -33,8 +37,14 @@ class EstimateIssueParser(
         val startColumns = fluxColumn.startColumns
 
         val issues = objectMapper.readTree(rawText).path("issues")
-        return issues.mapNotNull {
-            parseIssue(it, board, startColumns, holidays)
+        return runBlocking(issueParserCoroutineDispatcher) {
+            issues
+                .map {
+                    async { parseIssue(it, board, startColumns, holidays) }
+                }
+                .mapNotNull {
+                    it.await()
+                }
         }
     }
 

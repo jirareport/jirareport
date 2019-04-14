@@ -6,6 +6,9 @@ import br.com.jiratorio.domain.entity.embedded.Histogram
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.service.PercentileService
 import br.com.jiratorio.service.chart.HistogramService
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,20 +16,20 @@ class HistogramServiceImpl(
     private val percentileService: PercentileService
 ) : HistogramService {
 
-    override fun issueHistogram(issues: List<Issue>): Histogram {
-        log.info("Method=issueHistogram, issues={}", issues)
+    override fun issueHistogramAsync(issues: List<Issue>): Deferred<Histogram> =
+        GlobalScope.async {
+            log.info("Method=issueHistogram, issues={}", issues)
+            val leadTimeList = issues.map { it.leadTime }
+            val percentile = percentileService.calculatePercentile(leadTimeList)
+            val chart = histogramChart(issues)
 
-        val leadTimeList = issues.map { it.leadTime }
-        val percentile = percentileService.calculatePercentile(leadTimeList)
-        val chart = histogramChart(issues)
-
-        return Histogram(
-            chart,
-            percentile.median,
-            percentile.percentile75,
-            percentile.percentile90
-        )
-    }
+            Histogram(
+                chart,
+                percentile.median,
+                percentile.percentile75,
+                percentile.percentile90
+            )
+        }
 
     private fun histogramChart(issues: List<Issue>): Chart<Long, Int> {
         log.info("Method=histogramChart, issues={}", issues)

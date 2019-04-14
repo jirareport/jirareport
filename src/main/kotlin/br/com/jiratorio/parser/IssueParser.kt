@@ -2,11 +2,11 @@ package br.com.jiratorio.parser
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.domain.FluxColumn
-import br.com.jiratorio.domain.jira.changelog.JiraChangelog
-import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
+import br.com.jiratorio.domain.jira.changelog.JiraChangelog
+import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
@@ -19,13 +19,11 @@ import br.com.jiratorio.service.HolidayService
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.ExecutorCoroutineDispatcher
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
-import java.util.concurrent.Executors
 
 @Component
 class IssueParser(
@@ -34,7 +32,7 @@ class IssueParser(
     private val dueDateService: DueDateService,
     private val changelogService: ChangelogService,
     private val efficiencyService: EfficiencyService,
-    private val dispatcher: ExecutorCoroutineDispatcher = Executors.newFixedThreadPool(10).asCoroutineDispatcher()
+    private val issueParserCoroutineDispatcher: ExecutorCoroutineDispatcher
 ) {
 
     @ExecutionTime
@@ -45,10 +43,10 @@ class IssueParser(
         val fluxColumn = FluxColumn(board)
         val issues = objectMapper.readTree(rawText).path("issues")
 
-        return runBlocking {
+        return runBlocking(issueParserCoroutineDispatcher) {
             issues.map {
                 try {
-                    async(dispatcher) { parseIssue(it, board, holidays, fluxColumn) }
+                    async { parseIssue(it, board, holidays, fluxColumn) }
                 } catch (e: Exception) {
                     log.error(
                         "Method=parse, info=Error parsing issue, issue={}, err={}",

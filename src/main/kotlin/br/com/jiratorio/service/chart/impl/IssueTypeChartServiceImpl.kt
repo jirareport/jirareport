@@ -1,34 +1,36 @@
 package br.com.jiratorio.service.chart.impl
 
-import br.com.jiratorio.config.internationalization.MessageResolver
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.toChart
 import br.com.jiratorio.service.chart.IssueTypeChartService
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import org.springframework.stereotype.Service
 
 @Service
-class IssueTypeChartServiceImpl(
-    private val messageResolver: MessageResolver
-) : IssueTypeChartService {
+class IssueTypeChartServiceImpl : IssueTypeChartService {
 
-    override fun leadTimeByType(issues: List<Issue>): Chart<String, Double> {
-        log.info("Method=leadTimeByType, issues={}", issues)
+    override fun leadTimeByTypeAsync(issues: List<Issue>, uninformed: String): Deferred<Chart<String, Double>> =
+        GlobalScope.async {
+            log.info("Method=leadTimeByType, issues={}", issues)
 
-        return issues
-            .groupBy { it.issueType ?: messageResolver.resolve("uninformed") }
-            .mapValues { (_, value) -> value.map { it.leadTime }.average() }
-            .toChart()
-    }
+            issues
+                .groupBy { it.issueType ?: uninformed }
+                .mapValues { (_, value) -> value.map { it.leadTime }.average() }
+                .toChart()
+        }
 
-    override fun throughputByType(issues: List<Issue>): Chart<String, Int> {
-        log.info("Method=throughputByType, issues={}", issues)
+    override fun throughputByTypeAsync(issues: List<Issue>, uninformed: String): Deferred<Chart<String, Int>> =
+        GlobalScope.async {
+            log.info("Method=throughputByType, issues={}", issues)
 
-        return issues
-            .groupingBy { it.issueType ?: messageResolver.resolve("uninformed") }
-            .eachCount()
-            .toChart()
-    }
+            issues
+                .groupingBy { it.issueType ?: uninformed }
+                .eachCount()
+                .toChart()
+        }
 
 }
