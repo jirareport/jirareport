@@ -90,5 +90,5 @@ class IssueResponseAssert(
     fun hasPctEfficiency(pctEfficiency: Double) = assertAll {
         objects.assertEqual(field("issueResponse.pctEfficiency"), actual.pctEfficiency, pctEfficiency)
     }
-    
+
 }

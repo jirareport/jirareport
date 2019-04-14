@@ -8,6 +8,7 @@ import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.domain.response.IssueFilterResponse
 import br.com.jiratorio.domain.response.ListIssueResponse
 import br.com.jiratorio.extension.log
+import br.com.jiratorio.extension.time.atEndOfDay
 import br.com.jiratorio.mapper.IssueMapper
 import br.com.jiratorio.parser.IssueParser
 import br.com.jiratorio.repository.IssueRepository
@@ -18,6 +19,7 @@ import br.com.jiratorio.service.chart.ChartService
 import br.com.jiratorio.service.leadtime.LeadTimeService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 
 @Service
 class IssueServiceImpl(
@@ -55,9 +57,7 @@ class IssueServiceImpl(
         val board = boardService.findById(boardId)
         val chartAggregator = chartService.buildAllCharts(issues, board)
 
-        val leadTime = issues
-            .map { it.leadTime }
-            .average()
+        val leadTime = issues.map { it.leadTime }.average()
 
         val weeklyThroughput = weeklyThroughputService.calcWeeklyThroughput(
             searchIssueRequest.startDate,
@@ -65,23 +65,11 @@ class IssueServiceImpl(
             issues
         )
 
-        val filters = IssueFilterResponse(
-            estimatives = issueRepository.findAllEstimatesByBoardId(boardId),
-            keys = (issues.map { it.key } + searchIssueRequest.keys).toSortedSet(),
-            systems = issueRepository.findAllSystemsByBoardId(boardId),
-            epics = issueRepository.findAllEpicsByBoardId(boardId),
-            issueTypes = issueRepository.findAllIssueTypesByBoardId(boardId),
-            projects = issueRepository.findAllIssueProjectsByBoardId(boardId),
-            priorities = issueRepository.findAllIssuePrioritiesByBoardId(boardId),
-            dynamicFieldsValues = issueRepository.findAllDynamicFieldValues(boardId)
-        )
-
         return ListIssueResponse(
             issues = issueMapper.issueToIssueResponse(issues),
             charts = chartAggregator,
             leadTime = leadTime,
-            weeklyThroughput = weeklyThroughput,
-            filters = filters
+            weeklyThroughput = weeklyThroughput
         )
     }
 
@@ -99,4 +87,24 @@ class IssueServiceImpl(
         issueRepository.deleteAll(issues)
     }
 
+    @ExecutionTime
+    @Transactional(readOnly = true)
+    override fun findFilters(boardId: Long, startDate: LocalDate, endDate: LocalDate): IssueFilterResponse {
+        log.info("Method=findFilters, boardId={}, startDate={}, endDate={}", boardId, startDate, endDate)
+        
+        return IssueFilterResponse(
+            estimates = issueRepository.findAllEstimatesByBoardId(boardId),
+            keys = issueRepository.findAllKeysByBoardIdAndDates(
+                boardId,
+                startDate.atStartOfDay(),
+                endDate.atEndOfDay()
+            ),
+            systems = issueRepository.findAllSystemsByBoardId(boardId),
+            epics = issueRepository.findAllEpicsByBoardId(boardId),
+            issueTypes = issueRepository.findAllIssueTypesByBoardId(boardId),
+            projects = issueRepository.findAllIssueProjectsByBoardId(boardId),
+            priorities = issueRepository.findAllIssuePrioritiesByBoardId(boardId),
+            dynamicFieldsValues = issueRepository.findAllDynamicFieldValues(boardId)
+        )
+    }
 }

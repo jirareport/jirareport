@@ -7,6 +7,5 @@ data class ListIssueResponse(
     val issues: List<IssueResponse>,
     val charts: ChartAggregator,
     val leadTime: Double,
-    val weeklyThroughput: Chart<String, Int>,
-    val filters: IssueFilterResponse
+    val weeklyThroughput: Chart<String, Int>
 )

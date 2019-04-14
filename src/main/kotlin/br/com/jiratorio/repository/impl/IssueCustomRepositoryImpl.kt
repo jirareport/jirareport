@@ -102,17 +102,19 @@ class IssueCustomRepositoryImpl(
             return emptyList()
         }
 
-        val query = StringBuilder("SELECT ")
-        query.append(dynamicFields.joinToString { """ ARRAY_TO_JSON(ARRAY_REMOVE(ARRAY_AGG(DISTINCT fields."$it"), null)) as "$it" """ })
-        query.append(" FROM issue, JSONB_TO_RECORD(dynamic_fields) AS ")
-        query.append(dynamicFields.joinToString(prefix = "fields(", postfix = ")") { query.append(""" "$it" TEXT """) })
-        query.append(" WHERE board_id = ? ")
+        val query = """
+            SELECT
+            ${dynamicFields.joinToString { """ ARRAY_TO_JSON(ARRAY_REMOVE(ARRAY_AGG(DISTINCT fields."$it"), null)) as "$it" """ }}
+            FROM issue, JSONB_TO_RECORD(dynamic_fields) AS
+            ${dynamicFields.joinToString(prefix = "fields(", postfix = ")") { """ "$it" TEXT """ }}
+            WHERE board_id = ?
+        """.trimIndent()
 
-        return jdbcTemplate.queryForObject(query.toString(), DynamicFieldsValuesRowMapper(objectMapper), boardId)
+        return jdbcTemplate.queryForObject(query, DynamicFieldsValuesRowMapper(objectMapper), boardId)
             ?: emptyList()
     }
 
-    private fun findAllDynamicFieldsByBoardId(boardId: Long?): List<String> {
+    private fun findAllDynamicFieldsByBoardId(boardId: Long): List<String> {
         log.info("Method=findAllDynamicFieldsByBoardId, boardId={}", boardId)
 
         val query = "SELECT DISTINCT JSONB_OBJECT_KEYS(dynamic_fields) FROM issue WHERE board_id = ?"

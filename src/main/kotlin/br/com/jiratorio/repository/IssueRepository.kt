@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 @Repository
 interface IssueRepository : CrudRepository<Issue, Long>, IssueCustomRepository {
@@ -62,5 +63,18 @@ interface IssueRepository : CrudRepository<Issue, Long>, IssueCustomRepository {
         """
     )
     fun findAllIssuePrioritiesByBoardId(@Param("boardId") boardId: Long): Set<String>
+
+    @Query(
+        """
+            SELECT DISTINCT key FROM Issue
+            WHERE board.id = :boardId
+            AND endDate between :startDate and :endDate
+        """
+    )
+    fun findAllKeysByBoardIdAndDates(
+        @Param("boardId") boardId: Long,
+        @Param("startDate") startDate: LocalDateTime,
+        @Param("endDate") endDate: LocalDateTime
+    ): Set<String>
 
 }
