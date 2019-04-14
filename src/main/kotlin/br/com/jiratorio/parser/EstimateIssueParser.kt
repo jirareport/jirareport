@@ -1,10 +1,11 @@
 package br.com.jiratorio.parser
 
+import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.domain.FluxColumn
-import br.com.jiratorio.domain.jira.changelog.JiraChangelog
-import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.estimate.EstimateIssue
+import br.com.jiratorio.domain.jira.changelog.JiraChangelog
+import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
@@ -24,13 +25,15 @@ class EstimateIssueParser(
     private val changelogService: ChangelogService
 ) {
 
+    @ExecutionTime
     fun parseEstimate(rawText: String, board: Board): List<EstimateIssue> {
         val holidays = holidayService.findDaysByBoard(board.id)
 
         val fluxColumn = FluxColumn(board)
         val startColumns = fluxColumn.startColumns
 
-        return objectMapper.readTree(rawText).path("issues").mapNotNull {
+        val issues = objectMapper.readTree(rawText).path("issues")
+        return issues.mapNotNull {
             parseIssue(it, board, startColumns, holidays)
         }
     }
@@ -45,14 +48,13 @@ class EstimateIssueParser(
 
         val changelogItems = extractChangelogItems(issue)
         val changelog = changelogService.parseChangelog(changelogItems, holidays, board.ignoreWeekend)
-        if (!changelog.isEmpty()) {
-            val changelogItem = changelog[changelog.size - 1]
-            changelogItem.leadTime =
-                changelogItem.created.daysDiff(
-                    LocalDateTime.now(),
-                    holidays,
-                    board.ignoreWeekend
-                )
+        if (changelog.isNotEmpty()) {
+            val changelogItem = changelog.last()
+            changelogItem.leadTime = changelogItem.created.daysDiff(
+                LocalDateTime.now(),
+                holidays,
+                board.ignoreWeekend
+            )
             changelogItem.endDate = LocalDateTime.now()
         }
         val created = fields.get("created")

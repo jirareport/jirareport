@@ -1,12 +1,13 @@
 package br.com.jiratorio.service.impl
 
+import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.client.IssueClient
 import br.com.jiratorio.config.internationalization.MessageResolver
 import br.com.jiratorio.domain.Percentile
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.estimate.EstimateFieldReference
 import br.com.jiratorio.domain.estimate.EstimateIssue
-import br.com.jiratorio.domain.form.EstimateForm
+import br.com.jiratorio.domain.request.SearchEstimateRequest
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.exception.BadRequestException
 import br.com.jiratorio.extension.log
@@ -20,7 +21,6 @@ import br.com.jiratorio.service.JQLService
 import br.com.jiratorio.service.PercentileService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.util.CollectionUtils
 import java.util.HashMap
 
 @Service
@@ -35,77 +35,85 @@ class EstimateServiceImpl(
     private val messageResolver: MessageResolver
 ) : EstimateService {
 
+    @ExecutionTime
     @Transactional(readOnly = true)
-    override fun findEstimateIssues(boardId: Long, estimateForm: EstimateForm): List<EstimateIssue> {
-        log.info("Method=findEstimateIssues, boardId={}, estimateForm={}", boardId, estimateForm)
+    override fun findEstimateIssues(boardId: Long, searchEstimateRequest: SearchEstimateRequest): List<EstimateIssue> {
+        log.info("Method=findEstimateIssues, boardId={}, searchEstimateRequest={}", boardId, searchEstimateRequest)
 
         val board = boardService.findById(boardId)
 
-        if (CollectionUtils.isEmpty(board.fluxColumn)) {
+        if (board.fluxColumn.isNullOrEmpty()) {
             throw BadRequestException(messageResolver.resolve("errors.flux-column-not-configured"))
         }
 
-        val jql = jqlService.openedIssues(board)
-        val issueList = findEstimateByJql(jql, board)
+        val estimateIssues = findEstimateIssues(board)
 
-        val holidays = if (board.ignoreWeekend == true)
-            emptyList()
-        else
-            holidayService.findDaysByBoard(boardId)
+        val holidays = holidayService.findDaysByBoard(boardId)
 
         val fieldPercentileMap = HashMap<String, Percentile>()
-
-        for (issue in issueList) {
-            val value = retrieveByFilter(issue, estimateForm.filter) ?: continue
+        for (estimateIssue in estimateIssues) {
+            val value = retrieveByFilter(estimateIssue, searchEstimateRequest.filter) ?: continue
 
             val percentile: Percentile = fieldPercentileMap.getOrPut(value) {
-                calculatePercentile(board, estimateForm, value)
+                calculatePercentile(board, searchEstimateRequest, value)
             }
 
-            issue.estimateDateAvg = issue.startDate.plusDays(
+            estimateIssue.estimateDateAvg = estimateIssue.startDate.plusDays(
                 percentile.average.toLong(), holidays, board.ignoreWeekend
             )
 
-            issue.estimateDatePercentile50 = issue.startDate.plusDays(
+            estimateIssue.estimateDatePercentile50 = estimateIssue.startDate.plusDays(
                 percentile.median, holidays, board.ignoreWeekend
             )
 
-            issue.estimateDatePercentile75 = issue.startDate.plusDays(
+            estimateIssue.estimateDatePercentile75 = estimateIssue.startDate.plusDays(
                 percentile.percentile75, holidays, board.ignoreWeekend
             )
 
-            issue.estimateDatePercentile90 = issue.startDate.plusDays(
+            estimateIssue.estimateDatePercentile90 = estimateIssue.startDate.plusDays(
                 percentile.percentile90, holidays, board.ignoreWeekend
             )
         }
 
-        return issueList
+        return estimateIssues
     }
 
-    private fun findEstimateByJql(jql: String, board: Board): List<EstimateIssue> {
+    private fun findEstimateIssues(board: Board): List<EstimateIssue> {
+        val jql = jqlService.openedIssues(board)
         val issues = issueClient.findByJql(jql)
         return estimateIssueParser.parseEstimate(issues, board)
     }
 
-    private fun calculatePercentile(board: Board, estimateForm: EstimateForm, value: String): Percentile {
-        log.info("Method=calculatePercentile, board={}, estimateForm={}, value={}", board, estimateForm, value)
-
-        val issueForm = buildIssueFormByEstimateForm(estimateForm, value)
-
+    private fun calculatePercentile(
+        board: Board,
+        searchEstimateRequest: SearchEstimateRequest,
+        value: String
+    ): Percentile {
+        log.info(
+            "Method=calculatePercentile, board={}, searchEstimateRequest={}, value={}",
+            board, searchEstimateRequest, value
+        )
+        val issueForm = buildIssueFormByEstimateForm(searchEstimateRequest, value)
         val leadTimeList = issueService.findLeadTimeByExample(board.id, issueForm)
 
         return percentileService.calculatePercentile(leadTimeList)
     }
 
-    private fun buildIssueFormByEstimateForm(estimateForm: EstimateForm, value: String): SearchIssueRequest {
-        log.info("Method=buildIssueFormByEstimateForm, estimateForm={}, value={}", estimateForm, value)
-
-        val searchIssueRequest = SearchIssueRequest(
-            startDate = estimateForm.startDate,
-            endDate = estimateForm.endDate
+    private fun buildIssueFormByEstimateForm(
+        searchEstimateRequest: SearchEstimateRequest,
+        value: String
+    ): SearchIssueRequest {
+        log.info(
+            "Method=buildIssueFormByEstimateForm, searchEstimateRequest={}, value={}",
+            searchEstimateRequest, value
         )
 
-        when (estimateForm.filter) {
+        val searchIssueRequest = SearchIssueRequest(
+            startDate = searchEstimateRequest.startDate,
+            endDate = searchEstimateRequest.endDate
+        )
+
+        when (searchEstimateRequest.filter) {
             EstimateFieldReference.ISSUE_TYPE -> searchIssueRequest.issueTypes.add(value)
             EstimateFieldReference.SYSTEM -> searchIssueRequest.systems.add(value)
             EstimateFieldReference.ESTIMATE -> searchIssueRequest.estimates.add(value)
