@@ -12,6 +12,7 @@ class UserConfigMapper {
 
     fun userConfigToResponse(userConfig: UserConfig): UserConfigResponse {
         return UserConfigResponse(
+            username = userConfig.username,
             state = userConfig.state,
             city = userConfig.city,
             holidayToken = userConfig.holidayToken,

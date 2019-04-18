@@ -48,7 +48,7 @@ class UserConfigServiceImpl(
 
         return userConfigRepository.findByUsername(username)
             .map { userConfigMapper.userConfigToResponse(it) }
-            .orElse(UserConfigResponse())
+            .orElse(UserConfigResponse(username))
     }
 
 }
