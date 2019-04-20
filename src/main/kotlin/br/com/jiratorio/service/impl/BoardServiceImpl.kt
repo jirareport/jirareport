@@ -13,13 +13,12 @@ import br.com.jiratorio.extension.log
 import br.com.jiratorio.mapper.BoardMapper
 import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.service.BoardService
+import br.com.jiratorio.specification.SearchBoardSpecification
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.jpa.domain.Specification
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import javax.persistence.criteria.Predicate
 
 @Service
 class BoardServiceImpl(
@@ -35,24 +34,7 @@ class BoardServiceImpl(
     ): Page<BoardResponse> {
         log.info("Method=findAll, searchBoardRequest={}, currentUser={}", searchBoardRequest, currentUser)
 
-        val filter = Specification<Board> { from, query, builder ->
-            val predicates: MutableList<Predicate> = ArrayList()
-
-            if (searchBoardRequest.name != null) {
-                predicates.add(
-                    builder.like(builder.lower(from.get<String>("name")), "%${searchBoardRequest.name}%".toLowerCase())
-                )
-            }
-
-            if (searchBoardRequest.owner == null) {
-                predicates.add(builder.equal(from.get<String>("owner"), currentUser.username))
-            } else if (searchBoardRequest.owner != "all") {
-                predicates.add(builder.equal(from.get<String>("owner"), searchBoardRequest.owner))
-            }
-
-            builder.and(*predicates.toTypedArray())
-        }
-
+        val filter = SearchBoardSpecification(searchBoardRequest, currentUser)
         val boards = boardRepository.findAll(filter, pageable)
         return boardMapper.toBoardResponse(boards)
     }
