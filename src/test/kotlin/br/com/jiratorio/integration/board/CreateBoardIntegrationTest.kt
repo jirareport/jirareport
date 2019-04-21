@@ -73,11 +73,8 @@ internal class CreateBoardIntegrationTest @Autowired constructor(
             }
             then {
                 statusCode(HttpStatus.SC_BAD_REQUEST)
-                body(
-                    "errors.find { it.field == 'externalId' }.messages",
-                    contains("must be greater than or equal to 1")
-                )
-                body("errors.find { it.field == 'name' }.messages", contains("must not be blank"))
+                body("externalId", contains("must be greater than or equal to 1"))
+                body("name", contains("must not be blank"))
             }
         }
     }

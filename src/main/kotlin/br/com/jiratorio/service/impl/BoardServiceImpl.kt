@@ -85,8 +85,10 @@ class BoardServiceImpl(
 
     @ExecutionTime
     @Transactional(readOnly = true)
-    override fun findAllOwners(): Set<String> {
-        log.info("Method=findAllOwners")
-        return boardRepository.findAllOwners()
+    override fun findAllOwners(currentUser: Account): Set<String> {
+        log.info("Method=findAllOwners, currentUser={}", currentUser)
+
+        val owners = boardRepository.findAllOwners()
+        return owners + currentUser.username
     }
 }

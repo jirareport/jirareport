@@ -79,9 +79,9 @@ internal class UpdateLeadTimeConfigIntegrationTest @Autowired constructor(
             }
             then {
                 statusCode(HttpStatus.SC_BAD_REQUEST)
-                body("errors.find { it.field == 'name' }.messages", contains("must not be blank"))
-                body("errors.find { it.field == 'startColumn' }.messages", contains("must not be blank"))
-                body("errors.find { it.field == 'endColumn' }.messages", contains("must not be blank"))
+                body("name", contains("must not be blank"))
+                body("startColumn", contains("must not be blank"))
+                body("endColumn", contains("must not be blank"))
             }
         }
     }

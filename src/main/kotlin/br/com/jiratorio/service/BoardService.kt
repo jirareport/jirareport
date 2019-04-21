@@ -24,6 +24,6 @@ interface BoardService {
 
     fun findDetailsById(id: Long): BoardDetailsResponse
 
-    fun findAllOwners(): Set<String>
+    fun findAllOwners(currentUser: Account): Set<String>
 
 }

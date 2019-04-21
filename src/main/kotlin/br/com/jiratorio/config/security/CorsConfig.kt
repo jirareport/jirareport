@@ -16,7 +16,9 @@ class CorsConfig {
         corsConfiguration.allowCredentials = true
         corsConfiguration.addAllowedOrigin("*")
         corsConfiguration.addAllowedHeader("*")
-        corsConfiguration.addExposedHeader("X-Auth-Token")
+        listOf("X-Auth-Token", "Location").forEach {
+            corsConfiguration.addExposedHeader(it)
+        }
         corsConfiguration.addAllowedMethod("*")
 
         return corsConfiguration

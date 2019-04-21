@@ -9,6 +9,7 @@ import br.com.jiratorio.domain.response.board.BoardResponse
 import br.com.jiratorio.service.BoardService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -28,7 +29,7 @@ class BoardController(private val boardService: BoardService) {
 
     @GetMapping
     fun index(
-        pageable: Pageable,
+        @PageableDefault(size = 20, sort = ["id"]) pageable: Pageable,
         searchBoardRequest: SearchBoardRequest,
         @AuthenticationPrincipal currentUser: Account
     ): Page<BoardResponse> {
@@ -36,8 +37,8 @@ class BoardController(private val boardService: BoardService) {
     }
 
     @GetMapping("/owners")
-    fun owners(): Set<String> {
-        return boardService.findAllOwners()
+    fun owners(@AuthenticationPrincipal currentUser: Account): Set<String> {
+        return boardService.findAllOwners(currentUser)
     }
 
     @GetMapping("/{id}")

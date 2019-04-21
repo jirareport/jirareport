@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank
 
 data class UpdateBoardRequest(
 
-    @NotBlank
+    @field:NotBlank
     var name: String,
 
     var startColumn: String? = null,

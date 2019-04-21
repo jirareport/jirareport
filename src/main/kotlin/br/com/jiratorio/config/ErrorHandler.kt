@@ -17,34 +17,25 @@ class ErrorHandler(
     @ExceptionHandler(MissingKotlinParameterException::class)
     fun handleMissingKotlinParameterException(
         e: MissingKotlinParameterException
-    ): ResponseEntity<Map<String, List<Map<String, Any>>>> {
+    ): ResponseEntity<Map<String, List<String>>> {
         return ResponseEntity(
-            mapOf(
-                "errors" to listOf(
-                    mapOf(
-                        "field" to e.parameter.name!!,
-                        "messages" to listOf(messageResolver.resolve("javax.validation.constraints.NotNull.message"))
-                    )
-                )
-            ), HttpStatus.BAD_REQUEST
+            mapOf(e.parameter.name!! to listOf(messageResolver.resolve("javax.validation.constraints.NotNull.message"))),
+            HttpStatus.BAD_REQUEST
         )
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleMethodArgumentNotValidException(
         e: MethodArgumentNotValidException
-    ): ResponseEntity<Map<String, List<Map<String, Any>>>> {
+    ): ResponseEntity<Map<String, List<String>>> {
         val errors = e.bindingResult.allErrors.groupBy {
             it as FieldError
             it.field
         }.map {
-            mapOf(
-                "field" to it.key,
-                "messages" to it.value.mapNotNull { it.defaultMessage }
-            )
-        }
+            it.key to it.value.mapNotNull { it.defaultMessage }
+        }.toMap()
 
-        return ResponseEntity(mapOf("errors" to errors), HttpStatus.BAD_REQUEST)
+        return ResponseEntity(errors, HttpStatus.BAD_REQUEST)
     }
 
 }

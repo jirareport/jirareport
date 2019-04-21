@@ -77,7 +77,7 @@ internal class UpdateHolidayIntegrationTest @Autowired constructor(
             }
             then {
                 statusCode(HttpStatus.SC_BAD_REQUEST)
-                body("errors.find { it.field == 'description' }.messages", Matchers.contains("must not be blank"))
+                body("description", Matchers.contains("must not be blank"))
             }
         }
     }
