@@ -1,7 +1,6 @@
 package br.com.jiratorio.domain.request
 
 import br.com.jiratorio.domain.duedate.DueDateType
-import br.com.jiratorio.domain.entity.DynamicFieldConfig
 import br.com.jiratorio.domain.impediment.ImpedimentType
 import javax.validation.constraints.NotBlank
 

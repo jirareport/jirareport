@@ -74,7 +74,7 @@ internal class SearchBoardIntegrationTest @Autowired constructor(
     fun `filter board by name`() {
         authenticator.withDefaultUser {
             boardFactory.create(5) {
-                name = "Uniq Start Name"
+                it.name = "Uniq Start Name"
             }
             boardFactory.create(5)
         }

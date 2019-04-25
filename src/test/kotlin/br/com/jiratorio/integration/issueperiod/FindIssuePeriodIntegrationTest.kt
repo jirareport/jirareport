@@ -34,7 +34,7 @@ internal class FindIssuePeriodIntegrationTest @Autowired constructor(
         val issuePeriod = authenticator.withDefaultUser {
             val defaultBoard = boardFactory.create()
             val mutableIssues = issueFactory.create(20) {
-                board = defaultBoard
+                it.board = defaultBoard
             }.toMutableList()
 
             issuePeriodFactory.create {

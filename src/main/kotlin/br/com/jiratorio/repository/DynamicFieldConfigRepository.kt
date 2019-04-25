@@ -5,4 +5,10 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface DynamicFieldConfigRepository : CrudRepository<DynamicFieldConfig, Long>
+interface DynamicFieldConfigRepository : CrudRepository<DynamicFieldConfig, Long> {
+
+    fun findByBoardId(boardId: Long): List<DynamicFieldConfig>
+
+    fun findByBoardIdAndId(boardId: Long, id: Long): DynamicFieldConfig?
+
+}

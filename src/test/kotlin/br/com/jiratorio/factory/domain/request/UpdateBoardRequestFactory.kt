@@ -1,14 +1,12 @@
 package br.com.jiratorio.factory.domain.request
 
 import br.com.jiratorio.domain.duedate.DueDateType
-import br.com.jiratorio.domain.entity.DynamicFieldConfig
 import br.com.jiratorio.domain.impediment.ImpedimentType
 import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.extension.faker.jira
 import br.com.jiratorio.factory.KBacon
 import com.github.javafaker.Faker
 import org.springframework.stereotype.Component
-import java.util.Arrays.asList
 
 @Component
 class UpdateBoardRequestFactory(

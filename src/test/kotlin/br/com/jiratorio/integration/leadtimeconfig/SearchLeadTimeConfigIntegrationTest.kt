@@ -29,7 +29,7 @@ internal class SearchLeadTimeConfigIntegrationTest @Autowired constructor(
         authenticator.withDefaultUser {
             val defaultBoard = boardFactory.create()
             leadTimeConfigFactory.create(10) {
-                board = defaultBoard
+                it.board = defaultBoard
             }
         }
 

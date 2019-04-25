@@ -28,7 +28,7 @@ abstract class KBacon<T>(
         quantity: Int,
         builder: KFunction0<T> = ::builder,
         persist: Boolean = repository != null,
-        modifier: T.() -> Unit = {}
+        modifier: (T) -> Unit = {}
     ): List<T> = (1..quantity).map {
         create(builder, persist, modifier)
     }

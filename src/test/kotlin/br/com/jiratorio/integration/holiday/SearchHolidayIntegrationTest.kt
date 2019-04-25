@@ -32,7 +32,7 @@ internal class SearchHolidayIntegrationTest @Autowired constructor(
         val (id) = authenticator.withDefaultUser {
             val boardExample = boardFactory.create()
             holidayFactory.create(10) {
-                board = boardExample
+                it.board = boardExample
             }
 
             boardExample

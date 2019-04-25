@@ -40,7 +40,7 @@ internal class DueDateServiceImplTest @Autowired constructor(
     @Test
     fun `extract due date history with many items`() {
         jiraChangelogItemFactory.create(5) {
-            field = "other_field"
+            it.field = "other_field"
         }
         val jiraChangelogItems = jiraChangelogItemFactory.create(5)
 
