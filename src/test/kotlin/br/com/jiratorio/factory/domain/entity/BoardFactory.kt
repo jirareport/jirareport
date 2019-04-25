@@ -1,7 +1,6 @@
 package br.com.jiratorio.factory.domain.entity
 
 import br.com.jiratorio.domain.duedate.DueDateType
-import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.impediment.ImpedimentType
 import br.com.jiratorio.extension.faker.jira
@@ -37,10 +36,6 @@ class BoardFactory(
             ignoreWeekend = false
             impedimentType = ImpedimentType.COLUMN
             impedimentColumns = asList("IMP_COLUMN1", "IMP_COLUMN2", "IMP_COLUMN3")
-            dynamicFields = asList(
-                DynamicFieldConfig("dn_field1", faker.jira().customField()),
-                DynamicFieldConfig("dn_field2", faker.jira().customField())
-            )
             touchingColumns = faker.lorem().words()
             waitingColumns = faker.lorem().words()
             dueDateCF = faker.jira().customField()
@@ -81,20 +76,4 @@ class BoardFactory(
             dueDateType = DueDateType.FIRST_DUE_DATE_AND_END_DATE
         }
     }
-
-    fun withDynamicFieldsBuilder(): Board {
-        return withCompleteConfigurationBuilder().apply {
-            dynamicFields = mutableListOf(
-                DynamicFieldConfig(
-                    name = "Team",
-                    field = "customfield_5000"
-                ),
-                DynamicFieldConfig(
-                    name = "Level Of Dependency",
-                    field = "customfield_6000"
-                )
-            )
-        }
-    }
-
 }

@@ -174,7 +174,7 @@ internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
 
             hasImpedimentTime(0)
 
-            hasDynamicFields(null)
+            hasEmptyDynamicFields()
 
             hasWaitTime(0)
             hasTouchTime(0)

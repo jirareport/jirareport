@@ -81,6 +81,10 @@ class IssueAssert(actual: Issue) :
         objects.assertEqual(field("issue.dynamicFields"), actual.dynamicFields, dynamicFields)
     }
 
+    fun hasEmptyDynamicFields() = assertAll {
+        maps.assertEmpty(field("issue.dynamicFields"), actual.dynamicFields)
+    }
+
     fun hasWaitTime(waitTime: Long) = assertAll {
         longs.assertEqual(field("issue.waitTime"), actual.waitTime, waitTime)
     }

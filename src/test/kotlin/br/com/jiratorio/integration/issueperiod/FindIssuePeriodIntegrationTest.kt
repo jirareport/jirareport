@@ -38,8 +38,8 @@ internal class FindIssuePeriodIntegrationTest @Autowired constructor(
             }.toMutableList()
 
             issuePeriodFactory.create {
-                boardId = defaultBoard.id
-                issues = mutableIssues
+                it.boardId = defaultBoard.id
+                it.issues = mutableIssues
             }
         }
 

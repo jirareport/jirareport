@@ -14,6 +14,7 @@ import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
 import br.com.jiratorio.factory.domain.entity.BoardFactory
+import br.com.jiratorio.factory.domain.entity.DynamicFieldConfigFactory
 import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.repository.IssueRepository
 import io.restassured.http.ContentType
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletResponse
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired constructor(
     private val boardFactory: BoardFactory,
+    private val dynamicFieldConfigFactory: DynamicFieldConfigFactory,
     private val authenticator: Authenticator,
     private val issuePeriodRepository: IssuePeriodRepository,
     private val issueRepository: IssueRepository
@@ -40,7 +42,18 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired cons
     @LoadStubs(["issues/with-dynamic-fields"])
     fun `create issue period with dynamic fields`() {
         val board = authenticator.withDefaultUser {
-            boardFactory.create(boardFactory::withDynamicFieldsBuilder)
+            val board = boardFactory.create(boardFactory::withCompleteConfigurationBuilder)
+            dynamicFieldConfigFactory.create {
+                it.board = board
+                it.name = "Level Of Dependency"
+                it.field = "customfield_6000"
+            }
+            dynamicFieldConfigFactory.create {
+                it.board = board
+                it.name = "Team"
+                it.field = "customfield_5000"
+            }
+            board
         }
 
         val request = object {

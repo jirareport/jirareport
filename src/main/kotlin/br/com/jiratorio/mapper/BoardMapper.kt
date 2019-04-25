@@ -32,8 +32,7 @@ class BoardMapper {
             impedimentType = board.impedimentType,
             impedimentColumns = board.impedimentColumns,
             touchingColumns = board.touchingColumns,
-            waitingColumns = board.waitingColumns,
-            dynamicFields = board.dynamicFields
+            waitingColumns = board.waitingColumns
         )
     }
 
@@ -78,7 +77,6 @@ class BoardMapper {
             ignoreWeekend = updateBoardRequest.ignoreWeekend
             impedimentType = updateBoardRequest.impedimentType
             impedimentColumns = updateBoardRequest.impedimentColumns?.toUpperCase()?.toMutableList()
-            dynamicFields = updateBoardRequest.dynamicFields
             touchingColumns = updateBoardRequest.touchingColumns?.toUpperCase()?.toMutableList()
             waitingColumns = updateBoardRequest.waitingColumns?.toUpperCase()?.toMutableList()
             dueDateCF = updateBoardRequest.dueDateCF

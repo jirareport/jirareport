@@ -1,7 +1,7 @@
 package br.com.jiratorio.factory.domain.request
 
 import br.com.jiratorio.domain.duedate.DueDateType
-import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig
+import br.com.jiratorio.domain.entity.DynamicFieldConfig
 import br.com.jiratorio.domain.impediment.ImpedimentType
 import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.extension.faker.jira
@@ -29,11 +29,6 @@ class UpdateBoardRequestFactory(
             ignoreWeekend = faker.random().nextBoolean(),
             impedimentType = faker.options().option(ImpedimentType::class.java),
             impedimentColumns = faker.lorem().words(),
-            dynamicFields = asList(
-                DynamicFieldConfig("dnf_1", faker.jira().customField()),
-                DynamicFieldConfig("dnf_2", faker.jira().customField()),
-                DynamicFieldConfig("dnf_3", faker.jira().customField())
-            ),
             touchingColumns = faker.lorem().words(),
             waitingColumns = faker.lorem().words(),
             dueDateCF = faker.jira().customField(),

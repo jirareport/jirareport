@@ -34,9 +34,9 @@ internal class UpdateIssuePeriodIntegrationTest @Autowired constructor(
         authenticator.withDefaultUser {
             val board = boardFactory.create(boardFactory::withBasicConfigurationBuilder)
             issuePeriodFactory.create {
-                startDate = "01/01/2019".toLocalDate()
-                endDate = "31/01/2019".toLocalDate()
-                boardId = board.id
+                it.startDate = "01/01/2019".toLocalDate()
+                it.endDate = "31/01/2019".toLocalDate()
+                it.boardId = board.id
             }
         }
 

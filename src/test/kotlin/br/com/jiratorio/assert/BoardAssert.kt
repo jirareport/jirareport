@@ -78,8 +78,4 @@ class BoardAssert(actual: Board) :
             impedimentColumns?.map { it.toUpperCase() })
     }
 
-    fun dynamicFieldsHasSize(size: Int?) = assertAll {
-        iterables.assertHasSize(field("board.dynamicFields"), actual.dynamicFields, size ?: 0)
-    }
-
 }

@@ -10,7 +10,7 @@ abstract class KBacon<T>(
     fun create(
         builder: KFunction0<T> = ::builder,
         persist: Boolean = repository != null,
-        modifier: T.() -> Unit = {}
+        modifier: (T) -> Unit = {}
     ): T {
         return builder().also {
             modifier(it)

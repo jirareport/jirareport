@@ -23,11 +23,19 @@ class IssuePeriodAssert(actual: IssuePeriod) :
         HistogramAssert(actual.histogram!!)
 
     fun hasLeadTimeByEstimate(vararg leadTimeByEstimate: Pair<String, Double>) = assertAll {
-        objects.assertEqual(field("issuePeriod.leadTimeByEstimate"), actual.leadTimeByEstimate?.data, mapOf(*leadTimeByEstimate))
+        objects.assertEqual(
+            field("issuePeriod.leadTimeByEstimate"),
+            actual.leadTimeByEstimate?.data,
+            mapOf(*leadTimeByEstimate)
+        )
     }
 
     fun hasThroughputByEstimate(vararg throughputByEstimate: Pair<String, Int>) = assertAll {
-        objects.assertEqual(field("issuePeriod.throughputByEstimate"), actual.throughputByEstimate?.data, mapOf(*throughputByEstimate))
+        objects.assertEqual(
+            field("issuePeriod.throughputByEstimate"),
+            actual.throughputByEstimate?.data,
+            mapOf(*throughputByEstimate)
+        )
     }
 
     fun hasLeadTimeBySystem(vararg leadTimeBySystem: Pair<String, Double>) = assertAll {
@@ -39,7 +47,11 @@ class IssuePeriodAssert(actual: IssuePeriod) :
     }
 
     fun hasThroughputBySystem(vararg throughputBySystem: Pair<String, Int>) = assertAll {
-        objects.assertEqual(field("issuePeriod.throughputBySystem"), actual.throughputBySystem?.data, mapOf(*throughputBySystem))
+        objects.assertEqual(
+            field("issuePeriod.throughputBySystem"),
+            actual.throughputBySystem?.data,
+            mapOf(*throughputBySystem)
+        )
     }
 
     fun hasLeadTimeByType(vararg leadTimeByType: Pair<String, Double>) = assertAll {
@@ -47,7 +59,11 @@ class IssuePeriodAssert(actual: IssuePeriod) :
     }
 
     fun hasThroughputByType(vararg throughputByType: Pair<String, Int>) = assertAll {
-        objects.assertEqual(field("issuePeriod.throughputByType"), actual.throughputByType?.data, mapOf(*throughputByType))
+        objects.assertEqual(
+            field("issuePeriod.throughputByType"),
+            actual.throughputByType?.data,
+            mapOf(*throughputByType)
+        )
     }
 
     fun hasLeadTimeByProject(vararg leadTimeByProject: Pair<String, Double>) = assertAll {
@@ -59,7 +75,11 @@ class IssuePeriodAssert(actual: IssuePeriod) :
     }
 
     fun hasThroughputByProject(vararg throughputByProject: Pair<String, Int>) = assertAll {
-        objects.assertEqual(field("issuePeriod.throughputByProject"), actual.throughputByProject?.data, mapOf(*throughputByProject))
+        objects.assertEqual(
+            field("issuePeriod.throughputByProject"),
+            actual.throughputByProject?.data,
+            mapOf(*throughputByProject)
+        )
     }
 
     fun hasLeadTimeByPriority(vararg leadTimeByPriority: Pair<String, Double>) = assertAll {
@@ -95,7 +115,7 @@ class IssuePeriodAssert(actual: IssuePeriod) :
     }
 
     fun hasDynamicCharts(dynamicCharts: List<DynamicChart>? = null) = assertAll {
-        objects.assertEqual(field("issuePeriod.dynamicCharts"), actual.dynamicCharts, dynamicCharts)
+        iterables.assertContainsAll(field("issuePeriod.dynamicCharts"), actual.dynamicCharts, dynamicCharts)
     }
 
     fun hasEmptyLeadTimeCompareChart() = assertAll {

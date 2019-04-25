@@ -65,7 +65,6 @@ internal class UpdateBoardIntegrationTest @Autowired constructor(
             hasProjectCF(request.projectCF)
             hasIgnoreWeekend(request.ignoreWeekend)
             hasImpedimentColumns(request.impedimentColumns)
-            dynamicFieldsHasSize(request.dynamicFields?.size)
         }
     }
 

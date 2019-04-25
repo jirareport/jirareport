@@ -26,7 +26,7 @@ internal class SearchBoardStatusIntegrationTest @Autowired constructor(
     @LoadStubs(["board-statuses"])
     fun `test find by board id`() {
         boardFactory.create {
-            externalId = 10552
+            it.externalId = 10552
         }
 
         restAssured {

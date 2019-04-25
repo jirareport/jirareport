@@ -179,7 +179,6 @@ internal class SearchBoardIntegrationTest @Autowired constructor(
                 body("dueDateType", equalTo(board.dueDateType!!.name))
                 body("touchingColumns", hasSize<Any>(board.touchingColumns!!.size))
                 body("waitingColumns", hasSize<Any>(board.waitingColumns!!.size))
-                body("dynamicFields", hasSize<Any>(board.dynamicFields!!.size))
             }
         }
     }

@@ -47,17 +47,17 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
             val defaultBoard = boardFactory.create(boardFactory::withCompleteConfigurationBuilder)
 
             leadTimeConfigFactory.create {
-                name = "Dev Lead Time"
-                startColumn = "DEV WIP"
-                endColumn = "DEV DONE"
-                board = defaultBoard
+                it.name = "Dev Lead Time"
+                it.startColumn = "DEV WIP"
+                it.endColumn = "DEV DONE"
+                it.board = defaultBoard
             }
 
             leadTimeConfigFactory.create {
-                name = "Test Lead Time"
-                startColumn = "TEST WIP"
-                endColumn = "TEST DONE"
-                board = defaultBoard
+                it.name = "Test Lead Time"
+                it.startColumn = "TEST WIP"
+                it.endColumn = "TEST DONE"
+                it.board = defaultBoard
             }
 
             defaultBoard
@@ -262,7 +262,7 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
 
                 hasImpedimentTime(3)
 
-                hasDynamicFields(null)
+                hasEmptyDynamicFields()
 
                 hasWaitTime(8643)
                 hasTouchTime(18723)

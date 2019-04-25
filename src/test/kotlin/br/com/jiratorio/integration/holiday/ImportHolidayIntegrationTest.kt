@@ -102,8 +102,8 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
             val defaultBoard = boardFactory.create()
             for (i in 1..5) {
                 holidayFactory.create {
-                    date = LocalDate.of(2019, i, 1)
-                    board = defaultBoard
+                    it.date = LocalDate.of(2019, i, 1)
+                    it.board = defaultBoard
                 }
             }
         }

@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.response.board
 
-import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig
+import br.com.jiratorio.domain.entity.DynamicFieldConfig
 import br.com.jiratorio.domain.impediment.ImpedimentType
 
 data class BoardDetailsResponse(
@@ -21,6 +21,5 @@ data class BoardDetailsResponse(
     val impedimentType: ImpedimentType? = null,
     val impedimentColumns: List<String>? = null,
     val touchingColumns: List<String>? = null,
-    val waitingColumns: List<String>? = null,
-    val dynamicFields: List<DynamicFieldConfig>? = null
+    val waitingColumns: List<String>? = null
 )

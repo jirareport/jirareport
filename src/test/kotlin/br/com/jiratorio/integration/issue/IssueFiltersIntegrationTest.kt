@@ -34,151 +34,151 @@ class IssueFiltersIntegrationTest @Autowired constructor(
             val defaultBoard = boardFactory.create()
 
             issueFactory.create {
-                key = "JIRAT-1"
-                board = defaultBoard
-                endDate = dateRange.random().atTime(12, 0, 0)
-                estimate = "P"
-                system = "jirareport-api"
-                epic = "v1"
-                issueType = "Story"
-                project = "JiraReport On Premise"
-                priority = "Major"
-                dynamicFields = mutableMapOf(
+                it.key = "JIRAT-1"
+                it.board = defaultBoard
+                it.endDate = dateRange.random().atTime(12, 0, 0)
+                it.estimate = "P"
+                it.system = "jirareport-api"
+                it.epic = "v1"
+                it.issueType = "Story"
+                it.project = "JiraReport On Premise"
+                it.priority = "Major"
+                it.dynamicFields = mutableMapOf(
                     "field1" to "value1",
                     "field2" to "value1"
                 )
             }
             issueFactory.create {
-                key = "JIRAT-2"
-                board = defaultBoard
-                endDate = dateRange.random().atTime(12, 0, 0)
-                estimate = "P"
-                system = "jirareport-api"
-                epic = "v1"
-                issueType = "Story"
-                project = "JiraReport On Premise"
-                priority = "Major"
-                dynamicFields = mutableMapOf(
+                it.key = "JIRAT-2"
+                it.board = defaultBoard
+                it.endDate = dateRange.random().atTime(12, 0, 0)
+                it.estimate = "P"
+                it.system = "jirareport-api"
+                it.epic = "v1"
+                it.issueType = "Story"
+                it.project = "JiraReport On Premise"
+                it.priority = "Major"
+                it.dynamicFields = mutableMapOf(
                     "field1" to "value1",
                     "field2" to "value1"
                 )
             }
             issueFactory.create {
-                key = "JIRAT-3"
-                board = defaultBoard
-                endDate = dateRange.random().atTime(12, 0, 0)
-                estimate = "M"
-                system = "jirareport-api"
-                epic = "v1"
-                issueType = "Story"
-                project = "JiraReport On Premise"
-                priority = "Major"
-                dynamicFields = mutableMapOf(
-                    "field1" to "value1",
-                    "field2" to "value2"
-                )
-            }
-            issueFactory.create {
-                key = "JIRAT-4"
-                board = defaultBoard
-                endDate = dateRange.random().atTime(12, 0, 0)
-                estimate = "M"
-                system = "jirareport-api"
-                epic = "v2"
-                issueType = "Task"
-                project = "JiraReport SASS"
-                priority = "Medium"
-                dynamicFields = mutableMapOf(
-                    "field1" to "value3",
-                    "field2" to "value1"
-                )
-            }
-            issueFactory.create {
-                key = "JIRAT-5"
-                board = defaultBoard
-                endDate = dateRange.random().atTime(12, 0, 0)
-                estimate = "M"
-                system = "jirareport-api"
-                epic = "v2"
-                issueType = "Task"
-                project = "JiraReport SASS"
-                priority = "Medium"
-                dynamicFields = mutableMapOf(
-                    "field1" to "value2",
-                    "field2" to "value1"
-                )
-            }
-            issueFactory.create {
-                key = "JIRAT-6"
-                board = defaultBoard
-                endDate = dateRange.random().atTime(12, 0, 0)
-                estimate = "M"
-                system = "jirareport-web"
-                epic = "v3"
-                issueType = "Task"
-                project = "JiraReport SASS"
-                priority = "Medium"
-                dynamicFields = mutableMapOf(
+                it.key = "JIRAT-3"
+                it.board = defaultBoard
+                it.endDate = dateRange.random().atTime(12, 0, 0)
+                it.estimate = "M"
+                it.system = "jirareport-api"
+                it.epic = "v1"
+                it.issueType = "Story"
+                it.project = "JiraReport On Premise"
+                it.priority = "Major"
+                it.dynamicFields = mutableMapOf(
                     "field1" to "value1",
                     "field2" to "value2"
                 )
             }
             issueFactory.create {
-                key = "JIRAT-7"
-                board = defaultBoard
-                endDate = dateRange.random().atTime(12, 0, 0)
-                estimate = "M"
-                system = "jirareport-web"
-                epic = "v3"
-                issueType = "Task"
-                project = "JiraReport SASS"
-                priority = "Expedite"
-                dynamicFields = mutableMapOf(
+                it.key = "JIRAT-4"
+                it.board = defaultBoard
+                it.endDate = dateRange.random().atTime(12, 0, 0)
+                it.estimate = "M"
+                it.system = "jirareport-api"
+                it.epic = "v2"
+                it.issueType = "Task"
+                it.project = "JiraReport SASS"
+                it.priority = "Medium"
+                it.dynamicFields = mutableMapOf(
                     "field1" to "value3",
-                    "field2" to "value3"
+                    "field2" to "value1"
                 )
             }
             issueFactory.create {
-                key = "JIRAT-8"
-                board = defaultBoard
-                endDate = dateRange.random().atTime(12, 0, 0)
-                estimate = "G"
-                system = "jirareport-web"
-                epic = "v3"
-                issueType = "Task"
-                project = "JiraReport SASS"
-                priority = "Expedite"
-                dynamicFields = mutableMapOf(
+                it.key = "JIRAT-5"
+                it.board = defaultBoard
+                it.endDate = dateRange.random().atTime(12, 0, 0)
+                it.estimate = "M"
+                it.system = "jirareport-api"
+                it.epic = "v2"
+                it.issueType = "Task"
+                it.project = "JiraReport SASS"
+                it.priority = "Medium"
+                it.dynamicFields = mutableMapOf(
                     "field1" to "value2",
                     "field2" to "value1"
                 )
             }
             issueFactory.create {
-                key = "JIRAT-9"
-                board = defaultBoard
-                endDate = dateRange.random().atTime(12, 0, 0)
-                estimate = "G"
-                system = "jirareport-web"
-                epic = "v3"
-                issueType = "Task"
-                project = "JiraReport SASS"
-                priority = "Blocker"
-                dynamicFields = mutableMapOf(
+                it.key = "JIRAT-6"
+                it.board = defaultBoard
+                it.endDate = dateRange.random().atTime(12, 0, 0)
+                it.estimate = "M"
+                it.system = "jirareport-web"
+                it.epic = "v3"
+                it.issueType = "Task"
+                it.project = "JiraReport SASS"
+                it.priority = "Medium"
+                it.dynamicFields = mutableMapOf(
+                    "field1" to "value1",
+                    "field2" to "value2"
+                )
+            }
+            issueFactory.create {
+                it.key = "JIRAT-7"
+                it.board = defaultBoard
+                it.endDate = dateRange.random().atTime(12, 0, 0)
+                it.estimate = "M"
+                it.system = "jirareport-web"
+                it.epic = "v3"
+                it.issueType = "Task"
+                it.project = "JiraReport SASS"
+                it.priority = "Expedite"
+                it.dynamicFields = mutableMapOf(
+                    "field1" to "value3",
+                    "field2" to "value3"
+                )
+            }
+            issueFactory.create {
+                it.key = "JIRAT-8"
+                it.board = defaultBoard
+                it.endDate = dateRange.random().atTime(12, 0, 0)
+                it.estimate = "G"
+                it.system = "jirareport-web"
+                it.epic = "v3"
+                it.issueType = "Task"
+                it.project = "JiraReport SASS"
+                it.priority = "Expedite"
+                it.dynamicFields = mutableMapOf(
+                    "field1" to "value2",
+                    "field2" to "value1"
+                )
+            }
+            issueFactory.create {
+                it.key = "JIRAT-9"
+                it.board = defaultBoard
+                it.endDate = dateRange.random().atTime(12, 0, 0)
+                it.estimate = "G"
+                it.system = "jirareport-web"
+                it.epic = "v3"
+                it.issueType = "Task"
+                it.project = "JiraReport SASS"
+                it.priority = "Blocker"
+                it.dynamicFields = mutableMapOf(
                     "field1" to "value1",
                     "field2" to "value3"
                 )
             }
             issueFactory.create {
-                key = "JIRAT-10"
-                board = defaultBoard
-                endDate = dateRange.random().atTime(12, 0, 0)
-                estimate = "P"
-                system = "jirareport-web"
-                epic = "v3"
-                issueType = "Task"
-                project = "JiraReport SASS"
-                priority = "Low"
-                dynamicFields = mutableMapOf(
+                it.key = "JIRAT-10"
+                it.board = defaultBoard
+                it.endDate = dateRange.random().atTime(12, 0, 0)
+                it.estimate = "P"
+                it.system = "jirareport-web"
+                it.epic = "v3"
+                it.issueType = "Task"
+                it.project = "JiraReport SASS"
+                it.priority = "Low"
+                it.dynamicFields = mutableMapOf(
                     "field1" to "value3",
                     "field2" to "value2"
                 )

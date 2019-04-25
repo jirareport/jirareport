@@ -1,7 +1,6 @@
 package br.com.jiratorio.domain.entity
 
 import br.com.jiratorio.domain.duedate.DueDateType
-import br.com.jiratorio.domain.dynamicfield.DynamicFieldConfig
 import br.com.jiratorio.domain.impediment.ImpedimentType
 import br.com.jiratorio.extension.equalsBuilder
 import br.com.jiratorio.extension.toStringBuilder
@@ -12,6 +11,7 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -71,9 +71,8 @@ data class Board(
     @Column(columnDefinition = "jsonb")
     var impedimentColumns: MutableList<String>? = null,
 
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    var dynamicFields: MutableList<DynamicFieldConfig>? = null,
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    var dynamicFields: Set<DynamicFieldConfig>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -107,7 +106,6 @@ data class Board(
             Board::issues,
             Board::impedimentType,
             Board::impedimentColumns,
-            Board::dynamicFields,
             Board::touchingColumns,
             Board::waitingColumns,
             Board::dueDateType,

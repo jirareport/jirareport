@@ -34,29 +34,29 @@ internal class ListIssuePeriodIntegrationTest @Autowired constructor(
             val board = boardFactory.create()
 
             issuePeriodFactory.create {
-                boardId = board.id
-                startDate = "01/01/2019".toLocalDate()
-                endDate = "31/01/2019".toLocalDate()
+                it.boardId = board.id
+                it.startDate = "01/01/2019".toLocalDate()
+                it.endDate = "31/01/2019".toLocalDate()
             }
             issuePeriodFactory.create {
-                boardId = board.id
-                startDate = "01/02/2019".toLocalDate()
-                endDate = "28/02/2019".toLocalDate()
+                it.boardId = board.id
+                it.startDate = "01/02/2019".toLocalDate()
+                it.endDate = "28/02/2019".toLocalDate()
             }
             issuePeriodFactory.create {
-                boardId = board.id
-                startDate = "01/03/2019".toLocalDate()
-                endDate = "31/03/2019".toLocalDate()
+                it.boardId = board.id
+                it.startDate = "01/03/2019".toLocalDate()
+                it.endDate = "31/03/2019".toLocalDate()
             }
             issuePeriodFactory.create {
-                boardId = board.id
-                startDate = "01/04/2019".toLocalDate()
-                endDate = "30/04/2019".toLocalDate()
+                it.boardId = board.id
+                it.startDate = "01/04/2019".toLocalDate()
+                it.endDate = "30/04/2019".toLocalDate()
             }
             issuePeriodFactory.create {
-                boardId = board.id
-                startDate = "01/05/2019".toLocalDate()
-                endDate = "31/05/2019".toLocalDate()
+                it.boardId = board.id
+                it.startDate = "01/05/2019".toLocalDate()
+                it.endDate = "31/05/2019".toLocalDate()
             }
         }
 
