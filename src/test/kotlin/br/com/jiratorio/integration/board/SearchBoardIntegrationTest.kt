@@ -175,9 +175,11 @@ internal class SearchBoardIntegrationTest @Autowired constructor(
                 body("ignoreWeekend", equalTo(board.ignoreWeekend))
                 body("impedimentType", equalTo(board.impedimentType!!.name))
                 body("impedimentColumns", contains<Any>(*board.impedimentColumns!!.toTypedArray()))
-                body("dynamicFields", hasSize<Any>(board.dynamicFields!!.size))
                 body("dueDateCF", equalTo(board.dueDateCF))
                 body("dueDateType", equalTo(board.dueDateType!!.name))
+                body("touchingColumns", hasSize<Any>(board.touchingColumns!!.size))
+                body("waitingColumns", hasSize<Any>(board.waitingColumns!!.size))
+                body("dynamicFields", hasSize<Any>(board.dynamicFields!!.size))
             }
         }
     }

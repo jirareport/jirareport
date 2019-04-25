@@ -15,6 +15,7 @@ class BoardMapper {
 
     fun toBoardResponseDetails(board: Board): BoardDetailsResponse {
         return BoardDetailsResponse(
+            id = board.id,
             externalId = board.externalId,
             name = board.name,
             startColumn = board.startColumn,
@@ -26,11 +27,13 @@ class BoardMapper {
             systemCF = board.systemCF,
             projectCF = board.projectCF,
             ignoreWeekend = board.ignoreWeekend,
+            dueDateCF = board.dueDateCF,
+            dueDateType = board.dueDateType?.name,
             impedimentType = board.impedimentType,
             impedimentColumns = board.impedimentColumns,
-            dynamicFields = board.dynamicFields,
-            dueDateCF = board.dueDateCF,
-            dueDateType = board.dueDateType?.name
+            touchingColumns = board.touchingColumns,
+            waitingColumns = board.waitingColumns,
+            dynamicFields = board.dynamicFields
         )
     }
 
