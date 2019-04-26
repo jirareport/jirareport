@@ -22,7 +22,8 @@ class DynamicFieldConfigServiceImpl(
     override fun findByBoard(boardId: Long): List<DynamicFieldConfigResponse> {
         log.info("Method=findByBoard, boardId={}", boardId)
 
-        val dynamicFields = dynamicFieldConfigRepository.findByBoardId(boardId)
+        val board = boardService.findById(boardId)
+        val dynamicFields = dynamicFieldConfigRepository.findByBoard(board)
         return dynamicFieldConfigMapper.dynamicFieldConfigToDynamicFieldConfigResponse(dynamicFields)
     }
 

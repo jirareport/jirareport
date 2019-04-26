@@ -13,7 +13,7 @@ class DynamicFieldConfigMapper {
         return DynamicFieldConfigResponse(
             id = dynamicField.id,
             name = dynamicField.name,
-            field = dynamicField.name
+            field = dynamicField.field
         )
     }
 
