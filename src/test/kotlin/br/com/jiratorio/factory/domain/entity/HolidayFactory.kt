@@ -1,12 +1,11 @@
 package br.com.jiratorio.factory.domain.entity
 
 import br.com.jiratorio.domain.entity.Holiday
-import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.KBacon
 import br.com.jiratorio.repository.HolidayRepository
 import com.github.javafaker.Faker
 import org.springframework.stereotype.Component
-import java.util.concurrent.TimeUnit
+import java.time.LocalDate
 
 @Component
 class HolidayFactory(
@@ -17,7 +16,7 @@ class HolidayFactory(
 
     override fun builder(): Holiday {
         return Holiday(
-            date = faker.date().future(5, TimeUnit.DAYS).toLocalDate(),
+            date = LocalDate.now().plusDays(faker.number().randomNumber()),
             description = faker.lorem().word(),
             board = boardFactory.create()
         )

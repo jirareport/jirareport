@@ -9,6 +9,7 @@ import br.com.jiratorio.domain.request.HolidayRequest
 import br.com.jiratorio.domain.response.holiday.HolidayResponse
 import br.com.jiratorio.exception.HolidaysAlreadyImported
 import br.com.jiratorio.exception.ResourceNotFound
+import br.com.jiratorio.exception.UniquenessFieldException
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.mapper.HolidayMapper
 import br.com.jiratorio.repository.HolidayRepository
@@ -55,6 +56,11 @@ class HolidayServiceImpl(
 
         val board = boardService.findById(boardId)
 
+        val existentHoliday = holidayRepository.findByDateAndBoardId(holidayRequest.date, boardId)
+        if (existentHoliday != null) {
+            throw UniquenessFieldException("date")
+        }
+
         val holiday = holidayMapper.toHoliday(holidayRequest, board)
         holidayRepository.save(holiday)
 
@@ -91,14 +97,19 @@ class HolidayServiceImpl(
             .filter { it.board == board }
             .orElseThrow(::ResourceNotFound)
 
+        val existentHoliday = holidayRepository.findByDateAndBoardId(holidayRequest.date, boardId)
+        if (existentHoliday != null && existentHoliday.id != holidayId) {
+            throw UniquenessFieldException("date")
+        }
+
         holidayMapper.updateFromRequest(holiday, holidayRequest)
 
         holidayRepository.save(holiday)
     }
 
     @Transactional
-    override fun createImported(boardId: Long, currentUser: Account) {
-        log.info("Method=createImported, boardId={}", boardId)
+    override fun importHolidays(boardId: Long, currentUser: Account) {
+        log.info("Method=importHolidays, boardId={}", boardId)
 
         val board = boardService.findById(boardId)
 
@@ -115,7 +126,7 @@ class HolidayServiceImpl(
         try {
             holidayRepository.saveAll(holidays)
         } catch (e: DataIntegrityViolationException) {
-            log.error("Method=createImported, e={}", e.message, e)
+            log.error("Method=importHolidays, e={}", e.message, e)
             throw HolidaysAlreadyImported(cause = e)
         }
     }

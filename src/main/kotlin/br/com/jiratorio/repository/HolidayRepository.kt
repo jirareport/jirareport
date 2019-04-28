@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
+import java.time.LocalDate
 
 @Repository
 interface HolidayRepository : CrudRepository<Holiday, Long> {
@@ -16,5 +17,7 @@ interface HolidayRepository : CrudRepository<Holiday, Long> {
     fun findAllByBoardId(id: Long, pageable: Pageable): Page<Holiday>
 
     fun findAllByBoard(board: Board): List<Holiday>
+
+    fun findByDateAndBoardId(date: LocalDate, boardId: Long): Holiday?
 
 }

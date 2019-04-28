@@ -21,6 +21,6 @@ interface HolidayService {
 
     fun update(boardId: Long, holidayId: Long, holidayRequest: HolidayRequest)
 
-    fun createImported(boardId: Long, currentUser: Account)
+    fun importHolidays(boardId: Long, currentUser: Account)
 
 }

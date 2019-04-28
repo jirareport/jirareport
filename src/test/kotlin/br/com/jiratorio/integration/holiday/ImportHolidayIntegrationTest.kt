@@ -41,9 +41,10 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
         restAssured {
             given {
                 header(authenticator.defaultUserHeader())
+                param("import", true)
             }
             on {
-                post("/boards/1/holidays/import")
+                post("/boards/1/holidays")
             }
             then {
                 statusCode(HttpStatus.SC_CREATED)
@@ -74,9 +75,10 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
         restAssured {
             given {
                 header(authenticator.defaultUserHeader())
+                param("import", true)
             }
             on {
-                post("/boards/1/holidays/import")
+                post("/boards/1/holidays")
             }
             then {
                 statusCode(HttpStatus.SC_CREATED)
@@ -111,9 +113,10 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
         restAssured {
             given {
                 header(authenticator.defaultUserHeader())
+                param("import", true)
             }
             on {
-                post("/boards/1/holidays/import")
+                post("/boards/1/holidays")
             }
             then {
                 statusCode(HttpStatus.SC_BAD_REQUEST)

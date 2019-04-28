@@ -48,19 +48,19 @@ class HolidayController(private val holidayService: HolidayService) {
         return ResponseEntity.created(location).build<Any>()
     }
 
+    @PostMapping(params = ["import=true"])
+    fun importHolidays(
+        @PathVariable boardId: Long,
+        @AuthenticationPrincipal account: Account
+    ): ResponseEntity<*> {
+        holidayService.importHolidays(boardId, account)
+        return ResponseEntity<Any>(HttpStatus.CREATED)
+    }
+
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Long): ResponseEntity<*> {
         holidayService.delete(id)
         return ResponseEntity.noContent().build<Any>()
-    }
-
-    @PostMapping("/import")
-    fun importFromAPI(
-        @PathVariable boardId: Long,
-        @AuthenticationPrincipal account: Account
-    ): ResponseEntity<*> {
-        holidayService.createImported(boardId, account)
-        return ResponseEntity<Any>(HttpStatus.CREATED)
     }
 
     @GetMapping("/{id}")

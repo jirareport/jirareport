@@ -1,6 +1,7 @@
 package br.com.jiratorio.config
 
 import br.com.jiratorio.config.internationalization.MessageResolver
+import br.com.jiratorio.exception.UniquenessFieldException
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -38,4 +39,13 @@ class ErrorHandler(
         return ResponseEntity(errors, HttpStatus.BAD_REQUEST)
     }
 
+    @ExceptionHandler(UniquenessFieldException::class)
+    fun handleUniquenessException(
+        e: UniquenessFieldException
+    ): ResponseEntity<Map<String, List<String>>> {
+        return ResponseEntity(
+            mapOf(e.field to listOf(messageResolver.resolve("validations.uniqueness"))),
+            HttpStatus.BAD_REQUEST
+        )
+    }
 }

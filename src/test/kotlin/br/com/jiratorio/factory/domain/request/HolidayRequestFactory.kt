@@ -1,11 +1,10 @@
 package br.com.jiratorio.factory.domain.request
 
 import br.com.jiratorio.domain.request.HolidayRequest
-import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.KBacon
 import com.github.javafaker.Faker
 import org.springframework.stereotype.Component
-import java.util.concurrent.TimeUnit
+import java.time.LocalDate
 
 @Component
 class HolidayRequestFactory(
@@ -14,7 +13,7 @@ class HolidayRequestFactory(
 
     override fun builder(): HolidayRequest {
         return HolidayRequest(
-            date = faker.date().future(5, TimeUnit.DAYS).toLocalDate(),
+            date = LocalDate.now().plusDays(faker.number().randomNumber()),
             description = faker.lorem().word()
         )
     }
