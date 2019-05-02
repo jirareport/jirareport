@@ -36,11 +36,11 @@ data class FluxColumn(
         var endDate: LocalDateTime? = null
 
         for (cl in changelog) {
-            if (startDate == null && startColumns.contains(cl.to)) {
+            if (startDate == null && startColumns.contains(cl.to?.toUpperCase())) {
                 startDate = cl.created
             }
 
-            if (endDate == null && endColumns.contains(cl.to)) {
+            if (endDate == null && endColumns.contains(cl.to?.toUpperCase())) {
                 endDate = cl.created
             }
         }

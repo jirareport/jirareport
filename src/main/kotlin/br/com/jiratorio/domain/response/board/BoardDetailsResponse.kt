@@ -20,5 +20,6 @@ data class BoardDetailsResponse(
     val impedimentType: ImpedimentType? = null,
     val impedimentColumns: List<String>? = null,
     val touchingColumns: List<String>? = null,
-    val waitingColumns: List<String>? = null
+    val waitingColumns: List<String>? = null,
+    val feature: BoardFeatureResponse
 )
