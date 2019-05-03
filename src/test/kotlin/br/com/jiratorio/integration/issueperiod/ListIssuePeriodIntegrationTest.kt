@@ -6,6 +6,7 @@ import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByBoardResponse
 import br.com.jiratorio.dsl.extractAs
 import br.com.jiratorio.dsl.restAssured
+import br.com.jiratorio.extension.format
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
@@ -113,7 +114,7 @@ internal class ListIssuePeriodIntegrationTest @Autowired constructor(
             .isEqualTo(period.leadTimeCompareChart?.data!!["Delivery Lead Time"])
 
         assertThat(response.charts.leadTime.data[period.dates])
-            .isEqualTo("%.2f".format(period.leadTime))
+            .isEqualTo(period.leadTime.format())
         assertThat(response.charts.issuesCount.data[period.dates])
             .isEqualTo(period.issuesCount)
     }

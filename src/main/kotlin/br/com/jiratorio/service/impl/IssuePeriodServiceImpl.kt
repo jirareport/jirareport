@@ -9,7 +9,9 @@ import br.com.jiratorio.domain.request.CreateIssuePeriodRequest
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByBoardResponse
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
 import br.com.jiratorio.exception.ResourceNotFound
+import br.com.jiratorio.extension.format
 import br.com.jiratorio.extension.log
+import br.com.jiratorio.extension.zeroIfNaN
 import br.com.jiratorio.mapper.IssueMapper
 import br.com.jiratorio.mapper.IssuePeriodMapper
 import br.com.jiratorio.repository.IssuePeriodRepository
@@ -50,8 +52,8 @@ class IssuePeriodServiceImpl(
         val jql = jqlService.finalizedIssues(board, startDate, endDate)
         val issues = issueService.createByJql(jql, board)
 
-        val leadTime = issues.map { it.leadTime }.average()
-        val avgPctEfficiency = issues.map { it.pctEfficiency }.average()
+        val leadTime = issues.map { it.leadTime }.average().zeroIfNaN()
+        val avgPctEfficiency = issues.map { it.pctEfficiency }.average().zeroIfNaN()
 
         val chartAggregator = chartService.buildAllCharts(issues, board)
 
@@ -158,7 +160,7 @@ class IssuePeriodServiceImpl(
         val issuesCount: Chart<String, Int> = Chart()
 
         for (issuePeriod in issuePeriods) {
-            leadTime[issuePeriod.dates] = "%.2f".format(issuePeriod.leadTime)
+            leadTime[issuePeriod.dates] = issuePeriod.leadTime.format()
             issuesCount[issuePeriod.dates] = issuePeriod.issuesCount
         }
 

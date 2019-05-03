@@ -4,6 +4,7 @@ import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.rangeTo
+import br.com.jiratorio.extension.zeroIfNaN
 import br.com.jiratorio.service.WipService
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -18,10 +19,10 @@ class WipServiceImpl : WipService {
         return (start..end).map { cursor ->
             issues.count { issue ->
                 issue.changelog.any { cl ->
-                    cursor in cl.dateRange() && cl.to in wipColumns
+                    cursor in cl.dateRange() && cl.to?.toUpperCase() in wipColumns
                 }
             }
-        }.average()
+        }.average().zeroIfNaN()
     }
 
 }
