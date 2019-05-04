@@ -15,15 +15,16 @@ internal class FluxColumnTest {
     @Nested
     inner class DefaultFluxColumn {
         private val fluxColumn = FluxColumn(
-            "start_lead_time_column", "end_lead_time_column",
-            asList(
-                "first_column",
-                "second_column",
-                "start_lead_time_column",
-                "middle_column",
-                "second_middle_column",
-                "end_lead_time_column",
-                "last_column"
+            startLeadTimeColumn = "START_LEAD_TIME_COLUMN",
+            endLeadTimeColumn = "END_LEAD_TIME_COLUMN",
+            orderedColumns = asList(
+                "FIRST_COLUMN",
+                "SECOND_COLUMN",
+                "START_LEAD_TIME_COLUMN",
+                "MIDDLE_COLUMN",
+                "SECOND_MIDDLE_COLUMN",
+                "END_LEAD_TIME_COLUMN",
+                "LAST_COLUMN"
             )
         )
 
@@ -31,29 +32,29 @@ internal class FluxColumnTest {
         fun `start columns`() {
             assertThat(fluxColumn.startColumns)
                 .containsExactlyInAnyOrder(
-                    "start_lead_time_column",
-                    "middle_column",
-                    "second_middle_column",
-                    "end_lead_time_column"
+                    "START_LEAD_TIME_COLUMN",
+                    "MIDDLE_COLUMN",
+                    "SECOND_MIDDLE_COLUMN",
+                    "END_LEAD_TIME_COLUMN"
                 )
         }
 
         @Test
         fun `end columns`() {
             assertThat(fluxColumn.endColumns)
-                .containsExactlyInAnyOrder("end_lead_time_column", "last_column")
+                .containsExactlyInAnyOrder("END_LEAD_TIME_COLUMN", "LAST_COLUMN")
         }
 
         @Test
         fun `wip columns`() {
             assertThat(fluxColumn.wipColumns)
-                .containsExactlyInAnyOrder("start_lead_time_column", "middle_column", "second_middle_column")
+                .containsExactlyInAnyOrder("START_LEAD_TIME_COLUMN", "MIDDLE_COLUMN", "SECOND_MIDDLE_COLUMN")
         }
 
         @Test
         fun `last column`() {
             assertThat(fluxColumn.lastColumn)
-                .isEqualTo("last_column")
+                .isEqualTo("LAST_COLUMN")
         }
 
     }
@@ -61,30 +62,30 @@ internal class FluxColumnTest {
     @Nested
     inner class NullOrderedColumns {
         private val fluxColumn =
-            FluxColumn("start_lead_time_column", "end_lead_time_column", null)
+            FluxColumn("START_LEAD_TIME_COLUMN", "END_LEAD_TIME_COLUMN", null)
 
         @Test
         fun `start columns`() {
             assertThat(fluxColumn.startColumns)
-                .containsExactlyInAnyOrder("start_lead_time_column")
+                .containsExactlyInAnyOrder("START_LEAD_TIME_COLUMN")
         }
 
         @Test
         fun `end columns`() {
             assertThat(fluxColumn.endColumns)
-                .containsExactlyInAnyOrder("end_lead_time_column")
+                .containsExactlyInAnyOrder("END_LEAD_TIME_COLUMN")
         }
 
         @Test
         fun `wip columns`() {
             assertThat(fluxColumn.wipColumns)
-                .containsExactlyInAnyOrder("start_lead_time_column")
+                .containsExactlyInAnyOrder("START_LEAD_TIME_COLUMN")
         }
 
         @Test
         fun `last column`() {
             assertThat(fluxColumn.lastColumn)
-                .isEqualTo("Done")
+                .isEqualTo("DONE")
         }
 
     }
@@ -95,16 +96,16 @@ internal class FluxColumnTest {
         @Test
         fun `test calc start and end date`() {
             val fluxColumn = FluxColumn(
-                startLeadTimeColumn = "start_lead_time_column",
-                endLeadTimeColumn = "end_lead_time_column",
+                startLeadTimeColumn = "START_LEAD_TIME_COLUMN",
+                endLeadTimeColumn = "END_LEAD_TIME_COLUMN",
                 orderedColumns = asList(
-                    "first_column",
-                    "second_column",
-                    "start_lead_time_column",
-                    "middle_column",
-                    "second_middle_column",
-                    "end_lead_time_column",
-                    "last_column"
+                    "FIRST_COLUMN",
+                    "SECOND_COLUMN",
+                    "START_LEAD_TIME_COLUMN",
+                    "MIDDLE_COLUMN",
+                    "SECOND_MIDDLE_COLUMN",
+                    "END_LEAD_TIME_COLUMN",
+                    "LAST_COLUMN"
                 )
             )
 

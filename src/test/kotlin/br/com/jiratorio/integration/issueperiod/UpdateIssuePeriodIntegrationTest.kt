@@ -70,7 +70,7 @@ internal class UpdateIssuePeriodIntegrationTest @Autowired constructor(
                 header(authenticator.defaultUserHeader())
             }
             on {
-                put("/board/2/issue-periods/1")
+                put("/boards/2/issue-periods/1")
             }
             then {
                 spec(notFound())
@@ -92,7 +92,7 @@ internal class UpdateIssuePeriodIntegrationTest @Autowired constructor(
                 header(authenticator.defaultUserHeader())
             }
             on {
-                put("/board/1/issue-periods/2")
+                put("/boards/1/issue-periods/2")
             }
             then {
                 spec(notFound())

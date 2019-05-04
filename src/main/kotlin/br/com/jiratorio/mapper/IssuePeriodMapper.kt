@@ -3,10 +3,14 @@ package br.com.jiratorio.mapper
 import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodDetailResponse
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodResponse
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
-class IssuePeriodMapper {
+class IssuePeriodMapper(
+    @Value("\${jira.url}")
+    private val jiraUrl: String
+) {
 
     fun issuePeriodToIssuePeriodResponse(issuePeriods: List<IssuePeriod>): List<IssuePeriodResponse> {
         return issuePeriods.map { issuePeriodToIssuePeriodResponse(it) }
@@ -20,7 +24,8 @@ class IssuePeriodMapper {
             leadTime = issuePeriod.leadTime,
             avgPctEfficiency = issuePeriod.avgPctEfficiency,
             jql = issuePeriod.jql,
-            issuesCount = issuePeriod.issuesCount
+            throughput = issuePeriod.throughput,
+            details = "$jiraUrl/issues/?jql=${issuePeriod.jql}"
         )
     }
 
@@ -30,7 +35,7 @@ class IssuePeriodMapper {
         return IssuePeriodDetailResponse(
             dates = issuePeriod.dates,
             leadTime = issuePeriod.leadTime,
-            issuesCount = issuePeriod.issuesCount,
+            throughput = issuePeriod.throughput,
             leadTimeByEstimate = issuePeriod.leadTimeByEstimate,
             throughputByEstimate = issuePeriod.throughputByEstimate,
             leadTimeBySystem = issuePeriod.leadTimeBySystem,

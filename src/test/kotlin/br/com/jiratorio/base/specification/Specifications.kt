@@ -9,6 +9,6 @@ fun notFound(): ResponseSpecification =
     ResponseSpecBuilder()
         .expectStatusCode(HttpStatus.SC_NOT_FOUND)
         .expectBody("error", equalTo("Not Found"))
-        .expectBody("message", equalTo("No message available"))
+        .expectBody("message", equalTo("Resource not found"))
         .expectBody("status", equalTo(404))
         .build()

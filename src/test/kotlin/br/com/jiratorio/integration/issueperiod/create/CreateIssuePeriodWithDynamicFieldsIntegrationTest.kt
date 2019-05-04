@@ -111,7 +111,7 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired cons
             hasLeadTimeByPriority("Major" to 17.0, "Medium" to 14.75, "Expedite" to 13.666666666666666)
             hasThroughputByPriority("Major" to 3, "Medium" to 4, "Expedite" to 3)
 
-            hasIssuesCount(10)
+            hasThroughput(10)
 
             hasWipAvg(1.56)
 

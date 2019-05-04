@@ -29,7 +29,7 @@ class IssuePeriodFactory(
             endDate = faker.date().past(15, TimeUnit.DAYS).toLocalDate(),
             jql = faker.lorem().paragraph(),
             issues = mutableListOf(),
-            issuesCount = faker.number().randomNumber().toInt(),
+            throughput = faker.number().randomNumber().toInt(),
             leadTimeByEstimate = Chart(
                 data = mapOf(
                     "P" to faker.jira().leadTime(),

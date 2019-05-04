@@ -1,21 +1,9 @@
-package br.com.jiratorio.extension
+package br.com.jiratorio.extension.decimal
 
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
-fun Double.zeroIfNaN(): Double {
-    return if (this.isNaN()) {
-        0.0
-    } else {
-        this
-    }
-}
-
-fun Double.format(): String {
-    return CustomFormatter.format(this)
-}
-
-object CustomFormatter {
+object DecimalFormatter {
     private val symbols: DecimalFormatSymbols = DecimalFormatSymbols()
     private val formatter: DecimalFormat = DecimalFormat("##0.00")
 

@@ -94,7 +94,7 @@ internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
             hasLeadTimeByPriority("Major" to 14.5)
             hasThroughputByPriority("Major" to 2)
 
-            hasIssuesCount(2)
+            hasThroughput(2)
 
             hasWipAvg(1.26)
 

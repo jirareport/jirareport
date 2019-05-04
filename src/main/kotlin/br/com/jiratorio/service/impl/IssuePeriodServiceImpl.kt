@@ -9,9 +9,9 @@ import br.com.jiratorio.domain.request.CreateIssuePeriodRequest
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByBoardResponse
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
 import br.com.jiratorio.exception.ResourceNotFound
-import br.com.jiratorio.extension.format
+import br.com.jiratorio.extension.decimal.format
 import br.com.jiratorio.extension.log
-import br.com.jiratorio.extension.zeroIfNaN
+import br.com.jiratorio.extension.decimal.zeroIfNaN
 import br.com.jiratorio.mapper.IssueMapper
 import br.com.jiratorio.mapper.IssuePeriodMapper
 import br.com.jiratorio.repository.IssuePeriodRepository
@@ -80,7 +80,7 @@ class IssuePeriodServiceImpl(
             leadTimeByPriority = chartAggregator.leadTimeByPriority,
             throughputByPriority = chartAggregator.throughputByPriority,
             dynamicCharts = chartAggregator.dynamicCharts.toMutableList(),
-            issuesCount = issues.size,
+            throughput = issues.size,
             jql = jql,
             wipAvg = wipAvg,
             avgPctEfficiency = avgPctEfficiency
@@ -157,21 +157,21 @@ class IssuePeriodServiceImpl(
         log.info("Method=buildCharts, issuePeriods={}, board={}", issuePeriods, board)
 
         val leadTime: Chart<String, String> = Chart()
-        val issuesCount: Chart<String, Int> = Chart()
+        val throughput: Chart<String, Int> = Chart()
 
         for (issuePeriod in issuePeriods) {
             leadTime[issuePeriod.dates] = issuePeriod.leadTime.format()
-            issuesCount[issuePeriod.dates] = issuePeriod.issuesCount
+            throughput[issuePeriod.dates] = issuePeriod.throughput
         }
 
-        val issueCountByEstimate = leadTimeChartService.issueCountByEstimate(issuePeriods)
+        val throughputByEstimate = leadTimeChartService.throughputByEstimate(issuePeriods)
         val leadTimeCompareChart = leadTimeChartService.leadTimeCompareByPeriod(issuePeriods, board)
 
         return IssuePeriodChartResponse(
-            issueCountByEstimate = issueCountByEstimate,
+            throughputByEstimate = throughputByEstimate,
             leadTimeCompareChart = leadTimeCompareChart,
             leadTime = leadTime,
-            issuesCount = issuesCount
+            throughput = throughput
         )
     }
 

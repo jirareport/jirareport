@@ -98,8 +98,8 @@ class IssuePeriodAssert(actual: IssuePeriod) :
         )
     }
 
-    fun hasIssuesCount(issuesCount: Int) = assertAll {
-        objects.assertEqual(field("issuePeriod.issuesCount"), actual.issuesCount, issuesCount)
+    fun hasThroughput(throughput: Int) = assertAll {
+        objects.assertEqual(field("issuePeriod.throughput"), actual.throughput, throughput)
     }
 
     fun hasWipAvg(wipAvg: Double) = assertAll {
@@ -115,7 +115,11 @@ class IssuePeriodAssert(actual: IssuePeriod) :
     }
 
     fun hasDynamicCharts(dynamicCharts: List<DynamicChart>? = null) = assertAll {
-        iterables.assertContainsAll(field("issuePeriod.dynamicCharts"), actual.dynamicCharts, dynamicCharts)
+        iterables.assertContainsExactlyInAnyOrder(
+            field("issuePeriod.dynamicCharts"),
+            actual.dynamicCharts,
+            dynamicCharts?.toTypedArray()
+        )
     }
 
     fun hasEmptyLeadTimeCompareChart() = assertAll {

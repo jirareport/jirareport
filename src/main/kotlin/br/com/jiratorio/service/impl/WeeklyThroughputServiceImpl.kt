@@ -30,11 +30,11 @@ class WeeklyThroughputServiceImpl : WeeklyThroughputService {
             currentDate = currentDate.plusWeeks(1)
             val endWeek = currentDate
 
-            val issuesCount = issues.count {
+            val throughput = issues.count {
                 it.endDate in startWeek.atStartOfDay()..endWeek.atEndOfDay()
             }
 
-            chart["[%s - %s]".format(startWeek.format(formatter), endWeek.format(formatter))] = issuesCount
+            chart["[%s - %s]".format(startWeek.format(formatter), endWeek.format(formatter))] = throughput
         }
 
         return chart

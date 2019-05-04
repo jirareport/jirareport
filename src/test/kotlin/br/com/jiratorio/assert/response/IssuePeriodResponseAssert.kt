@@ -30,8 +30,8 @@ class IssuePeriodResponseAssert(actual: IssuePeriodResponse) :
         objects.assertEqual(field("issuePeriodResponse.jql"), actual.jql, jql)
     }
 
-    fun hasIssuesCount(issuesCount: Int) = assertAll {
-        objects.assertEqual(field("issuePeriodResponse.issuesCount"), actual.issuesCount, issuesCount)
+    fun hasThroughput(throughput: Int) = assertAll {
+        objects.assertEqual(field("issuePeriodResponse.throughput"), actual.throughput, throughput)
     }
 
 }

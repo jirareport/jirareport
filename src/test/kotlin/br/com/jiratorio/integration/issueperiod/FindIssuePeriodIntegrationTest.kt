@@ -58,7 +58,7 @@ internal class FindIssuePeriodIntegrationTest @Autowired constructor(
         IssuePeriodDetailResponseAssert(response.detail).assertThat {
             hasDates(issuePeriod.dates)
             hasLeadTime(issuePeriod.leadTime)
-            hasIssuesCount(issuePeriod.issuesCount)
+            hasThroughput(issuePeriod.throughput)
             hasLeadTimeByEstimate(issuePeriod.leadTimeByEstimate)
             hasThroughputByEstimate(issuePeriod.throughputByEstimate)
             hasLeadTimeBySystem(issuePeriod.leadTimeBySystem)

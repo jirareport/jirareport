@@ -6,7 +6,7 @@ import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByBoardResponse
 import br.com.jiratorio.dsl.extractAs
 import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.extension.format
+import br.com.jiratorio.extension.decimal.format
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
@@ -80,20 +80,20 @@ internal class ListIssuePeriodIntegrationTest @Autowired constructor(
             hasAvgPctEfficiency(period.avgPctEfficiency)
             hasWipAvg(period.wipAvg)
             hasJql(period.jql)
-            hasIssuesCount(period.issuesCount)
+            hasThroughput(period.throughput)
         }
 
-        assertThat(response.charts.issueCountByEstimate.labels)
+        assertThat(response.charts.throughputByEstimate.labels)
             .hasSize(5)
-        assertThat(response.charts.issueCountByEstimate.datasources["P"])
+        assertThat(response.charts.throughputByEstimate.datasources["P"])
             .hasSize(5)
-        assertThat(response.charts.issueCountByEstimate.datasources["M"])
+        assertThat(response.charts.throughputByEstimate.datasources["M"])
             .hasSize(5)
-        assertThat(response.charts.issueCountByEstimate.datasources["G"])
+        assertThat(response.charts.throughputByEstimate.datasources["G"])
             .hasSize(5)
-        assertThat(response.charts.issueCountByEstimate.datasources["M"])
+        assertThat(response.charts.throughputByEstimate.datasources["M"])
             .hasSize(5)
-        assertThat(response.charts.issueCountByEstimate.datasources["G"])
+        assertThat(response.charts.throughputByEstimate.datasources["G"])
             .hasSize(5)
 
         assertThat(response.charts.leadTimeCompareChart.labels)
@@ -115,8 +115,8 @@ internal class ListIssuePeriodIntegrationTest @Autowired constructor(
 
         assertThat(response.charts.leadTime.data[period.dates])
             .isEqualTo(period.leadTime.format())
-        assertThat(response.charts.issuesCount.data[period.dates])
-            .isEqualTo(period.issuesCount)
+        assertThat(response.charts.throughput.data[period.dates])
+            .isEqualTo(period.throughput)
     }
 
     @Test

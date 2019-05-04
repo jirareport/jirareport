@@ -7,5 +7,6 @@ data class IssuePeriodResponse(
     val leadTime: Double,
     val avgPctEfficiency: Double,
     val jql: String,
-    var issuesCount: Int
+    val throughput: Int,
+    val details: String
 )

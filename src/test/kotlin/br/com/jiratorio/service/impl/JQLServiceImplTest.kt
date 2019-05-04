@@ -45,7 +45,7 @@ internal class JQLServiceImplTest {
                | AND issueType NOT IN ('IT_1')
                | AND status WAS IN ('TODO','WIP','DONE')
                | AND status IN ('DONE')
-                """.trimMargin()
+                """.trimMargin().replace("\n", "")
             )
         }
 
@@ -72,7 +72,7 @@ internal class JQLServiceImplTest {
                | ${""}
                | AND status WAS IN ('TODO','WIP','DONE')
                | AND status IN ('DONE')
-                """.trimMargin()
+                """.trimMargin().replace("\n", "")
             )
         }
     }

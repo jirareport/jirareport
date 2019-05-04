@@ -101,8 +101,8 @@ data class IssuePeriod(
     @Column(columnDefinition = "jsonb")
     var leadTimeCompareChart: Chart<String, Double>? = null,
 
-    @Column(nullable = false)
-    var issuesCount: Int,
+    @Column(name = "issues_count", nullable = false)
+    var throughput: Int,
 
     @Column(nullable = false)
     var jql: String,
@@ -148,7 +148,7 @@ data class IssuePeriod(
             IssuePeriod::throughputByPriority,
             IssuePeriod::columnTimeAvg,
             IssuePeriod::leadTimeCompareChart,
-            IssuePeriod::issuesCount,
+            IssuePeriod::throughput,
             IssuePeriod::jql,
             IssuePeriod::wipAvg,
             IssuePeriod::avgPctEfficiency,

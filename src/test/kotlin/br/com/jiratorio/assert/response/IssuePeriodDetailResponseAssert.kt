@@ -21,8 +21,8 @@ class IssuePeriodDetailResponseAssert(
         objects.assertEqual(field("issuePeriodDetailResponse.leadTime"), actual.leadTime, leadTime)
     }
 
-    fun hasIssuesCount(issuesCount: Int) = assertAll {
-        objects.assertEqual(field("issuePeriodDetailResponse.issuesCount"), actual.issuesCount, issuesCount)
+    fun hasThroughput(throughput: Int) = assertAll {
+        objects.assertEqual(field("issuePeriodDetailResponse.throughput"), actual.throughput, throughput)
     }
 
     fun hasLeadTimeByEstimate(leadTimeByEstimate: Chart<String, Double>?) = assertAll {

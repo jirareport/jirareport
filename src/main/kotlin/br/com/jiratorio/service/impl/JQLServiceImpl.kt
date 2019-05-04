@@ -2,8 +2,8 @@ package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.service.JQLService
 import br.com.jiratorio.extension.log
+import br.com.jiratorio.service.JQLService
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -25,9 +25,13 @@ class JQLServiceImpl : JQLService {
         val startColumns = fluxColumn.startColumns.joinToString(",") { "'$it'" }
         val endColumns = fluxColumn.endColumns.joinToString(",") { "'$it'" }
 
-        val ignoredIssueTypes = board.ignoreIssueType?.joinToString(",", "AND issueType NOT IN (", ")") {
-            "'$it'"
-        } ?: ""
+        val ignoredIssueTypes = board.ignoreIssueType.let {
+            if (it.isNullOrEmpty()) {
+                ""
+            } else {
+                it.joinToString(",", "AND issueType NOT IN (", ")") { "'$it'" }
+            }
+        }
 
         return """
               | project = '$project'
@@ -55,9 +59,13 @@ class JQLServiceImpl : JQLService {
         val wipColumns = FluxColumn(board).wipColumns.joinToString(",") { "'$it'" }
         val project = board.externalId
 
-        val ignoredIssueTypes = board.ignoreIssueType?.joinToString(",", "AND issueType NOT IN (", ")") {
-            "'$it'"
-        } ?: ""
+        val ignoredIssueTypes = board.ignoreIssueType.let {
+            if (it.isNullOrEmpty()) {
+                ""
+            } else {
+                it.joinToString(",", "AND issueType NOT IN (", ")") { "'$it'" }
+            }
+        }
 
         return """
             project = '$project'

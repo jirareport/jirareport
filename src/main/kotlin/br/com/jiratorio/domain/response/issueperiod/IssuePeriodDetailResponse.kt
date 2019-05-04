@@ -7,7 +7,7 @@ import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
 data class IssuePeriodDetailResponse(
     val dates: String,
     val leadTime: Double,
-    val issuesCount: Int,
+    val throughput: Int,
     val leadTimeByEstimate: Chart<String, Double>?,
     val throughputByEstimate: Chart<String, Int>?,
     val leadTimeBySystem: Chart<String, Double>?,

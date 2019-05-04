@@ -26,7 +26,7 @@ data class FluxColumn(
         get() = startColumns - endLeadTimeColumn
 
     val lastColumn: String
-        get() = orderedColumns?.last() ?: "Done"
+        get() = orderedColumns?.last() ?: "DONE"
 
     fun calcStartAndEndDate(changelog: List<Changelog>, created: LocalDateTime): Pair<LocalDateTime?, LocalDateTime?> {
         val startColumns = startColumns
