@@ -25,7 +25,7 @@ class IssuePeriodMapper(
             avgPctEfficiency = issuePeriod.avgPctEfficiency,
             jql = issuePeriod.jql,
             throughput = issuePeriod.throughput,
-            details = "$jiraUrl/issues/?jql=${issuePeriod.jql}"
+            detailsUrl = "$jiraUrl/issues/?jql=${issuePeriod.jql}"
         )
     }
 
@@ -36,6 +36,7 @@ class IssuePeriodMapper(
             dates = issuePeriod.dates,
             leadTime = issuePeriod.leadTime,
             throughput = issuePeriod.throughput,
+            histogram = issuePeriod.histogram,
             leadTimeByEstimate = issuePeriod.leadTimeByEstimate,
             throughputByEstimate = issuePeriod.throughputByEstimate,
             leadTimeBySystem = issuePeriod.leadTimeBySystem,

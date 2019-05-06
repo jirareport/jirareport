@@ -8,5 +8,5 @@ data class IssuePeriodResponse(
     val avgPctEfficiency: Double,
     val jql: String,
     val throughput: Int,
-    val details: String
+    val detailsUrl: String
 )

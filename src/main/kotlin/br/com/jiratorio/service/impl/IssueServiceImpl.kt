@@ -5,8 +5,10 @@ import br.com.jiratorio.client.IssueClient
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
+import br.com.jiratorio.domain.response.IssueDetailResponse
 import br.com.jiratorio.domain.response.IssueFilterResponse
 import br.com.jiratorio.domain.response.ListIssueResponse
+import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.atEndOfDay
 import br.com.jiratorio.mapper.IssueMapper
@@ -106,5 +108,15 @@ class IssueServiceImpl(
             priorities = issueRepository.findAllIssuePrioritiesByBoardId(boardId),
             dynamicFieldsValues = issueRepository.findAllDynamicFieldValues(boardId)
         )
+    }
+
+    @Transactional(readOnly = true)
+    override fun findByBoardAndId(boardId: Long, id: Long): IssueDetailResponse {
+        log.info("Method=findByBoardAndId, boardId={}, id={}", boardId, id)
+
+        val issue = issueRepository.findByBoardIdAndId(boardId, id)
+            ?: throw ResourceNotFound()
+
+        return issueMapper.issueToIssueDetailResponse(issue)
     }
 }

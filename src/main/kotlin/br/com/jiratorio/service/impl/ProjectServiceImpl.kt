@@ -29,7 +29,7 @@ class ProjectServiceImpl(
     }
 
     override fun findById(projectId: Long): JiraProjectDetails {
-        log.info("Method=findById, projectId={}", projectId)
+        log.info("Method=findByBoardAndId, projectId={}", projectId)
         return projectClient.findById(projectId)
             .orElseThrow(::ResourceNotFound)
     }

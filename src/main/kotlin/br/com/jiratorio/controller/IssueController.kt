@@ -1,6 +1,7 @@
 package br.com.jiratorio.controller
 
 import br.com.jiratorio.domain.request.SearchIssueRequest
+import br.com.jiratorio.domain.response.IssueDetailResponse
 import br.com.jiratorio.domain.response.IssueFilterResponse
 import br.com.jiratorio.domain.response.ListIssueResponse
 import br.com.jiratorio.service.IssueService
@@ -19,6 +20,11 @@ class IssueController(private val issueService: IssueService) {
     @GetMapping
     fun index(@PathVariable boardId: Long, searchIssueRequest: SearchIssueRequest): ListIssueResponse {
         return issueService.findByExample(boardId, searchIssueRequest)
+    }
+
+    @GetMapping("/{id}")
+    fun findById(@PathVariable boardId: Long, @PathVariable id: Long): IssueDetailResponse {
+        return issueService.findByBoardAndId(boardId, id)
     }
 
     @GetMapping("/filters")

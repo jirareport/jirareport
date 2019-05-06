@@ -77,4 +77,6 @@ interface IssueRepository : CrudRepository<Issue, Long>, IssueCustomRepository {
         @Param("endDate") endDate: LocalDateTime
     ): Set<String>
 
+    fun findByBoardIdAndId(boardId: Long, id: Long): Issue?
+
 }

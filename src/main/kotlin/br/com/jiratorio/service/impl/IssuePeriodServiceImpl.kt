@@ -115,7 +115,7 @@ class IssuePeriodServiceImpl(
 
     @Transactional(readOnly = true)
     override fun findById(boardId: Long, id: Long): IssuePeriodByIdResponse {
-        log.info("Method=findById, id={}", id)
+        log.info("Method=findByBoardAndId, id={}", id)
 
         val issuePeriod = issuePeriodRepository.findByBoardIdAndId(boardId, id)
             ?: throw ResourceNotFound()

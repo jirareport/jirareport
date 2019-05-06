@@ -61,7 +61,7 @@ class BoardServiceImpl(
 
     @Transactional(readOnly = true)
     override fun findById(id: Long): Board {
-        log.info("Method=findById, id={}", id)
+        log.info("Method=findByBoardAndId, id={}", id)
 
         return boardRepository.findByIdOrNull(id)
             ?: throw ResourceNotFound()

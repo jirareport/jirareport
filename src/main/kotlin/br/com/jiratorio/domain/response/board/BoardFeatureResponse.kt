@@ -9,7 +9,9 @@ data class BoardFeatureResponse(
     val system: Boolean,
     val project: Boolean,
     val efficiency: Boolean,
-    val leadTimes: Boolean
+    val leadTimes: Boolean,
+    val impediment: Boolean,
+    val dynamicField: Boolean
 ) {
 
     constructor(board: Board) : this(
@@ -19,7 +21,9 @@ data class BoardFeatureResponse(
         system = !board.systemCF.isNullOrEmpty(),
         project = !board.projectCF.isNullOrEmpty(),
         efficiency = !board.waitingColumns.isNullOrEmpty() && !board.touchingColumns.isNullOrEmpty(),
-        leadTimes = !board.leadTimeConfigs.isNullOrEmpty()
+        leadTimes = !board.leadTimeConfigs.isNullOrEmpty(),
+        impediment = board.impedimentType != null,
+        dynamicField = !board.dynamicFields.isNullOrEmpty()
     )
 
 }

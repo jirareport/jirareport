@@ -92,12 +92,9 @@ internal class FindIssuePeriodIntegrationTest @Autowired constructor(
             hasEndDate(issue.endDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
             hasCreated(issue.created.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
             hasDeviationOfEstimate(issue.deviationOfEstimate)
-            hasDueDateHistory(issue.dueDateHistory)
+            hasChangeEstimateCount(issue.dueDateHistory?.size)
             hasImpedimentTime(issue.impedimentTime)
             hasDynamicFields(issue.dynamicFields)
-            hasWaitTime(issue.waitTime)
-            hasTouchTime(issue.touchTime)
-            hasPctEfficiency(issue.pctEfficiency)
         }
 
     }

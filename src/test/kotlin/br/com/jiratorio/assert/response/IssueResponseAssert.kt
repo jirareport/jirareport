@@ -1,7 +1,6 @@
 package br.com.jiratorio.assert.response
 
 import br.com.jiratorio.assert.BaseAssert
-import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.domain.response.IssueResponse
 
 class IssueResponseAssert(
@@ -67,8 +66,8 @@ class IssueResponseAssert(
         objects.assertEqual(field("issueResponse.deviationOfEstimate"), actual.deviationOfEstimate, deviationOfEstimate)
     }
 
-    fun hasDueDateHistory(dueDateHistory: List<DueDateHistory>?) = assertAll {
-        objects.assertEqual(field("issueResponse.dueDateHistory"), actual.dueDateHistory, dueDateHistory)
+    fun hasChangeEstimateCount(changeEstimateCount: Int?) = assertAll {
+        objects.assertEqual(field("issueResponse.changeEstimateCount"), actual.changeEstimateCount, changeEstimateCount)
     }
 
     fun hasImpedimentTime(impedimentTime: Long) = assertAll {
@@ -77,18 +76,6 @@ class IssueResponseAssert(
 
     fun hasDynamicFields(dynamicFields: Map<String, String?>?) = assertAll {
         objects.assertEqual(field("issueResponse.dynamicFields"), actual.dynamicFields, dynamicFields)
-    }
-
-    fun hasWaitTime(waitTime: Long) = assertAll {
-        objects.assertEqual(field("issueResponse.waitTime"), actual.waitTime, waitTime)
-    }
-
-    fun hasTouchTime(touchTime: Long) = assertAll {
-        objects.assertEqual(field("issueResponse.touchTime"), actual.touchTime, touchTime)
-    }
-
-    fun hasPctEfficiency(pctEfficiency: Double) = assertAll {
-        objects.assertEqual(field("issueResponse.pctEfficiency"), actual.pctEfficiency, pctEfficiency)
     }
 
 }

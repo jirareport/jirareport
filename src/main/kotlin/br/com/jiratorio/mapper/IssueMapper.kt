@@ -1,12 +1,20 @@
 package br.com.jiratorio.mapper
 
 import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.domain.response.IssueDetailResponse
 import br.com.jiratorio.domain.response.IssueResponse
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.time.format.DateTimeFormatter
 
 @Component
-class IssueMapper {
+class IssueMapper(
+    @Value("\${jira.url}")
+    private val jiraUrl: String,
+    private val leadTimeMapper: LeadTimeMapper,
+    private val changelogMapper: ChangelogMapper,
+    private val dueDateHistoryMapper: DueDateHistoryMapper
+) {
 
     fun issueToIssueResponse(issues: List<Issue>): List<IssueResponse> {
         return issues.map { issueToIssueResponse(it) }
@@ -30,12 +38,23 @@ class IssueMapper {
             endDate = issue.endDate.format(formatter),
             created = issue.created.format(formatter),
             deviationOfEstimate = issue.deviationOfEstimate,
-            dueDateHistory = issue.dueDateHistory,
+            changeEstimateCount = issue.dueDateHistory?.size,
             impedimentTime = issue.impedimentTime,
             dynamicFields = issue.dynamicFields,
-            waitTime = issue.waitTime,
-            touchTime = issue.touchTime,
-            pctEfficiency = issue.pctEfficiency
+            detailsUrl = "$jiraUrl/browse/${issue.key}"
+        )
+    }
+
+    fun issueToIssueDetailResponse(issue: Issue): IssueDetailResponse {
+        return IssueDetailResponse(
+            id = issue.id,
+            key = issue.key,
+            changelog = changelogMapper.changelogToChangelogResponse(issue.changelog),
+            dueDateHistory = dueDateHistoryMapper.dueDateHistoryToDueDateHistoryResponse(issue.dueDateHistory),
+            waitTime = issue.waitTime / 60.0,
+            touchTime = issue.touchTime / 60.0,
+            pctEfficiency = issue.pctEfficiency,
+            leadTimes = leadTimeMapper.leadTimeToLeadTimeResponse(issue.leadTimes)
         )
     }
 

@@ -79,7 +79,7 @@ class HolidayServiceImpl(
 
     @Transactional(readOnly = true)
     override fun findById(id: Long): HolidayResponse {
-        log.info("Method=findById, id={}", id)
+        log.info("Method=findByBoardAndId, id={}", id)
 
         val holiday = holidayRepository.findById(id)
             .orElseThrow(::ResourceNotFound)
