@@ -94,7 +94,7 @@ class EstimateServiceImpl(
             board, searchEstimateRequest, value
         )
         val issueForm = buildIssueFormByEstimateForm(searchEstimateRequest, value)
-        val leadTimeList = issueService.findLeadTimeByExample(board.id, issueForm)
+        val leadTimeList = issueService.findLeadTimeByExample(board, issueForm)
 
         return percentileService.calculatePercentile(leadTimeList)
     }

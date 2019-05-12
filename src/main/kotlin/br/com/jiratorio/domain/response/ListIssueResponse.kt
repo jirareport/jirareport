@@ -2,10 +2,12 @@ package br.com.jiratorio.domain.response
 
 import br.com.jiratorio.domain.chart.ChartAggregator
 import br.com.jiratorio.domain.entity.embedded.Chart
+import br.com.jiratorio.domain.response.issue.IssueResponse
 
 data class ListIssueResponse(
+    val leadTime: Double,
+    val throughput: Int,
     val issues: List<IssueResponse>,
     val charts: ChartAggregator,
-    val leadTime: Double,
     val weeklyThroughput: Chart<String, Int>
 )

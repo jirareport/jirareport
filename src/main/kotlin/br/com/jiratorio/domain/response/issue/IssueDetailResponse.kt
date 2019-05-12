@@ -1,4 +1,8 @@
-package br.com.jiratorio.domain.response
+package br.com.jiratorio.domain.response.issue
+
+import br.com.jiratorio.domain.response.ChangelogResponse
+import br.com.jiratorio.domain.response.DueDateHistoryResponse
+import br.com.jiratorio.domain.response.LeadTimeResponse
 
 data class IssueDetailResponse(
     val id: Long,

@@ -28,7 +28,7 @@ class IssuePeriodFactory(
             startDate = faker.date().past(30, TimeUnit.DAYS).toLocalDate(),
             endDate = faker.date().past(15, TimeUnit.DAYS).toLocalDate(),
             jql = faker.lorem().paragraph(),
-            issues = mutableListOf(),
+            issues = mutableSetOf(),
             throughput = faker.number().randomNumber().toInt(),
             leadTimeByEstimate = Chart(
                 data = mapOf(

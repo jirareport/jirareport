@@ -10,11 +10,13 @@ import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.factory.domain.entity.IssueFactory
 import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
+import br.com.jiratorio.repository.IssueRepository
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.format.DateTimeFormatter
 import javax.servlet.http.HttpServletResponse.SC_OK
@@ -26,21 +28,25 @@ internal class FindIssuePeriodIntegrationTest @Autowired constructor(
     private val authenticator: Authenticator,
     private val issuePeriodFactory: IssuePeriodFactory,
     private val issueFactory: IssueFactory,
-    private val boardFactory: BoardFactory
+    private val boardFactory: BoardFactory,
+    private val issueRepository: IssueRepository
 ) {
 
     @Test
     fun `test find by id`() {
         val issuePeriod = authenticator.withDefaultUser {
             val defaultBoard = boardFactory.create()
-            val mutableIssues = issueFactory.create(20) {
+
+            val issuePeriod = issuePeriodFactory.create {
+                it.boardId = defaultBoard.id
+            }
+
+            issueFactory.create(20) {
                 it.board = defaultBoard
+                it.issuePeriodId = issuePeriod.id
             }.toMutableList()
 
-            issuePeriodFactory.create {
-                it.boardId = defaultBoard.id
-                it.issues = mutableIssues
-            }
+            issuePeriod
         }
 
         val response = restAssured {
@@ -75,7 +81,8 @@ internal class FindIssuePeriodIntegrationTest @Autowired constructor(
         }
 
         val issueResponse = response.issues.first()
-        val issue = issuePeriod.issues.find { it.id == issueResponse.id } ?: throw ResourceNotFound()
+        val issue = issueRepository.findByIdOrNull(issueResponse.id) ?: throw ResourceNotFound()
+
         IssueResponseAssert(issueResponse).assertThat {
             hasId(issue.id)
             hasKey(issue.key)

@@ -2,9 +2,11 @@ package br.com.jiratorio.domain.entity
 
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
+import br.com.jiratorio.extension.equalsBuilder
 import br.com.jiratorio.extension.toStringBuilder
 import org.hibernate.annotations.Type
 import java.time.LocalDateTime
+import java.util.Objects
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -12,7 +14,6 @@ import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
-import javax.persistence.ManyToMany
 import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 
@@ -60,8 +61,8 @@ data class Issue(
     @Column(columnDefinition = "jsonb")
     var changelog: List<Changelog>,
 
-    @ManyToMany(mappedBy = "issues", cascade = [CascadeType.DETACH])
-    var issuePeriods: List<IssuePeriod>? = null,
+    @Column(name = "issue_period_id", nullable = false)
+    var issuePeriodId: Long = 0,
 
     @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     var leadTimes: Set<LeadTime>? = null,
@@ -97,5 +98,15 @@ data class Issue(
 
     override fun toString() =
         toStringBuilder(Issue::id)
+
+    override fun equals(other: Any?): Boolean =
+        equalsBuilder(
+            other,
+            Issue::id,
+            Issue::key
+        )
+
+    override fun hashCode(): Int =
+        Objects.hash(id, key)
 
 }

@@ -2,6 +2,7 @@ package br.com.jiratorio.repository.impl
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
+import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.extension.log
@@ -25,8 +26,15 @@ class IssueCustomRepositoryImpl(
 
     @ExecutionTime
     @Transactional(readOnly = true)
-    override fun findByExample(boardId: Long, searchIssueRequest: SearchIssueRequest): List<Issue> {
-        log.info("Method=findByExample, boardId={}, searchIssueRequest={}", boardId, searchIssueRequest)
+    override fun findByExample(
+        board: Board,
+        dynamicFilters: Map<String, Array<String>>,
+        searchIssueRequest: SearchIssueRequest
+    ): List<Issue> {
+        log.info(
+            "Method=findByExample, board={}, dynamicFilters={}, searchIssueRequest={}",
+            board, searchIssueRequest, dynamicFilters
+        )
 
         val params = HashMap<String, Any>()
 
@@ -72,15 +80,15 @@ class IssueCustomRepositoryImpl(
             params["priorities"] = searchIssueRequest.priorities
         }
 
-        searchIssueRequest.dynamicFieldsValues.forEachIndexed { i, (field, values) ->
-            if (field.isNotEmpty() && !values.isNullOrEmpty()) {
-                val fieldValue = (field + i).replace(" ", "")
-                query.append(" AND issue.dynamic_fields->>'$field' in (:$fieldValue) ")
-                params[fieldValue] = values
+        board.dynamicFields?.forEach {
+            val values = dynamicFilters[it.name]
+            if (!values.isNullOrEmpty()) {
+                query.append(" AND issue.dynamic_fields->>'${it.name}' in (:${it.field}) ")
+                params[it.field] = values.toList()
             }
         }
 
-        params["boardId"] = boardId
+        params["boardId"] = board.id
         params["startDate"] = searchIssueRequest.startDate.atStartOfDay()
         params["endDate"] = searchIssueRequest.endDate.atEndOfDay()
 

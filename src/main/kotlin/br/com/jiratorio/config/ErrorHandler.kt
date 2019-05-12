@@ -5,6 +5,8 @@ import br.com.jiratorio.exception.UniquenessFieldException
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.BindException
+import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -26,10 +28,19 @@ class ErrorHandler(
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleMethodArgumentNotValidException(
-        e: MethodArgumentNotValidException
-    ): ResponseEntity<Map<String, List<String>>> {
-        val errors = e.bindingResult.allErrors.groupBy {
+    fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ResponseEntity<Map<String, List<String>>> {
+        val bindingResult = e.bindingResult
+        return buildBindResultResponseErrors(bindingResult)
+    }
+
+    @ExceptionHandler(BindException::class)
+    fun handleBindException(e: BindException): ResponseEntity<Map<String, List<String>>> {
+        val bindingResult = e.bindingResult
+        return buildBindResultResponseErrors(bindingResult)
+    }
+
+    private fun buildBindResultResponseErrors(bindingResult: BindingResult): ResponseEntity<Map<String, List<String>>> {
+        val errors = bindingResult.allErrors.groupBy {
             it as FieldError
             it.field
         }.map {

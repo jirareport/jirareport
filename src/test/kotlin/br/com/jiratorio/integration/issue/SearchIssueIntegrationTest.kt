@@ -7,6 +7,7 @@ import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.factory.domain.entity.DynamicFieldConfigFactory
 import br.com.jiratorio.factory.domain.entity.IssueFactory
+import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
 import org.apache.http.HttpStatus.SC_OK
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.BeforeEach
@@ -22,6 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SearchIssueIntegrationTest @Autowired constructor(
     private val issueFactory: IssueFactory,
+    private val issuePeriodFactory: IssuePeriodFactory,
     private val boardFactory: BoardFactory,
     private val dynamicFieldConfigFactory: DynamicFieldConfigFactory,
     private val authenticator: Authenticator
@@ -120,6 +122,9 @@ class SearchIssueIntegrationTest @Autowired constructor(
 
         authenticator.withDefaultUser {
             val board = boardFactory.create()
+            val issuePeriod = issuePeriodFactory.create {
+                it.boardId = board.id
+            }
 
             dynamicFieldConfigFactory.create {
                 it.board = board
@@ -143,6 +148,7 @@ class SearchIssueIntegrationTest @Autowired constructor(
                     "field1" to "value1",
                     "field2" to "value1"
                 )
+                it.issuePeriodId = issuePeriod.id
             }
             issueFactory.create {
                 it.key = "JIRAT-2"
@@ -158,6 +164,7 @@ class SearchIssueIntegrationTest @Autowired constructor(
                     "field1" to "value1",
                     "field2" to "value1"
                 )
+                it.issuePeriodId = issuePeriod.id
             }
             issueFactory.create {
                 it.key = "JIRAT-3"
@@ -173,6 +180,7 @@ class SearchIssueIntegrationTest @Autowired constructor(
                     "field1" to "value1",
                     "field2" to "value2"
                 )
+                it.issuePeriodId = issuePeriod.id
             }
             issueFactory.create {
                 it.key = "JIRAT-4"
@@ -188,6 +196,7 @@ class SearchIssueIntegrationTest @Autowired constructor(
                     "field1" to "value3",
                     "field2" to "value1"
                 )
+                it.issuePeriodId = issuePeriod.id
             }
             issueFactory.create {
                 it.key = "JIRAT-5"
@@ -203,6 +212,7 @@ class SearchIssueIntegrationTest @Autowired constructor(
                     "field1" to "value2",
                     "field2" to "value1"
                 )
+                it.issuePeriodId = issuePeriod.id
             }
             issueFactory.create {
                 it.key = "JIRAT-6"
@@ -218,6 +228,7 @@ class SearchIssueIntegrationTest @Autowired constructor(
                     "field1" to "value1",
                     "field2" to "value2"
                 )
+                it.issuePeriodId = issuePeriod.id
             }
             issueFactory.create {
                 it.key = "JIRAT-7"
@@ -233,6 +244,7 @@ class SearchIssueIntegrationTest @Autowired constructor(
                     "field1" to "value3",
                     "field2" to "value3"
                 )
+                it.issuePeriodId = issuePeriod.id
             }
             issueFactory.create {
                 it.key = "JIRAT-8"
@@ -248,6 +260,7 @@ class SearchIssueIntegrationTest @Autowired constructor(
                     "field1" to "value2",
                     "field2" to "value1"
                 )
+                it.issuePeriodId = issuePeriod.id
             }
             issueFactory.create {
                 it.key = "JIRAT-9"
@@ -263,6 +276,7 @@ class SearchIssueIntegrationTest @Autowired constructor(
                     "field1" to "value1",
                     "field2" to "value3"
                 )
+                it.issuePeriodId = issuePeriod.id
             }
             issueFactory.create {
                 it.key = "JIRAT-10"
@@ -278,6 +292,7 @@ class SearchIssueIntegrationTest @Autowired constructor(
                     "field1" to "value3",
                     "field2" to "value2"
                 )
+                it.issuePeriodId = issuePeriod.id
             }
         }
     }

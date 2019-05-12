@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.EntityGraph
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
-import java.util.Optional
 
 @Repository
 interface IssuePeriodRepository : CrudRepository<IssuePeriod, Long> {
@@ -21,7 +20,7 @@ interface IssuePeriodRepository : CrudRepository<IssuePeriod, Long> {
         startDate: LocalDate,
         endDate: LocalDate,
         boardId: Long
-    ): Optional<IssuePeriod>
+    ): IssuePeriod?
 
     fun findByBoardIdAndId(boardId: Long, id: Long): IssuePeriod?
 

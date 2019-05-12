@@ -1,62 +1,51 @@
 package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime
-import br.com.jiratorio.client.IssueClient
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
-import br.com.jiratorio.domain.response.IssueDetailResponse
-import br.com.jiratorio.domain.response.IssueFilterResponse
 import br.com.jiratorio.domain.response.ListIssueResponse
+import br.com.jiratorio.domain.response.issue.IssueDetailResponse
+import br.com.jiratorio.domain.response.issue.IssueFilterKeyResponse
+import br.com.jiratorio.domain.response.issue.IssueFilterResponse
 import br.com.jiratorio.exception.ResourceNotFound
+import br.com.jiratorio.extension.decimal.zeroIfNaN
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.atEndOfDay
 import br.com.jiratorio.mapper.IssueMapper
-import br.com.jiratorio.parser.IssueParser
 import br.com.jiratorio.repository.IssueRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.IssueService
 import br.com.jiratorio.service.WeeklyThroughputService
 import br.com.jiratorio.service.chart.ChartService
-import br.com.jiratorio.service.leadtime.LeadTimeService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
 class IssueServiceImpl(
-    private val issueClient: IssueClient,
-    private val issueParser: IssueParser,
     private val issueRepository: IssueRepository,
     private val issueMapper: IssueMapper,
     private val chartService: ChartService,
-    private val leadTimeService: LeadTimeService,
     private val boardService: BoardService,
     private val weeklyThroughputService: WeeklyThroughputService
 ) : IssueService {
 
     @ExecutionTime
-    @Transactional
-    override fun createByJql(jql: String, board: Board): List<Issue> {
-        log.info("Method=createByJql, jql={}, board={}", jql, board)
-
-        val issuesStr = issueClient.findByJql(jql)
-        val issues = issueParser.parse(issuesStr, board)
-
-        issueRepository.saveAll(issues)
-        leadTimeService.createLeadTimes(issues, board.id)
-
-        return issues
-    }
-
-    @ExecutionTime
     @Transactional(readOnly = true)
-    override fun findByExample(boardId: Long, searchIssueRequest: SearchIssueRequest): ListIssueResponse {
-        log.info("Method=findByExample, boardId={}, searchIssueRequest={}", boardId, searchIssueRequest)
-
-        val issues = issueRepository.findByExample(boardId, searchIssueRequest)
+    override fun findByExample(
+        boardId: Long,
+        dynamicFilters: Map<String, Array<String>>,
+        searchIssueRequest: SearchIssueRequest
+    ): ListIssueResponse {
+        log.info(
+            "Method=findByExample, boardId={}, dynamicFilters={}, searchIssueRequest={}",
+            boardId, dynamicFilters, searchIssueRequest
+        )
 
         val board = boardService.findById(boardId)
+
+        val issues = issueRepository.findByExample(board, dynamicFilters, searchIssueRequest)
         val chartAggregator = chartService.buildAllCharts(issues, board)
 
         val leadTime = issues.map { it.leadTime }.average()
@@ -68,46 +57,26 @@ class IssueServiceImpl(
         )
 
         return ListIssueResponse(
+            leadTime = leadTime.zeroIfNaN(),
+            throughput = issues.size,
             issues = issueMapper.issueToIssueResponse(issues),
             charts = chartAggregator,
-            leadTime = leadTime,
             weeklyThroughput = weeklyThroughput
         )
     }
 
     @ExecutionTime
     @Transactional(readOnly = true)
-    override fun findLeadTimeByExample(boardId: Long, searchIssueRequest: SearchIssueRequest): List<Long> {
-        log.info("Method=findLeadTimeByExample, board={}, searchIssueRequest={}", boardId, searchIssueRequest)
-        return issueRepository.findByExample(boardId, searchIssueRequest)
+    override fun findLeadTimeByExample(board: Board, searchIssueRequest: SearchIssueRequest): List<Long> {
+        log.info("Method=findLeadTimeByExample, board={}, searchIssueRequest={}", board, searchIssueRequest)
+        return issueRepository.findByExample(board, emptyMap(), searchIssueRequest)
             .map { it.leadTime }
     }
 
     @Transactional
-    override fun deleteAll(issues: List<Issue>) {
+    override fun deleteAll(issues: Set<Issue>) {
         log.info("Method=deleteAll, issues={}", issues)
         issueRepository.deleteAll(issues)
-    }
-
-    @ExecutionTime
-    @Transactional(readOnly = true)
-    override fun findFilters(boardId: Long, startDate: LocalDate, endDate: LocalDate): IssueFilterResponse {
-        log.info("Method=findFilters, boardId={}, startDate={}, endDate={}", boardId, startDate, endDate)
-
-        return IssueFilterResponse(
-            estimates = issueRepository.findAllEstimatesByBoardId(boardId),
-            keys = issueRepository.findAllKeysByBoardIdAndDates(
-                boardId,
-                startDate.atStartOfDay(),
-                endDate.atEndOfDay()
-            ),
-            systems = issueRepository.findAllSystemsByBoardId(boardId),
-            epics = issueRepository.findAllEpicsByBoardId(boardId),
-            issueTypes = issueRepository.findAllIssueTypesByBoardId(boardId),
-            projects = issueRepository.findAllIssueProjectsByBoardId(boardId),
-            priorities = issueRepository.findAllIssuePrioritiesByBoardId(boardId),
-            dynamicFieldsValues = issueRepository.findAllDynamicFieldValues(boardId)
-        )
     }
 
     @Transactional(readOnly = true)
@@ -119,4 +88,33 @@ class IssueServiceImpl(
 
         return issueMapper.issueToIssueDetailResponse(issue)
     }
+
+    @ExecutionTime
+    @Transactional(readOnly = true)
+    override fun findFilters(boardId: Long): IssueFilterResponse {
+        log.info("Method=findFilters, boardId={}", boardId)
+
+        return IssueFilterResponse(
+            estimates = issueRepository.findAllEstimatesByBoardId(boardId),
+            systems = issueRepository.findAllSystemsByBoardId(boardId),
+            epics = issueRepository.findAllEpicsByBoardId(boardId),
+            issueTypes = issueRepository.findAllIssueTypesByBoardId(boardId),
+            projects = issueRepository.findAllIssueProjectsByBoardId(boardId),
+            priorities = issueRepository.findAllIssuePrioritiesByBoardId(boardId),
+            dynamicFieldsValues = issueRepository.findAllDynamicFieldValues(boardId)
+        )
+    }
+
+    @ExecutionTime
+    @Transactional(readOnly = true)
+    override fun findFilterKeys(boardId: Long, startDate: LocalDate, endDate: LocalDate): IssueFilterKeyResponse {
+        return IssueFilterKeyResponse(
+            keys = issueRepository.findAllKeysByBoardIdAndDates(
+                boardId = boardId,
+                startDate = startDate.atStartOfDay(),
+                endDate = endDate.atEndOfDay()
+            )
+        )
+    }
+
 }

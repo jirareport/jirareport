@@ -8,16 +8,13 @@ import br.com.jiratorio.extension.toStringBuilder
 import org.hibernate.annotations.Type
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
-import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
-import javax.persistence.JoinTable
-import javax.persistence.ManyToMany
+import javax.persistence.OneToMany
 import javax.persistence.OrderBy
 
 @Entity
@@ -36,15 +33,10 @@ data class IssuePeriod(
     @Column(nullable = false)
     var boardId: Long,
 
-    @Column(nullable = false)
+    @OneToMany
     @OrderBy("key asc")
-    @ManyToMany(cascade = [CascadeType.DETACH], fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "issue_period_issue",
-        joinColumns = [JoinColumn(name = "issue_period_id")],
-        inverseJoinColumns = [JoinColumn(name = "issue_id")]
-    )
-    var issues: MutableList<Issue>,
+    @JoinColumn(name = "issue_period_id")
+    var issues: MutableSet<Issue>,
 
     @Column(name = "avg_lead_time", nullable = false)
     var leadTime: Double,

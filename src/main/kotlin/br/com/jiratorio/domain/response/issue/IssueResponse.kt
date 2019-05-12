@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain.response
+package br.com.jiratorio.domain.response.issue
 
 data class IssueResponse(
     val id: Long,

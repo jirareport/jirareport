@@ -1,7 +1,7 @@
 package br.com.jiratorio.assert.response
 
 import br.com.jiratorio.assert.BaseAssert
-import br.com.jiratorio.domain.response.IssueResponse
+import br.com.jiratorio.domain.response.issue.IssueResponse
 
 class IssueResponseAssert(
     actual: IssueResponse
