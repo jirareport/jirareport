@@ -14,7 +14,7 @@ interface IssueRepository : CrudRepository<Issue, Long>, IssueCustomRepository {
         """
             SELECT DISTINCT estimate FROM Issue
             WHERE board.id = :boardId
-            AND estimated IS NOT NULL
+            AND estimate IS NOT NULL
         """
     )
     fun findAllEstimatesByBoardId(@Param("boardId") boardId: Long): Set<String>

@@ -51,7 +51,7 @@ class IssueCustomRepositoryImpl(
         }
 
         if (searchIssueRequest.estimates.isNotEmpty()) {
-            query.append(" AND issue.estimated IN (:estimates) ")
+            query.append(" AND issue.estimate IN (:estimates) ")
             params["estimates"] = searchIssueRequest.estimates
         }
 

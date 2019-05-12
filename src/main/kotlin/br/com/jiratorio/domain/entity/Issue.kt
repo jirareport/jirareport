@@ -38,7 +38,6 @@ data class Issue(
     @Column(nullable = false)
     var summary: String,
 
-    @Column(name = "estimated")
     var estimate: String? = null,
 
     var project: String? = null,

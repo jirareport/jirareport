@@ -38,7 +38,7 @@ data class IssuePeriod(
     @JoinColumn(name = "issue_period_id")
     var issues: MutableSet<Issue>,
 
-    @Column(name = "avg_lead_time", nullable = false)
+    @Column(nullable = false)
     var leadTime: Double,
 
     @Type(type = "jsonb")
@@ -46,11 +46,11 @@ data class IssuePeriod(
     var histogram: Histogram? = null,
 
     @Type(type = "jsonb")
-    @Column(name = "lead_time_by_size", columnDefinition = "jsonb")
+    @Column(columnDefinition = "jsonb")
     var leadTimeByEstimate: Chart<String, Double>? = null,
 
     @Type(type = "jsonb")
-    @Column(name = "estimated", columnDefinition = "jsonb")
+    @Column(columnDefinition = "jsonb")
     var throughputByEstimate: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
@@ -58,7 +58,7 @@ data class IssuePeriod(
     var leadTimeBySystem: Chart<String, Double>? = null,
 
     @Type(type = "jsonb")
-    @Column(name = "tasks_by_system", columnDefinition = "jsonb")
+    @Column(columnDefinition = "jsonb")
     var throughputBySystem: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
@@ -66,7 +66,7 @@ data class IssuePeriod(
     var leadTimeByType: Chart<String, Double>? = null,
 
     @Type(type = "jsonb")
-    @Column(name = "tasks_by_type", columnDefinition = "jsonb")
+    @Column(columnDefinition = "jsonb")
     var throughputByType: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
@@ -74,7 +74,7 @@ data class IssuePeriod(
     var leadTimeByProject: Chart<String, Double>? = null,
 
     @Type(type = "jsonb")
-    @Column(name = "tasks_by_project", columnDefinition = "jsonb")
+    @Column(columnDefinition = "jsonb")
     var throughputByProject: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
@@ -86,14 +86,14 @@ data class IssuePeriod(
     var throughputByPriority: Chart<String, Int>? = null,
 
     @Type(type = "jsonb")
-    @Column(name = "column_time_avgs", columnDefinition = "jsonb")
+    @Column(columnDefinition = "jsonb")
     var columnTimeAvg: MutableList<ColumnTimeAvg>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     var leadTimeCompareChart: Chart<String, Double>? = null,
 
-    @Column(name = "issues_count", nullable = false)
+    @Column(nullable = false)
     var throughput: Int,
 
     @Column(nullable = false)
