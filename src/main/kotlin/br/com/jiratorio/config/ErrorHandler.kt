@@ -2,6 +2,7 @@ package br.com.jiratorio.config
 
 import br.com.jiratorio.config.internationalization.MessageResolver
 import br.com.jiratorio.exception.UniquenessFieldException
+import br.com.jiratorio.extension.log
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -11,6 +12,8 @@ import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import java.util.UUID
+import javax.servlet.http.HttpServletResponse
 
 @ControllerAdvice
 class ErrorHandler(
@@ -18,9 +21,7 @@ class ErrorHandler(
 ) {
 
     @ExceptionHandler(MissingKotlinParameterException::class)
-    fun handleMissingKotlinParameterException(
-        e: MissingKotlinParameterException
-    ): ResponseEntity<Map<String, List<String>>> {
+    fun handleMissingKotlinParameterException(e: MissingKotlinParameterException): ResponseEntity<Map<String, List<String>>> {
         return ResponseEntity(
             mapOf(e.parameter.name!! to listOf(messageResolver.resolve("javax.validation.constraints.NotNull.message"))),
             HttpStatus.BAD_REQUEST
@@ -51,12 +52,18 @@ class ErrorHandler(
     }
 
     @ExceptionHandler(UniquenessFieldException::class)
-    fun handleUniquenessException(
-        e: UniquenessFieldException
-    ): ResponseEntity<Map<String, List<String>>> {
+    fun handleUniquenessException(e: UniquenessFieldException): ResponseEntity<Map<String, List<String>>> {
         return ResponseEntity(
             mapOf(e.field to listOf(messageResolver.resolve("validations.uniqueness"))),
             HttpStatus.BAD_REQUEST
         )
     }
+
+    @ExceptionHandler(Exception::class)
+    fun defaultHandler(e: Exception, request: HttpServletResponse) {
+        val uuid = UUID.randomUUID().toString()
+        log.error("Method=defaultHandler, MSG=trace uuid, uuid={}", uuid, e)
+        request.sendError(500, uuid)
+    }
+
 }

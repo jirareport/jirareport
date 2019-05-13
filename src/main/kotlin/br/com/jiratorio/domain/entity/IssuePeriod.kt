@@ -8,6 +8,7 @@ import br.com.jiratorio.extension.toStringBuilder
 import org.hibernate.annotations.Type
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -33,9 +34,9 @@ data class IssuePeriod(
     @Column(nullable = false)
     var boardId: Long,
 
-    @OneToMany
     @OrderBy("key asc")
-    @JoinColumn(name = "issue_period_id")
+    @JoinColumn(name = "issue_period_id", updatable = false)
+    @OneToMany(orphanRemoval = true, cascade = [CascadeType.ALL])
     var issues: MutableSet<Issue>,
 
     @Column(nullable = false)

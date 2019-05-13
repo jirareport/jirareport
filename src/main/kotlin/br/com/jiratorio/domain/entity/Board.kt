@@ -90,28 +90,7 @@ data class Board(
         toStringBuilder(
             Board::id,
             Board::externalId,
-            Board::name,
-            Board::startColumn,
-            Board::endColumn,
-            Board::fluxColumn,
-            Board::ignoreIssueType,
-            Board::epicCF,
-            Board::estimateCF,
-            Board::systemCF,
-            Board::projectCF,
-            Board::dueDateCF,
-            Board::ignoreWeekend,
-            Board::leadTimeConfigs,
-            Board::holidays,
-            Board::issues,
-            Board::impedimentType,
-            Board::impedimentColumns,
-            Board::touchingColumns,
-            Board::waitingColumns,
-            Board::dueDateType,
-            Board::owner,
-            Board::createdAt,
-            Board::updatedAt
+            Board::name
         )
 
     override fun equals(other: Any?) =

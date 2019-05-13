@@ -31,7 +31,7 @@ class JiraClientConfiguration(
             try {
                 objectMapper.readValue(response.body().asInputStream(), JiraError::class.java)
             } catch (e: JsonParseException) {
-                JiraError(messageResolver.resolve("error.session-timeout"), response.status().toLong())
+                JiraError(messageResolver.resolve("errors.session-timeout"), response.status().toLong())
             }
         )
     }

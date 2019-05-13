@@ -96,7 +96,10 @@ data class Issue(
     }
 
     override fun toString() =
-        toStringBuilder(Issue::id)
+        toStringBuilder(
+            Issue::id,
+            Issue::key
+        )
 
     override fun equals(other: Any?): Boolean =
         equalsBuilder(

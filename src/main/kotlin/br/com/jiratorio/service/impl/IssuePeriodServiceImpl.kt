@@ -16,14 +16,12 @@ import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.CreateIssueService
 import br.com.jiratorio.service.IssuePeriodService
-import br.com.jiratorio.service.IssueService
 import br.com.jiratorio.service.chart.IssuePeriodChartService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class IssuePeriodServiceImpl(
-    private val issueService: IssueService,
     private val issuePeriodRepository: IssuePeriodRepository,
     private val leadTimeChartService: IssuePeriodChartService,
     private val boardService: BoardService,
@@ -45,12 +43,7 @@ class IssuePeriodServiceImpl(
         val issuePeriod = issuePeriodRepository.findByBoardIdAndId(boardId, id)
             ?: throw ResourceNotFound()
 
-        delete(issuePeriod)
-    }
-
-    private fun delete(issuePeriod: IssuePeriod) {
         issuePeriodRepository.delete(issuePeriod)
-        issueService.deleteAll(issuePeriod.issues)
     }
 
     @Transactional(readOnly = true)

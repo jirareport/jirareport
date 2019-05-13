@@ -11,7 +11,7 @@ class FakerConfig {
 
     @Bean
     fun faker() = Faker(Random(System.currentTimeMillis().also {
-        log.info("I=generated seed, seed={}", it)
+        log.info("MSG=generated seed, seed={}", it)
     }))
 
 }

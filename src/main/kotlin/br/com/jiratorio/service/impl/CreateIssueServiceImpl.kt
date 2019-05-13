@@ -14,21 +14,18 @@ import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.repository.IssueRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.CreateIssueService
-import br.com.jiratorio.service.IssueService
 import br.com.jiratorio.service.JQLService
 import br.com.jiratorio.service.WipService
 import br.com.jiratorio.service.chart.ChartService
 import br.com.jiratorio.service.leadtime.LeadTimeService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDate
 
 @Service
 class CreateIssueServiceImpl(
     private val issueRepository: IssueRepository,
     private val issueClient: IssueClient,
     private val issuePeriodRepository: IssuePeriodRepository,
-    private val issueService: IssueService,
     private val boardService: BoardService,
     private val chartService: ChartService,
     private val jqlService: JQLService,
@@ -44,13 +41,20 @@ class CreateIssueServiceImpl(
 
         val (startDate, endDate) = createIssuePeriodRequest
 
-        delete(startDate, endDate, boardId)
+        issuePeriodRepository.deleteByStartDateAndEndDateAndBoardId(
+            createIssuePeriodRequest.startDate,
+            createIssuePeriodRequest.endDate,
+            boardId
+        )
 
         val board = boardService.findById(boardId)
 
         val jql = jqlService.finalizedIssues(board, startDate, endDate)
 
-        val issues = buildIssues(jql, board)
+        val issues = issueParser.parse(
+            rawText = issueClient.findByJql(jql),
+            board = board
+        )
 
         val leadTime = issues.map { it.leadTime }.average().zeroIfNaN()
         val avgPctEfficiency = issues.map { it.pctEfficiency }.average().zeroIfNaN()
@@ -111,25 +115,6 @@ class CreateIssueServiceImpl(
         }
 
         issuePeriodRepository.save(issuePeriod)
-    }
-
-    private fun buildIssues(
-        jql: String,
-        board: Board
-    ): List<Issue> {
-        val issuesStr = issueClient.findByJql(jql)
-        val issues = issueParser.parse(issuesStr, board)
-        return issues
-    }
-
-    private fun delete(startDate: LocalDate, endDate: LocalDate, boardId: Long) {
-        log.info("Method=delete, startDate={}, endDate={}, boardId={}", startDate, endDate, boardId)
-
-        val issuePeriod = issuePeriodRepository.findByStartDateAndEndDateAndBoardId(startDate, endDate, boardId)
-        if (issuePeriod != null) {
-            issuePeriodRepository.delete(issuePeriod)
-            issueService.deleteAll(issuePeriod.issues)
-        }
     }
 
 }
