@@ -36,7 +36,7 @@ data class IssuePeriod(
 
     @OrderBy("key asc")
     @JoinColumn(name = "issue_period_id", updatable = false)
-    @OneToMany(orphanRemoval = true, cascade = [CascadeType.ALL])
+    @OneToMany(orphanRemoval = true, cascade = [CascadeType.REMOVE])
     var issues: MutableSet<Issue>,
 
     @Column(nullable = false)
