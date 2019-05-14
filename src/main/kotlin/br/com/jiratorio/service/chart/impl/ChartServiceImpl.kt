@@ -16,8 +16,6 @@ import br.com.jiratorio.service.chart.LeadTimeCompareChartService
 import br.com.jiratorio.service.chart.PriorityChartService
 import br.com.jiratorio.service.chart.ProjectChartService
 import br.com.jiratorio.service.chart.SystemChartService
-import kotlinx.coroutines.ExecutorCoroutineDispatcher
-import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
 
 @Service
@@ -31,7 +29,6 @@ class ChartServiceImpl(
     private val leadTimeCompareChartService: LeadTimeCompareChartService,
     private val columnTimeChartService: ColumnTimeChartService,
     private val dynamicChartService: DynamicChartService,
-    private val chartCoroutineDispatcher: ExecutorCoroutineDispatcher,
     private val messageResolver: MessageResolver
 ) : ChartService {
 
@@ -40,39 +37,36 @@ class ChartServiceImpl(
         log.info("Method=buildAllCharts, issues={}, board={}", issues, board)
         val uninformed = messageResolver.resolve("uninformed")
 
-        return runBlocking(chartCoroutineDispatcher) {
-            val histogram = histogramService.issueHistogramAsync(issues)
-            val leadTimeByEstimate = estimateChartService.throughputChartAsync(issues, uninformed)
-            val throughputByEstimate = estimateChartService.leadTimeChartAsync(issues, uninformed)
-            val leadTimeBySystem = systemChartService.leadTimeBySystemAsync(issues, uninformed)
-            val throughputBySystem = systemChartService.throughputBySystemAsync(issues, uninformed)
-            val leadTimeByType = typeChartService.leadTimeByTypeAsync(issues, uninformed)
-            val throughputByType = typeChartService.throughputByTypeAsync(issues, uninformed)
-            val leadTimeByProject = projectChartService.leadTimeByProjectAsync(issues, uninformed)
-            val throughputByProject = projectChartService.throughputByProjectAsync(issues, uninformed)
-            val leadTimeByPriority = priorityChartService.leadTimeByPriorityAsync(issues, uninformed)
-            val throughputByPriority = priorityChartService.throughputByPriorityAsync(issues, uninformed)
-            val leadTimeCompareChart = leadTimeCompareChartService.leadTimeCompareAsync(issues)
-            val columnTimeAvg = columnTimeChartService.averageAsync(issues, board.fluxColumn ?: emptyList())
-            val dynamicCharts = dynamicChartService.buildDynamicChartsAsync(issues, board, uninformed)
+        val histogram = histogramService.issueHistogramAsync(issues)
+        val leadTimeByEstimate = estimateChartService.throughputChartAsync(issues, uninformed)
+        val throughputByEstimate = estimateChartService.leadTimeChartAsync(issues, uninformed)
+        val leadTimeBySystem = systemChartService.leadTimeBySystemAsync(issues, uninformed)
+        val throughputBySystem = systemChartService.throughputBySystemAsync(issues, uninformed)
+        val leadTimeByType = typeChartService.leadTimeByTypeAsync(issues, uninformed)
+        val throughputByType = typeChartService.throughputByTypeAsync(issues, uninformed)
+        val leadTimeByProject = projectChartService.leadTimeByProjectAsync(issues, uninformed)
+        val throughputByProject = projectChartService.throughputByProjectAsync(issues, uninformed)
+        val leadTimeByPriority = priorityChartService.leadTimeByPriorityAsync(issues, uninformed)
+        val throughputByPriority = priorityChartService.throughputByPriorityAsync(issues, uninformed)
+        val leadTimeCompareChart = leadTimeCompareChartService.leadTimeCompareAsync(issues)
+        val columnTimeAvg = columnTimeChartService.averageAsync(issues, board.fluxColumn ?: emptyList())
+        val dynamicCharts = dynamicChartService.buildDynamicChartsAsync(issues, board, uninformed)
 
-            ChartAggregator(
-                histogram = histogram.await(),
-                leadTimeByEstimate = leadTimeByEstimate.await(),
-                throughputByEstimate = throughputByEstimate.await(),
-                leadTimeBySystem = leadTimeBySystem.await(),
-                throughputBySystem = throughputBySystem.await(),
-                leadTimeByType = leadTimeByType.await(),
-                throughputByType = throughputByType.await(),
-                leadTimeByProject = leadTimeByProject.await(),
-                throughputByProject = throughputByProject.await(),
-                leadTimeByPriority = leadTimeByPriority.await(),
-                throughputByPriority = throughputByPriority.await(),
-                leadTimeCompareChart = leadTimeCompareChart.await(),
-                columnTimeAvg = columnTimeAvg.await(),
-                dynamicCharts = dynamicCharts.await()
-            )
-        }
+        return ChartAggregator(
+            histogram = histogram,
+            leadTimeByEstimate = leadTimeByEstimate,
+            throughputByEstimate = throughputByEstimate,
+            leadTimeBySystem = leadTimeBySystem,
+            throughputBySystem = throughputBySystem,
+            leadTimeByType = leadTimeByType,
+            throughputByType = throughputByType,
+            leadTimeByProject = leadTimeByProject,
+            throughputByProject = throughputByProject,
+            leadTimeByPriority = leadTimeByPriority,
+            throughputByPriority = throughputByPriority,
+            leadTimeCompareChart = leadTimeCompareChart,
+            columnTimeAvg = columnTimeAvg,
+            dynamicCharts = dynamicCharts
+        )
     }
-
 }

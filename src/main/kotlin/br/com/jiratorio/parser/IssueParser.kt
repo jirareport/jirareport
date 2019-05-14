@@ -5,8 +5,6 @@ import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
-import br.com.jiratorio.domain.jira.changelog.JiraChangelog
-import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
@@ -17,10 +15,7 @@ import br.com.jiratorio.service.DueDateService
 import br.com.jiratorio.service.EfficiencyService
 import br.com.jiratorio.service.HolidayService
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import kotlinx.coroutines.ExecutorCoroutineDispatcher
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import io.reactivex.Flowable
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -28,27 +23,23 @@ import java.time.LocalDate
 @Component
 class IssueParser(
     private val holidayService: HolidayService,
-    private val objectMapper: ObjectMapper,
     private val dueDateService: DueDateService,
     private val changelogService: ChangelogService,
     private val efficiencyService: EfficiencyService,
-    private val issueParserCoroutineDispatcher: ExecutorCoroutineDispatcher
+    private val changelogParser: ChangelogParser
 ) {
 
     @ExecutionTime
     @Transactional(readOnly = true)
-    fun parse(rawText: String, board: Board): List<Issue> {
+    fun parse(root: JsonNode, board: Board): List<Issue> {
         val holidays = holidayService.findDaysByBoard(board.id)
 
         val fluxColumn = FluxColumn(board)
-        val issues = objectMapper.readTree(rawText).path("issues")
-
-        return runBlocking(issueParserCoroutineDispatcher) {
-            issues.map {
+        return Flowable.fromIterable(root.path("issues"))
+            .parallel()
+            .map {
                 try {
-                    async {
-                        parseIssue(it, board, holidays, fluxColumn)
-                    }
+                    parseIssue(it, board, holidays, fluxColumn)
                 } catch (e: Exception) {
                     log.error(
                         "Method=parse, info=Error parsing issue, issue={}, err={}",
@@ -56,12 +47,10 @@ class IssueParser(
                     )
                     throw e
                 }
-            }.mapNotNull {
-                val issue = it.await()
-                log.info("Method=parseIssue, Info=parsed, key={}", issue?.key)
-                issue
             }
-        }
+            .sequential()
+            .blockingIterable()
+            .filterNotNull()
     }
 
     private fun parseIssue(
@@ -74,7 +63,7 @@ class IssueParser(
 
         val fields = issue.path("fields")
 
-        val changelogItems = extractChangelogItems(issue)
+        val changelogItems = changelogParser.extractChangelogItems(issue)
         val changelog = changelogService.parseChangelog(changelogItems, holidays, board.ignoreWeekend)
 
         val created = fields.path("created")
@@ -166,12 +155,6 @@ class IssueParser(
             touchTime = efficiency.touchTime,
             pctEfficiency = efficiency.pctEfficiency
         )
-    }
-
-    private fun extractChangelogItems(issue: JsonNode): List<JiraChangelogItem> {
-        val changelog = objectMapper.treeToValue(issue.path("changelog"), JiraChangelog::class.java)
-        changelog.histories.forEach { cl -> cl.items.forEach { i -> i.created = cl.created } }
-        return changelog.histories.map { it.items }.flatten()
     }
 
 }

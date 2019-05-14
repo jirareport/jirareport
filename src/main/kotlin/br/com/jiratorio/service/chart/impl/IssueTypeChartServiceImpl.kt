@@ -5,32 +5,27 @@ import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.toChart
 import br.com.jiratorio.service.chart.IssueTypeChartService
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import org.springframework.stereotype.Service
 
 @Service
 class IssueTypeChartServiceImpl : IssueTypeChartService {
 
-    override fun leadTimeByTypeAsync(issues: List<Issue>, uninformed: String): Deferred<Chart<String, Double>> =
-        GlobalScope.async {
-            log.info("Method=leadTimeByType, issues={}", issues)
+    override fun leadTimeByTypeAsync(issues: List<Issue>, uninformed: String): Chart<String, Double> {
+        log.info("Method=leadTimeByType, issues={}", issues)
 
-            issues
-                .groupBy { it.issueType ?: uninformed }
-                .mapValues { (_, value) -> value.map { it.leadTime }.average() }
-                .toChart()
-        }
+        return issues
+            .groupBy { it.issueType ?: uninformed }
+            .mapValues { (_, value) -> value.map { it.leadTime }.average() }
+            .toChart()
+    }
 
-    override fun throughputByTypeAsync(issues: List<Issue>, uninformed: String): Deferred<Chart<String, Int>> =
-        GlobalScope.async {
-            log.info("Method=throughputByType, issues={}", issues)
+    override fun throughputByTypeAsync(issues: List<Issue>, uninformed: String): Chart<String, Int> {
+        log.info("Method=throughputByType, issues={}", issues)
 
-            issues
-                .groupingBy { it.issueType ?: uninformed }
-                .eachCount()
-                .toChart()
-        }
+        return issues
+            .groupingBy { it.issueType ?: uninformed }
+            .eachCount()
+            .toChart()
+    }
 
 }
