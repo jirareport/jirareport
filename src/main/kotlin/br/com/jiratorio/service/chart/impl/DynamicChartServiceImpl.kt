@@ -12,6 +12,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import org.springframework.stereotype.Service
+import rx.Single
 
 @Service
 class DynamicChartServiceImpl : DynamicChartService {
@@ -20,8 +21,8 @@ class DynamicChartServiceImpl : DynamicChartService {
         issues: List<Issue>,
         board: Board,
         uninformed: String
-    ): Deferred<List<DynamicChart>> =
-        GlobalScope.async {
+    ): Single<List<DynamicChart>> =
+        Single.fromCallable {
             log.info("Method=buildDynamicCharts, issues={}, board={}", issues, board)
 
             val dynamicFields = board.dynamicFields

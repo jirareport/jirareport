@@ -5,16 +5,14 @@ import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.toChart
 import br.com.jiratorio.service.chart.EstimateChartService
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import org.springframework.stereotype.Service
+import rx.Single
 
 @Service
 class EstimateChartServiceImpl : EstimateChartService {
 
-    override fun leadTimeChartAsync(issues: List<Issue>, uninformed: String): Deferred<Chart<String, Double>> =
-        GlobalScope.async {
+    override fun leadTimeChartAsync(issues: List<Issue>, uninformed: String): Single<Chart<String, Double>> =
+        Single.fromCallable {
             log.info("Method=leadTimeChart, issues={}", issues)
 
             issues.groupBy { it.estimate ?: uninformed }
@@ -22,8 +20,8 @@ class EstimateChartServiceImpl : EstimateChartService {
                 .toChart()
         }
 
-    override fun throughputChartAsync(issues: List<Issue>, uninformed: String): Deferred<Chart<String, Int>> =
-        GlobalScope.async {
+    override fun throughputChartAsync(issues: List<Issue>, uninformed: String): Single<Chart<String, Int>> =
+        Single.fromCallable {
             log.info("Method=throughputChart, issues={}", issues)
 
             issues.groupingBy { it.estimate ?: uninformed }

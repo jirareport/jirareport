@@ -18,9 +18,7 @@ import br.com.jiratorio.service.EfficiencyService
 import br.com.jiratorio.service.HolidayService
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import kotlinx.coroutines.ExecutorCoroutineDispatcher
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import io.reactivex.rxkotlin.toFlowable
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -31,8 +29,7 @@ class IssueParser(
     private val objectMapper: ObjectMapper,
     private val dueDateService: DueDateService,
     private val changelogService: ChangelogService,
-    private val efficiencyService: EfficiencyService,
-    private val issueParserCoroutineDispatcher: ExecutorCoroutineDispatcher
+    private val efficiencyService: EfficiencyService
 ) {
 
     @ExecutionTime
@@ -41,14 +38,12 @@ class IssueParser(
         val holidays = holidayService.findDaysByBoard(board.id)
 
         val fluxColumn = FluxColumn(board)
-        val issues = objectMapper.readTree(rawText).path("issues")
-
-        return runBlocking(issueParserCoroutineDispatcher) {
-            issues.map {
+        return objectMapper.readTree(rawText).path("issues")
+            .toFlowable()
+            .parallel()
+            .map {
                 try {
-                    async {
-                        parseIssue(it, board, holidays, fluxColumn)
-                    }
+                    parseIssue(it, board, holidays, fluxColumn)
                 } catch (e: Exception) {
                     log.error(
                         "Method=parse, info=Error parsing issue, issue={}, err={}",
@@ -56,12 +51,10 @@ class IssueParser(
                     )
                     throw e
                 }
-            }.mapNotNull {
-                val issue = it.await()
-                log.info("Method=parseIssue, Info=parsed, key={}", issue?.key)
-                issue
             }
-        }
+            .sequential()
+            .blockingIterable()
+            .filterNotNull()
     }
 
     private fun parseIssue(

@@ -42,6 +42,8 @@ dependencies {
 
     implementation "org.flywaydb:flyway-core"
 
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
+
     implementation "org.springframework.boot:spring-boot-devtools"
     compileOnly "org.springframework.boot:spring-boot-configuration-processor"
 

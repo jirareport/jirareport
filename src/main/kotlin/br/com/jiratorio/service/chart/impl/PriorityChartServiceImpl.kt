@@ -5,16 +5,14 @@ import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.toChart
 import br.com.jiratorio.service.chart.PriorityChartService
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import org.springframework.stereotype.Service
+import rx.Single
 
 @Service
 class PriorityChartServiceImpl : PriorityChartService {
 
-    override fun leadTimeByPriorityAsync(issues: List<Issue>, uninformed: String): Deferred<Chart<String, Double>> =
-        GlobalScope.async {
+    override fun leadTimeByPriorityAsync(issues: List<Issue>, uninformed: String): Single<Chart<String, Double>> =
+        Single.fromCallable {
             log.info("Method=leadTimeByPriority, issues={}", issues)
 
             issues
@@ -23,8 +21,8 @@ class PriorityChartServiceImpl : PriorityChartService {
                 .toChart()
         }
 
-    override fun throughputByPriorityAsync(issues: List<Issue>, uninformed: String): Deferred<Chart<String, Int>> =
-        GlobalScope.async {
+    override fun throughputByPriorityAsync(issues: List<Issue>, uninformed: String): Single<Chart<String, Int>> =
+        Single.fromCallable {
             log.info("Method=throughputByPriority, issues={}", issues)
 
             issues

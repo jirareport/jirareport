@@ -4,16 +4,14 @@ import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.service.chart.ColumnTimeChartService
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import org.springframework.stereotype.Service
+import rx.Single
 
 @Service
 class ColumnTimeChartServiceImpl : ColumnTimeChartService {
 
-    override fun averageAsync(issues: List<Issue>, fluxColumn: List<String>): Deferred<List<ColumnTimeAvg>> =
-        GlobalScope.async {
+    override fun averageAsync(issues: List<Issue>, fluxColumn: List<String>): Single<List<ColumnTimeAvg>> =
+        Single.fromCallable {
             log.info("Method=average, issues={}, fluxColumn={}", issues, fluxColumn)
 
             issues.asSequence()
