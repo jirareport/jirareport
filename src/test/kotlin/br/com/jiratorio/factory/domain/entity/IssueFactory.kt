@@ -15,6 +15,7 @@ class IssueFactory(
     private val faker: Faker,
     private val boardFactory: BoardFactory,
     private val changelogFactory: ChangelogFactory,
+    private val issuePeriodFactory: IssuePeriodFactory,
     issueRepository: IssueRepository?
 ) : KBacon<Issue>(issueRepository) {
 
@@ -41,7 +42,8 @@ class IssueFactory(
             dynamicFields = mapOf(
                 "dnf_1" to faker.lorem().word(),
                 "dnf_2" to faker.lorem().word()
-            )
+            ),
+            issuePeriodId = issuePeriodFactory.create().id
         )
     }
 

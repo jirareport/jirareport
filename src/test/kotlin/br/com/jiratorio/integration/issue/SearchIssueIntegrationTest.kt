@@ -11,6 +11,7 @@ import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
 import org.apache.http.HttpStatus.SC_OK
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
+@Tag("integration")
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SearchIssueIntegrationTest @Autowired constructor(
@@ -52,66 +54,182 @@ class SearchIssueIntegrationTest @Autowired constructor(
         }
     }
 
-    @Test
-    fun `test filter by multiple value`() {
-        restAssured {
-            given {
-                header(authenticator.defaultUserHeader())
-                param("startDate", "2019-01-01")
-                param("endDate", "2019-05-04")
-                param("estimates", "P", "M")
-            }
-            on {
-                get("/boards/1/issues")
-            }
-            then {
-                statusCode(SC_OK)
-                body("issues", hasSize<Int>(8))
-            }
-        }
-    }
-
     @ParameterizedTest
     @MethodSource("filters")
-    fun `test filter issue`(testParam: Pair<Pair<String, String>, Int>) {
-        val (param, expected) = testParam
-
+    fun `test filter issue`(testParam: FilterParameter) {
         restAssured {
             given {
                 header(authenticator.defaultUserHeader())
                 param("startDate", "2019-01-01")
                 param("endDate", "2019-05-04")
-                param(param.first, param.second)
+                param(testParam.name, *testParam.value)
             }
             on {
                 get("/boards/1/issues")
             }
             then {
                 statusCode(SC_OK)
-                body("issues", hasSize<Int>(expected))
+                body("issues", hasSize<Int>(testParam.expectedCount))
             }
         }
     }
 
-    fun filters(): List<Pair<Pair<String, String>, Int>> {
+    class FilterParameter(
+        val name: String,
+        val value: Array<String>,
+        val expectedCount: Int
+    ) {
+        override fun toString(): String =
+                "$name=[${value.joinToString()}] expected $expectedCount"
+    }
+
+    fun filters(): List<FilterParameter> {
         return listOf(
-            "estimates" to "P" to 3,
-            "estimates" to "M" to 5,
-            "estimates" to "G" to 2,
-            "systems" to "jirareport-api" to 5,
-            "systems" to "jirareport-web" to 5,
-            "epics" to "v1" to 3,
-            "epics" to "v2" to 2,
-            "epics" to "v3" to 5,
-            "issueTypes" to "Story" to 3,
-            "issueTypes" to "Task" to 7,
-            "projects" to "JiraReport On Premise" to 3,
-            "projects" to "JiraReport SASS" to 7,
-            "priorities" to "Major" to 3,
-            "priorities" to "Medium" to 3,
-            "priorities" to "Expedite" to 2,
-            "priorities" to "Blocker" to 1,
-            "priorities" to "Low" to 1
+            FilterParameter(
+                name = "estimates",
+                value = arrayOf("P"),
+                expectedCount = 3
+            ),
+            FilterParameter(
+                name = "estimates",
+                value = arrayOf("M"),
+                expectedCount = 5
+            ),
+            FilterParameter(
+                name = "estimates",
+                value = arrayOf("G"),
+                expectedCount = 2
+            ),
+            FilterParameter(
+                name = "estimates",
+                value = arrayOf("P", "G"),
+                expectedCount = 5
+            ),
+            FilterParameter(
+                name = "systems",
+                value = arrayOf("jirareport-api"),
+                expectedCount = 5
+            ),
+            FilterParameter(
+                name = "systems",
+                value = arrayOf("jirareport-web"),
+                expectedCount = 5
+            ),
+            FilterParameter(
+                name = "epics",
+                value = arrayOf("v1"),
+                expectedCount = 3
+            ),
+            FilterParameter(
+                name = "epics",
+                value = arrayOf("v2"),
+                expectedCount = 2
+            ),
+            FilterParameter(
+                name = "epics",
+                value = arrayOf("v3"),
+                expectedCount = 5
+            ),
+            FilterParameter(
+                name = "epics",
+                value = arrayOf("v1", "v3"),
+                expectedCount = 8
+            ),
+            FilterParameter(
+                name = "issueTypes",
+                value = arrayOf("Story"),
+                expectedCount = 3
+            ),
+            FilterParameter(
+                name = "issueTypes",
+                value = arrayOf("Task"),
+                expectedCount = 7
+            ),
+            FilterParameter(
+                name = "issueTypes",
+                value = arrayOf("Story", "Task"),
+                expectedCount = 10
+            ),
+            FilterParameter(
+                name = "projects",
+                value = arrayOf("JiraReport On Premise"),
+                expectedCount = 3
+            ),
+            FilterParameter(
+                name = "projects",
+                value = arrayOf("JiraReport SASS"),
+                expectedCount = 7
+            ),
+            FilterParameter(
+                name = "priorities",
+                value = arrayOf("Major"),
+                expectedCount = 3
+            ),
+            FilterParameter(
+                name = "priorities",
+                value = arrayOf("Medium"),
+                expectedCount = 3
+            ),
+            FilterParameter(
+                name = "priorities",
+                value = arrayOf("Expedite"),
+                expectedCount = 2
+            ),
+            FilterParameter(
+                name = "priorities",
+                value = arrayOf("Blocker"),
+                expectedCount = 1
+            ),
+            FilterParameter(
+                name = "priorities",
+                value = arrayOf("Low"),
+                expectedCount = 1
+            ),
+            FilterParameter(
+                name = "priorities",
+                value = arrayOf("Low", "Major", "Medium"),
+                expectedCount = 7
+            ),
+            FilterParameter(
+                name = "field1",
+                value = arrayOf("value1"),
+                expectedCount = 5
+            ),
+            FilterParameter(
+                name = "field1",
+                value = arrayOf("value2"),
+                expectedCount = 2
+            ),
+            FilterParameter(
+                name = "field1",
+                value = arrayOf("value3"),
+                expectedCount = 3
+            ),
+            FilterParameter(
+                name = "field1",
+                value = arrayOf("value2", "value3"),
+                expectedCount = 5
+            ),
+            FilterParameter(
+                name = "field2",
+                value = arrayOf("value1"),
+                expectedCount = 5
+            ),
+            FilterParameter(
+                name = "field2",
+                value = arrayOf("value2"),
+                expectedCount = 3
+            ),
+            FilterParameter(
+                name = "field2",
+                value = arrayOf("value3"),
+                expectedCount = 2
+            ),
+            FilterParameter(
+                name = "field2",
+                value = arrayOf("value1", "value2"),
+                expectedCount = 8
+            )
         )
     }
 
