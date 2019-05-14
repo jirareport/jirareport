@@ -1,12 +1,13 @@
 package br.com.jiratorio.config.internationalization
 
 import org.springframework.stereotype.Component
+import org.springframework.web.servlet.DispatcherServlet
 import org.springframework.web.servlet.LocaleResolver
 import java.util.Locale
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-@Component
+@Component(DispatcherServlet.LOCALE_RESOLVER_BEAN_NAME)
 class HeaderLocaleResolver : LocaleResolver {
     private val defaultLocale = Locale("pt_br")
 

@@ -73,7 +73,7 @@ class EstimateIssueParser(
         var startDate: LocalDateTime? = null
 
         for (cl in changelog) {
-            if (startDate == null && startColumns.contains(cl.to)) {
+            if (startDate == null && startColumns.contains(cl.to?.toUpperCase())) {
                 startDate = cl.created
             }
         }
@@ -119,7 +119,7 @@ class EstimateIssueParser(
             leadTime = leadTime,
             system = fields.path(board.systemCF).extractValue(),
             epic = fields.path(board.epicCF).extractValue(),
-            estimated = fields.path(board.estimateCF).extractValue(),
+            estimate = fields.path(board.estimateCF).extractValue(),
             project = fields.path(board.projectCF).extractValue(),
             summary = fields.get("summary").extractValueNotNull(),
             changelog = changelog,

@@ -46,7 +46,9 @@ class IssueParser(
         return runBlocking(issueParserCoroutineDispatcher) {
             issues.map {
                 try {
-                    async { parseIssue(it, board, holidays, fluxColumn) }
+                    async {
+                        parseIssue(it, board, holidays, fluxColumn)
+                    }
                 } catch (e: Exception) {
                     log.error(
                         "Method=parse, info=Error parsing issue, issue={}, err={}",

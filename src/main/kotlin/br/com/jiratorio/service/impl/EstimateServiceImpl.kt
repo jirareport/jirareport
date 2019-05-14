@@ -130,7 +130,7 @@ class EstimateServiceImpl(
         return when (filter) {
             EstimateFieldReference.ISSUE_TYPE -> issue.issueType
             EstimateFieldReference.SYSTEM -> issue.system
-            EstimateFieldReference.ESTIMATE -> issue.estimated
+            EstimateFieldReference.ESTIMATE -> issue.estimate
             EstimateFieldReference.EPIC -> issue.epic
             EstimateFieldReference.PROJECT -> issue.project
             EstimateFieldReference.PRIORITY -> issue.priority
