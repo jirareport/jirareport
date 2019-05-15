@@ -1,7 +1,7 @@
 package br.com.jiratorio.controller
 
-import br.com.jiratorio.domain.estimate.EstimateIssue
 import br.com.jiratorio.domain.request.SearchEstimateRequest
+import br.com.jiratorio.domain.response.EstimateIssueResponse
 import br.com.jiratorio.service.EstimateService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -15,7 +15,7 @@ class EstimateController(
 ) {
 
     @GetMapping
-    fun index(@PathVariable boardId: Long, searchEstimateRequest: SearchEstimateRequest): List<EstimateIssue> {
+    fun index(@PathVariable boardId: Long, searchEstimateRequest: SearchEstimateRequest): List<EstimateIssueResponse> {
         return estimateService.findEstimateIssues(boardId, searchEstimateRequest)
     }
 

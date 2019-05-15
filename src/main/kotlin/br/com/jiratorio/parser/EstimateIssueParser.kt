@@ -31,7 +31,7 @@ class EstimateIssueParser(
         val startColumns = fluxColumn.startColumns
 
         return Flowable.fromIterable(root.path("issues"))
-            .parallel()
+            .parallel(10)
             .map { parseIssue(it, board, startColumns, holidays) }
             .sequential()
             .blockingIterable()
@@ -102,7 +102,7 @@ class EstimateIssueParser(
 
         return EstimateIssue(
             creator = author,
-            key = issue.get("key").extractValueNotNull(),
+            key = issue.path("key").extractValueNotNull(),
             issueType = fields.path("issuetype").extractValue(),
             created = created,
             startDate = startDate,
@@ -111,7 +111,7 @@ class EstimateIssueParser(
             epic = fields.path(board.epicCF).extractValue(),
             estimate = fields.path(board.estimateCF).extractValue(),
             project = fields.path(board.projectCF).extractValue(),
-            summary = fields.get("summary").extractValueNotNull(),
+            summary = fields.path("summary").extractValueNotNull(),
             changelog = changelog,
             impedimentTime = timeInImpediment,
             priority = priority

@@ -36,7 +36,7 @@ class IssueParser(
 
         val fluxColumn = FluxColumn(board)
         return Flowable.fromIterable(root.path("issues"))
-            .parallel()
+            .parallel(10)
             .map {
                 try {
                     parseIssue(it, board, holidays, fluxColumn)

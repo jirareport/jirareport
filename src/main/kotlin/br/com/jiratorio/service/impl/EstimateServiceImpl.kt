@@ -9,9 +9,11 @@ import br.com.jiratorio.domain.estimate.EstimateFieldReference
 import br.com.jiratorio.domain.estimate.EstimateIssue
 import br.com.jiratorio.domain.request.SearchEstimateRequest
 import br.com.jiratorio.domain.request.SearchIssueRequest
+import br.com.jiratorio.domain.response.EstimateIssueResponse
 import br.com.jiratorio.exception.BadRequestException
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.plusDays
+import br.com.jiratorio.mapper.EstimateIssueMapper
 import br.com.jiratorio.parser.EstimateIssueParser
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.EstimateService
@@ -32,12 +34,16 @@ class EstimateServiceImpl(
     private val holidayService: HolidayService,
     private val percentileService: PercentileService,
     private val jqlService: JQLService,
+    private val estimateIssueMapper: EstimateIssueMapper,
     private val messageResolver: MessageResolver
 ) : EstimateService {
 
     @ExecutionTime
     @Transactional(readOnly = true)
-    override fun findEstimateIssues(boardId: Long, searchEstimateRequest: SearchEstimateRequest): List<EstimateIssue> {
+    override fun findEstimateIssues(
+        boardId: Long,
+        searchEstimateRequest: SearchEstimateRequest
+    ): List<EstimateIssueResponse> {
         log.info("Method=findEstimateIssues, boardId={}, searchEstimateRequest={}", boardId, searchEstimateRequest)
 
         val board = boardService.findById(boardId)
@@ -46,7 +52,12 @@ class EstimateServiceImpl(
             throw BadRequestException(messageResolver.resolve("errors.flux-column-not-configured"))
         }
 
-        val estimateIssues = findEstimateIssues(board)
+        val estimateIssues = estimateIssueParser.parseEstimate(
+            root = issueClient.findByJql(
+                jql = jqlService.openedIssues(board)
+            ),
+            board = board
+        )
 
         val holidays = holidayService.findDaysByBoard(boardId)
 
@@ -75,13 +86,7 @@ class EstimateServiceImpl(
             )
         }
 
-        return estimateIssues
-    }
-
-    private fun findEstimateIssues(board: Board): List<EstimateIssue> {
-        val jql = jqlService.openedIssues(board)
-        val issues = issueClient.findByJql(jql)
-        return estimateIssueParser.parseEstimate(issues, board)
+        return estimateIssueMapper.estimateIssueToEstimateIssueResponse(estimateIssues)
     }
 
     private fun calculatePercentile(

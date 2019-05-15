@@ -9,16 +9,18 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.stereotype.Component
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter.ofPattern
+import java.time.format.DateTimeFormatter
 
 @Component
 class HolidayMapper {
+
+    private val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
     fun fromApiResponse(holidayApiResponse: HolidayApiResponse, board: Board): Holiday {
         return Holiday(
             description = holidayApiResponse.name,
             board = board,
-            date = LocalDate.parse(holidayApiResponse.date, ofPattern("dd/MM/yyyy"))
+            date = LocalDate.parse(holidayApiResponse.date, datePattern)
         )
     }
 
@@ -29,7 +31,7 @@ class HolidayMapper {
     fun toHolidayResponse(holiday: Holiday): HolidayResponse {
         return HolidayResponse(
             id = holiday.id,
-            date = holiday.date.format(ofPattern("dd/MM/yyyy")),
+            date = holiday.date.format(datePattern),
             description = holiday.description,
             boardId = holiday.board.id
         )
