@@ -3,6 +3,7 @@ package br.com.jiratorio.domain.request
 import br.com.jiratorio.domain.estimate.EstimateFieldReference
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
+import javax.validation.constraints.AssertTrue
 
 class SearchEstimateRequest(
 
@@ -14,4 +15,10 @@ class SearchEstimateRequest(
 
     val filter: EstimateFieldReference
 
-)
+) {
+
+    @AssertTrue(message = "{validations.start-date-cant-be-before-end-date}")
+    fun isStartDateIsBeforeEndDate(): Boolean =
+        startDate.isBefore(endDate) || startDate.isEqual(endDate)
+
+}
