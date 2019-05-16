@@ -2,11 +2,9 @@ package br.com.jiratorio.service.chart
 
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
-import kotlinx.coroutines.Deferred
-import rx.Single
 
 interface ColumnTimeChartService {
 
-    fun averageAsync(issues: List<Issue>, fluxColumn: List<String>): Single<List<ColumnTimeAvg>>
+    fun averageAsync(issues: List<Issue>, fluxColumn: List<String>): List<ColumnTimeAvg>
 
 }

@@ -7,27 +7,25 @@ import br.com.jiratorio.extension.log
 import br.com.jiratorio.service.PercentileService
 import br.com.jiratorio.service.chart.HistogramService
 import org.springframework.stereotype.Service
-import rx.Single
 
 @Service
 class HistogramServiceImpl(
     private val percentileService: PercentileService
 ) : HistogramService {
 
-    override fun issueHistogramAsync(issues: List<Issue>): Single<Histogram> =
-        Single.fromCallable {
-            log.info("Method=issueHistogram, issues={}", issues)
-            val leadTimeList = issues.map { it.leadTime }
-            val percentile = percentileService.calculatePercentile(leadTimeList)
-            val chart = histogramChart(issues)
+    override fun issueHistogramAsync(issues: List<Issue>): Histogram {
+        log.info("Method=issueHistogram, issues={}", issues)
+        val leadTimeList = issues.map { it.leadTime }
+        val percentile = percentileService.calculatePercentile(leadTimeList)
+        val chart = histogramChart(issues)
 
-            Histogram(
-                chart,
-                percentile.median,
-                percentile.percentile75,
-                percentile.percentile90
-            )
-        }
+        return Histogram(
+            chart,
+            percentile.median,
+            percentile.percentile75,
+            percentile.percentile90
+        )
+    }
 
     private fun histogramChart(issues: List<Issue>): Chart<Long, Int> {
         log.info("Method=histogramChart, issues={}", issues)

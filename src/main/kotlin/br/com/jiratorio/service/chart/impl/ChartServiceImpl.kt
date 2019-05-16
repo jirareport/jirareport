@@ -16,11 +16,7 @@ import br.com.jiratorio.service.chart.LeadTimeCompareChartService
 import br.com.jiratorio.service.chart.PriorityChartService
 import br.com.jiratorio.service.chart.ProjectChartService
 import br.com.jiratorio.service.chart.SystemChartService
-import kotlinx.coroutines.ExecutorCoroutineDispatcher
-import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
-import rx.Observable
-import rx.Single
 
 @Service
 class ChartServiceImpl(
@@ -56,28 +52,7 @@ class ChartServiceImpl(
         val columnTimeAvg = columnTimeChartService.averageAsync(issues, board.fluxColumn ?: emptyList())
         val dynamicCharts = dynamicChartService.buildDynamicChartsAsync(issues, board, uninformed)
 
-        Single.zip(listOf(histogram, leadTimeByEstimate, throughputByEstimate))  {
-
-        }
-//        Single.zip(
-//                histogram,
-//                leadTimeByEstimate,
-//                throughputByEstimate,
-//                leadTimeBySystem,
-//                throughputBySystem,
-//                leadTimeByType,
-//                throughputByType,
-//                leadTimeByProject,
-//                throughputByProject,
-//                leadTimeByPriority,
-//                throughputByPriority,
-//                leadTimeCompareChart,
-//                columnTimeAvg,
-//                dynamicCharts
-//        ) {
-//
-//            })
-        ChartAggregator(
+        return ChartAggregator(
             histogram = histogram,
             leadTimeByEstimate = leadTimeByEstimate,
             throughputByEstimate = throughputByEstimate,
@@ -94,6 +69,4 @@ class ChartServiceImpl(
             dynamicCharts = dynamicCharts
         )
     }
-}
-
 }

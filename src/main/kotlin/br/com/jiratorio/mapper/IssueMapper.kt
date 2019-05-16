@@ -16,12 +16,13 @@ class IssueMapper(
     private val dueDateHistoryMapper: DueDateHistoryMapper
 ) {
 
+    private val datePattern = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
     fun issueToIssueResponse(issues: Collection<Issue>): List<IssueResponse> {
         return issues.map { issueToIssueResponse(it) }
     }
 
     fun issueToIssueResponse(issue: Issue): IssueResponse {
-        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         return IssueResponse(
             id = issue.id,
             key = issue.key,
@@ -34,9 +35,9 @@ class IssueMapper(
             system = issue.system,
             priority = issue.priority,
             leadTime = issue.leadTime,
-            startDate = issue.startDate.format(formatter),
-            endDate = issue.endDate.format(formatter),
-            created = issue.created.format(formatter),
+            startDate = issue.startDate.format(datePattern),
+            endDate = issue.endDate.format(datePattern),
+            created = issue.created.format(datePattern),
             deviationOfEstimate = issue.deviationOfEstimate,
             changeEstimateCount = issue.dueDateHistory?.size,
             impedimentTime = issue.impedimentTime,

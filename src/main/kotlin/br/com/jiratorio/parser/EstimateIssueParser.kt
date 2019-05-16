@@ -4,8 +4,6 @@ import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.estimate.EstimateIssue
-import br.com.jiratorio.domain.jira.changelog.JiraChangelog
-import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
@@ -13,8 +11,7 @@ import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.service.ChangelogService
 import br.com.jiratorio.service.HolidayService
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import io.reactivex.rxkotlin.toFlowable
+import io.reactivex.Flowable
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -22,20 +19,19 @@ import java.time.LocalDateTime
 @Component
 class EstimateIssueParser(
     private val holidayService: HolidayService,
-    private val objectMapper: ObjectMapper,
-    private val changelogService: ChangelogService
+    private val changelogService: ChangelogService,
+    private val changelogParser: ChangelogParser
 ) {
 
     @ExecutionTime
-    fun parseEstimate(rawText: String, board: Board): List<EstimateIssue> {
+    fun parseEstimate(root: JsonNode, board: Board): List<EstimateIssue> {
         val holidays = holidayService.findDaysByBoard(board.id)
 
         val fluxColumn = FluxColumn(board)
         val startColumns = fluxColumn.startColumns
 
-        return objectMapper.readTree(rawText).path("issues")
-            .toFlowable()
-            .parallel()
+        return Flowable.fromIterable(root.path("issues"))
+            .parallel(10)
             .map { parseIssue(it, board, startColumns, holidays) }
             .sequential()
             .blockingIterable()
@@ -50,7 +46,7 @@ class EstimateIssueParser(
     ): EstimateIssue? {
         val fields = issue.path("fields")
 
-        val changelogItems = extractChangelogItems(issue)
+        val changelogItems = changelogParser.extractChangelogItems(issue)
         val changelog = changelogService.parseChangelog(changelogItems, holidays, board.ignoreWeekend)
         if (changelog.isNotEmpty()) {
             val changelogItem = changelog.last()
@@ -106,7 +102,7 @@ class EstimateIssueParser(
 
         return EstimateIssue(
             creator = author,
-            key = issue.get("key").extractValueNotNull(),
+            key = issue.path("key").extractValueNotNull(),
             issueType = fields.path("issuetype").extractValue(),
             created = created,
             startDate = startDate,
@@ -115,17 +111,11 @@ class EstimateIssueParser(
             epic = fields.path(board.epicCF).extractValue(),
             estimate = fields.path(board.estimateCF).extractValue(),
             project = fields.path(board.projectCF).extractValue(),
-            summary = fields.get("summary").extractValueNotNull(),
+            summary = fields.path("summary").extractValueNotNull(),
             changelog = changelog,
             impedimentTime = timeInImpediment,
             priority = priority
         )
-    }
-
-    private fun extractChangelogItems(issue: JsonNode): List<JiraChangelogItem> {
-        val changelog = objectMapper.treeToValue(issue.path("changelog"), JiraChangelog::class.java)
-        changelog.histories.forEach { cl -> cl.items.forEach { i -> i.created = cl.created } }
-        return changelog.histories.map { it.items }.flatten()
     }
 
 }

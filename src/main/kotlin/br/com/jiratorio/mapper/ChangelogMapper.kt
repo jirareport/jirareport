@@ -8,13 +8,14 @@ import java.time.format.DateTimeFormatter
 @Component
 class ChangelogMapper {
 
+    private val dateTimePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+
     fun changelogToChangelogResponse(changelog: Changelog): ChangelogResponse {
-        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
         return ChangelogResponse(
             from = changelog.from,
             to = changelog.to,
-            startDate = changelog.created.format(formatter),
-            endDate = changelog.endDate.format(formatter),
+            startDate = changelog.created.format(dateTimePattern),
+            endDate = changelog.endDate.format(dateTimePattern),
             leadTime = changelog.leadTime
         )
     }

@@ -8,12 +8,13 @@ import java.time.format.DateTimeFormatter
 @Component
 class LeadTimeMapper {
 
+    private val dateTimePattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+
     fun leadTimeToLeadTimeResponse(leadTime: LeadTime): LeadTimeResponse {
-        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
         return LeadTimeResponse(
             name = leadTime.leadTimeConfig.name,
-            startDate = leadTime.startDate.format(formatter),
-            endDate = leadTime.endDate.format(formatter),
+            startDate = leadTime.startDate.format(dateTimePattern),
+            endDate = leadTime.endDate.format(dateTimePattern),
             leadTime = leadTime.leadTime
         )
     }

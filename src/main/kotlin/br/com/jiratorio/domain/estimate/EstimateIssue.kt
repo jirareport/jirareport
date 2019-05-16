@@ -5,40 +5,41 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class EstimateIssue(
-    var key: String,
 
-    var issueType: String? = null,
+    val key: String,
 
-    var creator: String? = null,
+    val summary: String,
 
-    var system: String? = null,
+    val startDate: LocalDateTime,
 
-    var epic: String? = null,
+    var estimateDateAvg: LocalDate = startDate.toLocalDate(),
 
-    var summary: String,
+    var estimateDatePercentile50: LocalDate = startDate.toLocalDate(),
 
-    var estimate: String? = null,
+    var estimateDatePercentile75: LocalDate = startDate.toLocalDate(),
 
-    var project: String? = null,
+    var estimateDatePercentile90: LocalDate = startDate.toLocalDate(),
 
-    var startDate: LocalDateTime,
+    val leadTime: Long,
 
-    var estimateDateAvg: LocalDate? = null,
+    val created: LocalDateTime,
 
-    var estimateDatePercentile50: LocalDate? = null,
+    val issueType: String? = null,
 
-    var estimateDatePercentile75: LocalDate? = null,
+    val creator: String? = null,
 
-    var estimateDatePercentile90: LocalDate? = null,
+    val estimate: String? = null,
 
-    var leadTime: Long,
+    val system: String? = null,
 
-    var created: LocalDateTime,
+    val project: String? = null,
 
-    var priority: String? = null,
+    val epic: String? = null,
 
-    var changelog: List<Changelog>,
+    val priority: String? = null,
 
-    var impedimentTime: Long
+    val changelog: List<Changelog>,
+
+    val impedimentTime: Long
 
 )

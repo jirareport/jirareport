@@ -52,7 +52,7 @@ class CreateIssueServiceImpl(
         val jql = jqlService.finalizedIssues(board, startDate, endDate)
 
         val issues = issueParser.parse(
-            rawText = issueClient.findByJql(jql),
+            root = issueClient.findByJql(jql),
             board = board
         )
 

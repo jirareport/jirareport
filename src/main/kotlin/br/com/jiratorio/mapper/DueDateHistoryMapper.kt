@@ -8,10 +8,14 @@ import java.time.format.DateTimeFormatter
 @Component
 class DueDateHistoryMapper {
 
+    private val dateTimePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+
+    private val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
     fun dueDateHistoryToDueDateHistoryResponse(dueDateHistory: DueDateHistory): DueDateHistoryResponse {
         return DueDateHistoryResponse(
-            created = dueDateHistory.created?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-            dueDate = dueDateHistory.dueDate?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+            created = dueDateHistory.created?.format(dateTimePattern),
+            dueDate = dueDateHistory.dueDate?.format(datePattern)
         )
     }
 
