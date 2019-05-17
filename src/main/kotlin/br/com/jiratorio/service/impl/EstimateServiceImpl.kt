@@ -49,7 +49,7 @@ class EstimateServiceImpl(
         val board = boardService.findById(boardId)
 
         if (board.fluxColumn.isNullOrEmpty()) {
-            throw BadRequestException(messageResolver.resolve("errors.flux-column-not-configured"))
+            throw BadRequestException("board.fluxColumn", messageResolver.resolve("errors.flux-column-not-configured"))
         }
 
         val estimateIssues = estimateIssueParser.parseEstimate(

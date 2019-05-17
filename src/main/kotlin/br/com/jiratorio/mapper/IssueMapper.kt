@@ -9,11 +9,16 @@ import java.time.format.DateTimeFormatter
 
 @Component
 class IssueMapper(
+
     @Value("\${jira.url}")
     private val jiraUrl: String,
+
     private val leadTimeMapper: LeadTimeMapper,
+
     private val changelogMapper: ChangelogMapper,
+
     private val dueDateHistoryMapper: DueDateHistoryMapper
+
 ) {
 
     private val datePattern = DateTimeFormatter.ofPattern("dd/MM/yyyy")

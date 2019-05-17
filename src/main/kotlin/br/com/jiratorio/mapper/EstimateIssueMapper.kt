@@ -2,11 +2,15 @@ package br.com.jiratorio.mapper
 
 import br.com.jiratorio.domain.estimate.EstimateIssue
 import br.com.jiratorio.domain.response.EstimateIssueResponse
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.time.format.DateTimeFormatter
 
 @Component
 class EstimateIssueMapper(
+    @Value("\${jira.url}")
+    private val jiraUrl: String,
+
     private val changelogMapper: ChangelogMapper
 ) {
 
@@ -24,7 +28,6 @@ class EstimateIssueMapper(
             estimateDatePercentile75 = estimateIssue.estimateDatePercentile75.format(datePattern),
             estimateDatePercentile90 = estimateIssue.estimateDatePercentile90.format(datePattern),
             leadTime = estimateIssue.leadTime,
-            created = estimateIssue.created.format(dateTimePattern),
             issueType = estimateIssue.issueType,
             creator = estimateIssue.creator,
             estimate = estimateIssue.estimate,
@@ -33,7 +36,8 @@ class EstimateIssueMapper(
             epic = estimateIssue.epic,
             priority = estimateIssue.priority,
             changelog = changelogMapper.changelogToChangelogResponse(estimateIssue.changelog),
-            impedimentTime = estimateIssue.impedimentTime
+            impedimentTime = estimateIssue.impedimentTime,
+            detailsUrl = "$jiraUrl/browse/${estimateIssue.key}"
         )
     }
 

@@ -57,8 +57,6 @@ class EstimateIssueParser(
             )
             changelogItem.endDate = LocalDateTime.now()
         }
-        val created = fields.get("created")
-            .extractValueNotNull().fromJiraToLocalDateTime()
 
         var startDate: LocalDateTime? = null
 
@@ -69,7 +67,8 @@ class EstimateIssueParser(
         }
 
         if ("BACKLOG" == board.startColumn) {
-            startDate = created
+            startDate = fields.get("created")
+                .extractValueNotNull().fromJiraToLocalDateTime()
         }
         if (startDate == null) {
             return null
@@ -104,7 +103,6 @@ class EstimateIssueParser(
             creator = author,
             key = issue.path("key").extractValueNotNull(),
             issueType = fields.path("issuetype").extractValue(),
-            created = created,
             startDate = startDate,
             leadTime = leadTime,
             system = fields.path(board.systemCF).extractValue(),
