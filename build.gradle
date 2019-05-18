@@ -1,5 +1,5 @@
 plugins {
-    id "org.springframework.boot" version "2.1.4.RELEASE"
+    id "org.springframework.boot" version "2.1.5.RELEASE"
 
     id "org.jetbrains.kotlin.jvm" version "1.3.30"
     id "org.jetbrains.kotlin.plugin.jpa" version "1.3.30"
@@ -97,4 +97,11 @@ detekt {
             "src/test/kotlin"
     )
     config = files("$projectDir/detekt-config.yml")
+}
+
+task unitTest(type: Test) {
+    useJUnitPlatform {
+        includeTags 'unit'
+        excludeTags 'integration'
+    }
 }
