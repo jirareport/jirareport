@@ -1,0 +1,70 @@
+{
+  "request": {
+    "urlPath": "/holiday-api/",
+    "queryParameters": {
+      "json": {
+        "equalTo": "true"
+      },
+      "token": {
+        "matches": "(.*)"
+      },
+      "ano": {
+        "matches": "(.*)"
+      },
+      "estado": {
+        "matches": "(.*)"
+      },
+      "cidade": {
+        "matches": "(.*)"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": [
+      {
+        "date": "01/01/2019",
+        "name": "Feriado 1",
+        "link": "http://localhost:8888/feriados-nacionais/ano-novo.php",
+        "type": "Feriado Nacional",
+        "description": "Primeiro Feriado",
+        "type_code": "1"
+      },
+      {
+        "date": "01/02/2019",
+        "name": "Feriado 2",
+        "link": "http://localhost:8888/feriados-nacionais/ano-novo.php",
+        "type": "Feriado Nacional",
+        "description": "Segundo Feriado",
+        "type_code": "1"
+      },
+      {
+        "date": "01/03/2019",
+        "name": "Feriado 3",
+        "link": "http://localhost:8888/feriados-nacionais/ano-novo.php",
+        "type": "Feriado Nacional",
+        "description": "Terceiro Feriado",
+        "type_code": "1"
+      },
+      {
+        "date": "01/04/2019",
+        "name": "Feriado 4",
+        "link": "http://localhost:8888/feriados-nacionais/ano-novo.php",
+        "type": "Feriado Nacional",
+        "description": "Quarto Feriado",
+        "type_code": "1"
+      },
+      {
+        "date": "01/05/2019",
+        "name": "Feriado 5",
+        "link": "http://localhost:8888/feriados-nacionais/ano-novo.php",
+        "type": "Feriado Nacional",
+        "description": "Quinto Feriado",
+        "type_code": "1"
+      }
+    ],
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "request": {
+    "urlPath": "/jira/rest/api/2/project/1",
+    "headers": {
+      "Authorization": {
+        "equalTo": "secret-token"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "jsonBody": {
+      "errorMessages": [
+        "No project could be found with id '1'."
+      ],
+      "errors": {}
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "jira.url",
+      "type": "java.lang.String",
+      "description": "Jira URL"
+    },
+    {
+      "name": "security.key",
+      "type": "java.lang.String",
+      "description": "Key used to sign authorization tokens"
+    },
+    {
+      "name": "holiday.url",
+      "type": "java.lang.String",
+      "description": "Holiday API URL"
+    },
+    {
+      "name": "holiday.token",
+      "type": "java.lang.String",
+      "description": "Token that authenticate holiday API"
+    }
+  ]
+}
