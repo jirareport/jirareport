@@ -173,6 +173,7 @@ internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
             hasDueDateHistory(null)
 
             hasImpedimentTime(0)
+            hasEmptyImpedimentHistory()
 
             hasEmptyDynamicFields()
 

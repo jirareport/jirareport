@@ -8,6 +8,7 @@ import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.factory.domain.entity.DynamicFieldConfigFactory
+import br.com.jiratorio.factory.domain.entity.ImpedimentHistoryFactory
 import br.com.jiratorio.factory.domain.entity.IssueFactory
 import br.com.jiratorio.factory.domain.entity.LeadTimeConfigFactory
 import br.com.jiratorio.factory.domain.entity.LeadTimeFactory
@@ -32,6 +33,7 @@ class SearchIssueByIdIntegrationTest @Autowired constructor(
     private val leadTimeConfigFactory: LeadTimeConfigFactory,
     private val leadTimeFactory: LeadTimeFactory,
     private val dueDateHistoryFactory: DueDateHistoryFactory,
+    private val impedimentHistoryFactory: ImpedimentHistoryFactory,
     private val issueRepository: IssueRepository
 ) {
 
@@ -71,6 +73,10 @@ class SearchIssueByIdIntegrationTest @Autowired constructor(
                     it.board = board
                 }
             }
+
+            impedimentHistoryFactory.create(5) {
+                it.issueId = issue.id
+            }
         }
 
         val issueDetailResponse = restAssured {
@@ -94,6 +100,7 @@ class SearchIssueByIdIntegrationTest @Autowired constructor(
 
             hasChangelogSize(issue.changelog)
             hasDueDateHistorySize(issue.dueDateHistory)
+            hasImpedimentHistorySize(issue.impedimentHistory)
             hasLeadTimesSize(issue.leadTimes)
 
             hasTouchTime(issue.touchTime / 60.0)

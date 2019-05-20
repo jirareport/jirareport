@@ -43,7 +43,7 @@ class LeadTimeServiceImpl(
             leadTimeRepository.deleteByIssueId(it.id)
             it.leadTimes = leadTimeConfigs.mapNotNull { leadTimeConfig ->
                 calcLeadTime(leadTimeConfig, it, holidays, board)
-            }.toSet()
+            }.toMutableSet()
         }
     }
 

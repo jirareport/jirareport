@@ -4,6 +4,7 @@ import br.com.jiratorio.assert.IssueAssert
 import br.com.jiratorio.assert.IssuePeriodAssert
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.annotation.LoadStubs
+import br.com.jiratorio.domain.entity.ImpedimentHistory
 import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.entity.LeadTimeConfig
 import br.com.jiratorio.domain.entity.embedded.Changelog
@@ -261,6 +262,15 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
                 )
 
                 hasImpedimentTime(3)
+                containsImpedimentHistory(
+                    ImpedimentHistory(
+                        id = 1,
+                        issueId = 1,
+                        startDate = "16/01/2019 12:00".toLocalDateTime(),
+                        endDate = "18/01/2019 12:00".toLocalDateTime(),
+                        leadTime = 3
+                    )
+                )
 
                 hasEmptyDynamicFields()
 

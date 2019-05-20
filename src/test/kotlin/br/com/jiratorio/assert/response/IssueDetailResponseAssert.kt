@@ -1,6 +1,7 @@
 package br.com.jiratorio.assert.response
 
 import br.com.jiratorio.assert.BaseAssert
+import br.com.jiratorio.domain.entity.ImpedimentHistory
 import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
@@ -30,6 +31,14 @@ class IssueDetailResponseAssert(
             field("issueDetailResponse.dueDateHistory"),
             actual.dueDateHistory,
             dueDateHistory
+        )
+    }
+
+    fun hasImpedimentHistorySize(impedimentHistory: MutableSet<ImpedimentHistory>?) = assertAll {
+        iterables.assertHasSameSizeAs(
+            field("issueDetailResponse.impedimentHistory"),
+            actual.impedimentHistory,
+            impedimentHistory
         )
     }
 

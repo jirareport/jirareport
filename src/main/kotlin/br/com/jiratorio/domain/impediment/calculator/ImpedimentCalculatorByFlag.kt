@@ -1,7 +1,8 @@
 package br.com.jiratorio.domain.impediment.calculator
 
-import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
+import br.com.jiratorio.domain.entity.ImpedimentHistory
 import br.com.jiratorio.domain.entity.embedded.Changelog
+import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.daysDiff
 import java.time.LocalDate
@@ -10,14 +11,14 @@ import java.util.ArrayList
 
 object ImpedimentCalculatorByFlag : ImpedimentCalculator {
 
-    override fun timeInImpediment(
+    override fun calcImpediment(
         impedimentColumns: List<String>?,
         changelogItems: List<JiraChangelogItem>,
         changelog: List<Changelog>,
         endDate: LocalDateTime,
         holidays: List<LocalDate>,
         ignoreWeekend: Boolean?
-    ): Long {
+    ): ImpedimentCalculatorResult {
         log.info(
             "Method=timeInImpediment, impedimentColumns={}, changelogItems={}, changelog={}, endDate={}, holidays={}, ignoreWeekend={}",
             impedimentColumns, changelogItems, changelog, endDate, holidays, ignoreWeekend
@@ -46,18 +47,27 @@ object ImpedimentCalculatorByFlag : ImpedimentCalculator {
                 beginnings.size,
                 terms.size
             )
-            return 0
+            return ImpedimentCalculatorResult()
         }
 
         beginnings.sort()
         terms.sort()
 
-        var timeInImpediment: Long = 0
+        val impedimentHistory = sortedSetOf<ImpedimentHistory>()
         for (i in terms.indices) {
-            timeInImpediment += beginnings[i].daysDiff(terms[i], holidays, ignoreWeekend)
+            val history = ImpedimentHistory(
+                startDate = beginnings[i],
+                endDate = terms[i],
+                leadTime = beginnings[i].daysDiff(terms[i], holidays, ignoreWeekend)
+            )
+
+            impedimentHistory.add(history)
         }
 
-        return timeInImpediment
+        return ImpedimentCalculatorResult(
+            timeInImpediment = impedimentHistory.map { it.leadTime }.sum(),
+            impedimentHistory = impedimentHistory
+        )
     }
 
 }

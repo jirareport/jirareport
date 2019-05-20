@@ -1,5 +1,6 @@
 package br.com.jiratorio.assert
 
+import br.com.jiratorio.domain.entity.ImpedimentHistory
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.entity.embedded.Changelog
@@ -75,6 +76,14 @@ class IssueAssert(actual: Issue) :
 
     fun hasImpedimentTime(impedimentTime: Long) = assertAll {
         longs.assertEqual(field("issue.impedimentTime"), actual.impedimentTime, impedimentTime)
+    }
+
+    fun hasEmptyImpedimentHistory() = assertAll {
+        iterables.assertEmpty(field("issues.impedimentHistory"), actual.impedimentHistory)
+    }
+
+    fun containsImpedimentHistory(vararg impedimentHistory: ImpedimentHistory) = assertAll {
+        iterables.assertContainsExactly(field("issues.impedimentHistory"), actual.impedimentHistory, impedimentHistory)
     }
 
     fun hasDynamicFields(dynamicFields: Map<String, String>?) = assertAll {
