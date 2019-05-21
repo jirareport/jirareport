@@ -243,6 +243,7 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired cons
             )
 
             hasImpedimentTime(0)
+            hasEmptyImpedimentHistory()
 
             hasDynamicFields(
                 mapOf(

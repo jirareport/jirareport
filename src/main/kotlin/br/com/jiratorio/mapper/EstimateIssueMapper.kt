@@ -8,10 +8,14 @@ import java.time.format.DateTimeFormatter
 
 @Component
 class EstimateIssueMapper(
+
     @Value("\${jira.url}")
     private val jiraUrl: String,
 
-    private val changelogMapper: ChangelogMapper
+    private val changelogMapper: ChangelogMapper,
+
+    private val impedimentHistoryMapper: ImpedimentHistoryMapper
+
 ) {
 
     private val dateTimePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
@@ -37,6 +41,7 @@ class EstimateIssueMapper(
             priority = estimateIssue.priority,
             changelog = changelogMapper.changelogToChangelogResponse(estimateIssue.changelog),
             impedimentTime = estimateIssue.impedimentTime,
+            impedimentHistory = impedimentHistoryMapper.impedimentHistoryToImpedimentHistoryResponse(estimateIssue.impedimentHistory),
             detailsUrl = "$jiraUrl/browse/${estimateIssue.key}"
         )
     }

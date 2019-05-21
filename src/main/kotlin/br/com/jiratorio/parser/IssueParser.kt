@@ -5,6 +5,7 @@ import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
+import br.com.jiratorio.domain.impediment.calculator.ImpedimentCalculatorResult
 import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
@@ -98,14 +99,14 @@ class IssueParser(
                 dueDateType.calcDeviationOfEstimate(dueDateHistory, endDate, board.ignoreWeekend, holidays)
         }
 
-        val timeInImpediment = board.impedimentType?.timeInImpediment(
+        val impedimentCalculatorResult: ImpedimentCalculatorResult = board.impedimentType?.calcImpediment(
             board.impedimentColumns,
             changelogItems,
             changelog,
             endDate,
             holidays,
             board.ignoreWeekend
-        ) ?: 0L
+        ) ?: ImpedimentCalculatorResult()
 
         val priority: String? =
             if (fields.hasNonNull("priority")) {
@@ -148,7 +149,8 @@ class IssueParser(
             board = board,
             deviationOfEstimate = deviationOfEstimate,
             dueDateHistory = dueDateHistory,
-            impedimentTime = timeInImpediment,
+            impedimentTime = impedimentCalculatorResult.timeInImpediment,
+            impedimentHistory = impedimentCalculatorResult.impedimentHistory,
             priority = priority,
             dynamicFields = dynamicFields,
             waitTime = efficiency.waitTime,

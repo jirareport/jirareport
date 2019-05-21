@@ -14,6 +14,7 @@ import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.repository.IssueRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.CreateIssueService
+import br.com.jiratorio.service.ImpedimentService
 import br.com.jiratorio.service.JQLService
 import br.com.jiratorio.service.WipService
 import br.com.jiratorio.service.chart.ChartService
@@ -31,7 +32,8 @@ class CreateIssueServiceImpl(
     private val jqlService: JQLService,
     private val wipService: WipService,
     private val issueParser: IssueParser,
-    private val leadTimeService: LeadTimeService
+    private val leadTimeService: LeadTimeService,
+    private val impedimentService: ImpedimentService
 ) : CreateIssueService {
 
     @Transactional
@@ -83,6 +85,7 @@ class CreateIssueServiceImpl(
         issueRepository.saveAll(issues)
 
         leadTimeService.createLeadTimes(issues, board.id)
+        impedimentService.saveImpedimentHistories(issues)
 
         createCharts(issues, board, issuePeriod)
 

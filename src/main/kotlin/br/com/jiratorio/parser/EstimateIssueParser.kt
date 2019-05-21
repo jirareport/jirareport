@@ -4,6 +4,7 @@ import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.estimate.EstimateIssue
+import br.com.jiratorio.domain.impediment.calculator.ImpedimentCalculatorResult
 import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
@@ -83,14 +84,14 @@ class EstimateIssueParser(
 
         val leadTime = startDate.daysDiff(LocalDateTime.now(), holidays, board.ignoreWeekend)
 
-        val timeInImpediment = board.impedimentType?.timeInImpediment(
+        val impedimentCalculatorResult = board.impedimentType?.calcImpediment(
             board.impedimentColumns,
             changelogItems,
             changelog,
             LocalDateTime.now(),
             holidays,
             board.ignoreWeekend
-        ) ?: 0
+        ) ?: ImpedimentCalculatorResult()
 
         val author: String? =
             if (fields.hasNonNull("creator")) {
@@ -111,8 +112,9 @@ class EstimateIssueParser(
             project = fields.path(board.projectCF).extractValue(),
             summary = fields.path("summary").extractValueNotNull(),
             changelog = changelog,
-            impedimentTime = timeInImpediment,
-            priority = priority
+            priority = priority,
+            impedimentTime = impedimentCalculatorResult.timeInImpediment,
+            impedimentHistory = impedimentCalculatorResult.impedimentHistory
         )
     }
 

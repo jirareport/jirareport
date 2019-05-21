@@ -1,5 +1,6 @@
 package br.com.jiratorio.domain.estimate
 
+import br.com.jiratorio.domain.entity.ImpedimentHistory
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -21,5 +22,6 @@ data class EstimateIssue(
     val epic: String? = null,
     val priority: String? = null,
     val changelog: List<Changelog>,
-    val impedimentTime: Long
+    val impedimentTime: Long,
+    val impedimentHistory: Set<ImpedimentHistory>
 )
