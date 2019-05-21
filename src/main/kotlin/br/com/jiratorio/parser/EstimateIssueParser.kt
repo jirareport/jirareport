@@ -112,8 +112,9 @@ class EstimateIssueParser(
             project = fields.path(board.projectCF).extractValue(),
             summary = fields.path("summary").extractValueNotNull(),
             changelog = changelog,
+            priority = priority,
             impedimentTime = impedimentCalculatorResult.timeInImpediment,
-            priority = priority
+            impedimentHistory = impedimentCalculatorResult.impedimentHistory
         )
     }
 

@@ -124,28 +124,9 @@ data class IssuePeriod(
     override fun toString() =
         toStringBuilder(
             IssuePeriod::id,
-            IssuePeriod::startDate,
-            IssuePeriod::endDate,
             IssuePeriod::boardId,
-            IssuePeriod::leadTime,
-            IssuePeriod::histogram,
-            IssuePeriod::leadTimeByEstimate,
-            IssuePeriod::throughputByEstimate,
-            IssuePeriod::leadTimeBySystem,
-            IssuePeriod::throughputBySystem,
-            IssuePeriod::leadTimeByType,
-            IssuePeriod::throughputByType,
-            IssuePeriod::leadTimeByProject,
-            IssuePeriod::throughputByProject,
-            IssuePeriod::leadTimeByPriority,
-            IssuePeriod::throughputByPriority,
-            IssuePeriod::columnTimeAvg,
-            IssuePeriod::leadTimeCompareChart,
-            IssuePeriod::throughput,
-            IssuePeriod::jql,
-            IssuePeriod::wipAvg,
-            IssuePeriod::avgPctEfficiency,
-            IssuePeriod::dynamicCharts
+            IssuePeriod::startDate,
+            IssuePeriod::endDate
         )
 
 }

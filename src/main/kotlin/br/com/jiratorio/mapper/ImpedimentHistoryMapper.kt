@@ -18,7 +18,7 @@ class ImpedimentHistoryMapper {
         )
     }
 
-    fun impedimentHistoryToImpedimentHistoryResponse(impedimentHistory: MutableSet<ImpedimentHistory>): List<ImpedimentHistoryResponse> {
+    fun impedimentHistoryToImpedimentHistoryResponse(impedimentHistory: Set<ImpedimentHistory>): List<ImpedimentHistoryResponse> {
         return impedimentHistory.map { impedimentHistoryToImpedimentHistoryResponse(it) }
     }
 }

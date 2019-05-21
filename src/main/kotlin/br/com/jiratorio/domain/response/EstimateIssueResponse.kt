@@ -18,5 +18,6 @@ data class EstimateIssueResponse(
     val priority: String? = null,
     val changelog: List<ChangelogResponse>,
     val impedimentTime: Long,
+    val impedimentHistory: List<ImpedimentHistoryResponse>,
     val detailsUrl: String
 )
