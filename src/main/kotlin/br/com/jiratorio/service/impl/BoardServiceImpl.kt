@@ -91,4 +91,5 @@ class BoardServiceImpl(
         val owners = boardRepository.findAllOwners()
         return owners + currentUser.username
     }
+
 }

@@ -7,6 +7,7 @@ import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.domain.response.board.BoardDetailsResponse
 import br.com.jiratorio.domain.response.board.BoardResponse
 import br.com.jiratorio.service.BoardService
+import br.com.jiratorio.service.CloneBoardService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -19,13 +20,17 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("/boards")
-class BoardController(private val boardService: BoardService) {
+class BoardController(
+    private val boardService: BoardService,
+    private val cloneBoardService: CloneBoardService
+) {
 
     @GetMapping
     fun index(
@@ -54,6 +59,20 @@ class BoardController(private val boardService: BoardService) {
             .fromCurrentRequest()
             .path("/{id}")
             .build(boardId)
+
+        return ResponseEntity.created(location).build<Any>()
+    }
+
+    @PostMapping(params = ["boardIdToClone"])
+    fun clone(
+        @RequestParam("boardIdToClone") boardId: Long
+    ): ResponseEntity<*> {
+        val id: Long = cloneBoardService.clone(boardId)
+
+        val location = ServletUriComponentsBuilder
+            .fromCurrentContextPath()
+            .path("/boards/{id}")
+            .build(id)
 
         return ResponseEntity.created(location).build<Any>()
     }

@@ -85,4 +85,5 @@ class BoardMapper {
             dueDateType = updateBoardRequest.dueDateType
         }
     }
+
 }
