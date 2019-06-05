@@ -1,6 +1,8 @@
 package br.com.jiratorio.assert
 
+import br.com.jiratorio.domain.duedate.DueDateType
 import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.impediment.ImpedimentType
 
 class BoardAssert(actual: Board) :
     BaseAssert<BoardAssert, Board>(actual, BoardAssert::class) {
@@ -67,6 +69,10 @@ class BoardAssert(actual: Board) :
         objects.assertEqual(field("board.projectCF"), actual.projectCF, projectCF)
     }
 
+    fun hasDueDateCF(dueDateCF: String?) = assertAll {
+        objects.assertEqual(field("board.dueDateCF"), actual.dueDateCF, dueDateCF)
+    }
+
     fun hasIgnoreWeekend(ignoreWeekend: Boolean?) = assertAll {
         objects.assertEqual(field("board.ignoreWeekend"), actual.ignoreWeekend, ignoreWeekend)
     }
@@ -76,6 +82,14 @@ class BoardAssert(actual: Board) :
             field("board.impedimentColumns"),
             actual.impedimentColumns,
             impedimentColumns?.map { it.toUpperCase() })
+    }
+
+    fun hasImpedimentType(impedimentType: ImpedimentType?) = assertAll {
+        objects.assertEqual(field("board.impedimentType"), actual.impedimentType, impedimentType)
+    }
+
+    fun hasDueDateType(dueDateType: DueDateType?) = assertAll {
+        objects.assertEqual(field("board.dueDateType"), actual.dueDateType, dueDateType)
     }
 
 }
