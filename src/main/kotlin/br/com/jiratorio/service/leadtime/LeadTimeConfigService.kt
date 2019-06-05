@@ -17,4 +17,5 @@ interface LeadTimeConfigService {
     fun update(boardId: Long, id: Long, leadTimeConfigRequest: LeadTimeConfigRequest)
 
     fun deleteByBoardAndId(boardId: Long, id: Long)
+
 }
