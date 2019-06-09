@@ -12,8 +12,6 @@ class EstimateIssueMapper(
     @Value("\${jira.url}")
     private val jiraUrl: String,
 
-    private val changelogMapper: ChangelogMapper,
-
     private val impedimentHistoryMapper: ImpedimentHistoryMapper
 
 ) {
@@ -39,7 +37,7 @@ class EstimateIssueMapper(
             project = estimateIssue.project,
             epic = estimateIssue.epic,
             priority = estimateIssue.priority,
-            changelog = changelogMapper.changelogToChangelogResponse(estimateIssue.changelog),
+            changelog = estimateIssue.changelog.toChangelogResponse(),
             impedimentTime = estimateIssue.impedimentTime,
             impedimentHistory = impedimentHistoryMapper.impedimentHistoryToImpedimentHistoryResponse(estimateIssue.impedimentHistory),
             detailsUrl = "$jiraUrl/browse/${estimateIssue.key}"

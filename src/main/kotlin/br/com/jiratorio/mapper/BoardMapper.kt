@@ -9,81 +9,67 @@ import br.com.jiratorio.domain.response.board.BoardResponse
 import br.com.jiratorio.extension.toUpperCase
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
-import org.springframework.stereotype.Component
 
-@Component
-class BoardMapper {
+fun Board.toBoardDetailsResponse(): BoardDetailsResponse =
+    BoardDetailsResponse(
+        id = this.id,
+        externalId = this.externalId,
+        name = this.name,
+        startColumn = this.startColumn,
+        endColumn = this.endColumn,
+        fluxColumn = this.fluxColumn,
+        ignoreIssueType = this.ignoreIssueType,
+        epicCF = this.epicCF,
+        estimateCF = this.estimateCF,
+        systemCF = this.systemCF,
+        projectCF = this.projectCF,
+        ignoreWeekend = this.ignoreWeekend,
+        dueDateCF = this.dueDateCF,
+        dueDateType = this.dueDateType?.name,
+        impedimentType = this.impedimentType,
+        impedimentColumns = this.impedimentColumns,
+        touchingColumns = this.touchingColumns,
+        waitingColumns = this.waitingColumns,
+        feature = BoardFeatureResponse(this)
+    )
 
-    fun toBoardResponseDetails(board: Board): BoardDetailsResponse {
-        return BoardDetailsResponse(
-            id = board.id,
-            externalId = board.externalId,
-            name = board.name,
-            startColumn = board.startColumn,
-            endColumn = board.endColumn,
-            fluxColumn = board.fluxColumn,
-            ignoreIssueType = board.ignoreIssueType,
-            epicCF = board.epicCF,
-            estimateCF = board.estimateCF,
-            systemCF = board.systemCF,
-            projectCF = board.projectCF,
-            ignoreWeekend = board.ignoreWeekend,
-            dueDateCF = board.dueDateCF,
-            dueDateType = board.dueDateType?.name,
-            impedimentType = board.impedimentType,
-            impedimentColumns = board.impedimentColumns,
-            touchingColumns = board.touchingColumns,
-            waitingColumns = board.waitingColumns,
-            feature = BoardFeatureResponse(board)
-        )
+fun CreateBoardRequest.toBoard(): Board =
+    Board(
+        name = this.name,
+        externalId = this.externalId
+    )
+
+fun Board.toBoardResponse(): BoardResponse =
+    BoardResponse(
+        id = this.id,
+        name = this.name,
+        owner = this.owner
+    )
+
+fun Page<Board>.toBoardResponse(): Page<BoardResponse> =
+    PageImpl(
+        this.content.map { it.toBoardResponse() },
+        this.pageable,
+        this.totalElements
+    )
+
+fun Board.updateFromRequest(updateBoardRequest: UpdateBoardRequest) {
+    this.apply {
+        name = updateBoardRequest.name
+        startColumn = updateBoardRequest.startColumn?.toUpperCase()
+        endColumn = updateBoardRequest.endColumn?.toUpperCase()
+        fluxColumn = updateBoardRequest.fluxColumn?.toUpperCase()?.toMutableList()
+        ignoreIssueType = updateBoardRequest.ignoreIssueType
+        epicCF = updateBoardRequest.epicCF
+        estimateCF = updateBoardRequest.estimateCF
+        systemCF = updateBoardRequest.systemCF
+        projectCF = updateBoardRequest.projectCF
+        ignoreWeekend = updateBoardRequest.ignoreWeekend
+        impedimentType = updateBoardRequest.impedimentType
+        impedimentColumns = updateBoardRequest.impedimentColumns?.toUpperCase()?.toMutableList()
+        touchingColumns = updateBoardRequest.touchingColumns?.toUpperCase()?.toMutableList()
+        waitingColumns = updateBoardRequest.waitingColumns?.toUpperCase()?.toMutableList()
+        dueDateCF = updateBoardRequest.dueDateCF
+        dueDateType = updateBoardRequest.dueDateType
     }
-
-    fun boardFromCreateBoardRequest(request: CreateBoardRequest): Board {
-        return Board(
-            name = request.name,
-            externalId = request.externalId
-        )
-    }
-
-    fun toBoardResponse(board: Board): BoardResponse {
-        return BoardResponse(
-            id = board.id,
-            name = board.name,
-            owner = board.owner
-        )
-    }
-
-    fun toBoardResponse(boards: List<Board>): List<BoardResponse> {
-        return boards.map { toBoardResponse(it) }
-    }
-
-    fun toBoardResponse(boards: Page<Board>): PageImpl<BoardResponse> {
-        return PageImpl(
-            toBoardResponse(boards.content),
-            boards.pageable,
-            boards.totalElements
-        )
-    }
-
-    fun fromUpdateBoardRequest(board: Board, updateBoardRequest: UpdateBoardRequest): Board {
-        return board.apply {
-            name = updateBoardRequest.name
-            startColumn = updateBoardRequest.startColumn?.toUpperCase()
-            endColumn = updateBoardRequest.endColumn?.toUpperCase()
-            fluxColumn = updateBoardRequest.fluxColumn?.toUpperCase()?.toMutableList()
-            ignoreIssueType = updateBoardRequest.ignoreIssueType
-            epicCF = updateBoardRequest.epicCF
-            estimateCF = updateBoardRequest.estimateCF
-            systemCF = updateBoardRequest.systemCF
-            projectCF = updateBoardRequest.projectCF
-            ignoreWeekend = updateBoardRequest.ignoreWeekend
-            impedimentType = updateBoardRequest.impedimentType
-            impedimentColumns = updateBoardRequest.impedimentColumns?.toUpperCase()?.toMutableList()
-            touchingColumns = updateBoardRequest.touchingColumns?.toUpperCase()?.toMutableList()
-            waitingColumns = updateBoardRequest.waitingColumns?.toUpperCase()?.toMutableList()
-            dueDateCF = updateBoardRequest.dueDateCF
-            dueDateType = updateBoardRequest.dueDateType
-        }
-    }
-
 }

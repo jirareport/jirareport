@@ -4,32 +4,20 @@ import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.DynamicFieldConfig
 import br.com.jiratorio.domain.request.DynamicFieldConfigRequest
 import br.com.jiratorio.domain.response.DynamicFieldConfigResponse
-import org.springframework.stereotype.Component
 
-@Component
-class DynamicFieldConfigMapper {
+fun DynamicFieldConfig.toDynamicFieldConfigResponse(): DynamicFieldConfigResponse =
+    DynamicFieldConfigResponse(
+        id = this.id,
+        name = this.name,
+        field = this.field
+    )
 
-    fun dynamicFieldConfigToDynamicFieldConfigResponse(dynamicField: DynamicFieldConfig): DynamicFieldConfigResponse {
-        return DynamicFieldConfigResponse(
-            id = dynamicField.id,
-            name = dynamicField.name,
-            field = dynamicField.field
-        )
-    }
+fun List<DynamicFieldConfig>.toDynamicFieldConfigResponse(): List<DynamicFieldConfigResponse> =
+    this.map { it.toDynamicFieldConfigResponse() }
 
-    fun dynamicFieldConfigToDynamicFieldConfigResponse(dynamicFields: List<DynamicFieldConfig>): List<DynamicFieldConfigResponse> {
-        return dynamicFields.map { dynamicFieldConfigToDynamicFieldConfigResponse(it) }
-    }
-
-    fun dynamicFieldConfigRequestToDynamicFieldConfig(
-        board: Board,
-        dynamicFieldConfigRequest: DynamicFieldConfigRequest
-    ): DynamicFieldConfig {
-        return DynamicFieldConfig(
-            board = board,
-            name = dynamicFieldConfigRequest.name,
-            field = dynamicFieldConfigRequest.field
-        )
-    }
-
-}
+fun DynamicFieldConfigRequest.toDynamicFieldConfig(board: Board): DynamicFieldConfig =
+    DynamicFieldConfig(
+        board = board,
+        name = this.name,
+        field = this.field
+    )

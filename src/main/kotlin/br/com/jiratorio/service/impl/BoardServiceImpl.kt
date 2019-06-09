@@ -10,7 +10,10 @@ import br.com.jiratorio.domain.response.board.BoardDetailsResponse
 import br.com.jiratorio.domain.response.board.BoardResponse
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.log
-import br.com.jiratorio.mapper.BoardMapper
+import br.com.jiratorio.mapper.toBoard
+import br.com.jiratorio.mapper.toBoardDetailsResponse
+import br.com.jiratorio.mapper.toBoardResponse
+import br.com.jiratorio.mapper.updateFromRequest
 import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.specification.SearchBoardSpecification
@@ -22,8 +25,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class BoardServiceImpl(
-    private val boardRepository: BoardRepository,
-    private val boardMapper: BoardMapper
+    private val boardRepository: BoardRepository
 ) : BoardService {
 
     @Transactional(readOnly = true)
@@ -36,14 +38,15 @@ class BoardServiceImpl(
 
         val filter = SearchBoardSpecification(searchBoardRequest, currentUser)
         val boards = boardRepository.findAll(filter, pageable)
-        return boardMapper.toBoardResponse(boards)
+
+        return boards.toBoardResponse()
     }
 
     @Transactional
     override fun create(createBoardRequest: CreateBoardRequest): Long {
         log.info("Method=create, createBoardRequest={}", createBoardRequest)
 
-        val board = boardMapper.boardFromCreateBoardRequest(createBoardRequest)
+        val board = createBoardRequest.toBoard()
         boardRepository.save(board)
 
         return board.id
@@ -72,7 +75,7 @@ class BoardServiceImpl(
         log.info("Method=board, updateBoardRequest={}", updateBoardRequest)
 
         val board = findById(boardId)
-        boardMapper.fromUpdateBoardRequest(board, updateBoardRequest)
+        board.updateFromRequest(updateBoardRequest)
 
         boardRepository.save(board)
     }
@@ -80,7 +83,8 @@ class BoardServiceImpl(
     @Transactional(readOnly = true)
     override fun findDetailsById(id: Long): BoardDetailsResponse {
         log.info("Method=findDetailsById, id={}", id)
-        return boardMapper.toBoardResponseDetails(findById(id))
+
+        return findById(id).toBoardDetailsResponse()
     }
 
     @ExecutionTime

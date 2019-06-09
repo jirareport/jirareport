@@ -2,25 +2,18 @@ package br.com.jiratorio.mapper
 
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.domain.response.DueDateHistoryResponse
-import org.springframework.stereotype.Component
 import java.time.format.DateTimeFormatter
 
-@Component
-class DueDateHistoryMapper {
+private val dateTimePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
 
-    private val dateTimePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+private val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
-    private val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+fun DueDateHistory.toDueDateHistoryResponse(): DueDateHistoryResponse =
+    DueDateHistoryResponse(
+        created = this.created?.format(dateTimePattern),
+        dueDate = this.dueDate?.format(datePattern)
+    )
 
-    fun dueDateHistoryToDueDateHistoryResponse(dueDateHistory: DueDateHistory): DueDateHistoryResponse {
-        return DueDateHistoryResponse(
-            created = dueDateHistory.created?.format(dateTimePattern),
-            dueDate = dueDateHistory.dueDate?.format(datePattern)
-        )
-    }
+fun List<DueDateHistory>.toDueDateHistoryResponse(): List<DueDateHistoryResponse> =
+    this.map { it.toDueDateHistoryResponse() }
 
-    fun dueDateHistoryToDueDateHistoryResponse(dueDateHistory: List<DueDateHistory>?): List<DueDateHistoryResponse>? {
-        return dueDateHistory?.map { dueDateHistoryToDueDateHistoryResponse(it) }
-    }
-
-}

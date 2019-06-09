@@ -15,10 +15,6 @@ class IssueMapper(
 
     private val leadTimeMapper: LeadTimeMapper,
 
-    private val changelogMapper: ChangelogMapper,
-
-    private val dueDateHistoryMapper: DueDateHistoryMapper,
-
     private val impedimentHistoryMapper: ImpedimentHistoryMapper
 
 ) {
@@ -57,8 +53,8 @@ class IssueMapper(
         return IssueDetailResponse(
             id = issue.id,
             key = issue.key,
-            changelog = changelogMapper.changelogToChangelogResponse(issue.changelog),
-            dueDateHistory = dueDateHistoryMapper.dueDateHistoryToDueDateHistoryResponse(issue.dueDateHistory),
+            changelog = issue.changelog.toChangelogResponse(),
+            dueDateHistory = issue.dueDateHistory?.toDueDateHistoryResponse(),
             impedimentHistory = impedimentHistoryMapper.impedimentHistoryToImpedimentHistoryResponse(issue.impedimentHistory),
             waitTime = issue.waitTime / 60.0,
             touchTime = issue.touchTime / 60.0,
