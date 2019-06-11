@@ -7,17 +7,17 @@ import br.com.jiratorio.domain.response.DynamicFieldConfigResponse
 
 fun DynamicFieldConfig.toDynamicFieldConfigResponse(): DynamicFieldConfigResponse =
     DynamicFieldConfigResponse(
-        id = this.id,
-        name = this.name,
-        field = this.field
+        id = id,
+        name = name,
+        field = field
     )
 
 fun List<DynamicFieldConfig>.toDynamicFieldConfigResponse(): List<DynamicFieldConfigResponse> =
-    this.map { it.toDynamicFieldConfigResponse() }
+    map { it.toDynamicFieldConfigResponse() }
 
 fun DynamicFieldConfigRequest.toDynamicFieldConfig(board: Board): DynamicFieldConfig =
     DynamicFieldConfig(
         board = board,
-        name = this.name,
-        field = this.field
+        name = name,
+        field = field
     )

@@ -45,7 +45,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava'
 
     implementation "org.springframework.boot:spring-boot-devtools"
-    compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
     implementation "org.jetbrains.kotlin:kotlin-reflect"

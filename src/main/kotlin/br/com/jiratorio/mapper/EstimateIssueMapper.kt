@@ -2,50 +2,35 @@ package br.com.jiratorio.mapper
 
 import br.com.jiratorio.domain.estimate.EstimateIssue
 import br.com.jiratorio.domain.response.EstimateIssueResponse
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
 import java.time.format.DateTimeFormatter
 
-@Component
-class EstimateIssueMapper(
+private val dateTimePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
-    @Value("\${jira.url}")
-    private val jiraUrl: String,
+private val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
-    private val impedimentHistoryMapper: ImpedimentHistoryMapper
+fun EstimateIssue.toEstimateIssueResponse(jiraUrl: String): EstimateIssueResponse =
+    EstimateIssueResponse(
+        key = key,
+        summary = summary,
+        startDate = startDate.format(dateTimePattern),
+        estimateDateAvg = estimateDateAvg.format(datePattern),
+        estimateDatePercentile50 = estimateDatePercentile50.format(datePattern),
+        estimateDatePercentile75 = estimateDatePercentile75.format(datePattern),
+        estimateDatePercentile90 = estimateDatePercentile90.format(datePattern),
+        leadTime = leadTime,
+        issueType = issueType,
+        creator = creator,
+        estimate = estimate,
+        system = system,
+        project = project,
+        epic = epic,
+        priority = priority,
+        changelog = changelog.toChangelogResponse(),
+        impedimentTime = impedimentTime,
+        impedimentHistory = impedimentHistory.toImpedimentHistoryResponse(),
+        detailsUrl = "$jiraUrl/browse/$key"
+    )
 
-) {
+fun List<EstimateIssue>.toEstimateIssueResponse(jiraUrl: String): List<EstimateIssueResponse> =
+    map { it.toEstimateIssueResponse(jiraUrl) }
 
-    private val dateTimePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-
-    private val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-
-    fun estimateIssueToEstimateIssueResponse(estimateIssue: EstimateIssue): EstimateIssueResponse {
-        return EstimateIssueResponse(
-            key = estimateIssue.key,
-            summary = estimateIssue.summary,
-            startDate = estimateIssue.startDate.format(dateTimePattern),
-            estimateDateAvg = estimateIssue.estimateDateAvg.format(datePattern),
-            estimateDatePercentile50 = estimateIssue.estimateDatePercentile50.format(datePattern),
-            estimateDatePercentile75 = estimateIssue.estimateDatePercentile75.format(datePattern),
-            estimateDatePercentile90 = estimateIssue.estimateDatePercentile90.format(datePattern),
-            leadTime = estimateIssue.leadTime,
-            issueType = estimateIssue.issueType,
-            creator = estimateIssue.creator,
-            estimate = estimateIssue.estimate,
-            system = estimateIssue.system,
-            project = estimateIssue.project,
-            epic = estimateIssue.epic,
-            priority = estimateIssue.priority,
-            changelog = estimateIssue.changelog.toChangelogResponse(),
-            impedimentTime = estimateIssue.impedimentTime,
-            impedimentHistory = impedimentHistoryMapper.impedimentHistoryToImpedimentHistoryResponse(estimateIssue.impedimentHistory),
-            detailsUrl = "$jiraUrl/browse/${estimateIssue.key}"
-        )
-    }
-
-    fun estimateIssueToEstimateIssueResponse(estimateIssue: List<EstimateIssue>): List<EstimateIssueResponse> {
-        return estimateIssue.map { estimateIssueToEstimateIssueResponse(it) }
-    }
-
-}

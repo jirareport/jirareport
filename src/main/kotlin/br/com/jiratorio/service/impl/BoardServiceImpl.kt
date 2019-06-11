@@ -13,7 +13,7 @@ import br.com.jiratorio.extension.log
 import br.com.jiratorio.mapper.toBoard
 import br.com.jiratorio.mapper.toBoardDetailsResponse
 import br.com.jiratorio.mapper.toBoardResponse
-import br.com.jiratorio.mapper.updateFromRequest
+import br.com.jiratorio.mapper.updateFromUpdateBoardRequest
 import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.specification.SearchBoardSpecification
@@ -75,7 +75,7 @@ class BoardServiceImpl(
         log.info("Method=board, updateBoardRequest={}", updateBoardRequest)
 
         val board = findById(boardId)
-        board.updateFromRequest(updateBoardRequest)
+        board.updateFromUpdateBoardRequest(updateBoardRequest)
 
         boardRepository.save(board)
     }

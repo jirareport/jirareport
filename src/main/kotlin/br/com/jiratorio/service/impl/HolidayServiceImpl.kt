@@ -11,7 +11,9 @@ import br.com.jiratorio.exception.HolidaysAlreadyImported
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.exception.UniquenessFieldException
 import br.com.jiratorio.extension.log
-import br.com.jiratorio.mapper.HolidayMapper
+import br.com.jiratorio.mapper.toHoliday
+import br.com.jiratorio.mapper.toHolidayResponse
+import br.com.jiratorio.mapper.updateFromHolidayRequest
 import br.com.jiratorio.repository.HolidayRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.HolidayService
@@ -19,6 +21,7 @@ import br.com.jiratorio.service.UserConfigService
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -29,7 +32,6 @@ class HolidayServiceImpl(
     private val holidayRepository: HolidayRepository,
     private val boardService: BoardService,
     private val holidayClient: HolidayClient,
-    private val holidayMapper: HolidayMapper,
     private val userConfigService: UserConfigService,
     private val messageResolver: MessageResolver
 ) : HolidayService {
@@ -38,15 +40,17 @@ class HolidayServiceImpl(
     override fun findByBoard(boardId: Long, pageable: Pageable): Page<HolidayResponse> {
         log.info("Method=findByBoard, boardId={}", boardId)
 
-        val holidays = holidayRepository.findAllByBoardId(boardId, pageable)
-        return holidayMapper.toHolidayResponse(holidays)
+        return holidayRepository
+            .findAllByBoardId(boardId, pageable)
+            .toHolidayResponse()
     }
 
     @Transactional(readOnly = true)
     override fun findDaysByBoard(boardId: Long): List<LocalDate> {
         log.info("Method=findDaysByBoard, boardId={}", boardId)
 
-        return holidayRepository.findAllByBoardId(boardId)
+        return holidayRepository
+            .findAllByBoardId(boardId)
             .map { it.date }
     }
 
@@ -61,7 +65,7 @@ class HolidayServiceImpl(
             throw UniquenessFieldException("date")
         }
 
-        val holiday = holidayMapper.toHoliday(holidayRequest, board)
+        val holiday = holidayRequest.toHoliday(board)
         holidayRepository.save(holiday)
 
         return holiday.id
@@ -71,8 +75,8 @@ class HolidayServiceImpl(
     override fun delete(id: Long) {
         log.info("Method=delete, id={}", id)
 
-        val holiday = holidayRepository.findById(id)
-            .orElseThrow(::ResourceNotFound)
+        val holiday = holidayRepository.findByIdOrNull(id)
+            ?: throw ResourceNotFound()
 
         holidayRepository.delete(holiday)
     }
@@ -81,10 +85,10 @@ class HolidayServiceImpl(
     override fun findById(id: Long): HolidayResponse {
         log.info("Method=findByBoardAndId, id={}", id)
 
-        val holiday = holidayRepository.findById(id)
-            .orElseThrow(::ResourceNotFound)
+        val holiday = holidayRepository.findByIdOrNull(id)
+            ?: throw ResourceNotFound()
 
-        return holidayMapper.toHolidayResponse(holiday)
+        return holiday.toHolidayResponse()
     }
 
     @Transactional
@@ -93,16 +97,15 @@ class HolidayServiceImpl(
 
         val board = boardService.findById(boardId)
 
-        val holiday = holidayRepository.findById(holidayId)
-            .filter { it.board == board }
-            .orElseThrow(::ResourceNotFound)
+        val holiday = holidayRepository.findByIdAndBoard(holidayId, board)
+            ?: throw ResourceNotFound()
 
         val existentHoliday = holidayRepository.findByDateAndBoardId(holidayRequest.date, boardId)
         if (existentHoliday != null && existentHoliday.id != holidayId) {
             throw UniquenessFieldException("date")
         }
 
-        holidayMapper.updateFromRequest(holiday, holidayRequest)
+        holiday.updateFromHolidayRequest(holidayRequest)
 
         holidayRepository.save(holiday)
     }
@@ -136,10 +139,11 @@ class HolidayServiceImpl(
 
         val info = userConfigService.retrieveHolidayInfo(currentUser.username)
 
-        val allHolidaysInCity = holidayClient.findAllHolidaysInCity(
-            LocalDate.now().year, info.state, info.city, info.holidayToken
-        )
-
-        return holidayMapper.fromApiResponse(allHolidaysInCity, board)
+        return holidayClient.findAllHolidaysInCity(
+            year = LocalDate.now().year,
+            state = info.state,
+            city = info.city,
+            token = info.holidayToken
+        ).toHoliday(board)
     }
 }

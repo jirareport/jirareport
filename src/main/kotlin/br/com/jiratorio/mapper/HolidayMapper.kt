@@ -7,61 +7,44 @@ import br.com.jiratorio.domain.response.holiday.HolidayApiResponse
 import br.com.jiratorio.domain.response.holiday.HolidayResponse
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
-import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-@Component
-class HolidayMapper {
+private val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
-    private val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+fun HolidayApiResponse.toHoliday(board: Board): Holiday =
+    Holiday(
+        description = name,
+        board = board,
+        date = LocalDate.parse(date, datePattern)
+    )
 
-    fun fromApiResponse(holidayApiResponse: HolidayApiResponse, board: Board): Holiday {
-        return Holiday(
-            description = holidayApiResponse.name,
-            board = board,
-            date = LocalDate.parse(holidayApiResponse.date, datePattern)
-        )
-    }
+fun List<HolidayApiResponse>.toHoliday(board: Board): List<Holiday> =
+    this.map { it.toHoliday(board) }
 
-    fun fromApiResponse(holidayApiResponses: List<HolidayApiResponse>, board: Board): List<Holiday> {
-        return holidayApiResponses.map { fromApiResponse(it, board) }
-    }
+fun Holiday.toHolidayResponse(): HolidayResponse =
+    HolidayResponse(
+        id = id,
+        date = date.format(datePattern),
+        description = description,
+        boardId = board.id
+    )
 
-    fun toHolidayResponse(holiday: Holiday): HolidayResponse {
-        return HolidayResponse(
-            id = holiday.id,
-            date = holiday.date.format(datePattern),
-            description = holiday.description,
-            boardId = holiday.board.id
-        )
-    }
+fun Page<Holiday>.toHolidayResponse(): PageImpl<HolidayResponse> =
+    PageImpl(
+        content.map { it.toHolidayResponse() },
+        pageable,
+        totalElements
+    )
 
-    fun toHolidayResponse(holidays: List<Holiday>): List<HolidayResponse> {
-        return holidays.map { toHolidayResponse(it) }
-    }
+fun HolidayRequest.toHoliday(board: Board): Holiday =
+    Holiday(
+        description = description,
+        board = board,
+        date = date
+    )
 
-    fun toHolidayResponse(holidays: Page<Holiday>): PageImpl<HolidayResponse> {
-        return PageImpl(
-            toHolidayResponse(holidays.content),
-            holidays.pageable,
-            holidays.totalElements
-        )
-    }
-
-    fun toHoliday(holidayRequest: HolidayRequest, board: Board): Holiday {
-        return Holiday(
-            description = holidayRequest.description,
-            board = board,
-            date = holidayRequest.date
-        )
-    }
-
-    fun updateFromRequest(holiday: Holiday, holidayRequest: HolidayRequest): Holiday {
-        return holiday.apply {
-            description = holidayRequest.description
-            date = holidayRequest.date
-        }
-    }
-
+fun Holiday.updateFromHolidayRequest(holidayRequest: HolidayRequest) {
+    description = holidayRequest.description
+    date = holidayRequest.date
 }

@@ -4,39 +4,29 @@ import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.LeadTimeConfig
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest
 import br.com.jiratorio.domain.response.LeadTimeConfigResponse
-import org.springframework.stereotype.Component
 
-@Component
-class LeadTimeConfigMapper {
+fun LeadTimeConfig.toLeadTimeConfigResponse(): LeadTimeConfigResponse =
+    LeadTimeConfigResponse(
+        id = id,
+        boardId = board.id,
+        name = name,
+        startColumn = startColumn,
+        endColumn = endColumn
+    )
 
-    fun toResponse(leadTimeConfig: LeadTimeConfig): LeadTimeConfigResponse {
-        return LeadTimeConfigResponse(
-            id = leadTimeConfig.id,
-            boardId = leadTimeConfig.board.id,
-            name = leadTimeConfig.name,
-            startColumn = leadTimeConfig.startColumn,
-            endColumn = leadTimeConfig.endColumn
-        )
-    }
+fun List<LeadTimeConfig>.toLeadTimeConfigResponse(): List<LeadTimeConfigResponse> =
+    map { it.toLeadTimeConfigResponse() }
 
-    fun toResponse(leadTimeConfigs: List<LeadTimeConfig>): List<LeadTimeConfigResponse> {
-        return leadTimeConfigs.map { toResponse(it) }
-    }
+fun LeadTimeConfigRequest.toLeadTimeConfig(board: Board): LeadTimeConfig =
+    LeadTimeConfig(
+        board = board,
+        name = name,
+        startColumn = startColumn.toUpperCase(),
+        endColumn = endColumn.toUpperCase()
+    )
 
-    fun toLeadTimeConfig(request: LeadTimeConfigRequest, board: Board): LeadTimeConfig {
-        return LeadTimeConfig(
-            board = board,
-            name = request.name,
-            startColumn = request.startColumn.toUpperCase(),
-            endColumn = request.endColumn.toUpperCase()
-        )
-    }
-
-    fun updateFromRequest(leadTimeConfig: LeadTimeConfig, request: LeadTimeConfigRequest): LeadTimeConfig {
-        return leadTimeConfig.apply {
-            name = request.name
-            startColumn = request.startColumn.toUpperCase()
-            endColumn = request.endColumn.toUpperCase()
-        }
-    }
+fun LeadTimeConfig.updateFromLeadTimeConfigRequest(request: LeadTimeConfigRequest) {
+    name = request.name
+    startColumn = request.startColumn.toUpperCase()
+    endColumn = request.endColumn.toUpperCase()
 }

@@ -3,6 +3,7 @@ package br.com.jiratorio.service.impl
 import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.client.IssueClient
 import br.com.jiratorio.config.internationalization.MessageResolver
+import br.com.jiratorio.config.properties.JiraProperties
 import br.com.jiratorio.domain.Percentile
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.estimate.EstimateFieldReference
@@ -13,7 +14,7 @@ import br.com.jiratorio.domain.response.EstimateIssueResponse
 import br.com.jiratorio.exception.BadRequestException
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.plusDays
-import br.com.jiratorio.mapper.EstimateIssueMapper
+import br.com.jiratorio.mapper.toEstimateIssueResponse
 import br.com.jiratorio.parser.EstimateIssueParser
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.EstimateService
@@ -34,8 +35,8 @@ class EstimateServiceImpl(
     private val holidayService: HolidayService,
     private val percentileService: PercentileService,
     private val jqlService: JQLService,
-    private val estimateIssueMapper: EstimateIssueMapper,
-    private val messageResolver: MessageResolver
+    private val messageResolver: MessageResolver,
+    private val jiraProperties: JiraProperties
 ) : EstimateService {
 
     @ExecutionTime
@@ -86,7 +87,7 @@ class EstimateServiceImpl(
             )
         }
 
-        return estimateIssueMapper.estimateIssueToEstimateIssueResponse(estimateIssues)
+        return estimateIssues.toEstimateIssueResponse(jiraProperties.url)
     }
 
     private fun calculatePercentile(

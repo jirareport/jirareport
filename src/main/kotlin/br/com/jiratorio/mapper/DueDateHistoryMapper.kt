@@ -10,10 +10,10 @@ private val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/
 
 fun DueDateHistory.toDueDateHistoryResponse(): DueDateHistoryResponse =
     DueDateHistoryResponse(
-        created = this.created?.format(dateTimePattern),
-        dueDate = this.dueDate?.format(datePattern)
+        created = created?.format(dateTimePattern),
+        dueDate = dueDate?.format(datePattern)
     )
 
 fun List<DueDateHistory>.toDueDateHistoryResponse(): List<DueDateHistoryResponse> =
-    this.map { it.toDueDateHistoryResponse() }
+    map { it.toDueDateHistoryResponse() }
 

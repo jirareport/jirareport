@@ -8,12 +8,12 @@ private val dateTimePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd
 
 fun Changelog.toChangelogResponse(): ChangelogResponse =
     ChangelogResponse(
-        from = this.from,
-        to = this.to,
-        startDate = this.created.format(dateTimePattern),
-        endDate = this.endDate.format(dateTimePattern),
-        leadTime = this.leadTime
+        from = from,
+        to = to,
+        startDate = created.format(dateTimePattern),
+        endDate = endDate.format(dateTimePattern),
+        leadTime = leadTime
     )
 
 fun List<Changelog>.toChangelogResponse(): List<ChangelogResponse> =
-    this.map { it.toChangelogResponse() }
+    map { it.toChangelogResponse() }

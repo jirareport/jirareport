@@ -10,6 +10,6 @@ interface LeadTimeConfigRepository : CrudRepository<LeadTimeConfig, Long> {
 
     fun findByBoardId(boardId: Long): List<LeadTimeConfig>
 
-    fun findByIdAndBoardId(id: Long, boardId: Long): Optional<LeadTimeConfig>
+    fun findByIdAndBoardId(id: Long, boardId: Long): LeadTimeConfig?
 
 }
