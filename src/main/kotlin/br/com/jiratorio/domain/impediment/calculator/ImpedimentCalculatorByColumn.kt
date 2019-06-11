@@ -38,7 +38,9 @@ object ImpedimentCalculatorByColumn : ImpedimentCalculator {
 
         return ImpedimentCalculatorResult(
             timeInImpediment = impedimentHistory.map { it.leadTime }.sum(),
-            impedimentHistory = impedimentHistory.toSortedSet()
+            impedimentHistory = impedimentHistory
+                .sortedWith(Comparator.comparing(ImpedimentHistory::startDate))
+                .toMutableSet()
         )
     }
 

@@ -2,21 +2,18 @@ package br.com.jiratorio.mapper
 
 import br.com.jiratorio.domain.estimate.EstimateIssue
 import br.com.jiratorio.domain.response.EstimateIssueResponse
+import br.com.jiratorio.extension.time.displayFormat
 import java.time.format.DateTimeFormatter
-
-private val dateTimePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-
-private val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
 fun EstimateIssue.toEstimateIssueResponse(jiraUrl: String): EstimateIssueResponse =
     EstimateIssueResponse(
         key = key,
         summary = summary,
-        startDate = startDate.format(dateTimePattern),
-        estimateDateAvg = estimateDateAvg.format(datePattern),
-        estimateDatePercentile50 = estimateDatePercentile50.format(datePattern),
-        estimateDatePercentile75 = estimateDatePercentile75.format(datePattern),
-        estimateDatePercentile90 = estimateDatePercentile90.format(datePattern),
+        startDate = startDate.displayFormat(),
+        estimateDateAvg = estimateDateAvg.displayFormat(),
+        estimateDatePercentile50 = estimateDatePercentile50.displayFormat(),
+        estimateDatePercentile75 = estimateDatePercentile75.displayFormat(),
+        estimateDatePercentile90 = estimateDatePercentile90.displayFormat(),
         leadTime = leadTime,
         issueType = issueType,
         creator = creator,

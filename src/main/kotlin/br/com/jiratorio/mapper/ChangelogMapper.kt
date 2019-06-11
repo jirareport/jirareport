@@ -2,16 +2,14 @@ package br.com.jiratorio.mapper
 
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.response.ChangelogResponse
-import java.time.format.DateTimeFormatter
-
-private val dateTimePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+import br.com.jiratorio.extension.time.displayFormat
 
 fun Changelog.toChangelogResponse(): ChangelogResponse =
     ChangelogResponse(
         from = from,
         to = to,
-        startDate = created.format(dateTimePattern),
-        endDate = endDate.format(dateTimePattern),
+        startDate = created.displayFormat(),
+        endDate = endDate.displayFormat(),
         leadTime = leadTime
     )
 

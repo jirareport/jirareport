@@ -3,6 +3,7 @@ package br.com.jiratorio.extension.time
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 fun LocalDateTime?.minutesDiff(endDate: LocalDateTime?, holidays: List<LocalDate>, ignoreWeekend: Boolean?): Long {
@@ -61,3 +62,8 @@ fun LocalDateTime.plusDays(days: Long, holidays: List<LocalDate>, ignoreWeekend:
 
     return cursor
 }
+
+private val dateTimePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+
+fun LocalDateTime.displayFormat(): String =
+    this.format(dateTimePattern)

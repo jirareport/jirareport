@@ -2,15 +2,14 @@ package br.com.jiratorio.mapper
 
 import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.response.LeadTimeResponse
+import br.com.jiratorio.extension.time.displayFormat
 import java.time.format.DateTimeFormatter
-
-private val dateTimePattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
 
 fun LeadTime.toLeadTimeResponse(): LeadTimeResponse =
     LeadTimeResponse(
         name = leadTimeConfig.name,
-        startDate = startDate.format(dateTimePattern),
-        endDate = endDate.format(dateTimePattern),
+        startDate = startDate.displayFormat(),
+        endDate = endDate.displayFormat(),
         leadTime = leadTime
     )
 

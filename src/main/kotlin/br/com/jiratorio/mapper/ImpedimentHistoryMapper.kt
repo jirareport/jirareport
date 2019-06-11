@@ -2,14 +2,13 @@ package br.com.jiratorio.mapper
 
 import br.com.jiratorio.domain.entity.ImpedimentHistory
 import br.com.jiratorio.domain.response.ImpedimentHistoryResponse
+import br.com.jiratorio.extension.time.displayFormat
 import java.time.format.DateTimeFormatter
-
-private val dateTimePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
 
 fun ImpedimentHistory.toImpedimentHistoryResponse(): ImpedimentHistoryResponse =
     ImpedimentHistoryResponse(
-        startDate = startDate.format(dateTimePattern),
-        endDate = endDate.format(dateTimePattern),
+        startDate = startDate.displayFormat(),
+        endDate = endDate.displayFormat(),
         leadTime = leadTime
     )
 

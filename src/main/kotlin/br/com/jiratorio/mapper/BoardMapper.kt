@@ -6,7 +6,6 @@ import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.domain.response.board.BoardDetailsResponse
 import br.com.jiratorio.domain.response.board.BoardFeatureResponse
 import br.com.jiratorio.domain.response.board.BoardResponse
-import br.com.jiratorio.extension.toUpperCase
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 

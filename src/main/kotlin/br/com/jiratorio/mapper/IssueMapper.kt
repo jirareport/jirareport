@@ -3,9 +3,7 @@ package br.com.jiratorio.mapper
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.response.issue.IssueDetailResponse
 import br.com.jiratorio.domain.response.issue.IssueResponse
-import java.time.format.DateTimeFormatter
-
-private val datePattern = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+import br.com.jiratorio.extension.time.displayFormat
 
 fun Issue.toIssueResponse(jiraUrl: String): IssueResponse =
     IssueResponse(
@@ -20,9 +18,9 @@ fun Issue.toIssueResponse(jiraUrl: String): IssueResponse =
         system = system,
         priority = priority,
         leadTime = leadTime,
-        startDate = startDate.format(datePattern),
-        endDate = endDate.format(datePattern),
-        created = created.format(datePattern),
+        startDate = startDate.displayFormat(),
+        endDate = endDate.displayFormat(),
+        created = created.displayFormat(),
         deviationOfEstimate = deviationOfEstimate,
         changeEstimateCount = dueDateHistory?.size,
         impedimentTime = impedimentTime,
