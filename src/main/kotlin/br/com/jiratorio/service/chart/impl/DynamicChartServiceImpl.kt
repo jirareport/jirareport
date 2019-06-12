@@ -6,7 +6,7 @@ import br.com.jiratorio.domain.entity.DynamicFieldConfig
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.extension.log
-import br.com.jiratorio.extension.toChart
+import br.com.jiratorio.mapper.toChart
 import br.com.jiratorio.service.chart.DynamicChartService
 import org.springframework.stereotype.Service
 

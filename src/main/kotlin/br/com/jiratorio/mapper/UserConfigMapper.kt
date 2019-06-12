@@ -5,49 +5,39 @@ import br.com.jiratorio.domain.entity.UserConfig
 import br.com.jiratorio.domain.request.UpdateUserConfigRequest
 import br.com.jiratorio.domain.response.UserConfigResponse
 import br.com.jiratorio.extension.stripAccents
-import org.springframework.stereotype.Component
 
-@Component
-class UserConfigMapper {
+fun UserConfig.toUserConfigResponse(): UserConfigResponse =
+    UserConfigResponse(
+        username = username,
+        state = state,
+        city = city,
+        holidayToken = holidayToken,
+        leadTimeChartType = leadTimeChartType.name,
+        throughputChartType = throughputChartType.name
+    )
 
-    fun userConfigToResponse(userConfig: UserConfig): UserConfigResponse {
-        return UserConfigResponse(
-            username = userConfig.username,
-            state = userConfig.state,
-            city = userConfig.city,
-            holidayToken = userConfig.holidayToken,
-            leadTimeChartType = userConfig.leadTimeChartType.name,
-            throughputChartType = userConfig.throughputChartType.name
-        )
+fun UserConfig.updateFromUpdateUserConfigRequest(updateUserConfigRequest: UpdateUserConfigRequest) {
+    holidayToken = updateUserConfigRequest.holidayToken
+    state = updateUserConfigRequest.state
+    city = updateUserConfigRequest.city
+        ?.stripAccents()
+        ?.replace(" ", "_")
+        ?.toUpperCase()
+
+    val leadTimeChartType = updateUserConfigRequest.leadTimeChartType
+    if (leadTimeChartType != null) {
+        this.leadTimeChartType = leadTimeChartType
     }
 
-    fun updateFromRequest(userConfig: UserConfig, updateUserConfigRequest: UpdateUserConfigRequest): UserConfig {
-        return userConfig.apply {
-            holidayToken = updateUserConfigRequest.holidayToken
-            state = updateUserConfigRequest.state
-            city = updateUserConfigRequest.city
-                ?.stripAccents()
-                ?.replace(" ", "_")
-                ?.toUpperCase()
-
-            val leadTimeChartType = updateUserConfigRequest.leadTimeChartType
-            if (leadTimeChartType != null) {
-                this.leadTimeChartType = leadTimeChartType
-            }
-
-            val throughputChartType = updateUserConfigRequest.throughputChartType
-            if (throughputChartType != null) {
-                this.throughputChartType = throughputChartType
-            }
-        }
+    val throughputChartType = updateUserConfigRequest.throughputChartType
+    if (throughputChartType != null) {
+        this.throughputChartType = throughputChartType
     }
-
-    fun toImportHolidayInfo(userConfig: UserConfig): ImportHolidayInfo {
-        return ImportHolidayInfo(
-            state = userConfig.state!!,
-            city = userConfig.city!!,
-            holidayToken = userConfig.holidayToken!!
-        )
-    }
-
 }
+
+fun UserConfig.toImportHolidayInfo(): ImportHolidayInfo =
+    ImportHolidayInfo(
+        state = state!!,
+        city = city!!,
+        holidayToken = holidayToken!!
+    )

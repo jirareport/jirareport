@@ -20,4 +20,6 @@ interface HolidayRepository : CrudRepository<Holiday, Long> {
 
     fun findByDateAndBoardId(date: LocalDate, boardId: Long): Holiday?
 
+    fun findByIdAndBoard(holidayId: Long, board: Board): Holiday?
+
 }

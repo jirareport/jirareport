@@ -2,9 +2,8 @@ package br.com.jiratorio.extension
 
 import com.fasterxml.jackson.databind.JsonNode
 
-fun JsonNode?.extractValueNotNull(): String {
-    return this.extractValue()!!
-}
+fun JsonNode?.extractValueNotNull(): String =
+    this.extractValue()!!
 
 fun JsonNode?.extractValue(): String? {
     if (this == null || this.isNull || this.isMissingNode) {

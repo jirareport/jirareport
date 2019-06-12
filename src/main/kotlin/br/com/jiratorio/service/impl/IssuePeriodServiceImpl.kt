@@ -1,5 +1,6 @@
 package br.com.jiratorio.service.impl
 
+import br.com.jiratorio.config.properties.JiraProperties
 import br.com.jiratorio.domain.chart.IssuePeriodChartResponse
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.IssuePeriod
@@ -10,8 +11,9 @@ import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.decimal.format
 import br.com.jiratorio.extension.log
-import br.com.jiratorio.mapper.IssueMapper
-import br.com.jiratorio.mapper.IssuePeriodMapper
+import br.com.jiratorio.mapper.toIssuePeriodDetailResponse
+import br.com.jiratorio.mapper.toIssuePeriodResponse
+import br.com.jiratorio.mapper.toIssueResponse
 import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.CreateIssueService
@@ -25,9 +27,8 @@ class IssuePeriodServiceImpl(
     private val issuePeriodRepository: IssuePeriodRepository,
     private val leadTimeChartService: IssuePeriodChartService,
     private val boardService: BoardService,
-    private val issuePeriodMapper: IssuePeriodMapper,
-    private val issueMapper: IssueMapper,
-    private val createIssueService: CreateIssueService
+    private val createIssueService: CreateIssueService,
+    private val jiraProperties: JiraProperties
 ) : IssuePeriodService {
 
     @Transactional
@@ -54,8 +55,8 @@ class IssuePeriodServiceImpl(
             ?: throw ResourceNotFound()
 
         return IssuePeriodByIdResponse(
-            detail = issuePeriodMapper.issuePeriodToIssuePeriodDetailResponse(issuePeriod),
-            issues = issueMapper.issueToIssueResponse(issuePeriod.issues)
+            detail = issuePeriod.toIssuePeriodDetailResponse(),
+            issues = issuePeriod.issues.toIssueResponse(jiraProperties.url)
         )
     }
 
@@ -81,7 +82,7 @@ class IssuePeriodServiceImpl(
             .sortedBy { it.startDate }
 
         return IssuePeriodByBoardResponse(
-            periods = issuePeriodMapper.issuePeriodToIssuePeriodResponse(issuePeriods),
+            periods = issuePeriods.toIssuePeriodResponse(jiraProperties.url),
             charts = buildCharts(issuePeriods, board)
         )
     }

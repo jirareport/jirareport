@@ -1,6 +1,7 @@
 package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime
+import br.com.jiratorio.config.properties.JiraProperties
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
@@ -12,7 +13,8 @@ import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.decimal.zeroIfNaN
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.atEndOfDay
-import br.com.jiratorio.mapper.IssueMapper
+import br.com.jiratorio.mapper.toIssueDetailResponse
+import br.com.jiratorio.mapper.toIssueResponse
 import br.com.jiratorio.repository.IssueRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.IssueService
@@ -25,10 +27,10 @@ import java.time.LocalDate
 @Service
 class IssueServiceImpl(
     private val issueRepository: IssueRepository,
-    private val issueMapper: IssueMapper,
     private val chartService: ChartService,
     private val boardService: BoardService,
-    private val weeklyThroughputService: WeeklyThroughputService
+    private val weeklyThroughputService: WeeklyThroughputService,
+    private val jiraProperties: JiraProperties
 ) : IssueService {
 
     @ExecutionTime
@@ -59,7 +61,7 @@ class IssueServiceImpl(
         return ListIssueResponse(
             leadTime = leadTime.zeroIfNaN(),
             throughput = issues.size,
-            issues = issueMapper.issueToIssueResponse(issues),
+            issues = issues.toIssueResponse(jiraProperties.url),
             charts = chartAggregator,
             weeklyThroughput = weeklyThroughput
         )
@@ -86,7 +88,7 @@ class IssueServiceImpl(
         val issue = issueRepository.findByBoardIdAndId(boardId, id)
             ?: throw ResourceNotFound()
 
-        return issueMapper.issueToIssueDetailResponse(issue)
+        return issue.toIssueDetailResponse()
     }
 
     @ExecutionTime

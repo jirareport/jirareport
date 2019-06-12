@@ -5,7 +5,9 @@ import br.com.jiratorio.domain.request.LeadTimeConfigRequest
 import br.com.jiratorio.domain.response.LeadTimeConfigResponse
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.log
-import br.com.jiratorio.mapper.LeadTimeConfigMapper
+import br.com.jiratorio.mapper.toLeadTimeConfig
+import br.com.jiratorio.mapper.toLeadTimeConfigResponse
+import br.com.jiratorio.mapper.updateFromLeadTimeConfigRequest
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import br.com.jiratorio.service.BoardService
 import br.com.jiratorio.service.leadtime.LeadTimeConfigService
@@ -15,8 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class LeadTimeConfigServiceImpl(
     private val leadTimeConfigRepository: LeadTimeConfigRepository,
-    private val boardService: BoardService,
-    private val leadTimeConfigMapper: LeadTimeConfigMapper
+    private val boardService: BoardService
 ) : LeadTimeConfigService {
 
     @Transactional(readOnly = true)
@@ -30,8 +31,9 @@ class LeadTimeConfigServiceImpl(
     override fun findAll(boardId: Long): List<LeadTimeConfigResponse> {
         log.info("Method=findAllByBoardId, boardId={}", boardId)
 
-        val leadTimeConfigs = leadTimeConfigRepository.findByBoardId(boardId)
-        return leadTimeConfigMapper.toResponse(leadTimeConfigs)
+        return leadTimeConfigRepository
+            .findByBoardId(boardId)
+            .toLeadTimeConfigResponse()
     }
 
     @Transactional
@@ -39,7 +41,7 @@ class LeadTimeConfigServiceImpl(
         log.info("Method=create, boardId={}, leadTimeConfigRequest={}", boardId, leadTimeConfigRequest)
 
         val board = boardService.findById(boardId)
-        val leadTimeConfig = leadTimeConfigMapper.toLeadTimeConfig(leadTimeConfigRequest, board)
+        val leadTimeConfig = leadTimeConfigRequest.toLeadTimeConfig(board)
 
         leadTimeConfigRepository.save(leadTimeConfig)
 
@@ -51,9 +53,9 @@ class LeadTimeConfigServiceImpl(
         log.info("Method=findByBoardAndId, boardId={}, id={}", boardId, id)
 
         val leadTimeConfig = leadTimeConfigRepository.findByIdAndBoardId(id, boardId)
-            .orElseThrow(::ResourceNotFound)
+            ?: throw ResourceNotFound()
 
-        return leadTimeConfigMapper.toResponse(leadTimeConfig)
+        return leadTimeConfig.toLeadTimeConfigResponse()
     }
 
     @Transactional
@@ -61,9 +63,9 @@ class LeadTimeConfigServiceImpl(
         log.info("Method=update, boardId={}, id={}, leadTimeConfigRequest={}", boardId, id, leadTimeConfigRequest)
 
         val leadTimeConfig = leadTimeConfigRepository.findByIdAndBoardId(id, boardId)
-            .orElseThrow(::ResourceNotFound)
+            ?: throw ResourceNotFound()
 
-        leadTimeConfigMapper.updateFromRequest(leadTimeConfig, leadTimeConfigRequest)
+        leadTimeConfig.updateFromLeadTimeConfigRequest(leadTimeConfigRequest)
         leadTimeConfigRepository.save(leadTimeConfig)
     }
 
@@ -72,7 +74,7 @@ class LeadTimeConfigServiceImpl(
         log.info("Method=deleteByBoardAndId, boardId={}, id={}", boardId, id)
 
         val leadTimeConfig = leadTimeConfigRepository.findByIdAndBoardId(id, boardId)
-            .orElseThrow(::ResourceNotFound)
+            ?: throw ResourceNotFound()
 
         leadTimeConfigRepository.delete(leadTimeConfig)
     }
