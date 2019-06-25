@@ -11,15 +11,12 @@ import br.com.jiratorio.repository.IssuePeriodRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import javax.servlet.http.HttpServletResponse.SC_NO_CONTENT
 
 @Tag("integration")
-@ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class UpdateIssuePeriodIntegrationTest @Autowired constructor(
     private val authenticator: Authenticator,

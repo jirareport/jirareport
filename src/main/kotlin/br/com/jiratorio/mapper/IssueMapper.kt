@@ -25,7 +25,7 @@ fun Issue.toIssueResponse(jiraUrl: String): IssueResponse =
         changeEstimateCount = dueDateHistory?.size,
         impedimentTime = impedimentTime,
         dynamicFields = dynamicFields,
-        detailsUrl = "$jiraUrl/browse/${key}"
+        detailsUrl = "$jiraUrl/browse/$key"
     )
 
 fun Collection<Issue>.toIssueResponse(jiraUrl: String): List<IssueResponse> =

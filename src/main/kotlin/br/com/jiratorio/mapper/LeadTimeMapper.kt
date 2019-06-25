@@ -3,7 +3,6 @@ package br.com.jiratorio.mapper
 import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.response.LeadTimeResponse
 import br.com.jiratorio.extension.time.displayFormat
-import java.time.format.DateTimeFormatter
 
 fun LeadTime.toLeadTimeResponse(): LeadTimeResponse =
     LeadTimeResponse(

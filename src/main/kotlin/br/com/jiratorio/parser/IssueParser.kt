@@ -64,11 +64,11 @@ class IssueParser(
 
         val fields = issue.path("fields")
 
-        val changelogItems = changelogParser.extractChangelogItems(issue)
-        val changelog = changelogService.parseChangelog(changelogItems, holidays, board.ignoreWeekend)
-
         val created = fields.path("created")
             .extractValueNotNull().fromJiraToLocalDateTime()
+
+        val changelogItems = changelogParser.extractChangelogItems(issue)
+        val changelog = changelogService.parseChangelog(changelogItems, created, holidays, board.ignoreWeekend)
 
         val (
             startDate,
