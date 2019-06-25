@@ -17,7 +17,6 @@ import br.com.jiratorio.service.leadtime.impl.LeadTimeServiceImpl
 import io.mockk.called
 import io.mockk.clearAllMocks
 import io.mockk.every
-import io.mockk.junit5.MockKExtension
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
@@ -26,11 +25,9 @@ import io.mockk.verifyAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import java.time.LocalDate
 
 @Tag("unit")
-@ExtendWith(MockKExtension::class)
 internal class LeadTimeServiceImplTest {
 
     private val leadTimeConfigService = mockk<LeadTimeConfigService>()

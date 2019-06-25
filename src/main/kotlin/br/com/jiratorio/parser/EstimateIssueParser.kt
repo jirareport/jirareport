@@ -47,8 +47,12 @@ class EstimateIssueParser(
     ): EstimateIssue? {
         val fields = issue.path("fields")
 
+        val created = fields.path("created")
+            .extractValueNotNull().fromJiraToLocalDateTime()
+
         val changelogItems = changelogParser.extractChangelogItems(issue)
-        val changelog = changelogService.parseChangelog(changelogItems, holidays, board.ignoreWeekend)
+        val changelog = changelogService.parseChangelog(changelogItems, created, holidays, board.ignoreWeekend)
+
         if (changelog.isNotEmpty()) {
             val changelogItem = changelog.last()
             changelogItem.leadTime = changelogItem.created.daysDiff(

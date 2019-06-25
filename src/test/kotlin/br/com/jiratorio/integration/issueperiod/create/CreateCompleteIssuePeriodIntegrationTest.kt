@@ -22,15 +22,12 @@ import io.restassured.http.ContentType
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.transaction.support.TransactionTemplate
 import javax.servlet.http.HttpServletResponse
 
 @Tag("integration")
-@ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
     private val boardFactory: BoardFactory,

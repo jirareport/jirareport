@@ -1,7 +1,7 @@
 package br.com.jiratorio.service.impl
 
-import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.domain.entity.embedded.Changelog
+import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
@@ -17,7 +17,6 @@ internal class ChangelogServiceImplTest {
     fun `parse changelog`() {
         val jiraChangelog = asList(
             JiraChangelogItem(field = "issueType"),
-            JiraChangelogItem(field = "status", toString = "TODO", created = "01/01/2019".toLocalDateTime()),
             JiraChangelogItem(field = "other"),
             JiraChangelogItem(
                 field = "status",
@@ -42,7 +41,8 @@ internal class ChangelogServiceImplTest {
             JiraChangelogItem(field = "dueDate")
         )
 
-        assertThat(changelogServiceImpl.parseChangelog(jiraChangelog, emptyList(), true))
+        val issueCreationDate = "01/01/2019".toLocalDateTime()
+        assertThat(changelogServiceImpl.parseChangelog(jiraChangelog, issueCreationDate, emptyList(), true))
             .contains(
                 Changelog(
                     from = null,

@@ -5,21 +5,18 @@ import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
-import br.com.jiratorio.factory.domain.request.LeadTimeConfigRequestFactory
 import br.com.jiratorio.factory.domain.entity.LeadTimeConfigFactory
+import br.com.jiratorio.factory.domain.request.LeadTimeConfigRequestFactory
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers.contains
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @Tag("integration")
-@ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class UpdateLeadTimeConfigIntegrationTest @Autowired constructor(
     private val leadTimeConfigRequestFactory: LeadTimeConfigRequestFactory,

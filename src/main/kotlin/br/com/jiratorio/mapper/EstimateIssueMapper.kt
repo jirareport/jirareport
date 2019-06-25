@@ -3,7 +3,6 @@ package br.com.jiratorio.mapper
 import br.com.jiratorio.domain.estimate.EstimateIssue
 import br.com.jiratorio.domain.response.EstimateIssueResponse
 import br.com.jiratorio.extension.time.displayFormat
-import java.time.format.DateTimeFormatter
 
 fun EstimateIssue.toEstimateIssueResponse(jiraUrl: String): EstimateIssueResponse =
     EstimateIssueResponse(
@@ -30,4 +29,3 @@ fun EstimateIssue.toEstimateIssueResponse(jiraUrl: String): EstimateIssueRespons
 
 fun List<EstimateIssue>.toEstimateIssueResponse(jiraUrl: String): List<EstimateIssueResponse> =
     map { it.toEstimateIssueResponse(jiraUrl) }
-

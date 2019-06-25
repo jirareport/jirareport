@@ -13,16 +13,13 @@ import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
 import br.com.jiratorio.repository.IssueRepository
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.format.DateTimeFormatter
 import javax.servlet.http.HttpServletResponse.SC_OK
 
 @Tag("integration")
-@ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 internal class FindIssuePeriodIntegrationTest @Autowired constructor(
     private val authenticator: Authenticator,
@@ -95,9 +92,9 @@ internal class FindIssuePeriodIntegrationTest @Autowired constructor(
             hasSystem(issue.system)
             hasPriority(issue.priority)
             hasLeadTime(issue.leadTime)
-            hasStartDate(issue.startDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-            hasEndDate(issue.endDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-            hasCreated(issue.created.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+            hasStartDate(issue.startDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")))
+            hasEndDate(issue.endDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")))
+            hasCreated(issue.created.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")))
             hasDeviationOfEstimate(issue.deviationOfEstimate)
             hasChangeEstimateCount(issue.dueDateHistory?.size)
             hasImpedimentTime(issue.impedimentTime)

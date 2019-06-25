@@ -178,7 +178,7 @@ potential-bugs:
   InvalidRange:
     active: true
   LateinitUsage:
-    active: true
+    active: false
   UnconditionalJumpStatementInLoop:
     active: true
   UnreachableCode:
