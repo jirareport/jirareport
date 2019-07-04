@@ -5,8 +5,8 @@ import br.com.jiratorio.domain.entity.embedded.Chart
 
 interface SystemChartService {
 
-    fun leadTimeBySystemAsync(issues: List<Issue>, uninformed: String): Chart<String, Double>
+    fun leadTimeBySystem(issues: List<Issue>, uninformed: String): Chart<String, Double>
 
-    fun throughputBySystemAsync(issues: List<Issue>, uninformed: String): Chart<String, Int>
+    fun throughputBySystem(issues: List<Issue>, uninformed: String): Chart<String, Int>
 
 }

@@ -101,8 +101,8 @@ class CreateIssueServiceImpl(
 
         issuePeriod.run {
             histogram = chartAggregator.histogram
-            leadTimeByEstimate = chartAggregator.throughputByEstimate
-            throughputByEstimate = chartAggregator.leadTimeByEstimate
+            leadTimeByEstimate = chartAggregator.leadTimeByEstimate
+            throughputByEstimate = chartAggregator.throughputByEstimate
             leadTimeBySystem = chartAggregator.leadTimeBySystem
             throughputBySystem = chartAggregator.throughputBySystem
             columnTimeAvg = chartAggregator.columnTimeAvg.toMutableList()

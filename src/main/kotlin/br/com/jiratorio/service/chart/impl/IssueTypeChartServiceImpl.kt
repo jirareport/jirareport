@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class IssueTypeChartServiceImpl : IssueTypeChartService {
 
-    override fun leadTimeByTypeAsync(issues: List<Issue>, uninformed: String): Chart<String, Double> {
+    override fun leadTimeByType(issues: List<Issue>, uninformed: String): Chart<String, Double> {
         log.info("Method=leadTimeByType, issues={}", issues)
 
         return issues
@@ -19,7 +19,7 @@ class IssueTypeChartServiceImpl : IssueTypeChartService {
             .toChart()
     }
 
-    override fun throughputByTypeAsync(issues: List<Issue>, uninformed: String): Chart<String, Int> {
+    override fun throughputByType(issues: List<Issue>, uninformed: String): Chart<String, Int> {
         log.info("Method=throughputByType, issues={}", issues)
 
         return issues

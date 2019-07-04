@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 @Service
 class ColumnTimeChartServiceImpl : ColumnTimeChartService {
 
-    override fun averageAsync(issues: List<Issue>, fluxColumn: List<String>): List<ColumnTimeAvg> {
+    override fun average(issues: List<Issue>, fluxColumn: List<String>): List<ColumnTimeAvg> {
         log.info("Method=average, issues={}, fluxColumn={}", issues, fluxColumn)
 
         return issues.asSequence()

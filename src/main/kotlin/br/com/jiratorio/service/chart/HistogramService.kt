@@ -5,6 +5,6 @@ import br.com.jiratorio.domain.entity.embedded.Histogram
 
 interface HistogramService {
 
-    fun issueHistogramAsync(issues: List<Issue>): Histogram
+    fun issueHistogram(issues: List<Issue>): Histogram
 
 }

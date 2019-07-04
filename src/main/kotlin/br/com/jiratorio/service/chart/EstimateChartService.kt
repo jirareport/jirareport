@@ -5,8 +5,8 @@ import br.com.jiratorio.domain.entity.embedded.Chart
 
 interface EstimateChartService {
 
-    fun leadTimeChartAsync(issues: List<Issue>, uninformed: String): Chart<String, Double>
+    fun leadTimeChart(issues: List<Issue>, uninformed: String): Chart<String, Double>
 
-    fun throughputChartAsync(issues: List<Issue>, uninformed: String): Chart<String, Int>
+    fun throughputChart(issues: List<Issue>, uninformed: String): Chart<String, Int>
 
 }

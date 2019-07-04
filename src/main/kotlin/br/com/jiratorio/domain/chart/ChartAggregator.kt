@@ -7,8 +7,8 @@ import br.com.jiratorio.domain.entity.embedded.Histogram
 
 data class ChartAggregator(
     var histogram: Histogram,
-    var leadTimeByEstimate: Chart<String, Int>,
-    var throughputByEstimate: Chart<String, Double>,
+    var leadTimeByEstimate: Chart<String, Double>,
+    var throughputByEstimate: Chart<String, Int>,
     var leadTimeBySystem: Chart<String, Double>,
     var throughputBySystem: Chart<String, Int>,
     var leadTimeByType: Chart<String, Double>,

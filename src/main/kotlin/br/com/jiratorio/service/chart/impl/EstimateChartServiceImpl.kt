@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class EstimateChartServiceImpl : EstimateChartService {
 
-    override fun leadTimeChartAsync(issues: List<Issue>, uninformed: String): Chart<String, Double> {
+    override fun leadTimeChart(issues: List<Issue>, uninformed: String): Chart<String, Double> {
         log.info("Method=leadTimeChart, issues={}", issues)
 
         return issues.groupBy { it.estimate ?: uninformed }
@@ -18,7 +18,7 @@ class EstimateChartServiceImpl : EstimateChartService {
             .toChart()
     }
 
-    override fun throughputChartAsync(issues: List<Issue>, uninformed: String): Chart<String, Int> {
+    override fun throughputChart(issues: List<Issue>, uninformed: String): Chart<String, Int> {
         log.info("Method=throughputChart, issues={}", issues)
 
         return issues.groupingBy { it.estimate ?: uninformed }
