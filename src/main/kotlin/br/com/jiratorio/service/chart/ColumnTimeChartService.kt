@@ -5,6 +5,6 @@ import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
 
 interface ColumnTimeChartService {
 
-    fun averageAsync(issues: List<Issue>, fluxColumn: List<String>): List<ColumnTimeAvg>
+    fun average(issues: List<Issue>, fluxColumn: List<String>): List<ColumnTimeAvg>
 
 }

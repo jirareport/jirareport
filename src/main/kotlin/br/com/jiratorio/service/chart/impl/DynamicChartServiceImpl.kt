@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 @Service
 class DynamicChartServiceImpl : DynamicChartService {
 
-    override fun buildDynamicChartsAsync(issues: List<Issue>, board: Board, uninformed: String): List<DynamicChart> {
+    override fun buildDynamicCharts(issues: List<Issue>, board: Board, uninformed: String): List<DynamicChart> {
         log.info("Method=buildDynamicCharts, issues={}, board={}", issues, board)
 
         val dynamicFields = board.dynamicFields

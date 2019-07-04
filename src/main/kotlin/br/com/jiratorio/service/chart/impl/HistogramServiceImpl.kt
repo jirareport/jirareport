@@ -13,7 +13,7 @@ class HistogramServiceImpl(
     private val percentileService: PercentileService
 ) : HistogramService {
 
-    override fun issueHistogramAsync(issues: List<Issue>): Histogram {
+    override fun issueHistogram(issues: List<Issue>): Histogram {
         log.info("Method=issueHistogram, issues={}", issues)
         val leadTimeList = issues.map { it.leadTime }
         val percentile = percentileService.calculatePercentile(leadTimeList)

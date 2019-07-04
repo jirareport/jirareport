@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class LeadTimeCompareChartServiceImpl : LeadTimeCompareChartService {
 
-    override fun leadTimeCompareAsync(issues: List<Issue>): Chart<String, Double> {
+    override fun leadTimeCompare(issues: List<Issue>): Chart<String, Double> {
         log.info("Method=leadTimeCompare, issues={}", issues)
 
         return issues

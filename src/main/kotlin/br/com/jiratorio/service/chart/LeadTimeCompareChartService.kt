@@ -5,6 +5,6 @@ import br.com.jiratorio.domain.entity.embedded.Chart
 
 interface LeadTimeCompareChartService {
 
-    fun leadTimeCompareAsync(issues: List<Issue>): Chart<String, Double>
+    fun leadTimeCompare(issues: List<Issue>): Chart<String, Double>
 
 }
