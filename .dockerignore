@@ -1,3 +1,6 @@
+### git ###
+.git
+
 ### gradle ###
 .gradle
 /build/
