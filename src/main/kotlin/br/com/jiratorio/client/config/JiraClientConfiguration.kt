@@ -6,6 +6,7 @@ import br.com.jiratorio.domain.jira.JiraError
 import br.com.jiratorio.exception.JiraException
 import br.com.jiratorio.exception.UnauthorizedException
 import br.com.jiratorio.extension.account
+import br.com.jiratorio.extension.log
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.ObjectMapper
 import feign.RequestInterceptor
@@ -28,7 +29,8 @@ class JiraClientConfiguration(
     }
 
     @Bean
-    fun errorDecoder() = ErrorDecoder { _, response ->
+    fun errorDecoder() = ErrorDecoder { methodKey, response ->
+        log.info("Method=errorDecoder, methodKey={}, response={}", methodKey, response)
 
         if (response.status() == HttpServletResponse.SC_UNAUTHORIZED) {
             UnauthorizedException()

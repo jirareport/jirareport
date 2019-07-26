@@ -1,6 +1,6 @@
 {
   "request": {
-    "urlPath": "/holiday-api/",
+    "urlPath": "/holiday-api",
     "queryParameters": {
       "json": {
         "equalTo": "true"
