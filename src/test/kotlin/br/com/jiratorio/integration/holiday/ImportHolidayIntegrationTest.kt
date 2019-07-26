@@ -53,7 +53,7 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
 
         verify(
             1,
-            getRequestedFor(urlPathEqualTo("/holiday-api/"))
+            getRequestedFor(urlPathEqualTo("/holiday-api"))
                 .withQueryParam("json", equalTo("true"))
                 .withQueryParam("ano", equalTo(LocalDate.now().year.toString()))
                 .withQueryParam("estado", equalTo("SP"))
@@ -86,7 +86,7 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
 
         verify(
             1,
-            getRequestedFor(urlPathEqualTo("/holiday-api/"))
+            getRequestedFor(urlPathEqualTo("/holiday-api"))
                 .withQueryParam("json", equalTo("true"))
                 .withQueryParam("ano", equalTo(LocalDate.now().year.toString()))
                 .withQueryParam("estado", equalTo(userConfig.state))
@@ -125,7 +125,7 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
 
         verify(
             1,
-            getRequestedFor(urlPathEqualTo("/holiday-api/"))
+            getRequestedFor(urlPathEqualTo("/holiday-api"))
                 .withQueryParam("json", equalTo("true"))
                 .withQueryParam("ano", equalTo(LocalDate.now().year.toString()))
                 .withQueryParam("estado", equalTo("SP"))
