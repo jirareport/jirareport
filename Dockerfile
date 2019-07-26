@@ -3,8 +3,10 @@ FROM openjdk:8 as builder
 COPY . /jirareport-api
 WORKDIR /jirareport-api
 
-RUN ./gradlew unitTest
-RUN ./gradlew build -x test
+RUN ./gradlew -i unitTest
+
+COPY ./src/main/resources/application.yml /jirareport-api/src/main/resources/application.yml
+RUN ./gradlew -i build -x test
 
 ###
 
