@@ -1,20 +1,20 @@
 jira:
-  url: https://jira.url/jira
+  url: ${JIRA_URL:-https://jira.url/jira}
 
 holiday:
   url: https://api.calendario.com.br
-  token: seuToken
+  token: ${CALENDARIO_TOKEN:-seuCalendarioToken}
 
 security:
-  key: super-secret-key
+  key: ${SECRET_KEY:-pleasechangemeforthegodsake}
 
 spring:
   application:
     name: jirareport
   datasource:
-    url: jdbc:postgresql://localhost:5432/jirareport
-    username: ${USER}
-    password: ${PASSWORD:123123}
+    url: jdbc:${DATABASE_URL:-postgresql://database:5432/jirareport}
+    username: ${DATABASE_USER:-root}
+    password: ${DATABASE_PASSWORD}
   jpa:
     show-sql: true
     open-in-view: false
