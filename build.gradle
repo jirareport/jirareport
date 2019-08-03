@@ -51,6 +51,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
+    testImplementation "org.testcontainers:postgresql:1.12.0"
+
     testImplementation "com.github.javafaker:javafaker:0.16"
     testImplementation "io.rest-assured:rest-assured"
     testImplementation "com.github.tomakehurst:wiremock:2.19.0"

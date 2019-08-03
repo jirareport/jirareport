@@ -2,3 +2,6 @@ org.springframework.test.context.TestExecutionListener=\
   br.com.jiratorio.base.executionlistener.WireMockTestExecutionListener,\
   br.com.jiratorio.base.executionlistener.CleanDatabaseTestExecutionListener,\
   br.com.jiratorio.base.executionlistener.RestAssuredTestExecutionListener
+
+org.springframework.context.ApplicationContextInitializer=\
+  br.com.jiratorio.base.contextinitializer.DatabaseContainerContextInitializer

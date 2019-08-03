@@ -8,10 +8,6 @@ holiday:
 spring:
   application:
     name: jirareport
-  datasource:
-    url: jdbc:postgresql://localhost:5432/jirareport_test
-    username: ${USER}
-    password: 123123
   jpa:
     hibernate:
       ddl-auto: none
