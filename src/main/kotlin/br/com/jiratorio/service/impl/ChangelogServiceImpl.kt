@@ -33,7 +33,7 @@ class ChangelogServiceImpl : ChangelogService {
             0,
             Changelog(
                 from = null,
-                to = changelog.first().from,
+                to = changelog.firstOrNull()?.from,
                 created = issueCreationDate
             )
         )
