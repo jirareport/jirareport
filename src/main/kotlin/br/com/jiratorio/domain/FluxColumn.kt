@@ -33,9 +33,6 @@ data class FluxColumn(
         }
 
     fun calcStartAndEndDate(changelog: List<Changelog>, created: LocalDateTime): Pair<LocalDateTime?, LocalDateTime?> {
-        val startColumns = startColumns
-        val endColumns = endColumns
-
         var startDate: LocalDateTime? = null
         var endDate: LocalDateTime? = null
 
