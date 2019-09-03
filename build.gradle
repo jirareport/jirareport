@@ -44,6 +44,8 @@ dependencies {
 
     implementation 'io.reactivex.rxjava2:rxjava'
 
+    compile "io.github.openfeign:feign-httpclient:10.4.0"
+
     implementation "org.springframework.boot:spring-boot-devtools"
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
