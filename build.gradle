@@ -33,6 +33,7 @@ dependencies {
 
     implementation "org.apache.httpcomponents:httpclient:4.5.1"
 
+    implementation "io.github.openfeign:feign-httpclient"
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
     implementation "org.springframework.cloud:spring-cloud-starter-sleuth"
 

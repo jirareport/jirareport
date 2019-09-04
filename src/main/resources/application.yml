@@ -47,3 +47,5 @@ feign:
     config:
       default:
         logger-level: FULL
+  httpclient:
+    disable-ssl-validation: true
