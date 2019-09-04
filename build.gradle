@@ -33,6 +33,7 @@ dependencies {
 
     implementation "org.apache.httpcomponents:httpclient:4.5.1"
 
+    implementation "io.github.openfeign:feign-httpclient"
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
     implementation "org.springframework.cloud:spring-cloud-starter-sleuth"
 
@@ -43,8 +44,6 @@ dependencies {
     implementation "org.flywaydb:flyway-core"
 
     implementation 'io.reactivex.rxjava2:rxjava'
-
-    compile "io.github.openfeign:feign-httpclient:10.4.0"
 
     implementation "org.springframework.boot:spring-boot-devtools"
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
