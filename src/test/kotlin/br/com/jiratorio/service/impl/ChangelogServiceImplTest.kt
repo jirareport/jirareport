@@ -6,7 +6,6 @@ import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import java.util.Arrays.asList
 
 @Tag("unit")
 internal class ChangelogServiceImplTest {
@@ -15,7 +14,7 @@ internal class ChangelogServiceImplTest {
 
     @Test
     fun `parse changelog`() {
-        val jiraChangelog = asList(
+        val jiraChangelog = listOf(
             JiraChangelogItem(field = "issueType"),
             JiraChangelogItem(field = "other"),
             JiraChangelogItem(

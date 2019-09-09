@@ -7,14 +7,13 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
-import java.util.Arrays.asList
 
 @Tag("unit")
 internal class ImpedimentCalculatorByFlagTest {
 
     @Test
     fun `time in impediment`() {
-        val changelogItems = asList(
+        val changelogItems = listOf(
             JiraChangelogItem(
                 field = "flagged",
                 toString = "impediment",
@@ -71,7 +70,7 @@ internal class ImpedimentCalculatorByFlagTest {
 
     @Test
     fun `time in impediment without term`() {
-        val changelogItems = asList(
+        val changelogItems = listOf(
             JiraChangelogItem(
                 field = "flagged",
                 toString = "impediment",

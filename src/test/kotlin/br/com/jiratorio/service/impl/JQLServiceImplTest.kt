@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
-import java.util.Arrays
 
 @Tag("unit")
 internal class JQLServiceImplTest {
@@ -109,7 +108,7 @@ internal class JQLServiceImplTest {
             externalId = 123123L,
             startColumn = "TODO",
             endColumn = "DONE",
-            fluxColumn = Arrays.asList("TODO", "WIP", "DONE"),
+            fluxColumn = mutableListOf("TODO", "WIP", "DONE"),
             ignoreIssueType = ignoreIssueType
         )
 }

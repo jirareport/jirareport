@@ -6,14 +6,13 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
-import java.util.Arrays.asList
 
 @Tag("unit")
 internal class ImpedimentCalculatorByColumnTest {
 
     @Test
     fun `time in impediment`() {
-        val changelog = asList(
+        val changelog = listOf(
             Changelog(to = "COLUMN_ONE", leadTime = 1, created = LocalDateTime.now()),
             Changelog(to = "IMP_COLUMN_ONE", leadTime = 2, created = LocalDateTime.now()),
             Changelog(to = "COLUMN_TWO", leadTime = 3, created = LocalDateTime.now()),
@@ -22,7 +21,7 @@ internal class ImpedimentCalculatorByColumnTest {
             Changelog(to = "IMP_COLUMN_THREE", leadTime = 6, created = LocalDateTime.now()),
             Changelog(to = "COLUMN_FOUR", leadTime = 7, created = LocalDateTime.now())
         )
-        val columns = asList("IMP_COLUMN_ONE", "IMP_COLUMN_TWO", "IMP_COLUMN_THREE")
+        val columns = listOf("IMP_COLUMN_ONE", "IMP_COLUMN_TWO", "IMP_COLUMN_THREE")
 
         val impedimentCalculatorResult = ImpedimentCalculatorByColumn.calcImpediment(
             columns,

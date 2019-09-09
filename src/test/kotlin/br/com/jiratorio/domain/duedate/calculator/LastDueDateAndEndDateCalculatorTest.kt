@@ -15,7 +15,7 @@ internal class LastDueDateAndEndDateCalculatorTest {
     fun `calc deviation of estimate with due date type last and end date`() {
         val firstDueDate = DueDateHistory(null, "05/02/2019".toLocalDate())
         val secondDueDate = DueDateHistory(null, "10/02/2019".toLocalDate())
-        val dueDateHistories = Arrays.asList(firstDueDate, secondDueDate)
+        val dueDateHistories = listOf(firstDueDate, secondDueDate)
         val endDate = "15/02/2019 09:40".toLocalDateTime()
 
         val deviationOfEstimate = LastDueDateAndEndDateCalculator.calcDeviationOfEstimate(

@@ -6,12 +6,12 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType
 import com.vladmihalcea.hibernate.type.json.JsonNodeBinaryType
 import com.vladmihalcea.hibernate.type.json.JsonNodeStringType
 import com.vladmihalcea.hibernate.type.json.JsonStringType
-import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.TypeDef
 import org.hibernate.annotations.TypeDefs
-import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.data.annotation.CreatedBy
+import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedBy
+import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
 import java.time.LocalDateTime
@@ -29,6 +29,7 @@ import javax.persistence.MappedSuperclass
     TypeDef(name = "json-node", typeClass = JsonNodeStringType::class)
 )
 open class BaseEntity : Serializable {
+    
     companion object {
         private const val serialVersionUID = -818259944975210693L
     }
@@ -36,13 +37,13 @@ open class BaseEntity : Serializable {
     @CreatedBy
     var owner: String = ""
 
-    @CreationTimestamp
+    @CreatedDate
     var createdAt: LocalDateTime = LocalDateTime.now()
-
-    @UpdateTimestamp
-    var updatedAt: LocalDateTime = LocalDateTime.now()
 
     @LastModifiedBy
     var lastEditor: String = ""
+
+    @LastModifiedDate
+    var updatedAt: LocalDateTime = LocalDateTime.now()
 
 }

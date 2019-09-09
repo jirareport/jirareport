@@ -11,7 +11,7 @@ import br.com.jiratorio.domain.estimate.EstimateIssue
 import br.com.jiratorio.domain.request.SearchEstimateRequest
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.domain.response.EstimateIssueResponse
-import br.com.jiratorio.exception.BadRequestException
+import br.com.jiratorio.exception.MissingBoardConfigurationException
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.plusDays
 import br.com.jiratorio.mapper.toEstimateIssueResponse
@@ -50,7 +50,10 @@ class EstimateServiceImpl(
         val board = boardService.findById(boardId)
 
         if (board.fluxColumn.isNullOrEmpty()) {
-            throw BadRequestException("board.fluxColumn", messageResolver.resolve("errors.flux-column-not-configured"))
+            throw MissingBoardConfigurationException(
+                field = "board.fluxColumn",
+                message = messageResolver.resolve("errors.flux-column-not-configured")
+            )
         }
 
         val estimateIssues = estimateIssueParser.parseEstimate(

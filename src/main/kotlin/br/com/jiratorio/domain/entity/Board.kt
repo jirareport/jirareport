@@ -83,7 +83,10 @@ data class Board(
     var waitingColumns: MutableList<String>? = null,
 
     @Enumerated(EnumType.STRING)
-    var dueDateType: DueDateType? = null
+    var dueDateType: DueDateType? = null,
+
+    var useLastOccurrenceWhenCalculateLeadTime: Boolean = false
+
 ) : BaseEntity() {
 
     override fun toString() =

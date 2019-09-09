@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
-import java.util.Arrays.asList
 
 @Tag("unit")
 internal class FluxColumnTest {
@@ -17,7 +16,7 @@ internal class FluxColumnTest {
         private val fluxColumn = FluxColumn(
             startLeadTimeColumn = "START_LEAD_TIME_COLUMN",
             endLeadTimeColumn = "END_LEAD_TIME_COLUMN",
-            orderedColumns = asList(
+            orderedColumns = listOf(
                 "FIRST_COLUMN",
                 "SECOND_COLUMN",
                 "START_LEAD_TIME_COLUMN",
@@ -98,7 +97,7 @@ internal class FluxColumnTest {
             val fluxColumn = FluxColumn(
                 startLeadTimeColumn = "START_LEAD_TIME_COLUMN",
                 endLeadTimeColumn = "END_LEAD_TIME_COLUMN",
-                orderedColumns = asList(
+                orderedColumns = listOf(
                     "FIRST_COLUMN",
                     "SECOND_COLUMN",
                     "START_LEAD_TIME_COLUMN",
@@ -136,7 +135,7 @@ internal class FluxColumnTest {
             val fluxColumn = FluxColumn(
                 startLeadTimeColumn = "BACKLOG",
                 endLeadTimeColumn = "DONE",
-                orderedColumns = asList(
+                orderedColumns = listOf(
                     "BACKLOG",
                     "ANALYSIS",
                     "DEV WIP",
@@ -181,7 +180,7 @@ internal class FluxColumnTest {
             val fluxColumn = FluxColumn(
                 startLeadTimeColumn = "ANALYSIS",
                 endLeadTimeColumn = "ACCOMPANIMENT",
-                orderedColumns = asList(
+                orderedColumns = listOf(
                     "BACKLOG",
                     "ANALYSIS",
                     "DEV WIP",

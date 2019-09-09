@@ -8,7 +8,6 @@ import br.com.jiratorio.factory.KBacon
 import br.com.jiratorio.repository.BoardRepository
 import com.github.javafaker.Faker
 import org.springframework.stereotype.Component
-import java.util.Arrays.asList
 
 @Component
 class BoardFactory(
@@ -27,7 +26,7 @@ class BoardFactory(
         return builder().apply {
             startColumn = "TODO"
             endColumn = "DONE"
-            fluxColumn = asList("TODO", "WIP", "DONE")
+            fluxColumn = mutableListOf("TODO", "WIP", "DONE")
             ignoreIssueType = mutableListOf("IT_1")
             epicCF = faker.jira().customField()
             estimateCF = faker.jira().customField()
@@ -35,7 +34,7 @@ class BoardFactory(
             projectCF = faker.jira().customField()
             ignoreWeekend = false
             impedimentType = ImpedimentType.COLUMN
-            impedimentColumns = asList("IMP_COLUMN1", "IMP_COLUMN2", "IMP_COLUMN3")
+            impedimentColumns = mutableListOf("IMP_COLUMN1", "IMP_COLUMN2", "IMP_COLUMN3")
             touchingColumns = faker.lorem().words()
             waitingColumns = faker.lorem().words()
             dueDateCF = faker.jira().customField()
@@ -47,7 +46,7 @@ class BoardFactory(
         return builder().apply {
             startColumn = "TODO"
             endColumn = "DONE"
-            fluxColumn = asList("BACKLOG", "TODO", "WIP", "ACCOMPANIMENT", "DONE")
+            fluxColumn = mutableListOf("BACKLOG", "TODO", "WIP", "ACCOMPANIMENT", "DONE")
         }
     }
 
@@ -55,7 +54,7 @@ class BoardFactory(
         return builder().apply {
             startColumn = "ANALYSIS"
             endColumn = "DONE"
-            fluxColumn = asList(
+            fluxColumn = mutableListOf(
                 "BACKLOG", "ANALYSIS", "DEV WIP", "DEV DONE", "TEST WIP", "TEST DONE", "REVIEW", "ACCOMPANIMENT", "DONE"
             )
             ignoreIssueType = mutableListOf("SubTask")
@@ -66,10 +65,10 @@ class BoardFactory(
             ignoreWeekend = false
             impedimentType = ImpedimentType.FLAG
             impedimentColumns = mutableListOf()
-            touchingColumns = asList(
+            touchingColumns = mutableListOf(
                 "ANALYSIS", "DEV WIP", "TEST WIP", "REVIEW", "ACCOMPANIMENT"
             )
-            waitingColumns = asList(
+            waitingColumns = mutableListOf(
                 "BACKLOG", "DEV DONE", "TEST DONE"
             )
             dueDateCF = "duedate"
