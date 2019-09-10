@@ -1,6 +1,6 @@
 package br.com.jiratorio.integration.board
 
-import br.com.jiratorio.assert.BoardAssert
+import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.request.UpdateBoardRequest
@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.repository.findByIdOrNull
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -45,10 +46,10 @@ internal class UpdateBoardIntegrationTest @Autowired constructor(
             }
         }
 
-        val board = boardRepository.findById(1L)
-            .orElseThrow(::ResourceNotFound)
+        val board = boardRepository.findByIdOrNull(1L)
+            ?: throw ResourceNotFound()
 
-        BoardAssert(board).assertThat {
+        board.assertThat {
             hasName(request.name)
             hasStartColumn(request.startColumn)
             hasEndColumn(request.endColumn)

@@ -1,6 +1,6 @@
 package br.com.jiratorio.service.impl
 
-import br.com.jiratorio.assert.PercentileAssert
+import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.domain.Percentile
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.params.ParameterizedTest
@@ -18,7 +18,7 @@ internal class PercentileServiceImplTest {
 
         val result = percentileServiceImpl.calculatePercentile(leadTimes)
 
-        PercentileAssert(result).assertThat {
+        result.assertThat {
             hasAverage(expected.average)
             hasMedian(expected.median)
             hasPercentile75(expected.percentile75)

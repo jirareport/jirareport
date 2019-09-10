@@ -117,3 +117,6 @@ class IssuePeriodDetailResponseAssert(
         objects.assertEqual(field("issuePeriodDetailResponse.dynamicCharts"), actual.dynamicCharts, dynamicCharts)
     }
 }
+
+fun IssuePeriodDetailResponse.assertThat(assertions: IssuePeriodDetailResponseAssert.() -> Unit): IssuePeriodDetailResponseAssert =
+    IssuePeriodDetailResponseAssert(this).assertThat(assertions)

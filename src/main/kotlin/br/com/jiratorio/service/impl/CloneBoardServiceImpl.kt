@@ -25,7 +25,8 @@ class CloneBoardServiceImpl(
 
     @Transactional
     override fun clone(boardId: Long): Long {
-        log.info("Method=clone, boardId")
+        log.info("Method=clone, boardId={}", boardId)
+
         val boardToClone = boardRepository.findByIdOrNull(boardId)
             ?: throw ResourceNotFound()
 
@@ -99,7 +100,8 @@ class CloneBoardServiceImpl(
             impedimentColumns = boardToClone.impedimentColumns,
             touchingColumns = boardToClone.touchingColumns,
             waitingColumns = boardToClone.waitingColumns,
-            dueDateType = boardToClone.dueDateType
+            dueDateType = boardToClone.dueDateType,
+            useLastOccurrenceWhenCalculateLeadTime = boardToClone.useLastOccurrenceWhenCalculateLeadTime
         )
     }
 

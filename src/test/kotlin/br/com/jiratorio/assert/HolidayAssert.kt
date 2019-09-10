@@ -15,3 +15,6 @@ class HolidayAssert(actual: Holiday) :
     }
 
 }
+
+fun Holiday.assertThat(assertions: HolidayAssert.() -> Unit): HolidayAssert =
+    HolidayAssert(this).assertThat(assertions)

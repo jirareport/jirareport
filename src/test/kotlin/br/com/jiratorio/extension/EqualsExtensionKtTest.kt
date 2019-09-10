@@ -11,35 +11,55 @@ internal class EqualsExtensionKtTest {
     @Test
     fun `test complex equals, results true`() {
         val firstPerson = Person(
-            "Leonardo", 23,
-            listOf(Phone(1L, "123"), Phone(2L, "321"), Phone(3L, "543"))
+            name = "Leonardo",
+            age = 23,
+            phones = listOf(
+                Phone(id = 1L, number = "123"),
+                Phone(id = 2L, number = "321"),
+                Phone(id = 3L, number = "543")
+            )
         )
 
         val secondPerson = Person(
-            "Leonardo", 22,
-            listOf(Phone(1L, "123"), Phone(2L, "321"), Phone(3L, "543"))
+            name = "Leonardo",
+            age = 22,
+            phones = listOf(
+                Phone(id = 1L, number = "123"),
+                Phone(id = 2L, number = "321"),
+                Phone(id = 3L, number = "543")
+            )
         )
 
-        Assertions.assertThat(firstPerson === secondPerson).isFalse()
-        Assertions.assertThat(firstPerson.phones === secondPerson.phones).isFalse()
         Assertions.assertThat(firstPerson == secondPerson).isTrue()
+        Assertions.assertThat(firstPerson.phones == secondPerson.phones).isTrue()
+        Assertions.assertThat(firstPerson === secondPerson).isFalse()
     }
 
     @Test
     fun `test complex equals, results false`() {
         val firstPerson = Person(
-            "Leonardo", 23,
-            listOf(Phone(1L, "123"), Phone(2L, "321"), Phone(3L, "543"))
+            name = "Leonardo",
+            age = 23,
+            phones = listOf(
+                Phone(id = 1L, number = "123"),
+                Phone(id = 2L, number = "321"),
+                Phone(id = 3L, number = "345")
+            )
         )
 
         val secondPerson = Person(
-            "Ferreira", 23,
-            listOf(Phone(1L, "123"), Phone(2L, "321"), Phone(3L, "543"))
+            name = "Ferreira",
+            age = 23,
+            phones = listOf(
+                Phone(id = 1L, number = "123"),
+                Phone(id = 2L, number = "321"),
+                Phone(id = 3L, number = "543")
+            )
         )
 
-        Assertions.assertThat(firstPerson === secondPerson).isFalse()
-        Assertions.assertThat(firstPerson.phones === secondPerson.phones).isFalse()
         Assertions.assertThat(firstPerson == secondPerson).isFalse()
+        Assertions.assertThat(firstPerson.phones == secondPerson.phones).isFalse()
+        Assertions.assertThat(firstPerson === secondPerson).isFalse()
     }
 
     internal inner class Person(

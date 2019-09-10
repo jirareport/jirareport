@@ -29,7 +29,7 @@ import javax.persistence.MappedSuperclass
     TypeDef(name = "json-node", typeClass = JsonNodeStringType::class)
 )
 open class BaseEntity : Serializable {
-    
+
     companion object {
         private const val serialVersionUID = -818259944975210693L
     }

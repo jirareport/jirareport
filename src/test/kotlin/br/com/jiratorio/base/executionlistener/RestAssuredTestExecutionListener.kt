@@ -2,9 +2,9 @@ package br.com.jiratorio.base.executionlistener
 
 import io.restassured.RestAssured
 import org.springframework.test.context.TestContext
-import org.springframework.test.context.support.AbstractTestExecutionListener
+import org.springframework.test.context.TestExecutionListener
 
-class RestAssuredTestExecutionListener : AbstractTestExecutionListener() {
+class RestAssuredTestExecutionListener : TestExecutionListener {
 
     override fun beforeTestMethod(testContext: TestContext) {
         RestAssured.port = testContext.applicationContext.environment

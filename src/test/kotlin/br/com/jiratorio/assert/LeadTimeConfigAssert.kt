@@ -2,8 +2,12 @@ package br.com.jiratorio.assert
 
 import br.com.jiratorio.domain.entity.LeadTimeConfig
 
-class LeadTimeConfigAssert(actual: LeadTimeConfig) :
-    BaseAssert<LeadTimeConfigAssert, LeadTimeConfig>(actual, LeadTimeConfigAssert::class) {
+class LeadTimeConfigAssert(
+    actual: LeadTimeConfig
+) : BaseAssert<LeadTimeConfigAssert, LeadTimeConfig>(
+    actual,
+    LeadTimeConfigAssert::class
+) {
 
     fun hasName(name: String) = assertAll {
         objects.assertEqual(field("leadTimeConfig.name"), actual.name, name)
@@ -22,3 +26,6 @@ class LeadTimeConfigAssert(actual: LeadTimeConfig) :
     }
 
 }
+
+fun LeadTimeConfig.assertThat(assertions: LeadTimeConfigAssert.() -> Unit): LeadTimeConfigAssert =
+    LeadTimeConfigAssert(this).assertThat(assertions)

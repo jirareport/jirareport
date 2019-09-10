@@ -1,6 +1,6 @@
 package br.com.jiratorio.service.impl
 
-import br.com.jiratorio.assert.EfficiencyAssert
+import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.extension.toLocalDateTime
 import org.junit.jupiter.api.Tag
@@ -25,7 +25,7 @@ internal class EfficiencyServiceImplTest {
             null
         )
 
-        EfficiencyAssert(result).assertThat {
+        result.assertThat {
             hasWaitTime(2882)
             hasTouchTime(67622)
             hasPctEfficiency(95.91228866447294)
@@ -45,7 +45,7 @@ internal class EfficiencyServiceImplTest {
             null
         )
 
-        EfficiencyAssert(result).assertThat {
+        result.assertThat {
             hasWaitTime(0)
             hasTouchTime(0)
             hasPctEfficiency(0.0)
@@ -66,7 +66,7 @@ internal class EfficiencyServiceImplTest {
             null
         )
 
-        EfficiencyAssert(result).assertThat {
+        result.assertThat {
             hasWaitTime(0)
             hasTouchTime(0)
             hasPctEfficiency(0.0)
@@ -87,7 +87,7 @@ internal class EfficiencyServiceImplTest {
             null
         )
 
-        EfficiencyAssert(result).assertThat {
+        result.assertThat {
             hasWaitTime(0)
             hasTouchTime(0)
             hasPctEfficiency(0.0)

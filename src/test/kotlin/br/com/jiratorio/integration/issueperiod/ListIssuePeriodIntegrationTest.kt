@@ -1,17 +1,16 @@
 package br.com.jiratorio.integration.issueperiod
 
-import br.com.jiratorio.assert.response.IssuePeriodResponseAssert
+import br.com.jiratorio.assert.response.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByBoardResponse
 import br.com.jiratorio.dsl.extractAs
 import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.extension.decimal.format
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
 import org.apache.http.HttpStatus.SC_OK
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -58,7 +57,10 @@ internal class ListIssuePeriodIntegrationTest @Autowired constructor(
             }
         }
 
-        val response = restAssured {
+        val (
+            periods,
+            charts
+        ) = restAssured {
             given {
                 header(authenticator.defaultUserHeader())
             }
@@ -70,7 +72,7 @@ internal class ListIssuePeriodIntegrationTest @Autowired constructor(
             }
         } extractAs IssuePeriodByBoardResponse::class
 
-        IssuePeriodResponseAssert(response.periods.last()).assertThat {
+        periods.last().assertThat {
             hasId(period.id)
             hasDates(period.dates)
             hasLeadTime(period.leadTime)
@@ -80,40 +82,29 @@ internal class ListIssuePeriodIntegrationTest @Autowired constructor(
             hasThroughput(period.throughput)
         }
 
-        assertThat(response.charts.throughputByEstimate.labels)
-            .hasSize(5)
-        assertThat(response.charts.throughputByEstimate.datasources["P"])
-            .hasSize(5)
-        assertThat(response.charts.throughputByEstimate.datasources["M"])
-            .hasSize(5)
-        assertThat(response.charts.throughputByEstimate.datasources["G"])
-            .hasSize(5)
-        assertThat(response.charts.throughputByEstimate.datasources["M"])
-            .hasSize(5)
-        assertThat(response.charts.throughputByEstimate.datasources["G"])
-            .hasSize(5)
+        charts.assertThat {
+            hasThroughputByEstimateLabelsSize(5)
 
-        assertThat(response.charts.leadTimeCompareChart.labels)
-            .hasSize(5)
-        assertThat(response.charts.leadTimeCompareChart.datasources["Test Lead Time"])
-            .hasSize(5)
-        assertThat(response.charts.leadTimeCompareChart.datasources["Test Lead Time"]?.last())
-            .isEqualTo(period.leadTimeCompareChart?.data!!["Test Lead Time"])
+            hasThroughputByEstimateSize("P", 5)
+            hasThroughputByEstimateSize("M", 5)
+            hasThroughputByEstimateSize("G", 5)
 
-        assertThat(response.charts.leadTimeCompareChart.datasources["Dev Lead Time"])
-            .hasSize(5)
-        assertThat(response.charts.leadTimeCompareChart.datasources["Dev Lead Time"]?.last())
-            .isEqualTo(period.leadTimeCompareChart?.data!!["Dev Lead Time"])
+            hasLeadTimeCompareChartLabelsSize(5)
 
-        assertThat(response.charts.leadTimeCompareChart.datasources["Delivery Lead Time"])
-            .hasSize(5)
-        assertThat(response.charts.leadTimeCompareChart.datasources["Delivery Lead Time"]?.last())
-            .isEqualTo(period.leadTimeCompareChart?.data!!["Delivery Lead Time"])
+            period.leadTimeCompareChart?.let { leadTimeCompareChart ->
+                hasLeadTimeCompareChartSize("Test Lead Time", 5)
+                hasLeadTimeCompareChartData("Test Lead Time", leadTimeCompareChart.data["Test Lead Time"])
 
-        assertThat(response.charts.leadTime.data[period.dates])
-            .isEqualTo(period.leadTime.format())
-        assertThat(response.charts.throughput.data[period.dates])
-            .isEqualTo(period.throughput)
+                hasLeadTimeCompareChartSize("Dev Lead Time", 5)
+                hasLeadTimeCompareChartData("Dev Lead Time", leadTimeCompareChart.data["Dev Lead Time"])
+
+                hasLeadTimeCompareChartSize("Delivery Lead Time", 5)
+                hasLeadTimeCompareChartData("Delivery Lead Time", leadTimeCompareChart.data["Delivery Lead Time"])
+            } ?: Assertions.fail("period.leadTimeCompareChart can't be null")
+
+            hasLeadTime(period.dates, period.leadTime)
+            hasThroughput(period.dates, period.throughput)
+        }
     }
 
     @Test

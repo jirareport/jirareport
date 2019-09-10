@@ -1,6 +1,6 @@
 package br.com.jiratorio.integration.holiday
 
-import br.com.jiratorio.assert.HolidayAssert
+import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.repository.findByIdOrNull
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -44,10 +45,10 @@ internal class CreateHolidayIntegrationTest @Autowired constructor(
             }
         }
 
-        val holiday = holidayRepository.findById(1L)
-            .orElseThrow(::ResourceNotFound)
+        val holiday = holidayRepository.findByIdOrNull(1L)
+            ?: throw ResourceNotFound()
 
-        HolidayAssert(holiday).assertThat {
+        holiday.assertThat {
             hasDescription(request.description)
             hasDate(request.date)
         }

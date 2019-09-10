@@ -1,6 +1,6 @@
 package br.com.jiratorio.service.impl
 
-import br.com.jiratorio.assert.LeadTimeAssert
+import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.LeadTime
@@ -23,6 +23,7 @@ import io.mockk.runs
 import io.mockk.verify
 import io.mockk.verifyAll
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -160,23 +161,29 @@ internal class LeadTimeServiceImplTest {
 
         val leadTimes = issue.leadTimes ?: throw ResourceNotFound()
 
-        LeadTimeAssert(leadTimes.find { it.leadTimeConfig.name == "Development Lead Time" }!!).assertThat {
+        leadTimes.find {
+            it.leadTimeConfig.name == "Development Lead Time"
+        }?.assertThat {
             hasLeadTime(10)
             hasStartDate("10/01/2019 12:00".toLocalDateTime())
             hasEndDate("23/01/2019 12:00".toLocalDateTime())
-        }
+        } ?: Assertions.fail("Development Lead Time not found")
 
-        LeadTimeAssert(leadTimes.find { it.leadTimeConfig.name == "Test Lead Time" }!!).assertThat {
+        leadTimes.find {
+            it.leadTimeConfig.name == "Test Lead Time"
+        }?.assertThat {
             hasLeadTime(8)
             hasStartDate("23/01/2019 12:00".toLocalDateTime())
             hasEndDate("02/02/2019 12:00".toLocalDateTime())
-        }
+        } ?: Assertions.fail("Test Lead Time not found")
 
-        LeadTimeAssert(leadTimes.find { it.leadTimeConfig.name == "Delivery Lead Time" }!!).assertThat {
+        leadTimes.find {
+            it.leadTimeConfig.name == "Delivery Lead Time"
+        }?.assertThat {
             hasLeadTime(7)
             hasStartDate("02/02/2019 12:00".toLocalDateTime())
             hasEndDate("12/02/2019 12:00".toLocalDateTime())
-        }
+        } ?: Assertions.fail("Delivery Lead Time not found")
     }
 
     private fun defaultLeadTimes(board: Board): List<LeadTimeConfig> {

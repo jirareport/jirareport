@@ -3,12 +3,12 @@ package br.com.jiratorio.base.executionlistener
 import br.com.jiratorio.extension.log
 import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.test.context.TestContext
-import org.springframework.test.context.support.AbstractTestExecutionListener
+import org.springframework.test.context.TestExecutionListener
 import java.sql.Connection
 import java.sql.Statement
 import javax.sql.DataSource
 
-class CleanDatabaseTestExecutionListener : AbstractTestExecutionListener() {
+class CleanDatabaseTestExecutionListener : TestExecutionListener {
 
     override fun beforeTestMethod(testContext: TestContext) {
         try {

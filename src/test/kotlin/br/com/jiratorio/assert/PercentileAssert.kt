@@ -2,7 +2,12 @@ package br.com.jiratorio.assert
 
 import br.com.jiratorio.domain.Percentile
 
-class PercentileAssert(actual: Percentile) : BaseAssert<PercentileAssert, Percentile>(actual, PercentileAssert::class) {
+class PercentileAssert(
+    actual: Percentile
+) : BaseAssert<PercentileAssert, Percentile>(
+    actual,
+    PercentileAssert::class
+) {
 
     fun hasAverage(average: Double) = assertAll {
         objects.assertEqual(field("percentile.average"), actual.average, average)
@@ -21,3 +26,6 @@ class PercentileAssert(actual: Percentile) : BaseAssert<PercentileAssert, Percen
     }
 
 }
+
+fun Percentile.assertThat(assertions: PercentileAssert.() -> Unit): PercentileAssert =
+    PercentileAssert(this).assertThat(assertions)

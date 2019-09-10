@@ -7,8 +7,12 @@ import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import java.time.LocalDateTime
 
-class IssueAssert(actual: Issue) :
-    BaseAssert<IssueAssert, Issue>(actual, IssueAssert::class) {
+class IssueAssert(
+    actual: Issue
+) : BaseAssert<IssueAssert, Issue>(
+    actual,
+    IssueAssert::class
+) {
 
     fun hasKey(key: String) = assertAll {
         objects.assertEqual(field("issue.key"), actual.key, key)
@@ -110,3 +114,6 @@ class IssueAssert(actual: Issue) :
         objects.assertEqual(field("issue.leadTimes"), actual.leadTimes, leadTimes)
     }
 }
+
+fun Issue.assertThat(assertions: IssueAssert.() -> Unit): IssueAssert =
+    IssueAssert(this).assertThat(assertions)

@@ -1,7 +1,6 @@
 package br.com.jiratorio.integration.issueperiod.create
 
-import br.com.jiratorio.assert.IssueAssert
-import br.com.jiratorio.assert.IssuePeriodAssert
+import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.annotation.LoadStubs
 import br.com.jiratorio.domain.entity.embedded.Changelog
@@ -19,6 +18,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.repository.findByIdOrNull
 import javax.servlet.http.HttpServletResponse
 
 @Tag("integration")
@@ -57,16 +57,16 @@ internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
             }
         }
 
-        val issuePeriod = issuePeriodRepository.findById(1L)
-            .orElseThrow(::ResourceNotFound)
+        val issuePeriod = issuePeriodRepository.findByIdOrNull(1L)
+            ?: throw ResourceNotFound()
 
-        IssuePeriodAssert(issuePeriod).assertThat {
+        issuePeriod.assertThat {
             hasStartDate(request.startDate.toLocalDate())
             hasEndDate(request.endDate.toLocalDate())
 
             hasLeadTime(14.5)
 
-            histogram().assertThat {
+            histogram.assertThat {
                 hasMedian(11)
                 hasPercentile75(18)
                 hasPercentile90(18)
@@ -110,10 +110,10 @@ internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
             hasEmptyLeadTimeCompareChart()
         }
 
-        val issue = issueRepository.findById(1L)
-            .orElseThrow(::ResourceNotFound)
+        val issue = issueRepository.findByIdOrNull(1L)
+            ?: throw ResourceNotFound()
 
-        IssueAssert(issue).assertThat {
+        issue.assertThat {
             hasKey("JIRAT-1")
             hasIssueType("Task")
             hasCreator("Leonardo Ferreira")
