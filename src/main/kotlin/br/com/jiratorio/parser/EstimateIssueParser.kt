@@ -5,6 +5,7 @@ import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.estimate.EstimateIssue
 import br.com.jiratorio.domain.impediment.calculator.ImpedimentCalculatorResult
+import br.com.jiratorio.extension.containsUpperCase
 import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
@@ -66,7 +67,7 @@ class EstimateIssueParser(
         var startDate: LocalDateTime? = null
 
         for (cl in changelog) {
-            if (startDate == null && startColumns.contains(cl.to?.toUpperCase())) {
+            if (startDate == null && startColumns.containsUpperCase(cl.to)) {
                 startDate = cl.created
             }
         }

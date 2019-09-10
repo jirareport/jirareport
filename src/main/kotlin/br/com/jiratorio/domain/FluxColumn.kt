@@ -3,6 +3,7 @@ package br.com.jiratorio.domain
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.exception.MissingBoardConfigurationException
+import br.com.jiratorio.extension.containsUpperCase
 import java.time.LocalDateTime
 
 data class FluxColumn(
@@ -20,7 +21,7 @@ data class FluxColumn(
     )
 
     val endColumns: Set<String>
-        get() = if (orderedColumns == null)
+        get() = if (orderedColumns.isNullOrEmpty())
             setOf(endLeadTimeColumn)
         else
             orderedColumns.takeLastWhile { it != endLeadTimeColumn }.toSet() + endLeadTimeColumn
@@ -44,26 +45,32 @@ data class FluxColumn(
         var endDate: LocalDateTime? = null
 
         for (cl in changelog) {
-            if (startDate == null && startColumns.contains(cl.to?.toUpperCase())) {
-                startDate = if (useLastOccurrenceWhenCalculateLeadTime)
-                    changelog.last { it.to == cl.to }.created
-                else
-                    cl.created
+            if (startDate == null && startColumns.containsUpperCase(cl.to)) {
+                startDate = lastOccurrenceIfNeeds(cl.to, changelog, cl.created)
             }
 
-            if (endDate == null && endColumns.contains(cl.to?.toUpperCase())) {
-                endDate = if (useLastOccurrenceWhenCalculateLeadTime)
-                    changelog.last { it.to == cl.to }.created
-                else
-                    cl.created
+            if (endDate == null && endColumns.containsUpperCase(cl.to)) {
+                endDate = lastOccurrenceIfNeeds(cl.to, changelog, cl.created)
             }
         }
 
         if (startLeadTimeColumn == "BACKLOG") {
-            startDate = created
+            startDate = lastOccurrenceIfNeeds("BACKLOG", changelog, created)
         }
 
         return startDate to endDate
     }
+
+    private fun lastOccurrenceIfNeeds(
+        to: String?,
+        changelog: List<Changelog>,
+        created: LocalDateTime
+    ): LocalDateTime =
+        if (useLastOccurrenceWhenCalculateLeadTime)
+            changelog.last {
+                it.to.equals(to, ignoreCase = true)
+            }.created
+        else
+            created
 
 }
