@@ -7,7 +7,6 @@ import br.com.jiratorio.exception.JiraException
 import br.com.jiratorio.exception.UnauthorizedException
 import br.com.jiratorio.extension.account
 import br.com.jiratorio.extension.log
-import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.ObjectMapper
 import feign.RequestInterceptor
 import feign.codec.ErrorDecoder
@@ -38,7 +37,8 @@ class JiraClientConfiguration(
             JiraException(
                 try {
                     objectMapper.readValue(response.body().asInputStream(), JiraError::class.java)
-                } catch (e: JsonParseException) {
+                } catch (e: Exception) {
+                    log.error("Method=errorDecoder, methodKey={}, response={}", methodKey, response, e)
                     JiraError(messageResolver.resolve("errors.session-timeout"), response.status().toLong())
                 }
             )
