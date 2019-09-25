@@ -74,6 +74,19 @@ internal class JQLServiceImplTest {
                 """.trimMargin().replace("\n", "")
             )
         }
+
+        @Test
+        fun `finalized issues with backslash`() {
+            val board = createBoard(
+                fluxColumn = mutableListOf("TODO", "WAITING UI\\UX", "UI\\UX DONE", "WIP", "DONE")
+            )
+
+            val jql = jqlService.finalizedIssues(board, startDate, endDate)
+            assertThat(jql)
+                .contains("'WAITING UI\\\\UX'")
+                .contains("'UI\\\\UX DONE'")
+        }
+
     }
 
     @Nested
@@ -100,15 +113,31 @@ internal class JQLServiceImplTest {
                 .contains("project = '123123'")
                 .contains("AND status IN ('TODO','WIP')")
         }
+
+        @Test
+        fun `opened issues with backslash`() {
+            val board = createBoard(
+                fluxColumn = mutableListOf("TODO", "WAITING UI\\UX", "UI\\UX DONE", "WIP", "DONE")
+            )
+
+            val jql = jqlService.openedIssues(board)
+            assertThat(jql)
+                .contains("'WAITING UI\\\\UX'")
+                .contains("'UI\\\\UX DONE'")
+        }
+
     }
 
-    private fun createBoard(ignoreIssueType: MutableList<String>? = null) =
+    private fun createBoard(
+        ignoreIssueType: MutableList<String>? = null,
+        fluxColumn: MutableList<String> = mutableListOf("TODO", "WIP", "DONE")
+    ) =
         Board(
             name = "test board",
             externalId = 123123L,
             startColumn = "TODO",
             endColumn = "DONE",
-            fluxColumn = mutableListOf("TODO", "WIP", "DONE"),
+            fluxColumn = fluxColumn,
             ignoreIssueType = ignoreIssueType
         )
 }

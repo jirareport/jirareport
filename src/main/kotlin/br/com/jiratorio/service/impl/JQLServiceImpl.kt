@@ -50,7 +50,10 @@ class JQLServiceImpl : JQLService {
               | $ignoredIssueTypes
               | AND status WAS IN ($startColumns)
               | AND status IN ($endColumns)
-        """.trimMargin().replace("\n", "")
+        """
+            .trimMargin()
+            .replace("\n", "")
+            .replace("\\", "\\\\")
     }
 
     override fun openedIssues(board: Board): String {
@@ -71,7 +74,10 @@ class JQLServiceImpl : JQLService {
             project = '$project'
             AND status IN ($wipColumns)
             $ignoredIssueTypes
-        """.trimMargin().replace("\n", "")
+        """
+            .trimMargin()
+            .replace("\n", "")
+            .replace("\\", "\\\\")
     }
 
 }
