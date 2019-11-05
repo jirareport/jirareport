@@ -43,10 +43,7 @@ dependencies {
 
     implementation "org.flywaydb:flyway-core"
 
-    implementation 'io.reactivex.rxjava2:rxjava'
-
-    implementation "org.springframework.boot:spring-boot-devtools"
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
     implementation "org.jetbrains.kotlin:kotlin-reflect"
@@ -104,7 +101,7 @@ detekt {
 
 task unitTest(type: Test) {
     useJUnitPlatform {
-        includeTags 'unit'
-        excludeTags 'integration'
+        includeTags "unit"
+        excludeTags "integration"
     }
 }
