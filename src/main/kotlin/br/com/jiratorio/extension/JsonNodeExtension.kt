@@ -1,6 +1,8 @@
 package br.com.jiratorio.extension
 
 import com.fasterxml.jackson.databind.JsonNode
+import java.util.stream.Stream
+import java.util.stream.StreamSupport
 
 fun JsonNode?.extractValueNotNull(): String =
     this.extractValue()!!
@@ -25,3 +27,6 @@ fun JsonNode?.extractValue(): String? {
 
     return this.asText(null)
 }
+
+fun JsonNode.parallelStream(): Stream<JsonNode> =
+    StreamSupport.stream(spliterator(), true)

@@ -8,14 +8,16 @@ import br.com.jiratorio.domain.impediment.calculator.ImpedimentCalculatorResult
 import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
+import br.com.jiratorio.extension.log
+import br.com.jiratorio.extension.parallelStream
 import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.service.ChangelogService
 import br.com.jiratorio.service.HolidayService
 import com.fasterxml.jackson.databind.JsonNode
-import io.reactivex.Flowable
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
+import kotlin.streams.toList
 
 @Component
 class EstimateIssueParser(
@@ -31,15 +33,30 @@ class EstimateIssueParser(
         val fluxColumn = FluxColumn(board)
         val startColumns = fluxColumn.startColumns
 
-        return Flowable.fromIterable(root.path("issues"))
-            .parallel(10)
-            .map { parseIssue(it, board, startColumns, holidays) }
-            .sequential()
-            .blockingIterable()
+        return root.path("issues")
+            .parallelStream()
+            .map { jsonNodeToEstimateIssue(it, board, startColumns, holidays) }
+            .toList()
             .filterNotNull()
     }
 
-    fun parseIssue(
+    private fun jsonNodeToEstimateIssue(
+        jsonNode: JsonNode,
+        board: Board,
+        startColumns: Set<String>,
+        holidays: List<LocalDate>
+    ): EstimateIssue? =
+        try {
+            parseIssue(jsonNode, board, startColumns, holidays)
+        } catch (e: Exception) {
+            log.error(
+                "Method=jsonNodeToIssue, info=Error parsing estimate Issue, issue={}, err={}",
+                jsonNode.path("key").extractValue(), e.message
+            )
+            throw e
+        }
+
+    private fun parseIssue(
         issue: JsonNode,
         board: Board,
         startColumns: Set<String>,
