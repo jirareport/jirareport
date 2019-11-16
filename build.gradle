@@ -42,8 +42,6 @@ dependencies {
 
     implementation "org.springframework.cloud:spring-cloud-starter-sleuth"
 
-    implementation "io.reactivex.rxjava2:rxjava"
-
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin"

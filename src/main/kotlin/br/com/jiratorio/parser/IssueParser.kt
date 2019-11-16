@@ -10,16 +10,17 @@ import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
 import br.com.jiratorio.extension.log
+import br.com.jiratorio.extension.parallelStream
 import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.service.ChangelogService
 import br.com.jiratorio.service.DueDateService
 import br.com.jiratorio.service.EfficiencyService
 import br.com.jiratorio.service.HolidayService
 import com.fasterxml.jackson.databind.JsonNode
-import io.reactivex.Flowable
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
+import kotlin.streams.toList
 
 @Component
 class IssueParser(
@@ -36,22 +37,28 @@ class IssueParser(
         val holidays = holidayService.findDaysByBoard(board.id)
 
         val fluxColumn = FluxColumn(board)
-        return Flowable.fromIterable(root.path("issues"))
-            .parallel(10)
-            .map {
-                try {
-                    parseIssue(it, board, holidays, fluxColumn)
-                } catch (e: Exception) {
-                    log.error(
-                        "Method=parse, info=Error parsing issue, issue={}, err={}",
-                        it.path("key").extractValue(), e.message
-                    )
-                    throw e
-                }
-            }
-            .sequential()
-            .blockingIterable()
+        return root.path("issues")
+            .parallelStream()
+            .map { jsonNodeToIssue(it, board, holidays, fluxColumn) }
+            .toList()
             .filterNotNull()
+    }
+
+    private fun jsonNodeToIssue(
+        jsonNode: JsonNode,
+        board: Board,
+        holidays: List<LocalDate>,
+        fluxColumn: FluxColumn
+    ): Issue? {
+        return try {
+            parseIssue(jsonNode, board, holidays, fluxColumn)
+        } catch (e: Exception) {
+            log.error(
+                "Method=jsonNodeToIssue, info=Error parsing issue, issue={}, err={}",
+                jsonNode.path("key").extractValue(), e.message
+            )
+            throw e
+        }
     }
 
     private fun parseIssue(

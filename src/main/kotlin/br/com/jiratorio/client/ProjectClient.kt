@@ -27,4 +27,5 @@ interface ProjectClient {
 
     @GetMapping("/rest/api/2/project/{projectId}")
     fun findById(@PathVariable("projectId") projectId: Long): Optional<JiraProjectDetails>
+
 }
