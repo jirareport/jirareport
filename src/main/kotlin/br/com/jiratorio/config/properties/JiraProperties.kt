@@ -1,12 +1,10 @@
 package br.com.jiratorio.config.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.context.annotation.Configuration
+import org.springframework.boot.context.properties.ConstructorBinding
 
-@Configuration
+@ConstructorBinding
 @ConfigurationProperties(prefix = "jira")
-class JiraProperties {
-
-    lateinit var url: String
-
-}
+data class JiraProperties(
+    val url: String
+)

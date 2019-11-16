@@ -1,14 +1,11 @@
 package br.com.jiratorio.config.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.context.annotation.Configuration
+import org.springframework.boot.context.properties.ConstructorBinding
 
-@Configuration
+@ConstructorBinding
 @ConfigurationProperties(prefix = "holiday")
-class HolidayProperties {
-
-    lateinit var url: String
-
-    lateinit var token: String
-
-}
+data class HolidayProperties(
+    val url: String,
+    val token: String
+)

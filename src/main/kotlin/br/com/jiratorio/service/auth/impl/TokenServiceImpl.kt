@@ -1,32 +1,58 @@
 package br.com.jiratorio.service.auth.impl
 
+import br.com.jiratorio.config.properties.SecurityProperties
 import br.com.jiratorio.domain.Account
 import br.com.jiratorio.service.auth.TokenService
-import br.com.jiratorio.extension.log
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.security.jwt.JwtHelper
-import org.springframework.security.jwt.crypto.sign.SignatureVerifier
-import org.springframework.security.jwt.crypto.sign.Signer
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.stereotype.Service
+import java.util.Base64
+import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
 
 @Service
 class TokenServiceImpl(
     private val objectMapper: ObjectMapper,
-    private val signatureVerifier: SignatureVerifier,
-    private val signer: Signer
+    securityProperties: SecurityProperties
 ) : TokenService {
 
-    override fun encode(account: Account): String {
-        log.info("Method=encode, account={}", account)
-
-        val json = objectMapper.writeValueAsString(account)
-        return JwtHelper.encode(json, signer).encoded
+    companion object {
+        private const val algorithm = "Blowfish"
     }
 
-    override fun decode(token: String): Account {
-        log.info("Method=decode")
+    private val encryptCipher: Cipher
+    private val decryptCipher: Cipher
 
-        val jwt = JwtHelper.decodeAndVerify(token, signatureVerifier)
-        return objectMapper.readValue(jwt.claims, Account::class.java)
+    init {
+        val key = SecretKeySpec(securityProperties.key.toByteArray(), algorithm)
+
+        encryptCipher = Cipher.getInstance(algorithm)
+        encryptCipher.init(Cipher.ENCRYPT_MODE, key)
+
+        decryptCipher = Cipher.getInstance(algorithm)
+        decryptCipher.init(Cipher.DECRYPT_MODE, key)
     }
+
+    override fun encode(account: Account): String =
+        encryptCipher.doFinal(account.toJson())
+            .toBase64()
+
+    override fun decode(token: String): Account =
+        decryptCipher.doFinal(token.fromBase64())
+            .fromJson()
+
+    private fun ByteArray.toBase64(): String =
+        Base64.getEncoder()
+            .encodeToString(this)
+
+    private fun String.fromBase64(): ByteArray =
+        Base64.getDecoder()
+            .decode(this)
+
+    private inline fun <reified T> ByteArray.fromJson(): T =
+        objectMapper.readValue(this)
+
+    private fun Account.toJson(): ByteArray? =
+        objectMapper.writeValueAsBytes(this)
+
 }

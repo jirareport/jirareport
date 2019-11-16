@@ -1,12 +1,10 @@
 package br.com.jiratorio.config.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.context.annotation.Configuration
+import org.springframework.boot.context.properties.ConstructorBinding
 
-@Configuration
+@ConstructorBinding
 @ConfigurationProperties("security")
-class SecurityProperties {
-
-    lateinit var key: String
-
-}
+data class SecurityProperties(
+    val key: String
+)
