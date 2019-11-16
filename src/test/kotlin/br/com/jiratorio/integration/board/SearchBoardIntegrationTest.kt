@@ -7,9 +7,9 @@ import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.matcher.IdMatcher
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers.contains
+import org.hamcrest.Matchers.emptyOrNullString
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
-import org.hamcrest.Matchers.isEmptyOrNullString
 import org.hamcrest.Matchers.not
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -60,9 +60,9 @@ internal class SearchBoardIntegrationTest @Autowired constructor(
             then {
                 statusCode(HttpStatus.SC_OK)
                 body("$", hasSize<Int>(3))
-                body("find { it == 'default_user' }", not(isEmptyOrNullString()))
-                body("find { it == 'first_user' }", not(isEmptyOrNullString()))
-                body("find { it == 'second_user' }", not(isEmptyOrNullString()))
+                body("find { it == 'default_user' }", not(emptyOrNullString()))
+                body("find { it == 'first_user' }", not(emptyOrNullString()))
+                body("find { it == 'second_user' }", not(emptyOrNullString()))
             }
         }
     }

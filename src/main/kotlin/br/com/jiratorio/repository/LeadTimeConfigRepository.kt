@@ -11,4 +11,8 @@ interface LeadTimeConfigRepository : CrudRepository<LeadTimeConfig, Long> {
 
     fun findByIdAndBoardId(id: Long, boardId: Long): LeadTimeConfig?
 
+    @JvmDefault
+    fun findByIdOrNull(id: Long): LeadTimeConfig? =
+        findById(id).orElse(null)
+
 }

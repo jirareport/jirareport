@@ -21,5 +21,6 @@ data class BoardDetailsResponse(
     val impedimentColumns: List<String>? = null,
     val touchingColumns: List<String>? = null,
     val waitingColumns: List<String>? = null,
-    val feature: BoardFeatureResponse
+    val feature: BoardFeatureResponse,
+    var useLastOccurrenceWhenCalculateLeadTime: Boolean = false
 )

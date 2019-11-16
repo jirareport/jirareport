@@ -1,6 +1,6 @@
 package br.com.jiratorio.service.impl
 
-import br.com.jiratorio.assert.DueDateHistoryAssert
+import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.context.UnitTestContext
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.extension.toLocalDate
@@ -31,7 +31,7 @@ internal class DueDateServiceImplTest @Autowired constructor(
         val dueDateHistories = dueDateService.extractDueDateHistory("duedate", listOf(jiraChangelogItem))
 
         assertThat(dueDateHistories).hasSize(1)
-        DueDateHistoryAssert(dueDateHistories.first()).assertThat {
+        dueDateHistories.first().assertThat {
             hasDueDate(jiraChangelogItem.to?.toLocalDate("yyyy-MM-dd"))
             hasCreated(jiraChangelogItem.created)
         }

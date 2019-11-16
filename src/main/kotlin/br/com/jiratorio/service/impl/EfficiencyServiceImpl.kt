@@ -2,6 +2,7 @@ package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.domain.Efficiency
 import br.com.jiratorio.domain.entity.embedded.Changelog
+import br.com.jiratorio.extension.containsUpperCase
 import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.minutesDiff
 import br.com.jiratorio.service.EfficiencyService
@@ -53,7 +54,7 @@ class EfficiencyServiceImpl : EfficiencyService {
         ignoreWeekend: Boolean?
     ): Long {
         return changelog
-            .filter { columns.contains(it.to?.toUpperCase()) }
+            .filter { columns.containsUpperCase(it.to) }
             .map { it.created.minutesDiff(it.endDate, holidays, ignoreWeekend) }
             .sum()
     }

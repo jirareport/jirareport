@@ -1,6 +1,6 @@
 package br.com.jiratorio.integration.board
 
-import br.com.jiratorio.assert.BoardAssert
+import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.repository.findByIdOrNull
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -70,7 +69,7 @@ class CloneBoardIntegrationTest @Autowired constructor(
         val board = boardRepository.findByIdOrNull(32L)
             ?: throw ResourceNotFound()
 
-        BoardAssert(board).assertThat {
+        board.assertThat {
             hasExternalId(boardToClone.externalId)
             hasName(boardToClone.name)
             hasStartColumn(boardToClone.startColumn)

@@ -27,26 +27,24 @@ class RestAssuredDSL {
         blockThen = block
     }
 
-    fun build(): Response {
-        return RestAssured
-            .given()
-                .log().all()
-                .header("Accept-Language", "en")
-                .apply(blockGiven)
-            .`when`()
-                .run(blockOn)
-            .then()
-                .log().all()
-                .apply(blockThen)
-                .extract().response()
-    }
+    // @formatter:off
+    fun build(): Response = RestAssured
+        .given()
+            .log().all()
+            .header("Accept-Language", "en")
+            .apply(blockGiven)
+        .`when`()
+            .run(blockOn)
+        .then()
+            .log().all()
+            .apply(blockThen)
+            .extract().response()
+    // @formatter:on
 
 }
 
-inline fun restAssured(block: RestAssuredDSL.() -> Unit): Response {
-    return RestAssuredDSL().apply(block).build()
-}
+inline fun restAssured(block: RestAssuredDSL.() -> Unit): Response =
+    RestAssuredDSL().apply(block).build()
 
-infix fun <T : Any> Response.extractAs(type: KClass<T>): T {
-    return this.`as`<T>(type.java)
-}
+infix fun <T : Any> Response.extractAs(type: KClass<T>): T =
+    this.`as`<T>(type.java)

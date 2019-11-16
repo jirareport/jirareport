@@ -3,8 +3,12 @@ package br.com.jiratorio.assert
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.DynamicFieldConfig
 
-class DynamicFieldConfigAssert(actual: DynamicFieldConfig) :
-    BaseAssert<DynamicFieldConfigAssert, DynamicFieldConfig>(actual, DynamicFieldConfigAssert::class) {
+class DynamicFieldConfigAssert(
+    actual: DynamicFieldConfig
+) : BaseAssert<DynamicFieldConfigAssert, DynamicFieldConfig>(
+    actual,
+    DynamicFieldConfigAssert::class
+) {
 
     fun hasName(name: String) = assertAll {
         objects.assertEqual(field("dynamicFieldConfig.name"), actual.name, name)
@@ -19,3 +23,6 @@ class DynamicFieldConfigAssert(actual: DynamicFieldConfig) :
     }
 
 }
+
+fun DynamicFieldConfig.assertThat(assertions: DynamicFieldConfigAssert.() -> Unit): DynamicFieldConfigAssert =
+    DynamicFieldConfigAssert(this).assertThat(assertions)

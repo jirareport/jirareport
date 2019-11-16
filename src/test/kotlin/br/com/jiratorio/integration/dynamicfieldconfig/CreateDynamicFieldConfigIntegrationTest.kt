@@ -1,6 +1,6 @@
 package br.com.jiratorio.integration.dynamicfieldconfig
 
-import br.com.jiratorio.assert.DynamicFieldConfigAssert
+import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.dsl.restAssured
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.repository.findByIdOrNull
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -52,7 +51,7 @@ class CreateDynamicFieldConfigIntegrationTest @Autowired constructor(
 
         val dynamicFieldConfig = dynamicFieldConfigRepository.findByIdOrNull(1L) ?: throw ResourceNotFound()
 
-        DynamicFieldConfigAssert(dynamicFieldConfig).assertThat {
+        dynamicFieldConfig.assertThat {
             hasName(request.name)
             hasField(request.field)
             hasBoard(board)

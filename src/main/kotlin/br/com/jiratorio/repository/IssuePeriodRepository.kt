@@ -23,4 +23,8 @@ interface IssuePeriodRepository : CrudRepository<IssuePeriod, Long> {
 
     fun findByBoardIdAndId(boardId: Long, id: Long): IssuePeriod?
 
+    @JvmDefault
+    fun findByIdOrNull(id: Long): IssuePeriod? =
+        findById(id).orElse(null)
+
 }

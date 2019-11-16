@@ -1,0 +1,6 @@
+root = true
+
+[*]
+ij_formatter_off_tag = @formatter:off
+ij_formatter_on_tag = @formatter:on
+ij_formatter_tags_enabled = true

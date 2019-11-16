@@ -6,12 +6,12 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import org.springframework.core.annotation.AnnotationUtils
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import org.springframework.test.context.TestContext
-import org.springframework.test.context.support.AbstractTestExecutionListener
+import org.springframework.test.context.TestExecutionListener
 import org.springframework.util.StreamUtils
 import java.lang.reflect.AnnotatedElement
 import java.nio.charset.Charset
 
-class WireMockTestExecutionListener : AbstractTestExecutionListener() {
+class WireMockTestExecutionListener : TestExecutionListener {
 
     private val charset = Charset.forName("UTF-8")
 

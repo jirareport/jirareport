@@ -4,8 +4,12 @@ import br.com.jiratorio.domain.dynamicfield.DynamicChart
 import br.com.jiratorio.domain.entity.IssuePeriod
 import java.time.LocalDate
 
-class IssuePeriodAssert(actual: IssuePeriod) :
-    BaseAssert<IssuePeriodAssert, IssuePeriod>(actual, IssuePeriodAssert::class) {
+class IssuePeriodAssert(
+    actual: IssuePeriod
+) : BaseAssert<IssuePeriodAssert, IssuePeriod>(
+    actual,
+    IssuePeriodAssert::class
+) {
 
     fun hasStartDate(startDate: LocalDate) = assertAll {
         objects.assertEqual(field("issuePeriod.startDate"), actual.startDate, startDate)
@@ -19,8 +23,8 @@ class IssuePeriodAssert(actual: IssuePeriod) :
         objects.assertEqual(field("issuePeriod.leadTime"), actual.leadTime, leadTime)
     }
 
-    fun histogram() =
-        HistogramAssert(actual.histogram!!)
+    val histogram: HistogramAssert
+        get() = HistogramAssert(actual.histogram ?: throw NullPointerException())
 
     fun hasLeadTimeByEstimate(vararg leadTimeByEstimate: Pair<String, Double>) = assertAll {
         objects.assertEqual(
@@ -139,3 +143,6 @@ class IssuePeriodAssert(actual: IssuePeriod) :
     }
 
 }
+
+fun IssuePeriod.assertThat(assertions: IssuePeriodAssert.() -> Unit): IssuePeriodAssert =
+    IssuePeriodAssert(this).assertThat(assertions)

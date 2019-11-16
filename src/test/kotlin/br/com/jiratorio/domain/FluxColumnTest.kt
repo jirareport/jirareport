@@ -7,54 +7,55 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
-import java.util.Arrays.asList
 
 @Tag("unit")
 internal class FluxColumnTest {
 
     @Nested
     inner class DefaultFluxColumn {
-        private val fluxColumn = FluxColumn(
-            startLeadTimeColumn = "START_LEAD_TIME_COLUMN",
-            endLeadTimeColumn = "END_LEAD_TIME_COLUMN",
-            orderedColumns = asList(
-                "FIRST_COLUMN",
-                "SECOND_COLUMN",
-                "START_LEAD_TIME_COLUMN",
-                "MIDDLE_COLUMN",
-                "SECOND_MIDDLE_COLUMN",
-                "END_LEAD_TIME_COLUMN",
-                "LAST_COLUMN"
-            )
+        private val fluxColumn = createDefaultFluxColumn(
+            endLeadTimeColumn = "ACCOMPANIMENT"
         )
 
         @Test
         fun `start columns`() {
             assertThat(fluxColumn.startColumns)
                 .containsExactlyInAnyOrder(
-                    "START_LEAD_TIME_COLUMN",
-                    "MIDDLE_COLUMN",
-                    "SECOND_MIDDLE_COLUMN",
-                    "END_LEAD_TIME_COLUMN"
+                    "ANALYSIS",
+                    "DEV WIP",
+                    "DEV DONE",
+                    "TEST WIP",
+                    "TEST DONE",
+                    "REVIEW",
+                    "DELIVERY LINE",
+                    "ACCOMPANIMENT"
                 )
         }
 
         @Test
         fun `end columns`() {
             assertThat(fluxColumn.endColumns)
-                .containsExactlyInAnyOrder("END_LEAD_TIME_COLUMN", "LAST_COLUMN")
+                .containsExactlyInAnyOrder("ACCOMPANIMENT", "DONE")
         }
 
         @Test
         fun `wip columns`() {
             assertThat(fluxColumn.wipColumns)
-                .containsExactlyInAnyOrder("START_LEAD_TIME_COLUMN", "MIDDLE_COLUMN", "SECOND_MIDDLE_COLUMN")
+                .containsExactlyInAnyOrder(
+                    "ANALYSIS",
+                    "DEV WIP",
+                    "DEV DONE",
+                    "TEST WIP",
+                    "TEST DONE",
+                    "REVIEW",
+                    "DELIVERY LINE"
+                )
         }
 
         @Test
         fun `last column`() {
             assertThat(fluxColumn.lastColumn)
-                .isEqualTo("LAST_COLUMN")
+                .isEqualTo("DONE")
         }
 
     }
@@ -95,28 +96,21 @@ internal class FluxColumnTest {
 
         @Test
         fun `test calc start and end date`() {
-            val fluxColumn = FluxColumn(
-                startLeadTimeColumn = "START_LEAD_TIME_COLUMN",
-                endLeadTimeColumn = "END_LEAD_TIME_COLUMN",
-                orderedColumns = asList(
-                    "FIRST_COLUMN",
-                    "SECOND_COLUMN",
-                    "START_LEAD_TIME_COLUMN",
-                    "MIDDLE_COLUMN",
-                    "SECOND_MIDDLE_COLUMN",
-                    "END_LEAD_TIME_COLUMN",
-                    "LAST_COLUMN"
-                )
+            val fluxColumn = createDefaultFluxColumn(
+                startLeadTimeColumn = "DEV WIP",
+                endLeadTimeColumn = "ACCOMPANIMENT"
             )
 
             val changelog = listOf(
-                Changelog(to = "first_column", created = "01/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "second_column", created = "09/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "start_lead_time_column", created = "13/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "middle_column", created = "18/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "second_middle_column", created = "19/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "end_lead_time_column", created = "24/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "last_column", created = "28/01/2019 12:00".toLocalDateTime())
+                Changelog(to = "ANALYSIS", created = "01/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "DEV WIP", created = "09/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "DEV DONE", created = "13/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "TEST WIP", created = "18/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "TEST DONE", created = "19/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "REVIEW", created = "24/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "DELIVERY LINE", created = "28/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "ACCOMPANIMENT", created = "29/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "DONE", created = "30/01/2019 12:00".toLocalDateTime())
             )
 
             val (
@@ -125,30 +119,15 @@ internal class FluxColumnTest {
             ) = fluxColumn.calcStartAndEndDate(changelog, LocalDateTime.now())
 
             assertThat(startDate)
-                .isEqualTo("13/01/2019 12:00".toLocalDateTime())
+                .isEqualTo("09/01/2019 12:00".toLocalDateTime())
 
             assertThat(endDate)
-                .isEqualTo("24/01/2019 12:00".toLocalDateTime())
+                .isEqualTo("29/01/2019 12:00".toLocalDateTime())
         }
 
         @Test
         fun `test calc start and end date with backlog`() {
-            val fluxColumn = FluxColumn(
-                startLeadTimeColumn = "BACKLOG",
-                endLeadTimeColumn = "DONE",
-                orderedColumns = asList(
-                    "BACKLOG",
-                    "ANALYSIS",
-                    "DEV WIP",
-                    "DEV DONE",
-                    "TEST WIP",
-                    "TEST DONE",
-                    "REVIEW",
-                    "DELIVERY LINE",
-                    "ACCOMPANIMENT",
-                    "DONE"
-                )
-            )
+            val fluxColumn = createDefaultFluxColumn(startLeadTimeColumn = "BACKLOG")
 
             val changelog = listOf(
                 Changelog(to = "ANALYSIS", created = "05/01/2019 12:00".toLocalDateTime()),
@@ -178,22 +157,7 @@ internal class FluxColumnTest {
 
         @Test
         fun `test calc start and end date with not found events in changelog`() {
-            val fluxColumn = FluxColumn(
-                startLeadTimeColumn = "ANALYSIS",
-                endLeadTimeColumn = "ACCOMPANIMENT",
-                orderedColumns = asList(
-                    "BACKLOG",
-                    "ANALYSIS",
-                    "DEV WIP",
-                    "DEV DONE",
-                    "TEST WIP",
-                    "TEST DONE",
-                    "REVIEW",
-                    "DELIVERY LINE",
-                    "ACCOMPANIMENT",
-                    "DONE"
-                )
-            )
+            val fluxColumn = createDefaultFluxColumn(endLeadTimeColumn = "ACCOMPANIMENT")
 
             val changelog = listOf(
                 Changelog(to = "TODO", created = "01/01/2019 12:00".toLocalDateTime()),
@@ -213,4 +177,101 @@ internal class FluxColumnTest {
                 .isNull()
         }
     }
+
+    @Nested
+    inner class CalculatorWithDevaluation {
+
+        @Test
+        fun `use last occurrence of start column`() {
+            val fluxColumn = createDefaultFluxColumn(
+                useLastOccurrenceWhenCalculateLeadTime = true
+            )
+
+            val changelog = listOf(
+                Changelog(to = "ANALYSIS", created = "05/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "BACKLOG", created = "06/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "ANALYSIS", created = "10/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "DEV WIP", created = "12/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "DEV DONE", created = "13/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "TEST WIP", created = "21/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "TEST DONE", created = "28/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "REVIEW", created = "04/02/2019 12:00".toLocalDateTime()),
+                Changelog(to = "DELIVERY LINE", created = "09/02/2019 12:00".toLocalDateTime()),
+                Changelog(to = "ACCOMPANIMENT", created = "11/02/2019 12:00".toLocalDateTime()),
+                Changelog(to = "DONE", created = "14/02/2019 12:00".toLocalDateTime())
+            )
+
+            val created = "01/01/2019 12:00".toLocalDateTime()
+
+            val (
+                startDate,
+                endDate
+            ) = fluxColumn.calcStartAndEndDate(changelog, created)
+
+            assertThat(startDate)
+                .isEqualTo("10/01/2019 12:00".toLocalDateTime())
+
+            assertThat(endDate)
+                .isEqualTo("14/02/2019 12:00".toLocalDateTime())
+        }
+
+        @Test
+        fun `use last occurrence of backlog column`() {
+            val fluxColumn = createDefaultFluxColumn(
+                startLeadTimeColumn = "BACKLOG",
+                useLastOccurrenceWhenCalculateLeadTime = true
+            )
+
+            val changelog = listOf(
+                Changelog(to = "ANALYSIS", created = "05/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "BACKLOG", created = "06/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "ANALYSIS", created = "10/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "DEV WIP", created = "12/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "DEV DONE", created = "13/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "TEST WIP", created = "21/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "TEST DONE", created = "28/01/2019 12:00".toLocalDateTime()),
+                Changelog(to = "REVIEW", created = "04/02/2019 12:00".toLocalDateTime()),
+                Changelog(to = "DELIVERY LINE", created = "09/02/2019 12:00".toLocalDateTime()),
+                Changelog(to = "ACCOMPANIMENT", created = "11/02/2019 12:00".toLocalDateTime()),
+                Changelog(to = "DONE", created = "14/02/2019 12:00".toLocalDateTime())
+            )
+
+            val created = "01/01/2019 12:00".toLocalDateTime()
+
+            val (
+                startDate,
+                endDate
+            ) = fluxColumn.calcStartAndEndDate(changelog, created)
+
+            assertThat(startDate)
+                .isEqualTo("06/01/2019 12:00".toLocalDateTime())
+
+            assertThat(endDate)
+                .isEqualTo("14/02/2019 12:00".toLocalDateTime())
+        }
+
+    }
+
+    private fun createDefaultFluxColumn(
+        startLeadTimeColumn: String = "ANALYSIS",
+        endLeadTimeColumn: String = "DONE",
+        orderedColumns: List<String> = listOf(
+            "BACKLOG",
+            "ANALYSIS",
+            "DEV WIP",
+            "DEV DONE",
+            "TEST WIP",
+            "TEST DONE",
+            "REVIEW",
+            "DELIVERY LINE",
+            "ACCOMPANIMENT",
+            "DONE"
+        ),
+        useLastOccurrenceWhenCalculateLeadTime: Boolean = false
+    ) = FluxColumn(
+        startLeadTimeColumn = startLeadTimeColumn,
+        endLeadTimeColumn = endLeadTimeColumn,
+        orderedColumns = orderedColumns,
+        useLastOccurrenceWhenCalculateLeadTime = useLastOccurrenceWhenCalculateLeadTime
+    )
 }

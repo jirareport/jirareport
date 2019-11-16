@@ -1,9 +1,10 @@
 package br.com.jiratorio.integration.issueperiod
 
-import br.com.jiratorio.assert.response.IssuePeriodDetailResponseAssert
-import br.com.jiratorio.assert.response.IssueResponseAssert
+import br.com.jiratorio.assert.response.assertThat
 import br.com.jiratorio.base.Authenticator
+import br.com.jiratorio.domain.response.issue.IssueResponse
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodDetailResponse
 import br.com.jiratorio.dsl.extractAs
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
@@ -15,7 +16,6 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.repository.findByIdOrNull
 import java.time.format.DateTimeFormatter
 import javax.servlet.http.HttpServletResponse.SC_OK
 
@@ -46,7 +46,10 @@ internal class FindIssuePeriodIntegrationTest @Autowired constructor(
             issuePeriod
         }
 
-        val response = restAssured {
+        val (
+            detail: IssuePeriodDetailResponse,
+            issues: List<IssueResponse>
+        ) = restAssured {
             given {
                 header(authenticator.defaultUserHeader())
             }
@@ -58,7 +61,7 @@ internal class FindIssuePeriodIntegrationTest @Autowired constructor(
             }
         } extractAs IssuePeriodByIdResponse::class
 
-        IssuePeriodDetailResponseAssert(response.detail).assertThat {
+        detail.assertThat {
             hasDates(issuePeriod.dates)
             hasLeadTime(issuePeriod.leadTime)
             hasThroughput(issuePeriod.throughput)
@@ -77,10 +80,10 @@ internal class FindIssuePeriodIntegrationTest @Autowired constructor(
             hasDynamicCharts(issuePeriod.dynamicCharts)
         }
 
-        val issueResponse = response.issues.first()
+        val issueResponse = issues.first()
         val issue = issueRepository.findByIdOrNull(issueResponse.id) ?: throw ResourceNotFound()
 
-        IssueResponseAssert(issueResponse).assertThat {
+        issueResponse.assertThat {
             hasId(issue.id)
             hasKey(issue.key)
             hasCreator(issue.creator)

@@ -1,6 +1,6 @@
 package br.com.jiratorio.integration.board
 
-import br.com.jiratorio.assert.BoardAssert
+import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
@@ -42,10 +42,10 @@ internal class CreateBoardIntegrationTest @Autowired constructor(
             }
         }
 
-        val board = boardRepository.findById(1L)
-            .orElseThrow(::ResourceNotFound)
+        val board = boardRepository.findByIdOrNull(1L)
+            ?: throw ResourceNotFound()
 
-        BoardAssert(board).assertThat {
+        board.assertThat {
             hasName(request.name)
             hasExternalId(request.externalId)
             hasOwner("default_user")

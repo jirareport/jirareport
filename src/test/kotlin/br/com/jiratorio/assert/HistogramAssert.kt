@@ -2,8 +2,12 @@ package br.com.jiratorio.assert
 
 import br.com.jiratorio.domain.entity.embedded.Histogram
 
-class HistogramAssert(actual: Histogram) :
-    BaseAssert<HistogramAssert, Histogram>(actual, HistogramAssert::class) {
+class HistogramAssert(
+    actual: Histogram
+) : BaseAssert<HistogramAssert, Histogram>(
+    actual,
+    HistogramAssert::class
+) {
 
     fun hasMedian(median: Long) = assertAll {
         objects.assertEqual(field("histogram.median"), actual.median, median)

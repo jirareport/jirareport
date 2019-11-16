@@ -1,6 +1,6 @@
 package br.com.jiratorio.integration.issue
 
-import br.com.jiratorio.assert.response.IssueDetailResponseAssert
+import br.com.jiratorio.assert.response.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.domain.response.issue.IssueDetailResponse
 import br.com.jiratorio.dsl.extractAs
@@ -88,10 +88,10 @@ class SearchIssueByIdIntegrationTest @Autowired constructor(
             }
         } extractAs IssueDetailResponse::class
 
-        val issue = issueRepository.findById(1L)
-            .orElseThrow { ResourceNotFound() }
+        val issue = issueRepository.findByIdOrNull(1L)
+            ?: throw ResourceNotFound()
 
-        IssueDetailResponseAssert(issueDetailResponse).assertThat {
+        issueDetailResponse.assertThat {
             hasId(issue.id)
             hasKey(issue.key)
 

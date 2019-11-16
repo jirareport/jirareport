@@ -35,3 +35,6 @@ class IssuePeriodResponseAssert(actual: IssuePeriodResponse) :
     }
 
 }
+
+fun IssuePeriodResponse.assertThat(assertions: IssuePeriodResponseAssert.() -> Unit): IssuePeriodResponseAssert =
+    IssuePeriodResponseAssert(this).assertThat(assertions)

@@ -59,3 +59,6 @@ class IssueDetailResponseAssert(
     }
 
 }
+
+fun IssueDetailResponse.assertThat(assertions: IssueDetailResponseAssert.() -> Unit): IssueDetailResponseAssert =
+    IssueDetailResponseAssert(this).assertThat(assertions)

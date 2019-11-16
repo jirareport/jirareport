@@ -58,7 +58,12 @@ class LeadTimeServiceImpl(
             leadTimeConfig, issue, holidays, board
         )
 
-        val fluxColumn = FluxColumn(leadTimeConfig.startColumn, leadTimeConfig.endColumn, board.fluxColumn)
+        val fluxColumn = FluxColumn(
+            startLeadTimeColumn = leadTimeConfig.startColumn,
+            endLeadTimeColumn = leadTimeConfig.endColumn,
+            orderedColumns = board.fluxColumn,
+            useLastOccurrenceWhenCalculateLeadTime = board.useLastOccurrenceWhenCalculateLeadTime
+        )
         val (startDate, endDate) = fluxColumn.calcStartAndEndDate(issue.changelog, issue.created)
 
         if (startDate == null || endDate == null) {

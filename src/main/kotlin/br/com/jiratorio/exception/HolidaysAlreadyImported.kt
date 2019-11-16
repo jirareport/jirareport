@@ -7,8 +7,4 @@ import org.springframework.web.bind.annotation.ResponseStatus
 class HolidaysAlreadyImported(
     message: String? = null,
     cause: Exception? = null
-) : RuntimeException(message, cause) {
-    companion object {
-        private val serialVersionUID = 1189381143800680941L
-    }
-}
+) : RuntimeException(message, cause)

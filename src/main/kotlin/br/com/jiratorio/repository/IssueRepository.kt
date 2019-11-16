@@ -85,4 +85,8 @@ interface IssueRepository : CrudRepository<Issue, Long>, IssueCustomRepository {
     @EntityGraph(attributePaths = ["leadTimes", "impedimentHistory"], type = EntityGraph.EntityGraphType.LOAD)
     override fun findById(id: Long): Optional<Issue>
 
+    @JvmDefault
+    fun findByIdOrNull(id: Long): Issue? =
+        findById(id).orElse(null)
+
 }

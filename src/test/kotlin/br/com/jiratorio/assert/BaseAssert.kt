@@ -13,14 +13,14 @@ open class BaseAssert<SELF : AbstractAssert<SELF, ACTUAL>?, ACTUAL>(actual: ACTU
     AbstractAssert<SELF, ACTUAL>(actual, self.java) {
 
     companion object {
-        val objects = Objects.instance()
-        val iterables = Iterables.instance()
-        val maps = Maps.instance()
-        val strings = Strings.instance()
-        val longs = Longs.instance()
+        val objects: Objects = Objects.instance()
+        val iterables: Iterables = Iterables.instance()
+        val maps: Maps = Maps.instance()
+        val strings: Strings = Strings.instance()
+        val longs: Longs = Longs.instance()
     }
 
-    fun assertThat(block: SELF.() -> Unit) =
+    fun assertThat(block: SELF.() -> Unit): SELF =
         myself.apply(block)
 
     protected fun assertAll(function: () -> Unit) {

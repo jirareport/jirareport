@@ -37,6 +37,8 @@ data class UpdateBoardRequest(
 
     var dueDateCF: String? = null,
 
-    var dueDateType: DueDateType? = null
+    var dueDateType: DueDateType? = null,
+
+    var useLastOccurrenceWhenCalculateLeadTime: Boolean = false
 
 )

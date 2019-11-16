@@ -4,11 +4,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-class BadRequestException(
+class MissingBoardConfigurationException(
     val field: String,
-    message: String
-) : RuntimeException(message) {
-    companion object {
-        private val serialVersionUID = 2093334930630431201L
-    }
-}
+    message: String = "$field not configured"
+) : RuntimeException(message)

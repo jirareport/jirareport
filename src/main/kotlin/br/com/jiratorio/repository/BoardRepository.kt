@@ -23,4 +23,8 @@ interface BoardRepository : CrudRepository<Board, Long> {
     @Query("SELECT DISTINCT b.owner FROM Board b")
     fun findAllOwners(): Set<String>
 
+    @JvmDefault
+    fun findByIdOrNull(id: Long): Board? =
+        findById(id).orElse(null)
+
 }

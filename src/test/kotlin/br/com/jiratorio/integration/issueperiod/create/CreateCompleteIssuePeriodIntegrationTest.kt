@@ -1,7 +1,6 @@
 package br.com.jiratorio.integration.issueperiod.create
 
-import br.com.jiratorio.assert.IssueAssert
-import br.com.jiratorio.assert.IssuePeriodAssert
+import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.annotation.LoadStubs
 import br.com.jiratorio.domain.entity.ImpedimentHistory
@@ -81,16 +80,16 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
             }
         }
 
-        val issuePeriod = issuePeriodRepository.findById(1L)
-            .orElseThrow(::ResourceNotFound)
+        val issuePeriod = issuePeriodRepository.findByIdOrNull(1L)
+            ?: throw ResourceNotFound()
 
-        IssuePeriodAssert(issuePeriod).assertThat {
+        issuePeriod.assertThat {
             hasStartDate(request.startDate.toLocalDate())
             hasEndDate(request.endDate.toLocalDate())
 
             hasLeadTime(15.9)
 
-            histogram().assertThat {
+            histogram.assertThat {
                 hasMedian(15)
                 hasPercentile75(19)
                 hasPercentile90(20)
@@ -164,10 +163,10 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
         }
 
         transactionTemplate.execute {
-            val issue = issueRepository.findById(1L)
-                .orElseThrow(::ResourceNotFound)
+            val issue = issueRepository.findByIdOrNull(1L)
+                ?: throw ResourceNotFound()
 
-            IssueAssert(issue).assertThat {
+            issue.assertThat {
                 hasKey("JIRAT-1")
                 hasIssueType("Task")
                 hasCreator("Leonardo Ferreira")

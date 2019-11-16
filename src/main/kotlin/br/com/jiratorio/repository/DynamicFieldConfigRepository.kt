@@ -12,4 +12,8 @@ interface DynamicFieldConfigRepository : CrudRepository<DynamicFieldConfig, Long
 
     fun findByBoardIdAndId(boardId: Long, id: Long): DynamicFieldConfig?
 
+    @JvmDefault
+    fun findByIdOrNull(id: Long): DynamicFieldConfig? =
+        findById(id).orElse(null)
+
 }

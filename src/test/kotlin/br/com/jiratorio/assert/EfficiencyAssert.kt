@@ -2,7 +2,12 @@ package br.com.jiratorio.assert
 
 import br.com.jiratorio.domain.Efficiency
 
-class EfficiencyAssert(actual: Efficiency) : BaseAssert<EfficiencyAssert, Efficiency>(actual, EfficiencyAssert::class) {
+class EfficiencyAssert(
+    actual: Efficiency
+) : BaseAssert<EfficiencyAssert, Efficiency>(
+    actual,
+    EfficiencyAssert::class
+) {
 
     fun hasWaitTime(waitTime: Long) = assertAll {
         objects.assertEqual(field("efficiency.waitTime"), actual.waitTime, waitTime)
@@ -17,3 +22,6 @@ class EfficiencyAssert(actual: Efficiency) : BaseAssert<EfficiencyAssert, Effici
     }
 
 }
+
+fun Efficiency.assertThat(assertions: EfficiencyAssert.() -> Unit): EfficiencyAssert =
+    EfficiencyAssert(this).assertThat(assertions)

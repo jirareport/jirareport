@@ -22,4 +22,8 @@ interface HolidayRepository : CrudRepository<Holiday, Long> {
 
     fun findByIdAndBoard(holidayId: Long, board: Board): Holiday?
 
+    @JvmDefault
+    fun findByIdOrNull(id: Long): Holiday? =
+        findById(id).orElse(null)
+
 }
