@@ -1,7 +1,6 @@
 package br.com.jiratorio.repository
 
 import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.Issue
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
