@@ -11,7 +11,6 @@ import br.com.jiratorio.repository.DynamicFieldConfigRepository
 import br.com.jiratorio.repository.HolidayRepository
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import br.com.jiratorio.service.CloneBoardService
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

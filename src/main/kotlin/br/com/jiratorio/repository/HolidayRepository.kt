@@ -2,6 +2,7 @@ package br.com.jiratorio.repository
 
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Holiday
+import br.com.jiratorio.domain.entity.Issue
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -21,5 +22,9 @@ interface HolidayRepository : CrudRepository<Holiday, Long> {
     fun findByDateAndBoardId(date: LocalDate, boardId: Long): Holiday?
 
     fun findByIdAndBoard(holidayId: Long, board: Board): Holiday?
+
+    @JvmDefault
+    fun findByIdOrNull(id: Long): Holiday? =
+        findById(id).orElse(null)
 
 }

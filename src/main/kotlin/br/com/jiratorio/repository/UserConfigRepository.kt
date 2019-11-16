@@ -8,6 +8,6 @@ import java.util.Optional
 @Repository
 interface UserConfigRepository : CrudRepository<UserConfig, Long> {
 
-    fun findByUsername(username: String): Optional<UserConfig>
+    fun findByUsername(username: String): UserConfig?
 
 }

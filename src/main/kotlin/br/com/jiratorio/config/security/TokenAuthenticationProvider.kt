@@ -17,7 +17,6 @@ class TokenAuthenticationProvider(private val tokenService: TokenService) : Auth
         } catch (e: Exception) {
             throw PreAuthenticatedCredentialsNotFoundException(e.message, e)
         }
-
     }
 
     override fun supports(authentication: Class<*>): Boolean {

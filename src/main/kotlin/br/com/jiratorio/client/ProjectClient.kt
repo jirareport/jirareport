@@ -5,6 +5,7 @@ import br.com.jiratorio.domain.jira.BoardStatusList
 import br.com.jiratorio.domain.jira.JiraProjectDetails
 import br.com.jiratorio.domain.jira.JiraProject
 import org.springframework.cloud.openfeign.FeignClient
+import org.springframework.http.HttpEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import java.util.Optional

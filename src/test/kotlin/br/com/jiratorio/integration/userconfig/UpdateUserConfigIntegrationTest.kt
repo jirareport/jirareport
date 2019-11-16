@@ -42,7 +42,7 @@ internal class UpdateUserConfigIntegrationTest @Autowired constructor(
         }
 
         val userConfig = userConfigRepository.findByUsername(authenticator.defaultUserName())
-            .orElseThrow(::ResourceNotFound)
+            ?: throw ResourceNotFound()
 
         userConfig.assertThat {
             hasHolidayToken(request.holidayToken!!)

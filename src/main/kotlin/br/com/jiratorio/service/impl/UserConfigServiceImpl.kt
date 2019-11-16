@@ -13,7 +13,6 @@ import br.com.jiratorio.service.UserConfigService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.util.StringUtils
 
 @Service
 class UserConfigServiceImpl(
@@ -25,8 +24,7 @@ class UserConfigServiceImpl(
     override fun update(username: String, updateUserConfigRequest: UpdateUserConfigRequest) {
         log.info("Method=update, username={}, updateUserConfigRequest={}", username, updateUserConfigRequest)
 
-        val userConfig = userConfigRepository.findByUsername(username)
-            .orElseGet { UserConfig(username) }
+        val userConfig = userConfigRepository.findByUsername(username) ?: UserConfig(username)
 
         userConfig.updateFromUpdateUserConfigRequest(updateUserConfigRequest)
 
@@ -37,10 +35,12 @@ class UserConfigServiceImpl(
     override fun retrieveHolidayInfo(username: String): ImportHolidayInfo {
         log.info("Method=retrieveHolidayInfo, username={}", username)
 
-        return userConfigRepository.findByUsername(username)
-            .filter { !StringUtils.isEmpty(it.holidayToken) }
-            .map { it.toImportHolidayInfo() }
-            .orElse(ImportHolidayInfo("SP", "ARARAQUARA", holidayToken))
+        val userConfig = userConfigRepository.findByUsername(username)
+
+        return if (userConfig == null || userConfig.holidayToken.isNullOrEmpty())
+            ImportHolidayInfo("SP", "ARARAQUARA", holidayToken)
+        else
+            userConfig.toImportHolidayInfo()
     }
 
     @Transactional(readOnly = true)
@@ -48,8 +48,8 @@ class UserConfigServiceImpl(
         log.info("Method=findByUsername, username={}", username)
 
         return userConfigRepository.findByUsername(username)
-            .map { it.toUserConfigResponse() }
-            .orElse(UserConfigResponse(username))
+            ?.toUserConfigResponse()
+            ?: UserConfigResponse(username)
     }
 
 }
