@@ -13,46 +13,40 @@ import javax.crypto.spec.SecretKeySpec
 @Service
 class TokenServiceImpl(
     private val objectMapper: ObjectMapper,
-    securityProperties: SecurityProperties
+    private val securityProperties: SecurityProperties
 ) : TokenService {
 
     companion object {
         private const val algorithm = "Blowfish"
     }
 
-    private val encryptCipher: Cipher
-    private val decryptCipher: Cipher
+    override fun encode(account: Account): String {
+        val key = SecretKeySpec(securityProperties.key.toByteArray(Charsets.UTF_8), algorithm)
 
-    init {
-        val key = SecretKeySpec(securityProperties.key.toByteArray(), algorithm)
-
-        encryptCipher = Cipher.getInstance(algorithm)
+        val encryptCipher = Cipher.getInstance(algorithm)
         encryptCipher.init(Cipher.ENCRYPT_MODE, key)
 
-        decryptCipher = Cipher.getInstance(algorithm)
-        decryptCipher.init(Cipher.DECRYPT_MODE, key)
+        return Base64.getEncoder()
+            .encodeToString(
+                encryptCipher.doFinal(
+                    objectMapper.writeValueAsString(account)
+                        .toByteArray(Charsets.UTF_8)
+                )
+            )
     }
 
-    override fun encode(account: Account): String =
-        encryptCipher.doFinal(account.toJson())
-            .toBase64()
+    override fun decode(token: String): Account {
+        val key = SecretKeySpec(securityProperties.key.toByteArray(Charsets.UTF_8), algorithm)
 
-    override fun decode(token: String): Account =
-        decryptCipher.doFinal(token.fromBase64())
-            .fromJson()
+        val decryptCipher = Cipher.getInstance(algorithm)
+        decryptCipher.init(Cipher.DECRYPT_MODE, key)
 
-    private fun ByteArray.toBase64(): String =
-        Base64.getEncoder()
-            .encodeToString(this)
-
-    private fun String.fromBase64(): ByteArray =
-        Base64.getDecoder()
-            .decode(this)
-
-    private inline fun <reified T> ByteArray.fromJson(): T =
-        objectMapper.readValue(this)
-
-    private fun Account.toJson(): ByteArray? =
-        objectMapper.writeValueAsBytes(this)
+        return objectMapper.readValue(
+            String(
+                decryptCipher.doFinal(Base64.getDecoder().decode(token)),
+                Charsets.UTF_8
+            )
+        )
+    }
 
 }
