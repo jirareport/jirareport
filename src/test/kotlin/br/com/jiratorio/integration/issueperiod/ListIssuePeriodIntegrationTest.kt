@@ -3,6 +3,7 @@ package br.com.jiratorio.integration.issueperiod
 import br.com.jiratorio.assert.response.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByBoardResponse
 import br.com.jiratorio.dsl.extractAs
 import br.com.jiratorio.dsl.restAssured
@@ -14,12 +15,11 @@ import org.assertj.core.api.Assertions
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class ListIssuePeriodIntegrationTest @Autowired constructor(
+internal class ListIssuePeriodIntegrationTest(
     private val authenticator: Authenticator,
     private val boardFactory: BoardFactory,
     private val issuePeriodFactory: IssuePeriodFactory
@@ -30,31 +30,41 @@ internal class ListIssuePeriodIntegrationTest @Autowired constructor(
         val period = authenticator.withDefaultUser {
             val board = boardFactory.create()
 
-            issuePeriodFactory.create {
-                it.boardId = board.id
-                it.startDate = "01/01/2019".toLocalDate()
-                it.endDate = "31/01/2019".toLocalDate()
-            }
-            issuePeriodFactory.create {
-                it.boardId = board.id
-                it.startDate = "01/02/2019".toLocalDate()
-                it.endDate = "28/02/2019".toLocalDate()
-            }
-            issuePeriodFactory.create {
-                it.boardId = board.id
-                it.startDate = "01/03/2019".toLocalDate()
-                it.endDate = "31/03/2019".toLocalDate()
-            }
-            issuePeriodFactory.create {
-                it.boardId = board.id
-                it.startDate = "01/04/2019".toLocalDate()
-                it.endDate = "30/04/2019".toLocalDate()
-            }
-            issuePeriodFactory.create {
-                it.boardId = board.id
-                it.startDate = "01/05/2019".toLocalDate()
-                it.endDate = "31/05/2019".toLocalDate()
-            }
+            issuePeriodFactory.create(
+                modifyingFields = mapOf(
+                    IssuePeriod::boardId to board.id,
+                    IssuePeriod::startDate to "01/01/2019".toLocalDate(),
+                    IssuePeriod::endDate to "31/01/2019".toLocalDate()
+                )
+            )
+            issuePeriodFactory.create(
+                modifyingFields = mapOf(
+                    IssuePeriod::boardId to board.id,
+                    IssuePeriod::startDate to "01/02/2019".toLocalDate(),
+                    IssuePeriod::endDate to "28/02/2019".toLocalDate()
+                )
+            )
+            issuePeriodFactory.create(
+                modifyingFields = mapOf(
+                    IssuePeriod::boardId to board.id,
+                    IssuePeriod::startDate to "01/03/2019".toLocalDate(),
+                    IssuePeriod::endDate to "31/03/2019".toLocalDate()
+                )
+            )
+            issuePeriodFactory.create(
+                modifyingFields = mapOf(
+                    IssuePeriod::boardId to board.id,
+                    IssuePeriod::startDate to "01/04/2019".toLocalDate(),
+                    IssuePeriod::endDate to "30/04/2019".toLocalDate()
+                )
+            )
+            issuePeriodFactory.create(
+                modifyingFields = mapOf(
+                    IssuePeriod::boardId to board.id,
+                    IssuePeriod::startDate to "01/05/2019".toLocalDate(),
+                    IssuePeriod::endDate to "31/05/2019".toLocalDate()
+                )
+            )
         }
 
         val (

@@ -11,11 +11,11 @@ data class CreateIssuePeriodRequest(
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @field:NotNull(message = "{validations.required-start-date}")
-    var startDate: LocalDate,
+    val startDate: LocalDate,
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @field:NotNull(message = "{validations.required-end-date}")
-    var endDate: LocalDate
+    val endDate: LocalDate
 
 ) {
 

@@ -9,12 +9,11 @@ import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class DeleteLeadTimeConfigIntegrationTest @Autowired constructor(
+internal class DeleteLeadTimeConfigIntegrationTest(
     private val leadTimeConfigFactory: LeadTimeConfigFactory,
     private val leadTimeConfigRepository: LeadTimeConfigRepository,
     private val authenticator: Authenticator

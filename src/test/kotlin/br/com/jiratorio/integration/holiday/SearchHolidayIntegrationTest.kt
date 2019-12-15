@@ -2,6 +2,7 @@ package br.com.jiratorio.integration.holiday
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.domain.entity.Holiday
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.factory.domain.entity.HolidayFactory
@@ -12,13 +13,12 @@ import org.hamcrest.Matchers.hasSize
 import org.hamcrest.Matchers.notNullValue
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.format.DateTimeFormatter
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class SearchHolidayIntegrationTest @Autowired constructor(
+internal class SearchHolidayIntegrationTest(
     private val holidayFactory: HolidayFactory,
     private val boardFactory: BoardFactory,
     private val authenticator: Authenticator
@@ -28,9 +28,12 @@ internal class SearchHolidayIntegrationTest @Autowired constructor(
     fun `find all holidays`() {
         val (id) = authenticator.withDefaultUser {
             val boardExample = boardFactory.create()
-            holidayFactory.create(10) {
-                it.board = boardExample
-            }
+            holidayFactory.create(
+                quantity = 10,
+                modifyingFields = mapOf(
+                    Holiday::board to boardExample
+                )
+            )
 
             boardExample
         }

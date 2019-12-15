@@ -13,12 +13,11 @@ import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class UpdateBoardIntegrationTest @Autowired constructor(
+internal class UpdateBoardIntegrationTest(
     private val boardFactory: BoardFactory,
     private val updateBoardRequestFactory: UpdateBoardRequestFactory,
     private val boardRepository: BoardRepository,

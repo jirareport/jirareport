@@ -14,3 +14,6 @@ fun String.fromJiraToLocalDateTime(): LocalDateTime =
 fun String.stripAccents(): String =
     Normalizer.normalize(this, Normalizer.Form.NFD)
         .replace("[\\p{InCombiningDiacriticalMarks}]".toRegex(), "")
+
+fun String?.isPresent() =
+    !this.isNullOrBlank()

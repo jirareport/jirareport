@@ -19,7 +19,7 @@ internal class ToStringExtensionTest {
         class Person(
             private val name: String,
             private val age: Int,
-            private var phones: List<Phone>
+            private val phones: List<Phone>
         ) {
             override fun toString() =
                 toStringBuilder(Person::name, Person::age, Person::phones)

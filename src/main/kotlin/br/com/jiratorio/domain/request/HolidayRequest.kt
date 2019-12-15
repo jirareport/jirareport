@@ -9,9 +9,9 @@ data class HolidayRequest(
 
     @field:NotNull
     @JsonFormat(pattern = "dd/MM/yyyy")
-    var date: LocalDate,
+    val date: LocalDate,
 
     @field:NotBlank
-    var description: String
+    val description: String
 
 )

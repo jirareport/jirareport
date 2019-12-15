@@ -9,12 +9,11 @@ import org.apache.http.HttpStatus.SC_NO_CONTENT
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class DeleteDynamicFieldConfigIntegrationTest @Autowired constructor(
+class DeleteDynamicFieldConfigIntegrationTest(
     private val dynamicFieldConfigFactory: DynamicFieldConfigFactory,
     private val dynamicFieldConfigRepository: DynamicFieldConfigRepository,
     private val authenticator: Authenticator

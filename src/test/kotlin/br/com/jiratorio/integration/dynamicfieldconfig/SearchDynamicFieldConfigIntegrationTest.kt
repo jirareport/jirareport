@@ -2,6 +2,7 @@ package br.com.jiratorio.integration.dynamicfieldconfig
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.domain.entity.DynamicFieldConfig
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.factory.domain.entity.DynamicFieldConfigFactory
@@ -9,12 +10,11 @@ import org.apache.http.HttpStatus.SC_OK
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class SearchDynamicFieldConfigIntegrationTest @Autowired constructor(
+class SearchDynamicFieldConfigIntegrationTest(
     private val boardFactory: BoardFactory,
     private val dynamicFieldConfigFactory: DynamicFieldConfigFactory,
     private val authenticator: Authenticator
@@ -24,9 +24,12 @@ class SearchDynamicFieldConfigIntegrationTest @Autowired constructor(
     fun `test find all`() {
         val dynamicFieldConfigs = authenticator.withDefaultUser {
             val board = boardFactory.create()
-            dynamicFieldConfigFactory.create(10) {
-                it.board = board
-            }
+            dynamicFieldConfigFactory.create(
+                quantity = 10,
+                modifyingFields = mapOf(
+                    DynamicFieldConfig::board to board
+                )
+            )
         }
 
         val dynamicFieldConfig = dynamicFieldConfigs.first()
@@ -51,9 +54,12 @@ class SearchDynamicFieldConfigIntegrationTest @Autowired constructor(
     fun `test find all board not found`() {
         authenticator.withDefaultUser {
             val board = boardFactory.create()
-            dynamicFieldConfigFactory.create(10) {
-                it.board = board
-            }
+            dynamicFieldConfigFactory.create(
+                quantity = 10,
+                modifyingFields = mapOf(
+                    DynamicFieldConfig::board to board
+                )
+            )
 
             board
         }

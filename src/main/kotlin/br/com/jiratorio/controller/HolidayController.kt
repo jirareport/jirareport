@@ -7,6 +7,7 @@ import br.com.jiratorio.service.HolidayService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
+import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -29,15 +30,14 @@ class HolidayController(private val holidayService: HolidayService) {
     fun index(
         @PathVariable boardId: Long,
         @PageableDefault(sort = ["date"]) pageable: Pageable
-    ): Page<HolidayResponse> {
-        return holidayService.findByBoard(boardId, pageable)
-    }
+    ): Page<HolidayResponse> =
+        holidayService.findByBoard(boardId, pageable)
 
     @PostMapping
     fun create(
         @PathVariable boardId: Long,
         @Valid @RequestBody holiday: HolidayRequest
-    ): ResponseEntity<*> {
+    ): HttpEntity<*> {
         val id = holidayService.create(boardId, holiday)
 
         val location = ServletUriComponentsBuilder
@@ -52,28 +52,27 @@ class HolidayController(private val holidayService: HolidayService) {
     fun importHolidays(
         @PathVariable boardId: Long,
         @AuthenticationPrincipal account: Account
-    ): ResponseEntity<*> {
+    ): HttpEntity<*> {
         holidayService.importHolidays(boardId, account)
         return ResponseEntity<Any>(HttpStatus.CREATED)
     }
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long): ResponseEntity<*> {
+    fun delete(@PathVariable id: Long): HttpEntity<*> {
         holidayService.delete(id)
         return ResponseEntity.noContent().build<Any>()
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): HolidayResponse {
-        return holidayService.findById(id)
-    }
+    fun findById(@PathVariable id: Long): HolidayResponse =
+        holidayService.findById(id)
 
     @PutMapping("/{holidayId}")
     fun update(
         @PathVariable boardId: Long,
         @PathVariable holidayId: Long,
         @Valid @RequestBody holidayRequest: HolidayRequest
-    ): ResponseEntity<*> {
+    ): HttpEntity<*> {
         holidayService.update(boardId, holidayId, holidayRequest)
         return ResponseEntity.noContent().build<Any>()
     }

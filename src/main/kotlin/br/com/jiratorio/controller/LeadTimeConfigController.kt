@@ -3,6 +3,8 @@ package br.com.jiratorio.controller
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest
 import br.com.jiratorio.domain.response.LeadTimeConfigResponse
 import br.com.jiratorio.service.leadtime.LeadTimeConfigService
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import javax.validation.Valid
@@ -22,15 +25,14 @@ class LeadTimeConfigController(
 ) {
 
     @GetMapping
-    fun index(@PathVariable boardId: Long): List<LeadTimeConfigResponse> {
-        return leadTimeConfigService.findAll(boardId)
-    }
+    fun index(@PathVariable boardId: Long): List<LeadTimeConfigResponse> =
+        leadTimeConfigService.findAll(boardId)
 
     @PostMapping
     fun create(
         @PathVariable boardId: Long,
         @Valid @RequestBody leadTimeConfigRequest: LeadTimeConfigRequest
-    ): ResponseEntity<Any> {
+    ): HttpEntity<Any> {
         val id = leadTimeConfigService.create(boardId, leadTimeConfigRequest)
 
         val location = ServletUriComponentsBuilder
@@ -45,26 +47,24 @@ class LeadTimeConfigController(
     fun findById(
         @PathVariable boardId: Long,
         @PathVariable id: Long
-    ): LeadTimeConfigResponse {
-        return leadTimeConfigService.findByBoardAndId(boardId, id)
-    }
+    ): LeadTimeConfigResponse =
+        leadTimeConfigService.findByBoardAndId(boardId, id)
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(
         @PathVariable boardId: Long,
         @PathVariable id: Long,
         @Valid @RequestBody leadTimeConfigRequest: LeadTimeConfigRequest
-    ): ResponseEntity<*> {
+    ): Unit =
         leadTimeConfigService.update(boardId, id, leadTimeConfigRequest)
-        return ResponseEntity.noContent().build<Any>()
-    }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(
         @PathVariable boardId: Long,
         @PathVariable id: Long
-    ): ResponseEntity<*> {
+    ): Unit =
         leadTimeConfigService.deleteByBoardAndId(boardId, id)
-        return ResponseEntity.noContent().build<Any>()
-    }
+
 }

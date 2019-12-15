@@ -8,13 +8,12 @@ import br.com.jiratorio.repository.IssuePeriodRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import javax.servlet.http.HttpServletResponse.SC_NO_CONTENT
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class DeleteIssuePeriodIntegrationTest @Autowired constructor(
+internal class DeleteIssuePeriodIntegrationTest(
     private val authenticator: Authenticator,
     private val issuePeriodFactory: IssuePeriodFactory,
     private val issuePeriodRepository: IssuePeriodRepository

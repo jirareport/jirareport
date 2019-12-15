@@ -7,9 +7,8 @@ class LocalDateProgression(
     override val endInclusive: LocalDate
 ) : Iterable<LocalDate>, ClosedRange<LocalDate> {
 
-    override fun iterator(): Iterator<LocalDate> {
-        return LocalDateProgressionIterator(start, endInclusive)
-    }
+    override fun iterator(): Iterator<LocalDate> =
+        LocalDateProgressionIterator(start, endInclusive)
 
 }
 
@@ -19,9 +18,8 @@ private class LocalDateProgressionIterator(
     private var current: LocalDate = startDate
 ) : Iterator<LocalDate> {
 
-    override fun hasNext(): Boolean {
-        return current <= endDate
-    }
+    override fun hasNext(): Boolean =
+        current <= endDate
 
     override fun next(): LocalDate {
         val next = current
@@ -30,6 +28,5 @@ private class LocalDateProgressionIterator(
     }
 }
 
-operator fun LocalDate.rangeTo(endInclusive: LocalDate): LocalDateProgression {
-    return LocalDateProgression(this, endInclusive)
-}
+operator fun LocalDate.rangeTo(endInclusive: LocalDate): LocalDateProgression =
+    LocalDateProgression(this, endInclusive)

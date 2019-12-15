@@ -12,12 +12,11 @@ import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class CreateHolidayIntegrationTest @Autowired constructor(
+internal class CreateHolidayIntegrationTest(
     private val holidayRequestFactory: HolidayRequestFactory,
     private val boardFactory: BoardFactory,
     private val holidayRepository: HolidayRepository,

@@ -19,7 +19,7 @@ class SearchBoardSpecification(
         query: CriteriaQuery<*>,
         builder: CriteriaBuilder
     ): Predicate {
-        val predicates: MutableList<Predicate> = ArrayList()
+        val predicates = mutableListOf<Predicate>()
 
         if (searchBoardRequest.name != null) {
             predicates.add(

@@ -16,7 +16,7 @@ class HolidayFactory(
 
     override fun builder(): Holiday {
         return Holiday(
-            date = LocalDate.now().plusDays(faker.number().randomNumber()),
+            date = LocalDate.now().plusDays(faker.number().randomNumber(5, true)),
             description = faker.lorem().word(),
             board = boardFactory.create()
         )

@@ -1,6 +1,9 @@
 package br.com.jiratorio.domain.response
 
 data class DueDateHistoryResponse(
-    var created: String?,
-    var dueDate: String?
+
+    val created: String?,
+
+    val dueDate: String?
+
 )

@@ -7,10 +7,15 @@ import br.com.jiratorio.extension.containsUpperCase
 import java.time.LocalDateTime
 
 data class FluxColumn(
+
     val startLeadTimeColumn: String,
+
     val endLeadTimeColumn: String,
+
     val orderedColumns: List<String>?,
+
     val useLastOccurrenceWhenCalculateLeadTime: Boolean = false
+
 ) {
 
     constructor(board: Board) : this(

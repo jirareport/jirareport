@@ -13,13 +13,11 @@ import org.springframework.web.bind.annotation.RestController
 class ProjectController(private val projectService: ProjectService) {
 
     @GetMapping
-    fun findAll(): List<JiraProject> {
-        return projectService.findAllJiraProject()
-    }
+    fun findAll(): List<JiraProject> =
+        projectService.findAllJiraProject()
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): JiraProjectDetails {
-        return projectService.findById(id)
-    }
+    fun findById(@PathVariable id: Long): JiraProjectDetails =
+        projectService.findById(id)
 
 }

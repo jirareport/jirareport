@@ -1,11 +1,11 @@
 package br.com.jiratorio.config.security
 
+import br.com.jiratorio.extension.isPresent
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedCredentialsNotFoundException
-import org.springframework.util.StringUtils
 import org.springframework.web.filter.GenericFilterBean
 import javax.servlet.FilterChain
 import javax.servlet.ServletRequest
@@ -21,18 +21,17 @@ class AuthenticationFilter(
         request as HttpServletRequest
         response as HttpServletResponse
 
-        val authToken = request.getHeader("X-Auth-Token")
-        if (!StringUtils.isEmpty(authToken)) {
+        val authToken: String? = request.getHeader("X-Auth-Token")
+        if (authToken.isPresent()) {
             val authentication = PreAuthenticatedAuthenticationToken(authToken, null)
-            val authenticateResult: Authentication?
-            try {
-                authenticateResult = authenticationManager.authenticate(authentication)
+            val authenticateResult: Authentication = try {
+                authenticationManager.authenticate(authentication)
             } catch (e: PreAuthenticatedCredentialsNotFoundException) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.message)
                 return
             }
 
-            if (authenticateResult == null || !authenticateResult.isAuthenticated) {
+            if (!authenticateResult.isAuthenticated) {
                 throw RuntimeException("Internal Authentication Service Error")
             }
 

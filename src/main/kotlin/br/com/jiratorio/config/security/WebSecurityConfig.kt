@@ -21,42 +21,52 @@ class WebSecurityConfig(
 ) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
-        // @formatter:off
-        http
-            .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .anyRequest().authenticated()
-            .and()
-            .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .formLogin()
-                .successHandler { _, response, authentication ->
+        with(http) {
+            authorizeRequests {
+                it.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+                it.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                it.anyRequest().authenticated()
+            }
+
+            sessionManagement {
+                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }
+
+            formLogin {
+                it.successHandler { _, response, authentication ->
                     response.status = HttpServletResponse.SC_OK
                     response.setHeader("X-Auth-Token", authentication.details.toString())
                 }
-                .failureHandler { _, response, exception ->
+                it.failureHandler { _, response, exception ->
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST, exception.message)
                 }
-            .permitAll()
-            .and()
-            .exceptionHandling()
-                .authenticationEntryPoint { _, response, _ ->
+                it.permitAll()
+            }
+
+            exceptionHandling {
+                it.authenticationEntryPoint { _, response, _ ->
                     response.status = HttpServletResponse.SC_UNAUTHORIZED
                 }
-            .and()
-            .anonymous()
-                .disable()
-            .httpBasic()
-                .disable()
-            .csrf()
-                .disable()
-            .cors()
-                .configurationSource { corsConfiguration }
-            .and()
-            .addFilterBefore(AuthenticationFilter(authenticationManager()), BasicAuthenticationFilter::class.java)
-        // @formatter:on
+            }
+
+            anonymous {
+                it.disable()
+            }
+
+            httpBasic {
+                it.disable()
+            }
+
+            csrf {
+                it.disable()
+            }
+
+            cors {
+                it.configurationSource { corsConfiguration }
+            }
+
+            addFilterBefore(AuthenticationFilter(authenticationManager()), BasicAuthenticationFilter::class.java)
+        }
     }
 
     override fun configure(web: WebSecurity) {
@@ -66,8 +76,7 @@ class WebSecurityConfig(
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
-        auth
-            .authenticationProvider(jiraAuthenticationProvider)
+        auth.authenticationProvider(jiraAuthenticationProvider)
             .authenticationProvider(tokenAuthenticationProvider)
     }
 

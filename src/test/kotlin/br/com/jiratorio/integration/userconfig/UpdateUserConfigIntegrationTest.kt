@@ -2,6 +2,7 @@ package br.com.jiratorio.integration.userconfig
 
 import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
+import br.com.jiratorio.domain.request.UpdateUserConfigRequest
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.UpdateUserConfigFactory
@@ -10,12 +11,11 @@ import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class UpdateUserConfigIntegrationTest @Autowired constructor(
+internal class UpdateUserConfigIntegrationTest(
     private val updateUserConfigFactory: UpdateUserConfigFactory,
     private val userConfigRepository: UserConfigRepository,
     private val authenticator: Authenticator
@@ -23,9 +23,11 @@ internal class UpdateUserConfigIntegrationTest @Autowired constructor(
 
     @Test
     fun `update user config`() {
-        val request = updateUserConfigFactory.create {
-            it.city = "São Paulo"
-        }
+        val request = updateUserConfigFactory.create(
+            modifyingFields = mapOf(
+                UpdateUserConfigRequest::city to "São Paulo"
+            )
+        )
 
         restAssured {
             given {

@@ -19,8 +19,7 @@ class TokenAuthenticationProvider(private val tokenService: TokenService) : Auth
         }
     }
 
-    override fun supports(authentication: Class<*>): Boolean {
-        return authentication == PreAuthenticatedAuthenticationToken::class.java
-    }
+    override fun supports(authentication: Class<*>): Boolean =
+        authentication == PreAuthenticatedAuthenticationToken::class.java
 
 }

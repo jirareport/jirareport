@@ -20,10 +20,10 @@ class HistogramServiceImpl(
         val chart = histogramChart(issues)
 
         return Histogram(
-            chart,
-            percentile.median,
-            percentile.percentile75,
-            percentile.percentile90
+            chart = chart,
+            median = percentile.median,
+            percentile75 = percentile.percentile75,
+            percentile90 = percentile.percentile90
         )
     }
 

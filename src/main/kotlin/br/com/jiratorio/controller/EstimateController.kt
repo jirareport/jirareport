@@ -15,8 +15,10 @@ class EstimateController(
 ) {
 
     @GetMapping
-    fun index(@PathVariable boardId: Long, searchEstimateRequest: SearchEstimateRequest): List<EstimateIssueResponse> {
-        return estimateService.findEstimateIssues(boardId, searchEstimateRequest)
-    }
+    fun index(
+        @PathVariable boardId: Long,
+        searchEstimateRequest: SearchEstimateRequest
+    ): List<EstimateIssueResponse> =
+        estimateService.findEstimateIssues(boardId, searchEstimateRequest)
 
 }

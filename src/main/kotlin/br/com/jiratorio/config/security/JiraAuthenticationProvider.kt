@@ -30,7 +30,6 @@ class JiraAuthenticationProvider(
         }
     }
 
-    override fun supports(auth: Class<*>): Boolean {
-        return auth == UsernamePasswordAuthenticationToken::class.java
-    }
+    override fun supports(auth: Class<*>): Boolean =
+        auth == UsernamePasswordAuthenticationToken::class.java
 }

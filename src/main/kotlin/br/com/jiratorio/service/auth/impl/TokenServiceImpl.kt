@@ -1,6 +1,6 @@
 package br.com.jiratorio.service.auth.impl
 
-import br.com.jiratorio.config.properties.SecurityProperties
+import br.com.jiratorio.config.property.SecurityProperties
 import br.com.jiratorio.domain.Account
 import br.com.jiratorio.service.auth.TokenService
 import com.fasterxml.jackson.databind.ObjectMapper

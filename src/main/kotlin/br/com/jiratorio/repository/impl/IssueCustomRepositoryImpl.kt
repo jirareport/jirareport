@@ -126,7 +126,7 @@ class IssueCustomRepositoryImpl(
         log.info("Method=findAllDynamicFieldsByBoardId, boardId={}", boardId)
 
         val query = "SELECT DISTINCT JSONB_OBJECT_KEYS(dynamic_fields) FROM issue WHERE board_id = ?"
-        return jdbcTemplate.queryForList(query, String::class.java, boardId)
+        return jdbcTemplate.queryForList(query, arrayOf(boardId), String::class.java)
     }
 
 }

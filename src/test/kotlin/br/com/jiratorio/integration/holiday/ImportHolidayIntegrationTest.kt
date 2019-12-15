@@ -2,6 +2,7 @@ package br.com.jiratorio.integration.holiday
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.annotation.LoadStubs
+import br.com.jiratorio.domain.entity.Holiday
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.factory.domain.entity.HolidayFactory
@@ -16,14 +17,13 @@ import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDate
 
 @Tag("integration")
 @LoadStubs(["holidays"])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class ImportHolidayIntegrationTest @Autowired constructor(
+internal class ImportHolidayIntegrationTest(
     private val boardFactory: BoardFactory,
     private val holidayRepository: HolidayRepository,
     private val holidayFactory: HolidayFactory,
@@ -100,10 +100,12 @@ internal class ImportHolidayIntegrationTest @Autowired constructor(
         authenticator.withDefaultUser {
             val defaultBoard = boardFactory.create()
             for (i in 1..5) {
-                holidayFactory.create {
-                    it.date = LocalDate.of(2019, i, 1)
-                    it.board = defaultBoard
-                }
+                holidayFactory.create(
+                    modifyingFields = mapOf(
+                        Holiday::date to LocalDate.of(2019, i, 1),
+                        Holiday::board to defaultBoard
+                    )
+                )
             }
         }
 

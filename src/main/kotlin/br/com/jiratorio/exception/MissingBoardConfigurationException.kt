@@ -4,7 +4,4 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-class MissingBoardConfigurationException(
-    val field: String,
-    message: String = "$field not configured"
-) : RuntimeException(message)
+class MissingBoardConfigurationException(val field: String) : RuntimeException()

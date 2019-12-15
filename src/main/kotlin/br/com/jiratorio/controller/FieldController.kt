@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 class FieldController(private val fieldService: FieldService) {
 
     @GetMapping
-    fun fields(): List<JiraField> {
-        return fieldService.findAllJiraFields()
-    }
+    fun fields(): List<JiraField> =
+        fieldService.findAllJiraFields()
 
 }

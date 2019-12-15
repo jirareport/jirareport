@@ -7,38 +7,38 @@ import javax.validation.constraints.NotBlank
 data class UpdateBoardRequest(
 
     @field:NotBlank
-    var name: String,
+    val name: String,
 
-    var startColumn: String? = null,
+    val startColumn: String? = null,
 
-    var endColumn: String? = null,
+    val endColumn: String? = null,
 
-    var fluxColumn: MutableList<String>? = null,
+    val fluxColumn: MutableList<String>? = null,
 
-    var ignoreIssueType: MutableList<String>? = null,
+    val ignoreIssueType: MutableList<String>? = null,
 
-    var epicCF: String? = null,
+    val epicCF: String? = null,
 
-    var estimateCF: String? = null,
+    val estimateCF: String? = null,
 
-    var systemCF: String? = null,
+    val systemCF: String? = null,
 
-    var projectCF: String? = null,
+    val projectCF: String? = null,
 
-    var ignoreWeekend: Boolean? = null,
+    val ignoreWeekend: Boolean? = null,
 
-    var impedimentType: ImpedimentType? = null,
+    val impedimentType: ImpedimentType? = null,
 
-    var impedimentColumns: MutableList<String>? = null,
+    val impedimentColumns: MutableList<String>? = null,
 
-    var touchingColumns: MutableList<String>? = null,
+    val touchingColumns: MutableList<String>? = null,
 
-    var waitingColumns: MutableList<String>? = null,
+    val waitingColumns: MutableList<String>? = null,
 
-    var dueDateCF: String? = null,
+    val dueDateCF: String? = null,
 
-    var dueDateType: DueDateType? = null,
+    val dueDateType: DueDateType? = null,
 
-    var useLastOccurrenceWhenCalculateLeadTime: Boolean = false
+    val useLastOccurrenceWhenCalculateLeadTime: Boolean = false
 
 )

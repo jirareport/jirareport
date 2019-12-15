@@ -9,12 +9,11 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class FindUserConfigIntegrationTest @Autowired constructor(
+internal class FindUserConfigIntegrationTest(
     private val authenticator: Authenticator,
     private val userConfigFactory: UserConfigFactory
 ) {

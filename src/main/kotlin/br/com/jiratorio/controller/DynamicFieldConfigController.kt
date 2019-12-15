@@ -4,6 +4,7 @@ import br.com.jiratorio.domain.request.DynamicFieldConfigRequest
 import br.com.jiratorio.domain.response.DynamicFieldConfigResponse
 import br.com.jiratorio.service.DynamicFieldConfigService
 import org.springframework.http.HttpEntity
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import javax.validation.Valid
@@ -22,9 +24,8 @@ class DynamicFieldConfigController(
 ) {
 
     @GetMapping
-    fun findAllByBoard(@PathVariable boardId: Long): List<DynamicFieldConfigResponse> {
-        return dynamicFieldConfigService.findByBoard(boardId)
-    }
+    fun findAllByBoard(@PathVariable boardId: Long): List<DynamicFieldConfigResponse> =
+        dynamicFieldConfigService.findByBoard(boardId)
 
     @PostMapping
     fun create(
@@ -41,12 +42,11 @@ class DynamicFieldConfigController(
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun findByBoardAndId(
         @PathVariable boardId: Long,
         @PathVariable id: Long
-    ): HttpEntity<*> {
+    ): Unit =
         dynamicFieldConfigService.deleteByBoardAndId(boardId, id)
-        return ResponseEntity.noContent().build<Any>()
-    }
 
 }

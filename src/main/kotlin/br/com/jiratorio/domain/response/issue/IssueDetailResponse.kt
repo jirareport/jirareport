@@ -6,13 +6,23 @@ import br.com.jiratorio.domain.response.ImpedimentHistoryResponse
 import br.com.jiratorio.domain.response.LeadTimeResponse
 
 data class IssueDetailResponse(
+
     val id: Long,
+
     val key: String,
+
     val changelog: List<ChangelogResponse>,
+
     val dueDateHistory: List<DueDateHistoryResponse>?,
+
     val impedimentHistory: List<ImpedimentHistoryResponse>,
+
     val leadTimes: Set<LeadTimeResponse>?,
+
     val waitTime: Double,
+
     val touchTime: Double,
+
     val pctEfficiency: Double
+
 )
