@@ -48,7 +48,7 @@ class EstimateServiceImpl(
         val board = boardService.findById(boardId)
 
         if (board.fluxColumn.isNullOrEmpty()) {
-            throw MissingBoardConfigurationException("board.fluxColumn")
+            throw MissingBoardConfigurationException("fluxColumn")
         }
 
         val estimateIssues = estimateIssueParser.parseEstimate(
