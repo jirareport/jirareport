@@ -19,8 +19,7 @@ class MessageResolver(
 
     private val locale: Locale = localeResolver.resolveLocale(request)
 
-    fun resolve(key: String, vararg args: Any?): String {
-        return messageSource.getMessage(key, args, locale)
-    }
+    operator fun invoke(key: String, vararg args: Any?): String =
+        messageSource.getMessage(key, args, locale)
 
 }

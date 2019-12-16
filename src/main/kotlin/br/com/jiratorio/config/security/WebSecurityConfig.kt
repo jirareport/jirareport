@@ -38,7 +38,8 @@ class WebSecurityConfig(
                     response.setHeader("X-Auth-Token", authentication.details.toString())
                 }
                 it.failureHandler { _, response, exception ->
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, exception.message)
+                    response.setHeader("X-Auth-Fail-Reason", exception.message)
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST)
                 }
                 it.permitAll()
             }

@@ -52,7 +52,7 @@ class BoardController(
         boardService.findDetailsById(id)
 
     @PostMapping
-    fun create(@Valid @RequestBody board: CreateBoardRequest): HttpEntity<Any> {
+    fun create(@Valid @RequestBody board: CreateBoardRequest): HttpEntity<*> {
         val id = boardService.create(board)
 
         val location = ServletUriComponentsBuilder
@@ -64,7 +64,7 @@ class BoardController(
     }
 
     @PostMapping(params = ["boardIdToClone"])
-    fun clone(@RequestParam("boardIdToClone") boardId: Long): HttpEntity<Any> {
+    fun clone(@RequestParam("boardIdToClone") boardId: Long): HttpEntity<*> {
         val id: Long = cloneBoardService.clone(boardId)
 
         val location = ServletUriComponentsBuilder

@@ -32,7 +32,7 @@ class LeadTimeConfigController(
     fun create(
         @PathVariable boardId: Long,
         @Valid @RequestBody leadTimeConfigRequest: LeadTimeConfigRequest
-    ): HttpEntity<Any> {
+    ): HttpEntity<*> {
         val id = leadTimeConfigService.create(boardId, leadTimeConfigRequest)
 
         val location = ServletUriComponentsBuilder
