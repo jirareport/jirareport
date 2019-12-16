@@ -39,7 +39,7 @@ class JiraClientConfiguration(
                     objectMapper.readValue(response.body().asInputStream(), JiraError::class.java)
                 } catch (e: Exception) {
                     log.error("Method=errorDecoder, methodKey={}, response={}", methodKey, response, e)
-                    JiraError(messageResolver.resolve("errors.session-timeout"), response.status().toLong())
+                    JiraError(messageResolver("errors.session-timeout"), response.status().toLong())
                 }
             )
         }

@@ -4,14 +4,14 @@ import br.com.jiratorio.domain.chart.ChartType
 
 data class UpdateUserConfigRequest(
 
-    var state: String? = null,
+    val state: String? = null,
 
-    var city: String? = null,
+    val city: String? = null,
 
-    var holidayToken: String? = null,
+    val holidayToken: String? = null,
 
-    var leadTimeChartType: ChartType? = null,
+    val leadTimeChartType: ChartType? = null,
 
-    var throughputChartType: ChartType? = null
+    val throughputChartType: ChartType? = null
 
 )

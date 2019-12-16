@@ -2,8 +2,7 @@ package br.com.jiratorio.service.impl
 
 import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.client.IssueClient
-import br.com.jiratorio.config.internationalization.MessageResolver
-import br.com.jiratorio.config.properties.JiraProperties
+import br.com.jiratorio.config.property.JiraProperties
 import br.com.jiratorio.domain.Percentile
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.estimate.EstimateFieldReference
@@ -35,7 +34,6 @@ class EstimateServiceImpl(
     private val holidayService: HolidayService,
     private val percentileService: PercentileService,
     private val jqlService: JQLService,
-    private val messageResolver: MessageResolver,
     private val jiraProperties: JiraProperties
 ) : EstimateService {
 
@@ -50,10 +48,7 @@ class EstimateServiceImpl(
         val board = boardService.findById(boardId)
 
         if (board.fluxColumn.isNullOrEmpty()) {
-            throw MissingBoardConfigurationException(
-                field = "board.fluxColumn",
-                message = messageResolver.resolve("errors.flux-column-not-configured")
-            )
+            throw MissingBoardConfigurationException("fluxColumn")
         }
 
         val estimateIssues = estimateIssueParser.parseEstimate(

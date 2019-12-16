@@ -4,6 +4,7 @@ import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.annotation.LoadStubs
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
+import br.com.jiratorio.domain.entity.DynamicFieldConfig
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
@@ -20,13 +21,12 @@ import io.restassured.http.ContentType
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import javax.servlet.http.HttpServletResponse
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired constructor(
+internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest(
     private val boardFactory: BoardFactory,
     private val dynamicFieldConfigFactory: DynamicFieldConfigFactory,
     private val authenticator: Authenticator,
@@ -39,16 +39,20 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest @Autowired cons
     fun `create issue period with dynamic fields`() {
         val board = authenticator.withDefaultUser {
             val board = boardFactory.create(boardFactory::withCompleteConfigurationBuilder)
-            dynamicFieldConfigFactory.create {
-                it.board = board
-                it.name = "Level Of Dependency"
-                it.field = "customfield_6000"
-            }
-            dynamicFieldConfigFactory.create {
-                it.board = board
-                it.name = "Team"
-                it.field = "customfield_5000"
-            }
+            dynamicFieldConfigFactory.create(
+                modifyingFields = mapOf(
+                    DynamicFieldConfig::board to board,
+                    DynamicFieldConfig::name to "Level Of Dependency",
+                    DynamicFieldConfig::field to "customfield_6000"
+                )
+            )
+            dynamicFieldConfigFactory.create(
+                modifyingFields = mapOf(
+                    DynamicFieldConfig::board to board,
+                    DynamicFieldConfig::name to "Team",
+                    DynamicFieldConfig::field to "customfield_5000"
+                )
+            )
             board
         }
 

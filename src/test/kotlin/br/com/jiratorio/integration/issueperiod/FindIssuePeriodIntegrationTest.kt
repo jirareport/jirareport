@@ -2,6 +2,8 @@ package br.com.jiratorio.integration.issueperiod
 
 import br.com.jiratorio.assert.response.assertThat
 import br.com.jiratorio.base.Authenticator
+import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.domain.response.issue.IssueResponse
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodDetailResponse
@@ -14,14 +16,13 @@ import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
 import br.com.jiratorio.repository.IssueRepository
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.format.DateTimeFormatter
 import javax.servlet.http.HttpServletResponse.SC_OK
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class FindIssuePeriodIntegrationTest @Autowired constructor(
+internal class FindIssuePeriodIntegrationTest(
     private val authenticator: Authenticator,
     private val issuePeriodFactory: IssuePeriodFactory,
     private val issueFactory: IssueFactory,
@@ -34,14 +35,19 @@ internal class FindIssuePeriodIntegrationTest @Autowired constructor(
         val issuePeriod = authenticator.withDefaultUser {
             val defaultBoard = boardFactory.create()
 
-            val issuePeriod = issuePeriodFactory.create {
-                it.boardId = defaultBoard.id
-            }
+            val issuePeriod = issuePeriodFactory.create (
+                modifyingFields = mapOf(
+                    IssuePeriod::boardId to defaultBoard.id
+                )
+            )
 
-            issueFactory.create(20) {
-                it.board = defaultBoard
-                it.issuePeriodId = issuePeriod.id
-            }.toMutableList()
+            issueFactory.create(
+                quantity = 20,
+                modifyingFields = mapOf(
+                    Issue::board to defaultBoard,
+                    Issue::issuePeriodId to issuePeriod.id
+                )
+            ).toMutableList()
 
             issuePeriod
         }

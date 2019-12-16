@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 class BoardStatusController(private val projectService: ProjectService) {
 
     @GetMapping
-    fun findByBoardId(@PathVariable boardId: Long): Set<String> {
-        return projectService.findStatusesByBoardId(boardId)
-    }
+    fun findByBoardId(@PathVariable boardId: Long): Set<String> =
+        projectService.findStatusesByBoardId(boardId)
 
 }

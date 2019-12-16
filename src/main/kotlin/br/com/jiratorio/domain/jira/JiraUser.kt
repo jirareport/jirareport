@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class JiraUser(
 
     @JsonProperty("displayName")
-    var name: String,
+    val name: String,
 
     @JsonProperty("emailAddress")
-    var email: String
+    val email: String
 
 )

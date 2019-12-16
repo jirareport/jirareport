@@ -16,13 +16,12 @@ import io.restassured.http.ContentType
 import org.hamcrest.Matchers.containsString
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import javax.servlet.http.HttpServletResponse
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class CreateBasicIssuePeriodIntegrationTest @Autowired constructor(
+internal class CreateBasicIssuePeriodIntegrationTest(
     private val boardFactory: BoardFactory,
     private val authenticator: Authenticator,
     private val issuePeriodRepository: IssuePeriodRepository,

@@ -3,21 +3,23 @@ package br.com.jiratorio.domain.jira.changelog
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class JiraChangelogAuthor(
-    var self: String? = null,
+
+    val self: String? = null,
 
     @JsonProperty("name")
-    var username: String? = null,
+    val username: String? = null,
 
     @JsonProperty("key")
-    var key: String? = null,
+    val key: String? = null,
 
     @JsonProperty("emailAddress")
-    var email: String? = null,
+    val email: String? = null,
 
     @JsonProperty("displayName")
-    var name: String? = null,
+    val name: String? = null,
 
-    var active: Boolean? = null,
+    val active: Boolean? = null,
 
-    var timeZone: String? = null
+    val timeZone: String? = null
+
 )

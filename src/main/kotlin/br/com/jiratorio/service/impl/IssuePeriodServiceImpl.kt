@@ -1,6 +1,6 @@
 package br.com.jiratorio.service.impl
 
-import br.com.jiratorio.config.properties.JiraProperties
+import br.com.jiratorio.config.property.JiraProperties
 import br.com.jiratorio.domain.chart.IssuePeriodChartResponse
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.IssuePeriod

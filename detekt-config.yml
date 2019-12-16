@@ -1,13 +1,5 @@
 autoCorrect: false
 
-test-pattern:
-  active: true
-  patterns:
-    - '.*/test/.*'
-    - '.*Test.kt'
-  exclude-rules:
-    - 'LateinitUsage'
-
 build:
   maxIssues: 1
 

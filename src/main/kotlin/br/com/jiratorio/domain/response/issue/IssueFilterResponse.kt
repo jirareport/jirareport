@@ -3,11 +3,19 @@ package br.com.jiratorio.domain.response.issue
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
 
 data class IssueFilterResponse(
-    var estimates: Set<String>,
-    var systems: Set<String>,
-    var epics: Set<String>,
-    var issueTypes: Set<String>,
-    var projects: Set<String>,
-    var priorities: Set<String>,
-    var dynamicFieldsValues: List<DynamicFieldsValues>
+
+    val estimates: Set<String>,
+
+    val systems: Set<String>,
+
+    val epics: Set<String>,
+
+    val issueTypes: Set<String>,
+
+    val projects: Set<String>,
+
+    val priorities: Set<String>,
+
+    val dynamicFieldsValues: List<DynamicFieldsValues>
+
 )

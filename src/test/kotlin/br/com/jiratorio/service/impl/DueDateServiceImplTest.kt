@@ -3,13 +3,13 @@ package br.com.jiratorio.service.impl
 import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.context.UnitTestContext
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
+import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.domain.JiraChangelogItemFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.LocalDateTime
@@ -18,7 +18,7 @@ import java.util.Comparator
 @Tag("unit")
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(classes = [UnitTestContext::class])
-internal class DueDateServiceImplTest @Autowired constructor(
+internal class DueDateServiceImplTest(
     private val jiraChangelogItemFactory: JiraChangelogItemFactory
 ) {
 
@@ -27,7 +27,6 @@ internal class DueDateServiceImplTest @Autowired constructor(
     @Test
     fun `extract due date history with one item`() {
         val jiraChangelogItem = jiraChangelogItemFactory.create()
-
         val dueDateHistories = dueDateService.extractDueDateHistory("duedate", listOf(jiraChangelogItem))
 
         assertThat(dueDateHistories).hasSize(1)
@@ -39,9 +38,13 @@ internal class DueDateServiceImplTest @Autowired constructor(
 
     @Test
     fun `extract due date history with many items`() {
-        jiraChangelogItemFactory.create(5) {
-            it.field = "other_field"
-        }
+        jiraChangelogItemFactory.create(
+            quantity = 5,
+            modifyingFields = mapOf(
+                JiraChangelogItem::field to "other_field"
+            )
+        )
+
         val jiraChangelogItems = jiraChangelogItemFactory.create(5)
 
         val dueDateHistories = dueDateService.extractDueDateHistory("duedate", jiraChangelogItems)

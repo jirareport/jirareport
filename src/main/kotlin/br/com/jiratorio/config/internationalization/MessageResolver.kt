@@ -14,12 +14,12 @@ import javax.servlet.http.HttpServletRequest
 class MessageResolver(
     localeResolver: LocaleResolver,
     request: HttpServletRequest,
-    private val locale: Locale = localeResolver.resolveLocale(request),
     private val messageSource: MessageSource
 ) {
 
-    fun resolve(key: String, vararg args: Any?): String {
-        return messageSource.getMessage(key, args, locale)
-    }
+    private val locale: Locale = localeResolver.resolveLocale(request)
+
+    operator fun invoke(key: String, vararg args: Any?): String =
+        messageSource.getMessage(key, args, locale)
 
 }

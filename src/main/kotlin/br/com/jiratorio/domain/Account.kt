@@ -5,10 +5,15 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 data class Account(
+
     private val username: String,
+
     val name: String,
+
     val email: String,
+
     val token: String
+
 ) : UserDetails {
     companion object {
         private val serialVersionUID = -8167414094792278950L

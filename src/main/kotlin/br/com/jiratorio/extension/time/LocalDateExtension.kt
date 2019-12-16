@@ -10,12 +10,10 @@ import java.time.temporal.ChronoUnit
 fun LocalDate.isHoliday(holidays: List<LocalDate>): Boolean =
     this in holidays
 
-fun LocalDate.isWorkday(holidays: List<LocalDate>): Boolean {
-    val dayOfWeek = this.dayOfWeek
-    return DayOfWeek.SATURDAY != dayOfWeek &&
-            DayOfWeek.SUNDAY != dayOfWeek &&
-            !this.isHoliday(holidays)
-}
+fun LocalDate.isWorkday(holidays: List<LocalDate>): Boolean =
+    DayOfWeek.SATURDAY != dayOfWeek &&
+        DayOfWeek.SUNDAY != dayOfWeek &&
+        !this.isHoliday(holidays)
 
 fun LocalDate?.daysDiff(endDate: LocalDate?, holidays: List<LocalDate>, ignoreWeekend: Boolean?): Long {
     if (this == null || endDate == null) {
@@ -34,7 +32,8 @@ fun LocalDate?.daysDiff(endDate: LocalDate?, holidays: List<LocalDate>, ignoreWe
 fun LocalDate.atEndOfDay(): LocalDateTime =
     this.atTime(LocalTime.MAX)
 
-private val datePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+private val datePattern: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
 fun LocalDate.displayFormat(): String =
     this.format(datePattern)

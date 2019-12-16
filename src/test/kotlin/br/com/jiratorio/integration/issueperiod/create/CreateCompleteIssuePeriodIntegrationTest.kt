@@ -21,14 +21,13 @@ import io.restassured.http.ContentType
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.support.TransactionTemplate
 import javax.servlet.http.HttpServletResponse
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
+internal class CreateCompleteIssuePeriodIntegrationTest(
     private val boardFactory: BoardFactory,
     private val authenticator: Authenticator,
     private val issuePeriodRepository: IssuePeriodRepository,
@@ -43,19 +42,23 @@ internal class CreateCompleteIssuePeriodIntegrationTest @Autowired constructor(
         val board = authenticator.withDefaultUser {
             val defaultBoard = boardFactory.create(boardFactory::withCompleteConfigurationBuilder)
 
-            leadTimeConfigFactory.create {
-                it.name = "Dev Lead Time"
-                it.startColumn = "DEV WIP"
-                it.endColumn = "DEV DONE"
-                it.board = defaultBoard
-            }
+            leadTimeConfigFactory.create(
+                modifyingFields = mapOf(
+                    LeadTimeConfig::name to "Dev Lead Time",
+                    LeadTimeConfig::startColumn to "DEV WIP",
+                    LeadTimeConfig::endColumn to "DEV DONE",
+                    LeadTimeConfig::board to defaultBoard
+                )
+            )
 
-            leadTimeConfigFactory.create {
-                it.name = "Test Lead Time"
-                it.startColumn = "TEST WIP"
-                it.endColumn = "TEST DONE"
-                it.board = defaultBoard
-            }
+            leadTimeConfigFactory.create(
+                modifyingFields = mapOf(
+                    LeadTimeConfig::name to "Test Lead Time",
+                    LeadTimeConfig::startColumn to "TEST WIP",
+                    LeadTimeConfig::endColumn to "TEST DONE",
+                    LeadTimeConfig::board to defaultBoard
+                )
+            )
 
             defaultBoard
         }

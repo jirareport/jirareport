@@ -19,50 +19,43 @@ class ErrorHandler(
 ) {
 
     @ExceptionHandler(MissingKotlinParameterException::class)
-    fun handleMissingKotlinParameterException(e: MissingKotlinParameterException): ResponseEntity<Map<String, List<String>>> {
-        return ResponseEntity(
-            mapOf(e.parameter.name!! to listOf(messageResolver.resolve("javax.validation.constraints.NotNull.message"))),
+    fun handleMissingKotlinParameterException(e: MissingKotlinParameterException): ResponseEntity<Map<String, List<String>>> =
+        ResponseEntity(
+            mapOf(e.parameter.name!! to listOf(messageResolver("javax.validation.constraints.NotNull.message"))),
             HttpStatus.BAD_REQUEST
         )
-    }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ResponseEntity<Map<String, List<String>>> {
-        val bindingResult = e.bindingResult
-        return buildBindResultResponseErrors(bindingResult)
-    }
+    fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ResponseEntity<Map<String, List<String>>> =
+        buildBindResultResponseErrors(e.bindingResult)
 
     @ExceptionHandler(BindException::class)
-    fun handleBindException(e: BindException): ResponseEntity<Map<String, List<String>>> {
-        val bindingResult = e.bindingResult
-        return buildBindResultResponseErrors(bindingResult)
-    }
+    fun handleBindException(e: BindException): ResponseEntity<Map<String, List<String>>> =
+        buildBindResultResponseErrors(e.bindingResult)
 
     private fun buildBindResultResponseErrors(bindingResult: BindingResult): ResponseEntity<Map<String, List<String>>> {
         val errors = bindingResult.allErrors.groupBy {
             it as FieldError
             it.field
-        }.map {
-            it.key to it.value.mapNotNull { it.defaultMessage }
+        }.map { entry ->
+            entry.key to entry.value.mapNotNull { it.defaultMessage }
         }.toMap()
 
         return ResponseEntity(errors, HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(UniquenessFieldException::class)
-    fun handleUniquenessException(e: UniquenessFieldException): ResponseEntity<Map<String, List<String>>> {
-        return ResponseEntity(
-            mapOf(e.field to listOf(messageResolver.resolve("validations.uniqueness"))),
+    fun handleUniquenessException(e: UniquenessFieldException): ResponseEntity<Map<String, List<String>>> =
+        ResponseEntity(
+            mapOf(e.field to listOf(messageResolver("validations.uniqueness"))),
             HttpStatus.BAD_REQUEST
         )
-    }
 
     @ExceptionHandler(MissingBoardConfigurationException::class)
-    fun handleBadRequestException(e: MissingBoardConfigurationException): ResponseEntity<Map<String, List<String?>>> {
-        return ResponseEntity(
-            mapOf(e.field to listOf(e.message)),
+    fun handleBadRequestException(e: MissingBoardConfigurationException): ResponseEntity<Map<String, List<String?>>> =
+        ResponseEntity(
+            mapOf(e.field to listOf(messageResolver("validations.missing-board-configuration", e.field))),
             HttpStatus.BAD_REQUEST
         )
-    }
 
 }

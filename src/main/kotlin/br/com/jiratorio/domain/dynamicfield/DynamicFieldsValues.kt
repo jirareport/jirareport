@@ -1,6 +1,9 @@
 package br.com.jiratorio.domain.dynamicfield
 
 data class DynamicFieldsValues(
-    var field: String,
-    var values: List<String>
+
+    val field: String,
+
+    val values: List<String>
+
 )

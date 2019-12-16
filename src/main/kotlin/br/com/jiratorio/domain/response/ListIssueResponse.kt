@@ -5,9 +5,15 @@ import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.response.issue.IssueResponse
 
 data class ListIssueResponse(
+
     val leadTime: Double,
+
     val throughput: Int,
+
     val issues: List<IssueResponse>,
+
     val charts: ChartAggregator,
+
     val weeklyThroughput: Chart<String, Int>
+
 )

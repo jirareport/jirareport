@@ -3,15 +3,25 @@ package br.com.jiratorio.domain.response.board
 import br.com.jiratorio.domain.entity.Board
 
 data class BoardFeatureResponse(
+
     val dueDate: Boolean,
+
     val epic: Boolean,
+
     val estimate: Boolean,
+
     val system: Boolean,
+
     val project: Boolean,
+
     val efficiency: Boolean,
+
     val leadTimes: Boolean,
+
     val impediment: Boolean,
+
     val dynamicField: Boolean
+
 ) {
 
     constructor(board: Board) : this(

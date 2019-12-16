@@ -14,12 +14,11 @@ import org.apache.http.HttpStatus.SC_CREATED
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class CreateDynamicFieldConfigIntegrationTest @Autowired constructor(
+class CreateDynamicFieldConfigIntegrationTest(
     private val boardFactory: BoardFactory,
     private val dynamicFieldConfigRequestFactory: DynamicFieldConfigRequestFactory,
     private val dynamicFieldConfigRepository: DynamicFieldConfigRepository,

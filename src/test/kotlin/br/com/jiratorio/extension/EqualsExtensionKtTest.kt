@@ -65,7 +65,7 @@ internal class EqualsExtensionKtTest {
     internal inner class Person(
         val name: String,
         val age: Int,
-        var phones: List<Phone>
+        val phones: List<Phone>
     ) {
         override fun equals(other: Any?) =
             equalsBuilder(other, Person::name, Person::phones)

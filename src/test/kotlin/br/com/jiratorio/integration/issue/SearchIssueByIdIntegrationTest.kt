@@ -2,6 +2,11 @@ package br.com.jiratorio.integration.issue
 
 import br.com.jiratorio.assert.response.assertThat
 import br.com.jiratorio.base.Authenticator
+import br.com.jiratorio.domain.entity.DynamicFieldConfig
+import br.com.jiratorio.domain.entity.ImpedimentHistory
+import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.domain.entity.LeadTime
+import br.com.jiratorio.domain.entity.LeadTimeConfig
 import br.com.jiratorio.domain.response.issue.IssueDetailResponse
 import br.com.jiratorio.dsl.extractAs
 import br.com.jiratorio.dsl.restAssured
@@ -16,13 +21,12 @@ import br.com.jiratorio.factory.domain.request.DueDateHistoryFactory
 import br.com.jiratorio.repository.IssueRepository
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import javax.servlet.http.HttpServletResponse.SC_OK
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class SearchIssueByIdIntegrationTest @Autowired constructor(
+class SearchIssueByIdIntegrationTest(
     private val authenticator: Authenticator,
     private val boardFactory: BoardFactory,
     private val dynamicFieldConfigFactory: DynamicFieldConfigFactory,
@@ -39,41 +43,59 @@ class SearchIssueByIdIntegrationTest @Autowired constructor(
         authenticator.withDefaultUser {
             val board = boardFactory.create()
 
-            dynamicFieldConfigFactory.create {
-                it.board = board
-                it.name = "field1"
-            }
-            dynamicFieldConfigFactory.create {
-                it.board = board
-                it.name = "field2"
-            }
-
-            val issue = issueFactory.create {
-                it.board = board
-                it.dynamicFields = mutableMapOf(
-                    "field1" to "value1",
-                    "field2" to "value1"
+            dynamicFieldConfigFactory.create(
+                modifyingFields = mapOf(
+                    DynamicFieldConfig::board to board,
+                    DynamicFieldConfig::name to "field1"
                 )
-                it.dueDateHistory = dueDateHistoryFactory.create(5)
-            }
+            )
 
-            leadTimeFactory.create {
-                it.issue = issue
-                it.leadTimeConfig = leadTimeConfigFactory.create {
-                    it.board = board
-                }
-            }
+            dynamicFieldConfigFactory.create(
+                modifyingFields = mapOf(
+                    DynamicFieldConfig::board to board,
+                    DynamicFieldConfig::name to "field2"
+                )
+            )
 
-            leadTimeFactory.create {
-                it.issue = issue
-                it.leadTimeConfig = leadTimeConfigFactory.create {
-                    it.board = board
-                }
-            }
+            val issue = issueFactory.create(
+                modifyingFields = mapOf(
+                    Issue::board to board,
+                    Issue::dynamicFields to mutableMapOf(
+                        "field1" to "value1",
+                        "field2" to "value1"
+                    ),
+                    Issue::dueDateHistory to dueDateHistoryFactory.create(5)
+                )
+            )
 
-            impedimentHistoryFactory.create(5) {
-                it.issueId = issue.id
-            }
+            leadTimeFactory.create(
+                modifyingFields = mapOf(
+                    LeadTime::issue to issue,
+                    LeadTime::leadTimeConfig to leadTimeConfigFactory.create(
+                        modifyingFields = mapOf(
+                            LeadTimeConfig::board to board
+                        )
+                    )
+                )
+            )
+
+            leadTimeFactory.create(
+                modifyingFields = mapOf(
+                    LeadTime::issue to issue,
+                    LeadTime::leadTimeConfig to leadTimeConfigFactory.create(
+                        modifyingFields = mapOf(
+                            LeadTimeConfig::board to board
+                        )
+                    )
+                )
+            )
+
+            impedimentHistoryFactory.create(
+                quantity = 5,
+                modifyingFields = mapOf(
+                    ImpedimentHistory::issueId to issue.id
+                )
+            )
         }
 
         val issueDetailResponse = restAssured {

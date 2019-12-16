@@ -35,7 +35,7 @@ class ChartServiceImpl(
     @ExecutionTime
     override fun buildAllCharts(issues: List<Issue>, board: Board): ChartAggregator {
         log.info("Method=buildAllCharts, issues={}, board={}", issues, board)
-        val uninformed = messageResolver.resolve("uninformed")
+        val uninformed = messageResolver("uninformed")
 
         val histogram = histogramService.issueHistogram(issues)
         val leadTimeByEstimate = estimateChartService.leadTimeChart(issues, uninformed)

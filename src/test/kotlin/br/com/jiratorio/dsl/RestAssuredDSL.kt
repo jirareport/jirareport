@@ -9,11 +9,11 @@ import kotlin.reflect.KClass
 
 class RestAssuredDSL {
 
-    private lateinit var blockGiven: RequestSpecification.() -> Unit
+    private var blockGiven: RequestSpecification.() -> Unit = {}
 
-    private lateinit var blockOn: RequestSpecification.() -> Response
+    private var blockOn: RequestSpecification.() -> Response = { get() }
 
-    private lateinit var blockThen: ValidatableResponse.() -> Unit
+    private var blockThen: ValidatableResponse.() -> Unit = {}
 
     fun given(block: RequestSpecification.() -> Unit) {
         blockGiven = block
@@ -40,7 +40,6 @@ class RestAssuredDSL {
             .apply(blockThen)
             .extract().response()
     // @formatter:on
-
 }
 
 inline fun restAssured(block: RestAssuredDSL.() -> Unit): Response =

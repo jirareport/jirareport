@@ -6,11 +6,17 @@ import java.io.Serializable
 import java.time.LocalDateTime
 
 data class Changelog(
-    var from: String? = null,
-    var to: String? = null,
-    var created: LocalDateTime,
+
+    val from: String? = null,
+
+    val to: String? = null,
+
+    val created: LocalDateTime,
+
     var endDate: LocalDateTime = created,
+
     var leadTime: Long = 0
+
 ) : Serializable {
     companion object {
         private const val serialVersionUID = 6432821107545516780L

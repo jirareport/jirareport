@@ -2,6 +2,7 @@ package br.com.jiratorio.integration.board
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.matcher.IdMatcher
@@ -13,12 +14,11 @@ import org.hamcrest.Matchers.hasSize
 import org.hamcrest.Matchers.not
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @Tag("integration")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class SearchBoardIntegrationTest @Autowired constructor(
+internal class SearchBoardIntegrationTest(
     private val boardFactory: BoardFactory,
     private val authenticator: Authenticator
 ) {
@@ -70,9 +70,13 @@ internal class SearchBoardIntegrationTest @Autowired constructor(
     @Test
     fun `filter board by name`() {
         authenticator.withDefaultUser {
-            boardFactory.create(5) {
-                it.name = "Uniq Start Name"
-            }
+            boardFactory.create(
+                quantity = 5,
+                modifyingFields = mapOf(
+                    Board::name to "Uniq Start Name"
+                )
+            )
+
             boardFactory.create(5)
         }
 

@@ -35,9 +35,8 @@ fun LocalDateTime?.minutesDiff(endDate: LocalDateTime?, holidays: List<LocalDate
     return workingHours
 }
 
-fun LocalDateTime?.daysDiff(endDate: LocalDateTime?, holidays: List<LocalDate>, ignoreWeekend: Boolean?): Long {
-    return this?.toLocalDate().daysDiff(endDate?.toLocalDate(), holidays, ignoreWeekend)
-}
+fun LocalDateTime?.daysDiff(endDate: LocalDateTime?, holidays: List<LocalDate>, ignoreWeekend: Boolean?): Long =
+    this?.toLocalDate().daysDiff(endDate?.toLocalDate(), holidays, ignoreWeekend)
 
 fun LocalDateTime.plusDays(days: Long, holidays: List<LocalDate>, ignoreWeekend: Boolean?): LocalDate {
     val current = this.toLocalDate()
@@ -63,7 +62,8 @@ fun LocalDateTime.plusDays(days: Long, holidays: List<LocalDate>, ignoreWeekend:
     return cursor
 }
 
-private val dateTimePattern: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+private val dateTimePattern: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
 
 fun LocalDateTime.displayFormat(): String =
     this.format(dateTimePattern)
