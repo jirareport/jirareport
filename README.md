@@ -18,4 +18,4 @@ Try and make one logical change per PR. That is not make many changes in one PR.
 
 # License
 
-This project is licensed under the MIT License - see the (LICENSE.md)[LICENSE.md] file for details
+This project is licensed under the MIT License - see the (LICENSE.md)[LICENSE] file for details
