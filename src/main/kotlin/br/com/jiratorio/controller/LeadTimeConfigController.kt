@@ -40,7 +40,7 @@ class LeadTimeConfigController(
             .path("/{id}")
             .build(id)
 
-        return ResponseEntity.created(location).build()
+        return ResponseEntity.created(location).build<Any>()
     }
 
     @GetMapping("/{id}")
