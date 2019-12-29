@@ -3,7 +3,7 @@ package br.com.jiratorio.controller
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.domain.response.ListIssueResponse
 import br.com.jiratorio.domain.response.issue.IssueDetailResponse
-import br.com.jiratorio.domain.response.issue.IssueFilterKeyResponse
+import br.com.jiratorio.domain.response.issue.IssueKeysResponse
 import br.com.jiratorio.domain.response.issue.IssueFilterResponse
 import br.com.jiratorio.service.IssueService
 import org.springframework.format.annotation.DateTimeFormat
@@ -44,7 +44,7 @@ class IssueController(private val issueService: IssueService) {
         @PathVariable boardId: Long,
         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") startDate: LocalDate,
         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") endDate: LocalDate
-    ): IssueFilterKeyResponse =
+    ): IssueKeysResponse =
         issueService.findFilterKeys(boardId, startDate, endDate)
 
 }

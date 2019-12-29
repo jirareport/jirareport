@@ -48,7 +48,7 @@ class LeadTimeConfigController(
         @PathVariable boardId: Long,
         @PathVariable id: Long
     ): LeadTimeConfigResponse =
-        leadTimeConfigService.findByBoardAndId(boardId, id)
+        leadTimeConfigService.findByBoardAndId(id, boardId)
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -57,7 +57,7 @@ class LeadTimeConfigController(
         @PathVariable id: Long,
         @Valid @RequestBody leadTimeConfigRequest: LeadTimeConfigRequest
     ): Unit =
-        leadTimeConfigService.update(boardId, id, leadTimeConfigRequest)
+        leadTimeConfigService.update(id, boardId, leadTimeConfigRequest)
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

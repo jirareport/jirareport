@@ -5,7 +5,7 @@ import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.domain.response.ListIssueResponse
 import br.com.jiratorio.domain.response.issue.IssueDetailResponse
-import br.com.jiratorio.domain.response.issue.IssueFilterKeyResponse
+import br.com.jiratorio.domain.response.issue.IssueKeysResponse
 import br.com.jiratorio.domain.response.issue.IssueFilterResponse
 import java.time.LocalDate
 
@@ -25,6 +25,6 @@ interface IssueService {
 
     fun findFilters(boardId: Long): IssueFilterResponse
 
-    fun findFilterKeys(boardId: Long, startDate: LocalDate, endDate: LocalDate): IssueFilterKeyResponse
+    fun findFilterKeys(boardId: Long, startDate: LocalDate, endDate: LocalDate): IssueKeysResponse
 
 }

@@ -1,0 +1,25 @@
+package br.com.jiratorio.usecase.wip
+
+import br.com.jiratorio.config.stereotype.UseCase
+import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.extension.decimal.zeroIfNaN
+import br.com.jiratorio.extension.log
+import br.com.jiratorio.extension.time.rangeTo
+import java.time.LocalDate
+
+@UseCase
+class CalculateAverageWip {
+
+    fun execute(start: LocalDate, end: LocalDate, issues: List<Issue>, wipColumns: Set<String>): Double {
+        log.info("Method=execute, start={}, end={}, issues={}, wipColumns={}", start, end, issues, wipColumns)
+
+        return (start..end).map { cursor ->
+            issues.count { issue ->
+                issue.changelog.any { cl ->
+                    cursor in cl.dateRange() && cl.to?.toUpperCase() in wipColumns
+                }
+            }
+        }.average().zeroIfNaN()
+    }
+
+}

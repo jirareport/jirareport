@@ -3,7 +3,7 @@ package br.com.jiratorio.parser
 import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.estimate.EstimateIssue
+import br.com.jiratorio.domain.estimate.EstimatedIssue
 import br.com.jiratorio.domain.impediment.calculator.ImpedimentCalculatorResult
 import br.com.jiratorio.extension.containsUpperCase
 import br.com.jiratorio.extension.extractValue
@@ -28,7 +28,7 @@ class EstimateIssueParser(
 ) {
 
     @ExecutionTime
-    fun parseEstimate(root: JsonNode, board: Board): List<EstimateIssue> {
+    fun parseEstimate(root: JsonNode, board: Board): List<EstimatedIssue> {
         val holidays = holidayService.findDaysByBoard(board.id)
 
         val fluxColumn = FluxColumn(board)
@@ -46,7 +46,7 @@ class EstimateIssueParser(
         board: Board,
         startColumns: Set<String>,
         holidays: List<LocalDate>
-    ): EstimateIssue? =
+    ): EstimatedIssue? =
         try {
             parseIssue(jsonNode, board, startColumns, holidays)
         } catch (e: Exception) {
@@ -62,7 +62,7 @@ class EstimateIssueParser(
         board: Board,
         startColumns: Set<String>,
         holidays: List<LocalDate>
-    ): EstimateIssue? {
+    ): EstimatedIssue? {
         val fields = issue.path("fields")
 
         val created = fields.path("created")
@@ -122,7 +122,7 @@ class EstimateIssueParser(
                 null
             }
 
-        return EstimateIssue(
+        return EstimatedIssue(
             creator = author,
             key = issue.path("key").extractValueNotNull(),
             issueType = fields.path("issuetype").extractValue(),
