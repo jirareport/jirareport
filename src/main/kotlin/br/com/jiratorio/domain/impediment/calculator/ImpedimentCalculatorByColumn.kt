@@ -3,11 +3,13 @@ package br.com.jiratorio.domain.impediment.calculator
 import br.com.jiratorio.domain.entity.ImpedimentHistory
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
-import br.com.jiratorio.extension.log
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 object ImpedimentCalculatorByColumn : ImpedimentCalculator {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     override fun calcImpediment(
         impedimentColumns: List<String>?,

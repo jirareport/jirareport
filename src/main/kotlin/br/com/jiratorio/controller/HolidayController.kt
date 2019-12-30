@@ -3,7 +3,12 @@ package br.com.jiratorio.controller
 import br.com.jiratorio.domain.Account
 import br.com.jiratorio.domain.request.HolidayRequest
 import br.com.jiratorio.domain.response.holiday.HolidayResponse
-import br.com.jiratorio.service.HolidayService
+import br.com.jiratorio.usecase.holiday.CreateHoliday
+import br.com.jiratorio.usecase.holiday.DeleteHoliday
+import br.com.jiratorio.usecase.holiday.FindAllHolidays
+import br.com.jiratorio.usecase.holiday.FindHoliday
+import br.com.jiratorio.usecase.holiday.ImportHolidays
+import br.com.jiratorio.usecase.holiday.UpdateHoliday
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -18,27 +23,35 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import javax.validation.Valid
 
 @RestController
 @RequestMapping("/boards/{boardId}/holidays")
-class HolidayController(private val holidayService: HolidayService) {
+class HolidayController(
+    private val createHoliday: CreateHoliday,
+    private val deleteHoliday: DeleteHoliday,
+    private val findHoliday: FindHoliday,
+    private val findAllHolidays: FindAllHolidays,
+    private val importHolidays: ImportHolidays,
+    private val updateHoliday: UpdateHoliday
+) {
 
     @GetMapping
     fun index(
         @PathVariable boardId: Long,
         @PageableDefault(sort = ["date"]) pageable: Pageable
     ): Page<HolidayResponse> =
-        holidayService.findByBoard(boardId, pageable)
+        findAllHolidays.execute(boardId, pageable)
 
     @PostMapping
     fun create(
         @PathVariable boardId: Long,
-        @Valid @RequestBody holiday: HolidayRequest
+        @Valid @RequestBody holidayRequest: HolidayRequest
     ): HttpEntity<*> {
-        val id = holidayService.create(boardId, holiday)
+        val id = createHoliday.execute(boardId, holidayRequest)
 
         val location = ServletUriComponentsBuilder
             .fromCurrentRequest()
@@ -48,33 +61,30 @@ class HolidayController(private val holidayService: HolidayService) {
         return ResponseEntity.created(location).build<Any>()
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(params = ["import=true"])
     fun importHolidays(
         @PathVariable boardId: Long,
         @AuthenticationPrincipal account: Account
-    ): HttpEntity<*> {
-        holidayService.importHolidays(boardId, account)
-        return ResponseEntity<Any>(HttpStatus.CREATED)
-    }
+    ) =
+        importHolidays.execute(boardId, account)
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long): HttpEntity<*> {
-        holidayService.delete(id)
-        return ResponseEntity.noContent().build<Any>()
-    }
+    fun delete(@PathVariable id: Long) =
+        deleteHoliday.execute(id)
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long): HolidayResponse =
-        holidayService.findById(id)
+        findHoliday.execute(id)
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{holidayId}")
     fun update(
         @PathVariable boardId: Long,
         @PathVariable holidayId: Long,
         @Valid @RequestBody holidayRequest: HolidayRequest
-    ): HttpEntity<*> {
-        holidayService.update(boardId, holidayId, holidayRequest)
-        return ResponseEntity.noContent().build<Any>()
-    }
+    ) =
+        updateHoliday.execute(holidayId, boardId, holidayRequest)
 
 }

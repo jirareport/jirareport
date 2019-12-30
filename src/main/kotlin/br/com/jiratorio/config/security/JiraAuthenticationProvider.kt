@@ -1,9 +1,9 @@
 package br.com.jiratorio.config.security
 
 import br.com.jiratorio.domain.request.LoginRequest
-import br.com.jiratorio.service.auth.AuthService
-import br.com.jiratorio.service.auth.TokenService
-import br.com.jiratorio.extension.log
+import br.com.jiratorio.usecase.auth.Login
+import br.com.jiratorio.usecase.token.EncodeToken
+import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -12,14 +12,16 @@ import org.springframework.stereotype.Component
 
 @Component
 class JiraAuthenticationProvider(
-    private val authService: AuthService,
-    private val tokenService: TokenService
+    private val login: Login,
+    private val encodeToken: EncodeToken
 ) : AuthenticationProvider {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     override fun authenticate(auth: Authentication): Authentication {
         try {
-            val account = authService.login(LoginRequest(auth.name, auth.credentials.toString()))
-            val token = tokenService.encode(account)
+            val account = login.execute(LoginRequest(auth.name, auth.credentials.toString()))
+            val token = encodeToken.execute(account)
 
             return UsernamePasswordAuthenticationToken(account, account.password, account.authorities).also {
                 it.details = token

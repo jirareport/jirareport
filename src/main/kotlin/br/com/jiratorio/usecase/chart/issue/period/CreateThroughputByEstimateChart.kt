@@ -2,13 +2,15 @@ package br.com.jiratorio.usecase.chart.issue.period
 
 import br.com.jiratorio.domain.chart.ThroughputByEstimate
 import br.com.jiratorio.domain.entity.IssuePeriod
-import br.com.jiratorio.extension.log
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.HashSet
 import java.util.LinkedHashMap
 
 @Service
 class CreateThroughputByEstimateChart {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(issuePeriods: List<IssuePeriod>): ThroughputByEstimate {
         log.info("Method=execute, issuePeriods={}", issuePeriods)

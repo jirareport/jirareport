@@ -4,10 +4,12 @@ import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.domain.chart.LeadTimeCompareChart
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.IssuePeriod
-import br.com.jiratorio.extension.log
+import org.slf4j.LoggerFactory
 
 @UseCase
 class CreateLeadTimeCompareChartByPeriod {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(issuePeriods: List<IssuePeriod>, board: Board): LeadTimeCompareChart {
         log.info("Method=execute, issuePeriods={}, board={}", issuePeriods, board)

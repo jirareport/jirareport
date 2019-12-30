@@ -3,14 +3,16 @@ package br.com.jiratorio.usecase.chart.histogram
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.entity.embedded.Histogram
-import br.com.jiratorio.extension.log
 import br.com.jiratorio.usecase.percentile.CalculatePercentile
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class CreateHistogramChart(
     private val calculatePercentile: CalculatePercentile
 ) {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(issues: List<Issue>): Histogram {
         log.info("Method=execute, issues={}", issues)

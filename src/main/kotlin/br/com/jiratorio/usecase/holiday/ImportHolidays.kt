@@ -7,11 +7,12 @@ import br.com.jiratorio.domain.Account
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Holiday
 import br.com.jiratorio.exception.HolidaysAlreadyImported
-import br.com.jiratorio.extension.log
+import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.mapper.toHoliday
+import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.HolidayRepository
-import br.com.jiratorio.service.UserConfigService
-import br.com.jiratorio.usecase.board.FindBoard
+import br.com.jiratorio.usecase.userconfig.FindHolidayUserConfig
+import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -19,18 +20,20 @@ import java.util.HashSet
 
 @UseCase
 class ImportHolidays(
-    private val findBoardById: FindBoard,
+    private val boardRepository: BoardRepository,
     private val messageResolver: MessageResolver,
     private val holidayRepository: HolidayRepository,
     private val holidayClient: HolidayClient,
-    private val userConfigService: UserConfigService
+    private val findHolidayUserConfig: FindHolidayUserConfig
 ) {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional
     fun execute(boardId: Long, currentUser: Account) {
         log.info("Method=importHolidays, boardId={}", boardId)
 
-        val board = findBoardById.execute(boardId)
+        val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
 
         val holidaysByBoard = holidayRepository.findAllByBoard(board)
         val allHolidaysInCity = findAllHolidaysInCity(board, currentUser)
@@ -53,7 +56,7 @@ class ImportHolidays(
     private fun findAllHolidaysInCity(board: Board, currentUser: Account): List<Holiday> {
         log.info("Method=findAllHolidaysInCity, board={}, currentUser={}", board, currentUser)
 
-        val info = userConfigService.retrieveHolidayInfo(currentUser.username)
+        val info = findHolidayUserConfig.execute(currentUser.username)
 
         return holidayClient.findAllHolidaysInCity(
             year = LocalDate.now().year,
@@ -62,4 +65,5 @@ class ImportHolidays(
             token = info.holidayToken
         ).toHoliday(board)
     }
+
 }

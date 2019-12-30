@@ -7,17 +7,17 @@ import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.domain.request.CreateIssuePeriodRequest
+import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.decimal.zeroIfNaN
-import br.com.jiratorio.extension.log
-import br.com.jiratorio.parser.IssueParser
+import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.repository.IssueRepository
-import br.com.jiratorio.service.BoardService
-import br.com.jiratorio.service.ImpedimentService
-import br.com.jiratorio.service.JQLService
-import br.com.jiratorio.service.WipService
-import br.com.jiratorio.service.chart.ChartService
-import br.com.jiratorio.service.leadtime.LeadTimeService
+import br.com.jiratorio.usecase.chart.CreateChartAggregator
+import br.com.jiratorio.usecase.impediment.history.CreateImpedimentHistory
+import br.com.jiratorio.usecase.jql.CreateFinalizedIssueJql
+import br.com.jiratorio.usecase.leadtime.CreateLeadTime
+import br.com.jiratorio.usecase.parse.ParseIssue
+import br.com.jiratorio.usecase.wip.CalculateAverageWip
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -27,19 +27,18 @@ class CreateIssuePeriod(
     private val issueRepository: IssueRepository,
     private val issueClient: IssueClient,
     private val issuePeriodRepository: IssuePeriodRepository,
-    private val boardService: BoardService,
-    private val chartService: ChartService,
-    private val jqlService: JQLService,
-    private val wipService: WipService,
-    private val issueParser: IssueParser,
-    private val leadTimeService: LeadTimeService,
-    private val impedimentService: ImpedimentService
+    private val boardRepository: BoardRepository,
+    private val createChartAggregator: CreateChartAggregator,
+    private val createFinalizedIssueJql: CreateFinalizedIssueJql,
+    private val parseIssue: ParseIssue,
+    private val createLeadTime: CreateLeadTime,
+    private val createImpedimentHistory: CreateImpedimentHistory,
+    private val calculateAverageWip: CalculateAverageWip
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional
-    @ExecutionTime
     fun execute(createIssuePeriodRequest: CreateIssuePeriodRequest, boardId: Long): Long {
         log.info("Method=execute, createIssuePeriodRequest={}, boardId={}", createIssuePeriodRequest, boardId)
 
@@ -51,11 +50,11 @@ class CreateIssuePeriod(
             boardId
         )
 
-        val board = boardService.findById(boardId)
+        val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
 
-        val jql = jqlService.finalizedIssues(board, startDate, endDate)
+        val jql = createFinalizedIssueJql.execute(board, startDate, endDate)
 
-        val issues = issueParser.parse(
+        val issues = parseIssue.execute(
             root = issueClient.findByJql(jql),
             board = board
         )
@@ -64,7 +63,7 @@ class CreateIssuePeriod(
         val avgPctEfficiency = issues.map { it.pctEfficiency }.average().zeroIfNaN()
 
         val fluxColumn = FluxColumn(board)
-        val wipAvg = wipService.calcAvgWip(startDate, endDate, issues, fluxColumn.wipColumns)
+        val wipAvg = calculateAverageWip.execute(startDate, endDate, issues, fluxColumn.wipColumns)
 
         val issuePeriod = IssuePeriod(
             startDate = startDate,
@@ -86,8 +85,8 @@ class CreateIssuePeriod(
 
         issueRepository.saveAll(issues)
 
-        leadTimeService.createLeadTimes(issues, board.id)
-        impedimentService.saveImpedimentHistories(issues)
+        createLeadTime.execute(issues, board.id)
+        createImpedimentHistory.execute(issues)
 
         createCharts(issues, board, issuePeriod)
 
@@ -99,7 +98,7 @@ class CreateIssuePeriod(
         board: Board,
         issuePeriod: IssuePeriod
     ) {
-        val chartAggregator = chartService.buildAllCharts(issues, board)
+        val chartAggregator = createChartAggregator.execute(issues, board)
 
         issuePeriod.run {
             histogram = chartAggregator.histogram

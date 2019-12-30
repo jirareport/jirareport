@@ -3,12 +3,14 @@ package br.com.jiratorio.usecase.wip
 import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.extension.decimal.zeroIfNaN
-import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.rangeTo
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
 @UseCase
 class CalculateAverageWip {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(start: LocalDate, end: LocalDate, issues: List<Issue>, wipColumns: Set<String>): Double {
         log.info("Method=execute, start={}, end={}, issues={}, wipColumns={}", start, end, issues, wipColumns)

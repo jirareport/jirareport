@@ -9,10 +9,10 @@ import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
+import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import br.com.jiratorio.repository.LeadTimeRepository
-import br.com.jiratorio.service.BoardService
-import br.com.jiratorio.service.HolidayService
+import br.com.jiratorio.usecase.holiday.FindHolidayDays
 import io.mockk.called
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -32,17 +32,17 @@ internal class CreateLeadTimeTest {
 
     private val leadTimeConfigRepository = mockk<LeadTimeConfigRepository>()
 
-    private val holidayService = mockk<HolidayService>()
+    private val findHolidayDays = mockk<FindHolidayDays>()
 
     private val leadTimeRepository = mockk<LeadTimeRepository>()
 
-    private val boardService = mockk<BoardService>()
+    private val boardRepository = mockk<BoardRepository>()
 
     private val createLeadTime = CreateLeadTime(
         leadTimeConfigRepository,
-        holidayService,
         leadTimeRepository,
-        boardService
+        boardRepository,
+        findHolidayDays
     )
 
     @AfterEach
@@ -60,9 +60,9 @@ internal class CreateLeadTimeTest {
 
         verifyAll {
             leadTimeConfigRepository.findByBoardId(1L)
-            holidayService wasNot called
+            findHolidayDays wasNot called
             leadTimeRepository wasNot called
-            boardService wasNot called
+            boardRepository wasNot called
         }
     }
 
@@ -71,7 +71,7 @@ internal class CreateLeadTimeTest {
         val board = defaultBoard()
 
         every {
-            boardService.findById(1L)
+            boardRepository.findByIdOrNull(1L)
         } returns board
 
         every {
@@ -79,15 +79,15 @@ internal class CreateLeadTimeTest {
         } returns defaultLeadTimes(board)
 
         every {
-            holidayService.findDaysByBoard(1L)
+            findHolidayDays.execute(1L)
         } returns commonHolidays()
 
         createLeadTime.execute(emptyList(), 1L)
 
         verifyAll {
-            boardService.findById(1L)
+            boardRepository.findByIdOrNull(1L)
             leadTimeConfigRepository.findByBoardId(1L)
-            holidayService.findDaysByBoard(1L)
+            findHolidayDays.execute(1L)
         }
 
         verifyAll(inverse = true) {
@@ -101,7 +101,7 @@ internal class CreateLeadTimeTest {
         val board = defaultBoard()
 
         every {
-            boardService.findById(1L)
+            boardRepository.findByIdOrNull(1L)
         } returns board
 
         every {
@@ -109,7 +109,7 @@ internal class CreateLeadTimeTest {
         } returns defaultLeadTimes(board)
 
         every {
-            holidayService.findDaysByBoard(1L)
+            findHolidayDays.execute(1L)
         } returns commonHolidays()
 
         every {
@@ -146,9 +146,9 @@ internal class CreateLeadTimeTest {
         createLeadTime.execute(listOf(issue), 1L)
 
         verifyAll {
-            boardService.findById(1L)
+            boardRepository.findByIdOrNull(1L)
             leadTimeConfigRepository.findByBoardId(1L)
-            holidayService.findDaysByBoard(1L)
+            findHolidayDays.execute(1L)
 
             leadTimeRepository.deleteByIssueId(1L)
             leadTimeRepository.save(any<LeadTime>())

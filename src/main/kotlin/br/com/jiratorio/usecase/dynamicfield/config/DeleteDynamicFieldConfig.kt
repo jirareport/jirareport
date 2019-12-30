@@ -14,11 +14,12 @@ class DeleteDynamicFieldConfig(
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional
-    fun execute(boardId: Long, id: Long) {
-        log.info("Method=execute, boardId={}, id={}", boardId, id)
+    fun execute(id: Long, boardId: Long) {
+        log.info("Method=execute, id={}, boardId={}", id, boardId)
 
         val dynamicFieldConfig =
             dynamicFieldConfigRepository.findByBoardIdAndId(boardId, id) ?: throw ResourceNotFound()
+
         dynamicFieldConfigRepository.delete(dynamicFieldConfig)
     }
 

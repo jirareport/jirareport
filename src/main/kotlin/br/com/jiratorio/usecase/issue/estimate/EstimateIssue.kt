@@ -11,28 +11,29 @@ import br.com.jiratorio.domain.request.SearchEstimateRequest
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.domain.response.EstimateIssueResponse
 import br.com.jiratorio.exception.MissingBoardConfigurationException
+import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.time.plusDays
 import br.com.jiratorio.mapper.toEstimateIssueResponse
-import br.com.jiratorio.parser.EstimateIssueParser
-import br.com.jiratorio.service.HolidayService
-import br.com.jiratorio.service.IssueService
-import br.com.jiratorio.service.JQLService
-import br.com.jiratorio.service.PercentileService
-import br.com.jiratorio.usecase.board.FindBoard
+import br.com.jiratorio.repository.BoardRepository
+import br.com.jiratorio.usecase.holiday.FindHolidayDays
+import br.com.jiratorio.usecase.issue.FindIssueLeadTimes
+import br.com.jiratorio.usecase.jql.CreateOpenedIssueJql
+import br.com.jiratorio.usecase.parse.ParseEstimateIssue
+import br.com.jiratorio.usecase.percentile.CalculatePercentile
 import org.slf4j.LoggerFactory
 import org.springframework.transaction.annotation.Transactional
 import java.util.HashMap
 
 @UseCase
 class EstimateIssue(
-    private val findBoardById: FindBoard,
-    private val issueService: IssueService,
+    private val boardRepository: BoardRepository,
+    private val findIssueLeadTimes: FindIssueLeadTimes,
     private val issueClient: IssueClient,
-    private val estimateIssueParser: EstimateIssueParser,
-    private val holidayService: HolidayService,
-    private val percentileService: PercentileService,
-    private val jqlService: JQLService,
-    private val jiraProperties: JiraProperties
+    private val parseEstimateIssue: ParseEstimateIssue,
+    private val createOpenedIssueJql: CreateOpenedIssueJql,
+    private val jiraProperties: JiraProperties,
+    private val findHolidayDays: FindHolidayDays,
+    private val calculatePercentile: CalculatePercentile
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -44,20 +45,20 @@ class EstimateIssue(
     ): List<EstimateIssueResponse> {
         log.info("Method=findEstimateIssues, boardId={}, searchEstimateRequest={}", boardId, searchEstimateRequest)
 
-        val board = findBoardById.execute(boardId)
+        val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
 
         if (board.fluxColumn.isNullOrEmpty()) {
             throw MissingBoardConfigurationException("fluxColumn")
         }
 
-        val estimateIssues = estimateIssueParser.parseEstimate(
+        val estimateIssues = parseEstimateIssue.execute(
             root = issueClient.findByJql(
-                jql = jqlService.openedIssues(board)
+                jql = createOpenedIssueJql.execute(board)
             ),
             board = board
         )
 
-        val holidays = holidayService.findDaysByBoard(boardId)
+        val holidays = findHolidayDays.execute(boardId)
 
         val fieldPercentileMap = HashMap<String, Percentile>()
         for (estimateIssue in estimateIssues) {
@@ -97,9 +98,9 @@ class EstimateIssue(
             board, searchEstimateRequest, value
         )
         val issueForm = buildIssueFormByEstimateForm(searchEstimateRequest, value)
-        val leadTimeList = issueService.findLeadTimeByExample(board, issueForm)
+        val leadTimeList = findIssueLeadTimes.execute(board, issueForm)
 
-        return percentileService.calculatePercentile(leadTimeList)
+        return calculatePercentile.execute(leadTimeList)
     }
 
     private fun buildIssueFormByEstimateForm(

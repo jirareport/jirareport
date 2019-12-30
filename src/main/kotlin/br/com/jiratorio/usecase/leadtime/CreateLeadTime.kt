@@ -6,22 +6,25 @@ import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.entity.LeadTimeConfig
-import br.com.jiratorio.extension.log
+import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.time.daysDiff
+import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import br.com.jiratorio.repository.LeadTimeRepository
-import br.com.jiratorio.service.BoardService
-import br.com.jiratorio.service.HolidayService
+import br.com.jiratorio.usecase.holiday.FindHolidayDays
+import org.slf4j.LoggerFactory
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @UseCase
 class CreateLeadTime(
     private val leadTimeConfigRepository: LeadTimeConfigRepository,
-    private val holidayService: HolidayService,
     private val leadTimeRepository: LeadTimeRepository,
-    private val boardService: BoardService
+    private val boardRepository: BoardRepository,
+    private val findHolidayDays: FindHolidayDays
 ) {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional
     fun execute(issues: List<Issue>, boardId: Long) {
@@ -33,8 +36,8 @@ class CreateLeadTime(
             return
         }
 
-        val holidays = holidayService.findDaysByBoard(boardId)
-        val board = boardService.findById(boardId)
+        val holidays = findHolidayDays.execute(boardId)
+        val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
 
         issues.forEach {
             leadTimeRepository.deleteByIssueId(it.id)

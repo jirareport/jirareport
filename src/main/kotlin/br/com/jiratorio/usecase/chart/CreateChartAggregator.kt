@@ -1,11 +1,9 @@
 package br.com.jiratorio.usecase.chart
 
-import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.domain.chart.ChartAggregator
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
-import br.com.jiratorio.extension.log
 import br.com.jiratorio.usecase.chart.columntime.CreateColumnTimeChart
 import br.com.jiratorio.usecase.chart.dynamic.CreateDynamicChart
 import br.com.jiratorio.usecase.chart.estimate.CreateEstimateLeadTimeChart
@@ -20,6 +18,7 @@ import br.com.jiratorio.usecase.chart.project.CreateProjectLeadTimeChart
 import br.com.jiratorio.usecase.chart.project.CreateProjectThroughputChart
 import br.com.jiratorio.usecase.chart.system.CreateSystemLeadTimeChart
 import br.com.jiratorio.usecase.chart.system.CreateSystemThroughputChart
+import org.slf4j.LoggerFactory
 
 @UseCase
 class CreateChartAggregator(
@@ -39,7 +38,8 @@ class CreateChartAggregator(
     private val createSystemThroughputChart: CreateSystemThroughputChart
 ) {
 
-    @ExecutionTime
+    private val log = LoggerFactory.getLogger(javaClass)
+
     fun execute(issues: List<Issue>, board: Board): ChartAggregator {
         log.info("Method=execute, issues={}, board={}", issues, board)
 

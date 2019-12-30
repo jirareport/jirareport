@@ -2,11 +2,13 @@ package br.com.jiratorio.domain.duedate.calculator
 
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.extension.time.daysDiff
-import br.com.jiratorio.extension.log
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 object FirstAndLastDueDateCalculator : DueDateCalculator {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     override fun calcDeviationOfEstimate(
         dueDateHistories: List<DueDateHistory>,

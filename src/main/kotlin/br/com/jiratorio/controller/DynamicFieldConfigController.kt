@@ -2,7 +2,9 @@ package br.com.jiratorio.controller
 
 import br.com.jiratorio.domain.request.DynamicFieldConfigRequest
 import br.com.jiratorio.domain.response.DynamicFieldConfigResponse
-import br.com.jiratorio.service.DynamicFieldConfigService
+import br.com.jiratorio.usecase.dynamicfield.config.CreateDynamicFieldConfig
+import br.com.jiratorio.usecase.dynamicfield.config.DeleteDynamicFieldConfig
+import br.com.jiratorio.usecase.dynamicfield.config.FindAllDynamicFieldConfigs
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -20,19 +22,22 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/boards/{boardId}/dynamic-field-configs")
 class DynamicFieldConfigController(
-    private val dynamicFieldConfigService: DynamicFieldConfigService
+    private val createDynamicFieldConfig: CreateDynamicFieldConfig,
+    private val deleteDynamicFieldConfig: DeleteDynamicFieldConfig,
+    private val findAllDynamicFieldConfigs: FindAllDynamicFieldConfigs
 ) {
 
     @GetMapping
     fun findAllByBoard(@PathVariable boardId: Long): List<DynamicFieldConfigResponse> =
-        dynamicFieldConfigService.findByBoard(boardId)
+        findAllDynamicFieldConfigs.execute(boardId)
 
     @PostMapping
     fun create(
         @PathVariable boardId: Long,
         @Valid @RequestBody dynamicFieldConfigRequest: DynamicFieldConfigRequest
     ): HttpEntity<*> {
-        val id = dynamicFieldConfigService.create(boardId, dynamicFieldConfigRequest)
+        val id = createDynamicFieldConfig.execute(boardId, dynamicFieldConfigRequest)
+
         val location = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{id}")
@@ -47,6 +52,6 @@ class DynamicFieldConfigController(
         @PathVariable boardId: Long,
         @PathVariable id: Long
     ): Unit =
-        dynamicFieldConfigService.deleteByBoardAndId(boardId, id)
+        deleteDynamicFieldConfig.execute(id, boardId)
 
 }
