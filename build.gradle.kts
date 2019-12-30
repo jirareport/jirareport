@@ -15,8 +15,8 @@ apply {
     from("gradle/tasks/CreateMigration.gradle.kts")
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-java.targetCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_12
+java.targetCompatibility = JavaVersion.VERSION_12
 
 repositories {
     mavenCentral()
@@ -77,7 +77,7 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=enable")
-        jvmTarget = "1.8"
+        jvmTarget = "12"
     }
 }
 

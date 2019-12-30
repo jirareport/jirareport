@@ -1,4 +1,4 @@
-FROM openjdk:8 as builder
+FROM openjdk:12 as builder
 
 COPY . /jirareport-api
 WORKDIR /jirareport-api
@@ -8,7 +8,7 @@ RUN ./gradlew build -x test
 
 ###
 
-FROM openjdk:8-jre-slim
+FROM openjdk:12-alpine
 EXPOSE 80
 
 COPY --from=builder /jirareport-api/build/libs/jirareport.jar /usr/src/
