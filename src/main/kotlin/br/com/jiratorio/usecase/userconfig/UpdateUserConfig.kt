@@ -17,7 +17,7 @@ class UpdateUserConfig(
 
     @Transactional
     fun execute(username: String, updateUserConfigRequest: UpdateUserConfigRequest) {
-        log.info("Method=execute, username={}, updateUserConfigRequest={}", username, updateUserConfigRequest)
+        log.info("Action=updateUserConfig, username={}, updateUserConfigRequest={}", username, updateUserConfigRequest)
 
         val userConfig = userConfigRepository.findByUsername(username) ?: UserConfig(username)
 

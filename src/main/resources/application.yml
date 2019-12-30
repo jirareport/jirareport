@@ -3,6 +3,8 @@ jira:
 
 holiday:
   url: https://api.calendario.com.br
+  default-state: SP
+  default-city: ARARAQUARA
   token: seuToken
 
 security:

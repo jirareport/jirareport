@@ -15,7 +15,7 @@ class CreateSystemThroughputChart(
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(issues: List<Issue>): Chart<String, Int> {
-        log.info("Method=throughputBySystem, issues={}", issues)
+        log.info("Action=createSystemThroughputChart, issues={}", issues)
 
         return issues
             .groupingBy { it.system ?: messageResolver("uninformed") }

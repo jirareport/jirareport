@@ -15,7 +15,7 @@ class DeleteHoliday(
 
     @Transactional
     fun execute(id: Long) {
-        log.info("Method=execute, id={}", id)
+        log.info("Action=deleteHoliday, id={}", id)
 
         val holiday = holidayRepository.findByIdOrNull(id)
             ?: throw ResourceNotFound()

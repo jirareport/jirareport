@@ -11,7 +11,7 @@ class CreateOpenedIssueJql {
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(board: Board): String {
-        log.info("Method=execute, board={}", board)
+        log.info("Action=createOpenedIssueJql, board={}", board)
 
         val wipColumns = FluxColumn(board).wipColumns.joinToString(",") { "'$it'" }
         val project = board.externalId

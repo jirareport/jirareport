@@ -13,7 +13,7 @@ class CreateThroughputByEstimateChart {
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(issuePeriods: List<IssuePeriod>): ThroughputByEstimate {
-        log.info("Method=execute, issuePeriods={}", issuePeriods)
+        log.info("Action=createThroughputByEstimateChart, issuePeriods={}", issuePeriods)
 
         val sizes = HashSet<String>()
         val periodsSize: MutableMap<String, MutableMap<String, Int>> = LinkedHashMap()

@@ -3,6 +3,7 @@ package br.com.jiratorio.usecase.changelog
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.extension.toLocalDateTime
+import br.com.jiratorio.usecase.parse.ParseChangelog
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test

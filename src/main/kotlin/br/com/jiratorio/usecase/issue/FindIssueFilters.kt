@@ -15,7 +15,7 @@ class FindIssueFilters(
 
     @Transactional(readOnly = true)
     fun execute(boardId: Long): IssueFilterResponse {
-        log.info("Method=execute, boardId={}", boardId)
+        log.info("Action=findIssueFilters, boardId={}", boardId)
 
         return IssueFilterResponse(
             estimates = issueRepository.findAllEstimatesByBoardId(boardId),

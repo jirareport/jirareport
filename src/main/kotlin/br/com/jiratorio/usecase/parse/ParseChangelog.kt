@@ -1,4 +1,4 @@
-package br.com.jiratorio.usecase.changelog
+package br.com.jiratorio.usecase.parse
 
 import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.domain.entity.embedded.Changelog
@@ -20,7 +20,7 @@ class ParseChangelog {
         ignoreWeekend: Boolean?
     ): List<Changelog> {
         log.info(
-            "Method=execute, changelogItems={}, holidays={}, ignoreWeekend={}",
+            "Action=parseChangelog, changelogItems={}, holidays={}, ignoreWeekend={}",
             changelogItems, holidays, ignoreWeekend
         )
 

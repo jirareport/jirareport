@@ -9,6 +9,10 @@ data class HolidayProperties(
 
     val url: String,
 
+    val defaultState: String,
+
+    val defaultCity: String,
+
     val token: String
 
 )

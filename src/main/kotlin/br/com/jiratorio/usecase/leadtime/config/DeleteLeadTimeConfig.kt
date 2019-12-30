@@ -15,7 +15,7 @@ class DeleteLeadTimeConfig(
 
     @Transactional
     fun execute(id: Long, boardId: Long) {
-        log.info("Method=execute, id={}, boardId={}", id, boardId)
+        log.info("Action=deleteLeadTimeConfig, id={}, boardId={}", id, boardId)
 
         val leadTimeConfig = leadTimeConfigRepository.findByIdAndBoardId(id, boardId)
             ?: throw ResourceNotFound()

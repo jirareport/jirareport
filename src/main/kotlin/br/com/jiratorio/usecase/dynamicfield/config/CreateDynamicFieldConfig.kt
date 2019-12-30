@@ -19,7 +19,7 @@ class CreateDynamicFieldConfig(
 
     @Transactional
     fun execute(boardId: Long, dynamicFieldConfigRequest: DynamicFieldConfigRequest): Long {
-        log.info("Method=execute, boardId={}, dynamicFieldConfigRequest={}", boardId, dynamicFieldConfigRequest)
+        log.info("Action=createDynamicFieldConfig, boardId={}, dynamicFieldConfigRequest={}", boardId, dynamicFieldConfigRequest)
 
         val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
         val dynamicFieldConfig = dynamicFieldConfigRequest.toDynamicFieldConfig(board)

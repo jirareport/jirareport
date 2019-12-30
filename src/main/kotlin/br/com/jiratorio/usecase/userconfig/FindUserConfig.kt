@@ -16,7 +16,7 @@ class FindUserConfig(
 
     @Transactional(readOnly = true)
     fun execute(username: String): UserConfigResponse {
-        log.info("Method=execute, username={}", username)
+        log.info("Action=findUserConfig, username={}", username)
 
         return userConfigRepository.findByUsername(username)
             ?.toUserConfigResponse()

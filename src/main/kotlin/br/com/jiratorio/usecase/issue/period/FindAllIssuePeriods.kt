@@ -30,7 +30,7 @@ class FindAllIssuePeriods(
 
     @Transactional(readOnly = true)
     fun execute(boardId: Long): IssuePeriodListResponse {
-        log.info("Method=execute, boardId={}", boardId)
+        log.info("Action=findAllIssuePeriods, boardId={}", boardId)
 
         val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
 

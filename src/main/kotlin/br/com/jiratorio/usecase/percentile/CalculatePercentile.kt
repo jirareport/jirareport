@@ -11,7 +11,7 @@ class CalculatePercentile {
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(leadTimes: List<Long>): Percentile {
-        log.info("Method=execute, leadTimes={}", leadTimes)
+        log.info("Action=calculatePercentile, leadTimes={}", leadTimes)
 
         if (leadTimes.isEmpty()) {
             return Percentile()

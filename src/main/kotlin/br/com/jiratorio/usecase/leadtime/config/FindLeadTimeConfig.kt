@@ -17,7 +17,7 @@ class FindLeadTimeConfig(
 
     @Transactional(readOnly = true)
     fun execute(id: Long, boardId: Long): LeadTimeConfigResponse {
-        log.info("Method=execute, id={}, boardId={}", id, boardId)
+        log.info("Action=findLeadTimeConfig, id={}, boardId={}", id, boardId)
 
         val leadTimeConfig = leadTimeConfigRepository.findByIdAndBoardId(id, boardId)
             ?: throw ResourceNotFound()

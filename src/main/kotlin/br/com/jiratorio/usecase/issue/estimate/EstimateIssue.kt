@@ -43,7 +43,7 @@ class EstimateIssue(
         boardId: Long,
         searchEstimateRequest: SearchEstimateRequest
     ): List<EstimateIssueResponse> {
-        log.info("Method=findEstimateIssues, boardId={}, searchEstimateRequest={}", boardId, searchEstimateRequest)
+        log.info("Action=estimateIssue, boardId={}, searchEstimateRequest={}", boardId, searchEstimateRequest)
 
         val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
 

@@ -11,7 +11,7 @@ class CreateColumnTimeChart {
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(issues: List<Issue>, fluxColumn: List<String>): List<ColumnTimeAvg> {
-        log.info("Method=average, issues={}, fluxColumn={}", issues, fluxColumn)
+        log.info("Action=createColumnTimeChart, issues={}, fluxColumn={}", issues, fluxColumn)
 
         return issues.asSequence()
             .map { it.changelog }

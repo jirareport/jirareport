@@ -15,7 +15,7 @@ class CreateEstimateThroughputChart(
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(issues: List<Issue>): Chart<String, Int> {
-        log.info("Method=execute, issues={}", issues)
+        log.info("Action=createEstimateThroughputChart, issues={}", issues)
 
         return issues.groupingBy { it.estimate ?: messageResolver("uninformed") }
             .eachCount()

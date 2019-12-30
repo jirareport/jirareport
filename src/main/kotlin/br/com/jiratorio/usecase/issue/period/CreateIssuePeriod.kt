@@ -1,6 +1,5 @@
 package br.com.jiratorio.usecase.issue.period
 
-import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.client.IssueClient
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
@@ -40,7 +39,7 @@ class CreateIssuePeriod(
 
     @Transactional
     fun execute(createIssuePeriodRequest: CreateIssuePeriodRequest, boardId: Long): Long {
-        log.info("Method=execute, createIssuePeriodRequest={}, boardId={}", createIssuePeriodRequest, boardId)
+        log.info("Action=createIssuePeriod, createIssuePeriodRequest={}, boardId={}", createIssuePeriodRequest, boardId)
 
         val (startDate, endDate) = createIssuePeriodRequest
 

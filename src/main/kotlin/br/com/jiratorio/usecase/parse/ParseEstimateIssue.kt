@@ -10,7 +10,6 @@ import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
 import br.com.jiratorio.extension.parallelStream
 import br.com.jiratorio.extension.time.daysDiff
-import br.com.jiratorio.usecase.changelog.ParseChangelog
 import br.com.jiratorio.usecase.holiday.FindHolidayDays
 import com.fasterxml.jackson.databind.JsonNode
 import org.slf4j.LoggerFactory
@@ -29,6 +28,8 @@ class ParseEstimateIssue(
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(root: JsonNode, board: Board): List<EstimatedIssue> {
+        log.info("Action=parseEstimateIssue, root={}, board={}", root, board)
+
         val holidays = findHolidayDays.execute(board.id)
 
         val fluxColumn = FluxColumn(board)

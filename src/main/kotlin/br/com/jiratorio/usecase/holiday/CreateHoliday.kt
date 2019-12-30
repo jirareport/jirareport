@@ -20,7 +20,7 @@ class CreateHoliday(
 
     @Transactional
     fun execute(boardId: Long, holidayRequest: HolidayRequest): Long {
-        log.info("Method=execute, boardId={}, holidayRequest={}", boardId, holidayRequest)
+        log.info("Action=createHoliday, boardId={}, holidayRequest={}", boardId, holidayRequest)
 
         val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
 

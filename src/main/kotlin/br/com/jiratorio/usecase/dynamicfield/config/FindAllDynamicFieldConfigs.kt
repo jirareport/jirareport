@@ -19,7 +19,7 @@ class FindAllDynamicFieldConfigs(
 
     @Transactional(readOnly = true)
     fun execute(boardId: Long): List<DynamicFieldConfigResponse> {
-        log.info("Method=execute, boardId={}", boardId)
+        log.info("Action=findAllDynamicFieldConfigs, boardId={}", boardId)
 
         val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
         val dynamicFields = dynamicFieldConfigRepository.findByBoard(board)

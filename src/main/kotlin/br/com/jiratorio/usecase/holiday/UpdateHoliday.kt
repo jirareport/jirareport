@@ -20,7 +20,7 @@ class UpdateHoliday(
 
     @Transactional
     fun execute(holidayId: Long, boardId: Long, holidayRequest: HolidayRequest) {
-        log.info("Method=execute, holidayId={}, boardId={}, holidayRequest={}", holidayId, boardId, holidayRequest)
+        log.info("Action=updateHoliday, holidayId={}, boardId={}, holidayRequest={}", holidayId, boardId, holidayRequest)
 
         val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
 

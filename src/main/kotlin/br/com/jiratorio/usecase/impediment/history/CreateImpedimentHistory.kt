@@ -15,7 +15,7 @@ class CreateImpedimentHistory(
 
     @Transactional
     fun execute(issues: List<Issue>) {
-        log.info("Method=execute, issues={}", issues)
+        log.info("Action=createImpedimentHistory, issues={}", issues)
 
         issues.forEach { issue ->
             issue.impedimentHistory.forEach { impedimentHistory ->

@@ -17,7 +17,7 @@ class UpdateIssuePeriod(
 
     @Transactional
     fun execute(id: Long, boardId: Long) {
-        log.info("Method=execute, id={}, boardId={}", boardId, id)
+        log.info("Action=updateIssuePeriod, id={}, boardId={}", boardId, id)
 
         val issuePeriod = issuePeriodRepository.findByBoardIdAndId(boardId, id)
             ?: throw ResourceNotFound()

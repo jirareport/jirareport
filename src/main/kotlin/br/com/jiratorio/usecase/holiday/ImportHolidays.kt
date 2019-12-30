@@ -31,7 +31,7 @@ class ImportHolidays(
 
     @Transactional
     fun execute(boardId: Long, currentUser: Account) {
-        log.info("Method=importHolidays, boardId={}", boardId)
+        log.info("Action=importHolidays, boardId={}", boardId)
 
         val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
 

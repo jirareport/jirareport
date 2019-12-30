@@ -18,7 +18,7 @@ class FindAllHolidays(
 
     @Transactional(readOnly = true)
     fun execute(boardId: Long, pageable: Pageable): Page<HolidayResponse> {
-        log.info("Method=execute, boardId={}", boardId)
+        log.info("Action=findAllHolidays, boardId={}", boardId)
 
         return holidayRepository
             .findAllByBoardId(boardId, pageable)

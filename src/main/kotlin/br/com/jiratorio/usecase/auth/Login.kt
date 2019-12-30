@@ -13,7 +13,7 @@ class Login(private val authClient: AuthClient) {
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(loginRequest: LoginRequest): Account {
-        log.info("Method=login, loginRequest={}", loginRequest)
+        log.info("Action=login, loginRequest={}", loginRequest)
 
         val (username, password) = loginRequest
         val token = """Basic ${"$username:$password".toBase64()}"""

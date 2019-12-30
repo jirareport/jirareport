@@ -19,7 +19,7 @@ class CreateLeadTimeConfig(
 
     @Transactional
     fun execute(boardId: Long, leadTimeConfigRequest: LeadTimeConfigRequest): Long {
-        log.info("Method=create, boardId={}, leadTimeConfigRequest={}", boardId, leadTimeConfigRequest)
+        log.info("Action=createLeadTimeConfig, boardId={}, leadTimeConfigRequest={}", boardId, leadTimeConfigRequest)
 
         val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
         val leadTimeConfig = leadTimeConfigRequest.toLeadTimeConfig(board)

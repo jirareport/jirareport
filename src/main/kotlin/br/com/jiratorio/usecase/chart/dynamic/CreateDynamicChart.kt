@@ -18,7 +18,7 @@ class CreateDynamicChart(
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(issues: List<Issue>, board: Board): List<DynamicChart> {
-        log.info("Method=execute, issues={}, board={}", issues, board)
+        log.info("Action=createDynamicChart, issues={}, board={}", issues, board)
 
         val dynamicFields = board.dynamicFields
         return if (dynamicFields.isNullOrEmpty()) {

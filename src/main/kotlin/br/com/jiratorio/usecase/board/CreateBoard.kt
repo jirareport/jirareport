@@ -16,7 +16,7 @@ class CreateBoard(
 
     @Transactional
     fun execute(createBoardRequest: CreateBoardRequest): Long {
-        log.info("Method=execute, createBoardRequest={}", createBoardRequest)
+        log.info("Action=createBoard, createBoardRequest={}", createBoardRequest)
 
         val board = createBoardRequest.toBoard()
         boardRepository.save(board)

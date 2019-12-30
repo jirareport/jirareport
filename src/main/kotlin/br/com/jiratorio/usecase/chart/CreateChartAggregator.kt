@@ -41,7 +41,7 @@ class CreateChartAggregator(
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(issues: List<Issue>, board: Board): ChartAggregator {
-        log.info("Method=execute, issues={}, board={}", issues, board)
+        log.info("Action=createChartAggregator, issues={}, board={}", issues, board)
 
         return ChartAggregator(
             histogram = createHistogramChart.execute(issues),

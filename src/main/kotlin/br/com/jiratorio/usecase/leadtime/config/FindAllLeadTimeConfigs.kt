@@ -16,7 +16,7 @@ class FindAllLeadTimeConfigs(
 
     @Transactional(readOnly = true)
     fun execute(boardId: Long): List<LeadTimeConfigResponse> {
-        log.info("Method=execute, boardId={}", boardId)
+        log.info("Action=findAllLeadTimeConfigs, boardId={}", boardId)
 
         return leadTimeConfigRepository
             .findByBoardId(boardId)

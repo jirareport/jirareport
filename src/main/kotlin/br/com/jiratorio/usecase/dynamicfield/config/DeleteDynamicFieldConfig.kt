@@ -15,7 +15,7 @@ class DeleteDynamicFieldConfig(
 
     @Transactional
     fun execute(id: Long, boardId: Long) {
-        log.info("Method=execute, id={}, boardId={}", id, boardId)
+        log.info("Action=deleteDynamicFieldConfig, id={}, boardId={}", id, boardId)
 
         val dynamicFieldConfig =
             dynamicFieldConfigRepository.findByBoardIdAndId(boardId, id) ?: throw ResourceNotFound()

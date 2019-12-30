@@ -15,7 +15,7 @@ class CreateHistogramChart(
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(issues: List<Issue>): Histogram {
-        log.info("Method=execute, issues={}", issues)
+        log.info("Action=createHistogramChart, issues={}", issues)
 
         val leadTimeList = issues.map { it.leadTime }
         val percentile = calculatePercentile.execute(leadTimeList)

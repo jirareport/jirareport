@@ -13,7 +13,7 @@ class CalculateAverageWip {
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(start: LocalDate, end: LocalDate, issues: List<Issue>, wipColumns: Set<String>): Double {
-        log.info("Method=execute, start={}, end={}, issues={}, wipColumns={}", start, end, issues, wipColumns)
+        log.info("Action=calculateAverageWip, start={}, end={}, issues={}, wipColumns={}", start, end, issues, wipColumns)
 
         return (start..end).map { cursor ->
             issues.count { issue ->

@@ -17,7 +17,7 @@ class FindHoliday(
 
     @Transactional(readOnly = true)
     fun execute(id: Long): HolidayResponse {
-        log.info("Method=execute, id={}", id)
+        log.info("Action=findHoliday, id={}", id)
 
         val holiday = holidayRepository.findByIdOrNull(id)
             ?: throw ResourceNotFound()

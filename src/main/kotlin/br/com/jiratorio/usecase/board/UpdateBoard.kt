@@ -17,7 +17,7 @@ class UpdateBoard(
 
     @Transactional
     fun execute(boardId: Long, updateBoardRequest: UpdateBoardRequest) {
-        log.info("Method=execute, boardId={}, updateBoardRequest={}", boardId, updateBoardRequest)
+        log.info("Action=updateBoard, boardId={}, updateBoardRequest={}", boardId, updateBoardRequest)
 
         val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
         board.updateFromUpdateBoardRequest(updateBoardRequest)

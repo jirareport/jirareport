@@ -16,7 +16,8 @@ class FindIssueLeadTimes(
 
     @Transactional(readOnly = true)
     fun execute(board: Board, searchIssueRequest: SearchIssueRequest): List<Long> {
-        log.info("Method=findLeadTimeByExample, board={}, searchIssueRequest={}", board, searchIssueRequest)
+        log.info("Action=findIssueLeadTimes, board={}, searchIssueRequest={}", board, searchIssueRequest)
+
         return issueRepository.findByExample(board, emptyMap(), searchIssueRequest)
             .map { it.leadTime }
     }

@@ -21,7 +21,7 @@ class CalculateEfficiency {
         ignoreWeekend: Boolean?
     ): Efficiency {
         log.info(
-            "Method=calcEfficiency, touchingColumns={}, waitingColumns={}, changelog={}, holidays={}, ignoreWeekend={}",
+            "Action=calculateEfficiency, touchingColumns={}, waitingColumns={}, changelog={}, holidays={}, ignoreWeekend={}",
             touchingColumns, waitingColumns, changelog, holidays, ignoreWeekend
         )
 

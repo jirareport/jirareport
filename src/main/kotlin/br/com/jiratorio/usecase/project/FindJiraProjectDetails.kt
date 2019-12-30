@@ -14,7 +14,7 @@ class FindJiraProjectDetails(
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(projectId: Long): JiraProjectDetails {
-        log.info("Method=execute, projectId={}", projectId)
+        log.info("Action=findJiraProjectDetails, projectId={}", projectId)
 
         return projectClient.findById(projectId)
             .orElseThrow { ResourceNotFound() }

@@ -51,7 +51,7 @@ class BoardController(
         @PageableDefault(size = 20, sort = ["id"]) pageable: Pageable,
         @AuthenticationPrincipal currentUser: Account
     ): Page<BoardResponse> =
-        findAllBoards.execute(pageable, searchBoardRequest, currentUser)
+        findAllBoards.execute(searchBoardRequest, currentUser, pageable)
 
     @GetMapping("/owners")
     fun owners(@AuthenticationPrincipal currentUser: Account): Set<String> =

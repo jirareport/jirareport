@@ -15,7 +15,7 @@ class FindJiraProjectStatuses(
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(boardId: Long): Set<String> {
-        log.info("Method=findStatusesByBoardId, boardId={}", boardId)
+        log.info("Action=findJiraProjectStatuses, boardId={}", boardId)
 
         val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
         return projectClient.findStatusFromProject(board.externalId)

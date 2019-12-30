@@ -15,7 +15,7 @@ class DeleteBoard(
 
     @Transactional
     fun execute(id: Long, username: String) {
-        log.info("Method=execute, id={}, username={}", id, username)
+        log.info("Action=deleteBoard, id={}, username={}", id, username)
 
         val board = boardRepository.findByIdAndOwner(id, username)
             ?: throw ResourceNotFound()

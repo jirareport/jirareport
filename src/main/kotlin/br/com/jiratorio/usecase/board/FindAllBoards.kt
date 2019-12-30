@@ -21,11 +21,11 @@ class FindAllBoards(
 
     @Transactional(readOnly = true)
     fun execute(
-        pageable: Pageable,
         searchBoardRequest: SearchBoardRequest,
-        currentUser: Account
+        currentUser: Account,
+        pageable: Pageable
     ): Page<BoardResponse> {
-        log.info("Method=execute, searchBoardRequest={}, currentUser={}", searchBoardRequest, currentUser)
+        log.info("Action=findAllBoards, searchBoardRequest={}, currentUser={}", searchBoardRequest, currentUser)
 
         val filter = SearchBoardSpecification(searchBoardRequest, currentUser)
         val boards = boardRepository.findAll(filter, pageable)

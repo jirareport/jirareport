@@ -18,7 +18,7 @@ class CreateDueDateHistory {
         dueDateCF: String,
         changelogItems: List<JiraChangelogItem>
     ): List<DueDateHistory> {
-        log.info("Method=extractDueDateHistory, dueDateCF={}, changelogItems={}", dueDateCF, changelogItems)
+        log.info("Action=createDueDateHistory, dueDateCF={}, changelogItems={}", dueDateCF, changelogItems)
 
         return changelogItems
             .filter { dueDateCF == it.field && !StringUtils.isEmpty(it.to) }

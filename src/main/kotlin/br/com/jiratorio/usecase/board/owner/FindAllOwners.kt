@@ -15,7 +15,7 @@ class FindAllOwners(
 
     @Transactional(readOnly = true)
     fun execute(currentUser: Account): Set<String> {
-        log.info("Method=execute, currentUser={}", currentUser)
+        log.info("Action=findAllOwners, currentUser={}", currentUser)
 
         val owners = boardRepository.findAllOwners()
         return owners + currentUser.username

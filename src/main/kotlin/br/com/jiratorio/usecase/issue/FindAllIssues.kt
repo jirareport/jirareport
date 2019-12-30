@@ -32,7 +32,7 @@ class FindAllIssues(
         searchIssueRequest: SearchIssueRequest
     ): IssueListResponse {
         log.info(
-            "Method=findByExample, boardId={}, dynamicFilters={}, searchIssueRequest={}",
+            "Action=findAllIssues, boardId={}, dynamicFilters={}, searchIssueRequest={}",
             boardId, dynamicFilters, searchIssueRequest
         )
 

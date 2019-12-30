@@ -17,7 +17,7 @@ class FindBoard(
 
     @Transactional(readOnly = true)
     fun execute(id: Long): BoardDetailsResponse {
-        log.info("Method=execute, id={}", id)
+        log.info("Action=findBoard, id={}", id)
 
         val board = boardRepository.findByIdOrNull(id) ?: throw ResourceNotFound()
         return board.toBoardDetailsResponse()

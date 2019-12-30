@@ -21,7 +21,7 @@ class CalculateWeeklyThroughput {
         endDate: LocalDate,
         issues: List<Issue>
     ): Chart<String, Int> {
-        log.info("M=execute, startDate={}, endDate={}, issues={}", startDate, endDate, issues)
+        log.info("Action=calculateWeeklyThroughput, startDate={}, endDate={}, issues={}", startDate, endDate, issues)
 
         val chart: Chart<String, Int> = Chart()
 

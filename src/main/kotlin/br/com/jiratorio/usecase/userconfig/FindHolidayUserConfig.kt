@@ -18,12 +18,16 @@ class FindHolidayUserConfig(
 
     @Transactional(readOnly = true)
     fun execute(username: String): HolidayUserConfig {
-        log.info("Method=execute, username={}", username)
+        log.info("Action=findHolidayUserConfig, username={}", username)
 
         val userConfig = userConfigRepository.findByUsername(username)
 
         return if (userConfig == null || userConfig.holidayToken.isNullOrEmpty())
-            HolidayUserConfig("SP", "ARARAQUARA", holidayProperties.token)
+            HolidayUserConfig(
+                state = holidayProperties.defaultState,
+                city = holidayProperties.defaultCity,
+                holidayToken = holidayProperties.token
+            )
         else
             userConfig.toImportHolidayInfo()
     }

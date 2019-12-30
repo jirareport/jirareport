@@ -15,7 +15,7 @@ class FindHolidayDays(
 
     @Transactional(readOnly = true)
     fun execute(boardId: Long): List<LocalDate> {
-        log.info("Method=execute, boardId={}", boardId)
+        log.info("Action=findHolidayDays, boardId={}", boardId)
 
         return holidayRepository
             .findAllByBoardId(boardId)

@@ -10,7 +10,6 @@ import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
 import br.com.jiratorio.extension.parallelStream
 import br.com.jiratorio.extension.time.daysDiff
-import br.com.jiratorio.usecase.changelog.ParseChangelog
 import br.com.jiratorio.usecase.duedate.CreateDueDateHistory
 import br.com.jiratorio.usecase.efficiency.CalculateEfficiency
 import br.com.jiratorio.usecase.holiday.FindHolidayDays
@@ -34,6 +33,8 @@ class ParseIssue(
 
     @Transactional(readOnly = true)
     fun execute(root: JsonNode, board: Board): List<Issue> {
+        log.info("Action=parseIssue, root={}, board={}", root, board)
+
         val holidays = findHolidayDays.execute(board.id)
 
         val fluxColumn = FluxColumn(board)

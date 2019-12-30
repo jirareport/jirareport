@@ -13,7 +13,7 @@ class CreateFinalizedIssueJql {
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(board: Board, start: LocalDate, end: LocalDate): String {
-        log.info("Method=execute, board={}, startDate={}, endDate={}", board, start, end)
+        log.info("Action=createFinalizedIssueJql, board={}, startDate={}, endDate={}", board, start, end)
 
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val startDate = start.format(formatter)

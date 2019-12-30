@@ -12,7 +12,7 @@ class CreateLeadTimeCompareChartByPeriod {
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(issuePeriods: List<IssuePeriod>, board: Board): LeadTimeCompareChart {
-        log.info("Method=execute, issuePeriods={}, board={}", issuePeriods, board)
+        log.info("Action=createLeadTimeCompareChartByPeriod, issuePeriods={}, board={}", issuePeriods, board)
 
         val leadTimeCompareChart = LeadTimeCompareChart()
 

@@ -25,7 +25,7 @@ class CloneBoard(
 
     @Transactional
     fun execute(boardId: Long): Long {
-        log.info("Method=execute, boardId={}", boardId)
+        log.info("Action=cloneBoard, boardId={}", boardId)
 
         val boardToClone = boardRepository.findByIdOrNull(boardId)
             ?: throw ResourceNotFound()

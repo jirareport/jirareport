@@ -28,7 +28,7 @@ class CreateLeadTime(
 
     @Transactional
     fun execute(issues: List<Issue>, boardId: Long) {
-        log.info("Method=execute, issues={}, boardId={}", issues, boardId)
+        log.info("Action=createLeadTime, issues={}, boardId={}", issues, boardId)
 
         val leadTimeConfigs = leadTimeConfigRepository.findByBoardId(boardId)
 
@@ -39,10 +39,10 @@ class CreateLeadTime(
         val holidays = findHolidayDays.execute(boardId)
         val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
 
-        issues.forEach {
-            leadTimeRepository.deleteByIssueId(it.id)
-            it.leadTimes = leadTimeConfigs.mapNotNull { leadTimeConfig ->
-                calcLeadTime(leadTimeConfig, it, holidays, board)
+        issues.forEach { issue ->
+            leadTimeRepository.deleteByIssueId(issue.id)
+            issue.leadTimes = leadTimeConfigs.mapNotNull { leadTimeConfig ->
+                calcLeadTime(leadTimeConfig, issue, holidays, board)
             }.toMutableSet()
         }
     }

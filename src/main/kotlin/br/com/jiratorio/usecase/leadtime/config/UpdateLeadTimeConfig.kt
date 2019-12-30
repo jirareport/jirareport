@@ -17,7 +17,7 @@ class UpdateLeadTimeConfig(
 
     @Transactional
     fun execute(id: Long, boardId: Long, leadTimeConfigRequest: LeadTimeConfigRequest) {
-        log.info("Method=execute, id={}, boardId={}, leadTimeConfigRequest={}", id, boardId, leadTimeConfigRequest)
+        log.info("Action=updateLeadTimeConfig, id={}, boardId={}, leadTimeConfigRequest={}", id, boardId, leadTimeConfigRequest)
 
         val leadTimeConfig = leadTimeConfigRepository.findByIdAndBoardId(id, boardId)
             ?: throw ResourceNotFound()
