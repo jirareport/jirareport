@@ -29,7 +29,7 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.postgresql:postgresql")
-    implementation("com.vladmihalcea:hibernate-types-52:2.7.1")
+    implementation("com.vladmihalcea:hibernate-types-52:2.8.0")
     implementation("org.flywaydb:flyway-core")
 
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -48,7 +48,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    testImplementation("org.testcontainers:postgresql:1.12.3")
+    testImplementation("org.testcontainers:postgresql:1.12.4")
 
     testImplementation("com.github.javafaker:javafaker:1.0.1")
     testImplementation("io.rest-assured:rest-assured")
