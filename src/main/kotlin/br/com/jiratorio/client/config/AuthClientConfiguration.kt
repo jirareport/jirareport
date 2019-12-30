@@ -1,12 +1,14 @@
 package br.com.jiratorio.client.config
 
 import br.com.jiratorio.config.internationalization.MessageResolver
-import br.com.jiratorio.extension.log
 import feign.codec.ErrorDecoder
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.security.authentication.BadCredentialsException
 
 class AuthClientConfiguration {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     @Bean
     fun errorDecoder(messageResolver: MessageResolver) =

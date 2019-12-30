@@ -4,7 +4,7 @@ import br.com.jiratorio.assert.response.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
 import br.com.jiratorio.domain.entity.IssuePeriod
-import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByBoardResponse
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodListResponse
 import br.com.jiratorio.dsl.extractAs
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.extension.toLocalDate
@@ -80,7 +80,7 @@ internal class ListIssuePeriodIntegrationTest(
             then {
                 statusCode(SC_OK)
             }
-        } extractAs IssuePeriodByBoardResponse::class
+        } extractAs IssuePeriodListResponse::class
 
         periods.last().assertThat {
             hasId(period.id)

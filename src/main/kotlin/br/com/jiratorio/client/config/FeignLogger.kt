@@ -1,16 +1,18 @@
 package br.com.jiratorio.client.config
 
 import br.com.jiratorio.extension.feign.headersWithoutAuth
-import br.com.jiratorio.extension.log
 import feign.Logger
 import feign.Request
 import feign.Response
 import feign.Util
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.io.IOException
 
 @Component
 class FeignLogger : Logger() {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     override fun logRequest(configKey: String, logLevel: Level, request: Request) {
         log.info("Method=logRequest, configKey={}, method={}, url={}", configKey, request.httpMethod(), request.url())

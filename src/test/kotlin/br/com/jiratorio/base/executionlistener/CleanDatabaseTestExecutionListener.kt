@@ -1,6 +1,6 @@
 package br.com.jiratorio.base.executionlistener
 
-import br.com.jiratorio.extension.log
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.test.context.TestContext
 import org.springframework.test.context.TestExecutionListener
@@ -9,6 +9,8 @@ import java.sql.Statement
 import javax.sql.DataSource
 
 class CleanDatabaseTestExecutionListener : TestExecutionListener {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     override fun beforeTestMethod(testContext: TestContext) {
         try {

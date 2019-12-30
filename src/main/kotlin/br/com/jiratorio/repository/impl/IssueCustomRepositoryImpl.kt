@@ -1,15 +1,14 @@
 package br.com.jiratorio.repository.impl
 
-import br.com.jiratorio.aspect.annotation.ExecutionTime
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
-import br.com.jiratorio.extension.log
 import br.com.jiratorio.extension.time.atEndOfDay
 import br.com.jiratorio.repository.IssueCustomRepository
 import br.com.jiratorio.repository.impl.rowmapper.DynamicFieldsValuesRowMapper
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.slf4j.LoggerFactory
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -24,7 +23,8 @@ class IssueCustomRepositoryImpl(
     private val objectMapper: ObjectMapper
 ) : IssueCustomRepository {
 
-    @ExecutionTime
+    private val log = LoggerFactory.getLogger(javaClass)
+
     @Transactional(readOnly = true)
     override fun findByExample(
         board: Board,

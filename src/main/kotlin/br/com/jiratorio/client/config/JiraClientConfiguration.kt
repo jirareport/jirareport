@@ -6,10 +6,10 @@ import br.com.jiratorio.domain.jira.JiraError
 import br.com.jiratorio.exception.JiraException
 import br.com.jiratorio.exception.UnauthorizedException
 import br.com.jiratorio.extension.account
-import br.com.jiratorio.extension.log
 import com.fasterxml.jackson.databind.ObjectMapper
 import feign.RequestInterceptor
 import feign.codec.ErrorDecoder
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.security.core.context.SecurityContextHolder
 import javax.servlet.http.HttpServletResponse
@@ -18,6 +18,8 @@ class JiraClientConfiguration(
     private val objectMapper: ObjectMapper,
     private val messageResolver: MessageResolver
 ) {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     @Bean
     fun requestInterceptor() = RequestInterceptor {

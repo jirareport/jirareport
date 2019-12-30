@@ -1,6 +1,6 @@
 package br.com.jiratorio.mapper
 
-import br.com.jiratorio.domain.ImportHolidayInfo
+import br.com.jiratorio.domain.HolidayUserConfig
 import br.com.jiratorio.domain.entity.UserConfig
 import br.com.jiratorio.domain.request.UpdateUserConfigRequest
 import br.com.jiratorio.domain.response.UserConfigResponse
@@ -35,8 +35,8 @@ fun UserConfig.updateFromUpdateUserConfigRequest(updateUserConfigRequest: Update
     }
 }
 
-fun UserConfig.toImportHolidayInfo(): ImportHolidayInfo =
-    ImportHolidayInfo(
+fun UserConfig.toImportHolidayInfo(): HolidayUserConfig =
+    HolidayUserConfig(
         state = state!!,
         city = city!!,
         holidayToken = holidayToken!!

@@ -2,7 +2,11 @@ package br.com.jiratorio.controller
 
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest
 import br.com.jiratorio.domain.response.LeadTimeConfigResponse
-import br.com.jiratorio.service.leadtime.LeadTimeConfigService
+import br.com.jiratorio.usecase.leadtime.config.CreateLeadTimeConfig
+import br.com.jiratorio.usecase.leadtime.config.DeleteLeadTimeConfig
+import br.com.jiratorio.usecase.leadtime.config.FindAllLeadTimeConfigs
+import br.com.jiratorio.usecase.leadtime.config.FindLeadTimeConfig
+import br.com.jiratorio.usecase.leadtime.config.UpdateLeadTimeConfig
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -21,19 +25,23 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/boards/{boardId}/lead-time-configs")
 class LeadTimeConfigController(
-    private val leadTimeConfigService: LeadTimeConfigService
+    private val createLeadTimeConfig: CreateLeadTimeConfig,
+    private val deleteLeadTimeConfig: DeleteLeadTimeConfig,
+    private val findAllLeadTimeConfigs: FindAllLeadTimeConfigs,
+    private val findLeadTimeConfig: FindLeadTimeConfig,
+    private val updateLeadTimeConfig: UpdateLeadTimeConfig
 ) {
 
     @GetMapping
     fun index(@PathVariable boardId: Long): List<LeadTimeConfigResponse> =
-        leadTimeConfigService.findAll(boardId)
+        findAllLeadTimeConfigs.execute(boardId)
 
     @PostMapping
     fun create(
         @PathVariable boardId: Long,
         @Valid @RequestBody leadTimeConfigRequest: LeadTimeConfigRequest
     ): HttpEntity<*> {
-        val id = leadTimeConfigService.create(boardId, leadTimeConfigRequest)
+        val id = createLeadTimeConfig.execute(boardId, leadTimeConfigRequest)
 
         val location = ServletUriComponentsBuilder
             .fromCurrentRequest()
@@ -48,7 +56,7 @@ class LeadTimeConfigController(
         @PathVariable boardId: Long,
         @PathVariable id: Long
     ): LeadTimeConfigResponse =
-        leadTimeConfigService.findByBoardAndId(boardId, id)
+        findLeadTimeConfig.execute(id, boardId)
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -57,7 +65,7 @@ class LeadTimeConfigController(
         @PathVariable id: Long,
         @Valid @RequestBody leadTimeConfigRequest: LeadTimeConfigRequest
     ): Unit =
-        leadTimeConfigService.update(boardId, id, leadTimeConfigRequest)
+        updateLeadTimeConfig.execute(id, boardId, leadTimeConfigRequest)
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -65,6 +73,6 @@ class LeadTimeConfigController(
         @PathVariable boardId: Long,
         @PathVariable id: Long
     ): Unit =
-        leadTimeConfigService.deleteByBoardAndId(boardId, id)
+        deleteLeadTimeConfig.execute(id, boardId)
 
 }

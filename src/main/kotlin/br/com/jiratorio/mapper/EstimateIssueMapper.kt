@@ -1,10 +1,10 @@
 package br.com.jiratorio.mapper
 
-import br.com.jiratorio.domain.estimate.EstimateIssue
+import br.com.jiratorio.domain.estimate.EstimatedIssue
 import br.com.jiratorio.domain.response.EstimateIssueResponse
 import br.com.jiratorio.extension.time.displayFormat
 
-fun EstimateIssue.toEstimateIssueResponse(jiraUrl: String): EstimateIssueResponse =
+fun EstimatedIssue.toEstimateIssueResponse(jiraUrl: String): EstimateIssueResponse =
     EstimateIssueResponse(
         key = key,
         summary = summary,
@@ -27,5 +27,5 @@ fun EstimateIssue.toEstimateIssueResponse(jiraUrl: String): EstimateIssueRespons
         detailsUrl = "$jiraUrl/browse/$key"
     )
 
-fun List<EstimateIssue>.toEstimateIssueResponse(jiraUrl: String): List<EstimateIssueResponse> =
+fun List<EstimatedIssue>.toEstimateIssueResponse(jiraUrl: String): List<EstimateIssueResponse> =
     map { it.toEstimateIssueResponse(jiraUrl) }

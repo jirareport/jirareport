@@ -6,8 +6,13 @@ import br.com.jiratorio.domain.request.SearchBoardRequest
 import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.domain.response.board.BoardDetailsResponse
 import br.com.jiratorio.domain.response.board.BoardResponse
-import br.com.jiratorio.service.BoardService
-import br.com.jiratorio.service.CloneBoardService
+import br.com.jiratorio.usecase.board.CloneBoard
+import br.com.jiratorio.usecase.board.CreateBoard
+import br.com.jiratorio.usecase.board.DeleteBoard
+import br.com.jiratorio.usecase.board.FindAllBoards
+import br.com.jiratorio.usecase.board.FindBoard
+import br.com.jiratorio.usecase.board.UpdateBoard
+import br.com.jiratorio.usecase.board.owner.FindAllOwners
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -31,8 +36,13 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/boards")
 class BoardController(
-    private val boardService: BoardService,
-    private val cloneBoardService: CloneBoardService
+    private val findAllOwners: FindAllOwners,
+    private val createBoard: CreateBoard,
+    private val deleteBoard: DeleteBoard,
+    private val findAllBoards: FindAllBoards,
+    private val findBoard: FindBoard,
+    private val updateBoard: UpdateBoard,
+    private val cloneBoard: CloneBoard
 ) {
 
     @GetMapping
@@ -41,19 +51,19 @@ class BoardController(
         @PageableDefault(size = 20, sort = ["id"]) pageable: Pageable,
         @AuthenticationPrincipal currentUser: Account
     ): Page<BoardResponse> =
-        boardService.findAll(pageable, searchBoardRequest, currentUser)
+        findAllBoards.execute(searchBoardRequest, currentUser, pageable)
 
     @GetMapping("/owners")
     fun owners(@AuthenticationPrincipal currentUser: Account): Set<String> =
-        boardService.findAllOwners(currentUser)
+        findAllOwners.execute(currentUser)
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long): BoardDetailsResponse =
-        boardService.findDetailsById(id)
+        findBoard.execute(id)
 
     @PostMapping
     fun create(@Valid @RequestBody board: CreateBoardRequest): HttpEntity<*> {
-        val id = boardService.create(board)
+        val id = createBoard.execute(board)
 
         val location = ServletUriComponentsBuilder
             .fromCurrentRequest()
@@ -65,7 +75,7 @@ class BoardController(
 
     @PostMapping(params = ["boardIdToClone"])
     fun clone(@RequestParam("boardIdToClone") boardId: Long): HttpEntity<*> {
-        val id: Long = cloneBoardService.clone(boardId)
+        val id: Long = cloneBoard.execute(boardId)
 
         val location = ServletUriComponentsBuilder
             .fromCurrentContextPath()
@@ -81,7 +91,7 @@ class BoardController(
         @PathVariable id: Long,
         @AuthenticationPrincipal currentUser: Account
     ): Unit =
-        boardService.delete(id, currentUser.username)
+        deleteBoard.execute(id, currentUser.username)
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -89,6 +99,6 @@ class BoardController(
         @PathVariable id: Long,
         @Valid @RequestBody updateBoardRequest: UpdateBoardRequest
     ): Unit =
-        boardService.update(id, updateBoardRequest)
+        updateBoard.execute(id, updateBoardRequest)
 
 }
