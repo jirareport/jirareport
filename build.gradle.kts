@@ -48,7 +48,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    testImplementation("org.testcontainers:postgresql:1.12.4")
+    testImplementation("org.testcontainers:postgresql:1.12.3")
 
     testImplementation("com.github.javafaker:javafaker:1.0.1")
     testImplementation("io.rest-assured:rest-assured")
