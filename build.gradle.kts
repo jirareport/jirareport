@@ -8,7 +8,7 @@ plugins {
     kotlin("plugin.spring") version "1.3.61"
     kotlin("plugin.jpa") version "1.3.61"
 
-    id("io.gitlab.arturbosch.detekt") version "1.1.1"
+    id("io.gitlab.arturbosch.detekt") version "1.3.1"
 }
 
 apply {
@@ -61,7 +61,7 @@ dependencies {
 
     testImplementation("io.mockk:mockk:1.9.3")
 
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.1.1")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.3.1")
 }
 
 dependencyManagement {
