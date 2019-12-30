@@ -4,6 +4,8 @@ jira:
 holiday:
   url: http://localhost:8888/holiday-api
   token: super-secret-token
+  default-state: SP
+  default-city: ARARAQUARA
 
 spring:
   application:
