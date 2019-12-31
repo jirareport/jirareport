@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.entity
 
-import br.com.jiratorio.extension.equalsBuilder
+import br.com.jiratorio.extension.equalsComparing
 import java.time.LocalDateTime
 import java.util.Objects
 import javax.persistence.Column
@@ -34,7 +34,7 @@ data class ImpedimentHistory(
         startDate.compareTo(other.startDate)
 
     override fun equals(other: Any?): Boolean =
-        equalsBuilder(
+        equalsComparing(
             other,
             ImpedimentHistory::id,
             ImpedimentHistory::issueId,

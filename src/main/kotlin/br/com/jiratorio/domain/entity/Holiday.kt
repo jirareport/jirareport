@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.entity
 
-import br.com.jiratorio.extension.equalsBuilder
+import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.toStringBuilder
 import java.time.LocalDate
 import java.util.Objects
@@ -47,7 +47,7 @@ data class Holiday(
         toStringBuilder(Holiday::id, Holiday::date, Holiday::description)
 
     override fun equals(other: Any?) =
-        equalsBuilder(other, Holiday::date, Holiday::board)
+        equalsComparing(other, Holiday::date, Holiday::board)
 
     override fun hashCode() =
         Objects.hash(date, board)

@@ -2,7 +2,7 @@ package br.com.jiratorio.domain.entity
 
 import br.com.jiratorio.domain.duedate.DueDateType
 import br.com.jiratorio.domain.impediment.ImpedimentType
-import br.com.jiratorio.extension.equalsBuilder
+import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.toStringBuilder
 import org.hibernate.annotations.Type
 import java.util.Objects
@@ -97,7 +97,7 @@ data class Board(
         )
 
     override fun equals(other: Any?) =
-        equalsBuilder(other, Board::id)
+        equalsComparing(other, Board::id)
 
     override fun hashCode() =
         Objects.hash(id)

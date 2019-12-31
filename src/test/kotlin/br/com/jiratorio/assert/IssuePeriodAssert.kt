@@ -3,7 +3,7 @@ package br.com.jiratorio.assert
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
 import br.com.jiratorio.domain.entity.ColumnTimeAverage
 import br.com.jiratorio.domain.entity.IssuePeriod
-import br.com.jiratorio.extension.equalsBuilder
+import br.com.jiratorio.extension.equalsComparing
 import org.assertj.core.presentation.PredicateDescription
 import java.time.LocalDate
 
@@ -149,7 +149,7 @@ class IssuePeriodAssert(
             actual.columnTimeAverages,
             { columnTimeAverage ->
                 list.any { other ->
-                    columnTimeAverage.equalsBuilder(
+                    columnTimeAverage.equalsComparing(
                         other,
                         ColumnTimeAverage::columnName,
                         ColumnTimeAverage::averageTime

@@ -1,7 +1,7 @@
 package br.com.jiratorio.domain.entity
 
 import br.com.jiratorio.domain.chart.ChartType
-import br.com.jiratorio.extension.equalsBuilder
+import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.toStringBuilder
 import java.util.Objects
 import javax.persistence.Column
@@ -53,7 +53,7 @@ data class UserConfig(
         )
 
     override fun equals(other: Any?) =
-        equalsBuilder(other, UserConfig::username)
+        equalsComparing(other, UserConfig::username)
 
     override fun hashCode() =
         Objects.hash(username)

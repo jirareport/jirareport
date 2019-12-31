@@ -2,7 +2,7 @@ package br.com.jiratorio.domain.entity
 
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
-import br.com.jiratorio.extension.equalsBuilder
+import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.toStringBuilder
 import org.hibernate.annotations.Type
 import java.time.LocalDateTime
@@ -108,7 +108,7 @@ data class Issue(
         )
 
     override fun equals(other: Any?): Boolean =
-        equalsBuilder(
+        equalsComparing(
             other,
             Issue::id,
             Issue::key
