@@ -4,7 +4,6 @@ import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.domain.chart.ChartAggregator
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
-import br.com.jiratorio.usecase.chart.columntime.CreateColumnTimeChart
 import br.com.jiratorio.usecase.chart.dynamic.CreateDynamicChart
 import br.com.jiratorio.usecase.chart.estimate.CreateEstimateLeadTimeChart
 import br.com.jiratorio.usecase.chart.estimate.CreateEstimateThroughputChart
@@ -22,7 +21,6 @@ import org.slf4j.LoggerFactory
 
 @UseCase
 class CreateChartAggregator(
-    private val createColumnTimeChart: CreateColumnTimeChart,
     private val createDynamicChart: CreateDynamicChart,
     private val createEstimateLeadTimeChart: CreateEstimateLeadTimeChart,
     private val createEstimateThroughputChart: CreateEstimateThroughputChart,
@@ -56,7 +54,6 @@ class CreateChartAggregator(
             leadTimeByPriority = createPriorityLeadTimeChart.execute(issues),
             throughputByPriority = createPriorityThroughputChart.execute(issues),
             leadTimeCompareChart = createLeadTimeCompareChart.execute(issues),
-            columnTimeAvg = createColumnTimeChart.execute(issues, board.fluxColumn ?: emptyList()),
             dynamicCharts = createDynamicChart.execute(issues, board)
         )
     }

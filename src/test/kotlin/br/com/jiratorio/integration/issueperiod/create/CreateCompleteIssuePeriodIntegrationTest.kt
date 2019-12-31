@@ -3,11 +3,11 @@ package br.com.jiratorio.integration.issueperiod.create
 import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.annotation.LoadStubs
+import br.com.jiratorio.domain.entity.ColumnTimeAverage
 import br.com.jiratorio.domain.entity.ImpedimentHistory
 import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.entity.LeadTimeConfig
 import br.com.jiratorio.domain.entity.embedded.Changelog
-import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
@@ -146,15 +146,15 @@ internal class CreateCompleteIssuePeriodIntegrationTest(
             hasEmptyDynamicCharts()
 
             containsColumnTimeAvg(
-                ColumnTimeAvg(columnName = "BACKLOG", avgTime = 2.1),
-                ColumnTimeAvg(columnName = "ANALYSIS", avgTime = 3.0),
-                ColumnTimeAvg(columnName = "DEV WIP", avgTime = 3.7),
-                ColumnTimeAvg(columnName = "DEV DONE", avgTime = 2.3),
-                ColumnTimeAvg(columnName = "TEST WIP", avgTime = 2.8),
-                ColumnTimeAvg(columnName = "TEST DONE", avgTime = 2.7),
-                ColumnTimeAvg(columnName = "REVIEW", avgTime = 2.3),
-                ColumnTimeAvg(columnName = "ACCOMPANIMENT", avgTime = 3.3),
-                ColumnTimeAvg(columnName = "DONE", avgTime = 0.0)
+                ColumnTimeAverage(columnName = "BACKLOG", averageTime = 2.1),
+                ColumnTimeAverage(columnName = "ANALYSIS", averageTime = 3.0),
+                ColumnTimeAverage(columnName = "DEV WIP", averageTime = 3.7),
+                ColumnTimeAverage(columnName = "DEV DONE", averageTime = 2.3),
+                ColumnTimeAverage(columnName = "TEST WIP", averageTime = 2.8),
+                ColumnTimeAverage(columnName = "TEST DONE", averageTime = 2.7),
+                ColumnTimeAverage(columnName = "REVIEW", averageTime = 2.3),
+                ColumnTimeAverage(columnName = "ACCOMPANIMENT", averageTime = 3.3),
+                ColumnTimeAverage(columnName = "DONE", averageTime = 0.0)
             )
 
             hasLeadTimeCompareChart(

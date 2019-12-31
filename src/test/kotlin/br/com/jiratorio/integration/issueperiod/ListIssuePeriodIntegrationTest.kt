@@ -32,35 +32,35 @@ internal class ListIssuePeriodIntegrationTest(
 
             issuePeriodFactory.create(
                 modifyingFields = mapOf(
-                    IssuePeriod::boardId to board.id,
+                    IssuePeriod::board to board,
                     IssuePeriod::startDate to "01/01/2019".toLocalDate(),
                     IssuePeriod::endDate to "31/01/2019".toLocalDate()
                 )
             )
             issuePeriodFactory.create(
                 modifyingFields = mapOf(
-                    IssuePeriod::boardId to board.id,
+                    IssuePeriod::board to board,
                     IssuePeriod::startDate to "01/02/2019".toLocalDate(),
                     IssuePeriod::endDate to "28/02/2019".toLocalDate()
                 )
             )
             issuePeriodFactory.create(
                 modifyingFields = mapOf(
-                    IssuePeriod::boardId to board.id,
+                    IssuePeriod::board to board,
                     IssuePeriod::startDate to "01/03/2019".toLocalDate(),
                     IssuePeriod::endDate to "31/03/2019".toLocalDate()
                 )
             )
             issuePeriodFactory.create(
                 modifyingFields = mapOf(
-                    IssuePeriod::boardId to board.id,
+                    IssuePeriod::board to board,
                     IssuePeriod::startDate to "01/04/2019".toLocalDate(),
                     IssuePeriod::endDate to "30/04/2019".toLocalDate()
                 )
             )
             issuePeriodFactory.create(
                 modifyingFields = mapOf(
-                    IssuePeriod::boardId to board.id,
+                    IssuePeriod::board to board,
                     IssuePeriod::startDate to "01/05/2019".toLocalDate(),
                     IssuePeriod::endDate to "31/05/2019".toLocalDate()
                 )

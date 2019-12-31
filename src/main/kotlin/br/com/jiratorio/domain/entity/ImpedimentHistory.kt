@@ -28,11 +28,10 @@ data class ImpedimentHistory(
     @Column(nullable = false)
     var leadTime: Long
 
-) : Comparable<ImpedimentHistory>, BaseEntity() {
+) : BaseEntity(), Comparable<ImpedimentHistory> {
 
-    override fun compareTo(other: ImpedimentHistory): Int {
-        return this.startDate.compareTo(other.startDate)
-    }
+    override fun compareTo(other: ImpedimentHistory): Int =
+        startDate.compareTo(other.startDate)
 
     override fun equals(other: Any?): Boolean =
         equalsBuilder(

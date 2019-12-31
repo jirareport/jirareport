@@ -19,12 +19,12 @@ class UpdateIssuePeriod(
     fun execute(id: Long, boardId: Long) {
         log.info("Action=updateIssuePeriod, id={}, boardId={}", boardId, id)
 
-        val issuePeriod = issuePeriodRepository.findByBoardIdAndId(boardId, id)
+        val issuePeriod = issuePeriodRepository.findByIdAndBoardId(id, boardId)
             ?: throw ResourceNotFound()
 
         val createIssuePeriodRequest = CreateIssuePeriodRequest(issuePeriod.startDate, issuePeriod.endDate)
 
-        createIssuePeriod.execute(createIssuePeriodRequest, issuePeriod.boardId)
+        createIssuePeriod.execute(createIssuePeriodRequest, boardId)
     }
 
 }

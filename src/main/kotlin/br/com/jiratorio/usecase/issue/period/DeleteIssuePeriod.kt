@@ -17,7 +17,7 @@ class DeleteIssuePeriod(
     fun execute(id: Long, boardId: Long) {
         log.info("Action=deleteIssuePeriod, id={}, boardId={}", boardId, id)
 
-        val issuePeriod = issuePeriodRepository.findByBoardIdAndId(boardId, id)
+        val issuePeriod = issuePeriodRepository.findByIdAndBoardId(id, boardId)
             ?: throw ResourceNotFound()
 
         issuePeriodRepository.delete(issuePeriod)

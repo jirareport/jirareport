@@ -33,7 +33,7 @@ internal class UpdateIssuePeriodIntegrationTest(
                 modifyingFields = mapOf(
                     IssuePeriod::startDate to "01/01/2019".toLocalDate(),
                     IssuePeriod::endDate to "31/01/2019".toLocalDate(),
-                    IssuePeriod::boardId to board.id
+                    IssuePeriod::board to board
                 )
             )
         }

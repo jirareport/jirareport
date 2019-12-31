@@ -3,6 +3,7 @@ package br.com.jiratorio.usecase.issue
 import br.com.jiratorio.config.property.JiraProperties
 import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.domain.request.SearchIssueRequest
+import br.com.jiratorio.domain.response.ColumnTimeAverageResponse
 import br.com.jiratorio.domain.response.IssueListResponse
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.decimal.zeroIfNaN
@@ -10,6 +11,7 @@ import br.com.jiratorio.mapper.toIssueResponse
 import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.IssueRepository
 import br.com.jiratorio.usecase.chart.CreateChartAggregator
+import br.com.jiratorio.usecase.columntimeaverage.CalculateColumnTimeAverages
 import br.com.jiratorio.usecase.weeklythroughput.CalculateWeeklyThroughput
 import org.slf4j.LoggerFactory
 import org.springframework.transaction.annotation.Transactional
@@ -20,7 +22,8 @@ class FindAllIssues(
     private val issueRepository: IssueRepository,
     private val createChartAggregator: CreateChartAggregator,
     private val jiraProperties: JiraProperties,
-    private val calculateWeeklyThroughput: CalculateWeeklyThroughput
+    private val calculateWeeklyThroughput: CalculateWeeklyThroughput,
+    private val calculateColumnTimeAverages: CalculateColumnTimeAverages
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -49,11 +52,16 @@ class FindAllIssues(
             issues = issues
         )
 
+        val columnTimeAverages = calculateColumnTimeAverages
+            .execute(issues, board.fluxColumn ?: emptyList())
+            .map { (columnName, averageTime) -> ColumnTimeAverageResponse(columnName, averageTime) }
+
         return IssueListResponse(
             leadTime = leadTime.zeroIfNaN(),
             throughput = issues.size,
             issues = issues.toIssueResponse(jiraProperties.url),
             charts = chartAggregator,
+            columnTimeAverages = columnTimeAverages,
             weeklyThroughput = weeklyThroughput
         )
     }

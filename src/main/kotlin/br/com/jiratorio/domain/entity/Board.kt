@@ -71,8 +71,8 @@ data class Board(
     @Column(columnDefinition = "jsonb")
     var impedimentColumns: MutableList<String>? = null,
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    var dynamicFields: Set<DynamicFieldConfig>? = null,
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    var dynamicFields: MutableSet<DynamicFieldConfig>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")

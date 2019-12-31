@@ -2,7 +2,6 @@ package br.com.jiratorio.domain.chart
 
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
 import br.com.jiratorio.domain.entity.embedded.Chart
-import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
 import br.com.jiratorio.domain.entity.embedded.Histogram
 
 data class ChartAggregator(
@@ -28,8 +27,6 @@ data class ChartAggregator(
     val leadTimeByPriority: Chart<String, Double>,
 
     val throughputByPriority: Chart<String, Int>,
-
-    val columnTimeAvg: List<ColumnTimeAvg>,
 
     val leadTimeCompareChart: Chart<String, Double>,
 

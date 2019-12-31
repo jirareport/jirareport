@@ -5,24 +5,21 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
 
 @Entity
-data class DynamicFieldConfig(
+data class ColumnTimeAverage(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0,
 
-    @ManyToOne
-    @JoinColumn(name = "board_id", nullable = false)
-    var board: Board,
+    @Column(name = "issue_period_id", nullable = false)
+    var issuePeriodId: Long = 0,
 
     @Column(nullable = false)
-    var name: String,
+    var columnName: String,
 
     @Column(nullable = false)
-    var field: String
+    val averageTime: Double
 
 ) : BaseEntity()
