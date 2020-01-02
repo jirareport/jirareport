@@ -14,6 +14,8 @@ data class IssueListResponse(
 
     val charts: ChartAggregator,
 
+    val columnTimeAverages: List<ColumnTimeAverageResponse>,
+
     val weeklyThroughput: Chart<String, Int>
 
 )

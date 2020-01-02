@@ -2,7 +2,7 @@ package br.com.jiratorio.extension
 
 import kotlin.reflect.KProperty1
 
-inline fun <reified T : Any> T.equalsBuilder(
+inline fun <reified T : Any> T.equalsComparing(
     other: Any?,
     vararg properties: KProperty1<T, Any?>
 ) = when {

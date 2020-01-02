@@ -2,8 +2,8 @@ package br.com.jiratorio.domain.response.issueperiod
 
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
 import br.com.jiratorio.domain.entity.embedded.Chart
-import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
 import br.com.jiratorio.domain.entity.embedded.Histogram
+import br.com.jiratorio.domain.response.ColumnTimeAverageResponse
 
 data class IssuePeriodDetailResponse(
 
@@ -35,7 +35,7 @@ data class IssuePeriodDetailResponse(
 
     val throughputByPriority: Chart<String, Int>?,
 
-    val columnTimeAvg: MutableList<ColumnTimeAvg>?,
+    val columnTimeAverages: List<ColumnTimeAverageResponse>?,
 
     val leadTimeCompareChart: Chart<String, Double>?,
 

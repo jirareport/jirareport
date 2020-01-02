@@ -68,7 +68,7 @@ internal class EqualsExtensionKtTest {
         val phones: List<Phone>
     ) {
         override fun equals(other: Any?) =
-            equalsBuilder(other, Person::name, Person::phones)
+            equalsComparing(other, Person::name, Person::phones)
 
         override fun hashCode() =
             Objects.hash(name, phones)
@@ -79,7 +79,7 @@ internal class EqualsExtensionKtTest {
         val number: String
     ) {
         override fun equals(other: Any?) =
-            equalsBuilder(other, Phone::id, Phone::number)
+            equalsComparing(other, Phone::id, Phone::number)
 
         override fun hashCode() =
             Objects.hash(id, number)

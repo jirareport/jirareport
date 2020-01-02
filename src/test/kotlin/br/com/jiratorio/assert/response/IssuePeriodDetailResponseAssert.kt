@@ -2,8 +2,8 @@ package br.com.jiratorio.assert.response
 
 import br.com.jiratorio.assert.BaseAssert
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
+import br.com.jiratorio.domain.entity.ColumnTimeAverage
 import br.com.jiratorio.domain.entity.embedded.Chart
-import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodDetailResponse
 
 class IssuePeriodDetailResponseAssert(
@@ -101,8 +101,8 @@ class IssuePeriodDetailResponseAssert(
         )
     }
 
-    fun hasColumnTimeAvg(columnTimeAvg: MutableList<ColumnTimeAvg>?) = assertAll {
-        objects.assertEqual(field("issuePeriodDetailResponse.columnTimeAvg"), actual.columnTimeAvg, columnTimeAvg)
+    fun hasColumnTimeAverages(columnTimeAvg: Collection<ColumnTimeAverage>) = assertAll {
+        iterables.assertContains(field("issuePeriodDetailResponse.columnTimeAvg"), actual.columnTimeAverages, columnTimeAvg.toTypedArray())
     }
 
     fun hasLeadTimeCompareChart(leadTimeCompareChart: Chart<String, Double>?) = assertAll {

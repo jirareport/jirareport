@@ -12,6 +12,7 @@ import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.repository.IssueRepository
 import br.com.jiratorio.usecase.chart.CreateChartAggregator
+import br.com.jiratorio.usecase.columntimeaverage.CreateColumnTimeAverages
 import br.com.jiratorio.usecase.impediment.history.CreateImpedimentHistory
 import br.com.jiratorio.usecase.jql.CreateFinalizedIssueJql
 import br.com.jiratorio.usecase.leadtime.CreateLeadTime
@@ -32,7 +33,8 @@ class CreateIssuePeriod(
     private val parseIssue: ParseIssue,
     private val createLeadTime: CreateLeadTime,
     private val createImpedimentHistory: CreateImpedimentHistory,
-    private val calculateAverageWip: CalculateAverageWip
+    private val calculateAverageWip: CalculateAverageWip,
+    private val createColumnTimeAverages: CreateColumnTimeAverages
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -67,7 +69,7 @@ class CreateIssuePeriod(
         val issuePeriod = IssuePeriod(
             startDate = startDate,
             endDate = endDate,
-            boardId = boardId,
+            board = board,
             issues = issues.toMutableSet(),
             leadTime = leadTime,
             throughput = issues.size,
@@ -86,6 +88,7 @@ class CreateIssuePeriod(
 
         createLeadTime.execute(issues, board.id)
         createImpedimentHistory.execute(issues)
+        createColumnTimeAverages.execute(issuePeriod, board.fluxColumn ?: emptyList())
 
         createCharts(issues, board, issuePeriod)
 
@@ -105,7 +108,6 @@ class CreateIssuePeriod(
             throughputByEstimate = chartAggregator.throughputByEstimate
             leadTimeBySystem = chartAggregator.leadTimeBySystem
             throughputBySystem = chartAggregator.throughputBySystem
-            columnTimeAvg = chartAggregator.columnTimeAvg.toMutableList()
             leadTimeByType = chartAggregator.leadTimeByType
             throughputByType = chartAggregator.throughputByType
             leadTimeByProject = chartAggregator.leadTimeByProject

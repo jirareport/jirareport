@@ -3,8 +3,8 @@ package br.com.jiratorio.integration.issueperiod.create
 import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.annotation.LoadStubs
+import br.com.jiratorio.domain.entity.ColumnTimeAverage
 import br.com.jiratorio.domain.entity.embedded.Changelog
-import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
@@ -98,11 +98,11 @@ internal class CreateBasicIssuePeriodIntegrationTest(
             hasEmptyDynamicCharts()
 
             containsColumnTimeAvg(
-                ColumnTimeAvg(columnName = "BACKLOG", avgTime = 4.0),
-                ColumnTimeAvg(columnName = "TODO", avgTime = 2.0),
-                ColumnTimeAvg(columnName = "WIP", avgTime = 10.0),
-                ColumnTimeAvg(columnName = "ACCOMPANIMENT", avgTime = 4.0),
-                ColumnTimeAvg(columnName = "DONE", avgTime = 0.0)
+                ColumnTimeAverage(columnName = "BACKLOG", averageTime = 4.0),
+                ColumnTimeAverage(columnName = "TODO", averageTime = 2.0),
+                ColumnTimeAverage(columnName = "WIP", averageTime = 10.0),
+                ColumnTimeAverage(columnName = "ACCOMPANIMENT", averageTime = 4.0),
+                ColumnTimeAverage(columnName = "DONE", averageTime = 0.0)
             )
 
             hasEmptyLeadTimeCompareChart()

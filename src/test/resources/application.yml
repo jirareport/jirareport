@@ -7,26 +7,23 @@ holiday:
   default-state: SP
   default-city: ARARAQUARA
 
+security:
+  key: test-security-key
+
 spring:
   application:
     name: jirareport
   jpa:
-    hibernate:
-      ddl-auto: none
     show-sql: true
     open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     properties:
       hibernate:
-        jdbc:
-          lob:
-            non_contextual_creation: true
-  main:
-    allow-bean-definition-overriding: true
+        format_sql: true
   cache:
     cache-names:
       - findAllHolidaysInCity
       - findAllFields
-      - retrieveCurrentUserConfig
     caffeine:
       spec: expireAfterWrite=15m
   flyway:
@@ -35,6 +32,3 @@ spring:
     ignore-missing-migrations: true
   profiles:
     active: test
-
-security:
-  key: test-security-key

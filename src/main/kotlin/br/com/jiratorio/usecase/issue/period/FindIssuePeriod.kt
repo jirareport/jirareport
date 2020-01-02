@@ -22,7 +22,7 @@ class FindIssuePeriod(
     fun execute(id: Long, boardId: Long): IssuePeriodByIdResponse {
         log.info("Action=findIssuePeriod, id={}, boardId={}", boardId, id)
 
-        val issuePeriod = issuePeriodRepository.findByBoardIdAndId(boardId, id)
+        val issuePeriod = issuePeriodRepository.findByIdAndBoardId(id, boardId)
             ?: throw ResourceNotFound()
 
         return IssuePeriodByIdResponse(

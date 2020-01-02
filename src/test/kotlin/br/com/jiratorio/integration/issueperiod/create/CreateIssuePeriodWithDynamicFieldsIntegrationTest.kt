@@ -4,10 +4,10 @@ import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.annotation.LoadStubs
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
+import br.com.jiratorio.domain.entity.ColumnTimeAverage
 import br.com.jiratorio.domain.entity.DynamicFieldConfig
 import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.entity.embedded.Chart
-import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
@@ -157,15 +157,15 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest(
             )
 
             containsColumnTimeAvg(
-                ColumnTimeAvg(columnName = "BACKLOG", avgTime = 3.0),
-                ColumnTimeAvg(columnName = "ANALYSIS", avgTime = 3.2),
-                ColumnTimeAvg(columnName = "DEV WIP", avgTime = 2.4),
-                ColumnTimeAvg(columnName = "DEV DONE", avgTime = 2.6),
-                ColumnTimeAvg(columnName = "TEST WIP", avgTime = 2.5),
-                ColumnTimeAvg(columnName = "TEST DONE", avgTime = 2.8),
-                ColumnTimeAvg(columnName = "REVIEW", avgTime = 3.0),
-                ColumnTimeAvg(columnName = "ACCOMPANIMENT", avgTime = 2.5),
-                ColumnTimeAvg(columnName = "DONE", avgTime = 0.0)
+                ColumnTimeAverage(columnName = "BACKLOG", averageTime = 3.0),
+                ColumnTimeAverage(columnName = "ANALYSIS", averageTime = 3.2),
+                ColumnTimeAverage(columnName = "DEV WIP", averageTime = 2.4),
+                ColumnTimeAverage(columnName = "DEV DONE", averageTime = 2.6),
+                ColumnTimeAverage(columnName = "TEST WIP", averageTime = 2.5),
+                ColumnTimeAverage(columnName = "TEST DONE", averageTime = 2.8),
+                ColumnTimeAverage(columnName = "REVIEW", averageTime = 3.0),
+                ColumnTimeAverage(columnName = "ACCOMPANIMENT", averageTime = 2.5),
+                ColumnTimeAverage(columnName = "DONE", averageTime = 0.0)
             )
 
             hasEmptyLeadTimeCompareChart()

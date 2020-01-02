@@ -1,7 +1,10 @@
 package br.com.jiratorio.assert
 
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
+import br.com.jiratorio.domain.entity.ColumnTimeAverage
 import br.com.jiratorio.domain.entity.IssuePeriod
+import br.com.jiratorio.extension.equalsComparing
+import org.assertj.core.presentation.PredicateDescription
 import java.time.LocalDate
 
 class IssuePeriodAssert(
@@ -138,8 +141,23 @@ class IssuePeriodAssert(
         )
     }
 
-    fun containsColumnTimeAvg(vararg args: Any?) = assertAll {
-        iterables.assertContains(field("issuePeriod.columnTimeAvg"), actual.columnTimeAvg, args)
+    fun containsColumnTimeAvg(vararg args: ColumnTimeAverage) = assertAll {
+        val list = args.toList()
+
+        iterables.assertAllMatch(
+            field("issuePeriod.columnTimeAvg"),
+            actual.columnTimeAverages,
+            { columnTimeAverage ->
+                list.any { other ->
+                    columnTimeAverage.equalsComparing(
+                        other,
+                        ColumnTimeAverage::columnName,
+                        ColumnTimeAverage::averageTime
+                    )
+                }
+            },
+            PredicateDescription.GIVEN
+        )
     }
 
 }

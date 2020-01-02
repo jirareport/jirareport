@@ -1,7 +1,6 @@
 package br.com.jiratorio.domain.entity
 
 import br.com.jiratorio.extension.equalsComparing
-import java.time.LocalDateTime
 import java.util.Objects
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -10,38 +9,31 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
-data class ImpedimentHistory(
+data class ColumnTimeAverage(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0,
 
-    @Column(name = "issue_id", nullable = false)
-    var issueId: Long = 0,
+    @Column(name = "issue_period_id", nullable = false)
+    var issuePeriodId: Long = 0,
 
     @Column(nullable = false)
-    var startDate: LocalDateTime,
+    var columnName: String,
 
     @Column(nullable = false)
-    var endDate: LocalDateTime,
+    val averageTime: Double
 
-    @Column(nullable = false)
-    var leadTime: Long
-
-) : BaseEntity(), Comparable<ImpedimentHistory> {
-
-    override fun compareTo(other: ImpedimentHistory): Int =
-        startDate.compareTo(other.startDate)
+) : BaseEntity() {
 
     override fun equals(other: Any?): Boolean =
         equalsComparing(
             other,
-            ImpedimentHistory::id,
-            ImpedimentHistory::issueId,
-            ImpedimentHistory::leadTime
+            ColumnTimeAverage::issuePeriodId,
+            ColumnTimeAverage::columnName
         )
 
     override fun hashCode(): Int =
-        Objects.hash(id, issueId, leadTime)
+        Objects.hash(issuePeriodId, columnName)
 
 }

@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.entity
 
-import br.com.jiratorio.extension.equalsBuilder
+import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.toStringBuilder
 import java.util.Objects
 import javax.persistence.Column
@@ -35,7 +35,7 @@ data class LeadTimeConfig(
     }
 
     override fun equals(other: Any?) =
-        equalsBuilder(other, LeadTimeConfig::name, LeadTimeConfig::startColumn, LeadTimeConfig::endColumn)
+        equalsComparing(other, LeadTimeConfig::name, LeadTimeConfig::startColumn, LeadTimeConfig::endColumn)
 
     override fun hashCode() =
         Objects.hash(name, startColumn, endColumn)

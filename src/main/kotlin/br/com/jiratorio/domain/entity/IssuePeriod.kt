@@ -2,19 +2,18 @@ package br.com.jiratorio.domain.entity
 
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
 import br.com.jiratorio.domain.entity.embedded.Chart
-import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
 import br.com.jiratorio.domain.entity.embedded.Histogram
 import br.com.jiratorio.extension.toStringBuilder
 import org.hibernate.annotations.Type
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import javax.persistence.OrderBy
 
@@ -31,12 +30,13 @@ data class IssuePeriod(
     @Column(nullable = false)
     var endDate: LocalDate,
 
-    @Column(nullable = false)
-    var boardId: Long,
+    @ManyToOne
+    @JoinColumn(name = "board_id", nullable = false)
+    var board: Board,
 
-    @OrderBy("key asc")
+    @OneToMany
+    @OrderBy("key")
     @JoinColumn(name = "issue_period_id", updatable = false)
-    @OneToMany(orphanRemoval = true, cascade = [CascadeType.REMOVE])
     var issues: MutableSet<Issue>,
 
     @Column(nullable = false)
@@ -86,9 +86,10 @@ data class IssuePeriod(
     @Column(columnDefinition = "jsonb")
     var throughputByPriority: Chart<String, Int>? = null,
 
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    var columnTimeAvg: MutableList<ColumnTimeAvg>? = null,
+    @OneToMany
+    @OrderBy("id")
+    @JoinColumn(name = "issue_period_id", updatable = false)
+    var columnTimeAverages: Set<ColumnTimeAverage> = mutableSetOf(),
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -112,7 +113,7 @@ data class IssuePeriod(
 
 ) : BaseEntity() {
     companion object {
-        private val serialVersionUID = 7188140641247774389L
+        private const val serialVersionUID = 7188140641247774389L
     }
 
     val dates: String
@@ -124,7 +125,7 @@ data class IssuePeriod(
     override fun toString() =
         toStringBuilder(
             IssuePeriod::id,
-            IssuePeriod::boardId,
+            IssuePeriod::board,
             IssuePeriod::startDate,
             IssuePeriod::endDate
         )

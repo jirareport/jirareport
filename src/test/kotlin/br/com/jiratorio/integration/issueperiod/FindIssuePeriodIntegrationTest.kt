@@ -37,7 +37,7 @@ internal class FindIssuePeriodIntegrationTest(
 
             val issuePeriod = issuePeriodFactory.create (
                 modifyingFields = mapOf(
-                    IssuePeriod::boardId to defaultBoard.id
+                    IssuePeriod::board to defaultBoard
                 )
             )
 
@@ -81,7 +81,7 @@ internal class FindIssuePeriodIntegrationTest(
             hasThroughputByProject(issuePeriod.throughputByProject)
             hasLeadTimeByPriority(issuePeriod.leadTimeByPriority)
             hasThroughputByPriority(issuePeriod.throughputByPriority)
-            hasColumnTimeAvg(issuePeriod.columnTimeAvg)
+            hasColumnTimeAverages(issuePeriod.columnTimeAverages)
             hasLeadTimeCompareChart(issuePeriod.leadTimeCompareChart)
             hasDynamicCharts(issuePeriod.dynamicCharts)
         }

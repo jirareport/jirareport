@@ -241,7 +241,7 @@ class SearchIssueIntegrationTest(
             val board = boardFactory.create()
             val issuePeriod = issuePeriodFactory.create(
                 modifyingFields = mapOf(
-                    IssuePeriod::boardId to board.id
+                    IssuePeriod::board to board
                 )
             )
 

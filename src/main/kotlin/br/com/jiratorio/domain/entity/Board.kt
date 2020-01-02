@@ -2,7 +2,7 @@ package br.com.jiratorio.domain.entity
 
 import br.com.jiratorio.domain.duedate.DueDateType
 import br.com.jiratorio.domain.impediment.ImpedimentType
-import br.com.jiratorio.extension.equalsBuilder
+import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.toStringBuilder
 import org.hibernate.annotations.Type
 import java.util.Objects
@@ -71,8 +71,8 @@ data class Board(
     @Column(columnDefinition = "jsonb")
     var impedimentColumns: MutableList<String>? = null,
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    var dynamicFields: Set<DynamicFieldConfig>? = null,
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    var dynamicFields: MutableSet<DynamicFieldConfig>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -97,7 +97,7 @@ data class Board(
         )
 
     override fun equals(other: Any?) =
-        equalsBuilder(other, Board::id)
+        equalsComparing(other, Board::id)
 
     override fun hashCode() =
         Objects.hash(id)

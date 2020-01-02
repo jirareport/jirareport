@@ -101,7 +101,7 @@ class IssueFiltersIntegrationTest(
             val defaultBoard = boardFactory.create()
             val issuePeriod = issuePeriodFactory.create(
                 modifyingFields = mapOf(
-                    IssuePeriod::boardId to defaultBoard.id
+                    IssuePeriod::board to defaultBoard
                 )
             )
 

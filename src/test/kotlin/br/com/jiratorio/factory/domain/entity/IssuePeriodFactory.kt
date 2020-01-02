@@ -3,7 +3,6 @@ package br.com.jiratorio.factory.domain.entity
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
 import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.domain.entity.embedded.Chart
-import br.com.jiratorio.domain.entity.embedded.ColumnTimeAvg
 import br.com.jiratorio.extension.faker.jira
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.KBacon
@@ -16,12 +15,13 @@ import java.util.concurrent.TimeUnit
 class IssuePeriodFactory(
     private val faker: Faker,
     private val boardFactory: BoardFactory,
+//    private val columnTimeAverageFactory: ColumnTimeAverageFactory,
     issuePeriodRepository: IssuePeriodRepository?
 ) : KBacon<IssuePeriod>(issuePeriodRepository) {
 
     override fun builder(): IssuePeriod {
         return IssuePeriod(
-            boardId = boardFactory.create().id,
+            board = boardFactory.create(),
             leadTime = faker.jira().leadTime(),
             wipAvg = faker.number().randomDouble(2, 1, 10),
             avgPctEfficiency = faker.number().randomDouble(2, 1, 10),
@@ -99,11 +99,7 @@ class IssuePeriodFactory(
                     "expedite" to faker.jira().throughput()
                 )
             ),
-            columnTimeAvg = mutableListOf(
-                ColumnTimeAvg("TODO", faker.jira().leadTime()),
-                ColumnTimeAvg("WIP", faker.jira().leadTime()),
-                ColumnTimeAvg("DONE", 0.0)
-            ),
+//            columnTimeAverages = columnTimeAverageFactory.create(5).toMutableList(),
             dynamicCharts = mutableListOf(
                 DynamicChart(
                     name = "dnf_1",
