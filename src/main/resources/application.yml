@@ -16,20 +16,14 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/jirareport
     username: ${USER}
-    password: ${PASSWORD:123123}
+    password: 123123
   jpa:
     show-sql: true
     open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     properties:
       hibernate:
-        jdbc:
-          lob:
-            non_contextual_creation: true
-        temp:
-          use_jdbc_metadata_defaults: false
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-  main:
-    allow-bean-definition-overriding: true
+        format_sql: true
   cache:
     cache-names:
       - findAllHolidaysInCity
@@ -40,11 +34,6 @@ spring:
     enabled: true
     out-of-order: true
     ignore-missing-migrations: true
-  sleuth:
-    sampler:
-      probability: 1.0
-  jmx:
-    enabled: false
 
 feign:
   client:
