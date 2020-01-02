@@ -35,9 +35,9 @@ data class IssuePeriod(
     @JoinColumn(name = "board_id", nullable = false)
     var board: Board,
 
-    @OrderBy("key asc")
+    @OneToMany
+    @OrderBy("key")
     @JoinColumn(name = "issue_period_id", updatable = false)
-    @OneToMany(orphanRemoval = true, cascade = [CascadeType.REMOVE])
     var issues: MutableSet<Issue>,
 
     @Column(nullable = false)
@@ -88,8 +88,9 @@ data class IssuePeriod(
     var throughputByPriority: Chart<String, Int>? = null,
 
     @OneToMany
+    @OrderBy("id")
     @JoinColumn(name = "issue_period_id", updatable = false)
-    var columnTimeAverages: MutableList<ColumnTimeAverage> = mutableListOf(),
+    var columnTimeAverages: Set<ColumnTimeAverage> = mutableSetOf(),
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")

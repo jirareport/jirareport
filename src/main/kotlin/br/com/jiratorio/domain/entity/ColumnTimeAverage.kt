@@ -1,5 +1,7 @@
 package br.com.jiratorio.domain.entity
 
+import br.com.jiratorio.extension.equalsComparing
+import java.util.Objects
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -22,4 +24,16 @@ data class ColumnTimeAverage(
     @Column(nullable = false)
     val averageTime: Double
 
-) : BaseEntity()
+) : BaseEntity() {
+
+    override fun equals(other: Any?): Boolean =
+        equalsComparing(
+            other,
+            ColumnTimeAverage::issuePeriodId,
+            ColumnTimeAverage::columnName
+        )
+
+    override fun hashCode(): Int =
+        Objects.hash(issuePeriodId, columnName)
+
+}

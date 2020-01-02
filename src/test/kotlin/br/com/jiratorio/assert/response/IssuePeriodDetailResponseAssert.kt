@@ -101,8 +101,8 @@ class IssuePeriodDetailResponseAssert(
         )
     }
 
-    fun hasColumnTimeAverages(columnTimeAvg: MutableList<ColumnTimeAverage>?) = assertAll {
-        objects.assertEqual(field("issuePeriodDetailResponse.columnTimeAvg"), actual.columnTimeAverages, columnTimeAvg)
+    fun hasColumnTimeAverages(columnTimeAvg: Collection<ColumnTimeAverage>) = assertAll {
+        iterables.assertContains(field("issuePeriodDetailResponse.columnTimeAvg"), actual.columnTimeAverages, columnTimeAvg.toTypedArray())
     }
 
     fun hasLeadTimeCompareChart(leadTimeCompareChart: Chart<String, Double>?) = assertAll {
