@@ -70,11 +70,11 @@ class IssueAssert(
         iterables.assertContains(field("issue.changelog"), actual.columnChangelog, changelog)
     }
 
-    fun hasDeviationOfEstimate(deviationOfEstimate: Long?) = assertAll {
+    fun hasDeviationOfEstimate(deviationOfEstimate: Long) = assertAll {
         objects.assertEqual(field("issue.deviationOfEstimate"), actual.deviationOfEstimate, deviationOfEstimate)
     }
 
-    fun hasDueDateHistory(dueDateHistory: List<DueDateHistory>?) = assertAll {
+    fun hasDueDateHistory(dueDateHistory: List<DueDateHistory>) = assertAll {
         objects.assertEqual(field("issue.dueDateHistory"), actual.dueDateHistory, dueDateHistory)
     }
 

@@ -56,9 +56,9 @@ data class Issue(
 
     var priority: String? = null,
 
+    @OneToMany
     @OrderBy("startDate")
     @JoinColumn(name = "issue_id")
-    @OneToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     var columnChangelog: Set<ColumnChangelog>,
 
     @Column(name = "issue_period_id", nullable = false)

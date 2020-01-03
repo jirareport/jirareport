@@ -18,6 +18,9 @@ data class ColumnChangelog(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0,
 
+    @Column(name = "issue_id", nullable = false)
+    var issueId: Long = 0,
+
     @Column(name = "column_from")
     var from: String? = null,
 

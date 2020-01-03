@@ -164,8 +164,8 @@ internal class CreateBasicIssuePeriodIntegrationTest(
                 )
             )
 
-            hasDeviationOfEstimate(null)
-            hasDueDateHistory(null)
+            hasDeviationOfEstimate(0)
+            hasDueDateHistory(emptyList())
 
             hasImpedimentTime(0)
             hasEmptyImpedimentHistory()

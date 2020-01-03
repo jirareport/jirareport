@@ -63,7 +63,7 @@ data class FluxColumn(
             startDate = lastOccurrenceIfNeeds("BACKLOG", columnChangelog, created)
         }
 
-        return startDate to endDate
+        return Pair(startDate, endDate)
     }
 
     private fun lastOccurrenceIfNeeds(

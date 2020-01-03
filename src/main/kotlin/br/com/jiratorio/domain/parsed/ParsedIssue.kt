@@ -14,7 +14,7 @@ data class ParsedIssue(
     val estimate: String?,
     val project: String?,
     val summary: String,
-    val changelog: List<ParsedChangelog>,
+    val parsedChangelog: ParsedChangelog,
     val priority: String?,
     val dynamicFields: Map<String, String?>?
 )

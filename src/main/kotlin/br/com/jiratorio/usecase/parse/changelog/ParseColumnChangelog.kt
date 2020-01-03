@@ -40,7 +40,8 @@ class ParseColumnChangelog {
             .toMutableList()
 
         if (changelog.isNotEmpty()) {
-            changelog.first().let { (_, from, _, _, _, _) ->
+            changelog.first().let { firstChangelog ->
+                val from = firstChangelog.from
                 if (from != null) {
                     changelog.add(
                         0,

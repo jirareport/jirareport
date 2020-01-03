@@ -5,7 +5,7 @@ import br.com.jiratorio.extension.faker.jira
 import br.com.jiratorio.extension.toLocalDateTime
 import br.com.jiratorio.factory.KBacon
 import br.com.jiratorio.factory.domain.ChangelogFactory
-import br.com.jiratorio.repository.IssueRepository
+import br.com.jiratorio.usecase.issue.create.PersistIssue
 import com.github.javafaker.Faker
 import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
@@ -16,8 +16,10 @@ class IssueFactory(
     private val boardFactory: BoardFactory,
     private val changelogFactory: ChangelogFactory,
     private val issuePeriodFactory: IssuePeriodFactory,
-    issueRepository: IssueRepository?
-) : KBacon<Issue>(issueRepository) {
+    private val persistIssue: PersistIssue?
+) : KBacon<Issue>(
+    shouldPersist = persistIssue != null
+) {
 
     override fun builder(): Issue {
         return Issue(
@@ -45,6 +47,10 @@ class IssueFactory(
             ),
             issuePeriodId = issuePeriodFactory.create().id
         )
+    }
+
+    override fun persist(entity: Issue) {
+        persistIssue?.execute(entity)
     }
 
 }

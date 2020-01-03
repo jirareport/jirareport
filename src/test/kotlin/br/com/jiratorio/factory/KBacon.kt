@@ -7,12 +7,13 @@ import kotlin.reflect.full.instanceParameter
 import kotlin.reflect.full.memberFunctions
 
 abstract class KBacon<T : Any>(
-    val repository: CrudRepository<T, *>? = null
+    private val repository: CrudRepository<T, *>? = null,
+    private val shouldPersist: Boolean = repository != null
 ) {
 
     fun create(
         builder: KFunction0<T> = ::builder,
-        persist: Boolean = repository != null,
+        persist: Boolean = shouldPersist,
         modifyingFields: Map<KProperty<*>, Any> = mapOf()
     ): T {
         val instance = if (modifyingFields.isEmpty())
@@ -27,14 +28,14 @@ abstract class KBacon<T : Any>(
         return instance
     }
 
-    private fun persist(entity: T) {
+    protected open fun persist(entity: T) {
         repository?.save(entity) ?: throw UnsupportedOperationException()
     }
 
     fun create(
         quantity: Int,
         builder: KFunction0<T> = ::builder,
-        persist: Boolean = repository != null,
+        persist: Boolean = shouldPersist,
         modifyingFields: Map<KProperty<*>, Any> = mapOf()
     ): List<T> = (1..quantity).map {
         create(builder, persist, modifyingFields)
