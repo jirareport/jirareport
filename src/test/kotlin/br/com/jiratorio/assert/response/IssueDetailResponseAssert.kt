@@ -3,7 +3,7 @@ package br.com.jiratorio.assert.response
 import br.com.jiratorio.assert.BaseAssert
 import br.com.jiratorio.domain.entity.ImpedimentHistory
 import br.com.jiratorio.domain.entity.LeadTime
-import br.com.jiratorio.domain.entity.embedded.Changelog
+import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.domain.response.issue.IssueDetailResponse
 
@@ -22,8 +22,8 @@ class IssueDetailResponseAssert(
         objects.assertEqual(field("issueDetailResponse.key"), actual.key, key)
     }
 
-    fun hasChangelogSize(changelog: List<Changelog>) = assertAll {
-        iterables.assertHasSameSizeAs(field("issueDetailResponse.changelog"), actual.changelog, changelog)
+    fun hasChangelogSize(columnChangelog: Set<ColumnChangelog>) = assertAll {
+        iterables.assertHasSameSizeAs(field("issueDetailResponse.changelog"), actual.changelog, columnChangelog)
     }
 
     fun hasDueDateHistorySize(dueDateHistory: List<DueDateHistory>?) = assertAll {

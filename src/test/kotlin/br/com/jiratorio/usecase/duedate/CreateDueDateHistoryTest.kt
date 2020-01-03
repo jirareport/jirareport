@@ -2,10 +2,10 @@ package br.com.jiratorio.usecase.duedate
 
 import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.context.UnitTestContext
+import br.com.jiratorio.domain.FieldChangelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
-import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.extension.toLocalDate
-import br.com.jiratorio.factory.domain.JiraChangelogItemFactory
+import br.com.jiratorio.factory.domain.FieldChangelogFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -19,41 +19,39 @@ import java.util.Comparator
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(classes = [UnitTestContext::class])
 internal class CreateDueDateHistoryTest(
-    private val jiraChangelogItemFactory: JiraChangelogItemFactory
+    private val fieldChangelogFactory: FieldChangelogFactory
 ) {
 
     private val extractDueDateHistory = CreateDueDateHistory()
 
     @Test
     fun `extract due date history with one item`() {
-        val jiraChangelogItem = jiraChangelogItemFactory.create()
-        val dueDateHistories = extractDueDateHistory.execute("duedate", listOf(jiraChangelogItem))
+        val fieldChangelog = fieldChangelogFactory.create()
+        val dueDateHistories = extractDueDateHistory.execute("duedate", setOf(fieldChangelog))
 
         assertThat(dueDateHistories).hasSize(1)
         dueDateHistories.first().assertThat {
-            hasDueDate(jiraChangelogItem.to?.toLocalDate("yyyy-MM-dd"))
-            hasCreated(jiraChangelogItem.created)
+            hasDueDate(fieldChangelog.to?.toLocalDate("yyyy-MM-dd"))
+            hasCreated(fieldChangelog.created)
         }
     }
 
     @Test
     fun `extract due date history with many items`() {
-        jiraChangelogItemFactory.create(
+        fieldChangelogFactory.create(
             quantity = 5,
             modifyingFields = mapOf(
-                JiraChangelogItem::field to "other_field"
+                FieldChangelog::field to "other_field"
             )
         )
 
-        val jiraChangelogItems = jiraChangelogItemFactory.create(5)
+        val fieldChangelog = fieldChangelogFactory.create(5).toSet()
 
-        val dueDateHistories = extractDueDateHistory.execute("duedate", jiraChangelogItems)
+        val dueDateHistories = extractDueDateHistory.execute("duedate", fieldChangelog)
 
         assertThat(dueDateHistories)
             .hasSize(5)
-            .isSortedAccordingTo(Comparator.comparing<DueDateHistory, LocalDateTime> {
-                it.created
-            })
+            .isSortedAccordingTo(Comparator.comparing<DueDateHistory, LocalDateTime>(DueDateHistory::created))
     }
 
 }

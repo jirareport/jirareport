@@ -7,7 +7,7 @@ import br.com.jiratorio.domain.entity.ColumnTimeAverage
 import br.com.jiratorio.domain.entity.ImpedimentHistory
 import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.entity.LeadTimeConfig
-import br.com.jiratorio.domain.entity.embedded.Changelog
+import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
@@ -184,67 +184,67 @@ internal class CreateCompleteIssuePeriodIntegrationTest(
                 hasCreated("01/01/2019 12:00".toLocalDateTime())
                 hasPriority("Major")
 
-                hasChangelog(
-                    Changelog(
+                hasColumnChangelog(
+                    ColumnChangelog(
                         from = null,
                         to = "BACKLOG",
-                        created = "03/01/2019 12:00".toLocalDateTime(),
+                        startDate = "03/01/2019 12:00".toLocalDateTime(),
                         leadTime = 2,
                         endDate = "04/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         from = "BACKLOG",
                         to = "ANALYSIS",
-                        created = "04/01/2019 12:00".toLocalDateTime(),
+                        startDate = "04/01/2019 12:00".toLocalDateTime(),
                         leadTime = 2,
                         endDate = "07/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         from = "ANALYSIS",
                         to = "DEV WIP",
-                        created = "07/01/2019 12:00".toLocalDateTime(),
+                        startDate = "07/01/2019 12:00".toLocalDateTime(),
                         leadTime = 5,
                         endDate = "12/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         from = "DEV WIP",
                         to = "DEV DONE",
-                        created = "12/01/2019 12:00".toLocalDateTime(),
+                        startDate = "12/01/2019 12:00".toLocalDateTime(),
                         leadTime = 2,
                         endDate = "15/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         from = "DEV DONE",
                         to = "TEST WIP",
-                        created = "15/01/2019 12:00".toLocalDateTime(),
+                        startDate = "15/01/2019 12:00".toLocalDateTime(),
                         leadTime = 4,
                         endDate = "20/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         from = "TEST WIP",
                         to = "TEST DONE",
-                        created = "20/01/2019 12:00".toLocalDateTime(),
+                        startDate = "20/01/2019 12:00".toLocalDateTime(),
                         leadTime = 4,
                         endDate = "24/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         from = "TEST DONE",
                         to = "REVIEW",
-                        created = "24/01/2019 12:00".toLocalDateTime(),
+                        startDate = "24/01/2019 12:00".toLocalDateTime(),
                         leadTime = 3,
                         endDate = "28/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         from = "REVIEW",
                         to = "ACCOMPANIMENT",
-                        created = "28/01/2019 12:00".toLocalDateTime(),
+                        startDate = "28/01/2019 12:00".toLocalDateTime(),
                         leadTime = 3,
                         endDate = "30/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         from = "ACCOMPANIMENT",
                         to = "DONE",
-                        created = "30/01/2019 12:00".toLocalDateTime(),
+                        startDate = "30/01/2019 12:00".toLocalDateTime(),
                         leadTime = 0,
                         endDate = "30/01/2019 12:00".toLocalDateTime()
                     )

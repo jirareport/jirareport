@@ -37,10 +37,10 @@ data class IssuePeriod(
     @OneToMany
     @OrderBy("key")
     @JoinColumn(name = "issue_period_id", updatable = false)
-    var issues: MutableSet<Issue>,
+    var issues: MutableSet<Issue> = mutableSetOf(),
 
     @Column(nullable = false)
-    var leadTime: Double,
+    var leadTime: Double = 0.0,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -96,16 +96,16 @@ data class IssuePeriod(
     var leadTimeCompareChart: Chart<String, Double>? = null,
 
     @Column(nullable = false)
-    var throughput: Int,
+    var throughput: Int = 0,
 
     @Column(nullable = false)
-    var jql: String,
+    var jql: String = "",
 
     @Column(nullable = false)
-    var wipAvg: Double,
+    var wipAvg: Double = 0.0,
 
     @Column(nullable = false)
-    var avgPctEfficiency: Double,
+    var avgPctEfficiency: Double = 0.0,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")

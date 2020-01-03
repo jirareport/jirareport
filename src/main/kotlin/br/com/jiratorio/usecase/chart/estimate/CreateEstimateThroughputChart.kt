@@ -1,13 +1,13 @@
 package br.com.jiratorio.usecase.chart.estimate
 
 import br.com.jiratorio.config.internationalization.MessageResolver
+import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.mapper.toChart
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Service
 
-@Service
+@UseCase
 class CreateEstimateThroughputChart(
     private val messageResolver: MessageResolver
 ) {

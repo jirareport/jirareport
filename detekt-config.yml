@@ -185,8 +185,6 @@ style:
     active: true
   NoTabs:
     active: true
-  PreferToOverPairSyntax:
-    active: true
   RedundantVisibilityModifierRule:
     active: true
   SafeCast:

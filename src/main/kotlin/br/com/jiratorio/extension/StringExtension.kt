@@ -1,6 +1,7 @@
 package br.com.jiratorio.extension
 
 import java.text.Normalizer
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Base64
@@ -9,11 +10,20 @@ fun String.toBase64(): String =
     Base64.getEncoder().encodeToString(this.toByteArray())
 
 fun String.fromJiraToLocalDateTime(): LocalDateTime =
-    LocalDateTime.parse(this.substring(0, 19), DateTimeFormatter.ISO_DATE_TIME)
+    substring(0, 19).toLocalDateTime()
 
 fun String.stripAccents(): String =
     Normalizer.normalize(this, Normalizer.Form.NFD)
         .replace("[\\p{InCombiningDiacriticalMarks}]".toRegex(), "")
 
 fun String?.isPresent() =
-    !this.isNullOrBlank()
+    !isNullOrBlank()
+
+fun String.toLocalDate(formatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE): LocalDate =
+    LocalDate.parse(this, formatter)
+
+fun String.toLocalDate(pattern: String): LocalDate =
+    LocalDate.parse(this, DateTimeFormatter.ofPattern(pattern))
+
+fun String.toLocalDateTime(formatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME): LocalDateTime =
+    LocalDateTime.parse(this, formatter)

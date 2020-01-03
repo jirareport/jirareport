@@ -15,13 +15,17 @@ class CalculateAverageWip {
     fun execute(start: LocalDate, end: LocalDate, issues: List<Issue>, wipColumns: Set<String>): Double {
         log.info("Action=calculateAverageWip, start={}, end={}, issues={}, wipColumns={}", start, end, issues, wipColumns)
 
-        return (start..end).map { cursor ->
-            issues.count { issue ->
-                issue.changelog.any { cl ->
-                    cursor in cl.dateRange() && cl.to?.toUpperCase() in wipColumns
+        return (start..end)
+            .map { time ->
+                issues.count { issue ->
+                    issue.wasOnAnyWipColumnAtThisTime(wipColumns, time)
                 }
             }
-        }.average().zeroIfNaN()
+            .average()
+            .zeroIfNaN()
     }
+
+    private fun Issue.wasOnAnyWipColumnAtThisTime(wipColumns: Set<String>, time: LocalDate): Boolean =
+        columnChangelog.any { time in it.dateRange && it.to.toUpperCase() in wipColumns }
 
 }

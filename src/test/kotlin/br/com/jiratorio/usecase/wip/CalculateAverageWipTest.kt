@@ -3,7 +3,7 @@ package br.com.jiratorio.usecase.wip
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
-import br.com.jiratorio.domain.entity.embedded.Changelog
+import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions
@@ -49,55 +49,55 @@ internal class CalculateAverageWipTest {
                 id = 1L,
                 key = "JIRAT-1",
                 board = board,
-                changelog = listOf(
-                    Changelog(
+                columnChangelog = setOf(
+                    ColumnChangelog(
                         to = "BACKLOG",
-                        created = "01/01/2019 12:00".toLocalDateTime(),
+                        startDate = "01/01/2019 12:00".toLocalDateTime(),
                         endDate = "09/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "ANALYSIS",
-                        created = "09/01/2019 12:00".toLocalDateTime(),
+                        startDate = "09/01/2019 12:00".toLocalDateTime(),
                         endDate = "15/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "DEV WIP",
-                        created = "15/01/2019 12:00".toLocalDateTime(),
+                        startDate = "15/01/2019 12:00".toLocalDateTime(),
                         endDate = "22/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "DEV DONE",
-                        created = "22/01/2019 12:00".toLocalDateTime(),
+                        startDate = "22/01/2019 12:00".toLocalDateTime(),
                         endDate = "29/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "TEST WIP",
-                        created = "29/01/2019 12:00".toLocalDateTime(),
+                        startDate = "29/01/2019 12:00".toLocalDateTime(),
                         endDate = "07/02/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "TEST DONE",
-                        created = "07/02/2019 12:00".toLocalDateTime(),
+                        startDate = "07/02/2019 12:00".toLocalDateTime(),
                         endDate = "10/02/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "REVIEW",
-                        created = "10/02/2019 12:00".toLocalDateTime(),
+                        startDate = "10/02/2019 12:00".toLocalDateTime(),
                         endDate = "16/02/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "DELIVERY LINE",
-                        created = "16/02/2019 12:00".toLocalDateTime(),
+                        startDate = "16/02/2019 12:00".toLocalDateTime(),
                         endDate = "23/02/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "ACCOMPANIMENT",
-                        created = "23/02/2019 12:00".toLocalDateTime(),
+                        startDate = "23/02/2019 12:00".toLocalDateTime(),
                         endDate = "01/03/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "DONE",
-                        created = "01/03/2019 12:00".toLocalDateTime(),
+                        startDate = "01/03/2019 12:00".toLocalDateTime(),
                         endDate = "01/03/2019 12:00".toLocalDateTime()
                     )
                 ),
@@ -111,55 +111,55 @@ internal class CalculateAverageWipTest {
                 id = 2L,
                 key = "JIRAT-2",
                 board = board,
-                changelog = listOf(
-                    Changelog(
+                columnChangelog = setOf(
+                    ColumnChangelog(
                         to = "BACKLOG",
-                        created = "01/01/2019 12:00".toLocalDateTime(),
+                        startDate = "01/01/2019 12:00".toLocalDateTime(),
                         endDate = "06/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "ANALYSIS",
-                        created = "06/01/2019 12:00".toLocalDateTime(),
+                        startDate = "06/01/2019 12:00".toLocalDateTime(),
                         endDate = "09/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "DEV WIP",
-                        created = "09/01/2019 12:00".toLocalDateTime(),
+                        startDate = "09/01/2019 12:00".toLocalDateTime(),
                         endDate = "18/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "DEV DONE",
-                        created = "18/01/2019 12:00".toLocalDateTime(),
+                        startDate = "18/01/2019 12:00".toLocalDateTime(),
                         endDate = "24/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "TEST WIP",
-                        created = "24/01/2019 12:00".toLocalDateTime(),
+                        startDate = "24/01/2019 12:00".toLocalDateTime(),
                         endDate = "24/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "TEST DONE",
-                        created = "25/01/2019 12:00".toLocalDateTime(),
+                        startDate = "25/01/2019 12:00".toLocalDateTime(),
                         endDate = "26/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "REVIEW",
-                        created = "26/01/2019 12:00".toLocalDateTime(),
+                        startDate = "26/01/2019 12:00".toLocalDateTime(),
                         endDate = "04/02/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "DELIVERY LINE",
-                        created = "04/02/2019 12:00".toLocalDateTime(),
+                        startDate = "04/02/2019 12:00".toLocalDateTime(),
                         endDate = "09/02/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "ACCOMPANIMENT",
-                        created = "09/02/2019 12:00".toLocalDateTime(),
+                        startDate = "09/02/2019 12:00".toLocalDateTime(),
                         endDate = "15/02/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "DONE",
-                        created = "15/02/2019 12:00".toLocalDateTime(),
+                        startDate = "15/02/2019 12:00".toLocalDateTime(),
                         endDate = "15/02/2019 12:00".toLocalDateTime()
                     )
                 ),
@@ -173,55 +173,55 @@ internal class CalculateAverageWipTest {
                 id = 3L,
                 key = "JIRAT-3",
                 board = board,
-                changelog = listOf(
-                    Changelog(
+                columnChangelog = setOf(
+                    ColumnChangelog(
                         to = "BACKLOG",
-                        created = "01/01/2019 12:00".toLocalDateTime(),
+                        startDate = "01/01/2019 12:00".toLocalDateTime(),
                         endDate = "08/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "ANALYSIS",
-                        created = "08/01/2019 12:00".toLocalDateTime(),
+                        startDate = "08/01/2019 12:00".toLocalDateTime(),
                         endDate = "13/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "DEV WIP",
-                        created = "13/01/2019 12:00".toLocalDateTime(),
+                        startDate = "13/01/2019 12:00".toLocalDateTime(),
                         endDate = "20/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "DEV DONE",
-                        created = "20/01/2019 12:00".toLocalDateTime(),
+                        startDate = "20/01/2019 12:00".toLocalDateTime(),
                         endDate = "24/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "TEST WIP",
-                        created = "24/01/2019 12:00".toLocalDateTime(),
+                        startDate = "24/01/2019 12:00".toLocalDateTime(),
                         endDate = "31/01/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "TEST DONE",
-                        created = "31/01/2019 12:00".toLocalDateTime(),
+                        startDate = "31/01/2019 12:00".toLocalDateTime(),
                         endDate = "08/02/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "REVIEW",
-                        created = "08/02/2019 12:00".toLocalDateTime(),
+                        startDate = "08/02/2019 12:00".toLocalDateTime(),
                         endDate = "11/02/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "DELIVERY LINE",
-                        created = "11/02/2019 12:00".toLocalDateTime(),
+                        startDate = "11/02/2019 12:00".toLocalDateTime(),
                         endDate = "16/02/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "ACCOMPANIMENT",
-                        created = "16/02/2019 12:00".toLocalDateTime(),
+                        startDate = "16/02/2019 12:00".toLocalDateTime(),
                         endDate = "23/02/2019 12:00".toLocalDateTime()
                     ),
-                    Changelog(
+                    ColumnChangelog(
                         to = "DONE",
-                        created = "23/02/2019 12:00".toLocalDateTime(),
+                        startDate = "23/02/2019 12:00".toLocalDateTime(),
                         endDate = "23/02/2019 12:00".toLocalDateTime()
                     )
                 ),

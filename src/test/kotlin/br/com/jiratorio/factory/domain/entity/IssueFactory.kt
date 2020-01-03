@@ -4,8 +4,8 @@ import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.extension.faker.jira
 import br.com.jiratorio.extension.toLocalDateTime
 import br.com.jiratorio.factory.KBacon
-import br.com.jiratorio.factory.domain.ChangelogFactory
-import br.com.jiratorio.repository.IssueRepository
+import br.com.jiratorio.factory.domain.ColumnChangelogFactory
+import br.com.jiratorio.usecase.issue.create.PersistIssue
 import com.github.javafaker.Faker
 import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
@@ -14,10 +14,12 @@ import java.util.concurrent.TimeUnit
 class IssueFactory(
     private val faker: Faker,
     private val boardFactory: BoardFactory,
-    private val changelogFactory: ChangelogFactory,
+    private val columnChangelogFactory: ColumnChangelogFactory,
     private val issuePeriodFactory: IssuePeriodFactory,
-    issueRepository: IssueRepository?
-) : KBacon<Issue>(issueRepository) {
+    private val persistIssue: PersistIssue?
+) : KBacon<Issue>(
+    shouldPersist = persistIssue != null
+) {
 
     override fun builder(): Issue {
         return Issue(
@@ -34,7 +36,7 @@ class IssueFactory(
             leadTime = faker.jira().issueLeadTime(),
             created = faker.date().past(40, TimeUnit.DAYS).toLocalDateTime(),
             priority = faker.jira().priority(),
-            changelog = changelogFactory.create(20),
+            columnChangelog = columnChangelogFactory.create(20).toSet(),
             board = boardFactory.create(),
             waitTime = faker.number().randomNumber(),
             touchTime = faker.number().randomNumber(),
@@ -45,6 +47,10 @@ class IssueFactory(
             ),
             issuePeriodId = issuePeriodFactory.create().id
         )
+    }
+
+    override fun persist(entity: Issue) {
+        persistIssue?.execute(entity)
     }
 
 }

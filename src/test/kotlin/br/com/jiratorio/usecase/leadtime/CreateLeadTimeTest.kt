@@ -2,17 +2,15 @@ package br.com.jiratorio.usecase.leadtime
 
 import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.entity.LeadTimeConfig
-import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
-import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import br.com.jiratorio.repository.LeadTimeRepository
-import br.com.jiratorio.usecase.holiday.FindHolidayDays
 import io.mockk.called
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -32,17 +30,11 @@ internal class CreateLeadTimeTest {
 
     private val leadTimeConfigRepository = mockk<LeadTimeConfigRepository>()
 
-    private val findHolidayDays = mockk<FindHolidayDays>()
-
     private val leadTimeRepository = mockk<LeadTimeRepository>()
-
-    private val boardRepository = mockk<BoardRepository>()
 
     private val createLeadTime = CreateLeadTime(
         leadTimeConfigRepository,
-        leadTimeRepository,
-        boardRepository,
-        findHolidayDays
+        leadTimeRepository
     )
 
     @AfterEach
@@ -56,43 +48,15 @@ internal class CreateLeadTimeTest {
             leadTimeConfigRepository.findByBoardId(1L)
         } returns emptyList()
 
-        createLeadTime.execute(emptyList(), 1L)
-
-        verifyAll {
-            leadTimeConfigRepository.findByBoardId(1L)
-            findHolidayDays wasNot called
-            leadTimeRepository wasNot called
-            boardRepository wasNot called
-        }
-    }
-
-    @Test
-    fun `test create lead times with empty issue list`() {
         val board = defaultBoard()
+        val issue = defaultIssue(board)
+        val holidays = commonHolidays()
 
-        every {
-            boardRepository.findByIdOrNull(1L)
-        } returns board
-
-        every {
-            leadTimeConfigRepository.findByBoardId(1L)
-        } returns defaultLeadTimes(board)
-
-        every {
-            findHolidayDays.execute(1L)
-        } returns commonHolidays()
-
-        createLeadTime.execute(emptyList(), 1L)
+        createLeadTime.execute(issue, board, holidays)
 
         verifyAll {
-            boardRepository.findByIdOrNull(1L)
             leadTimeConfigRepository.findByBoardId(1L)
-            findHolidayDays.execute(1L)
-        }
-
-        verifyAll(inverse = true) {
-            leadTimeRepository.deleteByIssueId(any())
-            leadTimeRepository.save(any<LeadTime>())
+            leadTimeRepository wasNot called
         }
     }
 
@@ -101,16 +65,8 @@ internal class CreateLeadTimeTest {
         val board = defaultBoard()
 
         every {
-            boardRepository.findByIdOrNull(1L)
-        } returns board
-
-        every {
             leadTimeConfigRepository.findByBoardId(1L)
         } returns defaultLeadTimes(board)
-
-        every {
-            findHolidayDays.execute(1L)
-        } returns commonHolidays()
 
         every {
             leadTimeRepository.deleteByIssueId(any())
@@ -120,35 +76,14 @@ internal class CreateLeadTimeTest {
             leadTimeRepository.save(any<LeadTime>())
         } answers { firstArg() }
 
-        val issue = Issue(
-            id = 1L,
-            key = "JIRAT-1",
-            board = board,
-            changelog = listOf(
-                Changelog(from = null, to = "BACKLOG", created = "01/01/2019 12:00".toLocalDateTime()),
-                Changelog(from = "BACKLOG", to = "ANALYSIS", created = "10/01/2019 12:00".toLocalDateTime()),
-                Changelog(from = "ANALYSIS", to = "DEV WIP", created = "12/01/2019 12:00".toLocalDateTime()),
-                Changelog(from = "DEV WIP", to = "DEV DONE", created = "21/01/2019 12:00".toLocalDateTime()),
-                Changelog(from = "DEV DONE", to = "TEST WIP", created = "23/01/2019 12:00".toLocalDateTime()),
-                Changelog(from = "TEST WIP", to = "TEST DONE", created = "31/01/2019 12:00".toLocalDateTime()),
-                Changelog(from = "TEST DONE", to = "REVIEW", created = "01/02/2019 12:00".toLocalDateTime()),
-                Changelog(from = "REVIEW", to = "DELIVERY LINE", created = "02/02/2019 12:00".toLocalDateTime()),
-                Changelog(from = "DELIVERY LINE", to = "ACCOMPANIMENT", created = "06/02/2019 12:00".toLocalDateTime()),
-                Changelog(from = "ACCOMPANIMENT", to = "DONE", created = "12/02/2019 12:00".toLocalDateTime())
-            ),
-            created = "01/01/2019 12:00".toLocalDateTime(),
-            startDate = "12/01/2019 12:00".toLocalDateTime(),
-            endDate = "12/02/2019 12:00".toLocalDateTime(),
-            leadTime = 7L,
-            summary = "JIRAT-1 summary"
-        )
+        val issue = defaultIssue(board)
 
-        createLeadTime.execute(listOf(issue), 1L)
+        val holidays = commonHolidays()
+
+        createLeadTime.execute(issue, board, holidays)
 
         verifyAll {
-            boardRepository.findByIdOrNull(1L)
             leadTimeConfigRepository.findByBoardId(1L)
-            findHolidayDays.execute(1L)
 
             leadTimeRepository.deleteByIssueId(1L)
             leadTimeRepository.save(any<LeadTime>())
@@ -183,6 +118,71 @@ internal class CreateLeadTimeTest {
             hasStartDate("02/02/2019 12:00".toLocalDateTime())
             hasEndDate("12/02/2019 12:00".toLocalDateTime())
         } ?: Assertions.fail("Delivery Lead Time not found")
+    }
+
+    private fun defaultIssue(board: Board): Issue {
+        return Issue(
+            id = 1L,
+            key = "JIRAT-1",
+            board = board,
+            columnChangelog = setOf(
+                ColumnChangelog(
+                    from = null,
+                    to = "BACKLOG",
+                    startDate = "01/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "BACKLOG",
+                    to = "ANALYSIS",
+                    startDate = "10/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "ANALYSIS",
+                    to = "DEV WIP",
+                    startDate = "12/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "DEV WIP",
+                    to = "DEV DONE",
+                    startDate = "21/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "DEV DONE",
+                    to = "TEST WIP",
+                    startDate = "23/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "TEST WIP",
+                    to = "TEST DONE",
+                    startDate = "31/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "TEST DONE",
+                    to = "REVIEW",
+                    startDate = "01/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "REVIEW",
+                    to = "DELIVERY LINE",
+                    startDate = "02/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "DELIVERY LINE",
+                    to = "ACCOMPANIMENT",
+                    startDate = "06/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "ACCOMPANIMENT",
+                    to = "DONE",
+                    startDate = "12/02/2019 12:00".toLocalDateTime()
+                )
+            ),
+            created = "01/01/2019 12:00".toLocalDateTime(),
+            startDate = "12/01/2019 12:00".toLocalDateTime(),
+            endDate = "12/02/2019 12:00".toLocalDateTime(),
+            leadTime = 7L,
+            summary = "JIRAT-1 summary"
+        )
     }
 
     private fun defaultLeadTimes(board: Board): List<LeadTimeConfig> {

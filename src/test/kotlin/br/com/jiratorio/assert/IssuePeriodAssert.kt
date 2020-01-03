@@ -142,13 +142,11 @@ class IssuePeriodAssert(
     }
 
     fun containsColumnTimeAvg(vararg args: ColumnTimeAverage) = assertAll {
-        val list = args.toList()
-
         iterables.assertAllMatch(
             field("issuePeriod.columnTimeAvg"),
             actual.columnTimeAverages,
             { columnTimeAverage ->
-                list.any { other ->
+                args.any { other ->
                     columnTimeAverage.equalsComparing(
                         other,
                         ColumnTimeAverage::columnName,
