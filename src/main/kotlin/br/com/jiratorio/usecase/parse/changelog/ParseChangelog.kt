@@ -1,16 +1,16 @@
 package br.com.jiratorio.usecase.parse.changelog
 
+import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.domain.jira.JiraChangelog
 import br.com.jiratorio.domain.parsed.ParsedChangelog
 import br.com.jiratorio.extension.extractValue
 import com.fasterxml.jackson.databind.JsonNode
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@Service
+@UseCase
 class ParseChangelog(
     private val parseFieldChangelog: ParseFieldChangelog,
     private val parseColumnChangelog: ParseColumnChangelog
@@ -54,6 +54,5 @@ class ParseChangelog(
                         )
                     }
             }
-
 
 }

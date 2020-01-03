@@ -1,5 +1,6 @@
 package br.com.jiratorio.usecase.issue.period
 
+import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
@@ -14,10 +15,9 @@ import br.com.jiratorio.usecase.columntimeaverage.CreateColumnTimeAverages
 import br.com.jiratorio.usecase.issue.create.CreateIssues
 import br.com.jiratorio.usecase.wip.CalculateAverageWip
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-@Service
+@UseCase
 class CreateIssuePeriod(
     private val issuePeriodRepository: IssuePeriodRepository,
     private val boardRepository: BoardRepository,

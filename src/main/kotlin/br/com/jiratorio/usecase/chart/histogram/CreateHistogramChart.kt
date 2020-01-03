@@ -1,13 +1,13 @@
 package br.com.jiratorio.usecase.chart.histogram
 
+import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.entity.embedded.Histogram
 import br.com.jiratorio.usecase.percentile.CalculatePercentile
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Service
 
-@Service
+@UseCase
 class CreateHistogramChart(
     private val calculatePercentile: CalculatePercentile
 ) {

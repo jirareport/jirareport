@@ -93,7 +93,6 @@ class ParseIssue(
             it.name to fields.path(it.field).extractValue()
         }?.toMap()
 
-
         var issueType: String? = null
         if (fields.hasNonNull("issuetype") && fields.path("issuetype").isObject) {
             issueType = fields.path("issuetype").extractValue()
