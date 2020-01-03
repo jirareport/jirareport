@@ -2,25 +2,20 @@ package br.com.jiratorio.usecase.duedate
 
 import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.config.junit.testtype.UnitTest
-import br.com.jiratorio.context.UnitTestContext
 import br.com.jiratorio.domain.FieldChangelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.domain.FieldChangelogFactory
+import com.github.javafaker.Faker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.LocalDateTime
 import java.util.Comparator
 
 @UnitTest
-@ExtendWith(SpringExtension::class)
-@ContextConfiguration(classes = [UnitTestContext::class])
-internal class CreateDueDateHistoryTest(
-    private val fieldChangelogFactory: FieldChangelogFactory
-) {
+internal class CreateDueDateHistoryTest {
+
+    private val fieldChangelogFactory = FieldChangelogFactory(Faker())
 
     private val extractDueDateHistory = CreateDueDateHistory()
 

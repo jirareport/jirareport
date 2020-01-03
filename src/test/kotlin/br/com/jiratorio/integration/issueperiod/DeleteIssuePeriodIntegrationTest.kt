@@ -2,17 +2,15 @@ package br.com.jiratorio.integration.issueperiod
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.config.junit.testtype.IntegrationTest
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
 import br.com.jiratorio.repository.IssuePeriodRepository
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 import javax.servlet.http.HttpServletResponse.SC_NO_CONTENT
 
-@Tag("integration")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@IntegrationTest
 internal class DeleteIssuePeriodIntegrationTest(
     private val authenticator: Authenticator,
     private val issuePeriodFactory: IssuePeriodFactory,

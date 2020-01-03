@@ -2,6 +2,7 @@ package br.com.jiratorio.integration.board
 
 import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
+import br.com.jiratorio.config.junit.testtype.IntegrationTest
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.CreateBoardRequestFactory
@@ -10,12 +11,9 @@ import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsString
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 
-@Tag("integration")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@IntegrationTest
 internal class CreateBoardIntegrationTest(
     private val boardRepository: BoardRepository,
     private val createBoardRequestFactory: CreateBoardRequestFactory,

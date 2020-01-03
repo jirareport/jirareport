@@ -2,6 +2,7 @@ package br.com.jiratorio.integration.holiday
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.config.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.entity.Holiday
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.domain.entity.BoardFactory
@@ -11,13 +12,10 @@ import org.apache.http.HttpStatus
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.hamcrest.Matchers.notNullValue
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 import java.time.format.DateTimeFormatter
 
-@Tag("integration")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@IntegrationTest
 internal class SearchHolidayIntegrationTest(
     private val holidayFactory: HolidayFactory,
     private val boardFactory: BoardFactory,

@@ -2,6 +2,7 @@ package br.com.jiratorio.integration.board
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.config.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.domain.entity.BoardFactory
@@ -12,12 +13,9 @@ import org.hamcrest.Matchers.emptyOrNullString
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.hamcrest.Matchers.not
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 
-@Tag("integration")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@IntegrationTest
 internal class SearchBoardIntegrationTest(
     private val boardFactory: BoardFactory,
     private val authenticator: Authenticator

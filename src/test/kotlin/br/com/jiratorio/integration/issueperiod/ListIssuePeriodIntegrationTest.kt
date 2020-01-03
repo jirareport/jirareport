@@ -3,6 +3,7 @@ package br.com.jiratorio.integration.issueperiod
 import br.com.jiratorio.assert.response.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.config.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodListResponse
 import br.com.jiratorio.dsl.extractAs
@@ -13,12 +14,9 @@ import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
 import org.apache.http.HttpStatus.SC_OK
 import org.assertj.core.api.Assertions
 import org.hamcrest.Matchers
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 
-@Tag("integration")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@IntegrationTest
 internal class ListIssuePeriodIntegrationTest(
     private val authenticator: Authenticator,
     private val boardFactory: BoardFactory,
