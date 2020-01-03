@@ -11,10 +11,10 @@ import java.time.LocalDateTime
 @Tag("unit")
 internal class ParseColumnChangelogTest {
 
-    private val parseChangelog = ParseColumnChangelog()
+    private val parseColumnChangelog = ParseColumnChangelog()
 
     @Test
-    fun `parse changelog`() {
+    fun `parse column changelog`() {
         val jiraChangelog = listOf(
             JiraChangelog(
                 field = "issueType",
@@ -57,7 +57,7 @@ internal class ParseColumnChangelogTest {
         )
 
         val issueCreationDate = "01/01/2019".toLocalDateTime()
-        Assertions.assertThat(parseChangelog.execute(jiraChangelog, issueCreationDate, emptyList(), true))
+        Assertions.assertThat(parseColumnChangelog.execute(jiraChangelog, issueCreationDate, emptyList(), true))
             .contains(
                 ColumnChangelog(
                     from = null,

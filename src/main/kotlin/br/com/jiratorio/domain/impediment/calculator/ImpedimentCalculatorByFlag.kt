@@ -19,7 +19,7 @@ object ImpedimentCalculatorByFlag : ImpedimentCalculator {
         ignoreWeekend: Boolean?
     ): ImpedimentCalculatorResult {
         log.info(
-            "Method=calcImpediment, impedimentColumns={}, changelog={}, endDate={}, holidays={}, ignoreWeekend={}",
+            "Method=calcImpediment, impedimentColumns={}, parsedChangelog={}, endDate={}, holidays={}, ignoreWeekend={}",
             impedimentColumns, parsedChangelog, endDate, holidays, ignoreWeekend
         )
 

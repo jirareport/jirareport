@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
 
 @Component
-class ChangelogFactory(
+class ColumnChangelogFactory(
     private val faker: Faker
 ) : KBacon<ColumnChangelog>() {
 

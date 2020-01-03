@@ -115,7 +115,7 @@ class ParseEstimateIssue(
             estimate = fields.path(board.estimateCF).extractValue(),
             project = fields.path(board.projectCF).extractValue(),
             summary = fields.path("summary").extractValueNotNull(),
-            changelog = parsedChangelog.columnChangelog,
+            columnChangelog = parsedChangelog.columnChangelog,
             priority = priority,
             impedimentTime = impedimentCalculatorResult.timeInImpediment,
             impedimentHistory = impedimentCalculatorResult.impedimentHistory

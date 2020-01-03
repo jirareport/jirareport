@@ -126,7 +126,7 @@ internal class CreateBasicIssuePeriodIntegrationTest(
             hasCreated("25/12/2018 11:49:35".toLocalDateTime())
             hasPriority("Major")
 
-            hasChangelog(
+            hasColumnChangelog(
                 ColumnChangelog(
                     from = null,
                     to = "BACKLOG",

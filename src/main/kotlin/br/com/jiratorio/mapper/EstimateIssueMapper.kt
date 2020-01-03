@@ -21,7 +21,7 @@ fun EstimatedIssue.toEstimateIssueResponse(jiraUrl: String): EstimateIssueRespon
         project = project,
         epic = epic,
         priority = priority,
-        changelog = changelog.toChangelogResponse(),
+        changelog = columnChangelog.toChangelogResponse(),
         impedimentTime = impedimentTime,
         impedimentHistory = impedimentHistory.toImpedimentHistoryResponse(),
         detailsUrl = "$jiraUrl/browse/$key"

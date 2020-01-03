@@ -33,7 +33,7 @@ internal class CalculateEfficiencyTest {
     }
 
     @Test
-    fun `test calc efficiency with empty changelog`() {
+    fun `test calc efficiency with empty column changelog`() {
         val touchingColumns = mutableListOf("COLUMN_WIP_1", "COLUMN_WIP_2", "COLUMN_WIP_3")
         val waitingColumns = mutableListOf("COLUMN_WAIT_1", "COLUMN_WAIT_2", "COLUMN_WAIT_3")
 

@@ -22,8 +22,8 @@ class IssueDetailResponseAssert(
         objects.assertEqual(field("issueDetailResponse.key"), actual.key, key)
     }
 
-    fun hasChangelogSize(changelog: Set<ColumnChangelog>) = assertAll {
-        iterables.assertHasSameSizeAs(field("issueDetailResponse.changelog"), actual.changelog, changelog)
+    fun hasChangelogSize(columnChangelog: Set<ColumnChangelog>) = assertAll {
+        iterables.assertHasSameSizeAs(field("issueDetailResponse.changelog"), actual.changelog, columnChangelog)
     }
 
     fun hasDueDateHistorySize(dueDateHistory: List<DueDateHistory>?) = assertAll {

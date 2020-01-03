@@ -9,12 +9,18 @@ class ParseFieldChangelog {
 
     fun execute(jiraChangelog: List<JiraChangelog>): Set<FieldChangelog> =
         jiraChangelog
-            .mapNotNull {
-                if (it.field == null)
-                    null
-                else
-                    FieldChangelog(from = it.from, to = it.to, field = it.field, created = it.created)
-            }
+            .mapNotNull(this::toFieldChangelog)
             .toSet()
+
+    private fun toFieldChangelog(it: JiraChangelog): FieldChangelog? =
+        if (it.field == null || it.field == "status")
+            null
+        else
+            FieldChangelog(
+                from = it.from,
+                to = it.to,
+                field = it.field,
+                created = it.created
+            )
 
 }

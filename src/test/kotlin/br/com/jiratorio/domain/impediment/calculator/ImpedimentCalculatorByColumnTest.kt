@@ -13,7 +13,7 @@ internal class ImpedimentCalculatorByColumnTest {
 
     @Test
     fun `time in impediment`() {
-        val changelog = listOf(
+        val columnChangelog = listOf(
             ColumnChangelog(
                 to = "COLUMN_ONE",
                 leadTime = 1,
@@ -54,7 +54,7 @@ internal class ImpedimentCalculatorByColumnTest {
 
         val impedimentCalculatorResult = ImpedimentCalculatorByColumn.calcImpediment(
             columns,
-            ParsedChangelog(columnChangelog = changelog.toSet()),
+            ParsedChangelog(columnChangelog = columnChangelog.toSet()),
             LocalDateTime.now(),
             emptyList(),
             true
@@ -66,19 +66,19 @@ internal class ImpedimentCalculatorByColumnTest {
             .hasSize(3)
             .containsExactly(
                 ImpedimentHistory(
-                    startDate = changelog[1].startDate,
-                    endDate = changelog[1].endDate,
-                    leadTime = changelog[1].leadTime
+                    startDate = columnChangelog[1].startDate,
+                    endDate = columnChangelog[1].endDate,
+                    leadTime = columnChangelog[1].leadTime
                 ),
                 ImpedimentHistory(
-                    startDate = changelog[3].startDate,
-                    endDate = changelog[3].endDate,
-                    leadTime = changelog[3].leadTime
+                    startDate = columnChangelog[3].startDate,
+                    endDate = columnChangelog[3].endDate,
+                    leadTime = columnChangelog[3].leadTime
                 ),
                 ImpedimentHistory(
-                    startDate = changelog[5].startDate,
-                    endDate = changelog[5].endDate,
-                    leadTime = changelog[5].leadTime
+                    startDate = columnChangelog[5].startDate,
+                    endDate = columnChangelog[5].endDate,
+                    leadTime = columnChangelog[5].leadTime
                 )
             )
     }

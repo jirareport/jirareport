@@ -66,8 +66,8 @@ class IssueAssert(
         objects.assertEqual(field("issue.priority"), actual.priority, priority)
     }
 
-    fun hasChangelog(vararg changelog: ColumnChangelog) = assertAll {
-        iterables.assertContains(field("issue.changelog"), actual.columnChangelog, changelog)
+    fun hasColumnChangelog(vararg columnChangelog: ColumnChangelog) = assertAll {
+        iterables.assertContains(field("issue.columnChangelog"), actual.columnChangelog, columnChangelog)
     }
 
     fun hasDeviationOfEstimate(deviationOfEstimate: Long) = assertAll {

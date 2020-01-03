@@ -101,7 +101,7 @@ internal class FluxColumnTest {
                 endLeadTimeColumn = "ACCOMPANIMENT"
             )
 
-            val changelog = setOf(
+            val columnChangelog = setOf(
                 ColumnChangelog(
                     to = "ANALYSIS",
                     startDate = "01/01/2019 12:00".toLocalDateTime()
@@ -143,7 +143,7 @@ internal class FluxColumnTest {
             val (
                 startDate,
                 endDate
-            ) = fluxColumn.calcStartAndEndDate(changelog, LocalDateTime.now())
+            ) = fluxColumn.calcStartAndEndDate(columnChangelog, LocalDateTime.now())
 
             assertThat(startDate)
                 .isEqualTo("09/01/2019 12:00".toLocalDateTime())
@@ -156,7 +156,7 @@ internal class FluxColumnTest {
         fun `test calc start and end date with backlog`() {
             val fluxColumn = createDefaultFluxColumn(startLeadTimeColumn = "BACKLOG")
 
-            val changelog = setOf(
+            val columnChangelog = setOf(
                 ColumnChangelog(
                     to = "ANALYSIS",
                     startDate = "05/01/2019 12:00".toLocalDateTime()
@@ -200,7 +200,7 @@ internal class FluxColumnTest {
             val (
                 startDate,
                 endDate
-            ) = fluxColumn.calcStartAndEndDate(changelog, created)
+            ) = fluxColumn.calcStartAndEndDate(columnChangelog, created)
 
             assertThat(startDate)
                 .isEqualTo(created)
@@ -210,10 +210,10 @@ internal class FluxColumnTest {
         }
 
         @Test
-        fun `test calc start and end date with not found events in changelog`() {
+        fun `test calc start and end date with not found events in column changelog`() {
             val fluxColumn = createDefaultFluxColumn(endLeadTimeColumn = "ACCOMPANIMENT")
 
-            val changelog = setOf(
+            val columnChangelog = setOf(
                 ColumnChangelog(
                     to = "TODO",
                     startDate = "01/01/2019 12:00".toLocalDateTime()
@@ -231,7 +231,7 @@ internal class FluxColumnTest {
             val (
                 startDate,
                 endDate
-            ) = fluxColumn.calcStartAndEndDate(changelog, LocalDateTime.now())
+            ) = fluxColumn.calcStartAndEndDate(columnChangelog, LocalDateTime.now())
 
             assertThat(startDate)
                 .isNull()
@@ -250,7 +250,7 @@ internal class FluxColumnTest {
                 useLastOccurrenceWhenCalculateLeadTime = true
             )
 
-            val changelog = setOf(
+            val columnChangelog = setOf(
                 ColumnChangelog(
                     to = "ANALYSIS",
                     startDate = "05/01/2019 12:00".toLocalDateTime()
@@ -302,7 +302,7 @@ internal class FluxColumnTest {
             val (
                 startDate,
                 endDate
-            ) = fluxColumn.calcStartAndEndDate(changelog, created)
+            ) = fluxColumn.calcStartAndEndDate(columnChangelog, created)
 
             assertThat(startDate)
                 .isEqualTo("10/01/2019 12:00".toLocalDateTime())
@@ -318,7 +318,7 @@ internal class FluxColumnTest {
                 useLastOccurrenceWhenCalculateLeadTime = true
             )
 
-            val changelog = setOf(
+            val columnChangelog = setOf(
                 ColumnChangelog(
                     to = "ANALYSIS",
                     startDate = "05/01/2019 12:00".toLocalDateTime()
@@ -370,7 +370,7 @@ internal class FluxColumnTest {
             val (
                 startDate,
                 endDate
-            ) = fluxColumn.calcStartAndEndDate(changelog, created)
+            ) = fluxColumn.calcStartAndEndDate(columnChangelog, created)
 
             assertThat(startDate)
                 .isEqualTo("06/01/2019 12:00".toLocalDateTime())

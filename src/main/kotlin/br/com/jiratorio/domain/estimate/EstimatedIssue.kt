@@ -37,7 +37,7 @@ data class EstimatedIssue(
 
     val priority: String? = null,
 
-    val changelog: Set<ColumnChangelog>,
+    val columnChangelog: Set<ColumnChangelog>,
 
     val impedimentTime: Long,
 
