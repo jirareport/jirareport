@@ -49,17 +49,21 @@ class CreateIssuePeriod(
 
         val (jql, issues) = createIssues.execute(board, issuePeriod.id, startDate, endDate)
 
-        val fluxColumn = FluxColumn(board)
+        issuePeriod.jql = jql
         issuePeriod.issues = issues.toMutableSet()
         issuePeriod.leadTime = issues.map(Issue::leadTime).average().zeroIfNaN()
         issuePeriod.throughput = issues.size
-        issuePeriod.jql = jql
-        issuePeriod.wipAvg = calculateAverageWip.execute(startDate, endDate, issues, fluxColumn.wipColumns)
         issuePeriod.avgPctEfficiency = issues.map(Issue::pctEfficiency).average().zeroIfNaN()
+        issuePeriod.wipAvg = calculateAverageWip.execute(
+            startDate,
+            endDate,
+            issues,
+            FluxColumn(board).wipColumns
+        )
 
         createColumnTimeAverages.execute(issuePeriod, board.fluxColumn ?: emptyList())
 
-        createCharts(issues, board, issuePeriod)
+        createCharts(issuePeriod, board)
 
         issuePeriodRepository.save(issuePeriod)
 
@@ -67,11 +71,13 @@ class CreateIssuePeriod(
     }
 
     private fun createCharts(
-        issues: List<Issue>,
-        board: Board,
-        issuePeriod: IssuePeriod
+        issuePeriod: IssuePeriod,
+        board: Board
     ) {
-        val chartAggregator = createChartAggregator.execute(issues, board)
+        val chartAggregator = createChartAggregator.execute(
+            issuePeriod.issues.toList(),
+            board
+        )
 
         issuePeriod.apply {
             histogram = chartAggregator.histogram

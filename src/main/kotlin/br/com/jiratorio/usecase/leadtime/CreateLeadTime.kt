@@ -6,12 +6,9 @@ import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.entity.LeadTimeConfig
-import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.time.daysDiff
-import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import br.com.jiratorio.repository.LeadTimeRepository
-import br.com.jiratorio.usecase.holiday.FindHolidayDays
 import org.slf4j.LoggerFactory
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -19,44 +16,34 @@ import java.time.LocalDate
 @UseCase
 class CreateLeadTime(
     private val leadTimeConfigRepository: LeadTimeConfigRepository,
-    private val leadTimeRepository: LeadTimeRepository,
-    private val boardRepository: BoardRepository,
-    private val findHolidayDays: FindHolidayDays
+    private val leadTimeRepository: LeadTimeRepository
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional
-    fun execute(issues: List<Issue>, boardId: Long) {
-        log.info("Action=createLeadTime, issues={}, boardId={}", issues, boardId)
+    fun execute(issue: Issue, board: Board, holidays: List<LocalDate>) {
+        log.info("Action=createLeadTime, issue={}, board={}", issue, board)
 
-        val leadTimeConfigs = leadTimeConfigRepository.findByBoardId(boardId)
+        val leadTimeConfigs = leadTimeConfigRepository.findByBoardId(board.id)
 
         if (leadTimeConfigs.isEmpty()) {
             return
         }
 
-        val holidays = findHolidayDays.execute(boardId)
-        val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
-
-        issues.forEach { issue ->
-            leadTimeRepository.deleteByIssueId(issue.id)
-            issue.leadTimes = leadTimeConfigs.mapNotNull { leadTimeConfig ->
-                calcLeadTime(leadTimeConfig, issue, holidays, board)
-            }.toMutableSet()
-        }
+        leadTimeRepository.deleteByIssueId(issue.id)
+        issue.leadTimes = leadTimeConfigs.mapNotNull { leadTimeConfig ->
+            calcLeadTime(leadTimeConfig, issue, board, holidays)
+        }.toMutableSet()
     }
 
     private fun calcLeadTime(
         leadTimeConfig: LeadTimeConfig,
         issue: Issue,
-        holidays: List<LocalDate>,
-        board: Board
+        board: Board,
+        holidays: List<LocalDate>
     ): LeadTime? {
-        log.info(
-            "Method=calcLeadTime, leadTimeConfig={}, issue={}, holidays={}, board={}",
-            leadTimeConfig, issue, holidays, board
-        )
+        log.info("Method=calcLeadTime, leadTimeConfig={}, issue={}, board={},  holidays={}", leadTimeConfig, issue, board, holidays)
 
         val fluxColumn = FluxColumn(
             startLeadTimeColumn = leadTimeConfig.startColumn,

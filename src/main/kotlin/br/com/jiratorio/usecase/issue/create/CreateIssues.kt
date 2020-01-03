@@ -35,16 +35,16 @@ class CreateIssues(
 
         val (jql, parsedIssues) = findAllOpenIssues.execute(board, holidays, startDate, endDate)
 
-        val issues = parsedIssues
-            .map { parsedIssue -> toIssue(parsedIssue, issuePeriodId, board, holidays) }
-            .map { issue -> persistIssue.execute(issue) }
-
-        createLeadTime.execute(issues, board.id)
+        val issues = parsedIssues.asSequence()
+            .map { parsedIssue -> createIssue(parsedIssue, issuePeriodId, board, holidays) }
+            .onEach { issue -> persistIssue.execute(issue) }
+            .onEach { issue -> createLeadTime.execute(issue, board, holidays) }
+            .toList()
 
         return Pair(jql, issues)
     }
 
-    private fun toIssue(parsedIssue: ParsedIssue, issuePeriodId: Long, board: Board, holidays: List<LocalDate>): Issue {
+    private fun createIssue(parsedIssue: ParsedIssue, issuePeriodId: Long, board: Board, holidays: List<LocalDate>): Issue {
         val parsedChangelog = parsedIssue.parsedChangelog
 
         val leadTime = parsedIssue.startDate.daysDiff(

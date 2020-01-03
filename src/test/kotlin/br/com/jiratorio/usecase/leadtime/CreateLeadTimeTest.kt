@@ -2,17 +2,15 @@ package br.com.jiratorio.usecase.leadtime
 
 import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.entity.LeadTimeConfig
-import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
-import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import br.com.jiratorio.repository.LeadTimeRepository
-import br.com.jiratorio.usecase.holiday.FindHolidayDays
 import io.mockk.called
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -32,17 +30,11 @@ internal class CreateLeadTimeTest {
 
     private val leadTimeConfigRepository = mockk<LeadTimeConfigRepository>()
 
-    private val findHolidayDays = mockk<FindHolidayDays>()
-
     private val leadTimeRepository = mockk<LeadTimeRepository>()
-
-    private val boardRepository = mockk<BoardRepository>()
 
     private val createLeadTime = CreateLeadTime(
         leadTimeConfigRepository,
-        leadTimeRepository,
-        boardRepository,
-        findHolidayDays
+        leadTimeRepository
     )
 
     @AfterEach
@@ -56,43 +48,15 @@ internal class CreateLeadTimeTest {
             leadTimeConfigRepository.findByBoardId(1L)
         } returns emptyList()
 
-        createLeadTime.execute(emptyList(), 1L)
-
-        verifyAll {
-            leadTimeConfigRepository.findByBoardId(1L)
-            findHolidayDays wasNot called
-            leadTimeRepository wasNot called
-            boardRepository wasNot called
-        }
-    }
-
-    @Test
-    fun `test create lead times with empty issue list`() {
         val board = defaultBoard()
+        val issue = defaultIssue(board)
+        val holidays = commonHolidays()
 
-        every {
-            boardRepository.findByIdOrNull(1L)
-        } returns board
-
-        every {
-            leadTimeConfigRepository.findByBoardId(1L)
-        } returns defaultLeadTimes(board)
-
-        every {
-            findHolidayDays.execute(1L)
-        } returns commonHolidays()
-
-        createLeadTime.execute(emptyList(), 1L)
+        createLeadTime.execute(issue, board, holidays)
 
         verifyAll {
-            boardRepository.findByIdOrNull(1L)
             leadTimeConfigRepository.findByBoardId(1L)
-            findHolidayDays.execute(1L)
-        }
-
-        verifyAll(inverse = true) {
-            leadTimeRepository.deleteByIssueId(any())
-            leadTimeRepository.save(any<LeadTime>())
+            leadTimeRepository wasNot called
         }
     }
 
@@ -101,16 +65,8 @@ internal class CreateLeadTimeTest {
         val board = defaultBoard()
 
         every {
-            boardRepository.findByIdOrNull(1L)
-        } returns board
-
-        every {
             leadTimeConfigRepository.findByBoardId(1L)
         } returns defaultLeadTimes(board)
-
-        every {
-            findHolidayDays.execute(1L)
-        } returns commonHolidays()
 
         every {
             leadTimeRepository.deleteByIssueId(any())
@@ -120,7 +76,52 @@ internal class CreateLeadTimeTest {
             leadTimeRepository.save(any<LeadTime>())
         } answers { firstArg() }
 
-        val issue = Issue(
+        val issue = defaultIssue(board)
+
+        val holidays = commonHolidays()
+
+        createLeadTime.execute(issue, board, holidays)
+
+        verifyAll {
+            leadTimeConfigRepository.findByBoardId(1L)
+
+            leadTimeRepository.deleteByIssueId(1L)
+            leadTimeRepository.save(any<LeadTime>())
+        }
+
+        verify(exactly = 3) {
+            leadTimeRepository.save(any<LeadTime>())
+        }
+
+        val leadTimes = issue.leadTimes ?: throw ResourceNotFound()
+
+        leadTimes.find {
+            it.leadTimeConfig.name == "Development Lead Time"
+        }?.assertThat {
+            hasLeadTime(10)
+            hasStartDate("10/01/2019 12:00".toLocalDateTime())
+            hasEndDate("23/01/2019 12:00".toLocalDateTime())
+        } ?: Assertions.fail("Development Lead Time not found")
+
+        leadTimes.find {
+            it.leadTimeConfig.name == "Test Lead Time"
+        }?.assertThat {
+            hasLeadTime(8)
+            hasStartDate("23/01/2019 12:00".toLocalDateTime())
+            hasEndDate("02/02/2019 12:00".toLocalDateTime())
+        } ?: Assertions.fail("Test Lead Time not found")
+
+        leadTimes.find {
+            it.leadTimeConfig.name == "Delivery Lead Time"
+        }?.assertThat {
+            hasLeadTime(7)
+            hasStartDate("02/02/2019 12:00".toLocalDateTime())
+            hasEndDate("12/02/2019 12:00".toLocalDateTime())
+        } ?: Assertions.fail("Delivery Lead Time not found")
+    }
+
+    private fun defaultIssue(board: Board): Issue {
+        return Issue(
             id = 1L,
             key = "JIRAT-1",
             board = board,
@@ -182,47 +183,6 @@ internal class CreateLeadTimeTest {
             leadTime = 7L,
             summary = "JIRAT-1 summary"
         )
-
-        createLeadTime.execute(listOf(issue), 1L)
-
-        verifyAll {
-            boardRepository.findByIdOrNull(1L)
-            leadTimeConfigRepository.findByBoardId(1L)
-            findHolidayDays.execute(1L)
-
-            leadTimeRepository.deleteByIssueId(1L)
-            leadTimeRepository.save(any<LeadTime>())
-        }
-
-        verify(exactly = 3) {
-            leadTimeRepository.save(any<LeadTime>())
-        }
-
-        val leadTimes = issue.leadTimes ?: throw ResourceNotFound()
-
-        leadTimes.find {
-            it.leadTimeConfig.name == "Development Lead Time"
-        }?.assertThat {
-            hasLeadTime(10)
-            hasStartDate("10/01/2019 12:00".toLocalDateTime())
-            hasEndDate("23/01/2019 12:00".toLocalDateTime())
-        } ?: Assertions.fail("Development Lead Time not found")
-
-        leadTimes.find {
-            it.leadTimeConfig.name == "Test Lead Time"
-        }?.assertThat {
-            hasLeadTime(8)
-            hasStartDate("23/01/2019 12:00".toLocalDateTime())
-            hasEndDate("02/02/2019 12:00".toLocalDateTime())
-        } ?: Assertions.fail("Test Lead Time not found")
-
-        leadTimes.find {
-            it.leadTimeConfig.name == "Delivery Lead Time"
-        }?.assertThat {
-            hasLeadTime(7)
-            hasStartDate("02/02/2019 12:00".toLocalDateTime())
-            hasEndDate("12/02/2019 12:00".toLocalDateTime())
-        } ?: Assertions.fail("Delivery Lead Time not found")
     }
 
     private fun defaultLeadTimes(board: Board): List<LeadTimeConfig> {
