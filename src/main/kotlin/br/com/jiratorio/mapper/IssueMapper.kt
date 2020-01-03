@@ -35,7 +35,7 @@ fun Issue.toIssueDetailResponse(): IssueDetailResponse =
     IssueDetailResponse(
         id = id,
         key = key,
-        changelog = changelog.toChangelogResponse(),
+        changelog = columnChangelog.toChangelogResponse(),
         dueDateHistory = dueDateHistory?.toDueDateHistoryResponse(),
         impedimentHistory = impedimentHistory.toImpedimentHistoryResponse(),
         waitTime = waitTime / 60.0,

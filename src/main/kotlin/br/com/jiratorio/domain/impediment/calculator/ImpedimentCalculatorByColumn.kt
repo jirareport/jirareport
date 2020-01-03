@@ -1,8 +1,7 @@
 package br.com.jiratorio.domain.impediment.calculator
 
 import br.com.jiratorio.domain.entity.ImpedimentHistory
-import br.com.jiratorio.domain.entity.embedded.Changelog
-import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
+import br.com.jiratorio.domain.parsed.ParsedChangelog
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -13,26 +12,25 @@ object ImpedimentCalculatorByColumn : ImpedimentCalculator {
 
     override fun calcImpediment(
         impedimentColumns: List<String>?,
-        changelogItems: List<JiraChangelogItem>,
-        changelog: List<Changelog>,
+        parsedChangelog: ParsedChangelog,
         endDate: LocalDateTime,
         holidays: List<LocalDate>,
         ignoreWeekend: Boolean?
     ): ImpedimentCalculatorResult {
         log.info(
-            "Method=timeInImpediment, impedimentColumns={}, changelogItems={}, changelog={}, endDate={}, holidays={}, ignoreWeekend={}",
-            impedimentColumns, changelogItems, changelog, endDate, holidays, ignoreWeekend
+            "Method=timeInImpediment, impedimentColumns={}, changelog={}, endDate={}, holidays={}, ignoreWeekend={}",
+            impedimentColumns, parsedChangelog, endDate, holidays, ignoreWeekend
         )
 
         if (impedimentColumns == null || impedimentColumns.isEmpty()) {
             return ImpedimentCalculatorResult()
         }
 
-        val impedimentHistory = changelog
+        val impedimentHistory = parsedChangelog.columnChangelog
             .filter { impedimentColumns.contains(it.to) }
             .map {
                 ImpedimentHistory(
-                    startDate = it.created,
+                    startDate = it.startDate,
                     endDate = it.endDate,
                     leadTime = it.leadTime
                 )

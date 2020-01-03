@@ -4,7 +4,7 @@ import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.annotation.LoadStubs
 import br.com.jiratorio.domain.entity.ColumnTimeAverage
-import br.com.jiratorio.domain.entity.embedded.Changelog
+import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
@@ -127,38 +127,38 @@ internal class CreateBasicIssuePeriodIntegrationTest(
             hasPriority("Major")
 
             hasChangelog(
-                Changelog(
+                ColumnChangelog(
                     from = null,
                     to = "BACKLOG",
-                    created = "25/12/2018 11:49:35".toLocalDateTime(),
+                    startDate = "25/12/2018 11:49:35".toLocalDateTime(),
                     leadTime = 6,
                     endDate = "01/01/2019 10:15".toLocalDateTime()
                 ),
-                Changelog(
+                ColumnChangelog(
                     from = "BACKLOG",
                     to = "TODO",
-                    created = "01/01/2019 10:15".toLocalDateTime(),
+                    startDate = "01/01/2019 10:15".toLocalDateTime(),
                     leadTime = 1,
                     endDate = "01/01/2019 16:30".toLocalDateTime()
                 ),
-                Changelog(
+                ColumnChangelog(
                     from = "TODO",
                     to = "WIP",
-                    created = "01/01/2019 16:30".toLocalDateTime(),
+                    startDate = "01/01/2019 16:30".toLocalDateTime(),
                     leadTime = 8,
                     endDate = "10/01/2019 13:45".toLocalDateTime()
                 ),
-                Changelog(
+                ColumnChangelog(
                     from = "WIP",
                     to = "ACCOMPANIMENT",
-                    created = "10/01/2019 13:45".toLocalDateTime(),
+                    startDate = "10/01/2019 13:45".toLocalDateTime(),
                     leadTime = 4,
                     endDate = "15/01/2019 11:20".toLocalDateTime()
                 ),
-                Changelog(
+                ColumnChangelog(
                     from = "ACCOMPANIMENT",
                     to = "DONE",
-                    created = "15/01/2019 11:20".toLocalDateTime(),
+                    startDate = "15/01/2019 11:20".toLocalDateTime(),
                     leadTime = 0,
                     endDate = "15/01/2019 11:20".toLocalDateTime()
                 )

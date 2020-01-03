@@ -1,7 +1,7 @@
 package br.com.jiratorio.domain
 
 import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.embedded.Changelog
+import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.exception.MissingBoardConfigurationException
 import br.com.jiratorio.extension.containsUpperCase
 import java.time.LocalDateTime
@@ -45,22 +45,22 @@ data class FluxColumn(
         else
             orderedColumns.last()
 
-    fun calcStartAndEndDate(changelog: List<Changelog>, created: LocalDateTime): Pair<LocalDateTime?, LocalDateTime?> {
+    fun calcStartAndEndDate(columnChangelog: Set<ColumnChangelog>, created: LocalDateTime): Pair<LocalDateTime?, LocalDateTime?> {
         var startDate: LocalDateTime? = null
         var endDate: LocalDateTime? = null
 
-        for (cl in changelog) {
+        for (cl in columnChangelog) {
             if (startDate == null && startColumns.containsUpperCase(cl.to)) {
-                startDate = lastOccurrenceIfNeeds(cl.to, changelog, cl.created)
+                startDate = lastOccurrenceIfNeeds(cl.to, columnChangelog, cl.startDate)
             }
 
             if (endDate == null && endColumns.containsUpperCase(cl.to)) {
-                endDate = lastOccurrenceIfNeeds(cl.to, changelog, cl.created)
+                endDate = lastOccurrenceIfNeeds(cl.to, columnChangelog, cl.startDate)
             }
         }
 
         if (startLeadTimeColumn == "BACKLOG") {
-            startDate = lastOccurrenceIfNeeds("BACKLOG", changelog, created)
+            startDate = lastOccurrenceIfNeeds("BACKLOG", columnChangelog, created)
         }
 
         return startDate to endDate
@@ -68,13 +68,13 @@ data class FluxColumn(
 
     private fun lastOccurrenceIfNeeds(
         to: String?,
-        changelog: List<Changelog>,
+        columnChangelog: Set<ColumnChangelog>,
         created: LocalDateTime
     ): LocalDateTime =
         if (useLastOccurrenceWhenCalculateLeadTime)
-            changelog.last {
+            columnChangelog.last {
                 it.to.equals(to, ignoreCase = true)
-            }.created
+            }.startDate
         else
             created
 

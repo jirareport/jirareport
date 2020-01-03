@@ -13,15 +13,22 @@ class CalculateAverageWip {
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(start: LocalDate, end: LocalDate, issues: List<Issue>, wipColumns: Set<String>): Double {
-        log.info("Action=calculateAverageWip, start={}, end={}, issues={}, wipColumns={}", start, end, issues, wipColumns)
+        log.info(
+            "Action=calculateAverageWip, start={}, end={}, issues={}, wipColumns={}",
+            start, end, issues, wipColumns
+        )
 
-        return (start..end).map { cursor ->
-            issues.count { issue ->
-                issue.changelog.any { cl ->
-                    cursor in cl.dateRange() && cl.to?.toUpperCase() in wipColumns
+        return (start..end)
+            .map { cursor ->
+                issues.count { issue ->
+                    issue.columnChangelog.any { changelog ->
+                        cursor in changelog.dateRange
+                                && changelog.to.toUpperCase() in wipColumns
+                    }
                 }
             }
-        }.average().zeroIfNaN()
+            .average()
+            .zeroIfNaN()
     }
 
 }

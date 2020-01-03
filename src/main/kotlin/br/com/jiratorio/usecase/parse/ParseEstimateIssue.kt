@@ -2,6 +2,7 @@ package br.com.jiratorio.usecase.parse
 
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.domain.estimate.EstimatedIssue
 import br.com.jiratorio.domain.impediment.calculator.ImpedimentCalculatorResult
 import br.com.jiratorio.extension.containsUpperCase
@@ -11,6 +12,7 @@ import br.com.jiratorio.extension.fromJiraToLocalDateTime
 import br.com.jiratorio.extension.parallelStream
 import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.usecase.holiday.FindHolidayDays
+import br.com.jiratorio.usecase.parse.changelog.ParseChangelog
 import com.fasterxml.jackson.databind.JsonNode
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -20,8 +22,7 @@ import kotlin.streams.toList
 
 @Component
 class ParseEstimateIssue(
-    private val parseJiraChangelog: ParseJiraChangelog,
-    private val parserChangelog: ParseChangelog,
+    private val parseChangelog: ParseChangelog,
     private val findHolidayDays: FindHolidayDays
 ) {
 
@@ -69,34 +70,15 @@ class ParseEstimateIssue(
         val created = fields.path("created")
             .extractValueNotNull().fromJiraToLocalDateTime()
 
-        val changelogItems = parseJiraChangelog.execute(issue)
-        val changelog = parserChangelog.execute(changelogItems, created, holidays, board.ignoreWeekend)
+        val parsedChangelog = parseChangelog.execute(issue, created, holidays, board.ignoreWeekend)
 
-        if (changelog.isNotEmpty()) {
-            val changelogItem = changelog.last()
-            changelogItem.leadTime = changelogItem.created.daysDiff(
-                LocalDateTime.now(),
-                holidays,
-                board.ignoreWeekend
-            )
-            changelogItem.endDate = LocalDateTime.now()
-        }
-
-        var startDate: LocalDateTime? = null
-
-        for (cl in changelog) {
-            if (startDate == null && startColumns.containsUpperCase(cl.to)) {
-                startDate = cl.created
-            }
-        }
-
-        if ("BACKLOG" == board.startColumn) {
-            startDate = fields.get("created")
-                .extractValueNotNull().fromJiraToLocalDateTime()
-        }
-        if (startDate == null) {
-            return null
-        }
+        val startDate = extractStartDate(
+            startColumns,
+            created,
+            parsedChangelog.columnChangelog,
+            board,
+            holidays
+        ) ?: return null
 
         val priority: String? =
             if (fields.hasNonNull("priority")) {
@@ -109,8 +91,7 @@ class ParseEstimateIssue(
 
         val impedimentCalculatorResult = board.impedimentType?.calcImpediment(
             board.impedimentColumns,
-            changelogItems,
-            changelog,
+            parsedChangelog,
             LocalDateTime.now(),
             holidays,
             board.ignoreWeekend
@@ -134,11 +115,42 @@ class ParseEstimateIssue(
             estimate = fields.path(board.estimateCF).extractValue(),
             project = fields.path(board.projectCF).extractValue(),
             summary = fields.path("summary").extractValueNotNull(),
-            changelog = changelog,
+            changelog = parsedChangelog.columnChangelog,
             priority = priority,
             impedimentTime = impedimentCalculatorResult.timeInImpediment,
             impedimentHistory = impedimentCalculatorResult.impedimentHistory
         )
+    }
+
+    private fun extractStartDate(
+        startColumns: Set<String>,
+        created: LocalDateTime,
+        columnChangelog: Set<ColumnChangelog>,
+        board: Board,
+        holidays: List<LocalDate>
+    ): LocalDateTime? {
+        if (columnChangelog.isNotEmpty()) {
+            val changelogItem = columnChangelog.last()
+            changelogItem.leadTime = changelogItem.startDate.daysDiff(
+                LocalDateTime.now(),
+                holidays,
+                board.ignoreWeekend
+            )
+            changelogItem.endDate = LocalDateTime.now()
+        }
+
+        var startDate: LocalDateTime? = null
+
+        for (cl in columnChangelog) {
+            if (startDate == null && startColumns.containsUpperCase(cl.to)) {
+                startDate = cl.startDate
+            }
+        }
+
+        return if ("BACKLOG" == board.startColumn)
+            created
+        else
+            startDate
     }
 
 }

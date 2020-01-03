@@ -64,7 +64,7 @@ class CreateLeadTime(
             orderedColumns = board.fluxColumn,
             useLastOccurrenceWhenCalculateLeadTime = board.useLastOccurrenceWhenCalculateLeadTime
         )
-        val (startDate, endDate) = fluxColumn.calcStartAndEndDate(issue.changelog, issue.created)
+        val (startDate, endDate) = fluxColumn.calcStartAndEndDate(issue.columnChangelog, issue.created)
 
         if (startDate == null || endDate == null) {
             return null

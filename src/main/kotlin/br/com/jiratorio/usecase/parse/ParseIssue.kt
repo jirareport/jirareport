@@ -13,6 +13,7 @@ import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.usecase.duedate.CreateDueDateHistory
 import br.com.jiratorio.usecase.efficiency.CalculateEfficiency
 import br.com.jiratorio.usecase.holiday.FindHolidayDays
+import br.com.jiratorio.usecase.parse.changelog.ParseChangelog
 import com.fasterxml.jackson.databind.JsonNode
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -23,7 +24,6 @@ import kotlin.streams.toList
 @Component
 class ParseIssue(
     private val createDueDateHistory: CreateDueDateHistory,
-    private val parseJiraChangelog: ParseJiraChangelog,
     private val parseChangelog: ParseChangelog,
     private val calculateEfficiency: CalculateEfficiency,
     private val findHolidayDays: FindHolidayDays
@@ -75,13 +75,12 @@ class ParseIssue(
         val created = fields.path("created")
             .extractValueNotNull().fromJiraToLocalDateTime()
 
-        val changelogItems = parseJiraChangelog.execute(issue)
-        val changelog = parseChangelog.execute(changelogItems, created, holidays, board.ignoreWeekend)
+        val parsedChangelog = parseChangelog.execute(issue, created, holidays, board.ignoreWeekend)
 
         val (
             startDate,
             endDate
-        ) = fluxColumn.calcStartAndEndDate(changelog, created)
+        ) = fluxColumn.calcStartAndEndDate(parsedChangelog.columnChangelog, created)
 
         if (startDate == null || endDate == null) {
             return null
@@ -102,15 +101,14 @@ class ParseIssue(
         val dueDateType = board.dueDateType
         val dueDateCF = board.dueDateCF
         if (dueDateCF != null && dueDateCF.isNotEmpty() && dueDateType != null) {
-            dueDateHistory = createDueDateHistory.execute(dueDateCF, changelogItems)
+            dueDateHistory = createDueDateHistory.execute(dueDateCF, parsedChangelog.fieldChangelog)
             deviationOfEstimate =
                 dueDateType.calcDeviationOfEstimate(dueDateHistory, endDate, board.ignoreWeekend, holidays)
         }
 
         val impedimentCalculatorResult: ImpedimentCalculatorResult = board.impedimentType?.calcImpediment(
             board.impedimentColumns,
-            changelogItems,
-            changelog,
+            parsedChangelog,
             endDate,
             holidays,
             board.ignoreWeekend
@@ -128,7 +126,7 @@ class ParseIssue(
         }?.toMap()
 
         val efficiency = calculateEfficiency.execute(
-            changelog = changelog,
+            columnChangelog = parsedChangelog.columnChangelog,
             touchingColumns = board.touchingColumns,
             waitingColumns = board.waitingColumns,
             holidays = holidays,
@@ -153,7 +151,7 @@ class ParseIssue(
             estimate = fields.path(board.estimateCF).extractValue(),
             project = fields.path(board.projectCF).extractValue(),
             summary = fields.path("summary").extractValueNotNull(),
-            changelog = changelog,
+            columnChangelog = parsedChangelog.columnChangelog,
             board = board,
             deviationOfEstimate = deviationOfEstimate,
             dueDateHistory = dueDateHistory,

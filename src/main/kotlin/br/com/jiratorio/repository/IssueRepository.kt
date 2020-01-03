@@ -79,10 +79,10 @@ interface IssueRepository : CrudRepository<Issue, Long>, IssueCustomRepository {
         @Param("endDate") endDate: LocalDateTime
     ): Set<String>
 
-    @EntityGraph(attributePaths = ["leadTimes", "impedimentHistory"])
+    @EntityGraph(attributePaths = ["leadTimes", "impedimentHistory", "columnChangelog"])
     fun findByBoardIdAndId(boardId: Long, id: Long): Issue?
 
-    @EntityGraph(attributePaths = ["leadTimes", "impedimentHistory"], type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(attributePaths = ["leadTimes", "impedimentHistory", "columnChangelog"])
     override fun findById(id: Long): Optional<Issue>
 
     @JvmDefault

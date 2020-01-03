@@ -1,7 +1,8 @@
 package br.com.jiratorio.domain.impediment.calculator
 
+import br.com.jiratorio.domain.FieldChangelog
 import br.com.jiratorio.domain.entity.ImpedimentHistory
-import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
+import br.com.jiratorio.domain.parsed.ParsedChangelog
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
@@ -13,38 +14,42 @@ internal class ImpedimentCalculatorByFlagTest {
 
     @Test
     fun `time in impediment`() {
-        val changelogItems = listOf(
-            JiraChangelogItem(
+        val fieldChangelog = setOf(
+            FieldChangelog(
                 field = "flagged",
-                toString = "impediment",
+                to = "impediment",
                 created = "01/01/2019 12:00".toLocalDateTime()
             ),
-            JiraChangelogItem(
-                field = "customfield_123"
+            FieldChangelog(
+                field = "customfield_123",
+                created = LocalDateTime.now()
             ),
-            JiraChangelogItem(
-                field = "flagged", created = "10/01/2019 12:00".toLocalDateTime()
-            ),
-            JiraChangelogItem(
-                field = "xablau"
-            ),
-            JiraChangelogItem(
+            FieldChangelog(
                 field = "flagged",
-                toString = "impediment",
+                created = "10/01/2019 12:00".toLocalDateTime()
+            ),
+            FieldChangelog(
+                field = "xablau",
+                created = LocalDateTime.now()
+            ),
+            FieldChangelog(
+                field = "flagged",
+                to = "impediment",
                 created = "15/01/2019 12:00".toLocalDateTime()
             ),
-            JiraChangelogItem(
-                field = "other"
+            FieldChangelog(
+                field = "other",
+                created = LocalDateTime.now()
             ),
-            JiraChangelogItem(
-                field = "flagged", created = "19/01/2019 12:00".toLocalDateTime()
+            FieldChangelog(
+                field = "flagged",
+                created = "19/01/2019 12:00".toLocalDateTime()
             )
         )
 
         val impedimentCalculatorResult = ImpedimentCalculatorByFlag.calcImpediment(
             null,
-            changelogItems,
-            emptyList(),
+            ParsedChangelog(fieldChangelog.toSet()),
             LocalDateTime.now(),
             emptyList(),
             true
@@ -70,28 +75,42 @@ internal class ImpedimentCalculatorByFlagTest {
 
     @Test
     fun `time in impediment without term`() {
-        val changelogItems = listOf(
-            JiraChangelogItem(
+        val fieldChangelog = setOf(
+            FieldChangelog(
                 field = "flagged",
-                toString = "impediment",
+                to = "impediment",
                 created = "05/01/2019 12:00".toLocalDateTime()
             ),
-            JiraChangelogItem(field = "customfield_123"),
-            JiraChangelogItem(field = "flagged", created = "09/01/2019 12:00".toLocalDateTime()),
-            JiraChangelogItem(field = "xablau"),
-            JiraChangelogItem(
+            FieldChangelog(
+                field = "customfield_123",
+                created = LocalDateTime.now()
+            ),
+            FieldChangelog(
                 field = "flagged",
-                toString = "impediment",
+                created = "09/01/2019 12:00".toLocalDateTime()
+            ),
+            FieldChangelog(
+                field = "xablau",
+                created = LocalDateTime.now()
+            ),
+            FieldChangelog(
+                field = "flagged",
+                to = "impediment",
                 created = "15/01/2019 12:00".toLocalDateTime()
             ),
-            JiraChangelogItem(field = "bla"),
-            JiraChangelogItem(field = "other")
+            FieldChangelog(
+                field = "bla",
+                created = LocalDateTime.now()
+            ),
+            FieldChangelog(
+                field = "other",
+                created = LocalDateTime.now()
+            )
         )
 
         val impedimentCalculatorResult = ImpedimentCalculatorByFlag.calcImpediment(
             null,
-            changelogItems,
-            emptyList(),
+            ParsedChangelog(fieldChangelog),
             "19/01/2019 12:00".toLocalDateTime(),
             emptyList(),
             true

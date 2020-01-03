@@ -34,7 +34,7 @@ class IssueFactory(
             leadTime = faker.jira().issueLeadTime(),
             created = faker.date().past(40, TimeUnit.DAYS).toLocalDateTime(),
             priority = faker.jira().priority(),
-            changelog = changelogFactory.create(20),
+            columnChangelog = changelogFactory.create(20).toSet(),
             board = boardFactory.create(),
             waitTime = faker.number().randomNumber(),
             touchTime = faker.number().randomNumber(),

@@ -3,7 +3,7 @@ package br.com.jiratorio.assert
 import br.com.jiratorio.domain.entity.ImpedimentHistory
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.LeadTime
-import br.com.jiratorio.domain.entity.embedded.Changelog
+import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import java.time.LocalDateTime
 
@@ -66,8 +66,8 @@ class IssueAssert(
         objects.assertEqual(field("issue.priority"), actual.priority, priority)
     }
 
-    fun hasChangelog(vararg changelog: Changelog) = assertAll {
-        iterables.assertContains(field("issue.changelog"), actual.changelog, changelog)
+    fun hasChangelog(vararg changelog: ColumnChangelog) = assertAll {
+        iterables.assertContains(field("issue.changelog"), actual.columnChangelog, changelog)
     }
 
     fun hasDeviationOfEstimate(deviationOfEstimate: Long?) = assertAll {

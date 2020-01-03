@@ -1,6 +1,5 @@
 package br.com.jiratorio.domain.entity
 
-import br.com.jiratorio.domain.entity.embedded.Changelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.toStringBuilder
@@ -57,9 +56,10 @@ data class Issue(
 
     var priority: String? = null,
 
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    var changelog: List<Changelog>,
+    @OrderBy("startDate")
+    @JoinColumn(name = "issue_id")
+    @OneToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    var columnChangelog: Set<ColumnChangelog>,
 
     @Column(name = "issue_period_id", nullable = false)
     var issuePeriodId: Long = 0,
@@ -79,9 +79,9 @@ data class Issue(
     @Column(nullable = false)
     var impedimentTime: Long = 0,
 
-    @OrderBy("startDate asc")
+    @OneToMany
+    @OrderBy("startDate")
     @JoinColumn(name = "issue_id", updatable = false)
-    @OneToMany(orphanRemoval = true, cascade = [CascadeType.REMOVE])
     var impedimentHistory: MutableSet<ImpedimentHistory> = mutableSetOf(),
 
     @Type(type = "jsonb")
@@ -96,9 +96,10 @@ data class Issue(
 
     @Column(nullable = false)
     var pctEfficiency: Double = 0.0
+
 ) : BaseEntity() {
     companion object {
-        private val serialVersionUID = -1084659211505084402L
+        private const val serialVersionUID = -1084659211505084402L
     }
 
     override fun toString() =

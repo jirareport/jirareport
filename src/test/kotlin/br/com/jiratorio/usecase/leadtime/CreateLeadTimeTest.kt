@@ -5,7 +5,7 @@ import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.LeadTime
 import br.com.jiratorio.domain.entity.LeadTimeConfig
-import br.com.jiratorio.domain.entity.embedded.Changelog
+import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
@@ -124,17 +124,57 @@ internal class CreateLeadTimeTest {
             id = 1L,
             key = "JIRAT-1",
             board = board,
-            changelog = listOf(
-                Changelog(from = null, to = "BACKLOG", created = "01/01/2019 12:00".toLocalDateTime()),
-                Changelog(from = "BACKLOG", to = "ANALYSIS", created = "10/01/2019 12:00".toLocalDateTime()),
-                Changelog(from = "ANALYSIS", to = "DEV WIP", created = "12/01/2019 12:00".toLocalDateTime()),
-                Changelog(from = "DEV WIP", to = "DEV DONE", created = "21/01/2019 12:00".toLocalDateTime()),
-                Changelog(from = "DEV DONE", to = "TEST WIP", created = "23/01/2019 12:00".toLocalDateTime()),
-                Changelog(from = "TEST WIP", to = "TEST DONE", created = "31/01/2019 12:00".toLocalDateTime()),
-                Changelog(from = "TEST DONE", to = "REVIEW", created = "01/02/2019 12:00".toLocalDateTime()),
-                Changelog(from = "REVIEW", to = "DELIVERY LINE", created = "02/02/2019 12:00".toLocalDateTime()),
-                Changelog(from = "DELIVERY LINE", to = "ACCOMPANIMENT", created = "06/02/2019 12:00".toLocalDateTime()),
-                Changelog(from = "ACCOMPANIMENT", to = "DONE", created = "12/02/2019 12:00".toLocalDateTime())
+            columnChangelog = setOf(
+                ColumnChangelog(
+                    from = null,
+                    to = "BACKLOG",
+                    startDate = "01/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "BACKLOG",
+                    to = "ANALYSIS",
+                    startDate = "10/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "ANALYSIS",
+                    to = "DEV WIP",
+                    startDate = "12/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "DEV WIP",
+                    to = "DEV DONE",
+                    startDate = "21/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "DEV DONE",
+                    to = "TEST WIP",
+                    startDate = "23/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "TEST WIP",
+                    to = "TEST DONE",
+                    startDate = "31/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "TEST DONE",
+                    to = "REVIEW",
+                    startDate = "01/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "REVIEW",
+                    to = "DELIVERY LINE",
+                    startDate = "02/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "DELIVERY LINE",
+                    to = "ACCOMPANIMENT",
+                    startDate = "06/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    from = "ACCOMPANIMENT",
+                    to = "DONE",
+                    startDate = "12/02/2019 12:00".toLocalDateTime()
+                )
             ),
             created = "01/01/2019 12:00".toLocalDateTime(),
             startDate = "12/01/2019 12:00".toLocalDateTime(),

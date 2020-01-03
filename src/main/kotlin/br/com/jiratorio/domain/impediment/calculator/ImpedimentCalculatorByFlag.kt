@@ -1,13 +1,11 @@
 package br.com.jiratorio.domain.impediment.calculator
 
 import br.com.jiratorio.domain.entity.ImpedimentHistory
-import br.com.jiratorio.domain.entity.embedded.Changelog
-import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
+import br.com.jiratorio.domain.parsed.ParsedChangelog
 import br.com.jiratorio.extension.time.daysDiff
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.ArrayList
 
 object ImpedimentCalculatorByFlag : ImpedimentCalculator {
 
@@ -15,27 +13,26 @@ object ImpedimentCalculatorByFlag : ImpedimentCalculator {
 
     override fun calcImpediment(
         impedimentColumns: List<String>?,
-        changelogItems: List<JiraChangelogItem>,
-        changelog: List<Changelog>,
+        parsedChangelog: ParsedChangelog,
         endDate: LocalDateTime,
         holidays: List<LocalDate>,
         ignoreWeekend: Boolean?
     ): ImpedimentCalculatorResult {
         log.info(
-            "Method=timeInImpediment, impedimentColumns={}, changelogItems={}, changelog={}, endDate={}, holidays={}, ignoreWeekend={}",
-            impedimentColumns, changelogItems, changelog, endDate, holidays, ignoreWeekend
+            "Method=calcImpediment, impedimentColumns={}, changelog={}, endDate={}, holidays={}, ignoreWeekend={}",
+            impedimentColumns, parsedChangelog, endDate, holidays, ignoreWeekend
         )
 
-        val beginnings = ArrayList<LocalDateTime>()
-        val terms = ArrayList<LocalDateTime>()
+        val beginnings = mutableListOf<LocalDateTime>()
+        val terms = mutableListOf<LocalDateTime>()
 
-        changelogItems
-            .filter { it.field?.equals("flagged", ignoreCase = true) == true }
+        parsedChangelog.fieldChangelog
+            .filter { it.field.equals("flagged", ignoreCase = true) }
             .forEach {
-                if (it.toString?.equals("impediment", ignoreCase = true) == true) {
-                    beginnings.add(it.created!!)
+                if (it.to.equals("impediment", ignoreCase = true)) {
+                    beginnings.add(it.created)
                 } else {
-                    terms.add(it.created!!)
+                    terms.add(it.created)
                 }
             }
 

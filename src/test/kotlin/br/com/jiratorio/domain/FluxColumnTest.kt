@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain
 
-import br.com.jiratorio.domain.entity.embedded.Changelog
+import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -101,16 +101,43 @@ internal class FluxColumnTest {
                 endLeadTimeColumn = "ACCOMPANIMENT"
             )
 
-            val changelog = listOf(
-                Changelog(to = "ANALYSIS", created = "01/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DEV WIP", created = "09/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DEV DONE", created = "13/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "TEST WIP", created = "18/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "TEST DONE", created = "19/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "REVIEW", created = "24/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DELIVERY LINE", created = "28/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "ACCOMPANIMENT", created = "29/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DONE", created = "30/01/2019 12:00".toLocalDateTime())
+            val changelog = setOf(
+                ColumnChangelog(
+                    to = "ANALYSIS",
+                    startDate = "01/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DEV WIP",
+                    startDate = "09/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DEV DONE",
+                    startDate = "13/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "TEST WIP",
+                    startDate = "18/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "TEST DONE",
+                    startDate = "19/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "REVIEW",
+                    startDate = "24/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DELIVERY LINE",
+                    startDate = "28/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "ACCOMPANIMENT",
+                    startDate = "29/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DONE",
+                    startDate = "30/01/2019 12:00".toLocalDateTime()
+                )
             )
 
             val (
@@ -129,16 +156,43 @@ internal class FluxColumnTest {
         fun `test calc start and end date with backlog`() {
             val fluxColumn = createDefaultFluxColumn(startLeadTimeColumn = "BACKLOG")
 
-            val changelog = listOf(
-                Changelog(to = "ANALYSIS", created = "05/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DEV WIP", created = "12/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DEV DONE", created = "13/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "TEST WIP", created = "21/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "TEST DONE", created = "28/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "REVIEW", created = "04/02/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DELIVERY LINE", created = "09/02/2019 12:00".toLocalDateTime()),
-                Changelog(to = "ACCOMPANIMENT", created = "11/02/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DONE", created = "14/02/2019 12:00".toLocalDateTime())
+            val changelog = setOf(
+                ColumnChangelog(
+                    to = "ANALYSIS",
+                    startDate = "05/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DEV WIP",
+                    startDate = "12/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DEV DONE",
+                    startDate = "13/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "TEST WIP",
+                    startDate = "21/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "TEST DONE",
+                    startDate = "28/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "REVIEW",
+                    startDate = "04/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DELIVERY LINE",
+                    startDate = "09/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "ACCOMPANIMENT",
+                    startDate = "11/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DONE",
+                    startDate = "14/02/2019 12:00".toLocalDateTime()
+                )
             )
 
             val created = "01/01/2019 12:00".toLocalDateTime()
@@ -159,10 +213,19 @@ internal class FluxColumnTest {
         fun `test calc start and end date with not found events in changelog`() {
             val fluxColumn = createDefaultFluxColumn(endLeadTimeColumn = "ACCOMPANIMENT")
 
-            val changelog = listOf(
-                Changelog(to = "TODO", created = "01/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "WIP", created = "10/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "CLOSED", created = "12/01/2019 12:00".toLocalDateTime())
+            val changelog = setOf(
+                ColumnChangelog(
+                    to = "TODO",
+                    startDate = "01/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "WIP",
+                    startDate = "10/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "CLOSED",
+                    startDate = "12/01/2019 12:00".toLocalDateTime()
+                )
             )
 
             val (
@@ -187,18 +250,51 @@ internal class FluxColumnTest {
                 useLastOccurrenceWhenCalculateLeadTime = true
             )
 
-            val changelog = listOf(
-                Changelog(to = "ANALYSIS", created = "05/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "BACKLOG", created = "06/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "ANALYSIS", created = "10/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DEV WIP", created = "12/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DEV DONE", created = "13/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "TEST WIP", created = "21/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "TEST DONE", created = "28/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "REVIEW", created = "04/02/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DELIVERY LINE", created = "09/02/2019 12:00".toLocalDateTime()),
-                Changelog(to = "ACCOMPANIMENT", created = "11/02/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DONE", created = "14/02/2019 12:00".toLocalDateTime())
+            val changelog = setOf(
+                ColumnChangelog(
+                    to = "ANALYSIS",
+                    startDate = "05/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "BACKLOG",
+                    startDate = "06/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "ANALYSIS",
+                    startDate = "10/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DEV WIP",
+                    startDate = "12/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DEV DONE",
+                    startDate = "13/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "TEST WIP",
+                    startDate = "21/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "TEST DONE",
+                    startDate = "28/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "REVIEW",
+                    startDate = "04/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DELIVERY LINE",
+                    startDate = "09/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "ACCOMPANIMENT",
+                    startDate = "11/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DONE",
+                    startDate = "14/02/2019 12:00".toLocalDateTime()
+                )
             )
 
             val created = "01/01/2019 12:00".toLocalDateTime()
@@ -222,18 +318,51 @@ internal class FluxColumnTest {
                 useLastOccurrenceWhenCalculateLeadTime = true
             )
 
-            val changelog = listOf(
-                Changelog(to = "ANALYSIS", created = "05/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "BACKLOG", created = "06/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "ANALYSIS", created = "10/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DEV WIP", created = "12/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DEV DONE", created = "13/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "TEST WIP", created = "21/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "TEST DONE", created = "28/01/2019 12:00".toLocalDateTime()),
-                Changelog(to = "REVIEW", created = "04/02/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DELIVERY LINE", created = "09/02/2019 12:00".toLocalDateTime()),
-                Changelog(to = "ACCOMPANIMENT", created = "11/02/2019 12:00".toLocalDateTime()),
-                Changelog(to = "DONE", created = "14/02/2019 12:00".toLocalDateTime())
+            val changelog = setOf(
+                ColumnChangelog(
+                    to = "ANALYSIS",
+                    startDate = "05/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "BACKLOG",
+                    startDate = "06/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "ANALYSIS",
+                    startDate = "10/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DEV WIP",
+                    startDate = "12/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DEV DONE",
+                    startDate = "13/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "TEST WIP",
+                    startDate = "21/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "TEST DONE",
+                    startDate = "28/01/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "REVIEW",
+                    startDate = "04/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DELIVERY LINE",
+                    startDate = "09/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "ACCOMPANIMENT",
+                    startDate = "11/02/2019 12:00".toLocalDateTime()
+                ),
+                ColumnChangelog(
+                    to = "DONE",
+                    startDate = "14/02/2019 12:00".toLocalDateTime()
+                )
             )
 
             val created = "01/01/2019 12:00".toLocalDateTime()

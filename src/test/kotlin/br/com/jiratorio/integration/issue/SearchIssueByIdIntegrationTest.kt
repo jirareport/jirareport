@@ -117,7 +117,7 @@ class SearchIssueByIdIntegrationTest(
             hasId(issue.id)
             hasKey(issue.key)
 
-            hasChangelogSize(issue.changelog)
+            hasChangelogSize(issue.columnChangelog)
             hasDueDateHistorySize(issue.dueDateHistory)
             hasImpedimentHistorySize(issue.impedimentHistory)
             hasLeadTimesSize(issue.leadTimes)

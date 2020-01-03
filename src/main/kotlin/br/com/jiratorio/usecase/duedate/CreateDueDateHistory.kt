@@ -1,13 +1,12 @@
 package br.com.jiratorio.usecase.duedate
 
 import br.com.jiratorio.config.stereotype.UseCase
+import br.com.jiratorio.domain.FieldChangelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
-import br.com.jiratorio.domain.jira.changelog.JiraChangelogItem
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
+import br.com.jiratorio.extension.toLocalDate
 import org.slf4j.LoggerFactory
-import org.springframework.util.StringUtils
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.time.LocalDateTime
 
 @UseCase
 class CreateDueDateHistory {
@@ -16,27 +15,29 @@ class CreateDueDateHistory {
 
     fun execute(
         dueDateCF: String,
-        changelogItems: List<JiraChangelogItem>
+        fieldChangelog: Set<FieldChangelog>
     ): List<DueDateHistory> {
-        log.info("Action=createDueDateHistory, dueDateCF={}, changelogItems={}", dueDateCF, changelogItems)
+        log.info("Action=createDueDateHistory, dueDateCF={}, fieldChangelog={}", dueDateCF, fieldChangelog)
 
-        return changelogItems
-            .filter { dueDateCF == it.field && !StringUtils.isEmpty(it.to) }
-            .map { DueDateHistory(it.created, parseDueDate(it.to)) }
+        return fieldChangelog
+            .filter { dueDateCF == it.field }
+            .mapNotNull { parseDueDate(it.to, it.created) }
             .sortedBy { it.created }
     }
 
-    private fun parseDueDate(dueDateStr: String?): LocalDate? {
-        if (dueDateStr == null || dueDateStr.isEmpty()) {
-            return null
+    private fun parseDueDate(to: String?, created: LocalDateTime): DueDateHistory? =
+        to?.let { dueDate ->
+            if (dueDate.isEmpty()) {
+                return null
+            }
+
+            DueDateHistory(
+                created = created,
+                dueDate = if (dueDate.length > 19)
+                    dueDate.fromJiraToLocalDateTime().toLocalDate()
+                else
+                    dueDate.toLocalDate("[yyyy-MM-dd][dd/MM/yyyy]")
+            )
         }
 
-        if (dueDateStr.length > 19) {
-            val localDateTime = dueDateStr.fromJiraToLocalDateTime()
-            return localDateTime.toLocalDate()
-        }
-
-        val formatter = DateTimeFormatter.ofPattern("[yyyy-MM-dd][dd/MM/yyyy]")
-        return LocalDate.parse(dueDateStr, formatter)
-    }
 }
