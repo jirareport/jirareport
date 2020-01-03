@@ -11,9 +11,7 @@ import org.junit.jupiter.api.extension.ParameterResolver
 class ArchUnitJunitExtension : ParameterResolver {
 
     override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean =
-        parameterContext.target
-            .map { parameter -> parameter is JavaClasses }
-            .isPresent
+        parameterContext.parameter.type == JavaClasses::class.java
 
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any =
         ClassesToCheck.toJavaClasses()
