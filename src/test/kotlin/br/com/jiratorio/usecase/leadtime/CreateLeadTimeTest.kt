@@ -1,6 +1,7 @@
 package br.com.jiratorio.usecase.leadtime
 
 import br.com.jiratorio.assert.assertThat
+import br.com.jiratorio.config.junit.testtype.UnitTest
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.domain.entity.Issue
@@ -21,11 +22,10 @@ import io.mockk.verify
 import io.mockk.verifyAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
-@Tag("unit")
+@UnitTest
 internal class CreateLeadTimeTest {
 
     private val leadTimeConfigRepository = mockk<LeadTimeConfigRepository>()

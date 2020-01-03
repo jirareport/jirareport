@@ -1,5 +1,6 @@
 package br.com.jiratorio.usecase.parse
 
+import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.ColumnChangelog
@@ -15,12 +16,11 @@ import br.com.jiratorio.usecase.holiday.FindHolidayDays
 import br.com.jiratorio.usecase.parse.changelog.ParseChangelog
 import com.fasterxml.jackson.databind.JsonNode
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.streams.toList
 
-@Component
+@UseCase
 class ParseEstimateIssue(
     private val parseChangelog: ParseChangelog,
     private val findHolidayDays: FindHolidayDays

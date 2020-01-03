@@ -1,5 +1,6 @@
 package br.com.jiratorio.usecase.parse
 
+import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.parsed.ParsedIssue
@@ -10,12 +11,11 @@ import br.com.jiratorio.extension.parallelStream
 import br.com.jiratorio.usecase.parse.changelog.ParseChangelog
 import com.fasterxml.jackson.databind.JsonNode
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 import kotlin.streams.toList
 
-@Component
+@UseCase
 class ParseIssue(
     private val parseChangelog: ParseChangelog
 ) {

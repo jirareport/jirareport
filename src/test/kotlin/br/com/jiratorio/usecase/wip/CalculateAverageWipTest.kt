@@ -1,5 +1,6 @@
 package br.com.jiratorio.usecase.wip
 
+import br.com.jiratorio.config.junit.testtype.UnitTest
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
@@ -7,10 +8,9 @@ import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 
-@Tag("unit")
+@UnitTest
 internal class CalculateAverageWipTest {
 
     private val calculateAverageWip = CalculateAverageWip()
