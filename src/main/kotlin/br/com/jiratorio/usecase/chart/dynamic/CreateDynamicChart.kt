@@ -24,11 +24,13 @@ class CreateDynamicChart(
         return if (dynamicFields.isNullOrEmpty()) {
             emptyList()
         } else {
+            val uninformedValue = messageResolver.resolve("uninformed")
+
             dynamicFields.map {
                 DynamicChart(
                     name = it.name,
-                    leadTime = buildDynamicLeadTime(it, issues, messageResolver("uninformed")),
-                    throughput = buildDynamicThroughput(it, issues, messageResolver("uninformed"))
+                    leadTime = buildDynamicLeadTime(it, issues, uninformedValue),
+                    throughput = buildDynamicThroughput(it, issues, uninformedValue)
                 )
             }
         }

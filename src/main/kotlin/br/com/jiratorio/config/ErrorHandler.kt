@@ -21,7 +21,7 @@ class ErrorHandler(
     @ExceptionHandler(MissingKotlinParameterException::class)
     fun handleMissingKotlinParameterException(e: MissingKotlinParameterException): ResponseEntity<Map<String, List<String>>> =
         ResponseEntity(
-            mapOf(e.parameter.name!! to listOf(messageResolver("javax.validation.constraints.NotNull.message"))),
+            mapOf(e.parameter.name!! to listOf(messageResolver.resolve("javax.validation.constraints.NotNull.message"))),
             HttpStatus.BAD_REQUEST
         )
 
@@ -47,14 +47,14 @@ class ErrorHandler(
     @ExceptionHandler(UniquenessFieldException::class)
     fun handleUniquenessException(e: UniquenessFieldException): ResponseEntity<Map<String, List<String>>> =
         ResponseEntity(
-            mapOf(e.field to listOf(messageResolver("validations.uniqueness"))),
+            mapOf(e.field to listOf(messageResolver.resolve("validations.uniqueness"))),
             HttpStatus.BAD_REQUEST
         )
 
     @ExceptionHandler(MissingBoardConfigurationException::class)
     fun handleBadRequestException(e: MissingBoardConfigurationException): ResponseEntity<Map<String, List<String?>>> =
         ResponseEntity(
-            mapOf(e.field to listOf(messageResolver("validations.missing-board-configuration", e.field))),
+            mapOf(e.field to listOf(messageResolver.resolve("validations.missing-board-configuration", e.field))),
             HttpStatus.BAD_REQUEST
         )
 

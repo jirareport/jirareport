@@ -5,6 +5,7 @@ import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.repository.BoardRepository
 import org.slf4j.LoggerFactory
+import org.springframework.transaction.annotation.Transactional
 
 @UseCase
 class FindJiraProjectStatuses(
@@ -14,6 +15,7 @@ class FindJiraProjectStatuses(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
+    @Transactional
     fun execute(boardId: Long): Set<String> {
         log.info("Action=findJiraProjectStatuses, boardId={}", boardId)
 

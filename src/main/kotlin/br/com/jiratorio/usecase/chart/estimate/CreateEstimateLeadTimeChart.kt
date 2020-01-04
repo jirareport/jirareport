@@ -17,7 +17,8 @@ class CreateEstimateLeadTimeChart(
     fun execute(issues: List<Issue>): Chart<String, Double> {
         log.info("Action=createEstimateLeadTimeChart, issues={}", issues)
 
-        return issues.groupBy { it.estimate ?: messageResolver("uninformed") }
+        val uninformedValue = messageResolver.resolve("uninformed")
+        return issues.groupBy { it.estimate ?: uninformedValue }
             .mapValues { (_, value) -> value.map { it.leadTime }.average() }
             .toChart()
     }

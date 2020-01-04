@@ -39,7 +39,7 @@ class ImportHolidays(
         val allHolidaysInCity = findAllHolidaysInCity(board, currentUser)
 
         if (holidaysByBoard.containsAll(allHolidaysInCity)) {
-            throw HolidaysAlreadyImported(messageResolver("errors.holiday-already-imported"))
+            throw HolidaysAlreadyImported(messageResolver.resolve("errors.holiday-already-imported"))
         }
 
         val holidays = HashSet(holidaysByBoard)

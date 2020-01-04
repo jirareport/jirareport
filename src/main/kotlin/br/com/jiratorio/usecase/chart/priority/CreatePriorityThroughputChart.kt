@@ -17,8 +17,9 @@ class CreatePriorityThroughputChart(
     fun execute(issues: List<Issue>): Chart<String, Int> {
         log.info("Action=createPriorityThroughputChart, issues={}", issues)
 
+        val uninformedValue = messageResolver.resolve("uninformed")
         return issues
-            .groupingBy { it.priority ?: messageResolver("uninformed") }
+            .groupingBy { it.priority ?: uninformedValue }
             .eachCount()
             .toChart()
     }

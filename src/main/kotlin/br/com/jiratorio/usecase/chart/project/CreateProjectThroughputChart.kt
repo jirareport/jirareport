@@ -17,8 +17,9 @@ class CreateProjectThroughputChart(
     fun execute(issues: List<Issue>): Chart<String, Int> {
         log.info("Action=createProjectThroughputChart, issues={}", issues)
 
+        val uninformedValue = messageResolver.resolve("uninformed")
         return issues
-            .groupingBy { it.project ?: messageResolver("uninformed") }
+            .groupingBy { it.project ?: uninformedValue }
             .eachCount()
             .toChart()
     }

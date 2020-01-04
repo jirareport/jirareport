@@ -17,7 +17,8 @@ class CreateEstimateThroughputChart(
     fun execute(issues: List<Issue>): Chart<String, Int> {
         log.info("Action=createEstimateThroughputChart, issues={}", issues)
 
-        return issues.groupingBy { it.estimate ?: messageResolver("uninformed") }
+        val uninformedValue = messageResolver.resolve("uninformed")
+        return issues.groupingBy { it.estimate ?: uninformedValue }
             .eachCount()
             .toChart()
     }
