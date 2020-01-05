@@ -1,11 +1,11 @@
 package br.com.jiratorio.usecase.jql
 
+import br.com.jiratorio.config.junit.testtype.UnitTest
 import br.com.jiratorio.domain.entity.Board
 import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 
-@Tag("unit")
+@UnitTest
 internal class CreateOpenedIssueJqlTest {
 
     private val openedIssueJql = CreateOpenedIssueJql()

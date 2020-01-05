@@ -1,15 +1,15 @@
 package br.com.jiratorio.domain.impediment.calculator
 
+import br.com.jiratorio.config.junit.testtype.UnitTest
 import br.com.jiratorio.domain.FieldChangelog
 import br.com.jiratorio.domain.entity.ImpedimentHistory
 import br.com.jiratorio.domain.parsed.ParsedChangelog
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
-@Tag("unit")
+@UnitTest
 internal class ImpedimentCalculatorByFlagTest {
 
     @Test

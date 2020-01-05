@@ -3,6 +3,7 @@ package br.com.jiratorio.integration.holiday
 import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.config.junit.testtype.IntegrationTest
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.entity.BoardFactory
@@ -12,12 +13,9 @@ import br.com.jiratorio.repository.HolidayRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 
-@Tag("integration")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@IntegrationTest
 internal class UpdateHolidayIntegrationTest(
     private val holidayFactory: HolidayFactory,
     private val holidayRequestFactory: HolidayRequestFactory,

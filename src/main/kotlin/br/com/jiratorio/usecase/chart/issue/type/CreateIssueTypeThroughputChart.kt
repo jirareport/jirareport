@@ -17,8 +17,10 @@ class CreateIssueTypeThroughputChart(
     fun execute(issues: List<Issue>): Chart<String, Int> {
         log.info("Action=createIssueTypeThroughputChart, issues={}", issues)
 
+        val uninformedValue = messageResolver.resolve("uninformed")
+
         return issues
-            .groupingBy { it.issueType ?: messageResolver("uninformed") }
+            .groupingBy { it.issueType ?: uninformedValue }
             .eachCount()
             .toChart()
     }

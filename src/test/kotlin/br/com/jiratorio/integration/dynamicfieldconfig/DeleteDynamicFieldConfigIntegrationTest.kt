@@ -2,17 +2,15 @@ package br.com.jiratorio.integration.dynamicfieldconfig
 
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.specification.notFound
+import br.com.jiratorio.config.junit.testtype.IntegrationTest
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.domain.entity.DynamicFieldConfigFactory
 import br.com.jiratorio.repository.DynamicFieldConfigRepository
 import org.apache.http.HttpStatus.SC_NO_CONTENT
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 
-@Tag("integration")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@IntegrationTest
 class DeleteDynamicFieldConfigIntegrationTest(
     private val dynamicFieldConfigFactory: DynamicFieldConfigFactory,
     private val dynamicFieldConfigRepository: DynamicFieldConfigRepository,

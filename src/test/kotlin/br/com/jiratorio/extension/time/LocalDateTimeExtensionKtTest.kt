@@ -1,17 +1,17 @@
 package br.com.jiratorio.extension.time
 
+import br.com.jiratorio.config.junit.testtype.UnitTest
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-@Tag("unit")
+@UnitTest
 internal class LocalDateTimeExtensionKtTest {
 
     @Nested

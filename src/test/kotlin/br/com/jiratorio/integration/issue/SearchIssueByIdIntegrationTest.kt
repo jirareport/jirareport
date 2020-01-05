@@ -2,6 +2,7 @@ package br.com.jiratorio.integration.issue
 
 import br.com.jiratorio.assert.response.assertThat
 import br.com.jiratorio.base.Authenticator
+import br.com.jiratorio.config.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.entity.DynamicFieldConfig
 import br.com.jiratorio.domain.entity.ImpedimentHistory
 import br.com.jiratorio.domain.entity.Issue
@@ -19,13 +20,10 @@ import br.com.jiratorio.factory.domain.entity.LeadTimeConfigFactory
 import br.com.jiratorio.factory.domain.entity.LeadTimeFactory
 import br.com.jiratorio.factory.domain.request.DueDateHistoryFactory
 import br.com.jiratorio.repository.IssueRepository
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 import javax.servlet.http.HttpServletResponse.SC_OK
 
-@Tag("integration")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@IntegrationTest
 class SearchIssueByIdIntegrationTest(
     private val authenticator: Authenticator,
     private val boardFactory: BoardFactory,

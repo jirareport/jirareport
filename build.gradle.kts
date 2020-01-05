@@ -62,6 +62,8 @@ dependencies {
     testImplementation("io.mockk:mockk:1.9.3")
 
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.3.1")
+
+    testImplementation("com.tngtech.archunit:archunit:0.12.0")
 }
 
 dependencyManagement {

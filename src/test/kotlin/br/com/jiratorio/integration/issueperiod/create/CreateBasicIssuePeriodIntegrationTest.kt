@@ -3,8 +3,9 @@ package br.com.jiratorio.integration.issueperiod.create
 import br.com.jiratorio.assert.assertThat
 import br.com.jiratorio.base.Authenticator
 import br.com.jiratorio.base.annotation.LoadStubs
-import br.com.jiratorio.domain.entity.ColumnTimeAverage
+import br.com.jiratorio.config.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.entity.ColumnChangelog
+import br.com.jiratorio.domain.entity.ColumnTimeAverage
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
@@ -14,13 +15,10 @@ import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.repository.IssueRepository
 import io.restassured.http.ContentType
 import org.hamcrest.Matchers.containsString
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 import javax.servlet.http.HttpServletResponse
 
-@Tag("integration")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@IntegrationTest
 internal class CreateBasicIssuePeriodIntegrationTest(
     private val boardFactory: BoardFactory,
     private val authenticator: Authenticator,

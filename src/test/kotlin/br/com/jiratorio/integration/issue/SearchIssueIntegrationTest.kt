@@ -1,6 +1,7 @@
 package br.com.jiratorio.integration.issue
 
 import br.com.jiratorio.base.Authenticator
+import br.com.jiratorio.config.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.entity.DynamicFieldConfig
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.IssuePeriod
@@ -14,14 +15,11 @@ import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
 import org.apache.http.HttpStatus.SC_OK
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import org.springframework.boot.test.context.SpringBootTest
 
-@Tag("integration")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@IntegrationTest
 class SearchIssueIntegrationTest(
     private val issueFactory: IssueFactory,
     private val issuePeriodFactory: IssuePeriodFactory,

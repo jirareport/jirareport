@@ -1,12 +1,12 @@
 package br.com.jiratorio.usecase.percentile
 
 import br.com.jiratorio.assert.assertThat
+import br.com.jiratorio.config.junit.testtype.UnitTest
 import br.com.jiratorio.domain.Percentile
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-@Tag("unit")
+@UnitTest
 internal class CalculatePercentileTest {
 
     private val calculatePercentile = CalculatePercentile()

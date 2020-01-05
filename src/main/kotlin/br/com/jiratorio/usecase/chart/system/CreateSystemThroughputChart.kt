@@ -17,8 +17,9 @@ class CreateSystemThroughputChart(
     fun execute(issues: List<Issue>): Chart<String, Int> {
         log.info("Action=createSystemThroughputChart, issues={}", issues)
 
+        val uninformedValue = messageResolver.resolve("uninformed")
         return issues
-            .groupingBy { it.system ?: messageResolver("uninformed") }
+            .groupingBy { it.system ?: uninformedValue }
             .eachCount()
             .toChart()
     }

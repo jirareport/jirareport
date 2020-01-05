@@ -1,6 +1,7 @@
 package br.com.jiratorio.integration.issue
 
 import br.com.jiratorio.base.Authenticator
+import br.com.jiratorio.config.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.dsl.restAssured
@@ -12,14 +13,11 @@ import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
 import org.apache.http.HttpStatus.SC_OK
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.containsInAnyOrder
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-@Tag("integration")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@IntegrationTest
 class IssueFiltersIntegrationTest(
     private val issueFactory: IssueFactory,
     private val issuePeriodFactory: IssuePeriodFactory,

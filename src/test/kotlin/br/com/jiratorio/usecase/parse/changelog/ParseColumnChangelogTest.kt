@@ -1,14 +1,14 @@
 package br.com.jiratorio.usecase.parse.changelog
 
+import br.com.jiratorio.config.junit.testtype.UnitTest
 import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.domain.jira.JiraChangelog
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
-@Tag("unit")
+@UnitTest
 internal class ParseColumnChangelogTest {
 
     private val parseColumnChangelog = ParseColumnChangelog()

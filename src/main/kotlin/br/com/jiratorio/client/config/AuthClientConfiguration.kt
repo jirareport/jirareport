@@ -20,9 +20,9 @@ class AuthClientConfiguration {
 
             BadCredentialsException(
                 when {
-                    reason.isNullOrBlank() -> messageResolver("login.fail")
-                    reason.startsWith("CAPTCHA_CHALLENGE") -> messageResolver("login.fail.captcha-challenge")
-                    else -> messageResolver("login.fail")
+                    reason.isNullOrBlank() -> messageResolver.resolve("login.fail")
+                    reason.startsWith("CAPTCHA_CHALLENGE") -> messageResolver.resolve("login.fail.captcha-challenge")
+                    else -> messageResolver.resolve("login.fail")
                 }
             )
         }
