@@ -68,10 +68,8 @@ class UseCaseArchTest {
     private fun areExecuteMethodAnnotatedWithTransaction(): DescribedPredicate<in JavaClass>? {
         return object : DescribedPredicate<JavaClass>("execute method annotated with transaction") {
             override fun apply(input: JavaClass): Boolean =
-                !input.isAnnotatedWith(UseCase::class.java)
-                        || input.methods.filter { it.name == "execute" }.all { it.isAnnotatedWith(Transactional::class.java) }
+                !input.isAnnotatedWith(UseCase::class.java) || input.methods.filter { it.name == "execute" }.all { it.isAnnotatedWith(Transactional::class.java) }
         }
     }
-
 
 }
