@@ -17,7 +17,7 @@ select issue_id,
                             LPAD(changelog -> 'created' ->> 2, 2, '0'), ' ',
                             LPAD(changelog -> 'created' ->> 3, 2, '0'), ':',
                             LPAD(changelog -> 'created' ->> 4, 2, '0'), ':',
-                            LPAD(changelog -> 'created' ->> 5, 2, '0')
+                            COALESCE(LPAD(changelog -> 'created' ->> 5, 2, '0'), '00')
                         ), 'YYYY-MM-DD HH24:MI:SS')           as start_date,
        to_timestamp(concat(
                             changelog -> 'endDate' ->> 0, '-',
@@ -25,7 +25,7 @@ select issue_id,
                             LPAD(changelog -> 'endDate' ->> 2, 2, '0'), ' ',
                             LPAD(changelog -> 'endDate' ->> 3, 2, '0'), ':',
                             LPAD(changelog -> 'endDate' ->> 4, 2, '0'), ':',
-                            LPAD(changelog -> 'endDate' ->> 5, 2, '0')
+                            COALESCE(LPAD(changelog -> 'endDate' ->> 5, 2, '0'), '00')
                         ), 'YYYY-MM-DD HH24:MI:SS')           as end_date,
        jsonb_extract_path_text(changelog, 'leadTime')::bigint as lead_time,
        owner,
