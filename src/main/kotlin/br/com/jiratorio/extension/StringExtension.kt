@@ -10,7 +10,9 @@ fun String.toBase64(): String =
     Base64.getEncoder().encodeToString(this.toByteArray())
 
 fun String.fromJiraToLocalDateTime(): LocalDateTime =
-    substring(0, 19).toLocalDateTime()
+    substring(0, 19)
+        .replace("T", " ")
+        .toLocalDateTime()
 
 fun String.stripAccents(): String =
     Normalizer.normalize(this, Normalizer.Form.NFD)
@@ -25,5 +27,5 @@ fun String.toLocalDate(formatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE
 fun String.toLocalDate(pattern: String): LocalDate =
     LocalDate.parse(this, DateTimeFormatter.ofPattern(pattern))
 
-fun String.toLocalDateTime(formatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME): LocalDateTime =
+fun String.toLocalDateTime(formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")): LocalDateTime =
     LocalDateTime.parse(this, formatter)

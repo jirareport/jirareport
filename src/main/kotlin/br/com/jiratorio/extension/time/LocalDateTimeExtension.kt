@@ -62,8 +62,5 @@ fun LocalDateTime.plusDays(days: Long, holidays: List<LocalDate>, ignoreWeekend:
     return cursor
 }
 
-private val dateTimePattern: DateTimeFormatter =
-    DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
-
-fun LocalDateTime.displayFormat(): String =
-    this.format(dateTimePattern)
+fun LocalDateTime.displayFormat(formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")): String =
+    this.format(formatter)
