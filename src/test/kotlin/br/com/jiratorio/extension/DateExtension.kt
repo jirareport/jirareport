@@ -31,9 +31,8 @@ fun String.toLocalDateTime(pattern: String): LocalDateTime =
     LocalDateTime.parse(this, DateTimeFormatter.ofPattern(pattern))
 
 fun String.toLocalDateTime(): LocalDateTime =
-    if (this.length == 19)
-        this.toLocalDateTime("dd/MM/yyyy HH:mm:ss")
-    else if (this.length == 10)
-        "$this 00:00".toLocalDateTime("dd/MM/yyyy HH:mm")
-    else
-        this.toLocalDateTime("dd/MM/yyyy HH:mm")
+    when (this.length) {
+        19 -> this.toLocalDateTime("dd/MM/yyyy HH:mm:ss")
+        10 -> "$this 00:00".toLocalDateTime("dd/MM/yyyy HH:mm")
+        else -> this.toLocalDateTime("dd/MM/yyyy HH:mm")
+    }

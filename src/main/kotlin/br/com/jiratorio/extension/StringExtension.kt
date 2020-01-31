@@ -25,5 +25,5 @@ fun String.toLocalDate(formatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE
 fun String.toLocalDate(pattern: String): LocalDate =
     LocalDate.parse(this, DateTimeFormatter.ofPattern(pattern))
 
-fun String.toLocalDateTime(formatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME): LocalDateTime =
+fun String.toLocalDateTime(formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")): LocalDateTime =
     LocalDateTime.parse(this, formatter)
