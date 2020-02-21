@@ -13,10 +13,11 @@ fun JsonNode?.extractValue(): String? {
     }
 
     if (this.isObject) {
-        return if (this.hasNonNull("value"))
-            this.path("value").extractValue()
-        else
-            this.path("name").extractValue()
+        return when {
+            this.hasNonNull("value") -> this.path("value").extractValue()
+            this.hasNonNull("displayName") -> this.path("displayName").extractValue()
+            else -> this.path("name").extractValue()
+        }
     }
 
     if (this.isArray) {
