@@ -1,14 +1,24 @@
 package br.com.jiratorio.domain.jira
 
+import br.com.jiratorio.extension.buildList
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class JiraError(
 
-    val message: String,
+    val message: String?,
 
     @field:JsonProperty("status-code")
-    val statusCode: Long,
+    val statusCode: Long?,
 
-    val errorMessages: List<String>? = null
+    @field:JsonProperty("errorMessages")
+    val messages: List<String>? = null
 
-)
+) {
+
+    val allErrors: List<String>
+        get() = buildList {
+            message?.let { add(it) }
+            messages?.let { addAll(it) }
+        }
+
+}

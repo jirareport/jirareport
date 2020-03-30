@@ -1,10 +1,10 @@
 package br.com.jiratorio.client
 
 import br.com.jiratorio.client.config.JiraClientConfiguration
+import br.com.jiratorio.domain.request.SearchJiraIssueRequest
 import com.fasterxml.jackson.databind.JsonNode
 import org.springframework.cloud.openfeign.FeignClient
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.PostMapping
 
 @FeignClient(
     name = "issue-client",
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam
 )
 interface IssueClient {
 
-    @GetMapping("/rest/api/2/search?expand=changelog&maxResults=100")
-    fun findByJql(@RequestParam("jql") jql: String): JsonNode
+    @PostMapping("/rest/api/2/search")
+    fun findByJql(filter: SearchJiraIssueRequest): JsonNode
 
 }
