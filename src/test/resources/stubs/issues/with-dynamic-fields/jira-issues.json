@@ -1,20 +1,29 @@
 {
   "request": {
+    "method": "POST",
     "urlPath": "/jira/rest/api/2/search",
-    "queryParameters": {
-      "expand": {
-        "equalTo": "changelog"
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": {
+          "expression": "$.expand",
+          "equalToJson": [
+            "changelog"
+          ]
+        }
       },
-      "maxResults": {
-        "equalTo": "100"
+      {
+        "matchesJsonPath": {
+          "expression": "$.maxResults",
+          "equalTo": "100"
+        }
       },
-      "jql": {
-        "matches": "(.*)"
+      {
+        "matchesJsonPath": "$.jql"
       }
-    },
-    "headers" : {
-      "Authorization" : {
-        "equalTo" : "secret-token"
+    ],
+    "headers": {
+      "Authorization": {
+        "equalTo": "secret-token"
       }
     }
   },

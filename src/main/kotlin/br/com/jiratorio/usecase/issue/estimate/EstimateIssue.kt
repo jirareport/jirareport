@@ -9,6 +9,7 @@ import br.com.jiratorio.domain.estimate.EstimateFieldReference
 import br.com.jiratorio.domain.estimate.EstimatedIssue
 import br.com.jiratorio.domain.request.SearchEstimateRequest
 import br.com.jiratorio.domain.request.SearchIssueRequest
+import br.com.jiratorio.domain.request.SearchJiraIssueRequest
 import br.com.jiratorio.domain.response.EstimateIssueResponse
 import br.com.jiratorio.exception.MissingBoardConfigurationException
 import br.com.jiratorio.exception.ResourceNotFound
@@ -53,7 +54,9 @@ class EstimateIssue(
 
         val estimateIssues = parseEstimateIssue.execute(
             root = issueClient.findByJql(
-                jql = createOpenedIssueJql.execute(board)
+                filter = SearchJiraIssueRequest(
+                    jql = createOpenedIssueJql.execute(board)
+                )
             ),
             board = board
         )

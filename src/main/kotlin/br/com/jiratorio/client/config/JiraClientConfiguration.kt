@@ -22,11 +22,14 @@ class JiraClientConfiguration(
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Bean
-    fun requestInterceptor() = RequestInterceptor {
+    fun requestInterceptor() = RequestInterceptor { template ->
         val principal: Account? = SecurityContextHolder.getContext().account
         if (principal != null) {
-            it.header("Authorization", principal.token)
+            template.header("Authorization", principal.token)
         }
+
+        template.header("Accept-Language", "en")
+        template.header("X-Force-Accept-Language", "true")
     }
 
     @Bean

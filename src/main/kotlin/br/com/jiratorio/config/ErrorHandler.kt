@@ -1,6 +1,7 @@
 package br.com.jiratorio.config
 
 import br.com.jiratorio.config.internationalization.MessageResolver
+import br.com.jiratorio.exception.JiraException
 import br.com.jiratorio.exception.MissingBoardConfigurationException
 import br.com.jiratorio.exception.UniquenessFieldException
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
@@ -52,9 +53,16 @@ class ErrorHandler(
         )
 
     @ExceptionHandler(MissingBoardConfigurationException::class)
-    fun handleBadRequestException(e: MissingBoardConfigurationException): ResponseEntity<Map<String, List<String?>>> =
+    fun handleBadRequestException(e: MissingBoardConfigurationException): ResponseEntity<Map<String, List<String>>> =
         ResponseEntity(
             mapOf(e.field to listOf(messageResolver.resolve("validations.missing-board-configuration", e.field))),
+            HttpStatus.BAD_REQUEST
+        )
+
+    @ExceptionHandler(JiraException::class)
+    fun handleJiraError(e: JiraException): ResponseEntity<Map<String, List<String>>> =
+        ResponseEntity(
+            mapOf("jira" to e.jiraError.allErrors),
             HttpStatus.BAD_REQUEST
         )
 
