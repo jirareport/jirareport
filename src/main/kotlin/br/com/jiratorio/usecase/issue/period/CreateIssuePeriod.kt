@@ -94,6 +94,7 @@ class CreateIssuePeriod(
             throughputByPriority = chartAggregator.throughputByPriority
             dynamicCharts = chartAggregator.dynamicCharts.toMutableList()
             leadTimeCompareChart = chartAggregator.leadTimeCompareChart
+            issueProgression = chartAggregator.issueProgression
         }
     }
 

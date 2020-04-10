@@ -8,6 +8,7 @@ import br.com.jiratorio.usecase.chart.dynamic.CreateDynamicChart
 import br.com.jiratorio.usecase.chart.estimate.CreateEstimateLeadTimeChart
 import br.com.jiratorio.usecase.chart.estimate.CreateEstimateThroughputChart
 import br.com.jiratorio.usecase.chart.histogram.CreateHistogramChart
+import br.com.jiratorio.usecase.chart.issue.CreateIssueProgressionChart
 import br.com.jiratorio.usecase.chart.issue.type.CreateIssueTypeLeadTimeChart
 import br.com.jiratorio.usecase.chart.issue.type.CreateIssueTypeThroughputChart
 import br.com.jiratorio.usecase.chart.leadtimecompare.CreateLeadTimeCompareChart
@@ -33,7 +34,8 @@ class CreateChartAggregator(
     private val createProjectLeadTimeChart: CreateProjectLeadTimeChart,
     private val createProjectThroughputChart: CreateProjectThroughputChart,
     private val createSystemLeadTimeChart: CreateSystemLeadTimeChart,
-    private val createSystemThroughputChart: CreateSystemThroughputChart
+    private val createSystemThroughputChart: CreateSystemThroughputChart,
+    private val createIssueProgressionChart: CreateIssueProgressionChart
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -54,7 +56,8 @@ class CreateChartAggregator(
             leadTimeByPriority = createPriorityLeadTimeChart.execute(issues),
             throughputByPriority = createPriorityThroughputChart.execute(issues),
             leadTimeCompareChart = createLeadTimeCompareChart.execute(issues),
-            dynamicCharts = createDynamicChart.execute(issues, board)
+            dynamicCharts = createDynamicChart.execute(board, issues),
+            issueProgression = createIssueProgressionChart.execute(board, issues)
         )
     }
 

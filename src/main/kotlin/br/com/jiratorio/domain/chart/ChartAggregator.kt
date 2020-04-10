@@ -3,6 +3,7 @@ package br.com.jiratorio.domain.chart
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.entity.embedded.Histogram
+import br.com.jiratorio.domain.entity.embedded.IssueProgression
 
 data class ChartAggregator(
 
@@ -30,6 +31,8 @@ data class ChartAggregator(
 
     val leadTimeCompareChart: Chart<String, Double>,
 
-    val dynamicCharts: List<DynamicChart>
+    val dynamicCharts: List<DynamicChart>,
+
+    val issueProgression: IssueProgression
 
 )

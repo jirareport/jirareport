@@ -3,6 +3,8 @@ package br.com.jiratorio.extension.time
 import br.com.jiratorio.config.junit.testtype.UnitTest
 import br.com.jiratorio.extension.toLocalDate
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import java.time.LocalDate
@@ -78,6 +80,41 @@ internal class LocalDateExtensionKtTest {
         assertThat(daysDiff)
             .isEqualTo(expected)
     }
+
+    @ParameterizedTest
+    @CsvSource(
+        "06/04/2020, 06/04/2020, 07/04/2020",
+        "06/04/2020, 05/04/2020, 06/04/2020",
+        "06/04/2020, 05/04/2020, 07/04/2020",
+        "06/04/2020, 01/04/2020, 30/04/2020"
+    )
+    fun `should be between`(date: String, start: String, end: String) {
+        val startDate = start.toLocalDate()
+        val endDate = end.toLocalDate()
+        val localDate = date.toLocalDate()
+
+        val isBetween = localDate.isBetween(startDate, endDate)
+
+        assertTrue(isBetween)
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "05/04/2020, 06/04/2020, 07/04/2020",
+        "07/04/2020, 05/04/2020, 06/04/2020",
+        "01/04/2020, 05/04/2020, 07/04/2020",
+        "01/03/2020, 01/04/2020, 30/04/2020"
+    )
+    fun `should not be between`(date: String, start: String, end: String) {
+        val startDate = start.toLocalDate()
+        val endDate = end.toLocalDate()
+        val localDate = date.toLocalDate()
+
+        val isBetween = localDate.isBetween(startDate, endDate)
+
+        assertFalse(isBetween)
+    }
+
 
     private fun commonHolidays(): List<LocalDate> {
         return listOf(

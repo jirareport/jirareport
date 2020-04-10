@@ -37,5 +37,6 @@ fun IssuePeriod.toIssuePeriodDetailResponse(): IssuePeriodDetailResponse =
         throughputByPriority = throughputByPriority,
         columnTimeAverages = columnTimeAverages.toResponse(),
         leadTimeCompareChart = leadTimeCompareChart,
-        dynamicCharts = dynamicCharts
+        dynamicCharts = dynamicCharts,
+        issueProgression = issueProgression
     )
