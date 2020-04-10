@@ -3,6 +3,7 @@ package br.com.jiratorio.domain.entity
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.entity.embedded.Histogram
+import br.com.jiratorio.domain.entity.embedded.IssueProgression
 import br.com.jiratorio.extension.toStringBuilder
 import org.hibernate.annotations.Type
 import java.time.LocalDate
@@ -109,7 +110,11 @@ data class IssuePeriod(
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var dynamicCharts: MutableList<DynamicChart>? = null
+    var dynamicCharts: MutableList<DynamicChart>? = null,
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    var issueProgression: IssueProgression? = null
 
 ) : BaseEntity() {
     companion object {
