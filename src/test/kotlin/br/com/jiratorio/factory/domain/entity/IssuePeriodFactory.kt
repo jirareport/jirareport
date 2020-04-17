@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit
 class IssuePeriodFactory(
     private val faker: Faker,
     private val boardFactory: BoardFactory,
-//    private val columnTimeAverageFactory: ColumnTimeAverageFactory,
     issuePeriodRepository: IssuePeriodRepository?
 ) : KBacon<IssuePeriod>(issuePeriodRepository) {
 
@@ -99,7 +98,6 @@ class IssuePeriodFactory(
                     "expedite" to faker.jira().throughput()
                 )
             ),
-//            columnTimeAverages = columnTimeAverageFactory.create(5).toMutableList(),
             dynamicCharts = mutableListOf(
                 DynamicChart(
                     name = "dnf_1",

@@ -12,6 +12,7 @@ import br.com.jiratorio.extension.decimal.format
 import br.com.jiratorio.mapper.toIssuePeriodResponse
 import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.IssuePeriodRepository
+import br.com.jiratorio.usecase.chart.issue.period.CreateIssueTypePerformanceCompareChart
 import br.com.jiratorio.usecase.chart.issue.period.CreateLeadTimeCompareChartByPeriod
 import br.com.jiratorio.usecase.chart.issue.period.CreateThroughputByEstimateChart
 import org.slf4j.LoggerFactory
@@ -23,7 +24,8 @@ class FindAllIssuePeriods(
     private val issuePeriodRepository: IssuePeriodRepository,
     private val jiraProperties: JiraProperties,
     private val createLeadTimeCompareChartByPeriod: CreateLeadTimeCompareChartByPeriod,
-    private val createThroughputByEstimateChart: CreateThroughputByEstimateChart
+    private val createThroughputByEstimateChart: CreateThroughputByEstimateChart,
+    private val createIssueTypePerformanceCompareChart: CreateIssueTypePerformanceCompareChart
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -55,10 +57,11 @@ class FindAllIssuePeriods(
         }
 
         return IssuePeriodChartResponse(
-            throughputByEstimate = createThroughputByEstimateChart.execute(issuePeriods),
-            leadTimeCompareChart = createLeadTimeCompareChartByPeriod.execute(issuePeriods, board),
             leadTime = leadTime,
-            throughput = throughput
+            throughput = throughput,
+            leadTimeCompareChart = createLeadTimeCompareChartByPeriod.execute(issuePeriods, board),
+            throughputByEstimate = createThroughputByEstimateChart.execute(issuePeriods),
+            issueTypePerformanceCompareChart = createIssueTypePerformanceCompareChart.execute(issuePeriods)
         )
     }
 

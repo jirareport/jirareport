@@ -4,12 +4,14 @@ import br.com.jiratorio.domain.entity.embedded.Chart
 
 data class IssuePeriodChartResponse(
 
-    val throughputByEstimate: ThroughputByEstimate,
-
-    val leadTimeCompareChart: LeadTimeCompareChart,
-
     val leadTime: Chart<String, String>,
 
-    val throughput: Chart<String, Int>
+    val throughput: Chart<String, Int>,
+
+    val throughputByEstimate: ThroughputByEstimate,
+
+    val leadTimeCompareChart: MultiAxisChart<Double>,
+
+    val issueTypePerformanceCompareChart: Map<String, MultiAxisChart<Number>>
 
 )
