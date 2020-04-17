@@ -1,7 +1,7 @@
 package br.com.jiratorio.usecase.chart.issue.period
 
 import br.com.jiratorio.config.stereotype.UseCase
-import br.com.jiratorio.domain.chart.LeadTimeCompareChart
+import br.com.jiratorio.domain.chart.MultiAxisChart
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.IssuePeriod
 import org.slf4j.LoggerFactory
@@ -11,10 +11,10 @@ class CreateLeadTimeCompareChartByPeriod {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(issuePeriods: List<IssuePeriod>, board: Board): LeadTimeCompareChart {
+    fun execute(issuePeriods: List<IssuePeriod>, board: Board): MultiAxisChart<Double> {
         log.info("Action=createLeadTimeCompareChartByPeriod, issuePeriods={}, board={}", issuePeriods, board)
 
-        val leadTimeCompareChart = LeadTimeCompareChart()
+        val leadTimeCompareChart = MultiAxisChart<Double>()
 
         val leadTimeConfigs = board.leadTimeConfigs ?: return leadTimeCompareChart
 
@@ -30,7 +30,7 @@ class CreateLeadTimeCompareChartByPeriod {
                 }
             }
 
-            leadTimeCompareChart.add(issuePeriod.dates, collect)
+            leadTimeCompareChart[issuePeriod.dates] = collect
         }
 
         return leadTimeCompareChart
