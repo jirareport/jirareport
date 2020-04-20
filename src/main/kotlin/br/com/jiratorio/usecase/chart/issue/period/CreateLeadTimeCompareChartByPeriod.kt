@@ -30,7 +30,7 @@ class CreateLeadTimeCompareChartByPeriod {
                 }
             }
 
-            leadTimeCompareChart[issuePeriod.dates] = collect
+            leadTimeCompareChart[issuePeriod.name] = collect
         }
 
         return leadTimeCompareChart

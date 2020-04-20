@@ -10,7 +10,7 @@ fun List<IssuePeriod>.toIssuePeriodResponse(jiraUrl: String): List<IssuePeriodRe
 fun IssuePeriod.toIssuePeriodResponse(jiraUrl: String): IssuePeriodResponse =
     IssuePeriodResponse(
         id = id,
-        dates = dates,
+        name = name,
         wipAvg = wipAvg,
         leadTime = leadTime,
         avgPctEfficiency = avgPctEfficiency,
@@ -21,7 +21,7 @@ fun IssuePeriod.toIssuePeriodResponse(jiraUrl: String): IssuePeriodResponse =
 
 fun IssuePeriod.toIssuePeriodDetailResponse(): IssuePeriodDetailResponse =
     IssuePeriodDetailResponse(
-        dates = dates,
+        name = name,
         leadTime = leadTime,
         throughput = throughput,
         histogram = histogram,

@@ -1,5 +1,6 @@
 package br.com.jiratorio.usecase.issue.period
 
+import br.com.jiratorio.config.internationalization.MessageResolver
 import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.Board
@@ -24,7 +25,8 @@ class CreateIssuePeriod(
     private val createChartAggregator: CreateChartAggregator,
     private val calculateAverageWip: CalculateAverageWip,
     private val createColumnTimeAverages: CreateColumnTimeAverages,
-    private val createIssues: CreateIssues
+    private val createIssues: CreateIssues,
+    private val messageResolver: MessageResolver
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -40,6 +42,7 @@ class CreateIssuePeriod(
         val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
 
         val issuePeriod = IssuePeriod(
+            name = board.issuePeriodNameFormat.format(startDate, endDate, messageResolver.locale),
             startDate = startDate,
             endDate = endDate,
             board = board

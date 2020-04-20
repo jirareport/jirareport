@@ -21,7 +21,7 @@ class CreateThroughputByEstimateChart {
             val throughputByEstimate = issuePeriod.throughputByEstimate ?: continue
             val estimated = throughputByEstimate.data.toMutableMap()
             sizes.addAll(estimated.keys)
-            periodsSize[issuePeriod.dates] = estimated
+            periodsSize[issuePeriod.name] = estimated
         }
 
         periodsSize.forEach { (_, v) ->

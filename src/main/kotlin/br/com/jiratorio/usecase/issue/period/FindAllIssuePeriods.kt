@@ -52,8 +52,8 @@ class FindAllIssuePeriods(
         val throughput: Chart<String, Int> = Chart()
 
         for (issuePeriod in issuePeriods) {
-            leadTime[issuePeriod.dates] = issuePeriod.leadTime.format()
-            throughput[issuePeriod.dates] = issuePeriod.throughput
+            leadTime[issuePeriod.name] = issuePeriod.leadTime.format()
+            throughput[issuePeriod.name] = issuePeriod.throughput
         }
 
         return IssuePeriodChartResponse(

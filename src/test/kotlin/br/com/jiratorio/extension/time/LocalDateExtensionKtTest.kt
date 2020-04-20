@@ -115,6 +115,47 @@ internal class LocalDateExtensionKtTest {
         assertFalse(isBetween)
     }
 
+    @ParameterizedTest
+    @CsvSource(
+        "31/01/2020",
+        "29/02/2020",
+        "31/03/2020",
+        "30/04/2020",
+        "31/05/2020",
+        "30/06/2020",
+        "31/07/2020",
+        "31/08/2020",
+        "30/09/2020",
+        "31/10/2020",
+        "30/11/2020",
+        "31/12/2020"
+    )
+    fun `should be lastDayOfMonth`(date: String) {
+        val lastDayOfMonth = date.toLocalDate().isLastDayOfMonth
+        assertTrue(lastDayOfMonth)
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "30/01/2020",
+        "28/02/2020",
+        "15/03/2020",
+        "07/04/2020",
+        "20/05/2020",
+        "01/06/2020",
+        "10/07/2020",
+        "11/08/2020",
+        "29/09/2020",
+        "14/10/2020",
+        "13/11/2020",
+        "09/12/2020"
+    )
+    fun `shouldn't be lastDayOfMonth`(date: String) {
+        val localDate = date.toLocalDate()
+        val lastDayOfMonth = localDate.isLastDayOfMonth
+        assertFalse(lastDayOfMonth)
+    }
+
     private fun commonHolidays(): List<LocalDate> {
         return listOf(
             "01/01/2019".toLocalDate(),

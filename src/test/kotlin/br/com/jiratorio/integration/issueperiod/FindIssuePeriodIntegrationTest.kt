@@ -66,7 +66,7 @@ internal class FindIssuePeriodIntegrationTest(
         } extractAs IssuePeriodByIdResponse::class
 
         detail.assertThat {
-            hasDates(issuePeriod.dates)
+            hasName(issuePeriod.name)
             hasLeadTime(issuePeriod.leadTime)
             hasThroughput(issuePeriod.throughput)
             hasLeadTimeByEstimate(issuePeriod.leadTimeByEstimate)

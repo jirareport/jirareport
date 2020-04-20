@@ -2,6 +2,7 @@ package br.com.jiratorio.domain.request
 
 import br.com.jiratorio.domain.duedate.DueDateType
 import br.com.jiratorio.domain.impediment.ImpedimentType
+import br.com.jiratorio.domain.issueperiodnameformat.IssuePeriodNameFormat
 import javax.validation.constraints.NotBlank
 
 data class UpdateBoardRequest(
@@ -39,6 +40,8 @@ data class UpdateBoardRequest(
 
     val dueDateType: DueDateType? = null,
 
-    val useLastOccurrenceWhenCalculateLeadTime: Boolean = false
+    val useLastOccurrenceWhenCalculateLeadTime: Boolean = false,
+
+    val issuePeriodNameFormat: IssuePeriodNameFormat = IssuePeriodNameFormat.INITIAL_AND_FINAL_DATE
 
 )

@@ -1,6 +1,7 @@
 package br.com.jiratorio.domain.response.board
 
 import br.com.jiratorio.domain.impediment.ImpedimentType
+import br.com.jiratorio.domain.issueperiodnameformat.IssuePeriodNameFormat
 
 data class BoardDetailsResponse(
 
@@ -42,6 +43,8 @@ data class BoardDetailsResponse(
 
     val feature: BoardFeatureResponse,
 
-    val useLastOccurrenceWhenCalculateLeadTime: Boolean = false
+    val useLastOccurrenceWhenCalculateLeadTime: Boolean = false,
+
+    val issuePeriodNameFormat: IssuePeriodNameFormat
 
 )

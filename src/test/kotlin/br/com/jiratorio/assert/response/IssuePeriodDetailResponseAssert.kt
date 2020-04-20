@@ -13,8 +13,8 @@ class IssuePeriodDetailResponseAssert(
     IssuePeriodDetailResponseAssert::class
 ) {
 
-    fun hasDates(dates: String) = assertAll {
-        objects.assertEqual(field("issuePeriodDetailResponse.dates"), actual.dates, dates)
+    fun hasName(name: String) = assertAll {
+        objects.assertEqual(field("issuePeriodDetailResponse.name"), actual.name, name)
     }
 
     fun hasLeadTime(leadTime: Double) = assertAll {

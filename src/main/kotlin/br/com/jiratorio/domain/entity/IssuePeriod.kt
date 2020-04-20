@@ -7,7 +7,6 @@ import br.com.jiratorio.domain.entity.embedded.IssueProgression
 import br.com.jiratorio.extension.toStringBuilder
 import org.hibernate.annotations.Type
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -34,6 +33,9 @@ data class IssuePeriod(
     @ManyToOne
     @JoinColumn(name = "board_id", nullable = false)
     var board: Board,
+
+    @Column(nullable = false)
+    var name: String = board.issuePeriodNameFormat.format(startDate, endDate),
 
     @OneToMany
     @OrderBy("key")
@@ -120,12 +122,6 @@ data class IssuePeriod(
     companion object {
         private const val serialVersionUID = 7188140641247774389L
     }
-
-    val dates: String
-        get() {
-            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-            return "[%s - %s]".format(this.startDate.format(formatter), this.endDate.format(formatter))
-        }
 
     override fun toString() =
         toStringBuilder(

@@ -8,7 +8,7 @@ import br.com.jiratorio.domain.response.ColumnTimeAverageResponse
 
 data class IssuePeriodDetailResponse(
 
-    val dates: String,
+    val name: String,
 
     val leadTime: Double,
 
