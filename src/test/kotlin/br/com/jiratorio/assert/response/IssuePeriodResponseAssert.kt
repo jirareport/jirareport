@@ -10,8 +10,8 @@ class IssuePeriodResponseAssert(actual: IssuePeriodResponse) :
         objects.assertEqual(field("issuePeriodResponse.id"), actual.id, id)
     }
 
-    fun hasDates(dates: String) = assertAll {
-        objects.assertEqual(field("issuePeriodResponse.dates"), actual.dates, dates)
+    fun hasName(name: String) = assertAll {
+        objects.assertEqual(field("issuePeriodResponse.name"), actual.name, name)
     }
 
     fun hasWipAvg(wipAvg: Double) = assertAll {

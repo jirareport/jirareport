@@ -101,7 +101,8 @@ class CloneBoard(
             touchingColumns = boardToClone.touchingColumns,
             waitingColumns = boardToClone.waitingColumns,
             dueDateType = boardToClone.dueDateType,
-            useLastOccurrenceWhenCalculateLeadTime = boardToClone.useLastOccurrenceWhenCalculateLeadTime
+            useLastOccurrenceWhenCalculateLeadTime = boardToClone.useLastOccurrenceWhenCalculateLeadTime,
+            issuePeriodNameFormat = boardToClone.issuePeriodNameFormat
         )
     }
 }

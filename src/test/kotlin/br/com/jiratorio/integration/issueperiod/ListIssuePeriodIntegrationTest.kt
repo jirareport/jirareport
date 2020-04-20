@@ -82,7 +82,7 @@ internal class ListIssuePeriodIntegrationTest(
 
         periods.last().assertThat {
             hasId(period.id)
-            hasDates(period.dates)
+            hasName(period.name)
             hasLeadTime(period.leadTime)
             hasAvgPctEfficiency(period.avgPctEfficiency)
             hasWipAvg(period.wipAvg)
@@ -110,8 +110,8 @@ internal class ListIssuePeriodIntegrationTest(
                 hasLeadTimeCompareChartData("Delivery Lead Time", leadTimeCompareChart.data["Delivery Lead Time"])
             } ?: Assertions.fail("period.leadTimeCompareChart can't be null")
 
-            hasLeadTime(period.dates, period.leadTime)
-            hasThroughput(period.dates, period.throughput)
+            hasLeadTime(period.name, period.leadTime)
+            hasThroughput(period.name, period.throughput)
         }
     }
 

@@ -30,7 +30,8 @@ fun Board.toBoardDetailsResponse(): BoardDetailsResponse =
         touchingColumns = touchingColumns,
         waitingColumns = waitingColumns,
         feature = BoardFeatureResponse(this),
-        useLastOccurrenceWhenCalculateLeadTime = useLastOccurrenceWhenCalculateLeadTime
+        useLastOccurrenceWhenCalculateLeadTime = useLastOccurrenceWhenCalculateLeadTime,
+        issuePeriodNameFormat = issuePeriodNameFormat
     )
 
 fun CreateBoardRequest.toBoard(): Board =
@@ -71,4 +72,5 @@ fun Board.updateFromUpdateBoardRequest(updateBoardRequest: UpdateBoardRequest) {
     dueDateCF = updateBoardRequest.dueDateCF
     dueDateType = updateBoardRequest.dueDateType
     useLastOccurrenceWhenCalculateLeadTime = updateBoardRequest.useLastOccurrenceWhenCalculateLeadTime
+    issuePeriodNameFormat = updateBoardRequest.issuePeriodNameFormat
 }

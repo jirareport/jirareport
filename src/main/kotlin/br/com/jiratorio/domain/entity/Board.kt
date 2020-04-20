@@ -2,6 +2,7 @@ package br.com.jiratorio.domain.entity
 
 import br.com.jiratorio.domain.duedate.DueDateType
 import br.com.jiratorio.domain.impediment.ImpedimentType
+import br.com.jiratorio.domain.issueperiodnameformat.IssuePeriodNameFormat
 import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.toStringBuilder
 import org.hibernate.annotations.Type
@@ -85,7 +86,11 @@ data class Board(
     @Enumerated(EnumType.STRING)
     var dueDateType: DueDateType? = null,
 
-    var useLastOccurrenceWhenCalculateLeadTime: Boolean = false
+    var useLastOccurrenceWhenCalculateLeadTime: Boolean = false,
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    var issuePeriodNameFormat: IssuePeriodNameFormat = IssuePeriodNameFormat.INITIAL_AND_FINAL_DATE
 
 ) : BaseEntity() {
 

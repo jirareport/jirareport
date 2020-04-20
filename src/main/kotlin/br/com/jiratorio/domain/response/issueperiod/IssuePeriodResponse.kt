@@ -4,7 +4,7 @@ data class IssuePeriodResponse(
 
     val id: Long,
 
-    val dates: String,
+    val name: String,
 
     val wipAvg: Double,
 

@@ -51,3 +51,9 @@ fun LocalDate?.daysBetween(
         (this..endDate).toList()
     else
         (this..endDate).filter { it.isWorkday(holidays) }
+
+val LocalDate.isFirstDayOfMonth: Boolean
+    get() = dayOfMonth == 1
+
+val LocalDate.isLastDayOfMonth: Boolean
+    get() = dayOfMonth == lengthOfMonth()

@@ -33,7 +33,7 @@ class CreateIssueTypePerformanceCompareChart {
                 .filter { issue -> issue.issueType ?: EMPTY == issueType }
                 .map { issue -> issue.leadTime }
 
-            result[it.dates] = mapOf(
+            result[it.name] = mapOf(
                 "Throughput" to leadTimes.size,
                 "Lead Time" to leadTimes.average().zeroIfNaN()
             )

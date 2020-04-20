@@ -178,6 +178,8 @@ internal class SearchBoardIntegrationTest(
                 body("dueDateType", equalTo(board.dueDateType!!.name))
                 body("touchingColumns", hasSize<Any>(board.touchingColumns!!.size))
                 body("waitingColumns", hasSize<Any>(board.waitingColumns!!.size))
+                body("useLastOccurrenceWhenCalculateLeadTime", equalTo(board.useLastOccurrenceWhenCalculateLeadTime))
+                body("issuePeriodNameFormat", equalTo(board.issuePeriodNameFormat.name))
             }
         }
     }
