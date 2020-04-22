@@ -70,6 +70,8 @@ internal class ListIssuePeriodIntegrationTest(
             charts
         ) = restAssured {
             given {
+                param("startDate", "2019-01-01")
+                param("endDate", "2019-05-31")
                 header(authenticator.defaultUserHeader())
             }
             on {
@@ -120,6 +122,8 @@ internal class ListIssuePeriodIntegrationTest(
         restAssured {
             given {
                 header(authenticator.defaultUserHeader())
+                param("startDate", "2019-01-01")
+                param("endDate", "2019-05-31")
             }
             on {
                 get("/boards/1/issue-periods")
@@ -137,6 +141,8 @@ internal class ListIssuePeriodIntegrationTest(
         restAssured {
             given {
                 header(authenticator.defaultUserHeader())
+                param("startDate", "2019-01-01")
+                param("endDate", "2019-05-31")
             }
             on {
                 get("/boards/1/issue-periods")
