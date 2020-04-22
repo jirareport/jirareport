@@ -7,7 +7,6 @@ import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.toStringBuilder
 import org.hibernate.annotations.Type
 import java.util.Objects
-import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -56,14 +55,11 @@ data class Board(
 
     var ignoreWeekend: Boolean? = null,
 
-    @OneToMany(mappedBy = "board", cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "board")
     var leadTimeConfigs: MutableList<LeadTimeConfig>? = null,
 
-    @OneToMany(mappedBy = "board", cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "board")
     var holidays: MutableList<Holiday>? = null,
-
-    @OneToMany(mappedBy = "board", cascade = [CascadeType.ALL])
-    var issues: MutableList<Issue>? = null,
 
     @Enumerated(EnumType.STRING)
     var impedimentType: ImpedimentType? = null,
