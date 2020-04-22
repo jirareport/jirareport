@@ -17,6 +17,7 @@ import br.com.jiratorio.usecase.chart.issue.period.CreateLeadTimeCompareChartByP
 import br.com.jiratorio.usecase.chart.issue.period.CreateThroughputByEstimateChart
 import org.slf4j.LoggerFactory
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 
 @UseCase
 class FindAllIssuePeriods(
@@ -31,13 +32,12 @@ class FindAllIssuePeriods(
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional(readOnly = true)
-    fun execute(boardId: Long): IssuePeriodListResponse {
-        log.info("Action=findAllIssuePeriods, boardId={}", boardId)
+    fun execute(boardId: Long, startDate: LocalDate, endDate: LocalDate): IssuePeriodListResponse {
+        log.info("Action=findAllIssuePeriods, boardId={}, startDate={}, endDate={}", boardId, startDate, endDate)
 
         val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
 
-        val issuePeriods = issuePeriodRepository.findByBoardId(boardId)
-            .sortedBy { it.startDate }
+        val issuePeriods = issuePeriodRepository.findAll(boardId, startDate, endDate)
 
         return IssuePeriodListResponse(
             periods = issuePeriods.toIssuePeriodResponse(jiraProperties.url),
