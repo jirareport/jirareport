@@ -12,7 +12,6 @@ import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
 import br.com.jiratorio.extension.parallelStream
 import br.com.jiratorio.extension.time.daysDiff
-import br.com.jiratorio.usecase.holiday.FindHolidayDays
 import br.com.jiratorio.usecase.parse.changelog.ParseChangelog
 import com.fasterxml.jackson.databind.JsonNode
 import org.slf4j.LoggerFactory
@@ -22,8 +21,7 @@ import kotlin.streams.toList
 
 @UseCase
 class ParseEstimateIssue(
-    private val parseChangelog: ParseChangelog,
-    private val findHolidayDays: FindHolidayDays
+    private val parseChangelog: ParseChangelog
 ) : IssueParser<EstimatedIssue> {
 
     private val log = LoggerFactory.getLogger(javaClass)
