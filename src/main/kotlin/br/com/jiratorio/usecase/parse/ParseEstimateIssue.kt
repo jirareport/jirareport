@@ -24,14 +24,12 @@ import kotlin.streams.toList
 class ParseEstimateIssue(
     private val parseChangelog: ParseChangelog,
     private val findHolidayDays: FindHolidayDays
-) {
+) : IssueParser<EstimatedIssue> {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(root: JsonNode, board: Board): List<EstimatedIssue> {
+    override fun execute(root: JsonNode, board: Board, holidays: List<LocalDate>): List<EstimatedIssue> {
         log.info("Action=parseEstimateIssue, root={}, board={}", root, board)
-
-        val holidays = findHolidayDays.execute(board.id)
 
         val fluxColumn = FluxColumn(board)
         val startColumns = fluxColumn.startColumns

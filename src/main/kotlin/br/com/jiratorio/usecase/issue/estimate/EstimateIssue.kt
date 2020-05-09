@@ -7,9 +7,9 @@ import br.com.jiratorio.domain.Percentile
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.estimate.EstimateFieldReference
 import br.com.jiratorio.domain.estimate.EstimatedIssue
+import br.com.jiratorio.domain.jira.PagedIssueSearcher
 import br.com.jiratorio.domain.request.SearchEstimateRequest
 import br.com.jiratorio.domain.request.SearchIssueRequest
-import br.com.jiratorio.domain.request.SearchJiraIssueRequest
 import br.com.jiratorio.domain.response.EstimateIssueResponse
 import br.com.jiratorio.exception.MissingBoardConfigurationException
 import br.com.jiratorio.exception.ResourceNotFound
@@ -52,16 +52,15 @@ class EstimateIssue(
             throw MissingBoardConfigurationException("fluxColumn")
         }
 
-        val estimateIssues = parseEstimateIssue.execute(
-            root = issueClient.findByJql(
-                filter = SearchJiraIssueRequest(
-                    jql = createOpenedIssueJql.execute(board)
-                )
-            ),
-            board = board
+        val holidays = findHolidayDays.execute(board.id)
+
+        val searcher = PagedIssueSearcher(
+            issueClient = issueClient,
+            issueParser = parseEstimateIssue
         )
 
-        val holidays = findHolidayDays.execute(boardId)
+        val jql = createOpenedIssueJql.execute(board)
+        val estimateIssues = searcher.search(jql, board, holidays)
 
         val fieldPercentileMap = HashMap<String, Percentile>()
         for (estimateIssue in estimateIssues) {

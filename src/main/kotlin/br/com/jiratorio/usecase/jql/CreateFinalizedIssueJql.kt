@@ -51,6 +51,7 @@ class CreateFinalizedIssueJql {
               | $ignoredIssueTypes
               | AND status WAS IN ($startColumns)
               | AND status IN ($endColumns)
+              | ORDER BY key ASC
         """
             .trimMargin()
             .replace("\n", "")
