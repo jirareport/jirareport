@@ -14,7 +14,7 @@
       {
         "matchesJsonPath": {
           "expression": "$.maxResults",
-          "equalTo": "100"
+          "equalTo": "50"
         }
       },
       {

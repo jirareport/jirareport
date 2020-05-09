@@ -27,6 +27,7 @@ class UseCaseArchTest {
         ArchRuleDefinition.classes()
             .that().areNotInnerClass().and().resideInAPackage("..usecase..")
             .should().beAnnotatedWith(UseCase::class.java)
+            .orShould().beInterfaces()
             .check(classes)
 
     @Test

@@ -18,12 +18,12 @@ import kotlin.streams.toList
 @UseCase
 class ParseIssue(
     private val parseChangelog: ParseChangelog
-) {
+) : IssueParser<ParsedIssue> {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional(readOnly = true)
-    fun execute(root: JsonNode, board: Board, holidays: List<LocalDate>): List<ParsedIssue> {
+    override fun execute(root: JsonNode, board: Board, holidays: List<LocalDate>): List<ParsedIssue> {
         log.info("Action=parseIssue, root={}, board={}", root, board)
 
         val fluxColumn = FluxColumn(board)
