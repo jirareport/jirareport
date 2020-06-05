@@ -6,6 +6,7 @@ import br.com.jiratorio.extension.toStringBuilder
 import org.hibernate.annotations.Type
 import java.time.LocalDateTime
 import java.util.Objects
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -63,7 +64,7 @@ data class Issue(
     @Column(name = "issue_period_id", nullable = false)
     var issuePeriodId: Long = 0,
 
-    @OneToMany(mappedBy = "issue")
+    @OneToMany(mappedBy = "issue", cascade = [CascadeType.REMOVE])
     var leadTimes: MutableSet<LeadTime>? = null,
 
     @ManyToOne(optional = false)
