@@ -1,7 +1,1 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-    }
-}
-
-rootProject.name = "jirareport"
+rootProject.name = "jiratorio"
