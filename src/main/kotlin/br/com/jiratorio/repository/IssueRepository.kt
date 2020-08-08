@@ -12,16 +12,6 @@ import java.util.Optional
 @Repository
 interface IssueRepository : CrudRepository<Issue, Long>, NativeIssueRepository {
 
-
-    @Query(
-        """
-            SELECT DISTINCT epic FROM Issue
-            WHERE board.id = :boardId
-            AND epic IS NOT NULL
-        """
-    )
-    fun findAllEpicsByBoardId(@Param("boardId") boardId: Long): Set<String>
-
     @Query(
         """
             SELECT DISTINCT issueType FROM Issue

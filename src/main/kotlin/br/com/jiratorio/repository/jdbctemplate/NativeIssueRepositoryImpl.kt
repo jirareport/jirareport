@@ -148,6 +148,18 @@ class NativeIssueRepositoryImpl(
         return jdbcTemplate.queryForSet(query, arrayOf(boardId))
     }
 
+    override fun findAllEpicsByBoardId(boardId: Long): Set<String> {
+        log.info("M=findAllEpicsByBoardId, boardId={}", boardId)
+
+        val query = """
+            SELECT DISTINCT EPIC FROM issue
+            WHERE BOARD_ID = ?
+            AND EPIC IS NOT NULL
+        """
+
+        return jdbcTemplate.queryForSet(query, arrayOf(boardId))
+    }
+
     private fun findAllDynamicFieldsByBoardId(boardId: Long): List<String> {
         log.info("Method=findAllDynamicFieldsByBoardId, boardId={}", boardId)
 
