@@ -5,7 +5,6 @@ import org.assertj.core.api.WritableAssertionInfo
 import org.assertj.core.internal.Iterables
 import org.assertj.core.internal.Longs
 import org.assertj.core.internal.Maps
-import org.assertj.core.internal.Objects
 import org.assertj.core.internal.Strings
 import kotlin.reflect.KClass
 

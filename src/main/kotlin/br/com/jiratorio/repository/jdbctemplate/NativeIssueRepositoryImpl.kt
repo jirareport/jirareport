@@ -4,14 +4,17 @@ import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
-import br.com.jiratorio.extension.queryForSet
+import br.com.jiratorio.extension.jdbctemplate.queryForSet
 import br.com.jiratorio.extension.time.atEndOfDay
 import br.com.jiratorio.repository.NativeIssueRepository
 import br.com.jiratorio.repository.jdbctemplate.rowmapper.DynamicFieldsValuesRowMapper
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.jdbc.core.queryForList
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.jdbc.core.namedparam.set
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -23,10 +26,12 @@ import javax.persistence.Query
 class NativeIssueRepositoryImpl(
     private val entityManager: EntityManager,
     private val objectMapper: ObjectMapper,
-    private val jdbcTemplate: JdbcTemplate
+    jdbcTemplate: JdbcTemplate
 ) : NativeIssueRepository {
 
-    private val log = LoggerFactory.getLogger(javaClass)
+    private val log: Logger = LoggerFactory.getLogger(javaClass)
+
+    private val jdbcTemplate: NamedParameterJdbcTemplate = NamedParameterJdbcTemplate(jdbcTemplate)
 
     @Transactional(readOnly = true)
     override fun findByExample(
@@ -118,10 +123,13 @@ class NativeIssueRepositoryImpl(
             ${dynamicFields.joinToString { """ ARRAY_TO_JSON(ARRAY_REMOVE(ARRAY_AGG(DISTINCT fields."$it"), null)) as "$it" """ }}
             FROM issue, JSONB_TO_RECORD(dynamic_fields) AS
             ${dynamicFields.joinToString(prefix = "fields(", postfix = ")") { """ "$it" TEXT """ }}
-            WHERE board_id = ?
+            WHERE board_id = :boardId
         """.trimIndent()
 
-        return jdbcTemplate.queryForObject(query, DynamicFieldsValuesRowMapper(objectMapper), boardId)
+        val params = MapSqlParameterSource()
+        params["boardId"] = boardId
+
+        return jdbcTemplate.queryForObject(query, params, DynamicFieldsValuesRowMapper(objectMapper))
             ?: emptyList()
     }
 
@@ -130,11 +138,14 @@ class NativeIssueRepositoryImpl(
 
         val query = """
             SELECT DISTINCT ESTIMATE FROM ISSUE
-            WHERE BOARD_ID = ?
+            WHERE BOARD_ID = :boardId
             AND ESTIMATE IS NOT NULL
         """
 
-        return jdbcTemplate.queryForSet(query, arrayOf(boardId))
+        val params = MapSqlParameterSource()
+        params["boardId"] = boardId
+
+        return jdbcTemplate.queryForSet(query, params)
     }
 
     override fun findAllSystemsByBoardId(boardId: Long): Set<String> {
@@ -142,11 +153,14 @@ class NativeIssueRepositoryImpl(
 
         val query = """
             SELECT DISTINCT SYSTEM FROM issue
-            WHERE BOARD_ID = ?
+            WHERE BOARD_ID = :boardId
             AND SYSTEM IS NOT NULL
         """
 
-        return jdbcTemplate.queryForSet(query, arrayOf(boardId))
+        val params = MapSqlParameterSource()
+        params["boardId"] = boardId
+
+        return jdbcTemplate.queryForSet(query, params)
     }
 
     override fun findAllEpicsByBoardId(boardId: Long): Set<String> {
@@ -154,11 +168,14 @@ class NativeIssueRepositoryImpl(
 
         val query = """
             SELECT DISTINCT EPIC FROM issue
-            WHERE BOARD_ID = ?
+            WHERE BOARD_ID = :boardId
             AND EPIC IS NOT NULL
         """
 
-        return jdbcTemplate.queryForSet(query, arrayOf(boardId))
+        val params = MapSqlParameterSource()
+        params["boardId"] = boardId
+
+        return jdbcTemplate.queryForSet(query, params)
     }
 
     override fun findAllIssueTypesByBoardId(boardId: Long): Set<String> {
@@ -166,11 +183,14 @@ class NativeIssueRepositoryImpl(
 
         val query = """
             SELECT DISTINCT ISSUE_TYPE FROM ISSUE
-            WHERE BOARD_ID = ?
+            WHERE BOARD_ID = :boardId
             AND ISSUE_TYPE IS NOT NULL
         """
 
-        return jdbcTemplate.queryForSet(query, arrayOf(boardId))
+        val params = MapSqlParameterSource()
+        params["boardId"] = boardId
+
+        return jdbcTemplate.queryForSet(query, params)
     }
 
     override fun findAllIssueProjectsByBoardId(boardId: Long): Set<String> {
@@ -178,11 +198,14 @@ class NativeIssueRepositoryImpl(
 
         val query = """
             SELECT DISTINCT PROJECT FROM ISSUE
-            WHERE BOARD_ID = ?
+            WHERE BOARD_ID = :boardId
             AND PROJECT IS NOT NULL
         """
 
-        return jdbcTemplate.queryForSet(query, arrayOf(boardId))
+        val params = MapSqlParameterSource()
+        params["boardId"] = boardId
+
+        return jdbcTemplate.queryForSet(query, params)
     }
 
     override fun findAllIssuePrioritiesByBoardId(boardId: Long): Set<String> {
@@ -190,11 +213,14 @@ class NativeIssueRepositoryImpl(
 
         val query = """
             SELECT DISTINCT PRIORITY FROM ISSUE
-            WHERE BOARD_ID = ?
+            WHERE BOARD_ID = :boardId
             AND PRIORITY IS NOT NULL
         """
 
-        return jdbcTemplate.queryForSet(query, arrayOf(boardId))
+        val params = MapSqlParameterSource()
+        params["boardId"] = boardId
+
+        return jdbcTemplate.queryForSet(query, params)
     }
 
     override fun findAllKeysByBoardIdAndDates(boardId: Long, startDate: LocalDateTime, endDate: LocalDateTime): Set<String> {
@@ -202,23 +228,31 @@ class NativeIssueRepositoryImpl(
 
         val query = """
             SELECT DISTINCT KEY FROM ISSUE
-            WHERE BOARD_ID = ?
-            AND END_DATE BETWEEN ? AND ?
+            WHERE BOARD_ID = :boardId
+            AND END_DATE BETWEEN :startDate AND :endDate
         """
-        
-        return jdbcTemplate.queryForSet(query, arrayOf(boardId, startDate, endDate))
+
+        val params = MapSqlParameterSource()
+        params["boardId"] = boardId
+        params["startDate"] = startDate
+        params["endDate"] = endDate
+
+        return jdbcTemplate.queryForSet(query, params)
     }
 
-    private fun findAllDynamicFieldsByBoardId(boardId: Long): List<String> {
+    private fun findAllDynamicFieldsByBoardId(boardId: Long): Set<String> {
         log.info("Method=findAllDynamicFieldsByBoardId, boardId={}", boardId)
 
         val query = """ 
-            SELECT DISTINCT JSONB_OBJECT_KEYS(dynamic_fields) 
-            FROM issue 
-            WHERE board_id = ?
+            SELECT DISTINCT JSONB_OBJECT_KEYS(DYNAMIC_FIELDS) 
+            FROM ISSUE 
+            WHERE BOARD_ID = :boardId
         """
 
-        return jdbcTemplate.queryForList<String>(query, arrayOf(boardId))
+        val params = MapSqlParameterSource()
+        params["boardId"] = boardId
+
+        return jdbcTemplate.queryForSet(query, params)
     }
 
 }
