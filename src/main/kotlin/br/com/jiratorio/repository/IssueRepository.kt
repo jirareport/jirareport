@@ -12,14 +12,6 @@ import java.util.Optional
 @Repository
 interface IssueRepository : CrudRepository<Issue, Long>, NativeIssueRepository {
 
-    @Query(
-        """
-            SELECT DISTINCT system FROM Issue
-            WHERE board.id = :boardId
-            AND system IS NOT NULL
-        """
-    )
-    fun findAllSystemsByBoardId(@Param("boardId") boardId: Long): Set<String>
 
     @Query(
         """

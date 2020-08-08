@@ -136,6 +136,18 @@ class NativeIssueRepositoryImpl(
         return jdbcTemplate.queryForSet(query, arrayOf(boardId))
     }
 
+    override fun findAllSystemsByBoardId(boardId: Long): Set<String> {
+        log.info("M=findAllSystemsByBoardId, boardId={}", boardId)
+
+        val query = """
+            SELECT DISTINCT SYSTEM FROM issue
+            WHERE BOARD_ID = ?
+            AND SYSTEM IS NOT NULL
+        """
+
+        return jdbcTemplate.queryForSet(query, arrayOf(boardId))
+    }
+
     private fun findAllDynamicFieldsByBoardId(boardId: Long): List<String> {
         log.info("Method=findAllDynamicFieldsByBoardId, boardId={}", boardId)
 
@@ -147,5 +159,4 @@ class NativeIssueRepositoryImpl(
 
         return jdbcTemplate.queryForList<String>(query, arrayOf(boardId))
     }
-
 }

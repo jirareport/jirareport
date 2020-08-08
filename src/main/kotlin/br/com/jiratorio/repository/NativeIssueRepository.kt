@@ -13,4 +13,6 @@ interface NativeIssueRepository {
 
     fun findAllEstimatesByBoardId(boardId: Long): Set<String>
 
+    fun findAllSystemsByBoardId(boardId: Long): Set<String>
+
 }
