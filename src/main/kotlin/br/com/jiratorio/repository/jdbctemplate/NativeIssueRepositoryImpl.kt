@@ -160,6 +160,30 @@ class NativeIssueRepositoryImpl(
         return jdbcTemplate.queryForSet(query, arrayOf(boardId))
     }
 
+    override fun findAllIssueTypesByBoardId(boardId: Long): Set<String> {
+        log.info("M=findAllIssueTypesByBoardId, boardId={}", boardId)
+
+        val query = """
+            SELECT DISTINCT ISSUE_TYPE FROM ISSUE
+            WHERE BOARD_ID = ?
+            AND ISSUE_TYPE IS NOT NULL
+        """
+
+        return jdbcTemplate.queryForSet(query, arrayOf(boardId))
+    }
+
+    override fun findAllIssueProjectsByBoardId(boardId: Long): Set<String> {
+        log.info("M=findAllIssueProjectsByBoardId, boardId={}", boardId)
+
+        val query = """
+            SELECT DISTINCT PROJECT FROM ISSUE
+            WHERE BOARD_ID = ?
+            AND PROJECT IS NOT NULL
+        """
+
+        return jdbcTemplate.queryForSet(query, arrayOf(boardId))
+    }
+
     private fun findAllDynamicFieldsByBoardId(boardId: Long): List<String> {
         log.info("Method=findAllDynamicFieldsByBoardId, boardId={}", boardId)
 

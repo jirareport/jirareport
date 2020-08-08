@@ -14,24 +14,6 @@ interface IssueRepository : CrudRepository<Issue, Long>, NativeIssueRepository {
 
     @Query(
         """
-            SELECT DISTINCT issueType FROM Issue
-            WHERE board.id = :boardId
-            AND issueType IS NOT NULL
-        """
-    )
-    fun findAllIssueTypesByBoardId(@Param("boardId") boardId: Long): Set<String>
-
-    @Query(
-        """
-            SELECT DISTINCT project FROM Issue
-            WHERE board.id = :boardId
-            AND project IS NOT NULL
-        """
-    )
-    fun findAllIssueProjectsByBoardId(@Param("boardId") boardId: Long): Set<String>
-
-    @Query(
-        """
             SELECT DISTINCT priority FROM Issue
             WHERE board.id = :boardId
             AND priority IS NOT NULL

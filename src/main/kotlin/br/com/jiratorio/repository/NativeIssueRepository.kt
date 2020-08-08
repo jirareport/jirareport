@@ -4,8 +4,6 @@ import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
-import org.springframework.data.jpa.repository.Query
-import org.springframework.data.repository.query.Param
 
 interface NativeIssueRepository {
 
@@ -18,5 +16,9 @@ interface NativeIssueRepository {
     fun findAllSystemsByBoardId(boardId: Long): Set<String>
 
     fun findAllEpicsByBoardId(boardId: Long): Set<String>
+
+    fun findAllIssueTypesByBoardId(boardId: Long): Set<String>
+
+    fun findAllIssueProjectsByBoardId(boardId: Long): Set<String>
 
 }
