@@ -184,6 +184,18 @@ class NativeIssueRepositoryImpl(
         return jdbcTemplate.queryForSet(query, arrayOf(boardId))
     }
 
+    override fun findAllIssuePrioritiesByBoardId(boardId: Long): Set<String> {
+        log.info("M=findAllIssuePrioritiesByBoardId, boardId={}", boardId)
+
+        val query = """
+            SELECT DISTINCT priority FROM Issue
+            WHERE board.id = :boardId
+            AND priority IS NOT NULL
+        """
+
+        return jdbcTemplate.queryForSet(query, arrayOf(boardId))
+    }
+
     private fun findAllDynamicFieldsByBoardId(boardId: Long): List<String> {
         log.info("Method=findAllDynamicFieldsByBoardId, boardId={}", boardId)
 

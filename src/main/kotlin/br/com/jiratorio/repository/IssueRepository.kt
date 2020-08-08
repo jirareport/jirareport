@@ -14,15 +14,6 @@ interface IssueRepository : CrudRepository<Issue, Long>, NativeIssueRepository {
 
     @Query(
         """
-            SELECT DISTINCT priority FROM Issue
-            WHERE board.id = :boardId
-            AND priority IS NOT NULL
-        """
-    )
-    fun findAllIssuePrioritiesByBoardId(@Param("boardId") boardId: Long): Set<String>
-
-    @Query(
-        """
             SELECT DISTINCT key FROM Issue
             WHERE board.id = :boardId
             AND endDate between :startDate and :endDate

@@ -21,4 +21,6 @@ interface NativeIssueRepository {
 
     fun findAllIssueProjectsByBoardId(boardId: Long): Set<String>
 
+    fun findAllIssuePrioritiesByBoardId(boardId: Long): Set<String>
+
 }
