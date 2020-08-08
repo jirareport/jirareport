@@ -12,13 +12,10 @@ import kotlin.reflect.KClass
 open class BaseAssert<SELF : AbstractAssert<SELF, ACTUAL>?, ACTUAL>(actual: ACTUAL, self: KClass<*>) :
     AbstractAssert<SELF, ACTUAL>(actual, self.java) {
 
-    companion object {
-        val objects: Objects = Objects.instance()
-        val iterables: Iterables = Iterables.instance()
-        val maps: Maps = Maps.instance()
-        val strings: Strings = Strings.instance()
-        val longs: Longs = Longs.instance()
-    }
+    protected val iterables: Iterables = Iterables.instance()
+    protected val maps: Maps = Maps.instance()
+    protected val strings: Strings = Strings.instance()
+    protected val longs: Longs = Longs.instance()
 
     fun assertThat(block: SELF.() -> Unit): SELF =
         myself.apply(block)

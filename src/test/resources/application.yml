@@ -32,3 +32,7 @@ spring:
     ignore-missing-migrations: true
   profiles:
     active: test
+
+server:
+  error:
+    include-message: always

@@ -35,6 +35,7 @@ spring:
     out-of-order: true
     ignore-missing-migrations: true
 
+
 feign:
   client:
     config:
@@ -42,3 +43,7 @@ feign:
         logger-level: FULL
   httpclient:
     disable-ssl-validation: true
+
+server:
+  error:
+    include-message: always
