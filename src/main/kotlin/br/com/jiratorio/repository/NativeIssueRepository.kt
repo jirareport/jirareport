@@ -4,6 +4,7 @@ import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
+import java.time.LocalDateTime
 
 interface NativeIssueRepository {
 
@@ -22,5 +23,7 @@ interface NativeIssueRepository {
     fun findAllIssueProjectsByBoardId(boardId: Long): Set<String>
 
     fun findAllIssuePrioritiesByBoardId(boardId: Long): Set<String>
+
+    fun findAllKeysByBoardIdAndDates(boardId: Long, startDate: LocalDateTime, endDate: LocalDateTime): Set<String>
 
 }

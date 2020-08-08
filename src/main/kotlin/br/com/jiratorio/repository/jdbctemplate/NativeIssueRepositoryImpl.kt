@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.queryForList
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 import java.util.HashMap
 import javax.persistence.EntityManager
 import javax.persistence.Query
@@ -188,12 +189,24 @@ class NativeIssueRepositoryImpl(
         log.info("M=findAllIssuePrioritiesByBoardId, boardId={}", boardId)
 
         val query = """
-            SELECT DISTINCT priority FROM Issue
-            WHERE board.id = :boardId
-            AND priority IS NOT NULL
+            SELECT DISTINCT PRIORITY FROM ISSUE
+            WHERE BOARD_ID = ?
+            AND PRIORITY IS NOT NULL
         """
 
         return jdbcTemplate.queryForSet(query, arrayOf(boardId))
+    }
+
+    override fun findAllKeysByBoardIdAndDates(boardId: Long, startDate: LocalDateTime, endDate: LocalDateTime): Set<String> {
+        log.info("findAllKeysByBoardIdAndDates, boardId={}, startDate={}, endDate={}", boardId, startDate, endDate)
+
+        val query = """
+            SELECT DISTINCT KEY FROM ISSUE
+            WHERE BOARD_ID = ?
+            AND END_DATE BETWEEN ? AND ?
+        """
+        
+        return jdbcTemplate.queryForSet(query, arrayOf(boardId, startDate, endDate))
     }
 
     private fun findAllDynamicFieldsByBoardId(boardId: Long): List<String> {
@@ -207,4 +220,5 @@ class NativeIssueRepositoryImpl(
 
         return jdbcTemplate.queryForList<String>(query, arrayOf(boardId))
     }
+
 }
