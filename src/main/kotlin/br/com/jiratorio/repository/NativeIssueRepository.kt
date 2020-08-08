@@ -5,14 +5,12 @@ import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
 
-interface IssueCustomRepository {
+interface NativeIssueRepository {
 
-    fun findByExample(
-        board: Board,
-        dynamicFilters: Map<String, Array<String>>,
-        searchIssueRequest: SearchIssueRequest
-    ): List<Issue>
+    fun findByExample(board: Board, dynamicFilters: Map<String, Array<String>>, searchIssueRequest: SearchIssueRequest): List<Issue>
 
     fun findAllDynamicFieldValues(boardId: Long): List<DynamicFieldsValues>
+
+    fun findAllEstimatesByBoardId(boardId: Long): Set<String>
 
 }

@@ -10,16 +10,7 @@ import java.time.LocalDateTime
 import java.util.Optional
 
 @Repository
-interface IssueRepository : CrudRepository<Issue, Long>, IssueCustomRepository {
-
-    @Query(
-        """
-            SELECT DISTINCT estimate FROM Issue
-            WHERE board.id = :boardId
-            AND estimate IS NOT NULL
-        """
-    )
-    fun findAllEstimatesByBoardId(@Param("boardId") boardId: Long): Set<String>
+interface IssueRepository : CrudRepository<Issue, Long>, NativeIssueRepository {
 
     @Query(
         """

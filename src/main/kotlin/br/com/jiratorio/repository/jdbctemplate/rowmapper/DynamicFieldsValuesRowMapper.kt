@@ -1,4 +1,4 @@
-package br.com.jiratorio.repository.impl.rowmapper
+package br.com.jiratorio.repository.jdbctemplate.rowmapper
 
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
 import com.fasterxml.jackson.databind.ObjectMapper

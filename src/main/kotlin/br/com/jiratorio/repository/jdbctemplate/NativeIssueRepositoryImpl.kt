@@ -1,15 +1,17 @@
-package br.com.jiratorio.repository.impl
+package br.com.jiratorio.repository.jdbctemplate
 
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
+import br.com.jiratorio.extension.queryForSet
 import br.com.jiratorio.extension.time.atEndOfDay
-import br.com.jiratorio.repository.IssueCustomRepository
-import br.com.jiratorio.repository.impl.rowmapper.DynamicFieldsValuesRowMapper
+import br.com.jiratorio.repository.NativeIssueRepository
+import br.com.jiratorio.repository.jdbctemplate.rowmapper.DynamicFieldsValuesRowMapper
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.jdbc.core.queryForList
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.util.HashMap
@@ -17,11 +19,11 @@ import javax.persistence.EntityManager
 import javax.persistence.Query
 
 @Repository
-class IssueCustomRepositoryImpl(
+class NativeIssueRepositoryImpl(
     private val entityManager: EntityManager,
-    private val jdbcTemplate: JdbcTemplate,
-    private val objectMapper: ObjectMapper
-) : IssueCustomRepository {
+    private val objectMapper: ObjectMapper,
+    private val jdbcTemplate: JdbcTemplate
+) : NativeIssueRepository {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -122,11 +124,28 @@ class IssueCustomRepositoryImpl(
             ?: emptyList()
     }
 
+    override fun findAllEstimatesByBoardId(boardId: Long): Set<String> {
+        log.info("M=findAllEstimatesByBoardId, boardId={}", boardId)
+
+        val query = """
+            SELECT DISTINCT ESTIMATE FROM ISSUE
+            WHERE BOARD_ID = ?
+            AND ESTIMATE IS NOT NULL
+        """
+
+        return jdbcTemplate.queryForSet(query, arrayOf(boardId))
+    }
+
     private fun findAllDynamicFieldsByBoardId(boardId: Long): List<String> {
         log.info("Method=findAllDynamicFieldsByBoardId, boardId={}", boardId)
 
-        val query = "SELECT DISTINCT JSONB_OBJECT_KEYS(dynamic_fields) FROM issue WHERE board_id = ?"
-        return jdbcTemplate.queryForList(query, arrayOf(boardId), String::class.java)
+        val query = """ 
+            SELECT DISTINCT JSONB_OBJECT_KEYS(dynamic_fields) 
+            FROM issue 
+            WHERE board_id = ?
+        """
+
+        return jdbcTemplate.queryForList<String>(query, arrayOf(boardId))
     }
 
 }
