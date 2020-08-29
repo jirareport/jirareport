@@ -1,1 +1,0 @@
-alter table issue_period add column wip_avg decimal(10, 2);

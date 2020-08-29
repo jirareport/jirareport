@@ -1,6 +1,12 @@
 ### gradle ###
 .gradle
 /build/
+application/build/
+business-library/build/
+client-library/build/
+common-library/build/
+database-library/build/
+
 !gradle/wrapper/gradle-wrapper.jar
 
 ### STS ###

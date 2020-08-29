@@ -1,1 +1,0 @@
-ALTER TABLE issue_period ADD COLUMN dynamic_charts JSONB;
