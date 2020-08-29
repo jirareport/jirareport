@@ -53,7 +53,6 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
         
-        implementation("org.springframework.data:spring-data-commons")
         implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
 
         detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.12.0")
@@ -93,13 +92,13 @@ subprojects {
 
 configure(subprojects - project(":common-library")) {
     dependencies {
-        api(project(":common-library"))
+        implementation(project(":common-library"))
     }
 }
 
 configure(subprojects - project(":test-library")) {
     dependencies {
-        testApi(project(":test-library"))
+        testImplementation(project(":test-library"))
     }
 }
 

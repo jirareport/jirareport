@@ -1,6 +1,6 @@
 package br.com.jiratorio.client
 
-import br.com.jiratorio.AuthClientConfiguration
+import br.com.jiratorio.config.AuthClientConfiguration
 import br.com.jiratorio.jira.JiraUser
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping

@@ -1,6 +1,6 @@
 package br.com.jiratorio.client
 
-import br.com.jiratorio.JiraClientConfiguration
+import br.com.jiratorio.config.JiraClientConfiguration
 import br.com.jiratorio.jira.JiraField
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping

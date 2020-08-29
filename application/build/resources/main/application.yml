@@ -24,17 +24,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  cache:
-    cache-names:
-      - findAllHolidaysInCity
-      - findAllFields
-    caffeine:
-      spec: expireAfterWrite=15m
   flyway:
     enabled: true
     out-of-order: true
     ignore-missing-migrations: true
-
 
 feign:
   client:

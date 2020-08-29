@@ -1,6 +1,6 @@
 package br.com.jiratorio.client
 
-import br.com.jiratorio.JiraClientConfiguration
+import br.com.jiratorio.config.JiraClientConfiguration
 import br.com.jiratorio.jira.BoardStatusList
 import br.com.jiratorio.jira.JiraProjectDetails
 import br.com.jiratorio.jira.JiraProject

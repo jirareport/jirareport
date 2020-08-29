@@ -1,6 +1,6 @@
 package br.com.jiratorio.client
 
-import br.com.jiratorio.JiraClientConfiguration
+import br.com.jiratorio.config.JiraClientConfiguration
 import br.com.jiratorio.domain.request.SearchJiraIssueRequest
 import com.fasterxml.jackson.databind.JsonNode
 import org.springframework.cloud.openfeign.FeignClient
