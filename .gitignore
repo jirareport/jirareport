@@ -18,4 +18,4 @@
 *.ipr
 out/
 
-src/main/resources/application-*.yml
+application/src/main/resources/application-*.yml

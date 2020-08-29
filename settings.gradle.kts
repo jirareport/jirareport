@@ -5,3 +5,5 @@ pluginManagement {
 }
 
 rootProject.name = "jirareport"
+
+include("application")

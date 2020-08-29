@@ -1,0 +1,49 @@
+jira:
+  url: https://jira.url/jira
+
+holiday:
+  url: https://api.calendario.com.br
+  default-state: SP
+  default-city: ARARAQUARA
+  token: seuToken
+
+security:
+  key: super-secret-key
+
+spring:
+  application:
+    name: jirareport
+  datasource:
+    url: jdbc:postgresql://localhost:5432/jirareport
+    username: ${USER}
+    password: 123123
+  jpa:
+    show-sql: true
+    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    properties:
+      hibernate:
+        format_sql: true
+  cache:
+    cache-names:
+      - findAllHolidaysInCity
+      - findAllFields
+    caffeine:
+      spec: expireAfterWrite=15m
+  flyway:
+    enabled: true
+    out-of-order: true
+    ignore-missing-migrations: true
+
+
+feign:
+  client:
+    config:
+      default:
+        logger-level: FULL
+  httpclient:
+    disable-ssl-validation: true
+
+server:
+  error:
+    include-message: always
