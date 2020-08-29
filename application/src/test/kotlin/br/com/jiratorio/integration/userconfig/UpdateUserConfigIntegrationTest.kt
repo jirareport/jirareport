@@ -1,6 +1,6 @@
 package br.com.jiratorio.integration.userconfig
 
-import br.com.jiratorio.assert.assertThat
+import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.Authenticator
 import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.request.UpdateUserConfigRequest

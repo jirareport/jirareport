@@ -1,6 +1,6 @@
 package br.com.jiratorio.integration.issueperiod
 
-import br.com.jiratorio.assert.response.assertThat
+import br.com.jiratorio.assertion.response.assertThat
 import br.com.jiratorio.Authenticator
 import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.entity.Issue
