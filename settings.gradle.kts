@@ -6,4 +6,11 @@ pluginManagement {
 
 rootProject.name = "jirareport"
 
-include("application")
+include(
+    "application",
+    "business-library",
+    "client-library",
+    "common-library",
+    "database-library",
+    "test-library"
+)

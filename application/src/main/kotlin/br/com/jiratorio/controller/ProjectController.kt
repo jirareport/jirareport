@@ -1,7 +1,7 @@
 package br.com.jiratorio.controller
 
-import br.com.jiratorio.domain.jira.JiraProject
-import br.com.jiratorio.domain.jira.JiraProjectDetails
+import br.com.jiratorio.jira.JiraProject
+import br.com.jiratorio.jira.JiraProjectDetails
 import br.com.jiratorio.usecase.project.FindAllJiraProjects
 import br.com.jiratorio.usecase.project.FindJiraProjectDetails
 import org.springframework.web.bind.annotation.GetMapping

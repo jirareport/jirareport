@@ -1,7 +1,7 @@
 package br.com.jiratorio.usecase.percentile
 
 import br.com.jiratorio.assert.assertThat
-import br.com.jiratorio.config.junit.testtype.UnitTest
+import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.Percentile
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource

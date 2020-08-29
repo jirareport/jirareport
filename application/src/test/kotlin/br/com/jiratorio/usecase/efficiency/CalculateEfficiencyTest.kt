@@ -1,7 +1,7 @@
 package br.com.jiratorio.usecase.efficiency
 
 import br.com.jiratorio.assert.assertThat
-import br.com.jiratorio.config.junit.testtype.UnitTest
+import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.extension.toLocalDateTime
 import org.junit.jupiter.api.Test

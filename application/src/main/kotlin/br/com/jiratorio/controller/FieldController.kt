@@ -1,6 +1,6 @@
 package br.com.jiratorio.controller
 
-import br.com.jiratorio.domain.jira.JiraField
+import br.com.jiratorio.jira.JiraField
 import br.com.jiratorio.usecase.field.FindAllJiraFields
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping

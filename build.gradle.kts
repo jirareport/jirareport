@@ -3,11 +3,21 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.4.0"
     kotlin("plugin.spring") version "1.4.0" apply false
+    kotlin("plugin.jpa") version "1.4.0" apply false
 
-    id("org.springframework.boot") version "2.3.3.RELEASE" apply false
+    id("org.springframework.boot") version "2.3.3.RELEASE"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
 
-    id("io.gitlab.arturbosch.detekt") version "1.3.1"
+    id("io.gitlab.arturbosch.detekt") version "1.12.0"
+}
+
+apply {
+    from("$rootDir/gradle/tasks/CreateMigration.gradle.kts")
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
 }
 
 allprojects {
@@ -25,6 +35,7 @@ subprojects {
 
         plugin("org.jetbrains.kotlin.jvm")
         plugin("org.jetbrains.kotlin.plugin.spring")
+        plugin("org.jetbrains.kotlin.plugin.jpa")
 
         plugin("org.springframework.boot")
         plugin("io.spring.dependency-management")
@@ -41,8 +52,11 @@ subprojects {
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        
+        implementation("org.springframework.data:spring-data-commons")
+        implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
 
-        testImplementation("org.springframework.boot:spring-boot-starter-test")
+        detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.12.0")
     }
 
     configurations.all {
@@ -52,6 +66,7 @@ subprojects {
     dependencyManagement {
         imports {
             mavenBom("org.springframework.cloud:spring-cloud-dependencies:Hoxton.SR8")
+            mavenBom("org.springframework.data:spring-data-boom:${dependencyManagement.importedProperties["spring-data-releasetrain.version"]}")
         }
     }
 
@@ -73,10 +88,21 @@ subprojects {
             excludeTags = setOf("integration")
         }
     }
+
 }
 
-//configure(subprojects - project(":common-library")) {
-//    dependencies {
-//        implementation(project(":common-library"))
-//    }
-//}
+configure(subprojects - project(":common-library")) {
+    dependencies {
+        api(project(":common-library"))
+    }
+}
+
+configure(subprojects - project(":test-library")) {
+    dependencies {
+        testApi(project(":test-library"))
+    }
+}
+
+tasks.bootJar {
+    enabled = false
+}

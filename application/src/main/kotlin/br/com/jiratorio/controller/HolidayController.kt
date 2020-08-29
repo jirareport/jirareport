@@ -67,7 +67,7 @@ class HolidayController(
         @PathVariable boardId: Long,
         @AuthenticationPrincipal account: Account
     ) =
-        importHolidays.execute(boardId, account)
+        importHolidays.execute(boardId, account.username)
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")

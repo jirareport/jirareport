@@ -51,11 +51,11 @@ class BoardController(
         @PageableDefault(size = 20, sort = ["id"]) pageable: Pageable,
         @AuthenticationPrincipal currentUser: Account
     ): Page<BoardResponse> =
-        findAllBoards.execute(searchBoardRequest, currentUser, pageable)
+        findAllBoards.execute(searchBoardRequest, currentUser.username, pageable)
 
     @GetMapping("/owners")
     fun owners(@AuthenticationPrincipal currentUser: Account): Set<String> =
-        findAllOwners.execute(currentUser)
+        findAllOwners.execute(currentUser.username)
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long): BoardDetailsResponse =

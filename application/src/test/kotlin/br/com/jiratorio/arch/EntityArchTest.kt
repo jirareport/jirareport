@@ -1,6 +1,6 @@
 package br.com.jiratorio.arch
 
-import br.com.jiratorio.config.junit.testtype.ArchTest
+import br.com.jiratorio.junit.testtype.ArchTest
 import br.com.jiratorio.extension.areNotInnerClass
 import com.tngtech.archunit.core.domain.JavaClasses
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition

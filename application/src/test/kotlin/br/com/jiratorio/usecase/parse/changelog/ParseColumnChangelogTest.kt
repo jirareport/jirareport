@@ -1,9 +1,9 @@
 package br.com.jiratorio.usecase.parse.changelog
 
-import br.com.jiratorio.config.junit.testtype.UnitTest
+import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.entity.ColumnChangelog
-import br.com.jiratorio.domain.jira.JiraChangelog
 import br.com.jiratorio.extension.toLocalDateTime
+import br.com.jiratorio.jira.JiraChangelog
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime

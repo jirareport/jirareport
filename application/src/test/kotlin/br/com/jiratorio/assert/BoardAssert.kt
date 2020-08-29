@@ -40,14 +40,16 @@ class BoardAssert(
         iterables.assertContainsAll(
             field("board.touchingColumns"),
             actual.touchingColumns,
-            touchingColumns?.map { it.toUpperCase() })
+            touchingColumns?.map { it.toUpperCase() }
+        )
     }
 
     fun hasWaitingColumns(waitingColumns: List<String>?) = assertAll {
         iterables.assertContainsAll(
             field("board.waitingColumns"),
             actual.waitingColumns,
-            waitingColumns?.map { it.toUpperCase() })
+            waitingColumns?.map { it.toUpperCase() }
+        )
     }
 
     fun hasIgnoreIssueType(ignoreIssueType: List<String>?) = assertAll {
@@ -82,7 +84,8 @@ class BoardAssert(
         objects.assertEqual(
             field("board.impedimentColumns"),
             actual.impedimentColumns,
-            impedimentColumns?.map { it.toUpperCase() })
+            impedimentColumns?.map { it.toUpperCase() }
+        )
     }
 
     fun hasImpedimentType(impedimentType: ImpedimentType?) = assertAll {

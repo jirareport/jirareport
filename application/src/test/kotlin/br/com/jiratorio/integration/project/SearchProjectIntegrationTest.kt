@@ -1,9 +1,9 @@
 package br.com.jiratorio.integration.project
 
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.annotation.LoadStubs
-import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
+import br.com.jiratorio.Authenticator
+import br.com.jiratorio.annotation.LoadStubs
+import br.com.jiratorio.restassured.specification.notFound
+import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.dsl.restAssured
 import org.apache.http.HttpStatus.SC_OK
 import org.hamcrest.Matchers.containsInAnyOrder
@@ -30,13 +30,23 @@ internal class SearchProjectIntegrationTest(
                 statusCode(SC_OK)
                 body("$", hasSize<Int>(5))
                 body(
-                    "collect { it.name }", containsInAnyOrder(
-                        "Spring Data JPA", "Spring Data JDBC", "Spring Batch", "Spring Social", "Spring Tool Suite"
+                    "collect { it.name }",
+                    containsInAnyOrder(
+                        "Spring Data JPA",
+                        "Spring Data JDBC",
+                        "Spring Batch",
+                        "Spring Social",
+                        "Spring Tool Suite"
                     )
                 )
                 body(
-                    "collect { it.id }", containsInAnyOrder(
-                        10550, 10552, 10090, 10481, 11700
+                    "collect { it.id }",
+                    containsInAnyOrder(
+                        10550,
+                        10552,
+                        10090,
+                        10481,
+                        11700
                     )
                 )
             }
@@ -59,13 +69,23 @@ internal class SearchProjectIntegrationTest(
                 body("name", equalTo("Spring Data JPA"))
                 body("issueTypes", hasSize<Int>(5))
                 body(
-                    "issueTypes.collect { it.id }", containsInAnyOrder(
-                        1, 2, 3, 4, 5
+                    "issueTypes.collect { it.id }",
+                    containsInAnyOrder(
+                        1,
+                        2,
+                        3,
+                        4,
+                        5
                     )
                 )
                 body(
-                    "issueTypes.collect { it.name }", containsInAnyOrder(
-                        "Bug", "Improvement", "New Feature", "Task", "Sub-task"
+                    "issueTypes.collect { it.name }",
+                    containsInAnyOrder(
+                        "Bug",
+                        "Improvement",
+                        "New Feature",
+                        "Task",
+                        "Sub-task"
                     )
                 )
             }

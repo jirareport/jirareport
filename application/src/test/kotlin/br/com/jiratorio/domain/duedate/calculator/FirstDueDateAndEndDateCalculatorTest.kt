@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.duedate.calculator
 
-import br.com.jiratorio.config.junit.testtype.UnitTest
+import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime

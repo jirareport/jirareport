@@ -1,9 +1,9 @@
 package br.com.jiratorio.arch
 
-import br.com.jiratorio.config.junit.testtype.ArchTest
-import br.com.jiratorio.config.stereotype.UseCase
 import br.com.jiratorio.extension.areNotInnerClass
 import br.com.jiratorio.extension.areNotSynthetic
+import br.com.jiratorio.junit.testtype.ArchTest
+import br.com.jiratorio.stereotype.UseCase
 import com.tngtech.archunit.base.DescribedPredicate
 import com.tngtech.archunit.core.domain.JavaClass
 import com.tngtech.archunit.core.domain.JavaClasses

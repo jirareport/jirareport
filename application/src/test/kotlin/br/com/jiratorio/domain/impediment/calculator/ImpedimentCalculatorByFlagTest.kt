@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.impediment.calculator
 
-import br.com.jiratorio.config.junit.testtype.UnitTest
+import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.FieldChangelog
 import br.com.jiratorio.domain.entity.ImpedimentHistory
 import br.com.jiratorio.domain.parsed.ParsedChangelog

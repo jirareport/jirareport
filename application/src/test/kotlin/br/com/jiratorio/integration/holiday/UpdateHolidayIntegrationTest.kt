@@ -1,9 +1,9 @@
 package br.com.jiratorio.integration.holiday
 
 import br.com.jiratorio.assert.assertThat
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
+import br.com.jiratorio.Authenticator
+import br.com.jiratorio.restassured.specification.notFound
+import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.entity.BoardFactory

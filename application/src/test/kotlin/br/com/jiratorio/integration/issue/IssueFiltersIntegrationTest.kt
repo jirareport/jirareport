@@ -1,7 +1,7 @@
 package br.com.jiratorio.integration.issue
 
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
+import br.com.jiratorio.Authenticator
+import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.dsl.restAssured
@@ -73,7 +73,8 @@ class IssueFiltersIntegrationTest(
                 statusCode(SC_OK)
                 body("keys", Matchers.hasSize<Int>(10))
                 body(
-                    "keys", containsInAnyOrder(
+                    "keys",
+                    containsInAnyOrder(
                         "JIRAT-1",
                         "JIRAT-2",
                         "JIRAT-3",

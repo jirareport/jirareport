@@ -1,6 +1,6 @@
 package br.com.jiratorio.usecase.jql
 
-import br.com.jiratorio.config.junit.testtype.UnitTest
+import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.extension.toLocalDate
 import org.assertj.core.api.Assertions

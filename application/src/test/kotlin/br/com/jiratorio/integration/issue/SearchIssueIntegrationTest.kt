@@ -1,7 +1,7 @@
 package br.com.jiratorio.integration.issue
 
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
+import br.com.jiratorio.Authenticator
+import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.entity.DynamicFieldConfig
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.IssuePeriod

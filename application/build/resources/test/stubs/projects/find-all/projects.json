@@ -1,0 +1,118 @@
+{
+  "request": {
+    "urlPath": "/jira/rest/api/2/project",
+    "headers": {
+      "Authorization": {
+        "equalTo": "secret-token"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": [
+      {
+        "expand": "description,lead,url,projectKeys",
+        "self": "https://jira.spring.io/rest/api/2/project/10550",
+        "id": "10550",
+        "key": "DATAJDBC",
+        "name": "Spring Data JDBC",
+        "avatarUrls": {
+          "48x48": "https://jira.spring.io/secure/projectavatar?pid=10550&avatarId=10011",
+          "24x24": "https://jira.spring.io/secure/projectavatar?size=small&pid=10550&avatarId=10011",
+          "16x16": "https://jira.spring.io/secure/projectavatar?size=xsmall&pid=10550&avatarId=10011",
+          "32x32": "https://jira.spring.io/secure/projectavatar?size=medium&pid=10550&avatarId=10011"
+        },
+        "projectCategory": {
+          "self": "https://jira.spring.io/rest/api/2/projectCategory/10000",
+          "id": "10000",
+          "name": "Spring Projects",
+          "description": "Top-level Spring projects"
+        },
+        "projectTypeKey": "software"
+      },
+      {
+        "expand": "description,lead,url,projectKeys",
+        "self": "https://jira.spring.io/rest/api/2/project/10552",
+        "id": "10552",
+        "key": "DATAJPA",
+        "name": "Spring Data JPA",
+        "avatarUrls": {
+          "48x48": "https://jira.spring.io/secure/projectavatar?pid=10552&avatarId=12890",
+          "24x24": "https://jira.spring.io/secure/projectavatar?size=small&pid=10552&avatarId=12890",
+          "16x16": "https://jira.spring.io/secure/projectavatar?size=xsmall&pid=10552&avatarId=12890",
+          "32x32": "https://jira.spring.io/secure/projectavatar?size=medium&pid=10552&avatarId=12890"
+        },
+        "projectCategory": {
+          "self": "https://jira.spring.io/rest/api/2/projectCategory/10000",
+          "id": "10000",
+          "name": "Spring Projects",
+          "description": "Top-level Spring projects"
+        },
+        "projectTypeKey": "software"
+      },
+      {
+        "expand": "description,lead,url,projectKeys",
+        "self": "https://jira.spring.io/rest/api/2/project/10090",
+        "id": "10090",
+        "key": "BATCH",
+        "name": "Spring Batch",
+        "avatarUrls": {
+          "48x48": "https://jira.spring.io/secure/projectavatar?pid=10090&avatarId=12503",
+          "24x24": "https://jira.spring.io/secure/projectavatar?size=small&pid=10090&avatarId=12503",
+          "16x16": "https://jira.spring.io/secure/projectavatar?size=xsmall&pid=10090&avatarId=12503",
+          "32x32": "https://jira.spring.io/secure/projectavatar?size=medium&pid=10090&avatarId=12503"
+        },
+        "projectCategory": {
+          "self": "https://jira.spring.io/rest/api/2/projectCategory/10000",
+          "id": "10000",
+          "name": "Spring Projects",
+          "description": "Top-level Spring projects"
+        },
+        "projectTypeKey": "software"
+      },
+      {
+        "expand": "description,lead,url,projectKeys",
+        "self": "https://jira.spring.io/rest/api/2/project/10481",
+        "id": "10481",
+        "key": "SOCIAL",
+        "name": "Spring Social",
+        "avatarUrls": {
+          "48x48": "https://jira.spring.io/secure/projectavatar?pid=10481&avatarId=10011",
+          "24x24": "https://jira.spring.io/secure/projectavatar?size=small&pid=10481&avatarId=10011",
+          "16x16": "https://jira.spring.io/secure/projectavatar?size=xsmall&pid=10481&avatarId=10011",
+          "32x32": "https://jira.spring.io/secure/projectavatar?size=medium&pid=10481&avatarId=10011"
+        },
+        "projectCategory": {
+          "self": "https://jira.spring.io/rest/api/2/projectCategory/10000",
+          "id": "10000",
+          "name": "Spring Projects",
+          "description": "Top-level Spring projects"
+        },
+        "projectTypeKey": "software"
+      },
+      {
+        "expand": "description,lead,url,projectKeys",
+        "self": "https://jira.spring.io/rest/api/2/project/11700",
+        "id": "11700",
+        "key": "STS",
+        "name": "Spring Tool Suite",
+        "avatarUrls": {
+          "48x48": "https://jira.spring.io/secure/projectavatar?pid=11700&avatarId=10011",
+          "24x24": "https://jira.spring.io/secure/projectavatar?size=small&pid=11700&avatarId=10011",
+          "16x16": "https://jira.spring.io/secure/projectavatar?size=xsmall&pid=11700&avatarId=10011",
+          "32x32": "https://jira.spring.io/secure/projectavatar?size=medium&pid=11700&avatarId=10011"
+        },
+        "projectCategory": {
+          "self": "https://jira.spring.io/rest/api/2/projectCategory/10240",
+          "id": "10240",
+          "name": "Moved to GitHub",
+          "description": "Projects which have moved their issue tracking to GitHub"
+        },
+        "projectTypeKey": "software"
+      }
+    ],
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

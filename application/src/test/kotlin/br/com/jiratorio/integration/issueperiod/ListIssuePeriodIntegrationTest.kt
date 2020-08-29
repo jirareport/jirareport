@@ -1,9 +1,9 @@
 package br.com.jiratorio.integration.issueperiod
 
 import br.com.jiratorio.assert.response.assertThat
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
+import br.com.jiratorio.Authenticator
+import br.com.jiratorio.restassured.specification.notFound
+import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodListResponse
 import br.com.jiratorio.dsl.extractAs
