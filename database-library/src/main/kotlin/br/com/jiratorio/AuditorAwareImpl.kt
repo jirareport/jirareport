@@ -11,6 +11,6 @@ class AuditorAwareImpl(
 ) : AuditorAware<String> {
 
     override fun getCurrentAuditor(): Optional<String> =
-        Optional.of(currentUser.username)
+        Optional.ofNullable(currentUser.username)
 
 }

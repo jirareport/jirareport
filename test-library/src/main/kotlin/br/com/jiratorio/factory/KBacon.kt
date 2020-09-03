@@ -49,13 +49,10 @@ abstract class KBacon<T : Any>(
         val copy = obj::class.memberFunctions.first { it.name == "copy" }
         val instanceParam = copy.instanceParameter!!
 
-        val args = mapOf(
-            instanceParam to obj
-        ).plus(fields.mapKeys { entry ->
-            copy.parameters.first { param ->
-                param.name == entry.key.name
-            }
-        })
+        val args = mapOf(instanceParam to obj) + fields.mapKeys { entry ->
+            copy.parameters
+                .first { param -> param.name == entry.key.name }
+        }
         val callBy = copy.callBy(args)
 
         @Suppress("UNCHECKED_CAST")

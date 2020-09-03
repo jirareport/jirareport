@@ -36,7 +36,7 @@ class JiraClientConfiguration(
                     objectMapper.readValue(response.body().asInputStream(), JiraError::class.java)
                 } catch (e: Exception) {
                     log.error("Method=errorDecoder, methodKey={}, response={}", methodKey, response, e)
-                    JiraError("errors.session-timeout", response.status().toLong()) // TODO: resolve in application module
+                    JiraError("errors.session-timeout", response.status().toLong())
                 }
             )
         }

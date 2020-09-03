@@ -27,19 +27,17 @@ class RestAssuredDSL {
         blockThen = block
     }
 
-    // @formatter:off
     fun build(): Response = RestAssured
         .given()
-            .log().all()
-            .header("Accept-Language", "en")
-            .apply(blockGiven)
+        .log().all()
+        .header("Accept-Language", "en")
+        .apply(blockGiven)
         .`when`()
-            .run(blockOn)
+        .run(blockOn)
         .then()
-            .log().all()
-            .apply(blockThen)
-            .extract().response()
-    // @formatter:on
+        .log().all()
+        .apply(blockThen)
+        .extract().response()
 }
 
 inline fun restAssured(block: RestAssuredDSL.() -> Unit): Response =

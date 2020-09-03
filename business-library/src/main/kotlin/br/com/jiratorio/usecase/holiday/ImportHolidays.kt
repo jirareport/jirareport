@@ -3,7 +3,6 @@ package br.com.jiratorio.usecase.holiday
 import br.com.jiratorio.client.HolidayClient
 import br.com.jiratorio.internationalization.MessageResolver
 import br.com.jiratorio.stereotype.UseCase
-import br.com.jiratorio.domain.Account
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Holiday
 import br.com.jiratorio.exception.HolidaysAlreadyImported

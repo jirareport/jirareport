@@ -16,7 +16,8 @@ class Login(private val authClient: AuthClient) {
         log.info("Action=login, loginRequest={}", loginRequest)
 
         val (username, password) = loginRequest
-        val token = """Basic ${"$username:$password".toBase64()}"""
+        val token =
+            """Basic ${"$username:$password".toBase64()}"""
 
         val (name, email) = authClient.login(token)
         return Account(username, name, email, token)

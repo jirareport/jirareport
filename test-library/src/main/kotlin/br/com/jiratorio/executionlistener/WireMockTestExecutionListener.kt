@@ -2,6 +2,7 @@ package br.com.jiratorio.executionlistener
 
 import br.com.jiratorio.annotation.LoadStubs
 import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import org.springframework.core.annotation.AnnotationUtils
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
@@ -57,6 +58,7 @@ class WireMockTestExecutionListener : TestExecutionListener {
 
         val wireMockServer = testContext.applicationContext.getBean(WireMockServer::class.java)
         wireMockServer.stubMappings.forEach(wireMockServer::removeStub)
+        WireMock.reset()
     }
 
 }

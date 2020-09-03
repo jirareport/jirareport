@@ -12,8 +12,11 @@ class FakerConfig {
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Bean
-    fun faker() = Faker(Random(System.currentTimeMillis().also {
-        log.info("MSG=generated seed, seed={}", it)
-    }))
+    fun faker() = Faker(
+        Random(
+            System.currentTimeMillis()
+                .also { log.info("MSG=generated seed, seed={}", it) }
+        )
+    )
 
 }

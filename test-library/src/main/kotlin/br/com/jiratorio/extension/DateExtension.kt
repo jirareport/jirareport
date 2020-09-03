@@ -21,9 +21,6 @@ fun Date.toLocalDate(): LocalDate =
             .atZone(ZoneId.systemDefault()).toLocalDate()
     )
 
-fun String.toLocalDate(pattern: String): LocalDate =
-    LocalDate.parse(this, DateTimeFormatter.ofPattern(pattern))
-
 fun String.toLocalDate(): LocalDate =
     this.toLocalDate("dd/MM/yyyy")
 

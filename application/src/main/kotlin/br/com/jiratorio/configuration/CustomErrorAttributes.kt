@@ -1,4 +1,4 @@
-package br.com.jiratorio
+package br.com.jiratorio.configuration
 
 import org.slf4j.LoggerFactory
 import org.springframework.boot.web.error.ErrorAttributeOptions
@@ -15,9 +15,9 @@ class CustomErrorAttributes : DefaultErrorAttributes() {
     override fun getErrorAttributes(webRequest: WebRequest?, options: ErrorAttributeOptions?): MutableMap<String, Any> {
         val errorAttributes: MutableMap<String, Any> = super.getErrorAttributes(webRequest, options)
 
-        errorAttributes["traceId"] = UUID.randomUUID().toString().also {
-            log.info("traceId={}", it)
-        }
+        errorAttributes["traceId"] = UUID.randomUUID()
+            .toString()
+            .also { log.info("traceId={}", it) }
 
         return errorAttributes
     }

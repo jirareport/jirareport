@@ -1,9 +1,8 @@
 package br.com.jiratorio.domain
 
-import br.com.jiratorio.domain.FluxColumn
-import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.entity.ColumnChangelog
 import br.com.jiratorio.extension.toLocalDateTime
+import br.com.jiratorio.junit.testtype.UnitTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

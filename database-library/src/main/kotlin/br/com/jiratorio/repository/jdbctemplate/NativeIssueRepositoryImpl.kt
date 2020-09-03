@@ -118,13 +118,14 @@ class NativeIssueRepositoryImpl(
             return emptyList()
         }
 
-        val query = """
+        val query =
+            """
             SELECT
             ${dynamicFields.joinToString { """ ARRAY_TO_JSON(ARRAY_REMOVE(ARRAY_AGG(DISTINCT fields."$it"), null)) as "$it" """ }}
             FROM issue, JSONB_TO_RECORD(dynamic_fields) AS
             ${dynamicFields.joinToString(prefix = "fields(", postfix = ")") { """ "$it" TEXT """ }}
             WHERE board_id = :boardId
-        """.trimIndent()
+            """
 
         val params = MapSqlParameterSource()
         params["boardId"] = boardId
@@ -136,11 +137,12 @@ class NativeIssueRepositoryImpl(
     override fun findAllEstimatesByBoardId(boardId: Long): Set<String> {
         log.info("M=findAllEstimatesByBoardId, boardId={}", boardId)
 
-        val query = """
+        val query =
+            """
             SELECT DISTINCT ESTIMATE FROM ISSUE
             WHERE BOARD_ID = :boardId
             AND ESTIMATE IS NOT NULL
-        """
+            """
 
         val params = MapSqlParameterSource()
         params["boardId"] = boardId
@@ -151,11 +153,12 @@ class NativeIssueRepositoryImpl(
     override fun findAllSystemsByBoardId(boardId: Long): Set<String> {
         log.info("M=findAllSystemsByBoardId, boardId={}", boardId)
 
-        val query = """
+        val query =
+            """
             SELECT DISTINCT SYSTEM FROM issue
             WHERE BOARD_ID = :boardId
             AND SYSTEM IS NOT NULL
-        """
+            """
 
         val params = MapSqlParameterSource()
         params["boardId"] = boardId
@@ -166,11 +169,12 @@ class NativeIssueRepositoryImpl(
     override fun findAllEpicsByBoardId(boardId: Long): Set<String> {
         log.info("M=findAllEpicsByBoardId, boardId={}", boardId)
 
-        val query = """
+        val query =
+            """
             SELECT DISTINCT EPIC FROM issue
             WHERE BOARD_ID = :boardId
             AND EPIC IS NOT NULL
-        """
+            """
 
         val params = MapSqlParameterSource()
         params["boardId"] = boardId
@@ -181,11 +185,12 @@ class NativeIssueRepositoryImpl(
     override fun findAllIssueTypesByBoardId(boardId: Long): Set<String> {
         log.info("M=findAllIssueTypesByBoardId, boardId={}", boardId)
 
-        val query = """
+        val query =
+            """
             SELECT DISTINCT ISSUE_TYPE FROM ISSUE
             WHERE BOARD_ID = :boardId
             AND ISSUE_TYPE IS NOT NULL
-        """
+            """
 
         val params = MapSqlParameterSource()
         params["boardId"] = boardId
@@ -196,11 +201,12 @@ class NativeIssueRepositoryImpl(
     override fun findAllIssueProjectsByBoardId(boardId: Long): Set<String> {
         log.info("M=findAllIssueProjectsByBoardId, boardId={}", boardId)
 
-        val query = """
+        val query =
+            """
             SELECT DISTINCT PROJECT FROM ISSUE
             WHERE BOARD_ID = :boardId
             AND PROJECT IS NOT NULL
-        """
+            """
 
         val params = MapSqlParameterSource()
         params["boardId"] = boardId
@@ -211,11 +217,12 @@ class NativeIssueRepositoryImpl(
     override fun findAllIssuePrioritiesByBoardId(boardId: Long): Set<String> {
         log.info("M=findAllIssuePrioritiesByBoardId, boardId={}", boardId)
 
-        val query = """
+        val query =
+            """
             SELECT DISTINCT PRIORITY FROM ISSUE
             WHERE BOARD_ID = :boardId
             AND PRIORITY IS NOT NULL
-        """
+            """
 
         val params = MapSqlParameterSource()
         params["boardId"] = boardId
@@ -226,11 +233,12 @@ class NativeIssueRepositoryImpl(
     override fun findAllKeysByBoardIdAndDates(boardId: Long, startDate: LocalDateTime, endDate: LocalDateTime): Set<String> {
         log.info("findAllKeysByBoardIdAndDates, boardId={}, startDate={}, endDate={}", boardId, startDate, endDate)
 
-        val query = """
+        val query =
+            """
             SELECT DISTINCT KEY FROM ISSUE
             WHERE BOARD_ID = :boardId
             AND END_DATE BETWEEN :startDate AND :endDate
-        """
+            """
 
         val params = MapSqlParameterSource()
         params["boardId"] = boardId
@@ -243,11 +251,12 @@ class NativeIssueRepositoryImpl(
     private fun findAllDynamicFieldsByBoardId(boardId: Long): Set<String> {
         log.info("Method=findAllDynamicFieldsByBoardId, boardId={}", boardId)
 
-        val query = """ 
+        val query =
+            """ 
             SELECT DISTINCT JSONB_OBJECT_KEYS(DYNAMIC_FIELDS) 
             FROM ISSUE 
             WHERE BOARD_ID = :boardId
-        """
+            """
 
         val params = MapSqlParameterSource()
         params["boardId"] = boardId

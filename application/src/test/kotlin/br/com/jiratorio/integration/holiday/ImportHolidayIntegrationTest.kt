@@ -94,7 +94,7 @@ internal class ImportHolidayIntegrationTest(
     }
 
     @Test
-    fun `already been imported`() {
+    fun `should not import when already been imported`() {
         authenticator.withDefaultUser {
             val defaultBoard = boardFactory.create()
             for (i in 1..5) {

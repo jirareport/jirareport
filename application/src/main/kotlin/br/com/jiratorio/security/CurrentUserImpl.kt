@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component
 @Component
 class CurrentUserImpl : CurrentUser {
 
-    override val username: String
-        get() = SecurityContextHolder.getContext().account?.username ?: throw IllegalStateException("current user not found")
+    override val username: String?
+        get() = SecurityContextHolder.getContext().account?.username
 
-    override val jiraToken: String
-        get() = SecurityContextHolder.getContext().account?.token ?: throw IllegalStateException("current user not found")
+    override val jiraToken: String?
+        get() = SecurityContextHolder.getContext().account?.token
 
 }

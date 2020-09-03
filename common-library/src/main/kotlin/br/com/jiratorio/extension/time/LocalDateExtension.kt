@@ -12,8 +12,8 @@ fun LocalDate.isHoliday(holidays: List<LocalDate>): Boolean =
 
 fun LocalDate.isWorkday(holidays: List<LocalDate>): Boolean =
     DayOfWeek.SATURDAY != dayOfWeek &&
-            DayOfWeek.SUNDAY != dayOfWeek &&
-            !isHoliday(holidays)
+        DayOfWeek.SUNDAY != dayOfWeek &&
+        !isHoliday(holidays)
 
 fun LocalDate?.daysDiff(endDate: LocalDate?, holidays: List<LocalDate>, ignoreWeekend: Boolean?): Long {
     if (this == null || endDate == null) {
