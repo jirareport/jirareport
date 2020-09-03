@@ -52,7 +52,7 @@ subprojects {
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-        
+
         implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
 
         detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.12.0")
@@ -76,7 +76,13 @@ subprojects {
         )
         config = files("$rootDir/detekt-config.yml")
     }
-    
+
+    tasks.detekt {
+        doLast {
+            delete("$rootDir/config")
+        }
+    }
+
     tasks.withType<Test> {
         useJUnitPlatform()
     }
@@ -105,3 +111,4 @@ configure(subprojects - project(":test-library")) {
 tasks.bootJar {
     enabled = false
 }
+
