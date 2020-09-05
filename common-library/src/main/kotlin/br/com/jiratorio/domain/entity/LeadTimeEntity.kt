@@ -36,7 +36,7 @@ data class LeadTimeEntity(
 
 ) : BaseEntity() {
     companion object {
-        private val serialVersionUID = 2918615471478687270L
+        private const val serialVersionUID = 2918615471478687270L
     }
 
     override fun equals(other: Any?) =

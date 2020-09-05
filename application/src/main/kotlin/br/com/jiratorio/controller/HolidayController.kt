@@ -3,12 +3,12 @@ package br.com.jiratorio.controller
 import br.com.jiratorio.domain.Account
 import br.com.jiratorio.domain.request.HolidayRequest
 import br.com.jiratorio.domain.response.holiday.HolidayResponse
-import br.com.jiratorio.usecase.holiday.CreateHoliday
-import br.com.jiratorio.usecase.holiday.DeleteHoliday
-import br.com.jiratorio.usecase.holiday.FindAllHolidays
-import br.com.jiratorio.usecase.holiday.FindHoliday
-import br.com.jiratorio.usecase.holiday.ImportHolidays
-import br.com.jiratorio.usecase.holiday.UpdateHoliday
+import br.com.jiratorio.usecase.holiday.CreateHolidayUseCase
+import br.com.jiratorio.usecase.holiday.DeleteHolidayUseCase
+import br.com.jiratorio.usecase.holiday.FindAllHolidaysUseCase
+import br.com.jiratorio.usecase.holiday.FindHolidayUseCase
+import br.com.jiratorio.usecase.holiday.ImportHolidaysUseCase
+import br.com.jiratorio.usecase.holiday.UpdateHolidayUseCase
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -31,12 +31,12 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/boards/{boardId}/holidays")
 class HolidayController(
-    private val createHoliday: CreateHoliday,
-    private val deleteHoliday: DeleteHoliday,
-    private val findHoliday: FindHoliday,
-    private val findAllHolidays: FindAllHolidays,
-    private val importHolidays: ImportHolidays,
-    private val updateHoliday: UpdateHoliday
+    private val createHoliday: CreateHolidayUseCase,
+    private val deleteHoliday: DeleteHolidayUseCase,
+    private val findHoliday: FindHolidayUseCase,
+    private val findAllHolidays: FindAllHolidaysUseCase,
+    private val importHolidays: ImportHolidaysUseCase,
+    private val updateHoliday: UpdateHolidayUseCase
 ) {
 
     @GetMapping

@@ -2,9 +2,9 @@ package br.com.jiratorio.controller
 
 import br.com.jiratorio.domain.request.DynamicFieldConfigRequest
 import br.com.jiratorio.domain.response.DynamicFieldConfigResponse
-import br.com.jiratorio.usecase.dynamicfield.config.CreateDynamicFieldConfig
-import br.com.jiratorio.usecase.dynamicfield.config.DeleteDynamicFieldConfig
-import br.com.jiratorio.usecase.dynamicfield.config.FindAllDynamicFieldConfigs
+import br.com.jiratorio.usecase.dynamicfield.config.CreateDynamicFieldConfigUseCase
+import br.com.jiratorio.usecase.dynamicfield.config.DeleteDynamicFieldConfigUseCase
+import br.com.jiratorio.usecase.dynamicfield.config.FindAllDynamicFieldConfigsUseCase
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -22,9 +22,9 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/boards/{boardId}/dynamic-field-configs")
 class DynamicFieldConfigController(
-    private val createDynamicFieldConfig: CreateDynamicFieldConfig,
-    private val deleteDynamicFieldConfig: DeleteDynamicFieldConfig,
-    private val findAllDynamicFieldConfigs: FindAllDynamicFieldConfigs
+    private val createDynamicFieldConfig: CreateDynamicFieldConfigUseCase,
+    private val deleteDynamicFieldConfig: DeleteDynamicFieldConfigUseCase,
+    private val findAllDynamicFieldConfigs: FindAllDynamicFieldConfigsUseCase
 ) {
 
     @GetMapping

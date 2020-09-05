@@ -20,8 +20,8 @@ class NativeColumnTimeAverageRepositoryImpl(
         val query =
             """
             SELECT 
-                column_to as column_name, 
-                avg(lead_time) average_time
+                column_to AS column_name, 
+                AVG(lead_time) average_time
             FROM column_changelog
             WHERE issue_id IN (:issues)
             GROUP BY column_to;

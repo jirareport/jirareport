@@ -14,7 +14,7 @@ internal class CreateFinalizedIssueJqlTest {
 
     private val endDate: LocalDate = "31/01/2019".toLocalDate()
 
-    private val finalizedIssueJql = CreateFinalizedIssueJql()
+    private val finalizedIssueJql = CreateFinalizedIssueJqlUseCase()
 
     @Test
     fun `finalized issues with ignore issue type`() {

@@ -3,11 +3,11 @@ package br.com.jiratorio.controller
 import br.com.jiratorio.domain.request.CreateIssuePeriodRequest
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodListResponse
-import br.com.jiratorio.usecase.issue.period.CreateIssuePeriod
-import br.com.jiratorio.usecase.issue.period.DeleteIssuePeriod
-import br.com.jiratorio.usecase.issue.period.FindAllIssuePeriods
-import br.com.jiratorio.usecase.issue.period.FindIssuePeriod
-import br.com.jiratorio.usecase.issue.period.UpdateIssuePeriod
+import br.com.jiratorio.usecase.issue.period.CreateIssuePeriodUseCase
+import br.com.jiratorio.usecase.issue.period.DeleteIssuePeriodUseCase
+import br.com.jiratorio.usecase.issue.period.FindAllIssuePeriodsUseCase
+import br.com.jiratorio.usecase.issue.period.FindIssuePeriodUseCase
+import br.com.jiratorio.usecase.issue.period.UpdateIssuePeriodUseCase
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
@@ -29,11 +29,11 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/boards/{boardId}/issue-periods")
 class IssuePeriodController(
-    private val createIssuePeriod: CreateIssuePeriod,
-    private val deleteIssuePeriod: DeleteIssuePeriod,
-    private val findAllIssuePeriods: FindAllIssuePeriods,
-    private val findIssuePeriod: FindIssuePeriod,
-    private val updateIssuePeriod: UpdateIssuePeriod
+    private val createIssuePeriod: CreateIssuePeriodUseCase,
+    private val deleteIssuePeriod: DeleteIssuePeriodUseCase,
+    private val findAllIssuePeriods: FindAllIssuePeriodsUseCase,
+    private val findIssuePeriod: FindIssuePeriodUseCase,
+    private val updateIssuePeriod: UpdateIssuePeriodUseCase
 ) {
 
     @GetMapping

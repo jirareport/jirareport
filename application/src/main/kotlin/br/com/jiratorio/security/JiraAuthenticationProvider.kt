@@ -1,8 +1,8 @@
 package br.com.jiratorio.security
 
 import br.com.jiratorio.domain.request.LoginRequest
-import br.com.jiratorio.usecase.auth.Login
-import br.com.jiratorio.usecase.token.EncodeToken
+import br.com.jiratorio.usecase.auth.LoginUseCase
+import br.com.jiratorio.usecase.token.EncodeTokenUseCase
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.BadCredentialsException
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class JiraAuthenticationProvider(
-    private val login: Login,
-    private val encodeToken: EncodeToken
+    private val login: LoginUseCase,
+    private val encodeToken: EncodeTokenUseCase
 ) : AuthenticationProvider {
 
     private val log = LoggerFactory.getLogger(javaClass)

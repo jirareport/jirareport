@@ -2,11 +2,11 @@ package br.com.jiratorio.controller
 
 import br.com.jiratorio.domain.request.LeadTimeConfigRequest
 import br.com.jiratorio.domain.response.LeadTimeConfigResponse
-import br.com.jiratorio.usecase.leadtime.config.CreateLeadTimeConfig
-import br.com.jiratorio.usecase.leadtime.config.DeleteLeadTimeConfig
-import br.com.jiratorio.usecase.leadtime.config.FindAllLeadTimeConfigs
-import br.com.jiratorio.usecase.leadtime.config.FindLeadTimeConfig
-import br.com.jiratorio.usecase.leadtime.config.UpdateLeadTimeConfig
+import br.com.jiratorio.usecase.leadtime.config.CreateLeadTimeConfigUseCase
+import br.com.jiratorio.usecase.leadtime.config.DeleteLeadTimeConfigUseCase
+import br.com.jiratorio.usecase.leadtime.config.FindAllLeadTimeConfigsUseCase
+import br.com.jiratorio.usecase.leadtime.config.FindLeadTimeConfigUseCase
+import br.com.jiratorio.usecase.leadtime.config.UpdateLeadTimeConfigUseCase
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -25,11 +25,11 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/boards/{boardId}/lead-time-configs")
 class LeadTimeConfigController(
-    private val createLeadTimeConfig: CreateLeadTimeConfig,
-    private val deleteLeadTimeConfig: DeleteLeadTimeConfig,
-    private val findAllLeadTimeConfigs: FindAllLeadTimeConfigs,
-    private val findLeadTimeConfig: FindLeadTimeConfig,
-    private val updateLeadTimeConfig: UpdateLeadTimeConfig
+    private val createLeadTimeConfig: CreateLeadTimeConfigUseCase,
+    private val deleteLeadTimeConfig: DeleteLeadTimeConfigUseCase,
+    private val findAllLeadTimeConfigs: FindAllLeadTimeConfigsUseCase,
+    private val findLeadTimeConfig: FindLeadTimeConfigUseCase,
+    private val updateLeadTimeConfig: UpdateLeadTimeConfigUseCase
 ) {
 
     @GetMapping

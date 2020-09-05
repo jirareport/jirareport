@@ -32,7 +32,7 @@ internal class CreateLeadTimeTest {
 
     private val leadTimeRepository = mockk<LeadTimeRepository>()
 
-    private val createLeadTime = CreateLeadTime(
+    private val createLeadTime = CreateLeadTimeUseCase(
         leadTimeConfigRepository,
         leadTimeRepository
     )

@@ -6,13 +6,13 @@ import br.com.jiratorio.domain.request.SearchBoardRequest
 import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.domain.response.board.BoardDetailsResponse
 import br.com.jiratorio.domain.response.board.BoardResponse
-import br.com.jiratorio.usecase.board.CloneBoard
-import br.com.jiratorio.usecase.board.CreateBoard
-import br.com.jiratorio.usecase.board.DeleteBoard
-import br.com.jiratorio.usecase.board.FindAllBoards
-import br.com.jiratorio.usecase.board.FindBoard
-import br.com.jiratorio.usecase.board.UpdateBoard
-import br.com.jiratorio.usecase.board.owner.FindAllOwners
+import br.com.jiratorio.usecase.board.CloneBoardUseCase
+import br.com.jiratorio.usecase.board.CreateBoardUseCase
+import br.com.jiratorio.usecase.board.DeleteBoardUseCase
+import br.com.jiratorio.usecase.board.FindAllBoardsUseCase
+import br.com.jiratorio.usecase.board.FindBoardUseCase
+import br.com.jiratorio.usecase.board.UpdateBoardUseCase
+import br.com.jiratorio.usecase.board.owner.FindAllOwnersUseCase
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -36,13 +36,13 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/boards")
 class BoardController(
-    private val findAllOwners: FindAllOwners,
-    private val createBoard: CreateBoard,
-    private val deleteBoard: DeleteBoard,
-    private val findAllBoards: FindAllBoards,
-    private val findBoard: FindBoard,
-    private val updateBoard: UpdateBoard,
-    private val cloneBoard: CloneBoard
+    private val findAllOwners: FindAllOwnersUseCase,
+    private val createBoard: CreateBoardUseCase,
+    private val deleteBoard: DeleteBoardUseCase,
+    private val findAllBoards: FindAllBoardsUseCase,
+    private val findBoard: FindBoardUseCase,
+    private val updateBoard: UpdateBoardUseCase,
+    private val cloneBoard: CloneBoardUseCase
 ) {
 
     @GetMapping

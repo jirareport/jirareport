@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 @UnitTest
 internal class CreateOpenedIssueJqlTest {
 
-    private val openedIssueJql = CreateOpenedIssueJql()
+    private val openedIssueJql = CreateOpenedIssueJqlUseCase()
 
     @Test
     fun `opened issues with ignore issue type`() {

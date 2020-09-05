@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 @UnitTest
 internal class CalculateEfficiencyTest {
 
-    private val calculateEfficiency = CalculateEfficiency()
+    private val calculateEfficiency = CalculateEfficiencyUseCase()
 
     @Test
     fun `test calc efficiency`() {

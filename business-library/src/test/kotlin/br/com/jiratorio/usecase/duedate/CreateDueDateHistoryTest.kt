@@ -17,7 +17,7 @@ internal class CreateDueDateHistoryTest {
 
     private val fieldChangelogFactory = FieldChangelogFactory(Faker())
 
-    private val extractDueDateHistory = CreateDueDateHistory()
+    private val extractDueDateHistory = CreateDueDateHistoryUseCase()
 
     @Test
     fun `extract due date history with one item`() {

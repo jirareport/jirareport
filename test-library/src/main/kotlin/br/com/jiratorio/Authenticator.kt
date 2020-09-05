@@ -1,7 +1,7 @@
 package br.com.jiratorio
 
 import br.com.jiratorio.factory.domain.entity.AccountFactory
-import br.com.jiratorio.usecase.token.EncodeToken
+import br.com.jiratorio.usecase.token.EncodeTokenUseCase
 import io.restassured.http.Header
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.test.context.TestSecurityContextHolder
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 @Component
 class Authenticator(
     private val accountFactory: AccountFactory,
-    private val encodeToken: EncodeToken
+    private val encodeToken: EncodeTokenUseCase
 ) {
 
     fun <T> withDefaultUser(supplier: () -> T): T =

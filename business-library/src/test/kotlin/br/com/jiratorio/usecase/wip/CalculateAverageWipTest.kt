@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 @UnitTest
 internal class CalculateAverageWipTest {
 
-    private val calculateAverageWip = CalculateAverageWip()
+    private val calculateAverageWip = CalculateAverageWipUseCase()
 
     @Test
     fun `test calc avg wip`() {

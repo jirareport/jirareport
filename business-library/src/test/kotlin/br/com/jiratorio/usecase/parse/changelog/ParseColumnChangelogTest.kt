@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 @UnitTest
 internal class ParseColumnChangelogTest {
 
-    private val parseColumnChangelog = ParseColumnChangelog()
+    private val parseColumnChangelog = ParseColumnChangelogUseCase()
 
     @Test
     fun `parse column changelog`() {

@@ -5,10 +5,10 @@ import br.com.jiratorio.domain.response.IssueListResponse
 import br.com.jiratorio.domain.response.issue.IssueDetailResponse
 import br.com.jiratorio.domain.response.issue.IssueFilterResponse
 import br.com.jiratorio.domain.response.issue.IssueKeysResponse
-import br.com.jiratorio.usecase.issue.FindAllIssues
-import br.com.jiratorio.usecase.issue.FindIssue
-import br.com.jiratorio.usecase.issue.FindIssueFilters
-import br.com.jiratorio.usecase.issue.FindIssueKeys
+import br.com.jiratorio.usecase.issue.FindAllIssuesUseCase
+import br.com.jiratorio.usecase.issue.FindIssueUseCase
+import br.com.jiratorio.usecase.issue.FindIssueFiltersUseCase
+import br.com.jiratorio.usecase.issue.FindIssueKeysUseCase
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -22,10 +22,10 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/boards/{boardId}/issues")
 class IssueController(
-    private val findIssue: FindIssue,
-    private val findAllIssues: FindAllIssues,
-    private val findIssueKeys: FindIssueKeys,
-    private val findIssueFilters: FindIssueFilters
+    private val findIssue: FindIssueUseCase,
+    private val findAllIssues: FindAllIssuesUseCase,
+    private val findIssueKeys: FindIssueKeysUseCase,
+    private val findIssueFilters: FindIssueFiltersUseCase
 ) {
 
     @GetMapping

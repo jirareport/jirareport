@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource
 @UnitTest
 internal class CalculatePercentileTest {
 
-    private val calculatePercentile = CalculatePercentile()
+    private val calculatePercentile = CalculatePercentileUseCase()
 
     @ParameterizedTest
     @MethodSource("calculatePercentileProvider")
