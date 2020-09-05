@@ -13,9 +13,8 @@ class Authenticator(
     private val encodeToken: EncodeToken
 ) {
 
-    fun <T> withDefaultUser(supplier: () -> T): T {
-        return this.withUser(accountFactory.defaultUserName(), supplier)
-    }
+    fun <T> withDefaultUser(supplier: () -> T): T =
+        withUser(accountFactory.defaultUserName(), supplier)
 
     fun <T> withUser(username: String, supplier: () -> T): T {
         val oldContext = TestSecurityContextHolder.getContext()
@@ -38,11 +37,9 @@ class Authenticator(
         return result
     }
 
-    fun defaultUserHeader(): Header {
-        return Header("X-Auth-Token", encodeToken.execute(accountFactory.defaultUser()))
-    }
+    fun defaultUserHeader(): Header =
+        Header("X-Auth-Token", encodeToken.execute(accountFactory.defaultUser()))
 
-    fun defaultUserName(): String {
-        return accountFactory.defaultUserName()
-    }
+    fun defaultUserName(): String =
+        accountFactory.defaultUserName()
 }

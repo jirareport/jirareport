@@ -16,7 +16,7 @@ import java.time.LocalDate
 @UseCase
 class CreateLeadTime(
     private val leadTimeConfigRepository: LeadTimeConfigRepository,
-    private val leadTimeRepository: LeadTimeRepository
+    private val leadTimeRepository: LeadTimeRepository,
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -32,16 +32,16 @@ class CreateLeadTime(
         }
 
         leadTimeRepository.deleteByIssueId(issue.id)
-        issue.leadTimes = leadTimeConfigs.mapNotNull { leadTimeConfig ->
-            calcLeadTime(leadTimeConfig, issue, board, holidays)
-        }.toMutableSet()
+        issue.leadTimes = leadTimeConfigs
+            .mapNotNull { leadTimeConfig -> calcLeadTime(leadTimeConfig, issue, board, holidays) }
+            .toMutableSet()
     }
 
     private fun calcLeadTime(
         leadTimeConfig: LeadTimeConfig,
         issue: Issue,
         board: Board,
-        holidays: List<LocalDate>
+        holidays: List<LocalDate>,
     ): LeadTime? {
         log.info("Method=calcLeadTime, leadTimeConfig={}, issue={}, board={},  holidays={}", leadTimeConfig, issue, board, holidays)
 

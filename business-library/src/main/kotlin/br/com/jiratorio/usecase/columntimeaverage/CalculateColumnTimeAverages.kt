@@ -1,7 +1,9 @@
 package br.com.jiratorio.usecase.columntimeaverage
 
+import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.repository.ColumnTimeAverageRepository
 import org.slf4j.LoggerFactory
 
 @UseCase

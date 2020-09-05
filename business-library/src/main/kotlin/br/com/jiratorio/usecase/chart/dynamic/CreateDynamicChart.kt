@@ -1,5 +1,6 @@
 package br.com.jiratorio.usecase.chart.dynamic
 
+import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.internationalization.MessageResolver
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
@@ -17,7 +18,7 @@ class CreateDynamicChart(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(board: Board, issues: List<Issue>): List<DynamicChart> {
+    fun execute(board: Board, issues: List<MinimalIssue>): List<DynamicChart> {
         log.info("Action=createDynamicChart, board={}, issues={}", board, issues)
 
         val dynamicFields = board.dynamicFields
@@ -38,28 +39,26 @@ class CreateDynamicChart(
 
     private fun buildDynamicLeadTime(
         config: DynamicFieldConfig,
-        issues: List<Issue>,
+        issues: List<MinimalIssue>,
         uninformed: String
     ): Chart<String, Double> {
         log.info("Method=buildDynamicLeadTime, config={}, issues={}", config, issues)
 
         return issues
-            .filterNot { it.dynamicFields.isNullOrEmpty() }
-            .groupBy { it.dynamicFields!![config.name] ?: uninformed }
+            .groupBy { it.dynamicFields[config.name] ?: uninformed }
             .mapValues { (_, value) -> value.map { it.leadTime }.average() }
             .toChart()
     }
 
     private fun buildDynamicThroughput(
         config: DynamicFieldConfig,
-        issues: List<Issue>,
+        issues: List<MinimalIssue>,
         uninformed: String
     ): Chart<String, Int> {
         log.info("Method=buildDynamicThroughput, config={}, issues={}", config, issues)
 
         return issues
-            .filterNot { it.dynamicFields.isNullOrEmpty() }
-            .groupingBy { it.dynamicFields!![config.name] ?: uninformed }
+            .groupingBy { it.dynamicFields[config.name] ?: uninformed }
             .eachCount()
             .toChart()
     }

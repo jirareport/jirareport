@@ -5,7 +5,7 @@ import br.com.jiratorio.domain.request.SearchBoardRequest
 import br.com.jiratorio.domain.response.board.BoardResponse
 import br.com.jiratorio.mapper.toBoardResponse
 import br.com.jiratorio.repository.BoardRepository
-import br.com.jiratorio.restassured.specification.SearchBoardSpecification
+import br.com.jiratorio.specification.SearchBoardSpecification
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

@@ -1,4 +1,4 @@
-package br.com.jiratorio.repository.jdbctemplate.rowmapper
+package br.com.jiratorio.extension.jdbctemplate
 
 import org.springframework.jdbc.core.ResultSetExtractor
 import org.springframework.jdbc.core.RowMapper

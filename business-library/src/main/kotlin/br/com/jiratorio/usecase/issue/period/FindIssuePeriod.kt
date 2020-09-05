@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 @UseCase
 class FindIssuePeriod(
     private val issuePeriodRepository: IssuePeriodRepository,
-    private val jiraProperties: JiraProperties
+    private val jiraProperties: JiraProperties,
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -27,7 +27,7 @@ class FindIssuePeriod(
 
         return IssuePeriodByIdResponse(
             detail = issuePeriod.toIssuePeriodDetailResponse(),
-            issues = issuePeriod.issues.toIssueResponse(jiraProperties.url)
+            issues = issuePeriod.issues.map { it.toIssueResponse(jiraProperties.url) }
         )
     }
 

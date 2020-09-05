@@ -1,16 +1,17 @@
 package br.com.jiratorio.usecase.issue.period
 
-import br.com.jiratorio.internationalization.MessageResolver
-import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.FluxColumn
+import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.IssuePeriod
 import br.com.jiratorio.domain.request.CreateIssuePeriodRequest
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.decimal.zeroIfNaN
+import br.com.jiratorio.internationalization.MessageResolver
 import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.IssuePeriodRepository
+import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.usecase.chart.CreateChartAggregator
 import br.com.jiratorio.usecase.columntimeaverage.CreateColumnTimeAverages
 import br.com.jiratorio.usecase.issue.create.CreateIssues
@@ -26,7 +27,7 @@ class CreateIssuePeriod(
     private val calculateAverageWip: CalculateAverageWip,
     private val createColumnTimeAverages: CreateColumnTimeAverages,
     private val createIssues: CreateIssues,
-    private val messageResolver: MessageResolver
+    private val messageResolver: MessageResolver,
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -75,10 +76,31 @@ class CreateIssuePeriod(
 
     private fun createCharts(
         issuePeriod: IssuePeriod,
-        board: Board
+        board: Board,
     ) {
         val chartAggregator = createChartAggregator.execute(
-            issuePeriod.issues.toList(),
+            issuePeriod.issues.map {
+                MinimalIssue(
+                    id = it.id,
+                    key = it.key,
+                    leadTime = it.leadTime,
+                    startDate = it.startDate,
+                    endDate = it.endDate,
+                    creator = it.creator,
+                    summary = it.summary,
+                    issueType = it.issueType,
+                    estimate = it.estimate,
+                    project = it.project,
+                    epic = it.epic,
+                    system = it.system,
+                    priority = it.priority,
+                    created = it.created,
+                    deviationOfEstimate = it.deviationOfEstimate,
+                    changeEstimateCount = it.dueDateHistory?.size ?: 0,
+                    impedimentTime = it.impedimentTime,
+                    dynamicFields = it.dynamicFields ?: emptyMap()
+                )
+            },
             board
         )
 
@@ -96,7 +118,6 @@ class CreateIssuePeriod(
             leadTimeByPriority = chartAggregator.leadTimeByPriority
             throughputByPriority = chartAggregator.throughputByPriority
             dynamicCharts = chartAggregator.dynamicCharts.toMutableList()
-            leadTimeCompareChart = chartAggregator.leadTimeCompareChart
             issueProgression = chartAggregator.issueProgression
         }
     }

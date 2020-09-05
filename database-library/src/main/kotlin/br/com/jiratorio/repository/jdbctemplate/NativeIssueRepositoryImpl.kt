@@ -1,13 +1,14 @@
 package br.com.jiratorio.repository.jdbctemplate
 
+import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
 import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.extension.jdbctemplate.queryForSet
 import br.com.jiratorio.extension.time.atEndOfDay
 import br.com.jiratorio.repository.NativeIssueRepository
 import br.com.jiratorio.repository.jdbctemplate.rowmapper.DynamicFieldsValuesRowMapper
+import br.com.jiratorio.repository.jdbctemplate.rowmapper.MinimalIssueRowMapper
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,13 +19,9 @@ import org.springframework.jdbc.core.namedparam.set
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
-import java.util.HashMap
-import javax.persistence.EntityManager
-import javax.persistence.Query
 
 @Repository
 class NativeIssueRepositoryImpl(
-    private val entityManager: EntityManager,
     private val objectMapper: ObjectMapper,
     jdbcTemplate: JdbcTemplate
 ) : NativeIssueRepository {
@@ -38,20 +35,38 @@ class NativeIssueRepositoryImpl(
         board: Board,
         dynamicFilters: Map<String, Array<String>>,
         searchIssueRequest: SearchIssueRequest
-    ): List<Issue> {
-        log.info(
-            "Method=findByExample, board={}, dynamicFilters={}, searchIssueRequest={}",
-            board, searchIssueRequest, dynamicFilters
+    ): List<MinimalIssue> {
+        log.info("Method=findByExample, board={}, dynamicFilters={}, searchIssueRequest={}", board, searchIssueRequest, dynamicFilters)
+
+        val params = MapSqlParameterSource()
+
+        val query = StringBuilder(
+            """
+            SELECT issue.id,
+                   issue.key, 
+                   issue.lead_time,
+                   issue.start_date, 
+                   issue.end_date, 
+                   issue.creator, 
+                   issue.summary, 
+                   issue.issue_type, 
+                   issue.estimate, 
+                   issue.project, 
+                   issue.epic, 
+                   issue.system, 
+                   issue.priority, 
+                   issue.created, 
+                   issue.deviation_of_estimate, 
+                   coalesce(jsonb_array_length(issue.due_date_history), 0) as change_estimate_count,
+                   issue.impediment_time,
+                   issue.dynamic_fields 
+            FROM issue
+                     LEFT JOIN lead_time ON issue.id = lead_time.issue_id
+                     LEFT JOIN lead_time_config ON lead_time.lead_time_config_id = lead_time_config.id
+            WHERE issue.board_id = :boardId
+              AND issue.end_date BETWEEN :startDate AND :endDate 
+            """
         )
-
-        val params = HashMap<String, Any>()
-
-        val query = StringBuilder()
-        query.append(" SELECT DISTINCT issue.* FROM issue ")
-        query.append(" LEFT JOIN lead_time ON issue.id = lead_time.issue_id ")
-        query.append(" LEFT JOIN lead_time_config ON lead_time.lead_time_config_id = lead_time_config.id ")
-        query.append(" WHERE issue.board_id = :boardId ")
-        query.append(" AND issue.end_date BETWEEN :startDate AND :endDate ")
 
         if (searchIssueRequest.keys.isNotEmpty()) {
             query.append(" AND issue.key NOT IN (:keys) ")
@@ -102,11 +117,7 @@ class NativeIssueRepositoryImpl(
 
         query.append(" ORDER BY issue.key ")
 
-        val nativeQuery: Query = entityManager.createNativeQuery(query.toString(), Issue::class.java)
-        params.forEach { (k, v) -> nativeQuery.setParameter(k, v) }
-
-        @Suppress("UNCHECKED_CAST")
-        return nativeQuery.resultList as List<Issue>
+        return jdbcTemplate.query(query.toString(), params, MinimalIssueRowMapper(objectMapper))
     }
 
     @Transactional(readOnly = true)

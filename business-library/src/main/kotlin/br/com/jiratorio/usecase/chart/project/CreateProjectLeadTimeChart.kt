@@ -1,5 +1,6 @@
 package br.com.jiratorio.usecase.chart.project
 
+import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.internationalization.MessageResolver
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.entity.Issue
@@ -14,7 +15,7 @@ class CreateProjectLeadTimeChart(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(issues: List<Issue>): Chart<String, Double> {
+    fun execute(issues: List<MinimalIssue>): Chart<String, Double> {
         log.info("Action=createPriorityThroughputChart, issues={}", issues)
 
         val uninformedValue = messageResolver.resolve("uninformed")

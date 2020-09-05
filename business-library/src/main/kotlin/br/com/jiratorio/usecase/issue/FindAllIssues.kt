@@ -1,17 +1,19 @@
 package br.com.jiratorio.usecase.issue
 
-import br.com.jiratorio.property.JiraProperties
-import br.com.jiratorio.stereotype.UseCase
+import br.com.jiratorio.domain.MinimalIssue
+import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.domain.response.ColumnTimeAverageResponse
 import br.com.jiratorio.domain.response.IssueListResponse
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.decimal.zeroIfNaN
 import br.com.jiratorio.mapper.toIssueResponse
+import br.com.jiratorio.property.JiraProperties
 import br.com.jiratorio.repository.BoardRepository
+import br.com.jiratorio.repository.ColumnTimeAverageRepository
 import br.com.jiratorio.repository.IssueRepository
+import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.usecase.chart.CreateChartAggregator
-import br.com.jiratorio.usecase.columntimeaverage.CalculateColumnTimeAverages
 import br.com.jiratorio.usecase.weeklythroughput.CalculateWeeklyThroughput
 import org.slf4j.LoggerFactory
 import org.springframework.transaction.annotation.Transactional
@@ -23,7 +25,7 @@ class FindAllIssues(
     private val createChartAggregator: CreateChartAggregator,
     private val jiraProperties: JiraProperties,
     private val calculateWeeklyThroughput: CalculateWeeklyThroughput,
-    private val calculateColumnTimeAverages: CalculateColumnTimeAverages
+    private val columnTimeAverageRepository: ColumnTimeAverageRepository
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -52,9 +54,7 @@ class FindAllIssues(
             issues = issues
         )
 
-        val columnTimeAverages = calculateColumnTimeAverages
-            .execute(issues, board.fluxColumn ?: emptyList())
-            .map { (columnName, averageTime) -> ColumnTimeAverageResponse(columnName, averageTime) }
+        val columnTimeAverages = retrieveColumnTimeAverages(board, issues)
 
         return IssueListResponse(
             leadTime = leadTime.zeroIfNaN(),
@@ -65,4 +65,15 @@ class FindAllIssues(
             weeklyThroughput = weeklyThroughput
         )
     }
+
+    private fun retrieveColumnTimeAverages(
+        board: Board,
+        issues: List<MinimalIssue>
+    ): List<ColumnTimeAverageResponse> {
+        val fluxColumn = board.fluxColumn ?: emptyList()
+
+        return columnTimeAverageRepository.findColumnTimeAverage(issues.map { it.id })
+            .sortedBy { (to, _) -> fluxColumn.indexOf(to.toUpperCase()) }
+    }
+
 }

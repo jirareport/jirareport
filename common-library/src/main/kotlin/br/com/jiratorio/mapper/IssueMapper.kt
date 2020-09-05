@@ -1,9 +1,33 @@
 package br.com.jiratorio.mapper
 
+import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.response.issue.IssueDetailResponse
 import br.com.jiratorio.domain.response.issue.IssueResponse
 import br.com.jiratorio.extension.time.displayFormat
+
+fun MinimalIssue.toIssueResponse(jiraUrl: String): IssueResponse =
+    IssueResponse(
+        id = id,
+        key = key,
+        creator = creator,
+        summary = summary,
+        issueType = issueType,
+        estimate = estimate,
+        project = project,
+        epic = epic,
+        system = system,
+        priority = priority,
+        leadTime = leadTime,
+        startDate = startDate.displayFormat(),
+        endDate = endDate.displayFormat(),
+        created = created.displayFormat(),
+        deviationOfEstimate = deviationOfEstimate,
+        changeEstimateCount = changeEstimateCount,
+        impedimentTime = impedimentTime,
+        dynamicFields = dynamicFields,
+        detailsUrl = "$jiraUrl/browse/$key"
+    )
 
 fun Issue.toIssueResponse(jiraUrl: String): IssueResponse =
     IssueResponse(
@@ -28,7 +52,7 @@ fun Issue.toIssueResponse(jiraUrl: String): IssueResponse =
         detailsUrl = "$jiraUrl/browse/$key"
     )
 
-fun Collection<Issue>.toIssueResponse(jiraUrl: String): List<IssueResponse> =
+fun Collection<MinimalIssue>.toIssueResponse(jiraUrl: String): List<IssueResponse> =
     map { it.toIssueResponse(jiraUrl) }
 
 fun Issue.toIssueDetailResponse(): IssueDetailResponse =

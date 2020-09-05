@@ -1,5 +1,6 @@
 package br.com.jiratorio.usecase.chart.issue
 
+import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.entity.Holiday
@@ -16,21 +17,21 @@ class CreateIssueProgressionChart {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(board: Board, issues: List<Issue>): IssueProgression {
+    fun execute(board: Board, issues: List<MinimalIssue>): IssueProgression {
         log.info("Action=createIssueProgressionChart, board={}, issues={}", board, issues)
 
         if (issues.isEmpty()) {
             return IssueProgression()
         }
 
-        val sortedIssues = issues.sortedBy(Issue::startDate)
+        val sortedIssues = issues.sortedBy(MinimalIssue::startDate)
 
         val start = sortedIssues.first()
             .startDate
             .toLocalDate()
 
         val end = issues
-            .maxByOrNull(Issue::endDate)
+            .maxByOrNull(MinimalIssue::endDate)
             ?.endDate
             ?.toLocalDate()
 

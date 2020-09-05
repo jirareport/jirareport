@@ -1,6 +1,5 @@
 package br.com.jiratorio.extension.jdbctemplate
 
-import br.com.jiratorio.repository.jdbctemplate.rowmapper.SetRowMapperResultSetExtractor
 import org.springframework.jdbc.core.JdbcOperations
 import org.springframework.jdbc.core.SingleColumnRowMapper
 

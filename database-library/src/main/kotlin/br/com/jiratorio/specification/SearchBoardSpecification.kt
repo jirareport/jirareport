@@ -1,4 +1,4 @@
-package br.com.jiratorio.restassured.specification
+package br.com.jiratorio.specification
 
 import br.com.jiratorio.domain.entity.Board
 import br.com.jiratorio.domain.request.SearchBoardRequest

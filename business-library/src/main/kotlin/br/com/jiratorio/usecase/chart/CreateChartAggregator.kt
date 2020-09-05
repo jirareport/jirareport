@@ -1,5 +1,6 @@
 package br.com.jiratorio.usecase.chart
 
+import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.chart.ChartAggregator
 import br.com.jiratorio.domain.entity.Board
@@ -40,7 +41,7 @@ class CreateChartAggregator(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(issues: List<Issue>, board: Board): ChartAggregator {
+    fun execute(issues: List<MinimalIssue>, board: Board): ChartAggregator {
         log.info("Action=createChartAggregator, issues={}, board={}", issues, board)
 
         return ChartAggregator(

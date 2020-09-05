@@ -1,24 +1,26 @@
 package br.com.jiratorio.usecase.chart.leadtimecompare
 
-import br.com.jiratorio.stereotype.UseCase
-import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.domain.AverageLeadTime
+import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.mapper.toChart
+import br.com.jiratorio.repository.LeadTimeRepository
+import br.com.jiratorio.stereotype.UseCase
 import org.slf4j.LoggerFactory
 
 @UseCase
-class CreateLeadTimeCompareChart {
+class CreateLeadTimeCompareChart(
+    private val leadTimeRepository: LeadTimeRepository,
+) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(issues: List<Issue>): Chart<String, Double> {
+    fun execute(issues: List<MinimalIssue>): Chart<String, Double> {
         log.info("Action=createLeadTimeCompareChart, issues={}", issues)
 
-        return issues
-            .mapNotNull { it.leadTimes }
-            .flatten()
-            .groupBy { it.leadTimeConfig.name }
-            .mapValues { (_, value) -> value.map { it.leadTime }.average() }
+        return leadTimeRepository.findAverageLeadTime(issues.map(MinimalIssue::id))
+            .associateBy(AverageLeadTime::name)
+            .mapValues { it.value.value }
             .toChart()
     }
 
