@@ -4,7 +4,7 @@ import br.com.jiratorio.Authenticator
 import br.com.jiratorio.annotation.LoadStubs
 import br.com.jiratorio.restassured.specification.notFound
 import br.com.jiratorio.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.IssuePeriod
+import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.domain.entity.BoardFactory
@@ -29,9 +29,9 @@ internal class UpdateIssuePeriodIntegrationTest(
             val board = boardFactory.create(boardFactory::withBasicConfigurationBuilder)
             issuePeriodFactory.create(
                 modifyingFields = mapOf(
-                    IssuePeriod::startDate to "01/01/2019".toLocalDate(),
-                    IssuePeriod::endDate to "31/01/2019".toLocalDate(),
-                    IssuePeriod::board to board
+                    IssuePeriodEntity::startDate to "01/01/2019".toLocalDate(),
+                    IssuePeriodEntity::endDate to "31/01/2019".toLocalDate(),
+                    IssuePeriodEntity::board to board
                 )
             )
         }

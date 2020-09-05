@@ -1,7 +1,7 @@
 package br.com.jiratorio.domain
 
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.ColumnChangelog
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.exception.MissingBoardConfigurationException
 import br.com.jiratorio.extension.containsUpperCase
 import java.time.LocalDateTime
@@ -18,7 +18,7 @@ data class FluxColumn(
 
 ) {
 
-    constructor(board: Board) : this(
+    constructor(board: BoardEntity) : this(
         startLeadTimeColumn = board.startColumn ?: throw MissingBoardConfigurationException("startColumn"),
         endLeadTimeColumn = board.endColumn ?: throw MissingBoardConfigurationException("endColumn"),
         orderedColumns = board.fluxColumn,
@@ -45,7 +45,7 @@ data class FluxColumn(
         else
             orderedColumns.last()
 
-    fun calcStartAndEndDate(columnChangelog: Set<ColumnChangelog>, created: LocalDateTime): Pair<LocalDateTime?, LocalDateTime?> {
+    fun calcStartAndEndDate(columnChangelog: Set<ColumnChangelogEntity>, created: LocalDateTime): Pair<LocalDateTime?, LocalDateTime?> {
         var startDate: LocalDateTime? = null
         var endDate: LocalDateTime? = null
 
@@ -68,7 +68,7 @@ data class FluxColumn(
 
     private fun lastOccurrenceIfNeeds(
         to: String?,
-        columnChangelog: Set<ColumnChangelog>,
+        columnChangelog: Set<ColumnChangelogEntity>,
         created: LocalDateTime
     ): LocalDateTime =
         if (useLastOccurrenceWhenCalculateLeadTime)

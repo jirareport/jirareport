@@ -1,6 +1,6 @@
 package br.com.jiratorio.repository
 
-import br.com.jiratorio.domain.entity.IssuePeriod
+import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import org.springframework.data.jpa.repository.EntityGraph
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
@@ -10,12 +10,13 @@ import java.time.LocalDate
 import java.util.Optional
 
 @Repository
-interface IssuePeriodRepository : CrudRepository<IssuePeriod, Long> {
+interface IssuePeriodRepository : CrudRepository<IssuePeriodEntity, Long> {
 
     @Query(
-        value = """
+        value =
+        """
             SELECT DISTINCT issuePeriod
-            FROM IssuePeriod issuePeriod
+            FROM IssuePeriodEntity issuePeriod
             LEFT JOIN FETCH issuePeriod.columnTimeAverages   
             LEFT JOIN FETCH issuePeriod.issues issues
             LEFT JOIN FETCH issues.leadTimes leadTimes
@@ -29,22 +30,22 @@ interface IssuePeriodRepository : CrudRepository<IssuePeriod, Long> {
     fun findAll(
         @Param("boardId") boardId: Long,
         @Param("startDate") startDate: LocalDate,
-        @Param("endDate") endDate: LocalDate
-    ): List<IssuePeriod>
+        @Param("endDate") endDate: LocalDate,
+    ): List<IssuePeriodEntity>
 
     fun deleteByStartDateAndEndDateAndBoardId(
         startDate: LocalDate,
         endDate: LocalDate,
-        boardId: Long
+        boardId: Long,
     )
 
     @EntityGraph(attributePaths = ["issues", "issues.leadTimes", "issues.leadTimes.leadTimeConfig", "columnTimeAverages"])
-    fun findByIdAndBoardId(id: Long, boardId: Long): IssuePeriod?
+    fun findByIdAndBoardId(id: Long, boardId: Long): IssuePeriodEntity?
 
     @EntityGraph(attributePaths = ["issues", "issues.leadTimes", "issues.leadTimes.leadTimeConfig", "columnTimeAverages"])
-    override fun findById(id: Long): Optional<IssuePeriod>
+    override fun findById(id: Long): Optional<IssuePeriodEntity>
 
-    fun findByIdOrNull(id: Long): IssuePeriod? =
+    fun findByIdOrNull(id: Long): IssuePeriodEntity? =
         findById(id).orElse(null)
 
 }

@@ -1,7 +1,7 @@
 package br.com.jiratorio.usecase.issue
 
 import br.com.jiratorio.domain.MinimalIssue
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.domain.response.ColumnTimeAverageResponse
 import br.com.jiratorio.domain.response.IssueListResponse
@@ -67,7 +67,7 @@ class FindAllIssues(
     }
 
     private fun retrieveColumnTimeAverages(
-        board: Board,
+        board: BoardEntity,
         issues: List<MinimalIssue>
     ): List<ColumnTimeAverageResponse> {
         val fluxColumn = board.fluxColumn ?: emptyList()

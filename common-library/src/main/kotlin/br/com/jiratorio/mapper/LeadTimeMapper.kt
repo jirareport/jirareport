@@ -1,10 +1,10 @@
 package br.com.jiratorio.mapper
 
-import br.com.jiratorio.domain.entity.LeadTime
+import br.com.jiratorio.domain.entity.LeadTimeEntity
 import br.com.jiratorio.domain.response.LeadTimeResponse
 import br.com.jiratorio.extension.time.displayFormat
 
-fun LeadTime.toLeadTimeResponse(): LeadTimeResponse =
+fun LeadTimeEntity.toLeadTimeResponse(): LeadTimeResponse =
     LeadTimeResponse(
         name = leadTimeConfig.name,
         startDate = startDate.displayFormat(),
@@ -12,5 +12,5 @@ fun LeadTime.toLeadTimeResponse(): LeadTimeResponse =
         leadTime = leadTime
     )
 
-fun Set<LeadTime>.toLeadTimeResponse(): Set<LeadTimeResponse> =
+fun Set<LeadTimeEntity>.toLeadTimeResponse(): Set<LeadTimeResponse> =
     map { it.toLeadTimeResponse() }.toSet()

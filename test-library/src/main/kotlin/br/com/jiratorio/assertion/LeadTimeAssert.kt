@@ -1,11 +1,11 @@
 package br.com.jiratorio.assertion
 
-import br.com.jiratorio.domain.entity.LeadTime
+import br.com.jiratorio.domain.entity.LeadTimeEntity
 import java.time.LocalDateTime
 
 class LeadTimeAssert(
-    actual: LeadTime
-) : BaseAssert<LeadTimeAssert, LeadTime>(
+    actual: LeadTimeEntity
+) : BaseAssert<LeadTimeAssert, LeadTimeEntity>(
     actual,
     LeadTimeAssert::class
 ) {
@@ -24,5 +24,5 @@ class LeadTimeAssert(
 
 }
 
-fun LeadTime.assertThat(assertions: LeadTimeAssert.() -> Unit): LeadTimeAssert =
+fun LeadTimeEntity.assertThat(assertions: LeadTimeAssert.() -> Unit): LeadTimeAssert =
     LeadTimeAssert(this).assertThat(assertions)

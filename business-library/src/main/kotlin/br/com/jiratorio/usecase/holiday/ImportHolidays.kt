@@ -3,8 +3,8 @@ package br.com.jiratorio.usecase.holiday
 import br.com.jiratorio.client.HolidayClient
 import br.com.jiratorio.internationalization.MessageResolver
 import br.com.jiratorio.stereotype.UseCase
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.Holiday
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.entity.HolidayEntity
 import br.com.jiratorio.exception.HolidaysAlreadyImported
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.mapper.toHoliday
@@ -52,7 +52,7 @@ class ImportHolidays(
         }
     }
 
-    private fun findAllHolidaysInCity(board: Board, currentUser: String): List<Holiday> {
+    private fun findAllHolidaysInCity(board: BoardEntity, currentUser: String): List<HolidayEntity> {
         log.info("Method=findAllHolidaysInCity, board={}, currentUser={}", board, currentUser)
 
         val info = findHolidayUserConfig.execute(currentUser)

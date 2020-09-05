@@ -16,9 +16,11 @@ import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import javax.persistence.OrderBy
+import javax.persistence.Table
 
 @Entity
-data class Issue(
+@Table(name = "issue")
+data class IssueEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,16 +61,16 @@ data class Issue(
     @OneToMany
     @OrderBy("startDate")
     @JoinColumn(name = "issue_id")
-    var columnChangelog: Set<ColumnChangelog>,
+    var columnChangelog: Set<ColumnChangelogEntity>,
 
     @Column(name = "issue_period_id", nullable = false)
     var issuePeriodId: Long = 0,
 
     @OneToMany(mappedBy = "issue", cascade = [CascadeType.REMOVE])
-    var leadTimes: MutableSet<LeadTime>? = null,
+    var leadTimes: MutableSet<LeadTimeEntity>? = null,
 
     @ManyToOne(optional = false)
-    var board: Board,
+    var board: BoardEntity,
 
     var deviationOfEstimate: Long? = null,
 
@@ -82,7 +84,7 @@ data class Issue(
     @OneToMany
     @OrderBy("startDate")
     @JoinColumn(name = "issue_id", updatable = false)
-    var impedimentHistory: MutableSet<ImpedimentHistory> = mutableSetOf(),
+    var impedimentHistory: MutableSet<ImpedimentHistoryEntity> = mutableSetOf(),
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -104,15 +106,15 @@ data class Issue(
 
     override fun toString() =
         toStringBuilder(
-            Issue::id,
-            Issue::key
+            IssueEntity::id,
+            IssueEntity::key
         )
 
     override fun equals(other: Any?): Boolean =
         equalsComparing(
             other,
-            Issue::id,
-            Issue::key
+            IssueEntity::id,
+            IssueEntity::key
         )
 
     override fun hashCode(): Int =

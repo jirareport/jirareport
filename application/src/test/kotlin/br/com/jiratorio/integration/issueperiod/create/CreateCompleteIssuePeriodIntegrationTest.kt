@@ -4,11 +4,11 @@ import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.Authenticator
 import br.com.jiratorio.annotation.LoadStubs
 import br.com.jiratorio.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.ColumnChangelog
-import br.com.jiratorio.domain.entity.ColumnTimeAverage
-import br.com.jiratorio.domain.entity.ImpedimentHistory
-import br.com.jiratorio.domain.entity.LeadTime
-import br.com.jiratorio.domain.entity.LeadTimeConfig
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
+import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
+import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
+import br.com.jiratorio.domain.entity.LeadTimeEntity
+import br.com.jiratorio.domain.entity.LeadTimeConfigEntity
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
@@ -42,19 +42,19 @@ internal class CreateCompleteIssuePeriodIntegrationTest(
 
             leadTimeConfigFactory.create(
                 modifyingFields = mapOf(
-                    LeadTimeConfig::name to "Dev Lead Time",
-                    LeadTimeConfig::startColumn to "DEV WIP",
-                    LeadTimeConfig::endColumn to "DEV DONE",
-                    LeadTimeConfig::board to defaultBoard
+                    LeadTimeConfigEntity::name to "Dev Lead Time",
+                    LeadTimeConfigEntity::startColumn to "DEV WIP",
+                    LeadTimeConfigEntity::endColumn to "DEV DONE",
+                    LeadTimeConfigEntity::board to defaultBoard
                 )
             )
 
             leadTimeConfigFactory.create(
                 modifyingFields = mapOf(
-                    LeadTimeConfig::name to "Test Lead Time",
-                    LeadTimeConfig::startColumn to "TEST WIP",
-                    LeadTimeConfig::endColumn to "TEST DONE",
-                    LeadTimeConfig::board to defaultBoard
+                    LeadTimeConfigEntity::name to "Test Lead Time",
+                    LeadTimeConfigEntity::startColumn to "TEST WIP",
+                    LeadTimeConfigEntity::endColumn to "TEST DONE",
+                    LeadTimeConfigEntity::board to defaultBoard
                 )
             )
 
@@ -144,15 +144,15 @@ internal class CreateCompleteIssuePeriodIntegrationTest(
             hasEmptyDynamicCharts()
 
             containsColumnTimeAvg(
-                ColumnTimeAverage(columnName = "BACKLOG", averageTime = 2.1),
-                ColumnTimeAverage(columnName = "ANALYSIS", averageTime = 3.0),
-                ColumnTimeAverage(columnName = "DEV WIP", averageTime = 3.7),
-                ColumnTimeAverage(columnName = "DEV DONE", averageTime = 2.3),
-                ColumnTimeAverage(columnName = "TEST WIP", averageTime = 2.8),
-                ColumnTimeAverage(columnName = "TEST DONE", averageTime = 2.7),
-                ColumnTimeAverage(columnName = "REVIEW", averageTime = 2.3),
-                ColumnTimeAverage(columnName = "ACCOMPANIMENT", averageTime = 3.3),
-                ColumnTimeAverage(columnName = "DONE", averageTime = 0.0)
+                ColumnTimeAverageEntity(columnName = "BACKLOG", averageTime = 2.1),
+                ColumnTimeAverageEntity(columnName = "ANALYSIS", averageTime = 3.0),
+                ColumnTimeAverageEntity(columnName = "DEV WIP", averageTime = 3.7),
+                ColumnTimeAverageEntity(columnName = "DEV DONE", averageTime = 2.3),
+                ColumnTimeAverageEntity(columnName = "TEST WIP", averageTime = 2.8),
+                ColumnTimeAverageEntity(columnName = "TEST DONE", averageTime = 2.7),
+                ColumnTimeAverageEntity(columnName = "REVIEW", averageTime = 2.3),
+                ColumnTimeAverageEntity(columnName = "ACCOMPANIMENT", averageTime = 3.3),
+                ColumnTimeAverageEntity(columnName = "DONE", averageTime = 0.0)
             )
 
             hasLeadTimeCompareChart(
@@ -183,63 +183,63 @@ internal class CreateCompleteIssuePeriodIntegrationTest(
                 hasPriority("Major")
 
                 hasColumnChangelog(
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         from = null,
                         to = "BACKLOG",
                         startDate = "03/01/2019 12:00".toLocalDateTime(),
                         leadTime = 2,
                         endDate = "04/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         from = "BACKLOG",
                         to = "ANALYSIS",
                         startDate = "04/01/2019 12:00".toLocalDateTime(),
                         leadTime = 2,
                         endDate = "07/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         from = "ANALYSIS",
                         to = "DEV WIP",
                         startDate = "07/01/2019 12:00".toLocalDateTime(),
                         leadTime = 5,
                         endDate = "12/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         from = "DEV WIP",
                         to = "DEV DONE",
                         startDate = "12/01/2019 12:00".toLocalDateTime(),
                         leadTime = 2,
                         endDate = "15/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         from = "DEV DONE",
                         to = "TEST WIP",
                         startDate = "15/01/2019 12:00".toLocalDateTime(),
                         leadTime = 4,
                         endDate = "20/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         from = "TEST WIP",
                         to = "TEST DONE",
                         startDate = "20/01/2019 12:00".toLocalDateTime(),
                         leadTime = 4,
                         endDate = "24/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         from = "TEST DONE",
                         to = "REVIEW",
                         startDate = "24/01/2019 12:00".toLocalDateTime(),
                         leadTime = 3,
                         endDate = "28/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         from = "REVIEW",
                         to = "ACCOMPANIMENT",
                         startDate = "28/01/2019 12:00".toLocalDateTime(),
                         leadTime = 3,
                         endDate = "30/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         from = "ACCOMPANIMENT",
                         to = "DONE",
                         startDate = "30/01/2019 12:00".toLocalDateTime(),
@@ -260,7 +260,7 @@ internal class CreateCompleteIssuePeriodIntegrationTest(
 
                 hasImpedimentTime(3)
                 containsImpedimentHistory(
-                    ImpedimentHistory(
+                    ImpedimentHistoryEntity(
                         id = 1,
                         issueId = 1,
                         startDate = "16/01/2019 12:00".toLocalDateTime(),
@@ -277,8 +277,8 @@ internal class CreateCompleteIssuePeriodIntegrationTest(
 
                 hasLeadTimes(
                     setOf(
-                        LeadTime(
-                            leadTimeConfig = LeadTimeConfig(
+                        LeadTimeEntity(
+                            leadTimeConfig = LeadTimeConfigEntity(
                                 board = board,
                                 name = "Test Lead Time",
                                 startColumn = "TEST WIP",
@@ -289,8 +289,8 @@ internal class CreateCompleteIssuePeriodIntegrationTest(
                             endDate = "20/01/2019 12:00".toLocalDateTime(),
                             issue = issue
                         ),
-                        LeadTime(
-                            leadTimeConfig = LeadTimeConfig(
+                        LeadTimeEntity(
+                            leadTimeConfig = LeadTimeConfigEntity(
                                 board = board,
                                 name = "Dev Lead Time",
                                 startColumn = "DEV WIP",

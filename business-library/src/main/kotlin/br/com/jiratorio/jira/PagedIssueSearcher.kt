@@ -1,7 +1,7 @@
 package br.com.jiratorio.jira
 
 import br.com.jiratorio.client.IssueClient
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.request.SearchJiraIssueRequest
 import br.com.jiratorio.usecase.parse.IssueParser
 import com.fasterxml.jackson.databind.JsonNode
@@ -12,7 +12,7 @@ class PagedIssueSearcher<T>(
     private val issueParser: IssueParser<T>
 ) {
 
-    fun search(jql: String, board: Board, holidays: List<LocalDate>): List<T> {
+    fun search(jql: String, board: BoardEntity, holidays: List<LocalDate>): List<T> {
         val firstNode = issueClient.findByJql(
             filter = SearchJiraIssueRequest(
                 jql = jql,

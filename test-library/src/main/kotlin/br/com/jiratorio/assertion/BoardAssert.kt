@@ -1,12 +1,12 @@
 package br.com.jiratorio.assertion
 
 import br.com.jiratorio.domain.duedate.DueDateType
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.impediment.ImpedimentType
 
 class BoardAssert(
-    actual: Board
-) : BaseAssert<BoardAssert, Board>(actual, BoardAssert::class) {
+    actual: BoardEntity
+) : BaseAssert<BoardAssert, BoardEntity>(actual, BoardAssert::class) {
 
     fun hasName(name: String?) = assertAll {
         objects.assertEqual(field("board.name"), actual.name, name)
@@ -98,5 +98,5 @@ class BoardAssert(
 
 }
 
-fun Board.assertThat(assertions: BoardAssert.() -> Unit): BoardAssert =
+fun BoardEntity.assertThat(assertions: BoardAssert.() -> Unit): BoardAssert =
     BoardAssert(this).assertThat(assertions)

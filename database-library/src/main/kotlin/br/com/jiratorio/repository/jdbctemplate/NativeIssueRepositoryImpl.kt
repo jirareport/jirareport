@@ -2,7 +2,7 @@ package br.com.jiratorio.repository.jdbctemplate
 
 import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.extension.jdbctemplate.queryForSet
 import br.com.jiratorio.extension.time.atEndOfDay
@@ -32,7 +32,7 @@ class NativeIssueRepositoryImpl(
 
     @Transactional(readOnly = true)
     override fun findByExample(
-        board: Board,
+        board: BoardEntity,
         dynamicFilters: Map<String, Array<String>>,
         searchIssueRequest: SearchIssueRequest
     ): List<MinimalIssue> {

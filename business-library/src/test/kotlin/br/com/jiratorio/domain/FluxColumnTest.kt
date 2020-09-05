@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain
 
-import br.com.jiratorio.domain.entity.ColumnChangelog
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.extension.toLocalDateTime
 import br.com.jiratorio.junit.testtype.UnitTest
 import org.assertj.core.api.Assertions.assertThat
@@ -102,39 +102,39 @@ internal class FluxColumnTest {
             )
 
             val columnChangelog = setOf(
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "ANALYSIS",
                     startDate = "01/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DEV WIP",
                     startDate = "09/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DEV DONE",
                     startDate = "13/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "TEST WIP",
                     startDate = "18/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "TEST DONE",
                     startDate = "19/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "REVIEW",
                     startDate = "24/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DELIVERY LINE",
                     startDate = "28/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "ACCOMPANIMENT",
                     startDate = "29/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DONE",
                     startDate = "30/01/2019 12:00".toLocalDateTime()
                 )
@@ -157,39 +157,39 @@ internal class FluxColumnTest {
             val fluxColumn = createDefaultFluxColumn(startLeadTimeColumn = "BACKLOG")
 
             val columnChangelog = setOf(
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "ANALYSIS",
                     startDate = "05/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DEV WIP",
                     startDate = "12/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DEV DONE",
                     startDate = "13/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "TEST WIP",
                     startDate = "21/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "TEST DONE",
                     startDate = "28/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "REVIEW",
                     startDate = "04/02/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DELIVERY LINE",
                     startDate = "09/02/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "ACCOMPANIMENT",
                     startDate = "11/02/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DONE",
                     startDate = "14/02/2019 12:00".toLocalDateTime()
                 )
@@ -214,15 +214,15 @@ internal class FluxColumnTest {
             val fluxColumn = createDefaultFluxColumn(endLeadTimeColumn = "ACCOMPANIMENT")
 
             val columnChangelog = setOf(
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "TODO",
                     startDate = "01/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "WIP",
                     startDate = "10/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "CLOSED",
                     startDate = "12/01/2019 12:00".toLocalDateTime()
                 )
@@ -251,47 +251,47 @@ internal class FluxColumnTest {
             )
 
             val columnChangelog = setOf(
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "ANALYSIS",
                     startDate = "05/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "BACKLOG",
                     startDate = "06/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "ANALYSIS",
                     startDate = "10/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DEV WIP",
                     startDate = "12/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DEV DONE",
                     startDate = "13/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "TEST WIP",
                     startDate = "21/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "TEST DONE",
                     startDate = "28/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "REVIEW",
                     startDate = "04/02/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DELIVERY LINE",
                     startDate = "09/02/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "ACCOMPANIMENT",
                     startDate = "11/02/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DONE",
                     startDate = "14/02/2019 12:00".toLocalDateTime()
                 )
@@ -319,47 +319,47 @@ internal class FluxColumnTest {
             )
 
             val columnChangelog = setOf(
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "ANALYSIS",
                     startDate = "05/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "BACKLOG",
                     startDate = "06/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "ANALYSIS",
                     startDate = "10/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DEV WIP",
                     startDate = "12/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DEV DONE",
                     startDate = "13/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "TEST WIP",
                     startDate = "21/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "TEST DONE",
                     startDate = "28/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "REVIEW",
                     startDate = "04/02/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DELIVERY LINE",
                     startDate = "09/02/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "ACCOMPANIMENT",
                     startDate = "11/02/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     to = "DONE",
                     startDate = "14/02/2019 12:00".toLocalDateTime()
                 )

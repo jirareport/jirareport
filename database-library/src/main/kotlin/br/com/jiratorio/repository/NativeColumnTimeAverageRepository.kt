@@ -6,4 +6,4 @@ interface NativeColumnTimeAverageRepository {
 
     fun findColumnTimeAverage(issues: List<Long>): List<ColumnTimeAverageResponse>
 
-} 
+}

@@ -4,7 +4,7 @@ import br.com.jiratorio.assertion.response.assertThat
 import br.com.jiratorio.Authenticator
 import br.com.jiratorio.restassured.specification.notFound
 import br.com.jiratorio.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.IssuePeriod
+import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodListResponse
 import br.com.jiratorio.dsl.extractAs
 import br.com.jiratorio.dsl.restAssured
@@ -30,37 +30,37 @@ internal class ListIssuePeriodIntegrationTest(
 
             issuePeriodFactory.create(
                 modifyingFields = mapOf(
-                    IssuePeriod::board to board,
-                    IssuePeriod::startDate to "01/01/2019".toLocalDate(),
-                    IssuePeriod::endDate to "31/01/2019".toLocalDate()
+                    IssuePeriodEntity::board to board,
+                    IssuePeriodEntity::startDate to "01/01/2019".toLocalDate(),
+                    IssuePeriodEntity::endDate to "31/01/2019".toLocalDate()
                 )
             )
             issuePeriodFactory.create(
                 modifyingFields = mapOf(
-                    IssuePeriod::board to board,
-                    IssuePeriod::startDate to "01/02/2019".toLocalDate(),
-                    IssuePeriod::endDate to "28/02/2019".toLocalDate()
+                    IssuePeriodEntity::board to board,
+                    IssuePeriodEntity::startDate to "01/02/2019".toLocalDate(),
+                    IssuePeriodEntity::endDate to "28/02/2019".toLocalDate()
                 )
             )
             issuePeriodFactory.create(
                 modifyingFields = mapOf(
-                    IssuePeriod::board to board,
-                    IssuePeriod::startDate to "01/03/2019".toLocalDate(),
-                    IssuePeriod::endDate to "31/03/2019".toLocalDate()
+                    IssuePeriodEntity::board to board,
+                    IssuePeriodEntity::startDate to "01/03/2019".toLocalDate(),
+                    IssuePeriodEntity::endDate to "31/03/2019".toLocalDate()
                 )
             )
             issuePeriodFactory.create(
                 modifyingFields = mapOf(
-                    IssuePeriod::board to board,
-                    IssuePeriod::startDate to "01/04/2019".toLocalDate(),
-                    IssuePeriod::endDate to "30/04/2019".toLocalDate()
+                    IssuePeriodEntity::board to board,
+                    IssuePeriodEntity::startDate to "01/04/2019".toLocalDate(),
+                    IssuePeriodEntity::endDate to "30/04/2019".toLocalDate()
                 )
             )
             issuePeriodFactory.create(
                 modifyingFields = mapOf(
-                    IssuePeriod::board to board,
-                    IssuePeriod::startDate to "01/05/2019".toLocalDate(),
-                    IssuePeriod::endDate to "31/05/2019".toLocalDate()
+                    IssuePeriodEntity::board to board,
+                    IssuePeriodEntity::startDate to "01/05/2019".toLocalDate(),
+                    IssuePeriodEntity::endDate to "31/05/2019".toLocalDate()
                 )
             )
         }

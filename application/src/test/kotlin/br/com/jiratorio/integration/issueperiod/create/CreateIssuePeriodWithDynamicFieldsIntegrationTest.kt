@@ -5,9 +5,9 @@ import br.com.jiratorio.Authenticator
 import br.com.jiratorio.annotation.LoadStubs
 import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
-import br.com.jiratorio.domain.entity.ColumnChangelog
-import br.com.jiratorio.domain.entity.ColumnTimeAverage
-import br.com.jiratorio.domain.entity.DynamicFieldConfig
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
+import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
+import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.dsl.restAssured
@@ -39,16 +39,16 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest(
             val board = boardFactory.create(boardFactory::withCompleteConfigurationBuilder)
             dynamicFieldConfigFactory.create(
                 modifyingFields = mapOf(
-                    DynamicFieldConfig::board to board,
-                    DynamicFieldConfig::name to "Level Of Dependency",
-                    DynamicFieldConfig::field to "customfield_6000"
+                    DynamicFieldConfigEntity::board to board,
+                    DynamicFieldConfigEntity::name to "Level Of Dependency",
+                    DynamicFieldConfigEntity::field to "customfield_6000"
                 )
             )
             dynamicFieldConfigFactory.create(
                 modifyingFields = mapOf(
-                    DynamicFieldConfig::board to board,
-                    DynamicFieldConfig::name to "Team",
-                    DynamicFieldConfig::field to "customfield_5000"
+                    DynamicFieldConfigEntity::board to board,
+                    DynamicFieldConfigEntity::name to "Team",
+                    DynamicFieldConfigEntity::field to "customfield_5000"
                 )
             )
             board
@@ -155,15 +155,15 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest(
             )
 
             containsColumnTimeAvg(
-                ColumnTimeAverage(columnName = "BACKLOG", averageTime = 3.0),
-                ColumnTimeAverage(columnName = "ANALYSIS", averageTime = 3.2),
-                ColumnTimeAverage(columnName = "DEV WIP", averageTime = 2.4),
-                ColumnTimeAverage(columnName = "DEV DONE", averageTime = 2.6),
-                ColumnTimeAverage(columnName = "TEST WIP", averageTime = 2.5),
-                ColumnTimeAverage(columnName = "TEST DONE", averageTime = 2.8),
-                ColumnTimeAverage(columnName = "REVIEW", averageTime = 3.0),
-                ColumnTimeAverage(columnName = "ACCOMPANIMENT", averageTime = 2.5),
-                ColumnTimeAverage(columnName = "DONE", averageTime = 0.0)
+                ColumnTimeAverageEntity(columnName = "BACKLOG", averageTime = 3.0),
+                ColumnTimeAverageEntity(columnName = "ANALYSIS", averageTime = 3.2),
+                ColumnTimeAverageEntity(columnName = "DEV WIP", averageTime = 2.4),
+                ColumnTimeAverageEntity(columnName = "DEV DONE", averageTime = 2.6),
+                ColumnTimeAverageEntity(columnName = "TEST WIP", averageTime = 2.5),
+                ColumnTimeAverageEntity(columnName = "TEST DONE", averageTime = 2.8),
+                ColumnTimeAverageEntity(columnName = "REVIEW", averageTime = 3.0),
+                ColumnTimeAverageEntity(columnName = "ACCOMPANIMENT", averageTime = 2.5),
+                ColumnTimeAverageEntity(columnName = "DONE", averageTime = 0.0)
             )
 
             hasEmptyLeadTimeCompareChart()
@@ -188,42 +188,42 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest(
             hasPriority("Major")
 
             hasColumnChangelog(
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = null, to = "BACKLOG", startDate = "04/01/2019 12:00".toLocalDateTime(), leadTime = 2,
                     endDate = "07/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "BACKLOG", to = "ANALYSIS", startDate = "07/01/2019 12:00".toLocalDateTime(), leadTime = 5,
                     endDate = "11/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "ANALYSIS", to = "DEV WIP", startDate = "11/01/2019 12:00".toLocalDateTime(), leadTime = 2,
                     endDate = "14/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "DEV WIP", to = "DEV DONE", startDate = "14/01/2019 12:00".toLocalDateTime(), leadTime = 5,
                     endDate = "19/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "DEV DONE", to = "TEST WIP", startDate = "19/01/2019 12:00".toLocalDateTime(), leadTime = 3,
                     endDate = "23/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "TEST WIP", to = "TEST DONE", startDate = "23/01/2019 12:00".toLocalDateTime(), leadTime = 4,
                     endDate = "28/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "TEST DONE", to = "REVIEW", startDate = "28/01/2019 12:00".toLocalDateTime(), leadTime = 5,
                     endDate = "02/02/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "REVIEW",
                     to = "ACCOMPANIMENT",
                     startDate = "02/02/2019 12:00".toLocalDateTime(),
                     leadTime = 4,
                     endDate = "07/02/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "ACCOMPANIMENT", to = "DONE", startDate = "07/02/2019 12:00".toLocalDateTime(), leadTime = 0,
                     endDate = "07/02/2019 12:00".toLocalDateTime()
                 )

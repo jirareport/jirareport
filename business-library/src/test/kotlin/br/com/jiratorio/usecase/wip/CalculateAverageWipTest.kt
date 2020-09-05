@@ -2,9 +2,9 @@ package br.com.jiratorio.usecase.wip
 
 import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.FluxColumn
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.Issue
-import br.com.jiratorio.domain.entity.ColumnChangelog
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.entity.IssueEntity
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions
@@ -32,7 +32,7 @@ internal class CalculateAverageWipTest {
     @Test
     fun `test calc avg wip with empty issues`() {
         val board = createBoard()
-        val issues = emptyList<Issue>()
+        val issues = emptyList<IssueEntity>()
         val startDate = "01/01/2019".toLocalDate()
         val endDate = "28/02/2019".toLocalDate()
         val fluxColumn = FluxColumn(board)
@@ -43,59 +43,59 @@ internal class CalculateAverageWipTest {
             .isZero()
     }
 
-    private fun createIssues(board: Board): List<Issue> {
+    private fun createIssues(board: BoardEntity): List<IssueEntity> {
         return listOf(
-            Issue(
+            IssueEntity(
                 id = 1L,
                 key = "JIRAT-1",
                 board = board,
                 columnChangelog = setOf(
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "BACKLOG",
                         startDate = "01/01/2019 12:00".toLocalDateTime(),
                         endDate = "09/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "ANALYSIS",
                         startDate = "09/01/2019 12:00".toLocalDateTime(),
                         endDate = "15/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "DEV WIP",
                         startDate = "15/01/2019 12:00".toLocalDateTime(),
                         endDate = "22/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "DEV DONE",
                         startDate = "22/01/2019 12:00".toLocalDateTime(),
                         endDate = "29/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "TEST WIP",
                         startDate = "29/01/2019 12:00".toLocalDateTime(),
                         endDate = "07/02/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "TEST DONE",
                         startDate = "07/02/2019 12:00".toLocalDateTime(),
                         endDate = "10/02/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "REVIEW",
                         startDate = "10/02/2019 12:00".toLocalDateTime(),
                         endDate = "16/02/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "DELIVERY LINE",
                         startDate = "16/02/2019 12:00".toLocalDateTime(),
                         endDate = "23/02/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "ACCOMPANIMENT",
                         startDate = "23/02/2019 12:00".toLocalDateTime(),
                         endDate = "01/03/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "DONE",
                         startDate = "01/03/2019 12:00".toLocalDateTime(),
                         endDate = "01/03/2019 12:00".toLocalDateTime()
@@ -107,57 +107,57 @@ internal class CalculateAverageWipTest {
                 leadTime = 46,
                 summary = "JIRAT-2 summary"
             ),
-            Issue(
+            IssueEntity(
                 id = 2L,
                 key = "JIRAT-2",
                 board = board,
                 columnChangelog = setOf(
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "BACKLOG",
                         startDate = "01/01/2019 12:00".toLocalDateTime(),
                         endDate = "06/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "ANALYSIS",
                         startDate = "06/01/2019 12:00".toLocalDateTime(),
                         endDate = "09/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "DEV WIP",
                         startDate = "09/01/2019 12:00".toLocalDateTime(),
                         endDate = "18/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "DEV DONE",
                         startDate = "18/01/2019 12:00".toLocalDateTime(),
                         endDate = "24/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "TEST WIP",
                         startDate = "24/01/2019 12:00".toLocalDateTime(),
                         endDate = "24/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "TEST DONE",
                         startDate = "25/01/2019 12:00".toLocalDateTime(),
                         endDate = "26/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "REVIEW",
                         startDate = "26/01/2019 12:00".toLocalDateTime(),
                         endDate = "04/02/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "DELIVERY LINE",
                         startDate = "04/02/2019 12:00".toLocalDateTime(),
                         endDate = "09/02/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "ACCOMPANIMENT",
                         startDate = "09/02/2019 12:00".toLocalDateTime(),
                         endDate = "15/02/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "DONE",
                         startDate = "15/02/2019 12:00".toLocalDateTime(),
                         endDate = "15/02/2019 12:00".toLocalDateTime()
@@ -169,57 +169,57 @@ internal class CalculateAverageWipTest {
                 leadTime = 35,
                 summary = "JIRAT-3 summary"
             ),
-            Issue(
+            IssueEntity(
                 id = 3L,
                 key = "JIRAT-3",
                 board = board,
                 columnChangelog = setOf(
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "BACKLOG",
                         startDate = "01/01/2019 12:00".toLocalDateTime(),
                         endDate = "08/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "ANALYSIS",
                         startDate = "08/01/2019 12:00".toLocalDateTime(),
                         endDate = "13/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "DEV WIP",
                         startDate = "13/01/2019 12:00".toLocalDateTime(),
                         endDate = "20/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "DEV DONE",
                         startDate = "20/01/2019 12:00".toLocalDateTime(),
                         endDate = "24/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "TEST WIP",
                         startDate = "24/01/2019 12:00".toLocalDateTime(),
                         endDate = "31/01/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "TEST DONE",
                         startDate = "31/01/2019 12:00".toLocalDateTime(),
                         endDate = "08/02/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "REVIEW",
                         startDate = "08/02/2019 12:00".toLocalDateTime(),
                         endDate = "11/02/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "DELIVERY LINE",
                         startDate = "11/02/2019 12:00".toLocalDateTime(),
                         endDate = "16/02/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "ACCOMPANIMENT",
                         startDate = "16/02/2019 12:00".toLocalDateTime(),
                         endDate = "23/02/2019 12:00".toLocalDateTime()
                     ),
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         to = "DONE",
                         startDate = "23/02/2019 12:00".toLocalDateTime(),
                         endDate = "23/02/2019 12:00".toLocalDateTime()
@@ -234,8 +234,8 @@ internal class CalculateAverageWipTest {
         )
     }
 
-    private fun createBoard(): Board {
-        return Board(
+    private fun createBoard(): BoardEntity {
+        return BoardEntity(
             id = 1L,
             externalId = 123L,
             name = "My Board",

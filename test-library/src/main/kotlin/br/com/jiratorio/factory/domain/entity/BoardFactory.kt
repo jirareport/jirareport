@@ -1,7 +1,7 @@
 package br.com.jiratorio.factory.domain.entity
 
 import br.com.jiratorio.domain.duedate.DueDateType
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.impediment.ImpedimentType
 import br.com.jiratorio.extension.faker.jira
 import br.com.jiratorio.factory.KBacon
@@ -13,16 +13,16 @@ import org.springframework.stereotype.Component
 class BoardFactory(
     private val faker: Faker,
     boardRepository: BoardRepository?
-) : KBacon<Board>(boardRepository) {
+) : KBacon<BoardEntity>(boardRepository) {
 
-    override fun builder(): Board {
-        return Board(
+    override fun builder(): BoardEntity {
+        return BoardEntity(
             externalId = faker.number().randomNumber(5, true),
             name = faker.lorem().word()
         )
     }
 
-    fun fullBoardBuilder(): Board {
+    fun fullBoardBuilder(): BoardEntity {
         return builder().apply {
             startColumn = "TODO"
             endColumn = "DONE"
@@ -42,7 +42,7 @@ class BoardFactory(
         }
     }
 
-    fun withBasicConfigurationBuilder(): Board {
+    fun withBasicConfigurationBuilder(): BoardEntity {
         return builder().apply {
             startColumn = "TODO"
             endColumn = "DONE"
@@ -50,7 +50,7 @@ class BoardFactory(
         }
     }
 
-    fun withCompleteConfigurationBuilder(): Board {
+    fun withCompleteConfigurationBuilder(): BoardEntity {
         return builder().apply {
             startColumn = "ANALYSIS"
             endColumn = "DONE"

@@ -3,8 +3,8 @@ package br.com.jiratorio.usecase.issue.period
 import br.com.jiratorio.property.JiraProperties
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.chart.IssuePeriodChartResponse
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.IssuePeriod
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodListResponse
 import br.com.jiratorio.exception.ResourceNotFound
@@ -45,7 +45,7 @@ class FindAllIssuePeriods(
         )
     }
 
-    private fun buildCharts(issuePeriods: List<IssuePeriod>, board: Board): IssuePeriodChartResponse {
+    private fun buildCharts(issuePeriods: List<IssuePeriodEntity>, board: BoardEntity): IssuePeriodChartResponse {
         log.info("Method=buildCharts, issuePeriods={}, board={}", issuePeriods, board)
 
         val leadTime: Chart<String, String> = Chart()

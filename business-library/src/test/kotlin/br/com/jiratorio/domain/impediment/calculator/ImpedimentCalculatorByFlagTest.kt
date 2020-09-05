@@ -2,7 +2,7 @@ package br.com.jiratorio.domain.impediment.calculator
 
 import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.FieldChangelog
-import br.com.jiratorio.domain.entity.ImpedimentHistory
+import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
 import br.com.jiratorio.domain.parsed.ParsedChangelog
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -60,12 +60,12 @@ internal class ImpedimentCalculatorByFlagTest {
         assertThat(impedimentCalculatorResult.impedimentHistory)
             .hasSize(2)
             .containsExactly(
-                ImpedimentHistory(
+                ImpedimentHistoryEntity(
                     startDate = "01/01/2019 12:00".toLocalDateTime(),
                     endDate = "10/01/2019 12:00".toLocalDateTime(),
                     leadTime = 10
                 ),
-                ImpedimentHistory(
+                ImpedimentHistoryEntity(
                     startDate = "15/01/2019 12:00".toLocalDateTime(),
                     endDate = "19/01/2019 12:00".toLocalDateTime(),
                     leadTime = 5
@@ -121,12 +121,12 @@ internal class ImpedimentCalculatorByFlagTest {
         assertThat(impedimentCalculatorResult.impedimentHistory)
             .hasSize(2)
             .containsExactly(
-                ImpedimentHistory(
+                ImpedimentHistoryEntity(
                     startDate = "05/01/2019 12:00".toLocalDateTime(),
                     endDate = "09/01/2019 12:00".toLocalDateTime(),
                     leadTime = 5
                 ),
-                ImpedimentHistory(
+                ImpedimentHistoryEntity(
                     startDate = "15/01/2019 12:00".toLocalDateTime(),
                     endDate = "19/01/2019 12:00".toLocalDateTime(),
                     leadTime = 5

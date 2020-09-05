@@ -7,9 +7,11 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.Table
 
 @Entity
-data class ColumnTimeAverage(
+@Table(name = "column_time_average")
+data class ColumnTimeAverageEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +31,8 @@ data class ColumnTimeAverage(
     override fun equals(other: Any?): Boolean =
         equalsComparing(
             other,
-            ColumnTimeAverage::issuePeriodId,
-            ColumnTimeAverage::columnName
+            ColumnTimeAverageEntity::issuePeriodId,
+            ColumnTimeAverageEntity::columnName
         )
 
     override fun hashCode(): Int =

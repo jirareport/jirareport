@@ -1,18 +1,18 @@
 package br.com.jiratorio.repository
 
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.DynamicFieldConfig
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface DynamicFieldConfigRepository : CrudRepository<DynamicFieldConfig, Long> {
+interface DynamicFieldConfigRepository : CrudRepository<DynamicFieldConfigEntity, Long> {
 
-    fun findByBoard(board: Board): List<DynamicFieldConfig>
+    fun findByBoard(board: BoardEntity): List<DynamicFieldConfigEntity>
 
-    fun findByBoardIdAndId(boardId: Long, id: Long): DynamicFieldConfig?
+    fun findByBoardIdAndId(boardId: Long, id: Long): DynamicFieldConfigEntity?
 
-    fun findByIdOrNull(id: Long): DynamicFieldConfig? =
+    fun findByIdOrNull(id: Long): DynamicFieldConfigEntity? =
         findById(id).orElse(null)
 
 }

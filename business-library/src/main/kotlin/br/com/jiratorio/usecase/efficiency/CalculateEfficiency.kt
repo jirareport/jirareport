@@ -2,7 +2,7 @@ package br.com.jiratorio.usecase.efficiency
 
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.Efficiency
-import br.com.jiratorio.domain.entity.ColumnChangelog
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.extension.containsUpperCase
 import br.com.jiratorio.extension.time.minutesDiff
 import org.slf4j.LoggerFactory
@@ -14,7 +14,7 @@ class CalculateEfficiency {
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(
-        columnChangelog: Set<ColumnChangelog>,
+        columnChangelog: Set<ColumnChangelogEntity>,
         touchingColumns: MutableList<String>?,
         waitingColumns: MutableList<String>?,
         holidays: List<LocalDate>,
@@ -47,7 +47,7 @@ class CalculateEfficiency {
             touchTime.toDouble() / (touchTime + waitTime) * 100
 
     private fun calcDurationInColumns(
-        columnChangelog: Set<ColumnChangelog>,
+        columnChangelog: Set<ColumnChangelogEntity>,
         columns: List<String>,
         holidays: List<LocalDate>,
         ignoreWeekend: Boolean?

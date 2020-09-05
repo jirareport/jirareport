@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.impediment.calculator
 
-import br.com.jiratorio.domain.entity.ImpedimentHistory
+import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
 import br.com.jiratorio.domain.parsed.ParsedChangelog
 import br.com.jiratorio.extension.time.daysDiff
 import org.slf4j.LoggerFactory
@@ -52,9 +52,9 @@ object ImpedimentCalculatorByFlag : ImpedimentCalculator {
         beginnings.sort()
         terms.sort()
 
-        val impedimentHistory = sortedSetOf<ImpedimentHistory>()
+        val impedimentHistory = sortedSetOf<ImpedimentHistoryEntity>()
         for (i in terms.indices) {
-            val history = ImpedimentHistory(
+            val history = ImpedimentHistoryEntity(
                 startDate = beginnings[i],
                 endDate = terms[i],
                 leadTime = beginnings[i].daysDiff(terms[i], holidays, ignoreWeekend)

@@ -1,10 +1,10 @@
 package br.com.jiratorio.usecase.board
 
 import br.com.jiratorio.stereotype.UseCase
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.DynamicFieldConfig
-import br.com.jiratorio.domain.entity.Holiday
-import br.com.jiratorio.domain.entity.LeadTimeConfig
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity
+import br.com.jiratorio.domain.entity.HolidayEntity
+import br.com.jiratorio.domain.entity.LeadTimeConfigEntity
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.DynamicFieldConfigRepository
@@ -40,9 +40,9 @@ class CloneBoard(
         return board.id
     }
 
-    private fun cloneDynamicFields(boardToClone: Board, board: Board) {
+    private fun cloneDynamicFields(boardToClone: BoardEntity, board: BoardEntity) {
         val dynamicFieldConfigs = boardToClone.dynamicFields?.map {
-            DynamicFieldConfig(
+            DynamicFieldConfigEntity(
                 board = board,
                 name = it.name,
                 field = it.field
@@ -54,9 +54,9 @@ class CloneBoard(
         }
     }
 
-    private fun cloneHolidays(boardToClone: Board, board: Board) {
+    private fun cloneHolidays(boardToClone: BoardEntity, board: BoardEntity) {
         val holidays = boardToClone.holidays?.map {
-            Holiday(
+            HolidayEntity(
                 date = it.date,
                 description = it.description,
                 board = board
@@ -68,9 +68,9 @@ class CloneBoard(
         }
     }
 
-    private fun cloneLeadTimeConfigs(boardToClone: Board, board: Board) {
+    private fun cloneLeadTimeConfigs(boardToClone: BoardEntity, board: BoardEntity) {
         val leadTimeConfigs = boardToClone.leadTimeConfigs?.map {
-            LeadTimeConfig(
+            LeadTimeConfigEntity(
                 board = board,
                 name = it.name,
                 startColumn = it.startColumn,
@@ -82,8 +82,8 @@ class CloneBoard(
         }
     }
 
-    private fun cloneBoard(boardToClone: Board): Board {
-        return Board(
+    private fun cloneBoard(boardToClone: BoardEntity): BoardEntity {
+        return BoardEntity(
             externalId = boardToClone.externalId,
             name = boardToClone.name,
             startColumn = boardToClone.startColumn,

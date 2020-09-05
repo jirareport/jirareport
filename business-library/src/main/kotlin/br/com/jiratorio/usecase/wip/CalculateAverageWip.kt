@@ -1,7 +1,7 @@
 package br.com.jiratorio.usecase.wip
 
 import br.com.jiratorio.stereotype.UseCase
-import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.domain.entity.IssueEntity
 import br.com.jiratorio.extension.decimal.zeroIfNaN
 import br.com.jiratorio.extension.time.rangeTo
 import org.slf4j.LoggerFactory
@@ -12,7 +12,7 @@ class CalculateAverageWip {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(start: LocalDate, end: LocalDate, issues: List<Issue>, wipColumns: Set<String>): Double {
+    fun execute(start: LocalDate, end: LocalDate, issues: List<IssueEntity>, wipColumns: Set<String>): Double {
         log.info("Action=calculateAverageWip, start={}, end={}, issues={}, wipColumns={}", start, end, issues, wipColumns)
 
         return (start..end)
@@ -25,7 +25,7 @@ class CalculateAverageWip {
             .zeroIfNaN()
     }
 
-    private fun Issue.wasOnAnyWipColumnAtThisTime(wipColumns: Set<String>, time: LocalDate): Boolean =
+    private fun IssueEntity.wasOnAnyWipColumnAtThisTime(wipColumns: Set<String>, time: LocalDate): Boolean =
         columnChangelog.any { time in it.dateRange && it.to.toUpperCase() in wipColumns }
 
 }

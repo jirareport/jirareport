@@ -1,7 +1,6 @@
 package br.com.jiratorio.usecase.chart.histogram
 
 import br.com.jiratorio.domain.MinimalIssue
-import br.com.jiratorio.domain.entity.Issue
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.entity.embedded.Histogram
 import br.com.jiratorio.stereotype.UseCase

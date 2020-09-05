@@ -1,6 +1,6 @@
 package br.com.jiratorio.factory.domain.entity
 
-import br.com.jiratorio.domain.entity.Holiday
+import br.com.jiratorio.domain.entity.HolidayEntity
 import br.com.jiratorio.factory.KBacon
 import br.com.jiratorio.repository.HolidayRepository
 import com.github.javafaker.Faker
@@ -12,10 +12,10 @@ class HolidayFactory(
     private val faker: Faker,
     private val boardFactory: BoardFactory,
     holidayRepository: HolidayRepository?
-) : KBacon<Holiday>(holidayRepository) {
+) : KBacon<HolidayEntity>(holidayRepository) {
 
-    override fun builder(): Holiday {
-        return Holiday(
+    override fun builder(): HolidayEntity {
+        return HolidayEntity(
             date = LocalDate.now().plusDays(faker.number().randomNumber(5, true)),
             description = faker.lorem().word(),
             board = boardFactory.create()

@@ -4,8 +4,8 @@ import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.Authenticator
 import br.com.jiratorio.annotation.LoadStubs
 import br.com.jiratorio.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.ColumnChangelog
-import br.com.jiratorio.domain.entity.ColumnTimeAverage
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
+import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
@@ -96,11 +96,11 @@ internal class CreateBasicIssuePeriodIntegrationTest(
             hasEmptyDynamicCharts()
 
             containsColumnTimeAvg(
-                ColumnTimeAverage(columnName = "BACKLOG", averageTime = 4.0),
-                ColumnTimeAverage(columnName = "TODO", averageTime = 2.0),
-                ColumnTimeAverage(columnName = "WIP", averageTime = 10.0),
-                ColumnTimeAverage(columnName = "ACCOMPANIMENT", averageTime = 4.0),
-                ColumnTimeAverage(columnName = "DONE", averageTime = 0.0)
+                ColumnTimeAverageEntity(columnName = "BACKLOG", averageTime = 4.0),
+                ColumnTimeAverageEntity(columnName = "TODO", averageTime = 2.0),
+                ColumnTimeAverageEntity(columnName = "WIP", averageTime = 10.0),
+                ColumnTimeAverageEntity(columnName = "ACCOMPANIMENT", averageTime = 4.0),
+                ColumnTimeAverageEntity(columnName = "DONE", averageTime = 0.0)
             )
 
             hasEmptyLeadTimeCompareChart()
@@ -125,35 +125,35 @@ internal class CreateBasicIssuePeriodIntegrationTest(
             hasPriority("Major")
 
             hasColumnChangelog(
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = null,
                     to = "BACKLOG",
                     startDate = "25/12/2018 11:49:35".toLocalDateTime(),
                     leadTime = 6,
                     endDate = "01/01/2019 10:15".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "BACKLOG",
                     to = "TODO",
                     startDate = "01/01/2019 10:15".toLocalDateTime(),
                     leadTime = 1,
                     endDate = "01/01/2019 16:30".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "TODO",
                     to = "WIP",
                     startDate = "01/01/2019 16:30".toLocalDateTime(),
                     leadTime = 8,
                     endDate = "10/01/2019 13:45".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "WIP",
                     to = "ACCOMPANIMENT",
                     startDate = "10/01/2019 13:45".toLocalDateTime(),
                     leadTime = 4,
                     endDate = "15/01/2019 11:20".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "ACCOMPANIMENT",
                     to = "DONE",
                     startDate = "15/01/2019 11:20".toLocalDateTime(),

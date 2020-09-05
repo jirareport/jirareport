@@ -1,6 +1,6 @@
 package br.com.jiratorio.specification
 
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.request.SearchBoardRequest
 import org.springframework.data.jpa.domain.Specification
 import javax.persistence.criteria.CriteriaBuilder
@@ -11,10 +11,10 @@ import javax.persistence.criteria.Root
 class SearchBoardSpecification(
     private val searchBoardRequest: SearchBoardRequest,
     private val currentUser: String
-) : Specification<Board> {
+) : Specification<BoardEntity> {
 
     override fun toPredicate(
-        from: Root<Board>,
+        from: Root<BoardEntity>,
         query: CriteriaQuery<*>,
         builder: CriteriaBuilder
     ): Predicate {

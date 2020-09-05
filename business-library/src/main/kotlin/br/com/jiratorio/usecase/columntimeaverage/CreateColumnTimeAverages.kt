@@ -1,8 +1,8 @@
 package br.com.jiratorio.usecase.columntimeaverage
 
 import br.com.jiratorio.stereotype.UseCase
-import br.com.jiratorio.domain.entity.ColumnTimeAverage
-import br.com.jiratorio.domain.entity.IssuePeriod
+import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
+import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import br.com.jiratorio.repository.ColumnTimeAverageRepository
 import org.slf4j.LoggerFactory
 import org.springframework.transaction.annotation.Transactional
@@ -16,13 +16,13 @@ class CreateColumnTimeAverages(
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional
-    fun execute(issuePeriod: IssuePeriod, fluxColumn: List<String>) {
+    fun execute(issuePeriod: IssuePeriodEntity, fluxColumn: List<String>) {
         log.info("Action=createColumnTimeAverages, issuePeriod={}, fluxColumn={}", issuePeriod, fluxColumn)
 
         calculateColumnTimeAverages
             .execute(issuePeriod.issues, fluxColumn)
             .map { (columnName, averageTime) ->
-                ColumnTimeAverage(
+                ColumnTimeAverageEntity(
                     issuePeriodId = issuePeriod.id,
                     columnName = columnName,
                     averageTime = averageTime

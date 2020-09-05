@@ -2,7 +2,7 @@ package br.com.jiratorio.assertion.response
 
 import br.com.jiratorio.assertion.BaseAssert
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
-import br.com.jiratorio.domain.entity.ColumnTimeAverage
+import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodDetailResponse
 
@@ -101,7 +101,7 @@ class IssuePeriodDetailResponseAssert(
         )
     }
 
-    fun hasColumnTimeAverages(columnTimeAvg: Collection<ColumnTimeAverage>) = assertAll {
+    fun hasColumnTimeAverages(columnTimeAvg: Collection<ColumnTimeAverageEntity>) = assertAll {
         iterables.assertContains(field("issuePeriodDetailResponse.columnTimeAvg"), actual.columnTimeAverages, columnTimeAvg.toTypedArray())
     }
 

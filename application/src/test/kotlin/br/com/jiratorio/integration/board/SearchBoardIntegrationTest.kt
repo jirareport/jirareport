@@ -3,7 +3,7 @@ package br.com.jiratorio.integration.board
 import br.com.jiratorio.Authenticator
 import br.com.jiratorio.restassured.specification.notFound
 import br.com.jiratorio.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.matcher.IdMatcher
@@ -71,7 +71,7 @@ internal class SearchBoardIntegrationTest(
             boardFactory.create(
                 quantity = 5,
                 modifyingFields = mapOf(
-                    Board::name to "Uniq Start Name"
+                    BoardEntity::name to "Uniq Start Name"
                 )
             )
 

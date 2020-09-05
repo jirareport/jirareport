@@ -1,10 +1,10 @@
 package br.com.jiratorio.mapper
 
-import br.com.jiratorio.domain.entity.ColumnChangelog
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.response.ChangelogResponse
 import br.com.jiratorio.extension.time.displayFormat
 
-fun ColumnChangelog.toChangelogResponse(): ChangelogResponse =
+fun ColumnChangelogEntity.toChangelogResponse(): ChangelogResponse =
     ChangelogResponse(
         from = from,
         to = to,
@@ -13,5 +13,5 @@ fun ColumnChangelog.toChangelogResponse(): ChangelogResponse =
         leadTime = leadTime
     )
 
-fun Set<ColumnChangelog>.toChangelogResponse(): List<ChangelogResponse> =
+fun Set<ColumnChangelogEntity>.toChangelogResponse(): List<ChangelogResponse> =
     map { it.toChangelogResponse() }

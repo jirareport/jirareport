@@ -1,7 +1,7 @@
 package br.com.jiratorio.domain.estimate
 
-import br.com.jiratorio.domain.entity.ColumnChangelog
-import br.com.jiratorio.domain.entity.ImpedimentHistory
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
+import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -37,10 +37,10 @@ data class EstimatedIssue(
 
     val priority: String? = null,
 
-    val columnChangelog: Set<ColumnChangelog>,
+    val columnChangelog: Set<ColumnChangelogEntity>,
 
     val impedimentTime: Long,
 
-    val impedimentHistory: Set<ImpedimentHistory>
+    val impedimentHistory: Set<ImpedimentHistoryEntity>
 
 )

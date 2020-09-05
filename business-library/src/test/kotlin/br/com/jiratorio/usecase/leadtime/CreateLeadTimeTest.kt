@@ -2,11 +2,11 @@ package br.com.jiratorio.usecase.leadtime
 
 import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.junit.testtype.UnitTest
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.ColumnChangelog
-import br.com.jiratorio.domain.entity.Issue
-import br.com.jiratorio.domain.entity.LeadTime
-import br.com.jiratorio.domain.entity.LeadTimeConfig
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
+import br.com.jiratorio.domain.entity.IssueEntity
+import br.com.jiratorio.domain.entity.LeadTimeEntity
+import br.com.jiratorio.domain.entity.LeadTimeConfigEntity
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
@@ -73,7 +73,7 @@ internal class CreateLeadTimeTest {
         } just runs
 
         every {
-            leadTimeRepository.save(any<LeadTime>())
+            leadTimeRepository.save(any<LeadTimeEntity>())
         } answers { firstArg() }
 
         val issue = defaultIssue(board)
@@ -86,11 +86,11 @@ internal class CreateLeadTimeTest {
             leadTimeConfigRepository.findByBoardId(1L)
 
             leadTimeRepository.deleteByIssueId(1L)
-            leadTimeRepository.save(any<LeadTime>())
+            leadTimeRepository.save(any<LeadTimeEntity>())
         }
 
         verify(exactly = 3) {
-            leadTimeRepository.save(any<LeadTime>())
+            leadTimeRepository.save(any<LeadTimeEntity>())
         }
 
         val leadTimes = issue.leadTimes ?: throw ResourceNotFound()
@@ -120,58 +120,58 @@ internal class CreateLeadTimeTest {
         } ?: Assertions.fail("Delivery Lead Time not found")
     }
 
-    private fun defaultIssue(board: Board): Issue {
-        return Issue(
+    private fun defaultIssue(board: BoardEntity): IssueEntity {
+        return IssueEntity(
             id = 1L,
             key = "JIRAT-1",
             board = board,
             columnChangelog = setOf(
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = null,
                     to = "BACKLOG",
                     startDate = "01/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "BACKLOG",
                     to = "ANALYSIS",
                     startDate = "10/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "ANALYSIS",
                     to = "DEV WIP",
                     startDate = "12/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "DEV WIP",
                     to = "DEV DONE",
                     startDate = "21/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "DEV DONE",
                     to = "TEST WIP",
                     startDate = "23/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "TEST WIP",
                     to = "TEST DONE",
                     startDate = "31/01/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "TEST DONE",
                     to = "REVIEW",
                     startDate = "01/02/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "REVIEW",
                     to = "DELIVERY LINE",
                     startDate = "02/02/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "DELIVERY LINE",
                     to = "ACCOMPANIMENT",
                     startDate = "06/02/2019 12:00".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "ACCOMPANIMENT",
                     to = "DONE",
                     startDate = "12/02/2019 12:00".toLocalDateTime()
@@ -185,21 +185,21 @@ internal class CreateLeadTimeTest {
         )
     }
 
-    private fun defaultLeadTimes(board: Board): List<LeadTimeConfig> {
+    private fun defaultLeadTimes(board: BoardEntity): List<LeadTimeConfigEntity> {
         return listOf(
-            LeadTimeConfig(
+            LeadTimeConfigEntity(
                 board = board,
                 name = "Development Lead Time",
                 startColumn = "ANALYSIS",
                 endColumn = "TEST WIP"
             ),
-            LeadTimeConfig(
+            LeadTimeConfigEntity(
                 board = board,
                 name = "Test Lead Time",
                 startColumn = "TEST WIP",
                 endColumn = "DELIVERY LINE"
             ),
-            LeadTimeConfig(
+            LeadTimeConfigEntity(
                 board = board,
                 name = "Delivery Lead Time",
                 startColumn = "DELIVERY LINE",
@@ -216,8 +216,8 @@ internal class CreateLeadTimeTest {
         )
     }
 
-    private fun defaultBoard(): Board {
-        return Board(
+    private fun defaultBoard(): BoardEntity {
+        return BoardEntity(
             id = 1L,
             externalId = 123L,
             name = "My Board",

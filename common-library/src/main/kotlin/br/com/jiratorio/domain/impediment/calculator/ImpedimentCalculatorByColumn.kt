@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.impediment.calculator
 
-import br.com.jiratorio.domain.entity.ImpedimentHistory
+import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
 import br.com.jiratorio.domain.parsed.ParsedChangelog
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
@@ -29,7 +29,7 @@ object ImpedimentCalculatorByColumn : ImpedimentCalculator {
         val impedimentHistory = parsedChangelog.columnChangelog
             .filter { impedimentColumns.contains(it.to) }
             .map {
-                ImpedimentHistory(
+                ImpedimentHistoryEntity(
                     startDate = it.startDate,
                     endDate = it.endDate,
                     leadTime = it.leadTime
@@ -39,7 +39,7 @@ object ImpedimentCalculatorByColumn : ImpedimentCalculator {
         return ImpedimentCalculatorResult(
             timeInImpediment = impedimentHistory.map { it.leadTime }.sum(),
             impedimentHistory = impedimentHistory
-                .sortedWith(Comparator.comparing(ImpedimentHistory::startDate))
+                .sortedWith(Comparator.comparing(ImpedimentHistoryEntity::startDate))
                 .toMutableSet()
         )
     }

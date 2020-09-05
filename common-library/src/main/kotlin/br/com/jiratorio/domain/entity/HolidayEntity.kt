@@ -15,6 +15,7 @@ import javax.persistence.UniqueConstraint
 
 @Entity
 @Table(
+    name = "holiday",
     uniqueConstraints = [
         UniqueConstraint(
             columnNames = [
@@ -23,7 +24,7 @@ import javax.persistence.UniqueConstraint
         )
     ]
 )
-data class Holiday(
+data class HolidayEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +37,7 @@ data class Holiday(
     var description: String,
 
     @ManyToOne(optional = false)
-    var board: Board
+    var board: BoardEntity
 
 ) : BaseEntity() {
     companion object {
@@ -44,10 +45,10 @@ data class Holiday(
     }
 
     override fun toString() =
-        toStringBuilder(Holiday::id, Holiday::date, Holiday::description)
+        toStringBuilder(HolidayEntity::id, HolidayEntity::date, HolidayEntity::description)
 
     override fun equals(other: Any?) =
-        equalsComparing(other, Holiday::date, Holiday::board)
+        equalsComparing(other, HolidayEntity::date, HolidayEntity::board)
 
     override fun hashCode() =
         Objects.hash(date, board)

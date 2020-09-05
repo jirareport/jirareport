@@ -2,14 +2,13 @@ package br.com.jiratorio.repository
 
 import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import java.time.LocalDateTime
 
 interface NativeIssueRepository {
 
-    fun findByExample(board: Board, dynamicFilters: Map<String, Array<String>>, searchIssueRequest: SearchIssueRequest): List<MinimalIssue>
+    fun findByExample(board: BoardEntity, dynamicFilters: Map<String, Array<String>>, searchIssueRequest: SearchIssueRequest): List<MinimalIssue>
 
     fun findAllDynamicFieldValues(boardId: Long): List<DynamicFieldsValues>
 

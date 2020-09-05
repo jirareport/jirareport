@@ -3,8 +3,7 @@ package br.com.jiratorio.usecase.chart
 import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.chart.ChartAggregator
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.usecase.chart.dynamic.CreateDynamicChart
 import br.com.jiratorio.usecase.chart.estimate.CreateEstimateLeadTimeChart
 import br.com.jiratorio.usecase.chart.estimate.CreateEstimateThroughputChart
@@ -41,7 +40,7 @@ class CreateChartAggregator(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(issues: List<MinimalIssue>, board: Board): ChartAggregator {
+    fun execute(issues: List<MinimalIssue>, board: BoardEntity): ChartAggregator {
         log.info("Action=createChartAggregator, issues={}, board={}", issues, board)
 
         return ChartAggregator(

@@ -1,7 +1,7 @@
 package br.com.jiratorio.factory.domain.entity
 
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
-import br.com.jiratorio.domain.entity.IssuePeriod
+import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.extension.faker.jira
 import br.com.jiratorio.extension.toLocalDate
@@ -16,10 +16,10 @@ class IssuePeriodFactory(
     private val faker: Faker,
     private val boardFactory: BoardFactory,
     issuePeriodRepository: IssuePeriodRepository?
-) : KBacon<IssuePeriod>(issuePeriodRepository) {
+) : KBacon<IssuePeriodEntity>(issuePeriodRepository) {
 
-    override fun builder(): IssuePeriod {
-        return IssuePeriod(
+    override fun builder(): IssuePeriodEntity {
+        return IssuePeriodEntity(
             board = boardFactory.create(),
             leadTime = faker.jira().leadTime(),
             wipAvg = faker.number().randomDouble(2, 1, 10),

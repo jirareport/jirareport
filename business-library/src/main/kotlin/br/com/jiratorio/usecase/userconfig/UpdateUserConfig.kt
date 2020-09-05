@@ -1,7 +1,7 @@
 package br.com.jiratorio.usecase.userconfig
 
 import br.com.jiratorio.stereotype.UseCase
-import br.com.jiratorio.domain.entity.UserConfig
+import br.com.jiratorio.domain.entity.UserConfigEntity
 import br.com.jiratorio.domain.request.UpdateUserConfigRequest
 import br.com.jiratorio.mapper.updateFromUpdateUserConfigRequest
 import br.com.jiratorio.repository.UserConfigRepository
@@ -19,7 +19,7 @@ class UpdateUserConfig(
     fun execute(username: String, updateUserConfigRequest: UpdateUserConfigRequest) {
         log.info("Action=updateUserConfig, username={}, updateUserConfigRequest={}", username, updateUserConfigRequest)
 
-        val userConfig = userConfigRepository.findByUsername(username) ?: UserConfig(username)
+        val userConfig = userConfigRepository.findByUsername(username) ?: UserConfigEntity(username)
 
         userConfig.updateFromUpdateUserConfigRequest(updateUserConfigRequest)
 

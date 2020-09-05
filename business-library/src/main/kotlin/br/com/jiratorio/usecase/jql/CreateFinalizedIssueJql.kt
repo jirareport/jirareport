@@ -2,7 +2,7 @@ package br.com.jiratorio.usecase.jql
 
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.FluxColumn
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -12,7 +12,7 @@ class CreateFinalizedIssueJql {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(board: Board, start: LocalDate, end: LocalDate): String {
+    fun execute(board: BoardEntity, start: LocalDate, end: LocalDate): String {
         log.info("Action=createFinalizedIssueJql, board={}, startDate={}, endDate={}", board, start, end)
 
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")

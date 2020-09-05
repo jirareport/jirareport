@@ -4,9 +4,8 @@ import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.internationalization.MessageResolver
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.DynamicFieldConfig
-import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.mapper.toChart
 import org.slf4j.LoggerFactory
@@ -18,7 +17,7 @@ class CreateDynamicChart(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(board: Board, issues: List<MinimalIssue>): List<DynamicChart> {
+    fun execute(board: BoardEntity, issues: List<MinimalIssue>): List<DynamicChart> {
         log.info("Action=createDynamicChart, board={}, issues={}", board, issues)
 
         val dynamicFields = board.dynamicFields
@@ -38,7 +37,7 @@ class CreateDynamicChart(
     }
 
     private fun buildDynamicLeadTime(
-        config: DynamicFieldConfig,
+        config: DynamicFieldConfigEntity,
         issues: List<MinimalIssue>,
         uninformed: String
     ): Chart<String, Double> {
@@ -51,7 +50,7 @@ class CreateDynamicChart(
     }
 
     private fun buildDynamicThroughput(
-        config: DynamicFieldConfig,
+        config: DynamicFieldConfigEntity,
         issues: List<MinimalIssue>,
         uninformed: String
     ): Chart<String, Int> {

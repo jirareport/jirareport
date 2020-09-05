@@ -3,7 +3,7 @@ package br.com.jiratorio.integration.dynamicfieldconfig
 import br.com.jiratorio.Authenticator
 import br.com.jiratorio.restassured.specification.notFound
 import br.com.jiratorio.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.DynamicFieldConfig
+import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.factory.domain.entity.DynamicFieldConfigFactory
@@ -25,7 +25,7 @@ class SearchDynamicFieldConfigIntegrationTest(
             dynamicFieldConfigFactory.create(
                 quantity = 10,
                 modifyingFields = mapOf(
-                    DynamicFieldConfig::board to board
+                    DynamicFieldConfigEntity::board to board
                 )
             )
         }
@@ -55,7 +55,7 @@ class SearchDynamicFieldConfigIntegrationTest(
             dynamicFieldConfigFactory.create(
                 quantity = 10,
                 modifyingFields = mapOf(
-                    DynamicFieldConfig::board to board
+                    DynamicFieldConfigEntity::board to board
                 )
             )
 

@@ -1,7 +1,7 @@
 package br.com.jiratorio.mapper
 
 import br.com.jiratorio.domain.MinimalIssue
-import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.domain.entity.IssueEntity
 import br.com.jiratorio.domain.response.issue.IssueDetailResponse
 import br.com.jiratorio.domain.response.issue.IssueResponse
 import br.com.jiratorio.extension.time.displayFormat
@@ -29,7 +29,7 @@ fun MinimalIssue.toIssueResponse(jiraUrl: String): IssueResponse =
         detailsUrl = "$jiraUrl/browse/$key"
     )
 
-fun Issue.toIssueResponse(jiraUrl: String): IssueResponse =
+fun IssueEntity.toIssueResponse(jiraUrl: String): IssueResponse =
     IssueResponse(
         id = id,
         key = key,
@@ -55,7 +55,7 @@ fun Issue.toIssueResponse(jiraUrl: String): IssueResponse =
 fun Collection<MinimalIssue>.toIssueResponse(jiraUrl: String): List<IssueResponse> =
     map { it.toIssueResponse(jiraUrl) }
 
-fun Issue.toIssueDetailResponse(): IssueDetailResponse =
+fun IssueEntity.toIssueDetailResponse(): IssueDetailResponse =
     IssueDetailResponse(
         id = id,
         key = key,

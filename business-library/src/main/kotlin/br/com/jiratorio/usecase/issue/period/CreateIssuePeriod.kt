@@ -2,9 +2,9 @@ package br.com.jiratorio.usecase.issue.period
 
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.MinimalIssue
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.Issue
-import br.com.jiratorio.domain.entity.IssuePeriod
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.entity.IssueEntity
+import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import br.com.jiratorio.domain.request.CreateIssuePeriodRequest
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.decimal.zeroIfNaN
@@ -42,7 +42,7 @@ class CreateIssuePeriod(
 
         val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
 
-        val issuePeriod = IssuePeriod(
+        val issuePeriod = IssuePeriodEntity(
             name = board.issuePeriodNameFormat.format(startDate, endDate, messageResolver.locale),
             startDate = startDate,
             endDate = endDate,
@@ -55,9 +55,9 @@ class CreateIssuePeriod(
 
         issuePeriod.jql = jql
         issuePeriod.issues = issues.toMutableSet()
-        issuePeriod.leadTime = issues.map(Issue::leadTime).average().zeroIfNaN()
+        issuePeriod.leadTime = issues.map(IssueEntity::leadTime).average().zeroIfNaN()
         issuePeriod.throughput = issues.size
-        issuePeriod.avgPctEfficiency = issues.map(Issue::pctEfficiency).average().zeroIfNaN()
+        issuePeriod.avgPctEfficiency = issues.map(IssueEntity::pctEfficiency).average().zeroIfNaN()
         issuePeriod.wipAvg = calculateAverageWip.execute(
             startDate,
             endDate,
@@ -75,8 +75,8 @@ class CreateIssuePeriod(
     }
 
     private fun createCharts(
-        issuePeriod: IssuePeriod,
-        board: Board,
+        issuePeriod: IssuePeriodEntity,
+        board: BoardEntity,
     ) {
         val chartAggregator = createChartAggregator.execute(
             issuePeriod.issues.map {

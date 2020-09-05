@@ -1,15 +1,15 @@
 package br.com.jiratorio.assertion
 
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
-import br.com.jiratorio.domain.entity.ColumnTimeAverage
-import br.com.jiratorio.domain.entity.IssuePeriod
+import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
+import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import br.com.jiratorio.extension.equalsComparing
 import org.assertj.core.presentation.PredicateDescription
 import java.time.LocalDate
 
 class IssuePeriodAssert(
-    actual: IssuePeriod
-) : BaseAssert<IssuePeriodAssert, IssuePeriod>(
+    actual: IssuePeriodEntity
+) : BaseAssert<IssuePeriodAssert, IssuePeriodEntity>(
     actual,
     IssuePeriodAssert::class
 ) {
@@ -141,7 +141,7 @@ class IssuePeriodAssert(
         )
     }
 
-    fun containsColumnTimeAvg(vararg args: ColumnTimeAverage) = assertAll {
+    fun containsColumnTimeAvg(vararg args: ColumnTimeAverageEntity) = assertAll {
         iterables.assertAllMatch(
             field("issuePeriod.columnTimeAvg"),
             actual.columnTimeAverages,
@@ -149,8 +149,8 @@ class IssuePeriodAssert(
                 args.any { other ->
                     columnTimeAverage.equalsComparing(
                         other,
-                        ColumnTimeAverage::columnName,
-                        ColumnTimeAverage::averageTime
+                        ColumnTimeAverageEntity::columnName,
+                        ColumnTimeAverageEntity::averageTime
                     )
                 }
             },
@@ -160,5 +160,5 @@ class IssuePeriodAssert(
 
 }
 
-fun IssuePeriod.assertThat(assertions: IssuePeriodAssert.() -> Unit): IssuePeriodAssert =
+fun IssuePeriodEntity.assertThat(assertions: IssuePeriodAssert.() -> Unit): IssuePeriodAssert =
     IssuePeriodAssert(this).assertThat(assertions)

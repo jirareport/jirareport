@@ -17,9 +17,11 @@ import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.OneToMany
+import javax.persistence.Table
 
 @Entity
-data class Board(
+@Table(name = "board")
+data class BoardEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,13 +59,13 @@ data class Board(
     var ignoreWeekend: Boolean? = null,
 
     @OneToMany(mappedBy = "board", cascade = [CascadeType.ALL])
-    var leadTimeConfigs: MutableList<LeadTimeConfig>? = null,
+    var leadTimeConfigs: MutableList<LeadTimeConfigEntity>? = null,
 
     @OneToMany(mappedBy = "board", cascade = [CascadeType.ALL])
-    var holidays: MutableList<Holiday>? = null,
+    var holidays: MutableList<HolidayEntity>? = null,
 
     @OneToMany(mappedBy = "board", cascade = [CascadeType.ALL])
-    var issues: MutableList<Issue>? = null,
+    var issues: MutableList<IssueEntity>? = null,
 
     @Enumerated(EnumType.STRING)
     var impedimentType: ImpedimentType? = null,
@@ -73,7 +75,7 @@ data class Board(
     var impedimentColumns: MutableList<String>? = null,
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
-    var dynamicFields: MutableSet<DynamicFieldConfig>? = null,
+    var dynamicFields: MutableSet<DynamicFieldConfigEntity>? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -96,13 +98,13 @@ data class Board(
 
     override fun toString() =
         toStringBuilder(
-            Board::id,
-            Board::externalId,
-            Board::name
+            BoardEntity::id,
+            BoardEntity::externalId,
+            BoardEntity::name
         )
 
     override fun equals(other: Any?) =
-        equalsComparing(other, Board::id)
+        equalsComparing(other, BoardEntity::id)
 
     override fun hashCode() =
         Objects.hash(id)

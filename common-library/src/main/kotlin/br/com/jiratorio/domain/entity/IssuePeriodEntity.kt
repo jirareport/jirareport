@@ -16,9 +16,11 @@ import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import javax.persistence.OrderBy
+import javax.persistence.Table
 
 @Entity
-data class IssuePeriod(
+@Table(name = "issue_period")
+data class IssuePeriodEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +34,7 @@ data class IssuePeriod(
 
     @ManyToOne
     @JoinColumn(name = "board_id", nullable = false)
-    var board: Board,
+    var board: BoardEntity,
 
     @Column(nullable = false)
     var name: String = board.issuePeriodNameFormat.format(startDate, endDate),
@@ -40,7 +42,7 @@ data class IssuePeriod(
     @OneToMany
     @OrderBy("key")
     @JoinColumn(name = "issue_period_id", updatable = false)
-    var issues: MutableSet<Issue> = mutableSetOf(),
+    var issues: MutableSet<IssueEntity> = mutableSetOf(),
 
     @Column(nullable = false)
     var leadTime: Double = 0.0,
@@ -92,7 +94,7 @@ data class IssuePeriod(
     @OneToMany
     @OrderBy("id")
     @JoinColumn(name = "issue_period_id", updatable = false)
-    var columnTimeAverages: Set<ColumnTimeAverage> = mutableSetOf(),
+    var columnTimeAverages: Set<ColumnTimeAverageEntity> = mutableSetOf(),
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
@@ -125,10 +127,10 @@ data class IssuePeriod(
 
     override fun toString() =
         toStringBuilder(
-            IssuePeriod::id,
-            IssuePeriod::board,
-            IssuePeriod::startDate,
-            IssuePeriod::endDate
+            IssuePeriodEntity::id,
+            IssuePeriodEntity::board,
+            IssuePeriodEntity::startDate,
+            IssuePeriodEntity::endDate
         )
 
 }

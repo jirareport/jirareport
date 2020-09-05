@@ -10,9 +10,11 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.Table
 
 @Entity
-data class ColumnChangelog(
+@Table(name = "column_changelog")
+data class ColumnChangelogEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,11 +46,11 @@ data class ColumnChangelog(
     override fun equals(other: Any?): Boolean =
         equalsComparing(
             other,
-            ColumnChangelog::from,
-            ColumnChangelog::to,
-            ColumnChangelog::startDate,
-            ColumnChangelog::endDate,
-            ColumnChangelog::leadTime
+            ColumnChangelogEntity::from,
+            ColumnChangelogEntity::to,
+            ColumnChangelogEntity::startDate,
+            ColumnChangelogEntity::endDate,
+            ColumnChangelogEntity::leadTime
         )
 
     override fun hashCode(): Int =

@@ -4,7 +4,7 @@ import br.com.jiratorio.client.IssueClient
 import br.com.jiratorio.property.JiraProperties
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.Percentile
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.estimate.EstimateFieldReference
 import br.com.jiratorio.domain.estimate.EstimatedIssue
 import br.com.jiratorio.domain.request.SearchEstimateRequest
@@ -91,7 +91,7 @@ class EstimateIssue(
     }
 
     private fun calculatePercentile(
-        board: Board,
+        board: BoardEntity,
         searchEstimateRequest: SearchEstimateRequest,
         value: String
     ): Percentile {

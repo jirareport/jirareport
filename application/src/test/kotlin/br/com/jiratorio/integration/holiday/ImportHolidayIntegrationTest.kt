@@ -3,7 +3,7 @@ package br.com.jiratorio.integration.holiday
 import br.com.jiratorio.Authenticator
 import br.com.jiratorio.annotation.LoadStubs
 import br.com.jiratorio.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.Holiday
+import br.com.jiratorio.domain.entity.HolidayEntity
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.factory.domain.entity.HolidayFactory
@@ -100,8 +100,8 @@ internal class ImportHolidayIntegrationTest(
             for (i in 1..5) {
                 holidayFactory.create(
                     modifyingFields = mapOf(
-                        Holiday::date to LocalDate.of(2019, i, 1),
-                        Holiday::board to defaultBoard
+                        HolidayEntity::date to LocalDate.of(2019, i, 1),
+                        HolidayEntity::board to defaultBoard
                     )
                 )
             }

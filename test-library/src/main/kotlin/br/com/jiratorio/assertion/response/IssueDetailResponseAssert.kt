@@ -1,9 +1,9 @@
 package br.com.jiratorio.assertion.response
 
 import br.com.jiratorio.assertion.BaseAssert
-import br.com.jiratorio.domain.entity.ImpedimentHistory
-import br.com.jiratorio.domain.entity.LeadTime
-import br.com.jiratorio.domain.entity.ColumnChangelog
+import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
+import br.com.jiratorio.domain.entity.LeadTimeEntity
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.domain.response.issue.IssueDetailResponse
 
@@ -22,7 +22,7 @@ class IssueDetailResponseAssert(
         objects.assertEqual(field("issueDetailResponse.key"), actual.key, key)
     }
 
-    fun hasChangelogSize(columnChangelog: Set<ColumnChangelog>) = assertAll {
+    fun hasChangelogSize(columnChangelog: Set<ColumnChangelogEntity>) = assertAll {
         iterables.assertHasSameSizeAs(field("issueDetailResponse.changelog"), actual.changelog, columnChangelog)
     }
 
@@ -34,7 +34,7 @@ class IssueDetailResponseAssert(
         )
     }
 
-    fun hasImpedimentHistorySize(impedimentHistory: MutableSet<ImpedimentHistory>?) = assertAll {
+    fun hasImpedimentHistorySize(impedimentHistory: MutableSet<ImpedimentHistoryEntity>?) = assertAll {
         iterables.assertHasSameSizeAs(
             field("issueDetailResponse.impedimentHistory"),
             actual.impedimentHistory,
@@ -42,7 +42,7 @@ class IssueDetailResponseAssert(
         )
     }
 
-    fun hasLeadTimesSize(leadTimes: Set<LeadTime>?) = assertAll {
+    fun hasLeadTimesSize(leadTimes: Set<LeadTimeEntity>?) = assertAll {
         iterables.assertHasSameSizeAs(field("issueDetailResponse.leadTimes"), actual.leadTimes, leadTimes)
     }
 

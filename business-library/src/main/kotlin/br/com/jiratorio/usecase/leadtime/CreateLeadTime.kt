@@ -2,10 +2,10 @@ package br.com.jiratorio.usecase.leadtime
 
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.FluxColumn
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.Issue
-import br.com.jiratorio.domain.entity.LeadTime
-import br.com.jiratorio.domain.entity.LeadTimeConfig
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.entity.IssueEntity
+import br.com.jiratorio.domain.entity.LeadTimeEntity
+import br.com.jiratorio.domain.entity.LeadTimeConfigEntity
 import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import br.com.jiratorio.repository.LeadTimeRepository
@@ -22,7 +22,7 @@ class CreateLeadTime(
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional
-    fun execute(issue: Issue, board: Board, holidays: List<LocalDate>) {
+    fun execute(issue: IssueEntity, board: BoardEntity, holidays: List<LocalDate>) {
         log.info("Action=createLeadTime, issue={}, board={}", issue, board)
 
         val leadTimeConfigs = leadTimeConfigRepository.findByBoardId(board.id)
@@ -38,11 +38,11 @@ class CreateLeadTime(
     }
 
     private fun calcLeadTime(
-        leadTimeConfig: LeadTimeConfig,
-        issue: Issue,
-        board: Board,
+        leadTimeConfig: LeadTimeConfigEntity,
+        issue: IssueEntity,
+        board: BoardEntity,
         holidays: List<LocalDate>,
-    ): LeadTime? {
+    ): LeadTimeEntity? {
         log.info("Method=calcLeadTime, leadTimeConfig={}, issue={}, board={},  holidays={}", leadTimeConfig, issue, board, holidays)
 
         val fluxColumn = FluxColumn(
@@ -60,7 +60,7 @@ class CreateLeadTime(
         val leadTime = startDate.daysDiff(endDate, holidays, board.ignoreWeekend)
 
         return leadTimeRepository.save(
-            LeadTime(
+            LeadTimeEntity(
                 leadTimeConfig = leadTimeConfig,
                 issue = issue,
                 leadTime = leadTime,

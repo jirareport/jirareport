@@ -1,7 +1,7 @@
 package br.com.jiratorio.usecase.parse.changelog
 
 import br.com.jiratorio.junit.testtype.UnitTest
-import br.com.jiratorio.domain.entity.ColumnChangelog
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.extension.toLocalDateTime
 import br.com.jiratorio.jira.JiraChangelog
 import org.assertj.core.api.Assertions
@@ -59,28 +59,28 @@ internal class ParseColumnChangelogTest {
         val issueCreationDate = "01/01/2019".toLocalDateTime()
         Assertions.assertThat(parseColumnChangelog.execute(jiraChangelog, issueCreationDate, emptyList(), true))
             .contains(
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = null,
                     to = "TODO",
                     startDate = "01/01/2019".toLocalDateTime(),
                     leadTime = 5,
                     endDate = "05/01/2019".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "TODO",
                     to = "DEV",
                     startDate = "05/01/2019".toLocalDateTime(),
                     leadTime = 6,
                     endDate = "10/01/2019".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "DEV",
                     to = "TEST",
                     startDate = "10/01/2019".toLocalDateTime(),
                     leadTime = 6,
                     endDate = "15/01/2019".toLocalDateTime()
                 ),
-                ColumnChangelog(
+                ColumnChangelogEntity(
                     from = "TEST",
                     to = "DONE",
                     startDate = "15/01/2019".toLocalDateTime(),

@@ -9,19 +9,21 @@ import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.ManyToOne
+import javax.persistence.Table
 
 @Entity
-data class LeadTime(
+@Table(name = "lead_time")
+data class LeadTimeEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
     @ManyToOne(optional = false)
-    var leadTimeConfig: LeadTimeConfig,
+    var leadTimeConfig: LeadTimeConfigEntity,
 
     @ManyToOne(optional = false)
-    var issue: Issue,
+    var issue: IssueEntity,
 
     @Column(nullable = false)
     var leadTime: Long,
@@ -38,7 +40,7 @@ data class LeadTime(
     }
 
     override fun equals(other: Any?) =
-        equalsComparing(other, LeadTime::leadTimeConfig, LeadTime::leadTime, LeadTime::startDate, LeadTime::endDate)
+        equalsComparing(other, LeadTimeEntity::leadTimeConfig, LeadTimeEntity::leadTime, LeadTimeEntity::startDate, LeadTimeEntity::endDate)
 
     override fun hashCode() =
         Objects.hash(leadTimeConfig, leadTime, startDate, endDate)

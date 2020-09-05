@@ -17,14 +17,15 @@ class NativeColumnTimeAverageRepositoryImpl(
     private val jdbcTemplate: NamedParameterJdbcTemplate = NamedParameterJdbcTemplate(jdbcTemplate)
 
     override fun findColumnTimeAverage(issues: List<Long>): List<ColumnTimeAverageResponse> {
-        val query = """
+        val query =
+            """
             SELECT 
                 column_to as column_name, 
                 avg(lead_time) average_time
             FROM column_changelog
             WHERE issue_id IN (:issues)
             GROUP BY column_to;
-        """
+            """
 
         val params = MapSqlParameterSource()
         params["issues"] = issues

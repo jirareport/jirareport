@@ -1,7 +1,7 @@
 package br.com.jiratorio.usecase.parse.changelog
 
 import br.com.jiratorio.stereotype.UseCase
-import br.com.jiratorio.domain.entity.ColumnChangelog
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.jira.JiraChangelog
 import org.slf4j.LoggerFactory
@@ -18,7 +18,7 @@ class ParseColumnChangelog {
         issueCreationDate: LocalDateTime,
         holidays: List<LocalDate>,
         ignoreWeekend: Boolean?
-    ): Set<ColumnChangelog> {
+    ): Set<ColumnChangelogEntity> {
         log.info(
             "Action=parseColumnChangelog, jiraChangelog={}, holidays={}, ignoreWeekend={}",
             jiraChangelog, holidays, ignoreWeekend
@@ -30,7 +30,7 @@ class ParseColumnChangelog {
                 if (it.to == null)
                     null
                 else
-                    ColumnChangelog(
+                    ColumnChangelogEntity(
                         from = it.from,
                         to = it.to!!,
                         startDate = it.created
@@ -45,7 +45,7 @@ class ParseColumnChangelog {
                 if (from != null) {
                     changelog.add(
                         0,
-                        ColumnChangelog(
+                        ColumnChangelogEntity(
                             from = null,
                             to = from,
                             startDate = issueCreationDate

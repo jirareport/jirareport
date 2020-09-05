@@ -2,8 +2,8 @@ package br.com.jiratorio.usecase.parse
 
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.FluxColumn
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.ColumnChangelog
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.estimate.EstimatedIssue
 import br.com.jiratorio.domain.impediment.calculator.ImpedimentCalculatorResult
 import br.com.jiratorio.extension.containsUpperCase
@@ -26,7 +26,7 @@ class ParseEstimateIssue(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    override fun execute(root: JsonNode, board: Board, holidays: List<LocalDate>): List<EstimatedIssue> {
+    override fun execute(root: JsonNode, board: BoardEntity, holidays: List<LocalDate>): List<EstimatedIssue> {
         log.info("Action=parseEstimateIssue, root={}, board={}", root, board)
 
         val fluxColumn = FluxColumn(board)
@@ -41,7 +41,7 @@ class ParseEstimateIssue(
 
     private fun jsonNodeToEstimateIssue(
         jsonNode: JsonNode,
-        board: Board,
+        board: BoardEntity,
         startColumns: Set<String>,
         holidays: List<LocalDate>
     ): EstimatedIssue? =
@@ -57,7 +57,7 @@ class ParseEstimateIssue(
 
     private fun parseIssue(
         issue: JsonNode,
-        board: Board,
+        board: BoardEntity,
         startColumns: Set<String>,
         holidays: List<LocalDate>
     ): EstimatedIssue? {
@@ -121,8 +121,8 @@ class ParseEstimateIssue(
     private fun extractStartDate(
         startColumns: Set<String>,
         created: LocalDateTime,
-        columnChangelog: Set<ColumnChangelog>,
-        board: Board,
+        columnChangelog: Set<ColumnChangelogEntity>,
+        board: BoardEntity,
         holidays: List<LocalDate>
     ): LocalDateTime? {
         if (columnChangelog.isNotEmpty()) {

@@ -1,8 +1,8 @@
 package br.com.jiratorio.usecase.issue.create
 
 import br.com.jiratorio.stereotype.UseCase
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.entity.IssueEntity
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.domain.impediment.calculator.ImpedimentCalculatorResult
 import br.com.jiratorio.domain.parsed.ParsedIssue
@@ -28,7 +28,7 @@ class CreateIssues(
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional
-    fun execute(board: Board, issuePeriodId: Long, startDate: LocalDate, endDate: LocalDate): Pair<String, List<Issue>> {
+    fun execute(board: BoardEntity, issuePeriodId: Long, startDate: LocalDate, endDate: LocalDate): Pair<String, List<IssueEntity>> {
         log.info("Action=createIssues, board={}, issuePeriodId={}, startDate={}, endDate={}", board, issuePeriodId, startDate, endDate)
 
         val holidays = findHolidayDays.execute(board.id)
@@ -44,7 +44,7 @@ class CreateIssues(
         return Pair(jql, issues)
     }
 
-    private fun createIssue(parsedIssue: ParsedIssue, issuePeriodId: Long, board: Board, holidays: List<LocalDate>): Issue {
+    private fun createIssue(parsedIssue: ParsedIssue, issuePeriodId: Long, board: BoardEntity, holidays: List<LocalDate>): IssueEntity {
         val parsedChangelog = parsedIssue.parsedChangelog
 
         val leadTime = parsedIssue.startDate.daysDiff(
@@ -68,7 +68,7 @@ class CreateIssues(
             ignoreWeekend = board.ignoreWeekend
         )
 
-        return Issue(
+        return IssueEntity(
             key = parsedIssue.key,
             issueType = parsedIssue.issueType,
             creator = parsedIssue.creator,
@@ -96,7 +96,7 @@ class CreateIssues(
         )
     }
 
-    private fun createDueDateHistory(board: Board, parsedIssue: ParsedIssue, holidays: List<LocalDate>): Pair<Long, List<DueDateHistory>> {
+    private fun createDueDateHistory(board: BoardEntity, parsedIssue: ParsedIssue, holidays: List<LocalDate>): Pair<Long, List<DueDateHistory>> {
         val dueDateType = board.dueDateType
         val dueDateCF = board.dueDateCF
 
@@ -109,7 +109,7 @@ class CreateIssues(
             Pair(0, emptyList())
     }
 
-    private fun calculateImpediment(parsedIssue: ParsedIssue, board: Board, holidays: List<LocalDate>): ImpedimentCalculatorResult =
+    private fun calculateImpediment(parsedIssue: ParsedIssue, board: BoardEntity, holidays: List<LocalDate>): ImpedimentCalculatorResult =
         board.impedimentType?.calcImpediment(
             board.impedimentColumns,
             parsedIssue.parsedChangelog,

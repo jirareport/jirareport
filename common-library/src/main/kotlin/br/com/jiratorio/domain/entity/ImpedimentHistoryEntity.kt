@@ -8,9 +8,11 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.Table
 
 @Entity
-data class ImpedimentHistory(
+@Table(name = "impediment_history")
+data class ImpedimentHistoryEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,17 +30,17 @@ data class ImpedimentHistory(
     @Column(nullable = false)
     var leadTime: Long
 
-) : BaseEntity(), Comparable<ImpedimentHistory> {
+) : BaseEntity(), Comparable<ImpedimentHistoryEntity> {
 
-    override fun compareTo(other: ImpedimentHistory): Int =
+    override fun compareTo(other: ImpedimentHistoryEntity): Int =
         startDate.compareTo(other.startDate)
 
     override fun equals(other: Any?): Boolean =
         equalsComparing(
             other,
-            ImpedimentHistory::id,
-            ImpedimentHistory::issueId,
-            ImpedimentHistory::leadTime
+            ImpedimentHistoryEntity::id,
+            ImpedimentHistoryEntity::issueId,
+            ImpedimentHistoryEntity::leadTime
         )
 
     override fun hashCode(): Int =

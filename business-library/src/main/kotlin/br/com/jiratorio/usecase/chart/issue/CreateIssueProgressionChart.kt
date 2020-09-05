@@ -2,9 +2,8 @@ package br.com.jiratorio.usecase.chart.issue
 
 import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.stereotype.UseCase
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.Holiday
-import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.entity.HolidayEntity
 import br.com.jiratorio.domain.entity.embedded.IssueProgression
 import br.com.jiratorio.extension.time.daysBetween
 import br.com.jiratorio.extension.time.displayFormat
@@ -17,7 +16,7 @@ class CreateIssueProgressionChart {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(board: Board, issues: List<MinimalIssue>): IssueProgression {
+    fun execute(board: BoardEntity, issues: List<MinimalIssue>): IssueProgression {
         log.info("Action=createIssueProgressionChart, board={}, issues={}", board, issues)
 
         if (issues.isEmpty()) {
@@ -37,7 +36,7 @@ class CreateIssueProgressionChart {
 
         val days = start.daysBetween(
             endDate = end,
-            holidays = board.holidays?.map(Holiday::date) ?: emptyList(),
+            holidays = board.holidays?.map(HolidayEntity::date) ?: emptyList(),
             ignoreWeekend = board.ignoreWeekend
         )
 

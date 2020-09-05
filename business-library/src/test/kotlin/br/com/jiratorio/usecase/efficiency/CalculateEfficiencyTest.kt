@@ -2,7 +2,7 @@ package br.com.jiratorio.usecase.efficiency
 
 import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.junit.testtype.UnitTest
-import br.com.jiratorio.domain.entity.ColumnChangelog
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.extension.toLocalDateTime
 import org.junit.jupiter.api.Test
 
@@ -94,34 +94,34 @@ internal class CalculateEfficiencyTest {
         }
     }
 
-    private fun defaultColumnChangelog(): Set<ColumnChangelog> =
+    private fun defaultColumnChangelog(): Set<ColumnChangelogEntity> =
         setOf(
-            ColumnChangelog(
+            ColumnChangelogEntity(
                 to = "COLUMN_WIP_1",
                 startDate = "01/01/2019 12:00".toLocalDateTime(),
                 endDate = "03/03/2019 13:00".toLocalDateTime()
             ),
-            ColumnChangelog(
+            ColumnChangelogEntity(
                 to = "COLUMN_WAIT_1",
                 startDate = "03/01/2019 13:00".toLocalDateTime(),
                 endDate = "05/01/2019 11:00".toLocalDateTime()
             ),
-            ColumnChangelog(
+            ColumnChangelogEntity(
                 to = "COLUMN_WIP_2",
                 startDate = "05/01/2019 11:00".toLocalDateTime(),
                 endDate = "07/01/2019 14:00".toLocalDateTime()
             ),
-            ColumnChangelog(
+            ColumnChangelogEntity(
                 to = "COLUMN_WAIT_2",
                 startDate = "07/01/2019 14:00".toLocalDateTime(),
                 endDate = "07/01/2019 15:00".toLocalDateTime()
             ),
-            ColumnChangelog(
+            ColumnChangelogEntity(
                 to = "COLUMN_WIP_3",
                 startDate = "07/01/2019 15:00".toLocalDateTime(),
                 endDate = "10/01/2019 12:00".toLocalDateTime()
             ),
-            ColumnChangelog(
+            ColumnChangelogEntity(
                 to = "COLUMN_WAIT_3",
                 startDate = "10/01/2019 12:00".toLocalDateTime(),
                 endDate = "11/01/2019 00:00".toLocalDateTime()

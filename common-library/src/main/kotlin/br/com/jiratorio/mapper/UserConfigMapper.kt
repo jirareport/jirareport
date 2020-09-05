@@ -1,12 +1,12 @@
 package br.com.jiratorio.mapper
 
 import br.com.jiratorio.domain.HolidayUserConfig
-import br.com.jiratorio.domain.entity.UserConfig
+import br.com.jiratorio.domain.entity.UserConfigEntity
 import br.com.jiratorio.domain.request.UpdateUserConfigRequest
 import br.com.jiratorio.domain.response.UserConfigResponse
 import br.com.jiratorio.extension.stripAccents
 
-fun UserConfig.toUserConfigResponse(): UserConfigResponse =
+fun UserConfigEntity.toUserConfigResponse(): UserConfigResponse =
     UserConfigResponse(
         username = username,
         state = state,
@@ -16,7 +16,7 @@ fun UserConfig.toUserConfigResponse(): UserConfigResponse =
         throughputChartType = throughputChartType.name
     )
 
-fun UserConfig.updateFromUpdateUserConfigRequest(updateUserConfigRequest: UpdateUserConfigRequest) {
+fun UserConfigEntity.updateFromUpdateUserConfigRequest(updateUserConfigRequest: UpdateUserConfigRequest) {
     holidayToken = updateUserConfigRequest.holidayToken
     state = updateUserConfigRequest.state
     city = updateUserConfigRequest.city
@@ -35,7 +35,7 @@ fun UserConfig.updateFromUpdateUserConfigRequest(updateUserConfigRequest: Update
     }
 }
 
-fun UserConfig.toImportHolidayInfo(): HolidayUserConfig =
+fun UserConfigEntity.toImportHolidayInfo(): HolidayUserConfig =
     HolidayUserConfig(
         state = state!!,
         city = city!!,

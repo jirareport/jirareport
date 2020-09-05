@@ -1,6 +1,6 @@
 package br.com.jiratorio.factory.domain.entity
 
-import br.com.jiratorio.domain.entity.LeadTime
+import br.com.jiratorio.domain.entity.LeadTimeEntity
 import br.com.jiratorio.extension.faker.jira
 import br.com.jiratorio.extension.toLocalDateTime
 import br.com.jiratorio.factory.KBacon
@@ -15,10 +15,10 @@ class LeadTimeFactory(
     private val leadTimeConfigFactory: LeadTimeConfigFactory,
     private val issueFactory: IssueFactory,
     leadTimeRepository: LeadTimeRepository?
-) : KBacon<LeadTime>(leadTimeRepository) {
+) : KBacon<LeadTimeEntity>(leadTimeRepository) {
 
-    override fun builder(): LeadTime {
-        return LeadTime(
+    override fun builder(): LeadTimeEntity {
+        return LeadTimeEntity(
             leadTimeConfig = leadTimeConfigFactory.create(),
             issue = issueFactory.create(),
             leadTime = faker.jira().issueLeadTime(),

@@ -1,11 +1,11 @@
 package br.com.jiratorio.assertion
 
 import br.com.jiratorio.domain.chart.ChartType
-import br.com.jiratorio.domain.entity.UserConfig
+import br.com.jiratorio.domain.entity.UserConfigEntity
 
 class UserConfigAssert(
-    actual: UserConfig
-) : BaseAssert<UserConfigAssert, UserConfig>(
+    actual: UserConfigEntity
+) : BaseAssert<UserConfigAssert, UserConfigEntity>(
     actual,
     UserConfigAssert::class
 ) {
@@ -32,5 +32,5 @@ class UserConfigAssert(
 
 }
 
-fun UserConfig.assertThat(assertions: UserConfigAssert.() -> Unit): UserConfigAssert =
+fun UserConfigEntity.assertThat(assertions: UserConfigAssert.() -> Unit): UserConfigAssert =
     UserConfigAssert(this).assertThat(assertions)

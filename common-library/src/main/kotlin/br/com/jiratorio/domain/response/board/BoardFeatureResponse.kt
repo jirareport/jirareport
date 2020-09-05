@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.response.board
 
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 
 data class BoardFeatureResponse(
 
@@ -24,7 +24,7 @@ data class BoardFeatureResponse(
 
 ) {
 
-    constructor(board: Board) : this(
+    constructor(board: BoardEntity) : this(
         dueDate = !board.dueDateCF.isNullOrEmpty(),
         epic = !board.epicCF.isNullOrEmpty(),
         estimate = !board.estimateCF.isNullOrEmpty(),

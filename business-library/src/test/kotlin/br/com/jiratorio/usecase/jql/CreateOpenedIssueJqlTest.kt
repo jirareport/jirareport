@@ -1,7 +1,7 @@
 package br.com.jiratorio.usecase.jql
 
 import br.com.jiratorio.junit.testtype.UnitTest
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -48,7 +48,7 @@ internal class CreateOpenedIssueJqlTest {
         ignoreIssueType: MutableList<String>? = null,
         fluxColumn: MutableList<String> = mutableListOf("TODO", "WIP", "DONE")
     ) =
-        Board(
+        BoardEntity(
             name = "test board",
             externalId = 123123L,
             startColumn = "TODO",

@@ -2,7 +2,7 @@ package br.com.jiratorio.usecase.parse
 
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.FluxColumn
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.parsed.ParsedIssue
 import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.extension.extractValueNotNull
@@ -23,7 +23,7 @@ class ParseIssue(
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional(readOnly = true)
-    override fun execute(root: JsonNode, board: Board, holidays: List<LocalDate>): List<ParsedIssue> {
+    override fun execute(root: JsonNode, board: BoardEntity, holidays: List<LocalDate>): List<ParsedIssue> {
         log.info("Action=parseIssue, root={}, board={}", root, board)
 
         val fluxColumn = FluxColumn(board)
@@ -36,7 +36,7 @@ class ParseIssue(
 
     private fun jsonNodeToIssue(
         jsonNode: JsonNode,
-        board: Board,
+        board: BoardEntity,
         holidays: List<LocalDate>,
         fluxColumn: FluxColumn
     ): ParsedIssue? {
@@ -53,7 +53,7 @@ class ParseIssue(
 
     private fun parseIssue(
         issue: JsonNode,
-        board: Board,
+        board: BoardEntity,
         holidays: List<LocalDate>,
         fluxColumn: FluxColumn
     ): ParsedIssue? {

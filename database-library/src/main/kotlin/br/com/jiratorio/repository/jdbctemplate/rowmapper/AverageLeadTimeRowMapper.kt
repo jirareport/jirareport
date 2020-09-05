@@ -12,4 +12,4 @@ object AverageLeadTimeRowMapper : RowMapper<AverageLeadTime> {
             value = rs.getDouble("value")
         )
 
-} 
+}

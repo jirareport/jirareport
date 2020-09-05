@@ -1,6 +1,6 @@
 package br.com.jiratorio.repository
 
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
@@ -11,19 +11,19 @@ import org.springframework.stereotype.Repository
 import java.util.Optional
 
 @Repository
-interface BoardRepository : CrudRepository<Board, Long> {
+interface BoardRepository : CrudRepository<BoardEntity, Long> {
 
     @EntityGraph(attributePaths = ["leadTimeConfigs"], type = EntityGraph.EntityGraphType.LOAD)
-    override fun findById(id: Long): Optional<Board>
+    override fun findById(id: Long): Optional<BoardEntity>
 
-    fun findByIdAndOwner(id: Long, owner: String): Board?
+    fun findByIdAndOwner(id: Long, owner: String): BoardEntity?
 
-    fun findAll(specification: Specification<Board>, pageable: Pageable): Page<Board>
+    fun findAll(specification: Specification<BoardEntity>, pageable: Pageable): Page<BoardEntity>
 
-    @Query("SELECT DISTINCT b.owner FROM Board b")
+    @Query("SELECT DISTINCT b.owner FROM BoardEntity b")
     fun findAllOwners(): Set<String>
 
-    fun findByIdOrNull(id: Long): Board? =
+    fun findByIdOrNull(id: Long): BoardEntity? =
         findById(id).orElse(null)
 
 }

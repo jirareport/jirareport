@@ -11,9 +11,11 @@ import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.Table
 
 @Entity
-data class UserConfig(
+@Table(name = "user_config")
+data class UserConfigEntity(
 
     @Column(unique = true, nullable = false)
     val username: String,
@@ -43,17 +45,17 @@ data class UserConfig(
 
     override fun toString() =
         toStringBuilder(
-            UserConfig::id,
-            UserConfig::username,
-            UserConfig::state,
-            UserConfig::city,
-            UserConfig::holidayToken,
-            UserConfig::leadTimeChartType,
-            UserConfig::throughputChartType
+            UserConfigEntity::id,
+            UserConfigEntity::username,
+            UserConfigEntity::state,
+            UserConfigEntity::city,
+            UserConfigEntity::holidayToken,
+            UserConfigEntity::leadTimeChartType,
+            UserConfigEntity::throughputChartType
         )
 
     override fun equals(other: Any?) =
-        equalsComparing(other, UserConfig::username)
+        equalsComparing(other, UserConfigEntity::username)
 
     override fun hashCode() =
         Objects.hash(username)

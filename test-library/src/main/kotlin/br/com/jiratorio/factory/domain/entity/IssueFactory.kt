@@ -1,6 +1,6 @@
 package br.com.jiratorio.factory.domain.entity
 
-import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.domain.entity.IssueEntity
 import br.com.jiratorio.extension.faker.jira
 import br.com.jiratorio.extension.toLocalDateTime
 import br.com.jiratorio.factory.KBacon
@@ -17,12 +17,12 @@ class IssueFactory(
     private val columnChangelogFactory: ColumnChangelogFactory,
     private val issuePeriodFactory: IssuePeriodFactory,
     private val persistIssue: PersistIssue?
-) : KBacon<Issue>(
+) : KBacon<IssueEntity>(
     shouldPersist = persistIssue != null
 ) {
 
-    override fun builder(): Issue {
-        return Issue(
+    override fun builder(): IssueEntity {
+        return IssueEntity(
             key = "JIRAT-${faker.number().randomNumber()}",
             issueType = faker.jira().issueType(),
             creator = faker.gameOfThrones().character(),
@@ -49,7 +49,7 @@ class IssueFactory(
         )
     }
 
-    override fun persist(entity: Issue) {
+    override fun persist(entity: IssueEntity) {
         persistIssue?.execute(entity)
     }
 

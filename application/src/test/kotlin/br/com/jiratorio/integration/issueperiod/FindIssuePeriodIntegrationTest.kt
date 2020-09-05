@@ -3,8 +3,8 @@ package br.com.jiratorio.integration.issueperiod
 import br.com.jiratorio.assertion.response.assertThat
 import br.com.jiratorio.Authenticator
 import br.com.jiratorio.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.Issue
-import br.com.jiratorio.domain.entity.IssuePeriod
+import br.com.jiratorio.domain.entity.IssueEntity
+import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import br.com.jiratorio.domain.response.issue.IssueResponse
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodDetailResponse
@@ -35,15 +35,15 @@ internal class FindIssuePeriodIntegrationTest(
 
             val issuePeriod = issuePeriodFactory.create (
                 modifyingFields = mapOf(
-                    IssuePeriod::board to defaultBoard
+                    IssuePeriodEntity::board to defaultBoard
                 )
             )
 
             issueFactory.create(
                 quantity = 20,
                 modifyingFields = mapOf(
-                    Issue::board to defaultBoard,
-                    Issue::issuePeriodId to issuePeriod.id
+                    IssueEntity::board to defaultBoard,
+                    IssueEntity::issuePeriodId to issuePeriod.id
                 )
             ).toMutableList()
 

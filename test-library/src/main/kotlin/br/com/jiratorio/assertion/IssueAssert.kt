@@ -1,15 +1,15 @@
 package br.com.jiratorio.assertion
 
-import br.com.jiratorio.domain.entity.ImpedimentHistory
-import br.com.jiratorio.domain.entity.Issue
-import br.com.jiratorio.domain.entity.LeadTime
-import br.com.jiratorio.domain.entity.ColumnChangelog
+import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
+import br.com.jiratorio.domain.entity.IssueEntity
+import br.com.jiratorio.domain.entity.LeadTimeEntity
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import java.time.LocalDateTime
 
 class IssueAssert(
-    actual: Issue
-) : BaseAssert<IssueAssert, Issue>(
+    actual: IssueEntity
+) : BaseAssert<IssueAssert, IssueEntity>(
     actual,
     IssueAssert::class
 ) {
@@ -66,7 +66,7 @@ class IssueAssert(
         objects.assertEqual(field("issue.priority"), actual.priority, priority)
     }
 
-    fun hasColumnChangelog(vararg columnChangelog: ColumnChangelog) = assertAll {
+    fun hasColumnChangelog(vararg columnChangelog: ColumnChangelogEntity) = assertAll {
         iterables.assertContains(field("issue.columnChangelog"), actual.columnChangelog, columnChangelog)
     }
 
@@ -86,7 +86,7 @@ class IssueAssert(
         iterables.assertEmpty(field("issues.impedimentHistory"), actual.impedimentHistory)
     }
 
-    fun containsImpedimentHistory(vararg impedimentHistory: ImpedimentHistory) = assertAll {
+    fun containsImpedimentHistory(vararg impedimentHistory: ImpedimentHistoryEntity) = assertAll {
         iterables.assertContainsExactly(field("issues.impedimentHistory"), actual.impedimentHistory, impedimentHistory)
     }
 
@@ -110,10 +110,10 @@ class IssueAssert(
         objects.assertEqual(field("issue.pctEfficiency"), actual.pctEfficiency, pctEfficiency)
     }
 
-    fun hasLeadTimes(leadTimes: Set<LeadTime>) = assertAll {
+    fun hasLeadTimes(leadTimes: Set<LeadTimeEntity>) = assertAll {
         objects.assertEqual(field("issue.leadTimes"), actual.leadTimes, leadTimes)
     }
 }
 
-fun Issue.assertThat(assertions: IssueAssert.() -> Unit): IssueAssert =
+fun IssueEntity.assertThat(assertions: IssueAssert.() -> Unit): IssueAssert =
     IssueAssert(this).assertThat(assertions)

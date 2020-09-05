@@ -1,7 +1,7 @@
 package br.com.jiratorio.usecase.issue
 
 import br.com.jiratorio.stereotype.UseCase
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.repository.IssueRepository
 import org.slf4j.LoggerFactory
@@ -15,7 +15,7 @@ class FindIssueLeadTimes(
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional(readOnly = true)
-    fun execute(board: Board, searchIssueRequest: SearchIssueRequest): List<Long> {
+    fun execute(board: BoardEntity, searchIssueRequest: SearchIssueRequest): List<Long> {
         log.info("Action=findIssueLeadTimes, board={}, searchIssueRequest={}", board, searchIssueRequest)
 
         return issueRepository.findByExample(board, emptyMap(), searchIssueRequest)

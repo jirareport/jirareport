@@ -9,16 +9,18 @@ import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.ManyToOne
+import javax.persistence.Table
 
 @Entity
-data class LeadTimeConfig(
+@Table(name = "lead_time_config")
+data class LeadTimeConfigEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0,
 
     @ManyToOne(optional = false)
-    var board: Board,
+    var board: BoardEntity,
 
     @Column(nullable = false)
     var name: String,
@@ -35,16 +37,16 @@ data class LeadTimeConfig(
     }
 
     override fun equals(other: Any?) =
-        equalsComparing(other, LeadTimeConfig::name, LeadTimeConfig::startColumn, LeadTimeConfig::endColumn)
+        equalsComparing(other, LeadTimeConfigEntity::name, LeadTimeConfigEntity::startColumn, LeadTimeConfigEntity::endColumn)
 
     override fun hashCode() =
         Objects.hash(name, startColumn, endColumn)
 
     override fun toString() =
         toStringBuilder(
-            LeadTimeConfig::id,
-            LeadTimeConfig::name,
-            LeadTimeConfig::startColumn,
-            LeadTimeConfig::endColumn
+            LeadTimeConfigEntity::id,
+            LeadTimeConfigEntity::name,
+            LeadTimeConfigEntity::startColumn,
+            LeadTimeConfigEntity::endColumn
         )
 }

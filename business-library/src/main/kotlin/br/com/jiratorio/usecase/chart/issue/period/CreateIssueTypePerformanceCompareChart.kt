@@ -2,7 +2,7 @@ package br.com.jiratorio.usecase.chart.issue.period
 
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.chart.MultiAxisChart
-import br.com.jiratorio.domain.entity.IssuePeriod
+import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import br.com.jiratorio.extension.decimal.zeroIfNaN
 import org.slf4j.LoggerFactory
 
@@ -11,7 +11,7 @@ class CreateIssueTypePerformanceCompareChart {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(issuePeriods: List<IssuePeriod>): Map<String, MultiAxisChart<Number>> {
+    fun execute(issuePeriods: List<IssuePeriodEntity>): Map<String, MultiAxisChart<Number>> {
         log.info("Action=createIssueTypePerformanceCompareChart, issuePeriods={}", issuePeriods)
 
         return issuePeriods.issueTypes
@@ -19,13 +19,13 @@ class CreateIssueTypePerformanceCompareChart {
             .toMap()
     }
 
-    private val List<IssuePeriod>.issueTypes: Sequence<String>
+    private val List<IssuePeriodEntity>.issueTypes: Sequence<String>
         get() = asSequence()
             .flatMap { issuePeriod -> issuePeriod.issues.asSequence() }
             .map { issue -> issue.issueType ?: EMPTY }
             .distinct()
 
-    private fun buildChartByIssueType(issueType: String, issuePeriods: List<IssuePeriod>): Pair<String, MultiAxisChart<Number>> {
+    private fun buildChartByIssueType(issueType: String, issuePeriods: List<IssuePeriodEntity>): Pair<String, MultiAxisChart<Number>> {
         val result = MultiAxisChart<Number>()
 
         issuePeriods.forEach {

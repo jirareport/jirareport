@@ -1,8 +1,8 @@
 package br.com.jiratorio.domain.impediment.calculator
 
 import br.com.jiratorio.junit.testtype.UnitTest
-import br.com.jiratorio.domain.entity.ColumnChangelog
-import br.com.jiratorio.domain.entity.ImpedimentHistory
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
+import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
 import br.com.jiratorio.domain.parsed.ParsedChangelog
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -14,37 +14,37 @@ internal class ImpedimentCalculatorByColumnTest {
     @Test
     fun `time in impediment`() {
         val columnChangelog = listOf(
-            ColumnChangelog(
+            ColumnChangelogEntity(
                 to = "COLUMN_ONE",
                 leadTime = 1,
                 startDate = LocalDateTime.now()
             ),
-            ColumnChangelog(
+            ColumnChangelogEntity(
                 to = "IMP_COLUMN_ONE",
                 leadTime = 2,
                 startDate = LocalDateTime.now()
             ),
-            ColumnChangelog(
+            ColumnChangelogEntity(
                 to = "COLUMN_TWO",
                 leadTime = 3,
                 startDate = LocalDateTime.now()
             ),
-            ColumnChangelog(
+            ColumnChangelogEntity(
                 to = "IMP_COLUMN_TWO",
                 leadTime = 4,
                 startDate = LocalDateTime.now()
             ),
-            ColumnChangelog(
+            ColumnChangelogEntity(
                 to = "COLUMN_THREE",
                 leadTime = 5,
                 startDate = LocalDateTime.now()
             ),
-            ColumnChangelog(
+            ColumnChangelogEntity(
                 to = "IMP_COLUMN_THREE",
                 leadTime = 6,
                 startDate = LocalDateTime.now()
             ),
-            ColumnChangelog(
+            ColumnChangelogEntity(
                 to = "COLUMN_FOUR",
                 leadTime = 7,
                 startDate = LocalDateTime.now()
@@ -65,17 +65,17 @@ internal class ImpedimentCalculatorByColumnTest {
         assertThat(impedimentCalculatorResult.impedimentHistory)
             .hasSize(3)
             .containsExactly(
-                ImpedimentHistory(
+                ImpedimentHistoryEntity(
                     startDate = columnChangelog[1].startDate,
                     endDate = columnChangelog[1].endDate,
                     leadTime = columnChangelog[1].leadTime
                 ),
-                ImpedimentHistory(
+                ImpedimentHistoryEntity(
                     startDate = columnChangelog[3].startDate,
                     endDate = columnChangelog[3].endDate,
                     leadTime = columnChangelog[3].leadTime
                 ),
-                ImpedimentHistory(
+                ImpedimentHistoryEntity(
                     startDate = columnChangelog[5].startDate,
                     endDate = columnChangelog[5].endDate,
                     leadTime = columnChangelog[5].leadTime
