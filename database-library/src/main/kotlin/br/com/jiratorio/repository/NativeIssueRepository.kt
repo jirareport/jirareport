@@ -1,6 +1,5 @@
 package br.com.jiratorio.repository
 
-import br.com.jiratorio.domain.ThroughputByPeriodAndEstimate
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.issue.Issue
@@ -26,7 +25,5 @@ interface NativeIssueRepository {
     fun findAllIssuePrioritiesByBoardId(boardId: Long): Set<String>
 
     fun findAllKeysByBoardIdAndDates(boardId: Long, startDate: LocalDateTime, endDate: LocalDateTime): Set<String>
-    
-    fun findThroughputByPeriodAndEstimate(boardId: Long, issuePeriods: List<Long>): List<ThroughputByPeriodAndEstimate>
 
 }

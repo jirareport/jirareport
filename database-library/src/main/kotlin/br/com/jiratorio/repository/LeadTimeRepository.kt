@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface LeadTimeRepository : CrudRepository<LeadTimeEntity, Long>, LeadTimeNativeRepository {
+interface LeadTimeRepository : CrudRepository<LeadTimeEntity, Long>, NativeLeadTimeRepository {
 
     fun deleteByIssueId(id: Long)
 

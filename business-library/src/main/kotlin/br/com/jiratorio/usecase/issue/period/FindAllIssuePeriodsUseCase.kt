@@ -1,7 +1,5 @@
 package br.com.jiratorio.usecase.issue.period
 
-import br.com.jiratorio.property.JiraProperties
-import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.chart.IssuePeriodChartResponse
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.IssuePeriodEntity
@@ -10,8 +8,10 @@ import br.com.jiratorio.domain.response.issueperiod.IssuePeriodListResponse
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.decimal.format
 import br.com.jiratorio.mapper.toIssuePeriodResponse
+import br.com.jiratorio.property.JiraProperties
 import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.IssuePeriodRepository
+import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.usecase.chart.issue.period.CreateIssueTypePerformanceCompareChartUseCase
 import br.com.jiratorio.usecase.chart.issue.period.CreateLeadTimeCompareChartByPeriodUseCase
 import br.com.jiratorio.usecase.chart.issue.period.CreateThroughputByEstimateChartUseCase
@@ -26,7 +26,7 @@ class FindAllIssuePeriodsUseCase(
     private val jiraProperties: JiraProperties,
     private val createLeadTimeCompareChartByPeriod: CreateLeadTimeCompareChartByPeriodUseCase,
     private val createThroughputByEstimateChart: CreateThroughputByEstimateChartUseCase,
-    private val createIssueTypePerformanceCompareChart: CreateIssueTypePerformanceCompareChartUseCase
+    private val createIssueTypePerformanceCompareChart: CreateIssueTypePerformanceCompareChartUseCase,
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -56,12 +56,13 @@ class FindAllIssuePeriodsUseCase(
             throughput[issuePeriod.name] = issuePeriod.throughput
         }
 
+        val issuePeriodIds = issuePeriods.map(IssuePeriodEntity::id)
         return IssuePeriodChartResponse(
             leadTime = leadTime,
             throughput = throughput,
-            leadTimeCompareChart = createLeadTimeCompareChartByPeriod.execute(issuePeriods, board),
-            throughputByEstimate = createThroughputByEstimateChart.execute(issuePeriods, board),
-            issueTypePerformanceCompareChart = createIssueTypePerformanceCompareChart.execute(issuePeriods)
+            leadTimeCompareChart = createLeadTimeCompareChartByPeriod.execute(board, issuePeriodIds),
+            throughputByEstimate = createThroughputByEstimateChart.execute(board, issuePeriodIds),
+            issueTypePerformanceCompareChart = createIssueTypePerformanceCompareChart.execute(board, issuePeriodIds)
         )
     }
 

@@ -64,9 +64,6 @@ data class BoardEntity(
     @OneToMany(mappedBy = "board", cascade = [CascadeType.ALL])
     var holidays: MutableList<HolidayEntity>? = null,
 
-    @OneToMany(mappedBy = "board", cascade = [CascadeType.ALL])
-    var issues: MutableList<IssueEntity>? = null,
-
     @Enumerated(EnumType.STRING)
     var impedimentType: ImpedimentType? = null,
 
