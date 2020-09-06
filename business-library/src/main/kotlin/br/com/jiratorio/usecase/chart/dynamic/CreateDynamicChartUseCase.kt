@@ -1,23 +1,24 @@
 package br.com.jiratorio.usecase.chart.dynamic
 
-import br.com.jiratorio.domain.MinimalIssue
+import br.com.jiratorio.domain.issue.MinimalIssue
 import br.com.jiratorio.internationalization.MessageResolver
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.dynamicfield.DynamicChart
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity
 import br.com.jiratorio.domain.entity.embedded.Chart
+import br.com.jiratorio.domain.issue.Issue
 import br.com.jiratorio.mapper.toChart
 import org.slf4j.LoggerFactory
 
 @UseCase
 class CreateDynamicChartUseCase(
-    private val messageResolver: MessageResolver
+    private val messageResolver: MessageResolver,
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(board: BoardEntity, issues: List<MinimalIssue>): List<DynamicChart> {
+    fun execute(board: BoardEntity, issues: List<Issue>): List<DynamicChart> {
         log.info("Action=createDynamicChart, board={}, issues={}", board, issues)
 
         val dynamicFields = board.dynamicFields
@@ -38,8 +39,8 @@ class CreateDynamicChartUseCase(
 
     private fun buildDynamicLeadTime(
         config: DynamicFieldConfigEntity,
-        issues: List<MinimalIssue>,
-        uninformed: String
+        issues: List<Issue>,
+        uninformed: String,
     ): Chart<String, Double> {
         log.info("Method=buildDynamicLeadTime, config={}, issues={}", config, issues)
 
@@ -51,8 +52,8 @@ class CreateDynamicChartUseCase(
 
     private fun buildDynamicThroughput(
         config: DynamicFieldConfigEntity,
-        issues: List<MinimalIssue>,
-        uninformed: String
+        issues: List<Issue>,
+        uninformed: String,
     ): Chart<String, Int> {
         log.info("Method=buildDynamicThroughput, config={}, issues={}", config, issues)
 

@@ -1,8 +1,8 @@
 package br.com.jiratorio.repository.jdbctemplate
 
-import br.com.jiratorio.domain.MinimalIssue
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
 import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.issue.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.extension.jdbctemplate.queryForSet
 import br.com.jiratorio.extension.time.atEndOfDay
@@ -23,7 +23,7 @@ import java.time.LocalDateTime
 @Repository
 class NativeIssueRepositoryImpl(
     private val objectMapper: ObjectMapper,
-    jdbcTemplate: JdbcTemplate
+    jdbcTemplate: JdbcTemplate,
 ) : NativeIssueRepository {
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
@@ -34,8 +34,8 @@ class NativeIssueRepositoryImpl(
     override fun findByExample(
         board: BoardEntity,
         dynamicFilters: Map<String, Array<String>>,
-        searchIssueRequest: SearchIssueRequest
-    ): List<MinimalIssue> {
+        searchIssueRequest: SearchIssueRequest,
+    ): List<Issue> {
         log.info("Method=findByExample, board={}, dynamicFilters={}, searchIssueRequest={}", board, searchIssueRequest, dynamicFilters)
 
         val params = MapSqlParameterSource()

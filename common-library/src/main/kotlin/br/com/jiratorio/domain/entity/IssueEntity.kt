@@ -1,6 +1,7 @@
 package br.com.jiratorio.domain.entity
 
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
+import br.com.jiratorio.domain.issue.Issue
 import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.toStringBuilder
 import org.hibernate.annotations.Type
@@ -24,39 +25,39 @@ data class IssueEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
+    override var id: Long = 0,
 
     @Column(nullable = false)
-    var key: String,
+    override var key: String,
 
-    var issueType: String? = null,
+    override var issueType: String? = null,
 
-    var creator: String? = null,
+    override var creator: String? = null,
 
-    var system: String? = null,
+    override var system: String? = null,
 
-    var epic: String? = null,
-
-    @Column(nullable = false)
-    var summary: String,
-
-    var estimate: String? = null,
-
-    var project: String? = null,
+    override var epic: String? = null,
 
     @Column(nullable = false)
-    var startDate: LocalDateTime,
+    override var summary: String,
+
+    override var estimate: String? = null,
+
+    override var project: String? = null,
 
     @Column(nullable = false)
-    var endDate: LocalDateTime,
+    override var startDate: LocalDateTime,
 
     @Column(nullable = false)
-    val leadTime: Long,
+    override var endDate: LocalDateTime,
 
     @Column(nullable = false)
-    var created: LocalDateTime,
+    override val leadTime: Long,
 
-    var priority: String? = null,
+    @Column(nullable = false)
+    override var created: LocalDateTime,
+
+    override var priority: String? = null,
 
     @OneToMany
     @OrderBy("startDate")
@@ -72,14 +73,14 @@ data class IssueEntity(
     @ManyToOne(optional = false)
     var board: BoardEntity,
 
-    var deviationOfEstimate: Long? = null,
+    override var deviationOfEstimate: Long? = null,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     var dueDateHistory: List<DueDateHistory>? = null,
 
     @Column(nullable = false)
-    var impedimentTime: Long = 0,
+    override var impedimentTime: Long = 0,
 
     @OneToMany
     @OrderBy("startDate")
@@ -88,7 +89,7 @@ data class IssueEntity(
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var dynamicFields: Map<String, String?>? = null,
+    override var dynamicFields: Map<String, String?> = emptyMap(),
 
     @Column(nullable = false)
     var waitTime: Long = 0L,
@@ -97,12 +98,15 @@ data class IssueEntity(
     var touchTime: Long = 0L,
 
     @Column(nullable = false)
-    var pctEfficiency: Double = 0.0
+    var pctEfficiency: Double = 0.0,
 
-) : BaseEntity() {
+    ) : BaseEntity(), Issue {
     companion object {
         private const val serialVersionUID = -1084659211505084402L
     }
+
+    override val changeEstimateCount: Int
+        get() = dueDateHistory?.size ?: 0
 
     override fun toString() =
         toStringBuilder(

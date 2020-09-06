@@ -1,8 +1,9 @@
 package br.com.jiratorio.usecase.weeklythroughput
 
-import br.com.jiratorio.domain.MinimalIssue
+import br.com.jiratorio.domain.issue.MinimalIssue
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.entity.embedded.Chart
+import br.com.jiratorio.domain.issue.Issue
 import br.com.jiratorio.extension.time.atEndOfDay
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
@@ -19,7 +20,7 @@ class CalculateWeeklyThroughputUseCase {
     fun execute(
         startDate: LocalDate,
         endDate: LocalDate,
-        issues: List<MinimalIssue>
+        issues: List<Issue>
     ): Chart<String, Int> {
         log.info("Action=calculateWeeklyThroughput, startDate={}, endDate={}, issues={}", startDate, endDate, issues)
 

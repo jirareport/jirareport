@@ -1,8 +1,9 @@
 package br.com.jiratorio.usecase.chart.histogram
 
-import br.com.jiratorio.domain.MinimalIssue
+import br.com.jiratorio.domain.issue.MinimalIssue
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.entity.embedded.Histogram
+import br.com.jiratorio.domain.issue.Issue
 import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.usecase.percentile.CalculatePercentileUseCase
 import org.slf4j.LoggerFactory
@@ -14,7 +15,7 @@ class CreateHistogramChartUseCase(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(issues: List<MinimalIssue>): Histogram {
+    fun execute(issues: List<Issue>): Histogram {
         log.info("Action=createHistogramChart, issues={}", issues)
 
         val leadTimeList = issues.map { it.leadTime }
@@ -29,7 +30,7 @@ class CreateHistogramChartUseCase(
         )
     }
 
-    private fun histogramChart(issues: List<MinimalIssue>): Chart<Long, Int> {
+    private fun histogramChart(issues: List<Issue>): Chart<Long, Int> {
         log.info("Method=histogramChart, issues={}", issues)
 
         val collect: MutableMap<Long, Int> = issues

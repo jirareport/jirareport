@@ -1,39 +1,31 @@
 package br.com.jiratorio.usecase.chart.issue.period
 
-import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.chart.MultiAxisChart
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.IssuePeriodEntity
+import br.com.jiratorio.mapper.toMultiAxisChart
+import br.com.jiratorio.repository.LeadTimeRepository
+import br.com.jiratorio.stereotype.UseCase
 import org.slf4j.LoggerFactory
 
 @UseCase
-class CreateLeadTimeCompareChartByPeriodUseCase {
+class CreateLeadTimeCompareChartByPeriodUseCase(
+    private val leadTimeRepository: LeadTimeRepository,
+) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun execute(issuePeriods: List<IssuePeriodEntity>, board: BoardEntity): MultiAxisChart<Double> {
         log.info("Action=createLeadTimeCompareChartByPeriod, issuePeriods={}, board={}", issuePeriods, board)
 
-        val leadTimeCompareChart = MultiAxisChart<Double>()
-
-        val leadTimeConfigs = board.leadTimeConfigs ?: return leadTimeCompareChart
-
-        for (issuePeriod in issuePeriods) {
-            val periodChart = issuePeriod.leadTimeCompareChart ?: continue
-            val collect = periodChart.data.toMutableMap()
-
-            if (collect.size < leadTimeConfigs.size) {
-                leadTimeConfigs.forEach {
-                    if (!collect.containsKey(it.name)) {
-                        collect[it.name] = 0.0
-                    }
-                }
-            }
-
-            leadTimeCompareChart[issuePeriod.name] = collect
+        if (board.leadTimeConfigs.isNullOrEmpty()) {
+            return MultiAxisChart()
         }
 
-        return leadTimeCompareChart
+        return leadTimeRepository.findComparisonByPeriod(issuePeriods.map(IssuePeriodEntity::id))
+            .groupBy { board.issuePeriodNameFormat.format(it.periodStart, it.periodEnd) }
+            .mapValues { entry -> entry.value.associate { it.leadTimeName to it.leadTime } }
+            .toMultiAxisChart()
     }
 
 }

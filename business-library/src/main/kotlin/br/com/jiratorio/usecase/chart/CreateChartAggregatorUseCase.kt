@@ -1,9 +1,9 @@
 package br.com.jiratorio.usecase.chart
 
-import br.com.jiratorio.domain.MinimalIssue
-import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.chart.ChartAggregator
 import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.issue.Issue
+import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.usecase.chart.dynamic.CreateDynamicChartUseCase
 import br.com.jiratorio.usecase.chart.estimate.CreateEstimateLeadTimeChartUseCase
 import br.com.jiratorio.usecase.chart.estimate.CreateEstimateThroughputChartUseCase
@@ -35,12 +35,12 @@ class CreateChartAggregatorUseCase(
     private val createProjectThroughputChart: CreateProjectThroughputChartUseCase,
     private val createSystemLeadTimeChart: CreateSystemLeadTimeChartUseCase,
     private val createSystemThroughputChart: CreateSystemThroughputChartUseCase,
-    private val createIssueProgressionChart: CreateIssueProgressionChartUseCase
+    private val createIssueProgressionChart: CreateIssueProgressionChartUseCase,
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(issues: List<MinimalIssue>, board: BoardEntity): ChartAggregator {
+    fun execute(issues: List<Issue>, board: BoardEntity): ChartAggregator {
         log.info("Action=createChartAggregator, issues={}, board={}", issues, board)
 
         return ChartAggregator(

@@ -1,6 +1,6 @@
 package br.com.jiratorio.repository.jdbctemplate.rowmapper
 
-import br.com.jiratorio.domain.MinimalIssue
+import br.com.jiratorio.domain.issue.MinimalIssue
 import br.com.jiratorio.extension.jdbctemplate.getLocalDateTime
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue

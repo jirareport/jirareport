@@ -1,6 +1,6 @@
 package br.com.jiratorio.usecase.chart.issue.period
 
-import br.com.jiratorio. stereotype.UseCase
+import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.chart.ThroughputByEstimate
 import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import org.slf4j.LoggerFactory

@@ -1,8 +1,8 @@
 package br.com.jiratorio.usecase.chart.leadtimecompare
 
-import br.com.jiratorio.domain.AverageLeadTime
-import br.com.jiratorio.domain.MinimalIssue
+import br.com.jiratorio.domain.entity.IssueEntity
 import br.com.jiratorio.domain.entity.embedded.Chart
+import br.com.jiratorio.domain.issue.Issue
 import br.com.jiratorio.mapper.toChart
 import br.com.jiratorio.repository.LeadTimeRepository
 import br.com.jiratorio.stereotype.UseCase
@@ -15,13 +15,29 @@ class CreateLeadTimeCompareChartUseCase(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(issues: List<MinimalIssue>): Chart<String, Double> {
+    fun execute(issues: List<Issue>): Chart<String, Double> {
         log.info("Action=createLeadTimeCompareChart, issues={}", issues)
 
-        return leadTimeRepository.findAverageLeadTime(issues.map(MinimalIssue::id))
-            .associateBy(AverageLeadTime::name)
-            .mapValues { it.value.value }
+        if (issues.isEmpty()) {
+            return Chart()
+        }
+
+        if (issues.first() is IssueEntity) {
+            @Suppress("UNCHECKED_CAST")
+            return buildLeadTimeCompareChartWithIssueEntity(issues as List<IssueEntity>)
+        }
+
+        return leadTimeRepository.findAverageLeadTime(issues.map(Issue::id))
+            .associate { it.name to it.value }
             .toChart()
     }
+
+    private fun buildLeadTimeCompareChartWithIssueEntity(issues: List<IssueEntity>): Chart<String, Double> =
+        issues
+            .mapNotNull { it.leadTimes }
+            .flatten()
+            .groupBy { it.leadTimeConfig.name }
+            .mapValues { (_, value) -> value.map { it.leadTime }.average() }
+            .toChart()
 
 }

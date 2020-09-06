@@ -67,7 +67,7 @@ class IssueResponseAssert(
     }
 
     fun hasChangeEstimateCount(changeEstimateCount: Int?) = assertAll {
-        objects.assertEqual(field("issueResponse.changeEstimateCount"), actual.changeEstimateCount, changeEstimateCount)
+        objects.assertEqual(field("issueResponse.changeEstimateCount"), actual.changeEstimateCount, changeEstimateCount ?: 0)
     }
 
     fun hasImpedimentTime(impedimentTime: Long) = assertAll {

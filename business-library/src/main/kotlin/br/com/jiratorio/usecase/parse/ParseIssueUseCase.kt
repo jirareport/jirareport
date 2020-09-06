@@ -1,6 +1,5 @@
 package br.com.jiratorio.usecase.parse
 
-import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.parsed.ParsedIssue
@@ -8,6 +7,7 @@ import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
 import br.com.jiratorio.extension.parallelStream
+import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.usecase.parse.changelog.ParseChangelogUseCase
 import com.fasterxml.jackson.databind.JsonNode
 import org.slf4j.LoggerFactory
@@ -17,7 +17,7 @@ import kotlin.streams.toList
 
 @UseCase
 class ParseIssueUseCase(
-    private val parseChangelog: ParseChangelogUseCase
+    private val parseChangelog: ParseChangelogUseCase,
 ) : IssueParser<ParsedIssue> {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -38,7 +38,7 @@ class ParseIssueUseCase(
         jsonNode: JsonNode,
         board: BoardEntity,
         holidays: List<LocalDate>,
-        fluxColumn: FluxColumn
+        fluxColumn: FluxColumn,
     ): ParsedIssue? {
         return try {
             parseIssue(jsonNode, board, holidays, fluxColumn)
@@ -55,7 +55,7 @@ class ParseIssueUseCase(
         issue: JsonNode,
         board: BoardEntity,
         holidays: List<LocalDate>,
-        fluxColumn: FluxColumn
+        fluxColumn: FluxColumn,
     ): ParsedIssue? {
         log.info("Method=parseIssue, Info=parsing, key={}", issue.path("key").extractValue())
 
@@ -68,7 +68,7 @@ class ParseIssueUseCase(
 
         val (
             startDate,
-            endDate
+            endDate,
         ) = fluxColumn.calcStartAndEndDate(parsedChangelog.columnChangelog, created)
 
         if (startDate == null || endDate == null) {
@@ -89,9 +89,10 @@ class ParseIssueUseCase(
                 null
             }
 
-        val dynamicFields = board.dynamicFields?.map {
-            it.name to fields.path(it.field).extractValue()
-        }?.toMap()
+        val dynamicFields = board.dynamicFields
+            ?.map { it.name to fields.path(it.field).extractValue() }
+            ?.toMap()
+            ?: emptyMap()
 
         var issueType: String? = null
         if (fields.hasNonNull("issuetype") && fields.path("issuetype").isObject) {

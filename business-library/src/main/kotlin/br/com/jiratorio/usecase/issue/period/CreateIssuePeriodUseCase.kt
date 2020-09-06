@@ -1,7 +1,7 @@
 package br.com.jiratorio.usecase.issue.period
 
 import br.com.jiratorio.domain.FluxColumn
-import br.com.jiratorio.domain.MinimalIssue
+import br.com.jiratorio.domain.issue.MinimalIssue
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.IssueEntity
 import br.com.jiratorio.domain.entity.IssuePeriodEntity
