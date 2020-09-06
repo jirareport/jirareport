@@ -1,47 +1,34 @@
 package br.com.jiratorio.usecase.chart.issue.period
 
-import br.com.jiratorio.stereotype.UseCase
-import br.com.jiratorio.domain.chart.ThroughputByEstimate
+import br.com.jiratorio.domain.chart.MultiAxisChart
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.IssuePeriodEntity
+import br.com.jiratorio.internationalization.MessageResolver
+import br.com.jiratorio.mapper.toMultiAxisChart
+import br.com.jiratorio.repository.IssueRepository
+import br.com.jiratorio.stereotype.UseCase
 import org.slf4j.LoggerFactory
-import java.util.HashSet
-import java.util.LinkedHashMap
 
 @UseCase
-class CreateThroughputByEstimateChartUseCase {
+class CreateThroughputByEstimateChartUseCase(
+    private val issueRepository: IssueRepository,
+    private val messageResolver: MessageResolver,
+) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(issuePeriods: List<IssuePeriodEntity>): ThroughputByEstimate {
+    fun execute(issuePeriods: List<IssuePeriodEntity>, board: BoardEntity): MultiAxisChart<Int> {
         log.info("Action=createThroughputByEstimateChart, issuePeriods={}", issuePeriods)
 
-        val sizes = HashSet<String>()
-        val periodsSize: MutableMap<String, MutableMap<String, Int>> = LinkedHashMap()
-        for (issuePeriod in issuePeriods) {
-            val throughputByEstimate = issuePeriod.throughputByEstimate ?: continue
-            val estimated = throughputByEstimate.data.toMutableMap()
-            sizes.addAll(estimated.keys)
-            periodsSize[issuePeriod.name] = estimated
+        if (board.estimateCF.isNullOrBlank()) {
+            return MultiAxisChart()
         }
 
-        periodsSize.forEach { (_, v) ->
-            for (size in sizes) {
-                if (!v.containsKey(size)) {
-                    v[size] = 0
-                }
-            }
-        }
-
-        val datasources = LinkedHashMap<String, MutableList<Int>>()
-        for (periodSize in periodsSize.values) {
-            periodSize.forEach { (k, v) ->
-                val longs = datasources[k] ?: mutableListOf()
-                longs.add(v)
-                datasources[k] = longs
-            }
-        }
-
-        return ThroughputByEstimate(periodsSize.keys, datasources)
+        val uninformedValue = messageResolver.resolve("uninformed")
+        return issueRepository.findThroughputByPeriodAndEstimate(board.id, issuePeriods.map { it.id })
+            .groupBy { board.issuePeriodNameFormat.format(it.periodStart, it.periodEnd) }
+            .mapValues { entry -> entry.value.associate { Pair(it.estimate ?: uninformedValue, it.throughput) } }
+            .toMultiAxisChart()
     }
 
 }

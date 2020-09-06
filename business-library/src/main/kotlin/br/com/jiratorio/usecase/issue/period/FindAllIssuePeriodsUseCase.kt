@@ -60,7 +60,7 @@ class FindAllIssuePeriodsUseCase(
             leadTime = leadTime,
             throughput = throughput,
             leadTimeCompareChart = createLeadTimeCompareChartByPeriod.execute(issuePeriods, board),
-            throughputByEstimate = createThroughputByEstimateChart.execute(issuePeriods),
+            throughputByEstimate = createThroughputByEstimateChart.execute(issuePeriods, board),
             issueTypePerformanceCompareChart = createIssueTypePerformanceCompareChart.execute(issuePeriods)
         )
     }

@@ -1,5 +1,6 @@
 package br.com.jiratorio.repository.jdbctemplate
 
+import br.com.jiratorio.domain.ThroughputByPeriodAndEstimate
 import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.issue.Issue
@@ -9,6 +10,7 @@ import br.com.jiratorio.extension.time.atEndOfDay
 import br.com.jiratorio.repository.NativeIssueRepository
 import br.com.jiratorio.repository.jdbctemplate.rowmapper.DynamicFieldsValuesRowMapper
 import br.com.jiratorio.repository.jdbctemplate.rowmapper.MinimalIssueRowMapper
+import br.com.jiratorio.repository.jdbctemplate.rowmapper.ThroughputByPeriodAndEstimateRowMapper
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -257,6 +259,35 @@ class NativeIssueRepositoryImpl(
         params["endDate"] = endDate
 
         return jdbcTemplate.queryForSet(query, params)
+    }
+
+    override fun findThroughputByPeriodAndEstimate(boardId: Long, issuePeriods: List<Long>): List<ThroughputByPeriodAndEstimate> {
+        val query =
+            """
+                WITH issue_estimate AS (
+                    SELECT estimate, 
+                           board_id
+                    FROM issue
+                    WHERE board_id = :boardId
+                    GROUP BY estimate, board_id
+                )
+                SELECT
+                       ip.start_date as period_start,
+                       ip.end_date as period_end,
+                       ie.estimate as estimate,
+                       COUNT(i) as throughput
+                FROM issue_period ip
+                         INNER JOIN issue_estimate ie ON ie.board_id = ip.board_id
+                         LEFT JOIN issue i ON ip.id = i.issue_period_id AND i.estimate IS NOT DISTINCT FROM ie.estimate
+                WHERE ip.id IN (:issuePeriods)
+                GROUP BY ip.start_date, ip.end_date, ie.estimate
+            """
+
+        val params = MapSqlParameterSource()
+        params["boardId"] = boardId
+        params["issuePeriods"] = issuePeriods
+
+        return jdbcTemplate.query(query, params, ThroughputByPeriodAndEstimateRowMapper)
     }
 
     private fun findAllDynamicFieldsByBoardId(boardId: Long): Set<String> {

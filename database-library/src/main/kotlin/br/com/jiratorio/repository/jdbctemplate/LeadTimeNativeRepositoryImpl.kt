@@ -48,7 +48,7 @@ class LeadTimeNativeRepositoryImpl(
                      join lead_time_config ltc on ltc.board_id = ip.board_id
             where ip.id in (:issuePeriods)
             group by ip.id, ip.start_date, ip.end_date, ltc.name
-            order by ip.start_date, ip.end_date;  
+            order by ip.start_date, ip.end_date, ltc.name
             """
 
         val params = MapSqlParameterSource()

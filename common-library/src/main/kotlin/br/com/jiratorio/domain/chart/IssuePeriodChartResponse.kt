@@ -8,7 +8,7 @@ data class IssuePeriodChartResponse(
 
     val throughput: Chart<String, Int>,
 
-    val throughputByEstimate: ThroughputByEstimate,
+    val throughputByEstimate: MultiAxisChart<Int>,
 
     val leadTimeCompareChart: MultiAxisChart<Double>,
 
