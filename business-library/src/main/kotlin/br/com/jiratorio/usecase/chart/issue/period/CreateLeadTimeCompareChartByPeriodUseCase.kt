@@ -1,7 +1,8 @@
 package br.com.jiratorio.usecase.chart.issue.period
 
+import br.com.jiratorio.domain.BoardPreferences
+import br.com.jiratorio.domain.FindAllIssuePeriodsFilter
 import br.com.jiratorio.domain.chart.MultiAxisChart
-import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.mapper.toMultiAxisChart
 import br.com.jiratorio.repository.ChartRepository
 import br.com.jiratorio.stereotype.UseCase
@@ -14,15 +15,15 @@ class CreateLeadTimeCompareChartByPeriodUseCase(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(board: BoardEntity, issuePeriods: List<Long>): MultiAxisChart<Double> {
-        log.info("Action=createLeadTimeCompareChartByPeriod, issuePeriods={}, board={}", issuePeriods, board)
+    fun execute(filter: FindAllIssuePeriodsFilter, boardPreferences: BoardPreferences): MultiAxisChart<Double> {
+        log.info("Action=createLeadTimeCompareChartByPeriod, filter={}, boardPreferences={}", filter, boardPreferences)
 
-        if (board.leadTimeConfigs.isNullOrEmpty()) {
+        if (!boardPreferences.hasMultipleLeadTimeFeatureEnabled) {
             return MultiAxisChart()
         }
 
-        return chartRepository.findLeadTimeComparisonByPeriod(issuePeriods)
-            .groupBy { board.issuePeriodNameFormat.format(it.periodStart, it.periodEnd) }
+        return chartRepository.findLeadTimeComparisonByPeriod(filter)
+            .groupBy { boardPreferences.issuePeriodNameFormat.format(it.periodStart, it.periodEnd) }
             .mapValues { entry -> entry.value.associate { it.leadTimeName to it.leadTime } }
             .toMultiAxisChart()
     }

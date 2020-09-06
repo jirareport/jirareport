@@ -1,5 +1,6 @@
 package br.com.jiratorio.repository.jdbctemplate
 
+import br.com.jiratorio.domain.FindAllIssuePeriodsFilter
 import br.com.jiratorio.domain.LeadTimeComparisonByPeriod
 import br.com.jiratorio.domain.PerformanceComparisonByIssueType
 import br.com.jiratorio.domain.ThroughputByPeriodAndEstimate
@@ -20,29 +21,33 @@ class ChartRepositoryImpl(
 
     private val jdbcTemplate: NamedParameterJdbcTemplate = NamedParameterJdbcTemplate(jdbcTemplate)
 
-    override fun findLeadTimeComparisonByPeriod(issuePeriods: List<Long>): List<LeadTimeComparisonByPeriod> {
+    override fun findLeadTimeComparisonByPeriod(filter: FindAllIssuePeriodsFilter): List<LeadTimeComparisonByPeriod> {
         val query =
             """
-            SELECT ip.start_date                  AS period_start,
-                   ip.end_date                    AS period_end,
-                   ltc.name                       AS lead_time_name,
-                   COALESCE(AVG(lt.lead_time), 0) AS lead_time
-            FROM issue_period ip
-                     LEFT JOIN issue i ON ip.id = i.issue_period_id
-                     LEFT JOIN lead_time lt ON i.id = lt.issue_id
-                     LEFT JOIN lead_time_config ltc ON ltc.board_id = ip.board_id
-            WHERE ip.id IN (:issuePeriods)
-            GROUP BY ip.id, ip.start_date, ip.end_date, ltc.name
-            ORDER BY ip.start_date, ip.end_date, ltc.name
+                SELECT ip.start_date                  AS period_start,
+                       ip.end_date                    AS period_end,
+                       ltc.name                       AS lead_time_name,
+                       COALESCE(AVG(lt.lead_time), 0) AS lead_time
+                FROM issue_period ip
+                         LEFT JOIN issue i ON ip.id = i.issue_period_id
+                         LEFT JOIN lead_time lt ON i.id = lt.issue_id
+                         LEFT JOIN lead_time_config ltc ON ltc.board_id = ip.board_id
+                WHERE ip.start_date >= :startDate
+                    AND ip.end_date <= :endDate
+                    AND ip.board_id = :boardId
+                GROUP BY ip.start_date, ip.end_date, ltc.name
+                ORDER BY ip.start_date, ip.end_date, ltc.name
             """
 
         val params = MapSqlParameterSource()
-        params["issuePeriods"] = issuePeriods
+        params["boardId"] = filter.boardId
+        params["startDate"] = filter.startDate
+        params["endDate"] = filter.endDate
 
         return jdbcTemplate.query(query, params, LeadTimeComparisonByPeriodRowMapper)
     }
 
-    override fun findThroughputByPeriodAndEstimate(boardId: Long, issuePeriods: List<Long>): List<ThroughputByPeriodAndEstimate> {
+    override fun findThroughputByPeriodAndEstimate(filter: FindAllIssuePeriodsFilter): List<ThroughputByPeriodAndEstimate> {
         val query =
             """
             WITH issue_estimate AS (
@@ -58,18 +63,21 @@ class ChartRepositoryImpl(
             FROM issue_period ip
                      INNER JOIN issue_estimate ie ON ie.board_id = ip.board_id
                      LEFT JOIN issue i ON ip.id = i.issue_period_id AND i.estimate IS NOT DISTINCT FROM ie.estimate
-            WHERE ip.id IN (:issuePeriods)
+            WHERE ip.start_date >= :startDate
+                AND ip.end_date <= :endDate
+                AND ip.board_id = :boardId
             GROUP BY ip.start_date, ip.end_date, ie.estimate
             """
 
         val params = MapSqlParameterSource()
-        params["boardId"] = boardId
-        params["issuePeriods"] = issuePeriods
+        params["boardId"] = filter.boardId
+        params["startDate"] = filter.startDate
+        params["endDate"] = filter.endDate
 
         return jdbcTemplate.query(query, params, ThroughputByPeriodAndEstimateRowMapper)
     }
 
-    override fun findPerformanceComparisonByIssueType(boardId: Long, issuePeriods: List<Long>): List<PerformanceComparisonByIssueType> {
+    override fun findPerformanceComparisonByIssueType(filter: FindAllIssuePeriodsFilter): List<PerformanceComparisonByIssueType> {
         val query =
             """
             WITH issue_type AS (
@@ -86,14 +94,17 @@ class ChartRepositoryImpl(
             FROM issue_period ip
                      INNER JOIN issue_type it ON it.board_id = ip.board_id
                      LEFT JOIN issue i ON ip.id = i.issue_period_id AND i.issue_type IS NOT DISTINCT FROM it.issue_type
-            WHERE ip.id IN (:issuePeriods)
+            WHERE ip.start_date >= :startDate
+                AND ip.end_date <= :endDate
+                AND ip.board_id = :boardId
             GROUP BY ip.start_date, ip.end_date, it.issue_type
             ORDER BY ip.start_date, ip.end_date, it.issue_type
             """
 
         val params = MapSqlParameterSource()
-        params["boardId"] = boardId
-        params["issuePeriods"] = issuePeriods
+        params["boardId"] = filter.boardId
+        params["startDate"] = filter.startDate
+        params["endDate"] = filter.endDate
 
         return jdbcTemplate.query(query, params, PerformanceComparisonByIssueTypeRowMapper)
     }

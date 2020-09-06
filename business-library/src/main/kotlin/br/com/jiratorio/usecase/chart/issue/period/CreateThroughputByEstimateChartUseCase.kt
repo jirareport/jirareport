@@ -1,7 +1,8 @@
 package br.com.jiratorio.usecase.chart.issue.period
 
+import br.com.jiratorio.domain.BoardPreferences
+import br.com.jiratorio.domain.FindAllIssuePeriodsFilter
 import br.com.jiratorio.domain.chart.MultiAxisChart
-import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.internationalization.MessageResolver
 import br.com.jiratorio.mapper.toMultiAxisChart
 import br.com.jiratorio.repository.ChartRepository
@@ -16,16 +17,16 @@ class CreateThroughputByEstimateChartUseCase(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(board: BoardEntity, issuePeriods: List<Long>): MultiAxisChart<Int> {
-        log.info("Action=createThroughputByEstimateChart, issuePeriods={}", issuePeriods)
+    fun execute(filter: FindAllIssuePeriodsFilter, boardPreferences: BoardPreferences): MultiAxisChart<Int> {
+        log.info("Action=CreateThroughputByEstimateChartUseCase, filter={}, boardPreferences={}", filter, boardPreferences)
 
-        if (board.estimateCF.isNullOrBlank()) {
+        if (!boardPreferences.hasEstimateFeatureEnabled) {
             return MultiAxisChart()
         }
 
         val uninformedValue = messageResolver.resolve("uninformed")
-        return chartRepository.findThroughputByPeriodAndEstimate(board.id, issuePeriods)
-            .groupBy { board.issuePeriodNameFormat.format(it.periodStart, it.periodEnd) }
+        return chartRepository.findThroughputByPeriodAndEstimate(filter)
+            .groupBy { boardPreferences.issuePeriodNameFormat.format(it.periodStart, it.periodEnd) }
             .mapValues { entry -> entry.value.associate { Pair(it.estimate ?: uninformedValue, it.throughput) } }
             .toMultiAxisChart()
     }

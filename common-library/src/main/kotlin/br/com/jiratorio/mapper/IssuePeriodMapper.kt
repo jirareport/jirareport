@@ -1,13 +1,14 @@
 package br.com.jiratorio.mapper
 
 import br.com.jiratorio.domain.entity.IssuePeriodEntity
+import br.com.jiratorio.domain.issue.MinimalIssuePeriod
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodDetailResponse
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodResponse
 
-fun List<IssuePeriodEntity>.toIssuePeriodResponse(jiraUrl: String): List<IssuePeriodResponse> =
+fun List<MinimalIssuePeriod>.toIssuePeriodResponse(jiraUrl: String): List<IssuePeriodResponse> =
     map { it.toIssuePeriodResponse(jiraUrl) }
 
-fun IssuePeriodEntity.toIssuePeriodResponse(jiraUrl: String): IssuePeriodResponse =
+fun MinimalIssuePeriod.toIssuePeriodResponse(jiraUrl: String): IssuePeriodResponse =
     IssuePeriodResponse(
         id = id,
         name = name,

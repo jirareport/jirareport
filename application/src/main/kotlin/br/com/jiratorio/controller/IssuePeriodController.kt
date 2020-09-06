@@ -1,5 +1,6 @@
 package br.com.jiratorio.controller
 
+import br.com.jiratorio.domain.FindAllIssuePeriodsFilter
 import br.com.jiratorio.domain.request.CreateIssuePeriodRequest
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodListResponse
@@ -33,28 +34,28 @@ class IssuePeriodController(
     private val deleteIssuePeriod: DeleteIssuePeriodUseCase,
     private val findAllIssuePeriods: FindAllIssuePeriodsUseCase,
     private val findIssuePeriod: FindIssuePeriodUseCase,
-    private val updateIssuePeriod: UpdateIssuePeriodUseCase
+    private val updateIssuePeriod: UpdateIssuePeriodUseCase,
 ) {
 
     @GetMapping
     fun index(
         @PathVariable boardId: Long,
         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") startDate: LocalDate,
-        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") endDate: LocalDate
+        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") endDate: LocalDate,
     ): IssuePeriodListResponse =
-        findAllIssuePeriods.execute(boardId, startDate, endDate)
+        findAllIssuePeriods.execute(FindAllIssuePeriodsFilter(boardId, startDate, endDate))
 
     @GetMapping("/{issuePeriodId}")
     fun findById(
         @PathVariable boardId: Long,
-        @PathVariable issuePeriodId: Long
+        @PathVariable issuePeriodId: Long,
     ): IssuePeriodByIdResponse =
         findIssuePeriod.execute(issuePeriodId, boardId)
 
     @PostMapping
     fun create(
         @PathVariable boardId: Long,
-        @Valid @RequestBody createIssuePeriodRequest: CreateIssuePeriodRequest
+        @Valid @RequestBody createIssuePeriodRequest: CreateIssuePeriodRequest,
     ): HttpEntity<*> {
         val id = createIssuePeriod.execute(createIssuePeriodRequest, boardId)
 
@@ -70,7 +71,7 @@ class IssuePeriodController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(
         @PathVariable boardId: Long,
-        @PathVariable issuePeriodId: Long
+        @PathVariable issuePeriodId: Long,
     ): Unit =
         updateIssuePeriod.execute(issuePeriodId, boardId)
 
@@ -78,7 +79,7 @@ class IssuePeriodController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun remove(
         @PathVariable boardId: Long,
-        @PathVariable issuePeriodId: Long
+        @PathVariable issuePeriodId: Long,
     ): Unit =
         deleteIssuePeriod.execute(issuePeriodId, boardId)
 

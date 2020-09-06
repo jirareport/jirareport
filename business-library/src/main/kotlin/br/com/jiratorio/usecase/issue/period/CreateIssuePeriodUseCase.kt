@@ -98,7 +98,7 @@ class CreateIssuePeriodUseCase(
                     deviationOfEstimate = it.deviationOfEstimate,
                     changeEstimateCount = it.dueDateHistory?.size ?: 0,
                     impedimentTime = it.impedimentTime,
-                    dynamicFields = it.dynamicFields ?: emptyMap()
+                    dynamicFields = it.dynamicFields
                 )
             },
             board

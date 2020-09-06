@@ -22,7 +22,7 @@ class SearchBoardSpecification(
 
         if (searchBoardRequest.name != null) {
             predicates.add(
-                builder.like(builder.lower(from.get<String>("name")), "%${searchBoardRequest.name}%".toLowerCase())
+                builder.like(builder.lower(from.get("name")), "%${searchBoardRequest.name}%".toLowerCase())
             )
         }
 

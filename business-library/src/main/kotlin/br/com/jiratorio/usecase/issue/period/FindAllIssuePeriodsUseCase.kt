@@ -1,9 +1,10 @@
 package br.com.jiratorio.usecase.issue.period
 
+import br.com.jiratorio.domain.BoardPreferences
+import br.com.jiratorio.domain.FindAllIssuePeriodsFilter
 import br.com.jiratorio.domain.chart.IssuePeriodChartResponse
-import br.com.jiratorio.domain.entity.BoardEntity
-import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import br.com.jiratorio.domain.entity.embedded.Chart
+import br.com.jiratorio.domain.issue.MinimalIssuePeriod
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodListResponse
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.decimal.format
@@ -17,7 +18,6 @@ import br.com.jiratorio.usecase.chart.issue.period.CreateLeadTimeCompareChartByP
 import br.com.jiratorio.usecase.chart.issue.period.CreateThroughputByEstimateChartUseCase
 import org.slf4j.LoggerFactory
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDate
 
 @UseCase
 class FindAllIssuePeriodsUseCase(
@@ -32,21 +32,21 @@ class FindAllIssuePeriodsUseCase(
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional(readOnly = true)
-    fun execute(boardId: Long, startDate: LocalDate, endDate: LocalDate): IssuePeriodListResponse {
-        log.info("Action=findAllIssuePeriods, boardId={}, startDate={}, endDate={}", boardId, startDate, endDate)
+    fun execute(filter: FindAllIssuePeriodsFilter): IssuePeriodListResponse {
+        log.info("Action=findAllIssuePeriods, findAllIssuePeriodsFilter={}", filter)
 
-        val board = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
+        val boardPreferences = boardRepository.findIssuePeriodPreferencesByBoard(filter.boardId) ?: throw ResourceNotFound()
 
-        val issuePeriods = issuePeriodRepository.findAll(boardId, startDate, endDate)
+        val issuePeriods = issuePeriodRepository.findAll(filter, boardPreferences)
 
         return IssuePeriodListResponse(
             periods = issuePeriods.toIssuePeriodResponse(jiraProperties.url),
-            charts = buildCharts(issuePeriods, board)
+            charts = buildCharts(issuePeriods, filter, boardPreferences)
         )
     }
 
-    private fun buildCharts(issuePeriods: List<IssuePeriodEntity>, board: BoardEntity): IssuePeriodChartResponse {
-        log.info("Method=buildCharts, issuePeriods={}, board={}", issuePeriods, board)
+    private fun buildCharts(issuePeriods: List<MinimalIssuePeriod>, filter: FindAllIssuePeriodsFilter, boardPreferences: BoardPreferences): IssuePeriodChartResponse {
+        log.info("Method=buildCharts, issuePeriods={}, filter={},  boardPreferences={}", issuePeriods, filter, boardPreferences)
 
         val leadTime: Chart<String, String> = Chart()
         val throughput: Chart<String, Int> = Chart()
@@ -56,13 +56,12 @@ class FindAllIssuePeriodsUseCase(
             throughput[issuePeriod.name] = issuePeriod.throughput
         }
 
-        val issuePeriodIds = issuePeriods.map(IssuePeriodEntity::id)
         return IssuePeriodChartResponse(
             leadTime = leadTime,
             throughput = throughput,
-            leadTimeCompareChart = createLeadTimeCompareChartByPeriod.execute(board, issuePeriodIds),
-            throughputByEstimate = createThroughputByEstimateChart.execute(board, issuePeriodIds),
-            issueTypePerformanceCompareChart = createIssueTypePerformanceCompareChart.execute(board, issuePeriodIds)
+            leadTimeCompareChart = createLeadTimeCompareChartByPeriod.execute(filter, boardPreferences),
+            throughputByEstimate = createThroughputByEstimateChart.execute(filter, boardPreferences),
+            issueTypePerformanceCompareChart = createIssueTypePerformanceCompareChart.execute(filter, boardPreferences)
         )
     }
 

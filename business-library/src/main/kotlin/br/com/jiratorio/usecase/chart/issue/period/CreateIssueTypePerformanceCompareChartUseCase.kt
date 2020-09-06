@@ -1,7 +1,8 @@
 package br.com.jiratorio.usecase.chart.issue.period
 
+import br.com.jiratorio.domain.BoardPreferences
+import br.com.jiratorio.domain.FindAllIssuePeriodsFilter
 import br.com.jiratorio.domain.chart.MultiAxisChart
-import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.internationalization.MessageResolver
 import br.com.jiratorio.mapper.toMultiAxisChart
 import br.com.jiratorio.repository.ChartRepository
@@ -16,17 +17,17 @@ class CreateIssueTypePerformanceCompareChartUseCase(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(board: BoardEntity, issuePeriods: List<Long>): Map<String, MultiAxisChart<Number>> {
-        log.info("Action=createIssueTypePerformanceCompareChart, issuePeriods={}", issuePeriods)
+    fun execute(filter: FindAllIssuePeriodsFilter, boardPreferences: BoardPreferences): Map<String, MultiAxisChart<Number>> {
+        log.info("Action=CreateIssueTypePerformanceCompareChartUseCase, filter={}, boardPreferences={}", filter, boardPreferences)
 
         val uninformedValue = messageResolver.resolve("uninformed")
-        return chartRepository.findPerformanceComparisonByIssueType(board.id, issuePeriods)
+        return chartRepository.findPerformanceComparisonByIssueType(filter)
             .groupBy { it.issueType ?: uninformedValue }
             .mapValues {
                 it.value
                     .associate { performance ->
                         Pair(
-                            board.issuePeriodNameFormat.format(performance.periodStart, performance.periodEnd),
+                            boardPreferences.issuePeriodNameFormat.format(performance.periodStart, performance.periodEnd),
                             mapOf(
                                 "Throughput" to performance.throughput,
                                 "Lead Time" to performance.leadTime

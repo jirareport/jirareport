@@ -11,17 +11,14 @@ import org.springframework.stereotype.Repository
 import java.util.Optional
 
 @Repository
-interface BoardRepository : CrudRepository<BoardEntity, Long> {
+interface BoardRepository : CrudRepository<BoardEntity, Long>, NativeBoardRepository {
 
-    @EntityGraph(attributePaths = ["leadTimeConfigs"], type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(attributePaths = ["leadTimeConfigs", "dynamicFields"], type = EntityGraph.EntityGraphType.LOAD)
     override fun findById(id: Long): Optional<BoardEntity>
 
     fun findByIdAndOwner(id: Long, owner: String): BoardEntity?
 
     fun findAll(specification: Specification<BoardEntity>, pageable: Pageable): Page<BoardEntity>
-
-    @Query("SELECT DISTINCT b.owner FROM BoardEntity b")
-    fun findAllOwners(): Set<String>
 
     fun findByIdOrNull(id: Long): BoardEntity? =
         findById(id).orElse(null)
