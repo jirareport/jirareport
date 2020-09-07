@@ -1,23 +1,20 @@
-package br.com.jiratorio.usecase.duedate
+package br.com.jiratorio.service
 
-import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.FieldChangelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
 import br.com.jiratorio.extension.toLocalDate
 import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
-@UseCase
-class CreateDueDateHistoryUseCase {
+@Service
+class DueDateService {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(
-        dueDateCF: String,
-        fieldChangelog: Set<FieldChangelog>
-    ): List<DueDateHistory> {
-        log.info("Action=createDueDateHistory, dueDateCF={}, fieldChangelog={}", dueDateCF, fieldChangelog)
+    fun parseHistory(dueDateCF: String, fieldChangelog: Set<FieldChangelog>): List<DueDateHistory> {
+        log.info("dueDateCF={}, fieldChangelog={}", dueDateCF, fieldChangelog)
 
         return fieldChangelog
             .filter { dueDateCF == it.field }
@@ -25,12 +22,10 @@ class CreateDueDateHistoryUseCase {
             .sortedBy { it.created }
     }
 
-    private fun parseDueDate(to: String?, created: LocalDateTime): DueDateHistory? =
-        to?.let { dueDate ->
-            if (dueDate.isEmpty()) {
-                return null
-            }
-
+    private fun parseDueDate(dueDate: String?, created: LocalDateTime): DueDateHistory? =
+        if (dueDate.isNullOrEmpty())
+            null
+        else
             DueDateHistory(
                 created = created,
                 dueDate = if (dueDate.length > 19)
@@ -38,6 +33,5 @@ class CreateDueDateHistoryUseCase {
                 else
                     dueDate.toLocalDate("[yyyy-MM-dd][dd/MM/yyyy]")
             )
-        }
 
 }

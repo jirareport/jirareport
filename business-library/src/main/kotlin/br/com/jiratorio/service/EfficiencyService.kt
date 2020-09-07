@@ -1,27 +1,27 @@
-package br.com.jiratorio.usecase.efficiency
+package br.com.jiratorio.service
 
-import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.Efficiency
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.extension.containsUpperCase
 import br.com.jiratorio.extension.time.minutesDiff
+import br.com.jiratorio.stereotype.UseCase
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
 @UseCase
-class CalculateEfficiencyUseCase {
+class EfficiencyService {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun execute(
+    fun calculate(
         columnChangelog: Set<ColumnChangelogEntity>,
         touchingColumns: MutableList<String>?,
         waitingColumns: MutableList<String>?,
         holidays: List<LocalDate>,
-        ignoreWeekend: Boolean?
+        ignoreWeekend: Boolean?,
     ): Efficiency {
         log.info(
-            "Action=calculateEfficiency, touchingColumns={}, waitingColumns={}, columnChangelog={}, holidays={}, ignoreWeekend={}",
+            "touchingColumns={}, waitingColumns={}, columnChangelog={}, holidays={}, ignoreWeekend={}",
             touchingColumns, waitingColumns, columnChangelog, holidays, ignoreWeekend
         )
 
@@ -50,7 +50,7 @@ class CalculateEfficiencyUseCase {
         columnChangelog: Set<ColumnChangelogEntity>,
         columns: List<String>,
         holidays: List<LocalDate>,
-        ignoreWeekend: Boolean?
+        ignoreWeekend: Boolean?,
     ): Long =
         columnChangelog
             .filter { columns.containsUpperCase(it.to) }

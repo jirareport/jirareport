@@ -1,11 +1,12 @@
 package br.com.jiratorio.usecase.duedate
 
 import br.com.jiratorio.assertion.assertThat
-import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.FieldChangelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.domain.FieldChangelogFactory
+import br.com.jiratorio.junit.testtype.UnitTest
+import br.com.jiratorio.service.DueDateService
 import com.github.javafaker.Faker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -13,16 +14,16 @@ import java.time.LocalDateTime
 import java.util.Comparator
 
 @UnitTest
-internal class CreateDueDateHistoryTest {
+internal class DueDateServiceTest {
 
     private val fieldChangelogFactory = FieldChangelogFactory(Faker())
 
-    private val extractDueDateHistory = CreateDueDateHistoryUseCase()
+    private val dueDateService = DueDateService()
 
     @Test
     fun `extract due date history with one item`() {
         val fieldChangelog = fieldChangelogFactory.create()
-        val dueDateHistories = extractDueDateHistory.execute("duedate", setOf(fieldChangelog))
+        val dueDateHistories = dueDateService.parseHistory("duedate", setOf(fieldChangelog))
 
         assertThat(dueDateHistories).hasSize(1)
         dueDateHistories.first().assertThat {
@@ -42,7 +43,7 @@ internal class CreateDueDateHistoryTest {
 
         val fieldChangelog = fieldChangelogFactory.create(5).toSet()
 
-        val dueDateHistories = extractDueDateHistory.execute("duedate", fieldChangelog)
+        val dueDateHistories = dueDateService.parseHistory("duedate", fieldChangelog)
 
         assertThat(dueDateHistories)
             .hasSize(5)

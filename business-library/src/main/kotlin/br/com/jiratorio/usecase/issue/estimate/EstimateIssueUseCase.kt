@@ -16,7 +16,6 @@ import br.com.jiratorio.extension.time.plusDays
 import br.com.jiratorio.jira.PagedIssueSearcher
 import br.com.jiratorio.mapper.toEstimateIssueResponse
 import br.com.jiratorio.repository.BoardRepository
-import br.com.jiratorio.usecase.holiday.FindHolidayDaysUseCase
 import br.com.jiratorio.usecase.issue.FindIssueLeadTimesUseCase
 import br.com.jiratorio.usecase.jql.CreateOpenedIssueJqlUseCase
 import br.com.jiratorio.usecase.parse.ParseEstimateIssueUseCase

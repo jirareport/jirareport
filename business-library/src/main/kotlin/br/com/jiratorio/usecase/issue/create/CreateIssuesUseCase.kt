@@ -7,9 +7,8 @@ import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.domain.impediment.calculator.ImpedimentCalculatorResult
 import br.com.jiratorio.domain.parsed.ParsedIssue
 import br.com.jiratorio.extension.time.daysDiff
-import br.com.jiratorio.usecase.duedate.CreateDueDateHistoryUseCase
-import br.com.jiratorio.usecase.efficiency.CalculateEfficiencyUseCase
-import br.com.jiratorio.usecase.holiday.FindHolidayDaysUseCase
+import br.com.jiratorio.service.DueDateService
+import br.com.jiratorio.service.EfficiencyService
 import br.com.jiratorio.usecase.leadtime.CreateLeadTimeUseCase
 import org.slf4j.LoggerFactory
 import org.springframework.transaction.annotation.Transactional
@@ -20,9 +19,9 @@ class CreateIssuesUseCase(
     private val findAllOpenIssues: FindAllOpenIssuesUseCase,
     private val createLeadTime: CreateLeadTimeUseCase,
     private val findHolidayDays: FindHolidayDaysUseCase,
-    private val createDueDateHistory: CreateDueDateHistoryUseCase,
-    private val calculateEfficiency: CalculateEfficiencyUseCase,
-    private val persistIssue: PersistIssueUseCase
+    private val dueDateService: DueDateService,
+    private val efficiencyService: EfficiencyService,
+    private val persistIssue: PersistIssueUseCase,
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -55,12 +54,12 @@ class CreateIssuesUseCase(
 
         val (
             deviationOfEstimate: Long,
-            dueDateHistory: List<DueDateHistory>
+            dueDateHistory: List<DueDateHistory>,
         ) = createDueDateHistory(board, parsedIssue, holidays)
 
         val impedimentCalculatorResult: ImpedimentCalculatorResult = calculateImpediment(parsedIssue, board, holidays)
 
-        val efficiency = calculateEfficiency.execute(
+        val efficiency = efficiencyService.calculate(
             columnChangelog = parsedChangelog.columnChangelog,
             touchingColumns = board.touchingColumns,
             waitingColumns = board.waitingColumns,
@@ -101,7 +100,7 @@ class CreateIssuesUseCase(
         val dueDateCF = board.dueDateCF
 
         return if (dueDateCF != null && dueDateCF.isNotEmpty() && dueDateType != null) {
-            val dueDateHistory = createDueDateHistory.execute(dueDateCF, parsedIssue.parsedChangelog.fieldChangelog)
+            val dueDateHistory = dueDateService.parseHistory(dueDateCF, parsedIssue.parsedChangelog.fieldChangelog)
             val deviationOfEstimate = dueDateType.calcDeviationOfEstimate(dueDateHistory, parsedIssue.endDate, board.ignoreWeekend, holidays)
 
             Pair(deviationOfEstimate, dueDateHistory)
@@ -110,12 +109,8 @@ class CreateIssuesUseCase(
     }
 
     private fun calculateImpediment(parsedIssue: ParsedIssue, board: BoardEntity, holidays: List<LocalDate>): ImpedimentCalculatorResult =
-        board.impedimentType?.calcImpediment(
-            board.impedimentColumns,
-            parsedIssue.parsedChangelog,
-            parsedIssue.endDate,
-            holidays,
-            board.ignoreWeekend
-        ) ?: ImpedimentCalculatorResult()
+        board.impedimentType
+            ?.calcImpediment(board.impedimentColumns, parsedIssue.parsedChangelog, parsedIssue.endDate, holidays, board.ignoreWeekend)
+            ?: ImpedimentCalculatorResult()
 
 }

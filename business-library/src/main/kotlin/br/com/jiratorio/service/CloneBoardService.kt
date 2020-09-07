@@ -1,6 +1,5 @@
-package br.com.jiratorio.usecase.board
+package br.com.jiratorio.service
 
-import br.com.jiratorio.stereotype.UseCase
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity
 import br.com.jiratorio.domain.entity.HolidayEntity
@@ -11,21 +10,22 @@ import br.com.jiratorio.repository.DynamicFieldConfigRepository
 import br.com.jiratorio.repository.HolidayRepository
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-@UseCase
-class CloneBoardUseCase(
+@Service
+class CloneBoardService(
     private val boardRepository: BoardRepository,
     private val leadTimeConfigRepository: LeadTimeConfigRepository,
     private val holidayRepository: HolidayRepository,
-    private val dynamicFieldConfigRepository: DynamicFieldConfigRepository
+    private val dynamicFieldConfigRepository: DynamicFieldConfigRepository,
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional
-    fun execute(boardId: Long): Long {
-        log.info("Action=cloneBoard, boardId={}", boardId)
+    fun clone(boardId: Long): Long {
+        log.info("boardId={}", boardId)
 
         val boardToClone = boardRepository.findByIdOrNull(boardId)
             ?: throw ResourceNotFound()

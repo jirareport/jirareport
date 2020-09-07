@@ -1,7 +1,7 @@
 package br.com.jiratorio.controller
 
 import br.com.jiratorio.jira.JiraField
-import br.com.jiratorio.usecase.field.FindAllJiraFieldsUseCase
+import br.com.jiratorio.service.JiraFieldService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/fields")
 class FieldController(
-    private val findAllJiraFields: FindAllJiraFieldsUseCase
+    private val jiraFieldService: JiraFieldService
 ) {
 
     @GetMapping
     fun fields(): List<JiraField> =
-        findAllJiraFields.execute()
+        jiraFieldService.findAll()
 
 }

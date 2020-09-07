@@ -4,12 +4,13 @@ import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.extension.toLocalDateTime
+import br.com.jiratorio.service.EfficiencyService
 import org.junit.jupiter.api.Test
 
 @UnitTest
 internal class CalculateEfficiencyTest {
 
-    private val calculateEfficiency = CalculateEfficiencyUseCase()
+    private val efficiencyService = EfficiencyService()
 
     @Test
     fun `test calc efficiency`() {
@@ -17,7 +18,7 @@ internal class CalculateEfficiencyTest {
         val touchingColumns = mutableListOf("COLUMN_WIP_1", "COLUMN_WIP_2", "COLUMN_WIP_3")
         val waitingColumns = mutableListOf("COLUMN_WAIT_1", "COLUMN_WAIT_2", "COLUMN_WAIT_3")
 
-        val result = calculateEfficiency.execute(
+        val result = efficiencyService.calculate(
             columnChangelog,
             touchingColumns,
             waitingColumns,
@@ -37,7 +38,7 @@ internal class CalculateEfficiencyTest {
         val touchingColumns = mutableListOf("COLUMN_WIP_1", "COLUMN_WIP_2", "COLUMN_WIP_3")
         val waitingColumns = mutableListOf("COLUMN_WAIT_1", "COLUMN_WAIT_2", "COLUMN_WAIT_3")
 
-        val result = calculateEfficiency.execute(
+        val result = efficiencyService.calculate(
             emptySet(),
             touchingColumns,
             waitingColumns,
@@ -58,7 +59,7 @@ internal class CalculateEfficiencyTest {
         val touchingColumns = mutableListOf<String>()
         val waitingColumns = mutableListOf("COLUMN_WAIT_1", "COLUMN_WAIT_2", "COLUMN_WAIT_3")
 
-        val result = calculateEfficiency.execute(
+        val result = efficiencyService.calculate(
             columnChangelog,
             touchingColumns,
             waitingColumns,
@@ -79,7 +80,7 @@ internal class CalculateEfficiencyTest {
         val touchingColumns = mutableListOf("COLUMN_WIP_1", "COLUMN_WIP_2", "COLUMN_WIP_3")
         val waitingColumns = mutableListOf<String>()
 
-        val result = calculateEfficiency.execute(
+        val result = efficiencyService.calculate(
             columnChangelog,
             touchingColumns,
             waitingColumns,

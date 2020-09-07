@@ -3,12 +3,6 @@ package br.com.jiratorio.controller
 import br.com.jiratorio.domain.Account
 import br.com.jiratorio.domain.request.HolidayRequest
 import br.com.jiratorio.domain.response.holiday.HolidayResponse
-import br.com.jiratorio.usecase.holiday.CreateHolidayUseCase
-import br.com.jiratorio.usecase.holiday.DeleteHolidayUseCase
-import br.com.jiratorio.usecase.holiday.FindAllHolidaysUseCase
-import br.com.jiratorio.usecase.holiday.FindHolidayUseCase
-import br.com.jiratorio.usecase.holiday.ImportHolidaysUseCase
-import br.com.jiratorio.usecase.holiday.UpdateHolidayUseCase
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault

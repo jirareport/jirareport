@@ -2,9 +2,7 @@ package br.com.jiratorio.controller
 
 import br.com.jiratorio.domain.request.DynamicFieldConfigRequest
 import br.com.jiratorio.domain.response.DynamicFieldConfigResponse
-import br.com.jiratorio.usecase.dynamicfield.config.CreateDynamicFieldConfigUseCase
-import br.com.jiratorio.usecase.dynamicfield.config.DeleteDynamicFieldConfigUseCase
-import br.com.jiratorio.usecase.dynamicfield.config.FindAllDynamicFieldConfigsUseCase
+import br.com.jiratorio.service.DynamicFieldConfigService
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -22,21 +20,19 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/boards/{boardId}/dynamic-field-configs")
 class DynamicFieldConfigController(
-    private val createDynamicFieldConfig: CreateDynamicFieldConfigUseCase,
-    private val deleteDynamicFieldConfig: DeleteDynamicFieldConfigUseCase,
-    private val findAllDynamicFieldConfigs: FindAllDynamicFieldConfigsUseCase
+    private val dynamicFieldConfigService: DynamicFieldConfigService,
 ) {
 
     @GetMapping
     fun findAllByBoard(@PathVariable boardId: Long): List<DynamicFieldConfigResponse> =
-        findAllDynamicFieldConfigs.execute(boardId)
+        dynamicFieldConfigService.findAll(boardId)
 
     @PostMapping
     fun create(
         @PathVariable boardId: Long,
-        @Valid @RequestBody dynamicFieldConfigRequest: DynamicFieldConfigRequest
+        @Valid @RequestBody dynamicFieldConfigRequest: DynamicFieldConfigRequest,
     ): HttpEntity<*> {
-        val id = createDynamicFieldConfig.execute(boardId, dynamicFieldConfigRequest)
+        val id = dynamicFieldConfigService.create(boardId, dynamicFieldConfigRequest)
 
         val location = ServletUriComponentsBuilder
             .fromCurrentRequest()
@@ -50,8 +46,8 @@ class DynamicFieldConfigController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun findByBoardAndId(
         @PathVariable boardId: Long,
-        @PathVariable id: Long
+        @PathVariable id: Long,
     ): Unit =
-        deleteDynamicFieldConfig.execute(id, boardId)
+        dynamicFieldConfigService.delete(id, boardId)
 
 }
