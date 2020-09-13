@@ -1,22 +1,22 @@
 package br.com.jiratorio.mapper
 
+import br.com.jiratorio.domain.Holiday
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.HolidayEntity
 import br.com.jiratorio.domain.request.HolidayRequest
-import br.com.jiratorio.domain.response.holiday.HolidayApiResponse
 import br.com.jiratorio.domain.response.holiday.HolidayResponse
 import br.com.jiratorio.extension.time.displayFormat
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 
-fun HolidayApiResponse.toHoliday(board: BoardEntity): HolidayEntity =
+fun Holiday.toHoliday(board: BoardEntity): HolidayEntity =
     HolidayEntity(
-        description = name,
+        description = description,
         board = board,
         date = date
     )
 
-fun List<HolidayApiResponse>.toHoliday(board: BoardEntity): List<HolidayEntity> =
+fun List<Holiday>.toHoliday(board: BoardEntity): List<HolidayEntity> =
     this.map { it.toHoliday(board) }
 
 fun HolidayEntity.toHolidayResponse(): HolidayResponse =

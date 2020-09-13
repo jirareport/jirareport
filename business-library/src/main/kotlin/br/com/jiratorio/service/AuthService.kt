@@ -57,7 +57,6 @@ class AuthService(
             )
     }
 
-
     private fun createCipher(mode: Mode): Cipher =
         Cipher.getInstance(algorithm)
             .apply {

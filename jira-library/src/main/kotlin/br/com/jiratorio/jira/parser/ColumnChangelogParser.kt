@@ -4,15 +4,12 @@ import br.com.jiratorio.domain.changelog.ColumnChangelog
 import br.com.jiratorio.extension.time.daysDiff
 import br.com.jiratorio.jira.domain.JiraChangelog
 import br.com.jiratorio.jira.domain.JiraColumnChangelog
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Component
 class ColumnChangelogParser {
-
-    private val log = LoggerFactory.getLogger(javaClass)
 
     fun parse(jiraChangelog: List<JiraChangelog>, issueCreationDate: LocalDateTime, holidays: List<LocalDate>, ignoreWeekend: Boolean?, endsToday: Boolean): Set<ColumnChangelog> {
         val changelog = jiraChangelog

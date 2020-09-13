@@ -1,7 +1,6 @@
 dependencies {
     implementation(project(":business-library"))
     implementation(project(":database-library"))
-    implementation(project(":client-library"))
 
     implementation("org.springframework.data:spring-data-commons")
     implementation("org.springframework:spring-tx")

@@ -10,7 +10,7 @@ interface ChartRepository {
     fun findLeadTimeComparisonByPeriod(filter: FindAllIssuePeriodsFilter): List<LeadTimeComparisonByPeriod>
 
     fun findThroughputByPeriodAndEstimate(filter: FindAllIssuePeriodsFilter): List<ThroughputByPeriodAndEstimate>
-    
+
     fun findPerformanceComparisonByIssueType(filter: FindAllIssuePeriodsFilter): List<PerformanceComparisonByIssueType>
 
 }

@@ -1,6 +1,5 @@
 package br.com.jiratorio.jira.parser
 
-import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.extension.toLocalDateTime
 import br.com.jiratorio.jira.domain.JiraChangelog
 import br.com.jiratorio.jira.domain.JiraColumnChangelog
@@ -95,4 +94,3 @@ internal class ColumnChangelogParserTest {
     }
 
 }
-

@@ -5,7 +5,6 @@ import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.IssueEntity
 import br.com.jiratorio.domain.entity.LeadTimeConfigEntity
-import br.com.jiratorio.domain.entity.LeadTimeEntity
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime

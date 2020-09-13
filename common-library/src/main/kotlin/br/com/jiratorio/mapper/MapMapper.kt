@@ -9,5 +9,6 @@ fun <K, V> Map<K, V>.toChart(): Chart<K, V> =
 fun <T> Map<String, Map<String, T>>.toMultiAxisChart(): MultiAxisChart<T> {
     val result = MultiAxisChart<T>()
     forEach { result[it.key] = it.value }
-    return result;
+
+    return result
 }

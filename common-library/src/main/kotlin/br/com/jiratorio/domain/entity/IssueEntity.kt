@@ -100,7 +100,7 @@ data class IssueEntity(
     @Column(nullable = false)
     var pctEfficiency: Double = 0.0,
 
-    ) : BaseEntity(), Issue {
+) : BaseEntity(), Issue {
     companion object {
         private const val serialVersionUID = -1084659211505084402L
     }

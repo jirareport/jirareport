@@ -7,4 +7,4 @@ data class BoardPreferences(
     val issuePeriodNameFormat: IssuePeriodNameFormat,
     val hasEstimateFeatureEnabled: Boolean,
     val hasMultipleLeadTimeFeatureEnabled: Boolean,
-) 
+)

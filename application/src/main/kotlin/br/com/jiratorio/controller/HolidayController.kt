@@ -4,8 +4,6 @@ import br.com.jiratorio.domain.Account
 import br.com.jiratorio.domain.request.HolidayRequest
 import br.com.jiratorio.domain.response.holiday.HolidayResponse
 import br.com.jiratorio.service.HolidayService
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -28,22 +26,20 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/boards/{boardId}/holidays")
 class HolidayController(
-    private val holidayService: HolidayService
+    private val holidayService: HolidayService,
 ) {
-    
-    private val log: Logger = LoggerFactory.getLogger(javaClass)
 
     @GetMapping
     fun index(
         @PathVariable boardId: Long,
-        @PageableDefault(sort = ["date"]) pageable: Pageable
+        @PageableDefault(sort = ["date"]) pageable: Pageable,
     ): Page<HolidayResponse> =
         holidayService.findAll(boardId, pageable)
 
     @PostMapping
     fun create(
         @PathVariable boardId: Long,
-        @Valid @RequestBody holidayRequest: HolidayRequest
+        @Valid @RequestBody holidayRequest: HolidayRequest,
     ): HttpEntity<*> {
         val id = holidayService.create(boardId, holidayRequest)
 
@@ -59,11 +55,9 @@ class HolidayController(
     @PostMapping(params = ["import=true"])
     fun importHolidays(
         @PathVariable boardId: Long,
-        @AuthenticationPrincipal account: Account
-    ): Nothing {
-        log.info("boardId=$boardId, account=$account")
-        throw UnsupportedOperationException("temporary unavailable")
-    }
+        @AuthenticationPrincipal account: Account,
+    ) =
+        holidayService.import(boardId, account.username)
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{holidayId}")
@@ -79,7 +73,7 @@ class HolidayController(
     fun update(
         @PathVariable boardId: Long,
         @PathVariable holidayId: Long,
-        @Valid @RequestBody holidayRequest: HolidayRequest
+        @Valid @RequestBody holidayRequest: HolidayRequest,
     ) =
         holidayService.update(boardId, holidayId, holidayRequest)
 

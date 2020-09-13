@@ -6,7 +6,6 @@ import br.com.jiratorio.domain.chart.MultiAxisChart
 import br.com.jiratorio.internationalization.MessageResolver
 import br.com.jiratorio.mapper.toMultiAxisChart
 import br.com.jiratorio.repository.ChartRepository
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
@@ -14,8 +13,6 @@ class PeriodChartService(
     private val chartRepository: ChartRepository,
     private val messageResolver: MessageResolver,
 ) {
-
-    private val log = LoggerFactory.getLogger(javaClass)
 
     fun issueTypePerformanceCompare(filter: FindAllIssuePeriodsFilter, boardPreferences: BoardPreferences): Map<String, MultiAxisChart<Number>> {
         val uninformedValue = messageResolver.resolve("uninformed")

@@ -9,9 +9,9 @@ rootProject.name = "jirareport"
 include(
     "application",
     "business-library",
-    "client-library",
     "common-library",
     "database-library",
+    "holiday-library",
     "jira-library",
     "test-library"
 )

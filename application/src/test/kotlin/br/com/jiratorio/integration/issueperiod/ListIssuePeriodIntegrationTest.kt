@@ -19,7 +19,6 @@ import br.com.jiratorio.factory.domain.entity.LeadTimeFactory
 import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.restassured.specification.notFound
 import org.apache.http.HttpStatus.SC_OK
-import org.assertj.core.api.Assertions
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 

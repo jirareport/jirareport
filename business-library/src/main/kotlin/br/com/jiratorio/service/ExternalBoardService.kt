@@ -26,4 +26,4 @@ class ExternalBoardService(
         return boardDataProvider.findAllPossibleColumns(board.externalId)
     }
 
-} 
+}

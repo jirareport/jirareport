@@ -13,9 +13,6 @@ import br.com.jiratorio.mapper.toBoardDetailsResponse
 import br.com.jiratorio.mapper.toBoardResponse
 import br.com.jiratorio.mapper.updateFromUpdateBoardRequest
 import br.com.jiratorio.repository.BoardRepository
-import br.com.jiratorio.service.DynamicFieldConfigService
-import br.com.jiratorio.service.HolidayService
-import br.com.jiratorio.service.LeadTimeConfigService
 import br.com.jiratorio.specification.SearchBoardSpecification
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
@@ -96,7 +93,5 @@ class BoardService(
     @Transactional(readOnly = true)
     fun findIssuePeriodPreferencesByBoard(boardId: Long): BoardPreferences =
         boardRepository.findIssuePeriodPreferencesByBoard(boardId) ?: throw ResourceNotFound()
-
-   
 
 }

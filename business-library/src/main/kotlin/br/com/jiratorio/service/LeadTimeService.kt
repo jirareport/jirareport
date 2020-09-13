@@ -7,7 +7,6 @@ import br.com.jiratorio.domain.entity.IssueEntity
 import br.com.jiratorio.domain.entity.LeadTimeConfigEntity
 import br.com.jiratorio.domain.entity.LeadTimeEntity
 import br.com.jiratorio.extension.time.daysDiff
-import br.com.jiratorio.repository.LeadTimeConfigRepository
 import br.com.jiratorio.repository.LeadTimeRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service

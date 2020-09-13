@@ -8,4 +8,4 @@ data class PerformanceComparisonByIssueType(
     val periodEnd: LocalDate,
     val leadTime: Double,
     val throughput: Int,
-) 
+)

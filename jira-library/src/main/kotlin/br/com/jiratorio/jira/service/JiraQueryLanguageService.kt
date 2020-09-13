@@ -80,4 +80,5 @@ class JiraQueryLanguageService {
             .replace("\n", "")
             .replace("\\", "\\\\")
     }
-} 
+
+}

@@ -24,7 +24,6 @@ class UserConfigService(
             ?.toUserConfigResponse()
             ?: UserConfigResponse(username)
 
-
     @Transactional(readOnly = true)
     fun findHolidayConfig(username: String): HolidayUserConfig =
         userConfigRepository.findByUsername(username)

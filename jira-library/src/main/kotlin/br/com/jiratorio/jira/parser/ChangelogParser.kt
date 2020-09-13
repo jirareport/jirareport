@@ -4,7 +4,6 @@ import br.com.jiratorio.domain.changelog.Changelog
 import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.jira.domain.JiraChangelog
 import com.fasterxml.jackson.databind.JsonNode
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -16,15 +15,7 @@ class ChangelogParser(
     private val columnChangelogParser: ColumnChangelogParser,
 ) {
 
-    private val log = LoggerFactory.getLogger(javaClass)
-
-    fun parse(
-        issue: JsonNode,
-        issueCreationDate: LocalDateTime,
-        holidays: List<LocalDate>,
-        ignoreWeekend: Boolean?,
-        endsToday: Boolean = false,
-    ): Changelog {
+    fun parse(issue: JsonNode, issueCreationDate: LocalDateTime, holidays: List<LocalDate>, ignoreWeekend: Boolean?, endsToday: Boolean = false): Changelog {
         val jiraChangelog: List<JiraChangelog> = parseJiraChangelog(issue)
 
         val fieldChangelog = fieldChangelogParser.parse(jiraChangelog)

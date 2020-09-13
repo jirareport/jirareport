@@ -7,7 +7,7 @@ interface BoardDataProvider {
     fun findAllExternalBoards(): List<ExternalBoard>
 
     fun findDetails(externalId: Long): ExternalBoard
-    
+
     fun findAllPossibleColumns(externalId: Long): Set<String>
 
 }
