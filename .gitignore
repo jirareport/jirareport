@@ -1,15 +1,6 @@
 ### gradle ###
 .gradle
-/build/
-
-application/build/
-business-library/build/
-client-library/build/
-common-library/build/
-database-library/build/
-test-library/build/
-jira-library/build/
-holiday-library/build/
+**/build/
 
 !gradle/wrapper/gradle-wrapper.jar
 
