@@ -1,7 +1,7 @@
 package br.com.jiratorio.usecase.duedate
 
 import br.com.jiratorio.assertion.assertThat
-import br.com.jiratorio.domain.FieldChangelog
+import br.com.jiratorio.domain.changelog.FieldChangelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.domain.FieldChangelogFactory

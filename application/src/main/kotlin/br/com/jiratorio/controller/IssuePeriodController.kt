@@ -4,11 +4,7 @@ import br.com.jiratorio.domain.FindAllIssuePeriodsFilter
 import br.com.jiratorio.domain.request.CreateIssuePeriodRequest
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodListResponse
-import br.com.jiratorio.usecase.issue.period.CreateIssuePeriodUseCase
-import br.com.jiratorio.usecase.issue.period.DeleteIssuePeriodUseCase
-import br.com.jiratorio.usecase.issue.period.FindAllIssuePeriodsUseCase
-import br.com.jiratorio.usecase.issue.period.FindIssuePeriodUseCase
-import br.com.jiratorio.usecase.issue.period.UpdateIssuePeriodUseCase
+import br.com.jiratorio.service.IssuePeriodService
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
@@ -30,34 +26,30 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/boards/{boardId}/issue-periods")
 class IssuePeriodController(
-    private val createIssuePeriod: CreateIssuePeriodUseCase,
-    private val deleteIssuePeriod: DeleteIssuePeriodUseCase,
-    private val findAllIssuePeriods: FindAllIssuePeriodsUseCase,
-    private val findIssuePeriod: FindIssuePeriodUseCase,
-    private val updateIssuePeriod: UpdateIssuePeriodUseCase,
+    private val issuePeriodService: IssuePeriodService,
 ) {
 
     @GetMapping
-    fun index(
+    fun findAll(
         @PathVariable boardId: Long,
         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") startDate: LocalDate,
         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") endDate: LocalDate,
     ): IssuePeriodListResponse =
-        findAllIssuePeriods.execute(FindAllIssuePeriodsFilter(boardId, startDate, endDate))
+        issuePeriodService.findAll(FindAllIssuePeriodsFilter(boardId, startDate, endDate))
 
     @GetMapping("/{issuePeriodId}")
     fun findById(
         @PathVariable boardId: Long,
         @PathVariable issuePeriodId: Long,
     ): IssuePeriodByIdResponse =
-        findIssuePeriod.execute(issuePeriodId, boardId)
+        issuePeriodService.findByIdAndBoard(issuePeriodId, boardId)
 
     @PostMapping
     fun create(
         @PathVariable boardId: Long,
         @Valid @RequestBody createIssuePeriodRequest: CreateIssuePeriodRequest,
     ): HttpEntity<*> {
-        val id = createIssuePeriod.execute(createIssuePeriodRequest, boardId)
+        val id = issuePeriodService.create(createIssuePeriodRequest, boardId)
 
         val location = ServletUriComponentsBuilder
             .fromCurrentRequest()
@@ -73,7 +65,7 @@ class IssuePeriodController(
         @PathVariable boardId: Long,
         @PathVariable issuePeriodId: Long,
     ): Unit =
-        updateIssuePeriod.execute(issuePeriodId, boardId)
+        issuePeriodService.update(issuePeriodId, boardId)
 
     @DeleteMapping("/{issuePeriodId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -81,6 +73,6 @@ class IssuePeriodController(
         @PathVariable boardId: Long,
         @PathVariable issuePeriodId: Long,
     ): Unit =
-        deleteIssuePeriod.execute(issuePeriodId, boardId)
+        issuePeriodService.delete(issuePeriodId, boardId)
 
 }

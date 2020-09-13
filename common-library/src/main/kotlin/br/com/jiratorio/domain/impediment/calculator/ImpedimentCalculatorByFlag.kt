@@ -1,7 +1,7 @@
 package br.com.jiratorio.domain.impediment.calculator
 
+import br.com.jiratorio.domain.changelog.Changelog
 import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
-import br.com.jiratorio.domain.parsed.ParsedChangelog
 import br.com.jiratorio.extension.time.daysDiff
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
@@ -13,20 +13,20 @@ object ImpedimentCalculatorByFlag : ImpedimentCalculator {
 
     override fun calcImpediment(
         impedimentColumns: List<String>?,
-        parsedChangelog: ParsedChangelog,
+        changelog: Changelog,
         endDate: LocalDateTime,
         holidays: List<LocalDate>,
         ignoreWeekend: Boolean?
     ): ImpedimentCalculatorResult {
         log.info(
-            "Method=calcImpediment, impedimentColumns={}, parsedChangelog={}, endDate={}, holidays={}, ignoreWeekend={}",
-            impedimentColumns, parsedChangelog, endDate, holidays, ignoreWeekend
+            "Method=calcImpediment, impedimentColumns={}, changelog={}, endDate={}, holidays={}, ignoreWeekend={}",
+            impedimentColumns, changelog, endDate, holidays, ignoreWeekend
         )
 
         val beginnings = mutableListOf<LocalDateTime>()
         val terms = mutableListOf<LocalDateTime>()
 
-        parsedChangelog.fieldChangelog
+        changelog.fieldChangelog
             .filter { it.field.equals("flagged", ignoreCase = true) }
             .forEach {
                 if (it.to.equals("impediment", ignoreCase = true)) {

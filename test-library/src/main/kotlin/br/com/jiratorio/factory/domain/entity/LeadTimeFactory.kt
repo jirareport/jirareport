@@ -14,7 +14,7 @@ class LeadTimeFactory(
     private val faker: Faker,
     private val leadTimeConfigFactory: LeadTimeConfigFactory,
     private val issueFactory: IssueFactory,
-    leadTimeRepository: LeadTimeRepository?
+    val leadTimeRepository: LeadTimeRepository?
 ) : KBacon<LeadTimeEntity>(leadTimeRepository) {
 
     override fun builder(): LeadTimeEntity {

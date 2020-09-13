@@ -16,11 +16,9 @@ interface HolidayRepository : CrudRepository<HolidayEntity, Long> {
 
     fun findAllByBoardId(id: Long, pageable: Pageable): Page<HolidayEntity>
 
-    fun findAllByBoard(board: BoardEntity): List<HolidayEntity>
-
     fun findByDateAndBoardId(date: LocalDate, boardId: Long): HolidayEntity?
 
-    fun findByIdAndBoard(holidayId: Long, board: BoardEntity): HolidayEntity?
+    fun findByBoardAndId(board: BoardEntity, id: Long): HolidayEntity?
 
     fun findByIdOrNull(id: Long): HolidayEntity? =
         findById(id).orElse(null)

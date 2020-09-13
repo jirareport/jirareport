@@ -1,5 +1,6 @@
 dependencies {
     implementation(project(":business-library"))
+    implementation(project(":jira-library"))
 
     implementation("org.springframework.data:spring-data-commons")
 

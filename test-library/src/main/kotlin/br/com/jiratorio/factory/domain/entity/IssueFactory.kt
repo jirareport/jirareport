@@ -5,9 +5,12 @@ import br.com.jiratorio.extension.faker.jira
 import br.com.jiratorio.extension.toLocalDateTime
 import br.com.jiratorio.factory.KBacon
 import br.com.jiratorio.factory.domain.ColumnChangelogFactory
-import br.com.jiratorio.usecase.issue.create.PersistIssueUseCase
+import br.com.jiratorio.repository.ColumnChangelogRepository
+import br.com.jiratorio.repository.ImpedimentHistoryRepository
+import br.com.jiratorio.repository.IssueRepository
 import com.github.javafaker.Faker
 import org.springframework.stereotype.Component
+import org.springframework.transaction.support.TransactionTemplate
 import java.util.concurrent.TimeUnit
 
 @Component
@@ -16,10 +19,8 @@ class IssueFactory(
     private val boardFactory: BoardFactory,
     private val columnChangelogFactory: ColumnChangelogFactory,
     private val issuePeriodFactory: IssuePeriodFactory,
-    private val persistIssue: PersistIssueUseCase?
-) : KBacon<IssueEntity>(
-    shouldPersist = persistIssue != null
-) {
+    private val persistIssue: PersistIssue?,
+) : KBacon<IssueEntity>(shouldPersist = persistIssue != null) {
 
     override fun builder(): IssueEntity {
         return IssueEntity(
@@ -50,7 +51,39 @@ class IssueFactory(
     }
 
     override fun persist(entity: IssueEntity) {
-        persistIssue?.execute(entity)
+        persistIssue?.persist(entity)
+    }
+
+    @Component
+    class PersistIssue(
+        private val transactionTemplate: TransactionTemplate,
+        private val issueRepository: IssueRepository?,
+        private val impedimentHistoryRepository: ImpedimentHistoryRepository?,
+        private val columnChangelogRepository: ColumnChangelogRepository?,
+    ) {
+
+        fun persist(issue: IssueEntity) {
+            transactionTemplate.execute {
+                issueRepository?.save(issue)
+
+                if (impedimentHistoryRepository != null) {
+                    issue.impedimentHistory
+                        .forEach { impedimentHistory ->
+                            impedimentHistory.issueId = issue.id
+                            impedimentHistoryRepository.save(impedimentHistory)
+                        }
+                }
+
+                if (columnChangelogRepository != null) {
+                    issue.columnChangelog
+                        .forEach { columnChangelog ->
+                            columnChangelog.issueId = issue.id
+                            columnChangelogRepository.save(columnChangelog)
+                        }
+                }
+            }
+        }
+
     }
 
 }

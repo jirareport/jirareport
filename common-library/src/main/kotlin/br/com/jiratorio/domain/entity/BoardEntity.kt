@@ -59,7 +59,7 @@ data class BoardEntity(
     var ignoreWeekend: Boolean? = null,
 
     @OneToMany(mappedBy = "board", cascade = [CascadeType.ALL])
-    var leadTimeConfigs: MutableList<LeadTimeConfigEntity>? = null,
+    var leadTimeConfigs: MutableSet<LeadTimeConfigEntity>? = null,
 
     @OneToMany(mappedBy = "board", cascade = [CascadeType.ALL])
     var holidays: MutableList<HolidayEntity>? = null,

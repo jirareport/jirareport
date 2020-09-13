@@ -1,11 +1,13 @@
 package br.com.jiratorio.service
 
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
 import br.com.jiratorio.domain.entity.IssueEntity
 import br.com.jiratorio.domain.entity.IssuePeriodEntity
+import br.com.jiratorio.domain.issue.Issue
+import br.com.jiratorio.domain.response.ColumnTimeAverageResponse
 import br.com.jiratorio.repository.ColumnTimeAverageRepository
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,12 +16,8 @@ class ColumnTimeAverageService(
     private val columnTimeAverageRepository: ColumnTimeAverageRepository,
 ) {
 
-    private val log = LoggerFactory.getLogger(javaClass)
-
     @Transactional
     fun create(issuePeriod: IssuePeriodEntity, fluxColumn: List<String>) {
-        log.info("issuePeriod={}, fluxColumn={}", issuePeriod, fluxColumn)
-
         val issues = issuePeriod.issues
 
         issues
@@ -35,6 +33,13 @@ class ColumnTimeAverageService(
             }
             .sortedBy { fluxColumn.indexOf(it.columnName.toUpperCase()) }
             .forEach(columnTimeAverageRepository::save)
+    }
+
+    fun retrieveColumnTimeAverages(board: BoardEntity, issues: List<Issue>): List<ColumnTimeAverageResponse> {
+        val fluxColumn = board.fluxColumn ?: emptyList()
+
+        return columnTimeAverageRepository.findColumnTimeAverage(issues.map { it.id })
+            .sortedBy { (to, _) -> fluxColumn.indexOf(to.toUpperCase()) }
     }
 
 }

@@ -1,21 +1,16 @@
 package br.com.jiratorio.domain
 
+import br.com.jiratorio.domain.changelog.ColumnChangelog
 import br.com.jiratorio.domain.entity.BoardEntity
-import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.exception.MissingBoardConfigurationException
 import br.com.jiratorio.extension.containsUpperCase
 import java.time.LocalDateTime
 
 data class FluxColumn(
-
     val startLeadTimeColumn: String,
-
     val endLeadTimeColumn: String,
-
     val orderedColumns: List<String>?,
-
-    val useLastOccurrenceWhenCalculateLeadTime: Boolean = false
-
+    val useLastOccurrenceWhenCalculateLeadTime: Boolean = false,
 ) {
 
     constructor(board: BoardEntity) : this(
@@ -32,9 +27,10 @@ data class FluxColumn(
             orderedColumns.takeLastWhile { it != endLeadTimeColumn }.toSet() + endLeadTimeColumn
 
     val startColumns: Set<String>
-        get() = orderedColumns?.run {
-            takeWhile { it != endLeadTimeColumn } - takeWhile { it != startLeadTimeColumn } + endLeadTimeColumn
-        }?.toSet() ?: setOf(startLeadTimeColumn)
+        get() = orderedColumns
+            ?.run { takeWhile { it != endLeadTimeColumn } - takeWhile { it != startLeadTimeColumn } + endLeadTimeColumn }
+            ?.toSet()
+            ?: setOf(startLeadTimeColumn)
 
     val wipColumns: Set<String>
         get() = startColumns - endLeadTimeColumn
@@ -45,7 +41,7 @@ data class FluxColumn(
         else
             orderedColumns.last()
 
-    fun calcStartAndEndDate(columnChangelog: Set<ColumnChangelogEntity>, created: LocalDateTime): Pair<LocalDateTime?, LocalDateTime?> {
+    fun calcStartAndEndDate(columnChangelog: Set<ColumnChangelog>, created: LocalDateTime): Pair<LocalDateTime?, LocalDateTime?> {
         var startDate: LocalDateTime? = null
         var endDate: LocalDateTime? = null
 
@@ -68,13 +64,13 @@ data class FluxColumn(
 
     private fun lastOccurrenceIfNeeds(
         to: String?,
-        columnChangelog: Set<ColumnChangelogEntity>,
-        created: LocalDateTime
+        columnChangelog: Set<ColumnChangelog>,
+        created: LocalDateTime,
     ): LocalDateTime =
         if (useLastOccurrenceWhenCalculateLeadTime)
-            columnChangelog.last {
-                it.to.equals(to, ignoreCase = true)
-            }.startDate
+            columnChangelog
+                .last { it.to.equals(to, ignoreCase = true) }
+                .startDate
         else
             created
 

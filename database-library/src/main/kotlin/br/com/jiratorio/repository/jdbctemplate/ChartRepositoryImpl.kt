@@ -29,12 +29,12 @@ class ChartRepositoryImpl(
                        ltc.name                       AS lead_time_name,
                        COALESCE(AVG(lt.lead_time), 0) AS lead_time
                 FROM issue_period ip
-                         LEFT JOIN issue i ON ip.id = i.issue_period_id
-                         LEFT JOIN lead_time lt ON i.id = lt.issue_id
-                         LEFT JOIN lead_time_config ltc ON ltc.board_id = ip.board_id
+                       LEFT JOIN issue i on i.issue_period_id = ip.id
+                       LEFT JOIN lead_time_config ltc ON ltc.board_id = ip.board_id
+                       LEFT JOIN lead_time lt ON lt.issue_id = i.id AND lt.lead_time_config_id = ltc.id
                 WHERE ip.start_date >= :startDate
-                    AND ip.end_date <= :endDate
-                    AND ip.board_id = :boardId
+                       AND ip.end_date <= :endDate
+                       AND ip.board_id = :boardId
                 GROUP BY ip.start_date, ip.end_date, ltc.name
                 ORDER BY ip.start_date, ip.end_date, ltc.name
             """

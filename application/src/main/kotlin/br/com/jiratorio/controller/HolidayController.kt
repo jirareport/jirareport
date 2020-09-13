@@ -3,6 +3,9 @@ package br.com.jiratorio.controller
 import br.com.jiratorio.domain.Account
 import br.com.jiratorio.domain.request.HolidayRequest
 import br.com.jiratorio.domain.response.holiday.HolidayResponse
+import br.com.jiratorio.service.HolidayService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -25,27 +28,24 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/boards/{boardId}/holidays")
 class HolidayController(
-    private val createHoliday: CreateHolidayUseCase,
-    private val deleteHoliday: DeleteHolidayUseCase,
-    private val findHoliday: FindHolidayUseCase,
-    private val findAllHolidays: FindAllHolidaysUseCase,
-    private val importHolidays: ImportHolidaysUseCase,
-    private val updateHoliday: UpdateHolidayUseCase
+    private val holidayService: HolidayService
 ) {
+    
+    private val log: Logger = LoggerFactory.getLogger(javaClass)
 
     @GetMapping
     fun index(
         @PathVariable boardId: Long,
         @PageableDefault(sort = ["date"]) pageable: Pageable
     ): Page<HolidayResponse> =
-        findAllHolidays.execute(boardId, pageable)
+        holidayService.findAll(boardId, pageable)
 
     @PostMapping
     fun create(
         @PathVariable boardId: Long,
         @Valid @RequestBody holidayRequest: HolidayRequest
     ): HttpEntity<*> {
-        val id = createHoliday.execute(boardId, holidayRequest)
+        val id = holidayService.create(boardId, holidayRequest)
 
         val location = ServletUriComponentsBuilder
             .fromCurrentRequest()
@@ -60,17 +60,19 @@ class HolidayController(
     fun importHolidays(
         @PathVariable boardId: Long,
         @AuthenticationPrincipal account: Account
-    ) =
-        importHolidays.execute(boardId, account.username)
+    ): Nothing {
+        log.info("boardId=$boardId, account=$account")
+        throw UnsupportedOperationException("temporary unavailable")
+    }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long) =
-        deleteHoliday.execute(id)
+    @DeleteMapping("/{holidayId}")
+    fun delete(@PathVariable boardId: Long, @PathVariable holidayId: Long) =
+        holidayService.delete(boardId, holidayId)
 
-    @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): HolidayResponse =
-        findHoliday.execute(id)
+    @GetMapping("/{holidayId}")
+    fun findById(@PathVariable boardId: Long, @PathVariable holidayId: Long): HolidayResponse =
+        holidayService.findById(boardId, holidayId)
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{holidayId}")
@@ -79,6 +81,6 @@ class HolidayController(
         @PathVariable holidayId: Long,
         @Valid @RequestBody holidayRequest: HolidayRequest
     ) =
-        updateHoliday.execute(holidayId, boardId, holidayRequest)
+        holidayService.update(boardId, holidayId, holidayRequest)
 
 }

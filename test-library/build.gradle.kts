@@ -4,7 +4,8 @@ dependencies {
     implementation(project(":client-library"))
 
     implementation("org.springframework.data:spring-data-commons")
-    
+    implementation("org.springframework:spring-tx")
+
     api("org.springframework.boot:spring-boot-starter-test")
 
     api("org.testcontainers:postgresql:1.14.3")

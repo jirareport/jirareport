@@ -1,9 +1,9 @@
 package br.com.jiratorio.domain.impediment.calculator
 
+import br.com.jiratorio.domain.changelog.Changelog
 import br.com.jiratorio.junit.testtype.UnitTest
-import br.com.jiratorio.domain.FieldChangelog
+import br.com.jiratorio.domain.changelog.FieldChangelog
 import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
-import br.com.jiratorio.domain.parsed.ParsedChangelog
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -49,7 +49,7 @@ internal class ImpedimentCalculatorByFlagTest {
 
         val impedimentCalculatorResult = ImpedimentCalculatorByFlag.calcImpediment(
             null,
-            ParsedChangelog(fieldChangelog.toSet()),
+            Changelog(fieldChangelog.toSet()),
             LocalDateTime.now(),
             emptyList(),
             true
@@ -110,7 +110,7 @@ internal class ImpedimentCalculatorByFlagTest {
 
         val impedimentCalculatorResult = ImpedimentCalculatorByFlag.calcImpediment(
             null,
-            ParsedChangelog(fieldChangelog),
+            Changelog(fieldChangelog),
             "19/01/2019 12:00".toLocalDateTime(),
             emptyList(),
             true

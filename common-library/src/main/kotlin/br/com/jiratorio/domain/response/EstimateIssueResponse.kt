@@ -1,5 +1,8 @@
 package br.com.jiratorio.domain.response
 
+import com.fasterxml.jackson.annotation.JsonFormat
+import java.time.LocalDate
+
 data class EstimateIssueResponse(
 
     val key: String,
@@ -8,13 +11,17 @@ data class EstimateIssueResponse(
 
     val startDate: String,
 
-    val estimateDateAvg: String,
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    val estimateDateAvg: LocalDate,
 
-    val estimateDatePercentile50: String,
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    val estimateDatePercentile50: LocalDate,
 
-    val estimateDatePercentile75: String,
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    val estimateDatePercentile75: LocalDate,
 
-    val estimateDatePercentile90: String,
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    val estimateDatePercentile90: LocalDate,
 
     val leadTime: Long,
 

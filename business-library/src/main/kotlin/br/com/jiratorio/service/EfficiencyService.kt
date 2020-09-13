@@ -1,20 +1,20 @@
 package br.com.jiratorio.service
 
+import br.com.jiratorio.domain.changelog.ColumnChangelog
 import br.com.jiratorio.domain.Efficiency
-import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.extension.containsUpperCase
 import br.com.jiratorio.extension.time.minutesDiff
-import br.com.jiratorio.stereotype.UseCase
 import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Service
 import java.time.LocalDate
 
-@UseCase
+@Service
 class EfficiencyService {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun calculate(
-        columnChangelog: Set<ColumnChangelogEntity>,
+        columnChangelog: Set<ColumnChangelog>,
         touchingColumns: MutableList<String>?,
         waitingColumns: MutableList<String>?,
         holidays: List<LocalDate>,
@@ -47,7 +47,7 @@ class EfficiencyService {
             touchTime.toDouble() / (touchTime + waitTime) * 100
 
     private fun calcDurationInColumns(
-        columnChangelog: Set<ColumnChangelogEntity>,
+        columnChangelog: Set<ColumnChangelog>,
         columns: List<String>,
         holidays: List<LocalDate>,
         ignoreWeekend: Boolean?,

@@ -12,5 +12,6 @@ include(
     "client-library",
     "common-library",
     "database-library",
+    "jira-library",
     "test-library"
 )

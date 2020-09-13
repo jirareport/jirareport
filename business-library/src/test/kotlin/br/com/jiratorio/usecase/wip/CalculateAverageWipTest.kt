@@ -7,13 +7,14 @@ import br.com.jiratorio.domain.entity.IssueEntity
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
+import br.com.jiratorio.service.WipService
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 
 @UnitTest
 internal class CalculateAverageWipTest {
 
-    private val calculateAverageWip = CalculateAverageWipUseCase()
+    private val calculateAverageWip = WipService()
 
     @Test
     fun `test calc avg wip`() {
@@ -23,7 +24,7 @@ internal class CalculateAverageWipTest {
         val endDate = "28/02/2019".toLocalDate()
         val fluxColumn = FluxColumn(board)
 
-        val wipAvg = calculateAverageWip.execute(startDate, endDate, issues, fluxColumn.wipColumns)
+        val wipAvg = calculateAverageWip.calculateAverage(startDate, endDate, issues, fluxColumn.wipColumns)
 
         Assertions.assertThat(wipAvg)
             .isEqualTo(2.0508474576271185)
@@ -37,7 +38,7 @@ internal class CalculateAverageWipTest {
         val endDate = "28/02/2019".toLocalDate()
         val fluxColumn = FluxColumn(board)
 
-        val wipAvg = calculateAverageWip.execute(startDate, endDate, issues, fluxColumn.wipColumns)
+        val wipAvg = calculateAverageWip.calculateAverage(startDate, endDate, issues, fluxColumn.wipColumns)
 
         Assertions.assertThat(wipAvg)
             .isZero()

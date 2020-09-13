@@ -1,9 +1,9 @@
 package br.com.jiratorio.domain.impediment.calculator
 
-import br.com.jiratorio.junit.testtype.UnitTest
+import br.com.jiratorio.domain.changelog.Changelog
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
-import br.com.jiratorio.domain.parsed.ParsedChangelog
+import br.com.jiratorio.junit.testtype.UnitTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -54,7 +54,7 @@ internal class ImpedimentCalculatorByColumnTest {
 
         val impedimentCalculatorResult = ImpedimentCalculatorByColumn.calcImpediment(
             columns,
-            ParsedChangelog(columnChangelog = columnChangelog.toSet()),
+            Changelog(columnChangelog = columnChangelog.toSet()),
             LocalDateTime.now(),
             emptyList(),
             true

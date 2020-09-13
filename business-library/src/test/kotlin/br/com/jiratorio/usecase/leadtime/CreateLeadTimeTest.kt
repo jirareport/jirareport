@@ -1,17 +1,18 @@
 package br.com.jiratorio.usecase.leadtime
 
 import br.com.jiratorio.assertion.assertThat
-import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.IssueEntity
-import br.com.jiratorio.domain.entity.LeadTimeEntity
 import br.com.jiratorio.domain.entity.LeadTimeConfigEntity
+import br.com.jiratorio.domain.entity.LeadTimeEntity
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
-import br.com.jiratorio.repository.LeadTimeConfigRepository
+import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.repository.LeadTimeRepository
+import br.com.jiratorio.service.LeadTimeConfigService
+import br.com.jiratorio.service.LeadTimeService
 import io.mockk.called
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -28,12 +29,12 @@ import java.time.LocalDate
 @UnitTest
 internal class CreateLeadTimeTest {
 
-    private val leadTimeConfigRepository = mockk<LeadTimeConfigRepository>()
+    private val leadTimeConfigService = mockk<LeadTimeConfigService>()
 
     private val leadTimeRepository = mockk<LeadTimeRepository>()
 
-    private val createLeadTime = CreateLeadTimeUseCase(
-        leadTimeConfigRepository,
+    private val leadTimeService = LeadTimeService(
+        leadTimeConfigService,
         leadTimeRepository
     )
 
@@ -45,17 +46,17 @@ internal class CreateLeadTimeTest {
     @Test
     fun `test create lead times without lead times config`() {
         every {
-            leadTimeConfigRepository.findByBoardId(1L)
+            leadTimeConfigService.findByBoard(1L)
         } returns emptyList()
 
         val board = defaultBoard()
         val issue = defaultIssue(board)
         val holidays = commonHolidays()
 
-        createLeadTime.execute(issue, board, holidays)
+        leadTimeService.create(issue, board, holidays)
 
         verifyAll {
-            leadTimeConfigRepository.findByBoardId(1L)
+            leadTimeConfigService.findByBoard(1L)
             leadTimeRepository wasNot called
         }
     }
@@ -65,7 +66,7 @@ internal class CreateLeadTimeTest {
         val board = defaultBoard()
 
         every {
-            leadTimeConfigRepository.findByBoardId(1L)
+            leadTimeConfigService.findByBoard(1L)
         } returns defaultLeadTimes(board)
 
         every {
@@ -73,24 +74,24 @@ internal class CreateLeadTimeTest {
         } just runs
 
         every {
-            leadTimeRepository.save(any<LeadTimeEntity>())
+            leadTimeRepository.save(any())
         } answers { firstArg() }
 
         val issue = defaultIssue(board)
 
         val holidays = commonHolidays()
 
-        createLeadTime.execute(issue, board, holidays)
+        leadTimeService.create(issue, board, holidays)
 
         verifyAll {
-            leadTimeConfigRepository.findByBoardId(1L)
+            leadTimeConfigService.findByBoard(1L)
 
             leadTimeRepository.deleteByIssueId(1L)
-            leadTimeRepository.save(any<LeadTimeEntity>())
+            leadTimeRepository.save(any())
         }
 
         verify(exactly = 3) {
-            leadTimeRepository.save(any<LeadTimeEntity>())
+            leadTimeRepository.save(any())
         }
 
         val leadTimes = issue.leadTimes ?: throw ResourceNotFound()

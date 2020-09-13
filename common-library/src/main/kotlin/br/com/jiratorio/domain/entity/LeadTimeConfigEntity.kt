@@ -45,6 +45,7 @@ data class LeadTimeConfigEntity(
     override fun toString() =
         toStringBuilder(
             LeadTimeConfigEntity::id,
+            LeadTimeConfigEntity::board,
             LeadTimeConfigEntity::name,
             LeadTimeConfigEntity::startColumn,
             LeadTimeConfigEntity::endColumn

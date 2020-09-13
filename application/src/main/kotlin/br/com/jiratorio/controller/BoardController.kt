@@ -6,8 +6,8 @@ import br.com.jiratorio.domain.request.SearchBoardRequest
 import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.domain.response.board.BoardDetailsResponse
 import br.com.jiratorio.domain.response.board.BoardResponse
-import br.com.jiratorio.service.BoardService
-import br.com.jiratorio.service.CloneBoardService
+import br.com.jiratorio.service.board.BoardService
+import br.com.jiratorio.service.board.CloneBoardService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -32,7 +32,7 @@ import javax.validation.Valid
 @RequestMapping("/boards")
 class BoardController(
     private val boardService: BoardService,
-    private val cloneBoard: CloneBoardService,
+    private val cloneBoardService: CloneBoardService,
 ) {
 
     @GetMapping
@@ -65,7 +65,7 @@ class BoardController(
 
     @PostMapping(params = ["boardIdToClone"])
     fun clone(@RequestParam("boardIdToClone") boardId: Long): HttpEntity<*> {
-        val id: Long = cloneBoard.clone(boardId)
+        val id: Long = cloneBoardService.clone(boardId)
 
         val location = ServletUriComponentsBuilder
             .fromCurrentContextPath()

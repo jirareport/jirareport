@@ -5,10 +5,7 @@ import br.com.jiratorio.domain.response.IssueListResponse
 import br.com.jiratorio.domain.response.issue.IssueDetailResponse
 import br.com.jiratorio.domain.response.issue.IssueFilterResponse
 import br.com.jiratorio.domain.response.issue.IssueKeysResponse
-import br.com.jiratorio.usecase.issue.FindAllIssuesUseCase
-import br.com.jiratorio.usecase.issue.FindIssueUseCase
-import br.com.jiratorio.usecase.issue.FindIssueFiltersUseCase
-import br.com.jiratorio.usecase.issue.FindIssueKeysUseCase
+import br.com.jiratorio.service.issue.IssueService
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -22,37 +19,34 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/boards/{boardId}/issues")
 class IssueController(
-    private val findIssue: FindIssueUseCase,
-    private val findAllIssues: FindAllIssuesUseCase,
-    private val findIssueKeys: FindIssueKeysUseCase,
-    private val findIssueFilters: FindIssueFiltersUseCase
+    private val issueService: IssueService,
 ) {
 
     @GetMapping
-    fun index(
+    fun findAll(
         @PathVariable boardId: Long,
         @Valid searchIssueRequest: SearchIssueRequest,
-        webRequest: WebRequest
+        webRequest: WebRequest,
     ): IssueListResponse =
-        findAllIssues.execute(boardId, webRequest.parameterMap, searchIssueRequest)
+        issueService.findAll(boardId, webRequest.parameterMap, searchIssueRequest)
 
     @GetMapping("/{id}")
     fun findById(
         @PathVariable boardId: Long,
-        @PathVariable id: Long
+        @PathVariable id: Long,
     ): IssueDetailResponse =
-        findIssue.execute(id, boardId)
+        issueService.findByIdAndBoard(id, boardId)
 
     @GetMapping("/filters")
     fun filters(@PathVariable boardId: Long): IssueFilterResponse =
-        findIssueFilters.execute(boardId)
+        issueService.findAllFilters(boardId)
 
     @GetMapping("/filters/keys")
     fun filterKeys(
         @PathVariable boardId: Long,
         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") startDate: LocalDate,
-        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") endDate: LocalDate
+        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") endDate: LocalDate,
     ): IssueKeysResponse =
-        findIssueKeys.execute(boardId, startDate, endDate)
+        issueService.findKeys(boardId, startDate, endDate)
 
 }

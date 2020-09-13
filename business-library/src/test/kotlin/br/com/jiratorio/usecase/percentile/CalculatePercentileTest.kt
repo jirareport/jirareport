@@ -3,20 +3,21 @@ package br.com.jiratorio.usecase.percentile
 import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.Percentile
+import br.com.jiratorio.service.PercentileService
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @UnitTest
 internal class CalculatePercentileTest {
 
-    private val calculatePercentile = CalculatePercentileUseCase()
+    private val calculatePercentile = PercentileService()
 
     @ParameterizedTest
     @MethodSource("calculatePercentileProvider")
     fun `test calculate percentile`(pair: Pair<List<Long>, Percentile>) {
         val (leadTimes, expected) = pair
 
-        val result = calculatePercentile.execute(leadTimes)
+        val result = calculatePercentile.calculate(leadTimes)
 
         result.assertThat {
             hasAverage(expected.average)

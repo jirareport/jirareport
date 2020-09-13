@@ -1,7 +1,7 @@
 package br.com.jiratorio
 
 import br.com.jiratorio.factory.domain.entity.AccountFactory
-import br.com.jiratorio.usecase.token.EncodeTokenUseCase
+import br.com.jiratorio.service.AuthService
 import io.restassured.http.Header
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.test.context.TestSecurityContextHolder
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 @Component
 class Authenticator(
     private val accountFactory: AccountFactory,
-    private val encodeToken: EncodeTokenUseCase
+    private val authService: AuthService,
 ) {
 
     fun <T> withDefaultUser(supplier: () -> T): T =
@@ -38,7 +38,7 @@ class Authenticator(
     }
 
     fun defaultUserHeader(): Header =
-        Header("X-Auth-Token", encodeToken.execute(accountFactory.defaultUser()))
+        Header("X-Auth-Token", authService.encode(accountFactory.defaultUser()))
 
     fun defaultUserName(): String =
         accountFactory.defaultUserName()

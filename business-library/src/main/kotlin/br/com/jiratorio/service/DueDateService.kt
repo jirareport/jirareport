@@ -1,6 +1,6 @@
 package br.com.jiratorio.service
 
-import br.com.jiratorio.domain.FieldChangelog
+import br.com.jiratorio.domain.changelog.FieldChangelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
 import br.com.jiratorio.extension.toLocalDate

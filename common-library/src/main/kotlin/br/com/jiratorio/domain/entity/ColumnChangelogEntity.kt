@@ -1,5 +1,6 @@
 package br.com.jiratorio.domain.entity
 
+import br.com.jiratorio.domain.changelog.ColumnChangelog
 import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.time.LocalDateProgression
 import br.com.jiratorio.extension.time.rangeTo
@@ -24,21 +25,21 @@ data class ColumnChangelogEntity(
     var issueId: Long = 0,
 
     @Column(name = "column_from")
-    var from: String? = null,
+    override var from: String? = null,
 
     @Column(name = "column_to", nullable = false)
-    var to: String,
+    override var to: String,
 
     @Column(nullable = false)
-    var startDate: LocalDateTime,
+    override var startDate: LocalDateTime,
 
     @Column(nullable = false)
-    var endDate: LocalDateTime = startDate,
+    override var endDate: LocalDateTime = startDate,
 
     @Column(nullable = false)
-    var leadTime: Long = 0
+    override var leadTime: Long = 0
 
-) : BaseEntity() {
+) : BaseEntity(), ColumnChangelog {
 
     val dateRange: LocalDateProgression
         get() = startDate.toLocalDate()..endDate.toLocalDate()
