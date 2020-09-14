@@ -1,7 +1,7 @@
 package br.com.jiratorio.assertion.response.board
 
 import br.com.jiratorio.assertion.BaseAssert
-import br.com.jiratorio.domain.impediment.ImpedimentType
+import br.com.jiratorio.domain.ImpedimentType
 import br.com.jiratorio.domain.response.board.BoardDetailsResponse
 
 class BoardDetailsResponseAssert(

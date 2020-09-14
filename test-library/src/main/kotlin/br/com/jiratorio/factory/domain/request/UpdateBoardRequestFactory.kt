@@ -1,7 +1,7 @@
 package br.com.jiratorio.factory.domain.request
 
 import br.com.jiratorio.domain.DueDateType
-import br.com.jiratorio.domain.impediment.ImpedimentType
+import br.com.jiratorio.domain.ImpedimentType
 import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.extension.faker.jira
 import br.com.jiratorio.factory.KBacon

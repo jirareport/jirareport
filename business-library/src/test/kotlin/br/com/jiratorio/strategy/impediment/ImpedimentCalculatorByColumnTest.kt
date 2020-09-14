@@ -1,8 +1,7 @@
-package br.com.jiratorio.domain.impediment.calculator
+package br.com.jiratorio.strategy.impediment
 
 import br.com.jiratorio.domain.changelog.Changelog
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
-import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
 import br.com.jiratorio.junit.testtype.UnitTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -52,7 +51,7 @@ internal class ImpedimentCalculatorByColumnTest {
         )
         val columns = listOf("IMP_COLUMN_ONE", "IMP_COLUMN_TWO", "IMP_COLUMN_THREE")
 
-        val impedimentCalculatorResult = ImpedimentCalculatorByColumn.calcImpediment(
+        val (impedimentTime, impedimentHistory) = ImpedimentCalculatorByColumn.calcImpediment(
             columns,
             Changelog(columnChangelog = columnChangelog.toSet()),
             LocalDateTime.now(),
@@ -60,22 +59,22 @@ internal class ImpedimentCalculatorByColumnTest {
             true
         )
 
-        assertThat(impedimentCalculatorResult.timeInImpediment)
+        assertThat(impedimentTime)
             .isEqualTo(12)
-        assertThat(impedimentCalculatorResult.impedimentHistory)
+        assertThat(impedimentHistory)
             .hasSize(3)
             .containsExactly(
-                ImpedimentHistoryEntity(
+                InternalImpedimentHistory(
                     startDate = columnChangelog[1].startDate,
                     endDate = columnChangelog[1].endDate,
                     leadTime = columnChangelog[1].leadTime
                 ),
-                ImpedimentHistoryEntity(
+                InternalImpedimentHistory(
                     startDate = columnChangelog[3].startDate,
                     endDate = columnChangelog[3].endDate,
                     leadTime = columnChangelog[3].leadTime
                 ),
-                ImpedimentHistoryEntity(
+                InternalImpedimentHistory(
                     startDate = columnChangelog[5].startDate,
                     endDate = columnChangelog[5].endDate,
                     leadTime = columnChangelog[5].leadTime

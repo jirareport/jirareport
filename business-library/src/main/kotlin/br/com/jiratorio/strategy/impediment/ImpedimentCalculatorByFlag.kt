@@ -1,28 +1,20 @@
-package br.com.jiratorio.domain.impediment.calculator
+package br.com.jiratorio.strategy.impediment
 
+import br.com.jiratorio.domain.ImpedimentHistory
 import br.com.jiratorio.domain.changelog.Changelog
-import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
 import br.com.jiratorio.extension.time.daysDiff
-import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 object ImpedimentCalculatorByFlag : ImpedimentCalculator {
-
-    private val log = LoggerFactory.getLogger(javaClass)
 
     override fun calcImpediment(
         impedimentColumns: List<String>?,
         changelog: Changelog,
         endDate: LocalDateTime,
         holidays: List<LocalDate>,
-        ignoreWeekend: Boolean?
-    ): ImpedimentCalculatorResult {
-        log.info(
-            "Method=calcImpediment, impedimentColumns={}, changelog={}, endDate={}, holidays={}, ignoreWeekend={}",
-            impedimentColumns, changelog, endDate, holidays, ignoreWeekend
-        )
-
+        ignoreWeekend: Boolean?,
+    ): Pair<Long, Set<ImpedimentHistory>> {
         val beginnings = mutableListOf<LocalDateTime>()
         val terms = mutableListOf<LocalDateTime>()
 
@@ -41,20 +33,15 @@ object ImpedimentCalculatorByFlag : ImpedimentCalculator {
         }
 
         if (beginnings.size != terms.size) {
-            log.info(
-                "Method=countTimeInImpedimentByFlag, Info=tamanhos diferentes, beginnings={}, terms={}",
-                beginnings.size,
-                terms.size
-            )
-            return ImpedimentCalculatorResult()
+            return ImpedimentCalculator.EMPTY_RESULT
         }
 
         beginnings.sort()
         terms.sort()
 
-        val impedimentHistory = sortedSetOf<ImpedimentHistoryEntity>()
+        val impedimentHistory = sortedSetOf<ImpedimentHistory>()
         for (i in terms.indices) {
-            val history = ImpedimentHistoryEntity(
+            val history = InternalImpedimentHistory(
                 startDate = beginnings[i],
                 endDate = terms[i],
                 leadTime = beginnings[i].daysDiff(terms[i], holidays, ignoreWeekend)
@@ -63,9 +50,9 @@ object ImpedimentCalculatorByFlag : ImpedimentCalculator {
             impedimentHistory.add(history)
         }
 
-        return ImpedimentCalculatorResult(
-            timeInImpediment = impedimentHistory.map { it.leadTime }.sum(),
-            impedimentHistory = impedimentHistory
+        return Pair(
+            impedimentHistory.map { it.leadTime }.sum(),
+            impedimentHistory
         )
     }
 

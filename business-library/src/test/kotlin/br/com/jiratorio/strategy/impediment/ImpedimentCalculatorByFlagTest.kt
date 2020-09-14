@@ -1,9 +1,8 @@
-package br.com.jiratorio.domain.impediment.calculator
+package br.com.jiratorio.strategy.impediment
 
 import br.com.jiratorio.domain.changelog.Changelog
 import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.changelog.FieldChangelog
-import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
 import br.com.jiratorio.extension.toLocalDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -47,25 +46,20 @@ internal class ImpedimentCalculatorByFlagTest {
             )
         )
 
-        val impedimentCalculatorResult = ImpedimentCalculatorByFlag.calcImpediment(
-            null,
-            Changelog(fieldChangelog.toSet()),
-            LocalDateTime.now(),
-            emptyList(),
-            true
-        )
+        val (impedimentTime, impedimentHistory) = ImpedimentCalculatorByFlag
+            .calcImpediment(null, Changelog(fieldChangelog.toSet()), LocalDateTime.now(), emptyList(), true)
 
-        assertThat(impedimentCalculatorResult.timeInImpediment)
+        assertThat(impedimentTime)
             .isEqualTo(15)
-        assertThat(impedimentCalculatorResult.impedimentHistory)
+        assertThat(impedimentHistory)
             .hasSize(2)
             .containsExactly(
-                ImpedimentHistoryEntity(
+                InternalImpedimentHistory(
                     startDate = "01/01/2019 12:00".toLocalDateTime(),
                     endDate = "10/01/2019 12:00".toLocalDateTime(),
                     leadTime = 10
                 ),
-                ImpedimentHistoryEntity(
+                InternalImpedimentHistory(
                     startDate = "15/01/2019 12:00".toLocalDateTime(),
                     endDate = "19/01/2019 12:00".toLocalDateTime(),
                     leadTime = 5
@@ -108,7 +102,7 @@ internal class ImpedimentCalculatorByFlagTest {
             )
         )
 
-        val impedimentCalculatorResult = ImpedimentCalculatorByFlag.calcImpediment(
+        val (impedimentTime, impedimentHistory) = ImpedimentCalculatorByFlag.calcImpediment(
             null,
             Changelog(fieldChangelog),
             "19/01/2019 12:00".toLocalDateTime(),
@@ -116,17 +110,18 @@ internal class ImpedimentCalculatorByFlagTest {
             true
         )
 
-        assertThat(impedimentCalculatorResult.timeInImpediment)
+        assertThat(impedimentTime)
             .isEqualTo(10)
-        assertThat(impedimentCalculatorResult.impedimentHistory)
+
+        assertThat(impedimentHistory)
             .hasSize(2)
             .containsExactly(
-                ImpedimentHistoryEntity(
+                InternalImpedimentHistory(
                     startDate = "05/01/2019 12:00".toLocalDateTime(),
                     endDate = "09/01/2019 12:00".toLocalDateTime(),
                     leadTime = 5
                 ),
-                ImpedimentHistoryEntity(
+                InternalImpedimentHistory(
                     startDate = "15/01/2019 12:00".toLocalDateTime(),
                     endDate = "19/01/2019 12:00".toLocalDateTime(),
                     leadTime = 5

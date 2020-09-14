@@ -3,9 +3,9 @@ package br.com.jiratorio.service.issue
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.IssueEntity
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
-import br.com.jiratorio.domain.impediment.calculator.ImpedimentCalculatorResult
 import br.com.jiratorio.domain.issue.JiraIssue
 import br.com.jiratorio.mapper.toColumnChangelogEntity
+import br.com.jiratorio.mapper.toImpedimentHistoryEntity
 import br.com.jiratorio.provider.IssueProvider
 import br.com.jiratorio.repository.ColumnChangelogRepository
 import br.com.jiratorio.repository.ImpedimentHistoryRepository
@@ -15,6 +15,7 @@ import br.com.jiratorio.service.EfficiencyService
 import br.com.jiratorio.service.HolidayService
 import br.com.jiratorio.service.LeadTimeService
 import br.com.jiratorio.strategy.duedate.DueDateCalculator
+import br.com.jiratorio.strategy.impediment.ImpedimentCalculator
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -54,7 +55,8 @@ class CreateIssueService(
             dueDateHistory: List<DueDateHistory>,
         ) = createDueDateHistory(board, jiraIssue, holidays)
 
-        val impedimentCalculatorResult: ImpedimentCalculatorResult = calculateImpediment(jiraIssue, board, holidays)
+        val (impedimentTime, impedimentHistory) = ImpedimentCalculator.from(board.impedimentType)
+            .calcImpediment(board.impedimentColumns, jiraIssue.changelog, jiraIssue.endDate, holidays, board.ignoreWeekend)
 
         val efficiency = efficiencyService.calculate(
             columnChangelog = changelog.columnChangelog,
@@ -83,8 +85,8 @@ class CreateIssueService(
             board = board,
             deviationOfEstimate = deviationOfEstimate,
             dueDateHistory = dueDateHistory,
-            impedimentTime = impedimentCalculatorResult.timeInImpediment,
-            impedimentHistory = impedimentCalculatorResult.impedimentHistory,
+            impedimentTime = impedimentTime,
+            impedimentHistory = impedimentHistory.toImpedimentHistoryEntity(),
             waitTime = efficiency.waitTime,
             touchTime = efficiency.touchTime,
             pctEfficiency = efficiency.pctEfficiency,
@@ -105,11 +107,6 @@ class CreateIssueService(
         } else
             Pair(0, emptyList())
     }
-
-    private fun calculateImpediment(jiraIssue: JiraIssue, board: BoardEntity, holidays: List<LocalDate>): ImpedimentCalculatorResult =
-        board.impedimentType
-            ?.calcImpediment(board.impedimentColumns, jiraIssue.changelog, jiraIssue.endDate, holidays, board.ignoreWeekend)
-            ?: ImpedimentCalculatorResult()
 
     fun persistIssue(issue: IssueEntity): IssueEntity =
         issueRepository.save(issue)

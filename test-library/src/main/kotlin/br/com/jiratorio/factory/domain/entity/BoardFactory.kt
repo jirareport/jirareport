@@ -2,7 +2,7 @@ package br.com.jiratorio.factory.domain.entity
 
 import br.com.jiratorio.domain.DueDateType
 import br.com.jiratorio.domain.entity.BoardEntity
-import br.com.jiratorio.domain.impediment.ImpedimentType
+import br.com.jiratorio.domain.ImpedimentType
 import br.com.jiratorio.extension.faker.jira
 import br.com.jiratorio.factory.KBacon
 import br.com.jiratorio.repository.BoardRepository

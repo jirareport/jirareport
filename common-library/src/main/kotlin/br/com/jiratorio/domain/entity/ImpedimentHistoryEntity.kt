@@ -1,5 +1,6 @@
 package br.com.jiratorio.domain.entity
 
+import br.com.jiratorio.domain.ImpedimentHistory
 import br.com.jiratorio.extension.equalsComparing
 import java.time.LocalDateTime
 import java.util.Objects
@@ -22,18 +23,15 @@ data class ImpedimentHistoryEntity(
     var issueId: Long = 0,
 
     @Column(nullable = false)
-    var startDate: LocalDateTime,
+    override var startDate: LocalDateTime,
 
     @Column(nullable = false)
-    var endDate: LocalDateTime,
+    override var endDate: LocalDateTime,
 
     @Column(nullable = false)
-    var leadTime: Long
+    override var leadTime: Long
 
-) : BaseEntity(), Comparable<ImpedimentHistoryEntity> {
-
-    override fun compareTo(other: ImpedimentHistoryEntity): Int =
-        startDate.compareTo(other.startDate)
+) : BaseEntity(), ImpedimentHistory {
 
     override fun equals(other: Any?): Boolean =
         equalsComparing(

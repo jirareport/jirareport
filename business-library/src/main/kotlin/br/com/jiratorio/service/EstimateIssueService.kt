@@ -1,9 +1,8 @@
 package br.com.jiratorio.service
 
+import br.com.jiratorio.domain.EstimateFieldReference
 import br.com.jiratorio.domain.Percentile
 import br.com.jiratorio.domain.entity.BoardEntity
-import br.com.jiratorio.domain.EstimateFieldReference
-import br.com.jiratorio.domain.impediment.calculator.ImpedimentCalculatorResult
 import br.com.jiratorio.domain.issue.JiraIssue
 import br.com.jiratorio.domain.request.SearchEstimateRequest
 import br.com.jiratorio.domain.request.SearchIssueRequest
@@ -17,10 +16,10 @@ import br.com.jiratorio.property.JiraProperties
 import br.com.jiratorio.provider.IssueProvider
 import br.com.jiratorio.service.board.BoardService
 import br.com.jiratorio.service.issue.IssueService
+import br.com.jiratorio.strategy.impediment.ImpedimentCalculator
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDate
 import java.util.HashMap
 
 @Service
@@ -70,7 +69,8 @@ class EstimateIssueService(
                     val estimateDatePercentile90 = jiraIssue.startDate
                         .plusDays(percentile.percentile90, holidays, board.ignoreWeekend)
 
-                    val impedimentCalculatorResult = calculateImpediment(jiraIssue, board, holidays)
+                    val (impedimentTime, impedimentHistory) = ImpedimentCalculator.from(board.impedimentType)
+                        .calcImpediment(board.impedimentColumns, jiraIssue.changelog, jiraIssue.endDate, holidays, board.ignoreWeekend)
 
                     EstimateIssueResponse(
                         key = jiraIssue.key,
@@ -89,8 +89,8 @@ class EstimateIssueService(
                         epic = jiraIssue.epic,
                         priority = jiraIssue.priority,
                         changelog = jiraIssue.changelog.columnChangelog.toChangelogResponse(),
-                        impedimentTime = impedimentCalculatorResult.timeInImpediment,
-                        impedimentHistory = impedimentCalculatorResult.impedimentHistory.toImpedimentHistoryResponse(),
+                        impedimentTime = impedimentTime,
+                        impedimentHistory = impedimentHistory.toImpedimentHistoryResponse(),
                         detailsUrl = "${jiraProperties.url}/browse/${jiraIssue.key}"
                     )
                 }
@@ -136,10 +136,5 @@ class EstimateIssueService(
             EstimateFieldReference.PRIORITY -> issue.priority
         }
     }
-
-    private fun calculateImpediment(jiraIssue: JiraIssue, board: BoardEntity, holidays: List<LocalDate>): ImpedimentCalculatorResult =
-        board.impedimentType
-            ?.calcImpediment(board.impedimentColumns, jiraIssue.changelog, jiraIssue.endDate, holidays, board.ignoreWeekend)
-            ?: ImpedimentCalculatorResult()
 
 }
