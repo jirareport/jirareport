@@ -1,7 +1,7 @@
 package br.com.jiratorio.assertion.response
 
 import br.com.jiratorio.assertion.BaseAssert
-import br.com.jiratorio.domain.dynamicfield.DynamicChart
+import br.com.jiratorio.domain.chart.DynamicChart
 import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodDetailResponse

@@ -25,6 +25,7 @@ import br.com.jiratorio.service.board.BoardService
 import br.com.jiratorio.service.chart.ChartService
 import br.com.jiratorio.service.chart.PeriodChartService
 import br.com.jiratorio.service.issue.CreateIssueService
+import br.com.jiratorio.strategy.issueperiodnameformat.IssuePeriodNameFormatter
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -45,7 +46,9 @@ class IssuePeriodService(
     fun findAll(filter: FindAllIssuePeriodsFilter): IssuePeriodListResponse {
         val boardPreferences = boardService.findIssuePeriodPreferencesByBoard(filter.boardId)
 
-        val issuePeriods = issuePeriodRepository.findAll(filter, boardPreferences)
+        val formatter = IssuePeriodNameFormatter.from(boardPreferences.issuePeriodNameFormat)
+        val issuePeriods = issuePeriodRepository.findAll(filter)
+            .onEach { it.name = formatter.format(it.startDate, it.endDate) }
 
         return IssuePeriodListResponse(
             periods = issuePeriods.toIssuePeriodResponse(jiraProperties.url),
@@ -100,8 +103,11 @@ class IssuePeriodService(
 
         val board = boardService.findById(boardId)
 
+        val name = IssuePeriodNameFormatter.from(board.issuePeriodNameFormat)
+            .format(startDate, endDate, messageResolver.locale)
+
         val issuePeriod = IssuePeriodEntity(
-            name = board.issuePeriodNameFormat.format(startDate, endDate, messageResolver.locale),
+            name = name,
             startDate = startDate,
             endDate = endDate,
             board = board

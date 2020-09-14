@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain.dynamicfield
+package br.com.jiratorio.domain.chart
 
 import br.com.jiratorio.domain.entity.embedded.Chart
 import java.io.Serializable

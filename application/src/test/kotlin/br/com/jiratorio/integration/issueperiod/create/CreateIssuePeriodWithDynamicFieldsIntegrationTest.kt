@@ -4,7 +4,7 @@ import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.Authenticator
 import br.com.jiratorio.annotation.LoadStubs
 import br.com.jiratorio.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.dynamicfield.DynamicChart
+import br.com.jiratorio.domain.chart.DynamicChart
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
 import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity

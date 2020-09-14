@@ -1,6 +1,5 @@
 package br.com.jiratorio.domain.chart
 
-import br.com.jiratorio.domain.dynamicfield.DynamicChart
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.entity.embedded.Histogram
 import br.com.jiratorio.domain.entity.embedded.IssueProgression

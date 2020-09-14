@@ -1,6 +1,6 @@
 package br.com.jiratorio.assertion
 
-import br.com.jiratorio.domain.dynamicfield.DynamicChart
+import br.com.jiratorio.domain.chart.DynamicChart
 import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
 import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import br.com.jiratorio.extension.equalsComparing

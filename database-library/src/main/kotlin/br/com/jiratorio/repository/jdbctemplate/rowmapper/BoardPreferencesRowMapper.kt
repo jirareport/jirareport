@@ -1,7 +1,7 @@
 package br.com.jiratorio.repository.jdbctemplate.rowmapper
 
 import br.com.jiratorio.domain.BoardPreferences
-import br.com.jiratorio.domain.issueperiodnameformat.IssuePeriodNameFormat
+import br.com.jiratorio.domain.IssuePeriodNameFormat
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 

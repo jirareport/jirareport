@@ -18,6 +18,7 @@ import br.com.jiratorio.factory.domain.entity.LeadTimeConfigFactory
 import br.com.jiratorio.factory.domain.entity.LeadTimeFactory
 import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.restassured.specification.notFound
+import br.com.jiratorio.strategy.issueperiodnameformat.IssuePeriodNameFormatter
 import org.apache.http.HttpStatus.SC_OK
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
@@ -67,7 +68,7 @@ internal class ListIssuePeriodIntegrationTest(
                     IssuePeriodEntity::board to board,
                     IssuePeriodEntity::startDate to "01/01/2019".toLocalDate(),
                     IssuePeriodEntity::endDate to "31/01/2019".toLocalDate(),
-                    IssuePeriodEntity::name to board.issuePeriodNameFormat.format("01/01/2019".toLocalDate(), "31/01/2019".toLocalDate())
+                    IssuePeriodEntity::name to IssuePeriodNameFormatter.from(board.issuePeriodNameFormat).format("01/01/2019".toLocalDate(), "31/01/2019".toLocalDate())
                 )
             ).also { issuePeriod ->
                 issueFactory.create(
@@ -164,7 +165,7 @@ internal class ListIssuePeriodIntegrationTest(
                     IssuePeriodEntity::board to board,
                     IssuePeriodEntity::startDate to "01/02/2019".toLocalDate(),
                     IssuePeriodEntity::endDate to "28/02/2019".toLocalDate(),
-                    IssuePeriodEntity::name to board.issuePeriodNameFormat.format("01/02/2019".toLocalDate(), "28/02/2019".toLocalDate())
+                    IssuePeriodEntity::name to IssuePeriodNameFormatter.from(board.issuePeriodNameFormat).format("01/02/2019".toLocalDate(), "28/02/2019".toLocalDate())
                 )
             ).also { issuePeriod ->
                 issueFactory.create(
@@ -261,7 +262,7 @@ internal class ListIssuePeriodIntegrationTest(
                     IssuePeriodEntity::board to board,
                     IssuePeriodEntity::startDate to "01/03/2019".toLocalDate(),
                     IssuePeriodEntity::endDate to "31/03/2019".toLocalDate(),
-                    IssuePeriodEntity::name to board.issuePeriodNameFormat.format("01/03/2019".toLocalDate(), "31/03/2019".toLocalDate())
+                    IssuePeriodEntity::name to IssuePeriodNameFormatter.from(board.issuePeriodNameFormat).format("01/03/2019".toLocalDate(), "31/03/2019".toLocalDate())
                 )
             ).also { issuePeriod ->
                 issueFactory.create(
@@ -358,7 +359,7 @@ internal class ListIssuePeriodIntegrationTest(
                     IssuePeriodEntity::board to board,
                     IssuePeriodEntity::startDate to "01/04/2019".toLocalDate(),
                     IssuePeriodEntity::endDate to "30/04/2019".toLocalDate(),
-                    IssuePeriodEntity::name to board.issuePeriodNameFormat.format("01/04/2019".toLocalDate(), "30/04/2019".toLocalDate())
+                    IssuePeriodEntity::name to IssuePeriodNameFormatter.from(board.issuePeriodNameFormat).format("01/04/2019".toLocalDate(), "30/04/2019".toLocalDate())
                 )
             ).also { issuePeriod ->
                 issueFactory.create(
@@ -455,7 +456,7 @@ internal class ListIssuePeriodIntegrationTest(
                     IssuePeriodEntity::board to board,
                     IssuePeriodEntity::startDate to "01/05/2019".toLocalDate(),
                     IssuePeriodEntity::endDate to "31/05/2019".toLocalDate(),
-                    IssuePeriodEntity::name to board.issuePeriodNameFormat.format("01/05/2019".toLocalDate(), "31/05/2019".toLocalDate())
+                    IssuePeriodEntity::name to IssuePeriodNameFormatter.from(board.issuePeriodNameFormat).format("01/05/2019".toLocalDate(), "31/05/2019".toLocalDate())
                 )
             ).also { issuePeriod ->
                 issueFactory.create(

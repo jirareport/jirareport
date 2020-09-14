@@ -6,6 +6,7 @@ import br.com.jiratorio.domain.chart.MultiAxisChart
 import br.com.jiratorio.internationalization.MessageResolver
 import br.com.jiratorio.mapper.toMultiAxisChart
 import br.com.jiratorio.repository.ChartRepository
+import br.com.jiratorio.strategy.issueperiodnameformat.IssuePeriodNameFormatter
 import org.springframework.stereotype.Service
 
 @Service
@@ -22,7 +23,8 @@ class PeriodChartService(
                 it.value
                     .associate { performance ->
                         Pair(
-                            boardPreferences.issuePeriodNameFormat.format(performance.periodStart, performance.periodEnd),
+                            IssuePeriodNameFormatter.from(boardPreferences.issuePeriodNameFormat)
+                                .format(performance.periodStart, performance.periodEnd),
                             mapOf(
                                 "Throughput" to performance.throughput,
                                 "Lead Time" to performance.leadTime
@@ -39,7 +41,7 @@ class PeriodChartService(
         }
 
         return chartRepository.findLeadTimeComparisonByPeriod(filter)
-            .groupBy { boardPreferences.issuePeriodNameFormat.format(it.periodStart, it.periodEnd) }
+            .groupBy { IssuePeriodNameFormatter.from(boardPreferences.issuePeriodNameFormat).format(it.periodStart, it.periodEnd) }
             .mapValues { entry -> entry.value.associate { it.leadTimeName to it.leadTime } }
             .toMultiAxisChart()
     }
@@ -51,7 +53,7 @@ class PeriodChartService(
 
         val uninformedValue = messageResolver.resolve("uninformed")
         return chartRepository.findThroughputByPeriodAndEstimate(filter)
-            .groupBy { boardPreferences.issuePeriodNameFormat.format(it.periodStart, it.periodEnd) }
+            .groupBy { IssuePeriodNameFormatter.from(boardPreferences.issuePeriodNameFormat).format(it.periodStart, it.periodEnd) }
             .mapValues { entry -> entry.value.associate { Pair(it.estimate ?: uninformedValue, it.throughput) } }
             .toMultiAxisChart()
     }

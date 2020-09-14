@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.response.issue
 
-import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
+import br.com.jiratorio.domain.DynamicFieldsValues
 
 data class IssueFilterResponse(
 

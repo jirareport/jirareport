@@ -1,6 +1,6 @@
 package br.com.jiratorio.repository
 
-import br.com.jiratorio.domain.dynamicfield.DynamicFieldsValues
+import br.com.jiratorio.domain.DynamicFieldsValues
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.issue.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest

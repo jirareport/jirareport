@@ -1,6 +1,5 @@
 package br.com.jiratorio.repository.jdbctemplate
 
-import br.com.jiratorio.domain.BoardPreferences
 import br.com.jiratorio.domain.FindAllIssuePeriodsFilter
 import br.com.jiratorio.domain.issue.MinimalIssuePeriod
 import br.com.jiratorio.repository.NativeIssuePeriodRepository
@@ -18,7 +17,7 @@ class NativeIssuePeriodRepositoryImpl(
 
     private val jdbcTemplate: NamedParameterJdbcTemplate = NamedParameterJdbcTemplate(jdbcTemplate)
 
-    override fun findAll(filter: FindAllIssuePeriodsFilter, boardPreferences: BoardPreferences): List<MinimalIssuePeriod> {
+    override fun findAll(filter: FindAllIssuePeriodsFilter): List<MinimalIssuePeriod> {
         val query =
             """
                 SELECT ip.id,
@@ -40,7 +39,7 @@ class NativeIssuePeriodRepositoryImpl(
         params["startDate"] = filter.startDate
         params["endDate"] = filter.endDate
 
-        return jdbcTemplate.query(query, params, MinimalIssuePeriodRowMapper(boardPreferences))
+        return jdbcTemplate.query(query, params, MinimalIssuePeriodRowMapper)
     }
 
 }

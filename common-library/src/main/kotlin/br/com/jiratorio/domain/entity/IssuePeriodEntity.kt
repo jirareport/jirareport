@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.entity
 
-import br.com.jiratorio.domain.dynamicfield.DynamicChart
+import br.com.jiratorio.domain.chart.DynamicChart
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.entity.embedded.Histogram
 import br.com.jiratorio.domain.entity.embedded.IssueProgression
@@ -37,7 +37,7 @@ data class IssuePeriodEntity(
     var board: BoardEntity,
 
     @Column(nullable = false)
-    var name: String = board.issuePeriodNameFormat.format(startDate, endDate),
+    var name: String,
 
     @OneToMany
     @OrderBy("key")
@@ -118,9 +118,9 @@ data class IssuePeriodEntity(
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    var issueProgression: IssueProgression? = null
+    var issueProgression: IssueProgression? = null,
 
-) : BaseEntity() {
+    ) : BaseEntity() {
     companion object {
         private const val serialVersionUID = 7188140641247774389L
     }

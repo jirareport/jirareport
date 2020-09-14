@@ -1,5 +1,6 @@
-package br.com.jiratorio.domain.issueperiodnameformat
+package br.com.jiratorio.strategy.issueperiodnameformat
 
+import br.com.jiratorio.domain.IssuePeriodNameFormat
 import br.com.jiratorio.extension.toLocalDate
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
@@ -16,10 +17,9 @@ internal class IssuePeriodNameFormatTest {
         "15/01/2020, 15/02/2020, [15/01/2020 - 15/02/2020]"
     )
     fun `should format with INITIAL_AND_FINAL_DATE`(start: String, end: String, expected: String) {
-        val result = IssuePeriodNameFormat.INITIAL_AND_FINAL_DATE.format(
-            start.toLocalDate(),
-            end.toLocalDate()
-        )
+        val result = IssuePeriodNameFormatter.from(IssuePeriodNameFormat.INITIAL_AND_FINAL_DATE)
+            .format(start.toLocalDate(), end.toLocalDate())
+
         assertEquals(expected, result)
     }
 
@@ -40,11 +40,9 @@ internal class IssuePeriodNameFormatTest {
         "01/01/2020, 15/01/2020, [01/01/2020 - 15/01/2020]"
     )
     fun `should format with MONTH`(start: String, end: String, expected: String) {
-        val result = IssuePeriodNameFormat.MONTH.format(
-            start.toLocalDate(),
-            end.toLocalDate(),
-            Locale("pt", "BR'")
-        )
+        val result = IssuePeriodNameFormatter.from(IssuePeriodNameFormat.MONTH)
+            .format(start.toLocalDate(), end.toLocalDate(), Locale("pt", "BR'"))
+
         assertEquals(expected, result)
     }
 
@@ -65,11 +63,9 @@ internal class IssuePeriodNameFormatTest {
         "01/01/2020, 15/01/2020, [01/01/2020 - 15/01/2020]"
     )
     fun `should format with MONTH_AND_YEAR`(start: String, end: String, expected: String) {
-        val result = IssuePeriodNameFormat.MONTH_AND_YEAR.format(
-            start.toLocalDate(),
-            end.toLocalDate(),
-            Locale("pt", "BR'")
-        )
+        val result = IssuePeriodNameFormatter.from(IssuePeriodNameFormat.MONTH_AND_YEAR)
+            .format(start.toLocalDate(), end.toLocalDate(), Locale("pt", "BR'"))
+
         assertEquals(expected, result)
     }
 
@@ -90,11 +86,9 @@ internal class IssuePeriodNameFormatTest {
         "01/01/2020, 15/01/2020, [01/01/2020 - 15/01/2020]"
     )
     fun `should format with MONTH_AND_ABBREVIATED_YEAR`(start: String, end: String, expected: String) {
-        val result = IssuePeriodNameFormat.MONTH_AND_ABBREVIATED_YEAR.format(
-            start.toLocalDate(),
-            end.toLocalDate(),
-            Locale("pt", "BR'")
-        )
+        val result = IssuePeriodNameFormatter.from(IssuePeriodNameFormat.MONTH_AND_ABBREVIATED_YEAR)
+            .format(start.toLocalDate(), end.toLocalDate(), Locale("pt", "BR'"))
+
         assertEquals(expected, result)
     }
 
@@ -115,11 +109,9 @@ internal class IssuePeriodNameFormatTest {
         "01/01/2020, 15/01/2020, [01/01/2020 - 15/01/2020]"
     )
     fun `should format with ABBREVIATED_MONTH`(start: String, end: String, expected: String) {
-        val result = IssuePeriodNameFormat.ABBREVIATED_MONTH.format(
-            start.toLocalDate(),
-            end.toLocalDate(),
-            Locale("pt", "BR'")
-        )
+        val result = IssuePeriodNameFormatter.from(IssuePeriodNameFormat.ABBREVIATED_MONTH)
+            .format(start.toLocalDate(), end.toLocalDate(), Locale("pt", "BR'"))
+
         assertEquals(expected, result)
     }
 
@@ -140,11 +132,9 @@ internal class IssuePeriodNameFormatTest {
         "01/01/2020, 15/01/2020, [01/01/2020 - 15/01/2020]"
     )
     fun `should format with ABBREVIATED_MONTH_AND_YEAR`(start: String, end: String, expected: String) {
-        val result = IssuePeriodNameFormat.ABBREVIATED_MONTH_AND_YEAR.format(
-            start.toLocalDate(),
-            end.toLocalDate(),
-            Locale("pt", "BR'")
-        )
+        val result = IssuePeriodNameFormatter.from(IssuePeriodNameFormat.ABBREVIATED_MONTH_AND_YEAR)
+            .format(start.toLocalDate(), end.toLocalDate(), Locale("pt", "BR'"))
+
         assertEquals(expected, result)
     }
 
@@ -165,11 +155,9 @@ internal class IssuePeriodNameFormatTest {
         "01/01/2020, 15/01/2020, [01/01/2020 - 15/01/2020]"
     )
     fun `should format with ABBREVIATED_MONTH_AND_ABBREVIATED_YEAR`(start: String, end: String, expected: String) {
-        val result = IssuePeriodNameFormat.ABBREVIATED_MONTH_AND_ABBREVIATED_YEAR.format(
-            start.toLocalDate(),
-            end.toLocalDate(),
-            Locale("pt", "BR'")
-        )
+        val result = IssuePeriodNameFormatter.from(IssuePeriodNameFormat.ABBREVIATED_MONTH_AND_ABBREVIATED_YEAR)
+            .format(start.toLocalDate(), end.toLocalDate(), Locale("pt", "BR'"))
+
         assertEquals(expected, result)
     }
 

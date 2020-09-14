@@ -1,12 +1,13 @@
 package br.com.jiratorio.factory.domain.entity
 
-import br.com.jiratorio.domain.dynamicfield.DynamicChart
+import br.com.jiratorio.domain.chart.DynamicChart
 import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.extension.faker.jira
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.KBacon
 import br.com.jiratorio.repository.IssuePeriodRepository
+import br.com.jiratorio.strategy.issueperiodnameformat.IssuePeriodNameFormatter
 import com.github.javafaker.Faker
 import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
@@ -19,13 +20,18 @@ class IssuePeriodFactory(
 ) : KBacon<IssuePeriodEntity>(issuePeriodRepository) {
 
     override fun builder(): IssuePeriodEntity {
+        val board = boardFactory.create()
+        val startDate = faker.date().past(30, TimeUnit.DAYS).toLocalDate()
+        val endDate = faker.date().past(15, TimeUnit.DAYS).toLocalDate()
+
         return IssuePeriodEntity(
-            board = boardFactory.create(),
+            board = board,
             leadTime = faker.jira().leadTime(),
             wipAvg = faker.number().randomDouble(2, 1, 10),
             avgPctEfficiency = faker.number().randomDouble(2, 1, 10),
-            startDate = faker.date().past(30, TimeUnit.DAYS).toLocalDate(),
-            endDate = faker.date().past(15, TimeUnit.DAYS).toLocalDate(),
+            startDate = startDate,
+            endDate = endDate,
+            name = IssuePeriodNameFormatter.from(board.issuePeriodNameFormat).format(startDate, endDate),
             jql = faker.lorem().paragraph(),
             issues = mutableSetOf(),
             throughput = faker.number().randomNumber().toInt(),

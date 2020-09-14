@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain.dynamicfield
+package br.com.jiratorio.domain
 
 data class DynamicFieldsValues(
 

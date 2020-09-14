@@ -1,7 +1,7 @@
 package br.com.jiratorio.service.chart
 
 import br.com.jiratorio.domain.chart.ChartAggregator
-import br.com.jiratorio.domain.dynamicfield.DynamicChart
+import br.com.jiratorio.domain.chart.DynamicChart
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity
 import br.com.jiratorio.domain.entity.HolidayEntity

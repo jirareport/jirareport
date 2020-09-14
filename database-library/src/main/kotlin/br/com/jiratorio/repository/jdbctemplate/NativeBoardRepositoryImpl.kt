@@ -29,7 +29,7 @@ class NativeBoardRepositoryImpl(
     }
 
     override fun findIssuePeriodPreferencesByBoard(boardId: Long): BoardPreferences? {
-        val query = 
+        val query =
             """
             SELECT id,
                    issue_period_name_format,
