@@ -1,6 +1,6 @@
 package br.com.jiratorio.assertion
 
-import br.com.jiratorio.domain.duedate.DueDateType
+import br.com.jiratorio.domain.DueDateType
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.impediment.ImpedimentType
 

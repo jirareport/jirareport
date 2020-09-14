@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain.duedate.calculator
+package br.com.jiratorio.strategy.duedate
 
 import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory

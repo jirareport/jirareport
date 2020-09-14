@@ -2,7 +2,7 @@ package br.com.jiratorio.mapper
 
 import br.com.jiratorio.assertion.response.board.assertThat
 import br.com.jiratorio.junit.testtype.UnitTest
-import br.com.jiratorio.domain.duedate.DueDateType
+import br.com.jiratorio.domain.DueDateType
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.impediment.ImpedimentType
 import org.junit.jupiter.api.Test

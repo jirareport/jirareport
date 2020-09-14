@@ -14,6 +14,7 @@ import br.com.jiratorio.service.DueDateService
 import br.com.jiratorio.service.EfficiencyService
 import br.com.jiratorio.service.HolidayService
 import br.com.jiratorio.service.LeadTimeService
+import br.com.jiratorio.strategy.duedate.DueDateCalculator
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -97,7 +98,8 @@ class CreateIssueService(
 
         return if (dueDateCF != null && dueDateCF.isNotEmpty() && dueDateType != null) {
             val dueDateHistory = dueDateService.parseHistory(dueDateCF, jiraIssue.changelog.fieldChangelog)
-            val deviationOfEstimate = dueDateType.calcDeviationOfEstimate(dueDateHistory, jiraIssue.endDate, board.ignoreWeekend, holidays)
+            val deviationOfEstimate = DueDateCalculator.from(dueDateType)
+                .calcDeviationOfEstimate(dueDateHistory, jiraIssue.endDate, board.ignoreWeekend, holidays)
 
             Pair(deviationOfEstimate, dueDateHistory)
         } else

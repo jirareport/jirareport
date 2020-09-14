@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.request
 
-import br.com.jiratorio.domain.estimate.EstimateFieldReference
+import br.com.jiratorio.domain.EstimateFieldReference
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 import javax.validation.constraints.AssertTrue

@@ -2,7 +2,7 @@ package br.com.jiratorio.service
 
 import br.com.jiratorio.domain.Percentile
 import br.com.jiratorio.domain.entity.BoardEntity
-import br.com.jiratorio.domain.estimate.EstimateFieldReference
+import br.com.jiratorio.domain.EstimateFieldReference
 import br.com.jiratorio.domain.impediment.calculator.ImpedimentCalculatorResult
 import br.com.jiratorio.domain.issue.JiraIssue
 import br.com.jiratorio.domain.request.SearchEstimateRequest

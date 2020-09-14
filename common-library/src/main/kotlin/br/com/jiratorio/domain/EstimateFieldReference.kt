@@ -1,4 +1,4 @@
-package br.com.jiratorio.domain.estimate
+package br.com.jiratorio.domain
 
 enum class EstimateFieldReference {
     ISSUE_TYPE,
