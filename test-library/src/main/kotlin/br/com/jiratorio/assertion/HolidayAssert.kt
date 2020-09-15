@@ -1,20 +1,38 @@
 package br.com.jiratorio.assertion
 
+import br.com.jiratorio.assertion.error.ShouldBeEquals.Companion.shouldBeEquals
 import br.com.jiratorio.domain.entity.HolidayEntity
+import org.assertj.core.api.AbstractAssert
 import java.time.LocalDate
 
-class HolidayAssert(actual: HolidayEntity) :
-    BaseAssert<HolidayAssert, HolidayEntity>(actual, HolidayAssert::class) {
+class HolidayAssert(
+    actual: HolidayEntity,
+) : AbstractAssert<HolidayAssert, HolidayEntity>(
+    actual,
+    HolidayAssert::class.java
+) {
 
-    fun hasDescription(description: String?) = assertAll {
-        objects.assertEqual(field("holiday.description"), actual.description, description)
+    fun hasDescription(description: String?): HolidayAssert {
+        if (actual.description != description) {
+            failWithMessage(shouldBeEquals(actual.description, description).create())
+        }
+
+        return this
     }
 
-    fun hasDate(date: LocalDate?) = assertAll {
-        objects.assertEqual(field("holiday.date"), actual.date, date)
+    fun hasDate(date: LocalDate?): HolidayAssert {
+        if (actual.date != date) {
+            failWithMessage(shouldBeEquals(actual.date, date).create())
+        }
+
+        return this
+    }
+
+    companion object {
+
+        fun assertThat(actual: HolidayEntity): HolidayAssert =
+            HolidayAssert(actual)
+
     }
 
 }
-
-fun HolidayEntity.assertThat(assertions: HolidayAssert.() -> Unit): HolidayAssert =
-    HolidayAssert(this).assertThat(assertions)

@@ -1,7 +1,7 @@
 package br.com.jiratorio.integration.issue
 
-import br.com.jiratorio.assertion.response.assertThat
 import br.com.jiratorio.Authenticator
+import br.com.jiratorio.assertion.response.IssueDetailResponseAssert.Companion.assertThat
 import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity
 import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
@@ -111,19 +111,16 @@ class SearchIssueByIdIntegrationTest(
         val issue = issueRepository.findByIdOrNull(1L)
             ?: throw ResourceNotFound()
 
-        issueDetailResponse.assertThat {
-            hasId(issue.id)
-            hasKey(issue.key)
-
-            hasChangelogSize(issue.columnChangelog)
-            hasDueDateHistorySize(issue.dueDateHistory)
-            hasImpedimentHistorySize(issue.impedimentHistory)
-            hasLeadTimesSize(issue.leadTimes)
-
-            hasTouchTime(issue.touchTime / 60.0)
-            hasWaitTime(issue.waitTime / 60.0)
-            hasPctEfficiency(issue.pctEfficiency)
-        }
+        assertThat(issueDetailResponse)
+            .hasId(issue.id)
+            .hasKey(issue.key)
+            .hasChangelogSize(issue.columnChangelog)
+            .hasDueDateHistorySize(issue.dueDateHistory)
+            .hasImpedimentHistorySize(issue.impedimentHistory)
+            .hasLeadTimesSize(issue.leadTimes)
+            .hasTouchTime(issue.touchTime / 60.0)
+            .hasWaitTime(issue.waitTime / 60.0)
+            .hasPctEfficiency(issue.pctEfficiency)
     }
 
 }

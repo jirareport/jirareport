@@ -1,6 +1,6 @@
 package br.com.jiratorio.usecase.efficiency
 
-import br.com.jiratorio.assertion.assertThat
+import br.com.jiratorio.assertion.EfficiencyAssert
 import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.extension.toLocalDateTime
@@ -26,11 +26,10 @@ internal class CalculateEfficiencyTest {
             null
         )
 
-        result.assertThat {
-            hasWaitTime(2882)
-            hasTouchTime(67622)
-            hasPctEfficiency(95.91228866447294)
-        }
+        EfficiencyAssert.assertThat(result)
+            .hasWaitTime(2882)
+            .hasTouchTime(67622)
+            .hasPctEfficiency(95.91228866447294)
     }
 
     @Test
@@ -46,11 +45,10 @@ internal class CalculateEfficiencyTest {
             null
         )
 
-        result.assertThat {
-            hasWaitTime(0)
-            hasTouchTime(0)
-            hasPctEfficiency(0.0)
-        }
+        EfficiencyAssert.assertThat(result)
+            .hasWaitTime(0)
+            .hasTouchTime(0)
+            .hasPctEfficiency(0.0)
     }
 
     @Test
@@ -67,11 +65,10 @@ internal class CalculateEfficiencyTest {
             null
         )
 
-        result.assertThat {
-            hasWaitTime(0)
-            hasTouchTime(0)
-            hasPctEfficiency(0.0)
-        }
+        EfficiencyAssert.assertThat(result)
+            .hasWaitTime(0)
+            .hasTouchTime(0)
+            .hasPctEfficiency(0.0)
     }
 
     @Test
@@ -88,11 +85,10 @@ internal class CalculateEfficiencyTest {
             null
         )
 
-        result.assertThat {
-            hasWaitTime(0)
-            hasTouchTime(0)
-            hasPctEfficiency(0.0)
-        }
+        EfficiencyAssert.assertThat(result)
+            .hasWaitTime(0)
+            .hasTouchTime(0)
+            .hasPctEfficiency(0.0)
     }
 
     private fun defaultColumnChangelog(): Set<ColumnChangelogEntity> =

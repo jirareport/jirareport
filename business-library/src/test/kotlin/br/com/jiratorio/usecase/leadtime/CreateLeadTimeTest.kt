@@ -1,6 +1,6 @@
 package br.com.jiratorio.usecase.leadtime
 
-import br.com.jiratorio.assertion.assertThat
+import br.com.jiratorio.assertion.LeadTimeAssert
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.IssueEntity
@@ -21,7 +21,6 @@ import io.mockk.runs
 import io.mockk.verify
 import io.mockk.verifyAll
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
@@ -95,29 +94,26 @@ internal class CreateLeadTimeTest {
 
         val leadTimes = issue.leadTimes ?: throw ResourceNotFound()
 
-        leadTimes.find {
-            it.leadTimeConfig.name == "Development Lead Time"
-        }?.assertThat {
-            hasLeadTime(10)
-            hasStartDate("10/01/2019 12:00".toLocalDateTime())
-            hasEndDate("23/01/2019 12:00".toLocalDateTime())
-        } ?: Assertions.fail("Development Lead Time not found")
+        leadTimes.find { it.leadTimeConfig.name == "Development Lead Time" }
+            .let(LeadTimeAssert::assertThat)
+            .isNotNull
+            .hasLeadTime(10)
+            .hasStartDate("10/01/2019 12:00".toLocalDateTime())
+            .hasEndDate("23/01/2019 12:00".toLocalDateTime())
 
-        leadTimes.find {
-            it.leadTimeConfig.name == "Test Lead Time"
-        }?.assertThat {
-            hasLeadTime(8)
-            hasStartDate("23/01/2019 12:00".toLocalDateTime())
-            hasEndDate("02/02/2019 12:00".toLocalDateTime())
-        } ?: Assertions.fail("Test Lead Time not found")
+        leadTimes.find { it.leadTimeConfig.name == "Test Lead Time" }
+            .let(LeadTimeAssert::assertThat)
+            .isNotNull
+            .hasLeadTime(8)
+            .hasStartDate("23/01/2019 12:00".toLocalDateTime())
+            .hasEndDate("02/02/2019 12:00".toLocalDateTime())
 
-        leadTimes.find {
-            it.leadTimeConfig.name == "Delivery Lead Time"
-        }?.assertThat {
-            hasLeadTime(7)
-            hasStartDate("02/02/2019 12:00".toLocalDateTime())
-            hasEndDate("12/02/2019 12:00".toLocalDateTime())
-        } ?: Assertions.fail("Delivery Lead Time not found")
+        leadTimes.find { it.leadTimeConfig.name == "Delivery Lead Time" }
+            .let(LeadTimeAssert::assertThat)
+            .isNotNull
+            .hasLeadTime(7)
+            .hasStartDate("02/02/2019 12:00".toLocalDateTime())
+            .hasEndDate("12/02/2019 12:00".toLocalDateTime())
     }
 
     private fun defaultIssue(board: BoardEntity): IssueEntity {

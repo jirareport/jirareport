@@ -1,6 +1,6 @@
 package br.com.jiratorio.usecase.percentile
 
-import br.com.jiratorio.assertion.assertThat
+import br.com.jiratorio.assertion.PercentileAssert
 import br.com.jiratorio.junit.testtype.UnitTest
 import br.com.jiratorio.domain.Percentile
 import br.com.jiratorio.service.PercentileService
@@ -19,12 +19,11 @@ internal class CalculatePercentileTest {
 
         val result = calculatePercentile.calculate(leadTimes)
 
-        result.assertThat {
-            hasAverage(expected.average)
-            hasMedian(expected.median)
-            hasPercentile75(expected.percentile75)
-            hasPercentile90(expected.percentile90)
-        }
+        PercentileAssert.assertThat(result)
+            .hasAverage(expected.average)
+            .hasMedian(expected.median)
+            .hasPercentile75(expected.percentile75)
+            .hasPercentile90(expected.percentile90)
     }
 
     fun calculatePercentileProvider(): List<Pair<List<Long>, Percentile>> {

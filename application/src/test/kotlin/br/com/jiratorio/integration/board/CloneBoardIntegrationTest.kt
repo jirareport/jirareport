@@ -1,8 +1,7 @@
 package br.com.jiratorio.integration.board
 
-import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.Authenticator
-import br.com.jiratorio.junit.testtype.IntegrationTest
+import br.com.jiratorio.assertion.BoardAssert.Companion.assertThat
 import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity
 import br.com.jiratorio.domain.entity.HolidayEntity
 import br.com.jiratorio.domain.entity.LeadTimeConfigEntity
@@ -12,6 +11,7 @@ import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.factory.domain.entity.DynamicFieldConfigFactory
 import br.com.jiratorio.factory.domain.entity.HolidayFactory
 import br.com.jiratorio.factory.domain.entity.LeadTimeConfigFactory
+import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.DynamicFieldConfigRepository
 import br.com.jiratorio.repository.HolidayRepository
@@ -78,25 +78,24 @@ class CloneBoardIntegrationTest(
         val board = boardRepository.findByIdOrNull(32L)
             ?: throw ResourceNotFound()
 
-        board.assertThat {
-            hasExternalId(boardToClone.externalId)
-            hasName(boardToClone.name)
-            hasStartColumn(boardToClone.startColumn)
-            hasEndColumn(boardToClone.endColumn)
-            hasFluxColumn(boardToClone.fluxColumn)
-            hasIgnoreIssueType(boardToClone.ignoreIssueType)
-            hasEpicCF(boardToClone.epicCF)
-            hasEstimateCF(boardToClone.estimateCF)
-            hasSystemCF(boardToClone.systemCF)
-            hasProjectCF(boardToClone.projectCF)
-            hasDueDateCF(boardToClone.dueDateCF)
-            hasIgnoreWeekend(boardToClone.ignoreWeekend)
-            hasImpedimentType(boardToClone.impedimentType)
-            hasImpedimentColumns(boardToClone.impedimentColumns)
-            hasTouchingColumns(boardToClone.touchingColumns)
-            hasWaitingColumns(boardToClone.waitingColumns)
-            hasDueDateType(boardToClone.dueDateType)
-        }
+        assertThat(board)
+            .hasExternalId(boardToClone.externalId)
+            .hasName(boardToClone.name)
+            .hasStartColumn(boardToClone.startColumn)
+            .hasEndColumn(boardToClone.endColumn)
+            .hasFluxColumn(boardToClone.fluxColumn)
+            .hasIgnoreIssueType(boardToClone.ignoreIssueType)
+            .hasEpicCF(boardToClone.epicCF)
+            .hasEstimateCF(boardToClone.estimateCF)
+            .hasSystemCF(boardToClone.systemCF)
+            .hasProjectCF(boardToClone.projectCF)
+            .hasDueDateCF(boardToClone.dueDateCF)
+            .hasIgnoreWeekend(boardToClone.ignoreWeekend)
+            .hasImpedimentType(boardToClone.impedimentType)
+            .hasImpedimentColumns(boardToClone.impedimentColumns)
+            .hasTouchingColumns(boardToClone.touchingColumns)
+            .hasWaitingColumns(boardToClone.waitingColumns)
+            .hasDueDateType(boardToClone.dueDateType)
 
         assertThat(holidayRepository.count())
             .isEqualTo(20)

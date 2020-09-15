@@ -1,12 +1,12 @@
 package br.com.jiratorio.integration.userconfig
 
-import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.Authenticator
-import br.com.jiratorio.junit.testtype.IntegrationTest
+import br.com.jiratorio.assertion.UserConfigAssert
 import br.com.jiratorio.domain.request.UpdateUserConfigRequest
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.UpdateUserConfigFactory
+import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.repository.UserConfigRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 internal class UpdateUserConfigIntegrationTest(
     private val updateUserConfigFactory: UpdateUserConfigFactory,
     private val userConfigRepository: UserConfigRepository,
-    private val authenticator: Authenticator
+    private val authenticator: Authenticator,
 ) {
 
     @Test
@@ -44,13 +44,11 @@ internal class UpdateUserConfigIntegrationTest(
         val userConfig = userConfigRepository.findByUsername(authenticator.defaultUserName())
             ?: throw ResourceNotFound()
 
-        userConfig.assertThat {
-            hasHolidayToken(request.holidayToken!!)
-            hasState(request.state!!)
-            hasCity("SAO_PAULO")
-
-            hasLeadTimeChartType(request.leadTimeChartType!!)
-            hasThroughputChartType(request.throughputChartType!!)
-        }
+        UserConfigAssert.assertThat(userConfig)
+            .hasHolidayToken(request.holidayToken)
+            .hasState(request.state)
+            .hasCity("SAO_PAULO")
+            .hasLeadTimeChartType(request.leadTimeChartType)
+            .hasThroughputChartType(request.throughputChartType)
     }
 }

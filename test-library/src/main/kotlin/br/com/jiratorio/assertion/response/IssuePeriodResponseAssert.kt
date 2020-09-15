@@ -1,40 +1,77 @@
 package br.com.jiratorio.assertion.response
 
-import br.com.jiratorio.assertion.BaseAssert
+import br.com.jiratorio.assertion.error.ShouldBeEquals.Companion.shouldBeEquals
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodResponse
+import org.assertj.core.api.AbstractAssert
 
-class IssuePeriodResponseAssert(actual: IssuePeriodResponse) :
-    BaseAssert<IssuePeriodResponseAssert, IssuePeriodResponse>(actual, IssuePeriodResponseAssert::class) {
+class IssuePeriodResponseAssert private constructor(
+    actual: IssuePeriodResponse,
+) : AbstractAssert<IssuePeriodResponseAssert, IssuePeriodResponse>(
+    actual,
+    IssuePeriodResponseAssert::class.java
+) {
 
-    fun hasId(id: Long) = assertAll {
-        objects.assertEqual(field("issuePeriodResponse.id"), actual.id, id)
+    fun hasId(id: Long): IssuePeriodResponseAssert {
+        if (actual.id != id) {
+            failWithMessage(shouldBeEquals(actual.id, id).create())
+        }
+
+        return this
     }
 
-    fun hasName(name: String) = assertAll {
-        objects.assertEqual(field("issuePeriodResponse.name"), actual.name, name)
+    fun hasName(name: String): IssuePeriodResponseAssert {
+        if (actual.name != name) {
+            failWithMessage(shouldBeEquals(actual.name, name).create())
+        }
+
+        return this
     }
 
-    fun hasWipAvg(wipAvg: Double) = assertAll {
-        objects.assertEqual(field("issuePeriodResponse.wipAvg"), actual.wipAvg, wipAvg)
+    fun hasWipAvg(wipAvg: Double): IssuePeriodResponseAssert {
+        if (actual.wipAvg != wipAvg) {
+            failWithMessage(shouldBeEquals(actual.wipAvg, wipAvg).create())
+        }
+
+        return this
     }
 
-    fun hasLeadTime(leadTime: Double) = assertAll {
-        objects.assertEqual(field("issuePeriodResponse.leadTime"), actual.leadTime, leadTime)
+    fun hasLeadTime(leadTime: Double): IssuePeriodResponseAssert {
+        if (actual.leadTime != leadTime) {
+            failWithMessage(shouldBeEquals(actual.leadTime, leadTime).create())
+        }
+
+        return this
     }
 
-    fun hasAvgPctEfficiency(avgPctEfficiency: Double) = assertAll {
-        objects.assertEqual(field("issuePeriodResponse.avgPctEfficiency"), actual.avgPctEfficiency, avgPctEfficiency)
+    fun hasAvgPctEfficiency(avgPctEfficiency: Double): IssuePeriodResponseAssert {
+        if (actual.avgPctEfficiency != avgPctEfficiency) {
+            failWithMessage(shouldBeEquals(actual.avgPctEfficiency, avgPctEfficiency).create())
+        }
+
+        return this
     }
 
-    fun hasJql(jql: String) = assertAll {
-        objects.assertEqual(field("issuePeriodResponse.jql"), actual.jql, jql)
+    fun hasJql(jql: String): IssuePeriodResponseAssert {
+        if (actual.jql != jql) {
+            failWithMessage(shouldBeEquals(actual.jql, jql).create())
+        }
+
+        return this
     }
 
-    fun hasThroughput(throughput: Int) = assertAll {
-        objects.assertEqual(field("issuePeriodResponse.throughput"), actual.throughput, throughput)
+    fun hasThroughput(throughput: Int): IssuePeriodResponseAssert {
+        if (actual.throughput != throughput) {
+            failWithMessage(shouldBeEquals(actual.throughput, throughput).create())
+        }
+
+        return this
+    }
+
+    companion object {
+
+        fun assertThat(actual: IssuePeriodResponse): IssuePeriodResponseAssert =
+            IssuePeriodResponseAssert(actual)
+
     }
 
 }
-
-fun IssuePeriodResponse.assertThat(assertions: IssuePeriodResponseAssert.() -> Unit): IssuePeriodResponseAssert =
-    IssuePeriodResponseAssert(this).assertThat(assertions)

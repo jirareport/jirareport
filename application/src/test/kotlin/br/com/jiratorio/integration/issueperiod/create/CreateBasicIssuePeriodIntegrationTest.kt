@@ -1,9 +1,10 @@
 package br.com.jiratorio.integration.issueperiod.create
 
-import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.Authenticator
 import br.com.jiratorio.annotation.LoadStubs
-import br.com.jiratorio.junit.testtype.IntegrationTest
+import br.com.jiratorio.assertion.HistogramAssert.Companion.assertThat
+import br.com.jiratorio.assertion.IssueAssert.Companion.assertThat
+import br.com.jiratorio.assertion.IssuePeriodAssert.Companion.assertThat
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
 import br.com.jiratorio.dsl.restAssured
@@ -11,6 +12,7 @@ import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
 import br.com.jiratorio.factory.domain.entity.BoardFactory
+import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.repository.IssueRepository
 import io.restassured.http.ContentType
@@ -23,7 +25,7 @@ internal class CreateBasicIssuePeriodIntegrationTest(
     private val boardFactory: BoardFactory,
     private val authenticator: Authenticator,
     private val issuePeriodRepository: IssuePeriodRepository,
-    private val issueRepository: IssueRepository
+    private val issueRepository: IssueRepository,
 ) {
 
     @Test
@@ -56,75 +58,61 @@ internal class CreateBasicIssuePeriodIntegrationTest(
         val issuePeriod = issuePeriodRepository.findByIdOrNull(1L)
             ?: throw ResourceNotFound()
 
-        issuePeriod.assertThat {
-            hasStartDate(request.startDate.toLocalDate())
-            hasEndDate(request.endDate.toLocalDate())
-
-            hasLeadTime(14.5)
-
-            histogram.assertThat {
-                hasMedian(11)
-                hasPercentile75(18)
-                hasPercentile90(18)
-                hasChart(
-                    1L to 0, 2L to 0, 3L to 0, 4L to 0, 5L to 0, 6L to 0, 7L to 0, 8L to 0, 9L to 0, 10L to 0,
-                    11L to 1, 12L to 0, 13L to 0, 14L to 0, 15L to 0, 16L to 0, 17L to 0, 18L to 1
-                )
-            }
-
-            hasLeadTimeByEstimate("Uninformed" to 14.5)
-            hasThroughputByEstimate("Uninformed" to 2)
-
-            hasLeadTimeBySystem("Uninformed" to 14.5)
-            hasThroughputBySystem("Uninformed" to 2)
-
-            hasLeadTimeByType("Task" to 14.5)
-            hasThroughputByType("Task" to 2)
-
-            hasLeadTimeByProject("Uninformed" to 14.5)
-            hasThroughputByProject("Uninformed" to 2)
-
-            hasLeadTimeByPriority("Major" to 14.5)
-            hasThroughputByPriority("Major" to 2)
-
-            hasThroughput(2)
-
-            hasWipAvg(1.26)
-
-            hasAvgPctEfficiency(0.0)
-
-            hasEmptyDynamicCharts()
-
-            containsColumnTimeAvg(
+        assertThat(issuePeriod)
+            .hasStartDate(request.startDate.toLocalDate())
+            .hasEndDate(request.endDate.toLocalDate())
+            .hasLeadTime(14.5)
+            .hasLeadTimeByEstimate("Uninformed" to 14.5)
+            .hasThroughputByEstimate("Uninformed" to 2)
+            .hasLeadTimeBySystem("Uninformed" to 14.5)
+            .hasThroughputBySystem("Uninformed" to 2)
+            .hasLeadTimeByType("Task" to 14.5)
+            .hasThroughputByType("Task" to 2)
+            .hasLeadTimeByProject("Uninformed" to 14.5)
+            .hasThroughputByProject("Uninformed" to 2)
+            .hasLeadTimeByPriority("Major" to 14.5)
+            .hasThroughputByPriority("Major" to 2)
+            .hasThroughput(2)
+            .hasWipAvg(1.26)
+            .hasAvgPctEfficiency(0.0)
+            .hasEmptyDynamicCharts()
+            .containsColumnTimeAvg(
                 ColumnTimeAverageEntity(columnName = "BACKLOG", averageTime = 4.0),
                 ColumnTimeAverageEntity(columnName = "TODO", averageTime = 2.0),
                 ColumnTimeAverageEntity(columnName = "WIP", averageTime = 10.0),
                 ColumnTimeAverageEntity(columnName = "ACCOMPANIMENT", averageTime = 4.0),
                 ColumnTimeAverageEntity(columnName = "DONE", averageTime = 0.0)
             )
+            .hasEmptyLeadTimeCompareChart()
 
-            hasEmptyLeadTimeCompareChart()
-        }
+        assertThat(issuePeriod.histogram)
+            .isNotNull
+            .hasMedian(11)
+            .hasPercentile75(18)
+            .hasPercentile90(18)
+            .hasChart(
+                1L to 0, 2L to 0, 3L to 0, 4L to 0, 5L to 0, 6L to 0, 7L to 0, 8L to 0, 9L to 0, 10L to 0,
+                11L to 1, 12L to 0, 13L to 0, 14L to 0, 15L to 0, 16L to 0, 17L to 0, 18L to 1
+            )
 
         val issue = issueRepository.findByIdOrNull(1L)
             ?: throw ResourceNotFound()
 
-        issue.assertThat {
-            hasKey("JIRAT-1")
-            hasIssueType("Task")
-            hasCreator("Leonardo Ferreira")
-            hasSystem(null)
-            hasEpic(null)
-            hasSummary("Calcular diferença de data de entrega com o primeiro due date")
-            hasEstimate(null)
-            hasProject(null)
-            hasStartDate("01/01/2019 10:15".toLocalDateTime())
-            hasEndDate("15/01/2019 11:20".toLocalDateTime())
-            hasLeadTime(11)
-            hasCreated("25/12/2018 11:49:35".toLocalDateTime())
-            hasPriority("Major")
-
-            hasColumnChangelog(
+        assertThat(issue)
+            .hasKey("JIRAT-1")
+            .hasIssueType("Task")
+            .hasCreator("Leonardo Ferreira")
+            .hasSystem(null)
+            .hasEpic(null)
+            .hasSummary("Calcular diferença de data de entrega com o primeiro due date")
+            .hasEstimate(null)
+            .hasProject(null)
+            .hasStartDate("01/01/2019 10:15".toLocalDateTime())
+            .hasEndDate("15/01/2019 11:20".toLocalDateTime())
+            .hasLeadTime(11)
+            .hasCreated("25/12/2018 11:49:35".toLocalDateTime())
+            .hasPriority("Major")
+            .hasColumnChangelog(
                 ColumnChangelogEntity(
                     from = null,
                     to = "BACKLOG",
@@ -161,18 +149,13 @@ internal class CreateBasicIssuePeriodIntegrationTest(
                     endDate = "15/01/2019 11:20".toLocalDateTime()
                 )
             )
-
-            hasDeviationOfEstimate(0)
-            hasDueDateHistory(emptyList())
-
-            hasImpedimentTime(0)
-            hasEmptyImpedimentHistory()
-
-            hasEmptyDynamicFields()
-
-            hasWaitTime(0)
-            hasTouchTime(0)
-            hasPctEfficiency(0.0)
-        }
+            .hasDeviationOfEstimate(0)
+            .hasDueDateHistory(emptyList())
+            .hasImpedimentTime(0)
+            .hasEmptyImpedimentHistory()
+            .hasEmptyDynamicFields()
+            .hasWaitTime(0)
+            .hasTouchTime(0)
+            .hasPctEfficiency(0.0)
     }
 }

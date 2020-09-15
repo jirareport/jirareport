@@ -1,7 +1,7 @@
 package br.com.jiratorio.integration.leadtimeconfig
 
-import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.Authenticator
+import br.com.jiratorio.assertion.LeadTimeConfigAssert
 import br.com.jiratorio.restassured.specification.notFound
 import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.dsl.restAssured
@@ -48,12 +48,10 @@ internal class CreateLeadTimeConfigIntegrationTest(
         val leadTimeConfig = leadTimeConfigRepository.findByIdOrNull(1L)
             ?: throw ResourceNotFound()
 
-        leadTimeConfig.assertThat {
-            hasName(request.name)
-
-            hasStartColumn(request.startColumn)
-            hasEndColumn(request.endColumn)
-        }
+        LeadTimeConfigAssert.assertThat(leadTimeConfig)
+            .hasName(request.name)
+            .hasStartColumn(request.startColumn)
+            .hasEndColumn(request.endColumn)
     }
 
     @Test

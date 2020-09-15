@@ -1,10 +1,10 @@
 package br.com.jiratorio.mapper
 
-import br.com.jiratorio.assertion.response.board.assertThat
-import br.com.jiratorio.junit.testtype.UnitTest
+import br.com.jiratorio.assertion.response.board.BoardDetailsResponseAssert.Companion.assertThat
 import br.com.jiratorio.domain.DueDateType
-import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.ImpedimentType
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.junit.testtype.UnitTest
 import org.junit.jupiter.api.Test
 
 @UnitTest
@@ -35,26 +35,25 @@ class BoardMapperTest {
 
         val boardDetailsResponse = board.toBoardDetailsResponse()
 
-        boardDetailsResponse.assertThat {
-            hasId(board.id)
-            hasExternalId(board.externalId)
-            hasName(board.name)
-            hasStartColumn(board.startColumn)
-            hasEndColumn(board.endColumn)
-            hasFluxColumn(board.fluxColumn)
-            hasIgnoreIssueType(board.ignoreIssueType)
-            hasEpicCF(board.epicCF)
-            hasEstimateCF(board.estimateCF)
-            hasSystemCF(board.systemCF)
-            hasProjectCF(board.projectCF)
-            hasIgnoreWeekend(board.ignoreWeekend)
-            hasDueDateCF(board.dueDateCF)
-            hasDueDateType(board.dueDateType?.name)
-            hasImpedimentType(board.impedimentType)
-            hasImpedimentColumns(board.impedimentColumns)
-            hasTouchingColumns(board.touchingColumns)
-            hasWaitingColumns(board.waitingColumns)
-        }
+        assertThat(boardDetailsResponse)
+            .hasId(board.id)
+            .hasExternalId(board.externalId)
+            .hasName(board.name)
+            .hasStartColumn(board.startColumn)
+            .hasEndColumn(board.endColumn)
+            .hasFluxColumn(board.fluxColumn)
+            .hasIgnoreIssueType(board.ignoreIssueType)
+            .hasEpicCF(board.epicCF)
+            .hasEstimateCF(board.estimateCF)
+            .hasSystemCF(board.systemCF)
+            .hasProjectCF(board.projectCF)
+            .hasIgnoreWeekend(board.ignoreWeekend)
+            .hasDueDateCF(board.dueDateCF)
+            .hasDueDateType(board.dueDateType?.name)
+            .hasImpedimentType(board.impedimentType)
+            .hasImpedimentColumns(board.impedimentColumns)
+            .hasTouchingColumns(board.touchingColumns)
+            .hasWaitingColumns(board.waitingColumns)
     }
 
 }

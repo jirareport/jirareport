@@ -1,6 +1,6 @@
 package br.com.jiratorio.usecase.duedate
 
-import br.com.jiratorio.assertion.assertThat
+import br.com.jiratorio.assertion.DueDateHistoryAssert
 import br.com.jiratorio.domain.changelog.FieldChangelog
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.extension.toLocalDate
@@ -26,10 +26,9 @@ internal class DueDateServiceTest {
         val dueDateHistories = dueDateService.parseHistory("duedate", setOf(fieldChangelog))
 
         assertThat(dueDateHistories).hasSize(1)
-        dueDateHistories.first().assertThat {
-            hasDueDate(fieldChangelog.to?.toLocalDate("yyyy-MM-dd"))
-            hasCreated(fieldChangelog.created)
-        }
+        DueDateHistoryAssert.assertThat(dueDateHistories.first())
+            .hasDueDate(fieldChangelog.to?.toLocalDate("yyyy-MM-dd"))
+            .hasCreated(fieldChangelog.created)
     }
 
     @Test

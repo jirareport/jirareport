@@ -1,25 +1,37 @@
 package br.com.jiratorio.assertion
 
+import br.com.jiratorio.assertion.error.ShouldBeEquals.Companion.shouldBeEquals
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
+import org.assertj.core.api.AbstractAssert
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 class DueDateHistoryAssert(
-    actual: DueDateHistory
-) : BaseAssert<DueDateHistoryAssert, DueDateHistory>(
+    actual: DueDateHistory,
+) : AbstractAssert<DueDateHistoryAssert, DueDateHistory>(
     actual,
-    DueDateHistoryAssert::class
+    DueDateHistoryAssert::class.java
 ) {
 
-    fun hasDueDate(dueDate: LocalDate?) = assertAll {
-        objects.assertEqual(field("dueDateHistory.dueDate"), actual.dueDate, dueDate)
+    fun hasDueDate(dueDate: LocalDate?): DueDateHistoryAssert {
+        if (actual.dueDate != dueDate) {
+            failWithMessage(shouldBeEquals(actual.dueDate, dueDate).create())
+        }
+
+        return this
     }
 
-    fun hasCreated(created: LocalDateTime?) = assertAll {
-        objects.assertEqual(field("dueDateHistory.created"), actual.created, created)
+    fun hasCreated(created: LocalDateTime?): DueDateHistoryAssert {
+        if (actual.created != created) {
+            failWithMessage(shouldBeEquals(actual.created, created).create())
+        }
+
+        return this
+    }
+
+    companion object {
+        fun assertThat(actual: DueDateHistory): DueDateHistoryAssert =
+            DueDateHistoryAssert(actual)
     }
 
 }
-
-fun DueDateHistory.assertThat(assertions: DueDateHistoryAssert.() -> Unit): DueDateHistoryAssert =
-    DueDateHistoryAssert(this).assertThat(assertions)

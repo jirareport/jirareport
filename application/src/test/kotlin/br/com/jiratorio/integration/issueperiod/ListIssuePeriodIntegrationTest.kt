@@ -1,7 +1,8 @@
 package br.com.jiratorio.integration.issueperiod
 
 import br.com.jiratorio.Authenticator
-import br.com.jiratorio.assertion.response.assertThat
+import br.com.jiratorio.assertion.response.IssuePeriodChartResponseAssert
+import br.com.jiratorio.assertion.response.IssuePeriodResponseAssert
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.IssueEntity
 import br.com.jiratorio.domain.entity.IssuePeriodEntity
@@ -566,38 +567,29 @@ internal class ListIssuePeriodIntegrationTest(
             }
         } extractAs IssuePeriodListResponse::class
 
-        periods.last()
-            .assertThat {
-                hasId(period.id)
-                hasName(period.name)
-                hasLeadTime(period.leadTime)
-                hasAvgPctEfficiency(period.avgPctEfficiency)
-                hasWipAvg(period.wipAvg)
-                hasJql(period.jql)
-                hasThroughput(period.throughput)
-            }
+        IssuePeriodResponseAssert.assertThat(periods.last())
+            .hasId(period.id)
+            .hasName(period.name)
+            .hasLeadTime(period.leadTime)
+            .hasAvgPctEfficiency(period.avgPctEfficiency)
+            .hasWipAvg(period.wipAvg)
+            .hasJql(period.jql)
+            .hasThroughput(period.throughput)
 
-        charts.assertThat {
-            hasThroughputByEstimateLabelsSize(5)
-
-            hasThroughputByEstimateSize("P", 5)
-            hasThroughputByEstimateSize("M", 5)
-            hasThroughputByEstimateSize("G", 5)
-
-            hasLeadTimeCompareChartLabelsSize(5)
-
-            hasLeadTimeCompareChartSize("Test Lead Time", 5)
-            hasLeadTimeCompareChartData("Test Lead Time", 5.0)
-
-            hasLeadTimeCompareChartSize("Dev Lead Time", 5)
-            hasLeadTimeCompareChartData("Dev Lead Time", 6.0)
-
-            hasLeadTimeCompareChartSize("Delivery Lead Time", 5)
-            hasLeadTimeCompareChartData("Delivery Lead Time", 7.0)
-
-            hasLeadTime(period.name, period.leadTime)
-            hasThroughput(period.name, period.throughput)
-        }
+        IssuePeriodChartResponseAssert.assertThat(charts)
+            .hasThroughputByEstimateLabelsSize(5)
+            .hasThroughputByEstimateSize("P", 5)
+            .hasThroughputByEstimateSize("M", 5)
+            .hasThroughputByEstimateSize("G", 5)
+            .hasLeadTimeCompareChartLabelsSize(5)
+            .hasLeadTimeCompareChartSize("Test Lead Time", 5)
+            .hasLeadTimeCompareChartData("Test Lead Time", 5.0)
+            .hasLeadTimeCompareChartSize("Dev Lead Time", 5)
+            .hasLeadTimeCompareChartData("Dev Lead Time", 6.0)
+            .hasLeadTimeCompareChartSize("Delivery Lead Time", 5)
+            .hasLeadTimeCompareChartData("Delivery Lead Time", 7.0)
+            .hasLeadTime(period.name, period.leadTime)
+            .hasThroughput(period.name, period.throughput)
     }
 
     @Test

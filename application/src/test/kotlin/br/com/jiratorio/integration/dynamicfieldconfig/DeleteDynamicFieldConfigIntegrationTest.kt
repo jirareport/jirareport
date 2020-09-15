@@ -36,7 +36,7 @@ class DeleteDynamicFieldConfigIntegrationTest(
         }
 
         assertThat(dynamicFieldConfigRepository.count())
-            .isZero()
+            .isZero
     }
 
     @Test
@@ -58,7 +58,7 @@ class DeleteDynamicFieldConfigIntegrationTest(
         }
 
         assertThat(dynamicFieldConfigRepository.count())
-            .isOne()
+            .isOne
     }
 
     @Test
@@ -80,7 +80,7 @@ class DeleteDynamicFieldConfigIntegrationTest(
         }
 
         assertThat(dynamicFieldConfigRepository.count())
-            .isOne()
+            .isOne
     }
 
 }

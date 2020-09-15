@@ -1,7 +1,7 @@
 package br.com.jiratorio.integration.board
 
-import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.Authenticator
+import br.com.jiratorio.assertion.BoardAssert.Companion.assertThat
 import br.com.jiratorio.restassured.specification.notFound
 import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.request.UpdateBoardRequest
@@ -19,7 +19,7 @@ internal class UpdateBoardIntegrationTest(
     private val boardFactory: BoardFactory,
     private val updateBoardRequestFactory: UpdateBoardRequestFactory,
     private val boardRepository: BoardRepository,
-    private val authenticator: Authenticator
+    private val authenticator: Authenticator,
 ) {
 
     @Test
@@ -45,21 +45,20 @@ internal class UpdateBoardIntegrationTest(
         val board = boardRepository.findByIdOrNull(1L)
             ?: throw ResourceNotFound()
 
-        board.assertThat {
-            hasName(request.name)
-            hasStartColumn(request.startColumn)
-            hasEndColumn(request.endColumn)
-            hasFluxColumn(request.fluxColumn)
-            hasTouchingColumns(request.touchingColumns)
-            hasWaitingColumns(request.waitingColumns)
-            hasIgnoreIssueType(request.ignoreIssueType)
-            hasEpicCF(request.epicCF)
-            hasEstimateCF(request.estimateCF)
-            hasSystemCF(request.systemCF)
-            hasProjectCF(request.projectCF)
-            hasIgnoreWeekend(request.ignoreWeekend)
-            hasImpedimentColumns(request.impedimentColumns)
-        }
+        assertThat(board)
+            .hasName(request.name)
+            .hasStartColumn(request.startColumn)
+            .hasEndColumn(request.endColumn)
+            .hasFluxColumn(request.fluxColumn?.map { it.toUpperCase() })
+            .hasTouchingColumns(request.touchingColumns)
+            .hasWaitingColumns(request.waitingColumns)
+            .hasIgnoreIssueType(request.ignoreIssueType)
+            .hasEpicCF(request.epicCF)
+            .hasEstimateCF(request.estimateCF)
+            .hasSystemCF(request.systemCF)
+            .hasProjectCF(request.projectCF)
+            .hasIgnoreWeekend(request.ignoreWeekend)
+            .hasImpedimentColumns(request.impedimentColumns?.map { it.toUpperCase() })
     }
 
     @Test

@@ -1,7 +1,7 @@
 package br.com.jiratorio.integration.holiday
 
-import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.Authenticator
+import br.com.jiratorio.assertion.HolidayAssert.Companion.assertThat
 import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
@@ -44,10 +44,9 @@ internal class CreateHolidayIntegrationTest(
         val holiday = holidayRepository.findByIdOrNull(1L)
             ?: throw ResourceNotFound()
 
-        holiday.assertThat {
-            hasDescription(request.description)
-            hasDate(request.date)
-        }
+        assertThat(holiday)
+            .hasDescription(request.description)
+            .hasDate(request.date)
     }
 
     @Test

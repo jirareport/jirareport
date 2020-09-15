@@ -49,7 +49,6 @@ private object AbbreviatedMonthAndYear : PatternBasedFormatter(pattern = "MMM/yy
 
 private object AbbreviatedMonthAndAbbreviatedYear : PatternBasedFormatter(pattern = "MMM/yy")
 
-
 private open class PatternBasedFormatter(
     private val pattern: String,
 ) : IssuePeriodNameFormatter {

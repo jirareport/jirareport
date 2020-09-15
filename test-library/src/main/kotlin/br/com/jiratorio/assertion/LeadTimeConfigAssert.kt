@@ -1,31 +1,54 @@
 package br.com.jiratorio.assertion
 
+import br.com.jiratorio.assertion.error.ShouldBeEquals.Companion.shouldBeEquals
 import br.com.jiratorio.domain.entity.LeadTimeConfigEntity
+import org.assertj.core.api.AbstractAssert
+import org.assertj.core.error.ShouldBeUpperCase.shouldBeUpperCase
 
 class LeadTimeConfigAssert(
-    actual: LeadTimeConfigEntity
-) : BaseAssert<LeadTimeConfigAssert, LeadTimeConfigEntity>(
+    actual: LeadTimeConfigEntity,
+) : AbstractAssert<LeadTimeConfigAssert, LeadTimeConfigEntity>(
     actual,
-    LeadTimeConfigAssert::class
+    LeadTimeConfigAssert::class.java
 ) {
 
-    fun hasName(name: String) = assertAll {
-        objects.assertEqual(field("leadTimeConfig.name"), actual.name, name)
+    fun hasName(name: String): LeadTimeConfigAssert {
+        if (actual.name != name) {
+            failWithMessage(shouldBeEquals(actual.name, name).create())
+        }
+
+        return this
     }
 
-    fun hasStartColumn(startColumn: String) = assertAll {
-        val field = field("leadTimeConfig.startColumn")
-        strings.assertUpperCase(field, actual.startColumn)
-        objects.assertEqual(field, actual.startColumn, startColumn.toUpperCase())
+    fun hasStartColumn(startColumn: String): LeadTimeConfigAssert {
+        if (actual.startColumn != actual.startColumn.toUpperCase()) {
+            failWithMessage(shouldBeUpperCase(actual.startColumn).create())
+        }
+
+        if (actual.startColumn != startColumn.toUpperCase()) {
+            failWithMessage(shouldBeEquals(actual.startColumn, startColumn.toUpperCase()).create())
+        }
+
+        return this
     }
 
-    fun hasEndColumn(endColumn: String) = assertAll {
-        val field = field("leadTimeConfig.endColumn")
-        strings.assertUpperCase(field, actual.endColumn)
-        objects.assertEqual(field, actual.endColumn, endColumn.toUpperCase())
+    fun hasEndColumn(endColumn: String): LeadTimeConfigAssert {
+        if (actual.endColumn != actual.endColumn.toUpperCase()) {
+            failWithMessage(shouldBeUpperCase(actual.endColumn).create())
+        }
+
+        if (actual.endColumn != endColumn.toUpperCase()) {
+            failWithMessage(shouldBeEquals(actual.endColumn, endColumn.toUpperCase()).create())
+        }
+
+        return this
+    }
+
+    companion object {
+
+        fun assertThat(actual: LeadTimeConfigEntity): LeadTimeConfigAssert =
+            LeadTimeConfigAssert(actual)
+
     }
 
 }
-
-fun LeadTimeConfigEntity.assertThat(assertions: LeadTimeConfigAssert.() -> Unit): LeadTimeConfigAssert =
-    LeadTimeConfigAssert(this).assertThat(assertions)

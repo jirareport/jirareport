@@ -1,36 +1,62 @@
 package br.com.jiratorio.assertion
 
+import br.com.jiratorio.assertion.error.ShouldBeEquals.Companion.shouldBeEquals
 import br.com.jiratorio.domain.chart.ChartType
 import br.com.jiratorio.domain.entity.UserConfigEntity
+import org.assertj.core.api.AbstractAssert
 
 class UserConfigAssert(
-    actual: UserConfigEntity
-) : BaseAssert<UserConfigAssert, UserConfigEntity>(
+    actual: UserConfigEntity,
+) : AbstractAssert<UserConfigAssert, UserConfigEntity>(
     actual,
-    UserConfigAssert::class
+    UserConfigAssert::class.java
 ) {
 
-    fun hasHolidayToken(holidayToken: String) = assertAll {
-        objects.assertEqual(field("userConfig.holidayToken"), actual.holidayToken, holidayToken)
+    fun hasHolidayToken(holidayToken: String?): UserConfigAssert {
+        if (actual.holidayToken != holidayToken) {
+            failWithMessage(shouldBeEquals(actual.holidayToken, holidayToken).create())
+        }
+
+        return this
     }
 
-    fun hasState(state: String) = assertAll {
-        objects.assertEqual(field("userConfig.state"), actual.state, state)
+    fun hasState(state: String?): UserConfigAssert {
+        if (actual.state != state) {
+            failWithMessage(shouldBeEquals(actual.state, state).create())
+        }
+
+        return this
     }
 
-    fun hasCity(city: String) = assertAll {
-        objects.assertEqual(field("userConfig.city"), actual.city, city)
+    fun hasCity(city: String): UserConfigAssert {
+        if (actual.city != city) {
+            failWithMessage(shouldBeEquals(actual.city, city).create())
+        }
+
+        return this
     }
 
-    fun hasLeadTimeChartType(leadTimeChartType: ChartType) = assertAll {
-        objects.assertEqual(field("userConfig.leadTimeChartType"), actual.leadTimeChartType, leadTimeChartType)
+    fun hasLeadTimeChartType(leadTimeChartType: ChartType?): UserConfigAssert {
+        if (actual.leadTimeChartType != leadTimeChartType) {
+            failWithMessage(shouldBeEquals(actual.leadTimeChartType, leadTimeChartType).create())
+        }
+
+        return this
     }
 
-    fun hasThroughputChartType(throughputChartType: ChartType) = assertAll {
-        objects.assertEqual(field("userConfig.throughputChartType"), actual.throughputChartType, throughputChartType)
+    fun hasThroughputChartType(throughputChartType: ChartType?): UserConfigAssert {
+        if (actual.throughputChartType != throughputChartType) {
+            failWithMessage(shouldBeEquals(actual.throughputChartType, throughputChartType).create())
+        }
+
+        return this
+    }
+
+    companion object {
+
+        fun assertThat(actual: UserConfigEntity): UserConfigAssert =
+            UserConfigAssert(actual)
+
     }
 
 }
-
-fun UserConfigEntity.assertThat(assertions: UserConfigAssert.() -> Unit): UserConfigAssert =
-    UserConfigAssert(this).assertThat(assertions)

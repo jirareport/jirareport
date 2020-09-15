@@ -1,64 +1,98 @@
 package br.com.jiratorio.assertion.response
 
-import br.com.jiratorio.assertion.BaseAssert
+import br.com.jiratorio.assertion.error.ShouldBeEquals
+import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
 import br.com.jiratorio.domain.entity.LeadTimeEntity
-import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.domain.response.issue.IssueDetailResponse
+import org.assertj.core.api.AbstractAssert
+import org.assertj.core.error.ShouldHaveSize.shouldHaveSize
 
-class IssueDetailResponseAssert(
-    actual: IssueDetailResponse
-) : BaseAssert<IssueDetailResponseAssert, IssueDetailResponse>(
+class IssueDetailResponseAssert private constructor(
+    actual: IssueDetailResponse,
+) : AbstractAssert<IssueDetailResponseAssert, IssueDetailResponse>(
     actual,
-    IssueDetailResponseAssert::class
+    IssueDetailResponseAssert::class.java
 ) {
 
-    fun hasId(id: Long) = assertAll {
-        objects.assertEqual(field("issueDetailResponse.id"), actual.id, id)
+    fun hasId(id: Long): IssueDetailResponseAssert {
+        if (actual.id != id) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.id, id).create())
+        }
+
+        return this
     }
 
-    fun hasKey(key: String) = assertAll {
-        objects.assertEqual(field("issueDetailResponse.key"), actual.key, key)
+    fun hasKey(key: String): IssueDetailResponseAssert {
+        if (actual.key != key) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.key, key).create())
+        }
+
+        return this
     }
 
-    fun hasChangelogSize(columnChangelog: Set<ColumnChangelogEntity>) = assertAll {
-        iterables.assertHasSameSizeAs(field("issueDetailResponse.changelog"), actual.changelog, columnChangelog)
+    fun hasChangelogSize(columnChangelog: Set<ColumnChangelogEntity>): IssueDetailResponseAssert {
+        if (actual.changelog.size != columnChangelog.size) {
+            failWithMessage(shouldHaveSize(actual.changelog, actual.changelog.size, columnChangelog.size).create())
+        }
+
+        return this
     }
 
-    fun hasDueDateHistorySize(dueDateHistory: List<DueDateHistory>?) = assertAll {
-        iterables.assertHasSameSizeAs(
-            field("issueDetailResponse.dueDateHistory"),
-            actual.dueDateHistory,
-            dueDateHistory
-        )
+    fun hasDueDateHistorySize(dueDateHistory: List<DueDateHistory>?): IssueDetailResponseAssert {
+        if (actual.dueDateHistory?.size != dueDateHistory?.size) {
+            failWithMessage(shouldHaveSize(actual.dueDateHistory, actual.dueDateHistory?.size ?: 0, dueDateHistory?.size ?: 0).create())
+        }
+
+        return this
     }
 
-    fun hasImpedimentHistorySize(impedimentHistory: MutableSet<ImpedimentHistoryEntity>?) = assertAll {
-        iterables.assertHasSameSizeAs(
-            field("issueDetailResponse.impedimentHistory"),
-            actual.impedimentHistory,
-            impedimentHistory
-        )
+    fun hasImpedimentHistorySize(impedimentHistory: MutableSet<ImpedimentHistoryEntity>?): IssueDetailResponseAssert {
+        if (actual.impedimentHistory.size != impedimentHistory?.size) {
+            failWithMessage(shouldHaveSize(actual.impedimentHistory, actual.impedimentHistory.size, impedimentHistory?.size ?: 0).create())
+        }
+
+        return this
     }
 
-    fun hasLeadTimesSize(leadTimes: Set<LeadTimeEntity>?) = assertAll {
-        iterables.assertHasSameSizeAs(field("issueDetailResponse.leadTimes"), actual.leadTimes, leadTimes)
+    fun hasLeadTimesSize(leadTimes: Set<LeadTimeEntity>?): IssueDetailResponseAssert {
+        if (actual.leadTimes?.size != leadTimes?.size) {
+            failWithMessage(shouldHaveSize(actual.leadTimes, actual.leadTimes?.size ?: 0, leadTimes?.size ?: 0).create())
+        }
+
+        return this
     }
 
-    fun hasWaitTime(waitTime: Double) = assertAll {
-        objects.assertEqual(field("issueDetailResponse.waitTime"), actual.waitTime, waitTime)
+    fun hasWaitTime(waitTime: Double): IssueDetailResponseAssert {
+        if (actual.waitTime != waitTime) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.waitTime, waitTime).create())
+        }
+
+        return this
     }
 
-    fun hasTouchTime(touchTime: Double) = assertAll {
-        objects.assertEqual(field("issueDetailResponse.touchTime"), actual.touchTime, touchTime)
+    fun hasTouchTime(touchTime: Double): IssueDetailResponseAssert {
+        if (actual.touchTime != touchTime) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.touchTime, touchTime).create())
+        }
+
+        return this
     }
 
-    fun hasPctEfficiency(pctEfficiency: Double) = assertAll {
-        objects.assertEqual(field("issueDetailResponse.pctEfficiency"), actual.pctEfficiency, pctEfficiency)
+    fun hasPctEfficiency(pctEfficiency: Double): IssueDetailResponseAssert {
+        if (actual.pctEfficiency != pctEfficiency) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.pctEfficiency, pctEfficiency).create())
+        }
+
+        return this
+    }
+
+    companion object {
+
+        fun assertThat(actual: IssueDetailResponse): IssueDetailResponseAssert =
+            IssueDetailResponseAssert(actual)
+
     }
 
 }
-
-fun IssueDetailResponse.assertThat(assertions: IssueDetailResponseAssert.() -> Unit): IssueDetailResponseAssert =
-    IssueDetailResponseAssert(this).assertThat(assertions)

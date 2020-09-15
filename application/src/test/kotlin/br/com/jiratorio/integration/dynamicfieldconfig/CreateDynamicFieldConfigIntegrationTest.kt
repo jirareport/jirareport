@@ -1,7 +1,7 @@
 package br.com.jiratorio.integration.dynamicfieldconfig
 
-import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.Authenticator
+import br.com.jiratorio.assertion.DynamicFieldConfigAssert.Companion.assertThat
 import br.com.jiratorio.restassured.specification.notFound
 import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.dsl.restAssured
@@ -20,7 +20,7 @@ class CreateDynamicFieldConfigIntegrationTest(
     private val boardFactory: BoardFactory,
     private val dynamicFieldConfigRequestFactory: DynamicFieldConfigRequestFactory,
     private val dynamicFieldConfigRepository: DynamicFieldConfigRepository,
-    private val authenticator: Authenticator
+    private val authenticator: Authenticator,
 ) {
 
     @Test
@@ -48,11 +48,10 @@ class CreateDynamicFieldConfigIntegrationTest(
 
         val dynamicFieldConfig = dynamicFieldConfigRepository.findByIdOrNull(1L) ?: throw ResourceNotFound()
 
-        dynamicFieldConfig.assertThat {
-            hasName(request.name)
-            hasField(request.field)
-            hasBoard(board)
-        }
+        assertThat(dynamicFieldConfig)
+            .hasName(request.name)
+            .hasField(request.field)
+            .hasBoard(board)
     }
 
     @Test

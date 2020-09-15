@@ -1,11 +1,11 @@
 package br.com.jiratorio.integration.board
 
-import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.Authenticator
-import br.com.jiratorio.junit.testtype.IntegrationTest
+import br.com.jiratorio.assertion.BoardAssert.Companion.assertThat
 import br.com.jiratorio.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.factory.domain.request.CreateBoardRequestFactory
+import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.repository.BoardRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
@@ -42,11 +42,10 @@ internal class CreateBoardIntegrationTest(
         val board = boardRepository.findByIdOrNull(1L)
             ?: throw ResourceNotFound()
 
-        board.assertThat {
-            hasName(request.name)
-            hasExternalId(request.externalId)
-            hasOwner("default_user")
-        }
+        assertThat(board)
+            .hasName(request.name)
+            .hasExternalId(request.externalId)
+            .hasOwner("default_user")
     }
 
     @Test

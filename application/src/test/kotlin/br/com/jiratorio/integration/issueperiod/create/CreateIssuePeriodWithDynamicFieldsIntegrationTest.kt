@@ -1,9 +1,10 @@
 package br.com.jiratorio.integration.issueperiod.create
 
-import br.com.jiratorio.assertion.assertThat
 import br.com.jiratorio.Authenticator
 import br.com.jiratorio.annotation.LoadStubs
-import br.com.jiratorio.junit.testtype.IntegrationTest
+import br.com.jiratorio.assertion.HistogramAssert
+import br.com.jiratorio.assertion.IssueAssert
+import br.com.jiratorio.assertion.IssuePeriodAssert
 import br.com.jiratorio.domain.chart.DynamicChart
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
@@ -16,6 +17,7 @@ import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.extension.toLocalDateTime
 import br.com.jiratorio.factory.domain.entity.BoardFactory
 import br.com.jiratorio.factory.domain.entity.DynamicFieldConfigFactory
+import br.com.jiratorio.junit.testtype.IntegrationTest
 import br.com.jiratorio.repository.IssuePeriodRepository
 import br.com.jiratorio.repository.IssueRepository
 import io.restassured.http.ContentType
@@ -29,7 +31,7 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest(
     private val dynamicFieldConfigFactory: DynamicFieldConfigFactory,
     private val authenticator: Authenticator,
     private val issuePeriodRepository: IssuePeriodRepository,
-    private val issueRepository: IssueRepository
+    private val issueRepository: IssueRepository,
 ) {
 
     @Test
@@ -77,45 +79,24 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest(
         val issuePeriod = issuePeriodRepository.findByIdOrNull(1L)
             ?: throw ResourceNotFound()
 
-        issuePeriod.assertThat {
-            hasStartDate(request.startDate.toLocalDate())
-            hasEndDate(request.endDate.toLocalDate())
-
-            hasLeadTime(15.1)
-
-            histogram.assertThat {
-                hasMedian(14)
-                hasPercentile75(15)
-                hasPercentile90(18)
-                hasChart(
-                    1L to 0, 2L to 0, 3L to 0, 4L to 0, 5L to 0, 6L to 0, 7L to 0, 8L to 0, 9L to 0, 10L to 0,
-                    11L to 0, 12L to 2, 13L to 2, 14L to 1, 15L to 3, 16L to 0, 17L to 0, 18L to 1, 19L to 0,
-                    20L to 0, 21L to 0, 22L to 0, 23L to 0, 24L to 1
-                )
-            }
-
-            hasLeadTimeByEstimate("P" to 16.25, "M" to 14.0, "G" to 15.0)
-            hasThroughputByEstimate("P" to 4, "M" to 4, "G" to 2)
-
-            hasLeadTimeBySystem("JiraReport" to 15.4, "JiraWeb" to 14.8)
-            hasThroughputBySystem("JiraReport" to 5, "JiraWeb" to 5)
-
-            hasLeadTimeByType("Task" to 15.4, "Story" to 14.5, "Attendance" to 15.0)
-            hasThroughputByType("Task" to 5, "Story" to 2, "Attendance" to 3)
-
-            hasLeadTimeByProject("Metric" to 15.714285714285714, "Estimate" to 13.666666666666666)
-            hasThroughputByProject("Metric" to 7, "Estimate" to 3)
-
-            hasLeadTimeByPriority("Major" to 17.0, "Medium" to 14.75, "Expedite" to 13.666666666666666)
-            hasThroughputByPriority("Major" to 3, "Medium" to 4, "Expedite" to 3)
-
-            hasThroughput(10)
-
-            hasWipAvg(1.56)
-
-            hasAvgPctEfficiency(62.19)
-
-            hasDynamicCharts(
+        IssuePeriodAssert.assertThat(issuePeriod)
+            .hasStartDate(request.startDate.toLocalDate())
+            .hasEndDate(request.endDate.toLocalDate())
+            .hasLeadTime(15.1)
+            .hasLeadTimeByEstimate("P" to 16.25, "M" to 14.0, "G" to 15.0)
+            .hasThroughputByEstimate("P" to 4, "M" to 4, "G" to 2)
+            .hasLeadTimeBySystem("JiraReport" to 15.4, "JiraWeb" to 14.8)
+            .hasThroughputBySystem("JiraReport" to 5, "JiraWeb" to 5)
+            .hasLeadTimeByType("Task" to 15.4, "Story" to 14.5, "Attendance" to 15.0)
+            .hasThroughputByType("Task" to 5, "Story" to 2, "Attendance" to 3)
+            .hasLeadTimeByProject("Metric" to 15.714285714285714, "Estimate" to 13.666666666666666)
+            .hasThroughputByProject("Metric" to 7, "Estimate" to 3)
+            .hasLeadTimeByPriority("Major" to 17.0, "Medium" to 14.75, "Expedite" to 13.666666666666666)
+            .hasThroughputByPriority("Major" to 3, "Medium" to 4, "Expedite" to 3)
+            .hasThroughput(10)
+            .hasWipAvg(1.56)
+            .hasAvgPctEfficiency(62.19)
+            .hasDynamicCharts(
                 listOf(
                     DynamicChart(
                         name = "Team",
@@ -153,8 +134,7 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest(
                     )
                 )
             )
-
-            containsColumnTimeAvg(
+            .containsColumnTimeAvg(
                 ColumnTimeAverageEntity(columnName = "BACKLOG", averageTime = 3.0),
                 ColumnTimeAverageEntity(columnName = "ANALYSIS", averageTime = 3.2),
                 ColumnTimeAverageEntity(columnName = "DEV WIP", averageTime = 2.4),
@@ -165,29 +145,36 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest(
                 ColumnTimeAverageEntity(columnName = "ACCOMPANIMENT", averageTime = 2.5),
                 ColumnTimeAverageEntity(columnName = "DONE", averageTime = 0.0)
             )
+            .hasEmptyLeadTimeCompareChart()
 
-            hasEmptyLeadTimeCompareChart()
-        }
+        HistogramAssert.assertThat(issuePeriod.histogram)
+            .hasMedian(14)
+            .hasPercentile75(15)
+            .hasPercentile90(18)
+            .hasChart(
+                1L to 0, 2L to 0, 3L to 0, 4L to 0, 5L to 0, 6L to 0, 7L to 0, 8L to 0, 9L to 0, 10L to 0,
+                11L to 0, 12L to 2, 13L to 2, 14L to 1, 15L to 3, 16L to 0, 17L to 0, 18L to 1, 19L to 0,
+                20L to 0, 21L to 0, 22L to 0, 23L to 0, 24L to 1
+            )
 
         val issue = issueRepository.findByIdOrNull(1L)
             ?: throw ResourceNotFound()
 
-        issue.assertThat {
-            hasKey("JIRAT-1")
-            hasIssueType("Task")
-            hasCreator("Leonardo Ferreira")
-            hasSystem("JiraReport")
-            hasEpic("Period")
-            hasSummary("Calcular diferença de data de entrega com o primeiro due date")
-            hasEstimate("P")
-            hasProject("Metric")
-            hasStartDate("07/01/2019 12:00".toLocalDateTime())
-            hasEndDate("07/02/2019 12:00".toLocalDateTime())
-            hasLeadTime(24)
-            hasCreated("01/01/2019 12:00".toLocalDateTime())
-            hasPriority("Major")
-
-            hasColumnChangelog(
+        IssueAssert.assertThat(issue)
+            .hasKey("JIRAT-1")
+            .hasIssueType("Task")
+            .hasCreator("Leonardo Ferreira")
+            .hasSystem("JiraReport")
+            .hasEpic("Period")
+            .hasSummary("Calcular diferença de data de entrega com o primeiro due date")
+            .hasEstimate("P")
+            .hasProject("Metric")
+            .hasStartDate("07/01/2019 12:00".toLocalDateTime())
+            .hasEndDate("07/02/2019 12:00".toLocalDateTime())
+            .hasLeadTime(24)
+            .hasCreated("01/01/2019 12:00".toLocalDateTime())
+            .hasPriority("Major")
+            .hasColumnChangelog(
                 ColumnChangelogEntity(
                     from = null, to = "BACKLOG", startDate = "04/01/2019 12:00".toLocalDateTime(), leadTime = 2,
                     endDate = "07/01/2019 12:00".toLocalDateTime()
@@ -228,9 +215,8 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest(
                     endDate = "07/02/2019 12:00".toLocalDateTime()
                 )
             )
-
-            hasDeviationOfEstimate(26)
-            hasDueDateHistory(
+            .hasDeviationOfEstimate(26)
+            .hasDueDateHistory(
                 listOf(
                     DueDateHistory(
                         created = "06/01/2019 12:00".toLocalDateTime(),
@@ -242,21 +228,17 @@ internal class CreateIssuePeriodWithDynamicFieldsIntegrationTest(
                     )
                 )
             )
-
-            hasImpedimentTime(0)
-            hasEmptyImpedimentHistory()
-
-            hasDynamicFields(
+            .hasImpedimentTime(0)
+            .hasEmptyImpedimentHistory()
+            .hasDynamicFields(
                 mapOf(
                     "Team" to "Team A",
                     "Level Of Dependency" to "1"
                 )
             )
-
-            hasWaitTime(12242)
-            hasTouchTime(22324)
-            hasPctEfficiency(64.58)
-        }
+            .hasWaitTime(12242)
+            .hasTouchTime(22324)
+            .hasPctEfficiency(64.58)
     }
 
 }
