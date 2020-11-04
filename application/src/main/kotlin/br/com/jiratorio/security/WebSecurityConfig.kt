@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse
 
 @Configuration
 @EnableWebSecurity
-class WebSecurityConfig(
+internal class WebSecurityConfig(
     private val jiraAuthenticationProvider: JiraAuthenticationProvider,
     private val tokenAuthenticationProvider: TokenAuthenticationProvider,
     private val corsConfiguration: CorsConfiguration

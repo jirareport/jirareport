@@ -6,7 +6,7 @@ import br.com.jiratorio.domain.issue.Issue
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import java.time.LocalDateTime
 
-interface NativeIssueRepository {
+internal interface NativeIssueRepository {
 
     fun findByExample(board: BoardEntity, dynamicFilters: Map<String, Array<String>>, searchIssueRequest: SearchIssueRequest): List<Issue>
 

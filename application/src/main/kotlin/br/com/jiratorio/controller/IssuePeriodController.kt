@@ -25,7 +25,7 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/boards/{boardId}/issue-periods")
-class IssuePeriodController(
+internal class IssuePeriodController(
     private val issuePeriodService: IssuePeriodService,
 ) {
 

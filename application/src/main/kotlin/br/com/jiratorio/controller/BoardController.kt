@@ -30,7 +30,7 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/boards")
-class BoardController(
+internal class BoardController(
     private val boardService: BoardService,
     private val cloneBoardService: CloneBoardService,
 ) {

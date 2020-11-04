@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.namedparam.set
 import org.springframework.stereotype.Repository
 
 @Repository
-class NativeBoardRepositoryImpl(
+internal class NativeBoardRepositoryImpl(
     jdbcTemplate: JdbcTemplate,
 ) : NativeBoardRepository {
 

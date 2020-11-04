@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.namedparam.set
 import org.springframework.stereotype.Repository
 
 @Repository
-class NativeIssuePeriodRepositoryImpl(
+internal class NativeIssuePeriodRepositoryImpl(
     jdbcTemplate: JdbcTemplate,
 ) : NativeIssuePeriodRepository {
 

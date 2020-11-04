@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.namedparam.set
 import org.springframework.stereotype.Repository
 
 @Repository
-class NativeLeadTimeRepositoryImpl(
+internal class NativeLeadTimeRepositoryImpl(
     jdbcTemplate: JdbcTemplate,
 ) : NativeLeadTimeRepository {
 

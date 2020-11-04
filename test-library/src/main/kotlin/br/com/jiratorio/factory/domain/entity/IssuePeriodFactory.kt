@@ -7,9 +7,9 @@ import br.com.jiratorio.extension.faker.jira
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.factory.KBacon
 import br.com.jiratorio.repository.IssuePeriodRepository
-import br.com.jiratorio.strategy.issueperiodnameformat.IssuePeriodNameFormatter
 import com.github.javafaker.Faker
 import org.springframework.stereotype.Component
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 
 @Component
@@ -31,7 +31,7 @@ class IssuePeriodFactory(
             avgPctEfficiency = faker.number().randomDouble(2, 1, 10),
             startDate = startDate,
             endDate = endDate,
-            name = IssuePeriodNameFormatter.from(board.issuePeriodNameFormat).format(startDate, endDate),
+            name = "[${startDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))} - ${endDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))}]",
             jql = faker.lorem().paragraph(),
             issues = mutableSetOf(),
             throughput = faker.number().randomNumber().toInt(),

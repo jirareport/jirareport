@@ -5,7 +5,7 @@ import br.com.jiratorio.extension.jdbctemplate.getLocalDate
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 
-object ThroughputByPeriodAndEstimateRowMapper : RowMapper<ThroughputByPeriodAndEstimate> {
+internal object ThroughputByPeriodAndEstimateRowMapper : RowMapper<ThroughputByPeriodAndEstimate> {
 
     override fun mapRow(rs: ResultSet, rowNum: Int): ThroughputByPeriodAndEstimate =
         ThroughputByPeriodAndEstimate(

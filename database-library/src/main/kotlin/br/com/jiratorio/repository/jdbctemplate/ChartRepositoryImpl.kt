@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.namedparam.set
 import org.springframework.stereotype.Repository
 
 @Repository
-class ChartRepositoryImpl(
+internal class ChartRepositoryImpl(
     jdbcTemplate: JdbcTemplate,
 ) : ChartRepository {
 

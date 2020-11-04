@@ -4,7 +4,7 @@ import br.com.jiratorio.domain.response.ColumnTimeAverageResponse
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 
-object ColumnTimeAverageResponseRowMapper : RowMapper<ColumnTimeAverageResponse> {
+internal object ColumnTimeAverageResponseRowMapper : RowMapper<ColumnTimeAverageResponse> {
 
     override fun mapRow(rs: ResultSet, rowNum: Int): ColumnTimeAverageResponse =
         ColumnTimeAverageResponse(

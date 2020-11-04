@@ -5,7 +5,7 @@ import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-interface DueDateCalculator {
+internal interface DueDateCalculator {
 
     fun calcDeviationOfEstimate(dueDateHistories: List<DueDateHistory>, endDate: LocalDateTime, ignoreWeekend: Boolean?, holidays: List<LocalDate>): Long
 

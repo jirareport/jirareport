@@ -16,7 +16,7 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/users/me/configs")
-class UserConfigController(
+internal class UserConfigController(
     private val userConfigService: UserConfigService,
 ) {
 

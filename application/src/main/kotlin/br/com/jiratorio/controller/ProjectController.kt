@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/projects")
-class ProjectController(
+internal class ProjectController(
     private val boardDataProvider: ExternalBoardService,
 ) {
 

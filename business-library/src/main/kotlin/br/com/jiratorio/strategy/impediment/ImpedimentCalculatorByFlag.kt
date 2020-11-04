@@ -6,7 +6,7 @@ import br.com.jiratorio.extension.time.daysDiff
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-object ImpedimentCalculatorByFlag : ImpedimentCalculator {
+internal object ImpedimentCalculatorByFlag : ImpedimentCalculator {
 
     override fun calcImpediment(
         impedimentColumns: List<String>?,

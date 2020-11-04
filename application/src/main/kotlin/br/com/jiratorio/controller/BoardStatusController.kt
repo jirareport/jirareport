@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/boards/{boardId}/statuses")
-class BoardStatusController(
+internal class BoardStatusController(
     private val externalBoardService: ExternalBoardService
 ) {
 

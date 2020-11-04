@@ -6,7 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 
 @Component
-class CurrentUserImpl : CurrentUser {
+internal class CurrentUserImpl : CurrentUser {
 
     override val username: String?
         get() = SecurityContextHolder.getContext().account?.username

@@ -5,7 +5,7 @@ import br.com.jiratorio.domain.changelog.Changelog
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-object ImpedimentCalculatorByColumn : ImpedimentCalculator {
+internal object ImpedimentCalculatorByColumn : ImpedimentCalculator {
 
     override fun calcImpediment(
         impedimentColumns: List<String>?,

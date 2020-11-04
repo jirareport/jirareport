@@ -20,7 +20,7 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/boards/{boardId}/lead-time-configs")
-class LeadTimeConfigController(
+internal class LeadTimeConfigController(
     private val leadTimeConfigService: LeadTimeConfigService,
 ) {
 

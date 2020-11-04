@@ -5,7 +5,7 @@ import br.com.jiratorio.extension.jdbctemplate.getLocalDate
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 
-object MinimalIssuePeriodRowMapper : RowMapper<MinimalIssuePeriod> {
+internal object MinimalIssuePeriodRowMapper : RowMapper<MinimalIssuePeriod> {
 
     override fun mapRow(rs: ResultSet, rowNum: Int): MinimalIssuePeriod =
         MinimalIssuePeriod(

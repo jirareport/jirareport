@@ -13,7 +13,7 @@ import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class AuthenticationFilter(
+internal class AuthenticationFilter(
     private val authenticationManager: AuthenticationManager
 ) : GenericFilterBean() {
 

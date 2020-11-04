@@ -6,7 +6,7 @@ import br.com.jiratorio.domain.changelog.Changelog
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-fun interface ImpedimentCalculator {
+internal fun interface ImpedimentCalculator {
 
     fun calcImpediment(
         impedimentColumns: List<String>?,

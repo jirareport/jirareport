@@ -25,7 +25,7 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/boards/{boardId}/holidays")
-class HolidayController(
+internal class HolidayController(
     private val holidayService: HolidayService,
 ) {
 

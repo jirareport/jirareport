@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
 @ControllerAdvice
-class ErrorHandler(
+internal class ErrorHandler(
     private val messageResolver: MessageResolver,
 ) {
 

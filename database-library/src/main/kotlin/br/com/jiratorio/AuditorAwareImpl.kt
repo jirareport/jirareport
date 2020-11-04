@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 import java.util.Optional
 
 @Component
-class AuditorAwareImpl(
+internal class AuditorAwareImpl(
     private val currentUser: CurrentUser
 ) : AuditorAware<String> {
 

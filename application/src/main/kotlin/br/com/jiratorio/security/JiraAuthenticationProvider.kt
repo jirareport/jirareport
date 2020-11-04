@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
 
 @Component
-class JiraAuthenticationProvider(
+internal class JiraAuthenticationProvider(
     private val authService: AuthService,
 ) : AuthenticationProvider {
 

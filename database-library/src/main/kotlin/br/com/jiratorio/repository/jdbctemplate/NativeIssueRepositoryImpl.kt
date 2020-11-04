@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Repository
-class NativeIssueRepositoryImpl(
+internal class NativeIssueRepositoryImpl(
     private val objectMapper: ObjectMapper,
     jdbcTemplate: JdbcTemplate,
 ) : NativeIssueRepository {

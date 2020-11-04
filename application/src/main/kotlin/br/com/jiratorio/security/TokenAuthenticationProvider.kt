@@ -8,7 +8,7 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedC
 import org.springframework.stereotype.Component
 
 @Component
-class TokenAuthenticationProvider(
+internal class TokenAuthenticationProvider(
     private val decodeToken: AuthService,
 ) : AuthenticationProvider {
 

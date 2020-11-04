@@ -5,7 +5,7 @@ import br.com.jiratorio.domain.IssuePeriodNameFormat
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 
-object BoardPreferencesRowMapper : RowMapper<BoardPreferences> {
+internal object BoardPreferencesRowMapper : RowMapper<BoardPreferences> {
 
     override fun mapRow(rs: ResultSet, rowNum: Int): BoardPreferences =
         BoardPreferences(

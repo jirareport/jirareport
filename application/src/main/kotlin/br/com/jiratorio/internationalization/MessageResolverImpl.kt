@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest
 
 @Component
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
-class MessageResolverImpl(
+internal class MessageResolverImpl(
     localeResolver: LocaleResolver,
     request: HttpServletRequest,
     private val messageSource: MessageSource

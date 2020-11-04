@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 import java.sql.ResultSetMetaData
 
-class DynamicFieldsValuesRowMapper(
+internal class DynamicFieldsValuesRowMapper(
     private val objectMapper: ObjectMapper
 ) : RowMapper<List<DynamicFieldsValues>> {
 

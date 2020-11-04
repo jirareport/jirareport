@@ -4,7 +4,7 @@ import org.springframework.jdbc.core.ResultSetExtractor
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 
-class SetRowMapperResultSetExtractor<T>(
+internal class SetRowMapperResultSetExtractor<T>(
     private val rowMapper: RowMapper<T>
 ) : ResultSetExtractor<Set<T>> {
 

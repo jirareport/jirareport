@@ -5,7 +5,7 @@ import br.com.jiratorio.extension.jdbctemplate.getLocalDate
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 
-object PerformanceComparisonByIssueTypeRowMapper : RowMapper<PerformanceComparisonByIssueType> {
+internal object PerformanceComparisonByIssueTypeRowMapper : RowMapper<PerformanceComparisonByIssueType> {
 
     override fun mapRow(rs: ResultSet, rowNum: Int): PerformanceComparisonByIssueType =
         PerformanceComparisonByIssueType(

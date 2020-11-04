@@ -7,7 +7,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 
-class MinimalIssueRowMapper(
+internal class MinimalIssueRowMapper(
     private val objectMapper: ObjectMapper,
 ) : RowMapper<MinimalIssue> {
 

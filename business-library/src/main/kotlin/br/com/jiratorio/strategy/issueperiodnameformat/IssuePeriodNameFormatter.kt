@@ -7,7 +7,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-interface IssuePeriodNameFormatter {
+internal interface IssuePeriodNameFormatter {
 
     fun format(startDate: LocalDate, endDate: LocalDate, locale: Locale = Locale.ENGLISH): String
 

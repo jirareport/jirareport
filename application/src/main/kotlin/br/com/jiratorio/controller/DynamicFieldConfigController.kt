@@ -19,7 +19,7 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("/boards/{boardId}/dynamic-field-configs")
-class DynamicFieldConfigController(
+internal class DynamicFieldConfigController(
     private val dynamicFieldConfigService: DynamicFieldConfigService,
 ) {
 

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Component(DispatcherServlet.LOCALE_RESOLVER_BEAN_NAME)
-class HeaderLocaleResolver : LocaleResolver {
+internal class HeaderLocaleResolver : LocaleResolver {
     private val defaultLocale = Locale("pt", "BR")
 
     private val supportedLocales = mapOf(

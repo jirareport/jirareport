@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/fields")
-class FieldController(
+internal class FieldController(
     private val fieldService: FieldService,
 ) {
 

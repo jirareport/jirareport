@@ -8,7 +8,7 @@ import org.springframework.web.context.request.WebRequest
 import java.util.UUID
 
 @Component
-class CustomErrorAttributes : DefaultErrorAttributes() {
+internal class CustomErrorAttributes : DefaultErrorAttributes() {
 
     private val log = LoggerFactory.getLogger(javaClass)
 

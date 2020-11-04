@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/boards/{boardId}/estimates")
-class EstimateController(
+internal class EstimateController(
     private val estimateIssue: EstimateIssueService
 ) {
 

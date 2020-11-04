@@ -7,7 +7,7 @@ import org.springframework.context.support.ResourceBundleMessageSource
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean
 
 @Configuration
-class InternationalizationConfig {
+internal class InternationalizationConfig {
 
     @Bean
     fun messageSource(): MessageSource {
