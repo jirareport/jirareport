@@ -5,14 +5,14 @@ plugins {
     kotlin("plugin.spring") version "1.4.0"
     kotlin("plugin.jpa") version "1.4.0"
 
-    id("org.springframework.boot") version "2.3.3.RELEASE"
+    id("org.springframework.boot") version "2.3.5.RELEASE"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
 
     id("io.gitlab.arturbosch.detekt") version "1.14.2"
 }
 
 apply {
-    from("$rootDir/gradle/tasks/CreateMigration.gradle.kts")
+    from("gradle/tasks/CreateMigration.gradle.kts")
 }
 
 repositories {
@@ -79,7 +79,7 @@ detekt {
         "src/main/kotlin",
         "src/test/kotlin"
     )
-    config = files("detekt-config.yml")
+    config = files("$projectDir/detekt-config.yml")
 }
 
 tasks.withType<Test> {

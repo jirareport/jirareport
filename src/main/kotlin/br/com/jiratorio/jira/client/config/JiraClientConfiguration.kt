@@ -2,6 +2,7 @@ package br.com.jiratorio.jira.client.config
 
 import br.com.jiratorio.domain.CurrentUser
 import br.com.jiratorio.exception.UnauthorizedException
+import br.com.jiratorio.internationalization.MessageResolver
 import br.com.jiratorio.jira.domain.JiraError
 import br.com.jiratorio.jira.domain.exception.JiraException
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Bean
 class JiraClientConfiguration(
     private val objectMapper: ObjectMapper,
     private val currentUser: CurrentUser,
+    private val messageResolver: MessageResolver
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -36,7 +38,7 @@ class JiraClientConfiguration(
                     objectMapper.readValue(response.body().asInputStream(), JiraError::class.java)
                 } catch (e: Exception) {
                     log.error("Method=errorDecoder, methodKey={}, response={}", methodKey, response, e)
-                    JiraError("errors.session-timeout", response.status().toLong())
+                    JiraError(messageResolver.resolve("errors.session-timeout"), response.status().toLong())
                 }
             )
         }
