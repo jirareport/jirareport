@@ -1,4 +1,0 @@
-[ ] renomear testes
-[x] arrumar asserts
-[ ] mover flux column
-[ ] modificar de visibilidade internal
