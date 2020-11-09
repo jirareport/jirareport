@@ -32,9 +32,6 @@ data class LeadTimeConfigEntity(
     var endColumn: String
 
 ) : BaseEntity() {
-    companion object {
-        private val serialVersionUID = -1181175426509346889L
-    }
 
     override fun equals(other: Any?) =
         equalsComparing(other, LeadTimeConfigEntity::name, LeadTimeConfigEntity::startColumn, LeadTimeConfigEntity::endColumn)
@@ -50,4 +47,8 @@ data class LeadTimeConfigEntity(
             LeadTimeConfigEntity::startColumn,
             LeadTimeConfigEntity::endColumn
         )
+
+    companion object {
+        private val serialVersionUID = -1181175426509346889L
+    }
 }

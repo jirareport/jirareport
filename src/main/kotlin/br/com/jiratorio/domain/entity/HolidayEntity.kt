@@ -40,9 +40,6 @@ data class HolidayEntity(
     var board: BoardEntity
 
 ) : BaseEntity() {
-    companion object {
-        private val serialVersionUID = 18640912961216513L
-    }
 
     override fun toString() =
         toStringBuilder(HolidayEntity::id, HolidayEntity::date, HolidayEntity::description)
@@ -52,5 +49,9 @@ data class HolidayEntity(
 
     override fun hashCode() =
         Objects.hash(date, board)
+
+    companion object {
+        private val serialVersionUID = 18640912961216513L
+    }
 
 }

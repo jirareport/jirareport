@@ -39,9 +39,6 @@ data class UserConfigEntity(
     var throughputChartType: ChartType = ChartType.DOUGHNUT
 
 ) : BaseEntity() {
-    companion object {
-        private val serialVersionUID = -9168105728096346993L
-    }
 
     override fun toString() =
         toStringBuilder(
@@ -59,5 +56,9 @@ data class UserConfigEntity(
 
     override fun hashCode() =
         Objects.hash(username)
+
+    companion object {
+        private val serialVersionUID = -9168105728096346993L
+    }
 
 }

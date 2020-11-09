@@ -121,9 +121,6 @@ data class IssuePeriodEntity(
     var issueProgression: IssueProgression? = null
 
 ) : BaseEntity() {
-    companion object {
-        private const val serialVersionUID = 7188140641247774389L
-    }
 
     override fun toString() =
         toStringBuilder(
@@ -132,5 +129,9 @@ data class IssuePeriodEntity(
             IssuePeriodEntity::startDate,
             IssuePeriodEntity::endDate
         )
+
+    companion object {
+        private const val serialVersionUID = 7188140641247774389L
+    }
 
 }

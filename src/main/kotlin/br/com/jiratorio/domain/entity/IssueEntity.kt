@@ -101,9 +101,6 @@ data class IssueEntity(
     var pctEfficiency: Double = 0.0,
 
 ) : BaseEntity(), Issue {
-    companion object {
-        private const val serialVersionUID = -1084659211505084402L
-    }
 
     override val changeEstimateCount: Int
         get() = dueDateHistory?.size ?: 0
@@ -123,5 +120,9 @@ data class IssueEntity(
 
     override fun hashCode(): Int =
         Objects.hash(id, key)
+
+    companion object {
+        private const val serialVersionUID = -1084659211505084402L
+    }
 
 }
