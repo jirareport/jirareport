@@ -32,6 +32,7 @@ class NativeIssuePeriodRepositoryImpl(
                 WHERE ip.start_date >= :startDate
                 AND ip.end_date <= :endDate
                 AND ip.board_id = :boardId
+                ORDER BY ip.start_date
             """
 
         val params = MapSqlParameterSource()
