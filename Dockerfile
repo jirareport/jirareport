@@ -1,15 +1,14 @@
-FROM openjdk:12 as builder
+FROM openjdk:13 as builder
 
 COPY . /jirareport-api
 WORKDIR /jirareport-api
 
-RUN ./gradlew unitTest
-RUN ./gradlew build -x test
+RUN ./gradlew clean build -x test
 
 ###
 
-FROM openjdk:12-alpine
-EXPOSE 80
+FROM openjdk:13-alpine
+EXPOSE 80 443
 
 COPY --from=builder /jirareport-api/build/libs/jirareport.jar /usr/src/
 WORKDIR /usr/src/
