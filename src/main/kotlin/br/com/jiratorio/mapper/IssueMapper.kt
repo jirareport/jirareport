@@ -1,6 +1,7 @@
 package br.com.jiratorio.mapper
 
-import br.com.jiratorio.domain.entity.Issue
+import br.com.jiratorio.domain.entity.IssueEntity
+import br.com.jiratorio.domain.issue.Issue
 import br.com.jiratorio.domain.response.issue.IssueDetailResponse
 import br.com.jiratorio.domain.response.issue.IssueResponse
 import br.com.jiratorio.extension.time.displayFormat
@@ -22,7 +23,7 @@ fun Issue.toIssueResponse(jiraUrl: String): IssueResponse =
         endDate = endDate.displayFormat(),
         created = created.displayFormat(),
         deviationOfEstimate = deviationOfEstimate,
-        changeEstimateCount = dueDateHistory?.size,
+        changeEstimateCount = changeEstimateCount,
         impedimentTime = impedimentTime,
         dynamicFields = dynamicFields,
         detailsUrl = "$jiraUrl/browse/$key"
@@ -31,7 +32,7 @@ fun Issue.toIssueResponse(jiraUrl: String): IssueResponse =
 fun Collection<Issue>.toIssueResponse(jiraUrl: String): List<IssueResponse> =
     map { it.toIssueResponse(jiraUrl) }
 
-fun Issue.toIssueDetailResponse(): IssueDetailResponse =
+fun IssueEntity.toIssueDetailResponse(): IssueDetailResponse =
     IssueDetailResponse(
         id = id,
         key = key,

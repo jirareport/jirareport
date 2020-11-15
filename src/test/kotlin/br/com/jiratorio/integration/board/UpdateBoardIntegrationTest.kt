@@ -1,25 +1,25 @@
 package br.com.jiratorio.integration.board
 
-import br.com.jiratorio.assert.assertThat
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.assertion.BoardAssert.Companion.assertThat
+import br.com.jiratorio.testlibrary.restassured.specification.notFound
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.request.UpdateBoardRequest
-import br.com.jiratorio.dsl.restAssured
+import br.com.jiratorio.testlibrary.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
-import br.com.jiratorio.factory.domain.entity.BoardFactory
-import br.com.jiratorio.factory.domain.request.UpdateBoardRequestFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.BoardFactory
+import br.com.jiratorio.testlibrary.factory.domain.request.UpdateBoardRequestFactory
 import br.com.jiratorio.repository.BoardRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
 import org.junit.jupiter.api.Test
 
 @IntegrationTest
-internal class UpdateBoardIntegrationTest(
+class UpdateBoardIntegrationTest(
     private val boardFactory: BoardFactory,
     private val updateBoardRequestFactory: UpdateBoardRequestFactory,
     private val boardRepository: BoardRepository,
-    private val authenticator: Authenticator
+    private val authenticator: Authenticator,
 ) {
 
     @Test
@@ -45,21 +45,20 @@ internal class UpdateBoardIntegrationTest(
         val board = boardRepository.findByIdOrNull(1L)
             ?: throw ResourceNotFound()
 
-        board.assertThat {
-            hasName(request.name)
-            hasStartColumn(request.startColumn)
-            hasEndColumn(request.endColumn)
-            hasFluxColumn(request.fluxColumn)
-            hasTouchingColumns(request.touchingColumns)
-            hasWaitingColumns(request.waitingColumns)
-            hasIgnoreIssueType(request.ignoreIssueType)
-            hasEpicCF(request.epicCF)
-            hasEstimateCF(request.estimateCF)
-            hasSystemCF(request.systemCF)
-            hasProjectCF(request.projectCF)
-            hasIgnoreWeekend(request.ignoreWeekend)
-            hasImpedimentColumns(request.impedimentColumns)
-        }
+        assertThat(board)
+            .hasName(request.name)
+            .hasStartColumn(request.startColumn)
+            .hasEndColumn(request.endColumn)
+            .hasFluxColumn(request.fluxColumn?.map { it.toUpperCase() })
+            .hasTouchingColumns(request.touchingColumns)
+            .hasWaitingColumns(request.waitingColumns)
+            .hasIgnoreIssueType(request.ignoreIssueType)
+            .hasEpicCF(request.epicCF)
+            .hasEstimateCF(request.estimateCF)
+            .hasSystemCF(request.systemCF)
+            .hasProjectCF(request.projectCF)
+            .hasIgnoreWeekend(request.ignoreWeekend)
+            .hasImpedimentColumns(request.impedimentColumns?.map { it.toUpperCase() })
     }
 
     @Test

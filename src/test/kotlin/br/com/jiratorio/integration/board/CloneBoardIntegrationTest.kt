@@ -1,17 +1,17 @@
 package br.com.jiratorio.integration.board
 
-import br.com.jiratorio.assert.assertThat
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.DynamicFieldConfig
-import br.com.jiratorio.domain.entity.Holiday
-import br.com.jiratorio.domain.entity.LeadTimeConfig
-import br.com.jiratorio.dsl.restAssured
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.assertion.BoardAssert.Companion.assertThat
+import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity
+import br.com.jiratorio.domain.entity.HolidayEntity
+import br.com.jiratorio.domain.entity.LeadTimeConfigEntity
+import br.com.jiratorio.testlibrary.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
-import br.com.jiratorio.factory.domain.entity.BoardFactory
-import br.com.jiratorio.factory.domain.entity.DynamicFieldConfigFactory
-import br.com.jiratorio.factory.domain.entity.HolidayFactory
-import br.com.jiratorio.factory.domain.entity.LeadTimeConfigFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.BoardFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.DynamicFieldConfigFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.HolidayFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.LeadTimeConfigFactory
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
 import br.com.jiratorio.repository.BoardRepository
 import br.com.jiratorio.repository.DynamicFieldConfigRepository
 import br.com.jiratorio.repository.HolidayRepository
@@ -42,19 +42,19 @@ class CloneBoardIntegrationTest(
             holidayFactory.create(
                 quantity = 10,
                 modifyingFields = mapOf(
-                    Holiday::board to board
+                    HolidayEntity::board to board
                 )
             )
             leadTimeConfigFactory.create(
                 quantity = 10,
                 modifyingFields = mapOf(
-                    LeadTimeConfig::board to board
+                    LeadTimeConfigEntity::board to board
                 )
             )
             dynamicFieldConfigFactory.create(
                 quantity = 10,
                 modifyingFields = mapOf(
-                    DynamicFieldConfig::board to board
+                    DynamicFieldConfigEntity::board to board
                 )
             )
 
@@ -78,25 +78,24 @@ class CloneBoardIntegrationTest(
         val board = boardRepository.findByIdOrNull(32L)
             ?: throw ResourceNotFound()
 
-        board.assertThat {
-            hasExternalId(boardToClone.externalId)
-            hasName(boardToClone.name)
-            hasStartColumn(boardToClone.startColumn)
-            hasEndColumn(boardToClone.endColumn)
-            hasFluxColumn(boardToClone.fluxColumn)
-            hasIgnoreIssueType(boardToClone.ignoreIssueType)
-            hasEpicCF(boardToClone.epicCF)
-            hasEstimateCF(boardToClone.estimateCF)
-            hasSystemCF(boardToClone.systemCF)
-            hasProjectCF(boardToClone.projectCF)
-            hasDueDateCF(boardToClone.dueDateCF)
-            hasIgnoreWeekend(boardToClone.ignoreWeekend)
-            hasImpedimentType(boardToClone.impedimentType)
-            hasImpedimentColumns(boardToClone.impedimentColumns)
-            hasTouchingColumns(boardToClone.touchingColumns)
-            hasWaitingColumns(boardToClone.waitingColumns)
-            hasDueDateType(boardToClone.dueDateType)
-        }
+        assertThat(board)
+            .hasExternalId(boardToClone.externalId)
+            .hasName(boardToClone.name)
+            .hasStartColumn(boardToClone.startColumn)
+            .hasEndColumn(boardToClone.endColumn)
+            .hasFluxColumn(boardToClone.fluxColumn)
+            .hasIgnoreIssueType(boardToClone.ignoreIssueType)
+            .hasEpicCF(boardToClone.epicCF)
+            .hasEstimateCF(boardToClone.estimateCF)
+            .hasSystemCF(boardToClone.systemCF)
+            .hasProjectCF(boardToClone.projectCF)
+            .hasDueDateCF(boardToClone.dueDateCF)
+            .hasIgnoreWeekend(boardToClone.ignoreWeekend)
+            .hasImpedimentType(boardToClone.impedimentType)
+            .hasImpedimentColumns(boardToClone.impedimentColumns)
+            .hasTouchingColumns(boardToClone.touchingColumns)
+            .hasWaitingColumns(boardToClone.waitingColumns)
+            .hasDueDateType(boardToClone.dueDateType)
 
         assertThat(holidayRepository.count())
             .isEqualTo(20)

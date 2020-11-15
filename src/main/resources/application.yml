@@ -24,12 +24,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  cache:
-    cache-names:
-      - findAllHolidaysInCity
-      - findAllFields
-    caffeine:
-      spec: expireAfterWrite=15m
   flyway:
     enabled: true
     out-of-order: true
@@ -42,3 +36,7 @@ feign:
         logger-level: FULL
   httpclient:
     disable-ssl-validation: true
+
+server:
+  error:
+    include-message: always

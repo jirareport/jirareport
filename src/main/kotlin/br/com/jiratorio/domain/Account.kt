@@ -15,9 +15,6 @@ data class Account(
     val token: String
 
 ) : UserDetails {
-    companion object {
-        private val serialVersionUID = -8167414094792278950L
-    }
 
     override fun toString() =
         toStringBuilder(Account::name, Account::username)
@@ -35,4 +32,9 @@ data class Account(
     override fun isCredentialsNonExpired() = true
 
     override fun isEnabled() = true
+
+    companion object {
+        private val serialVersionUID = -8167414094792278950L
+    }
+
 }

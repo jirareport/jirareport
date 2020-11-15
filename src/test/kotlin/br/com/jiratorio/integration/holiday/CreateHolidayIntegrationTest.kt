@@ -1,12 +1,12 @@
 package br.com.jiratorio.integration.holiday
 
-import br.com.jiratorio.assert.assertThat
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
-import br.com.jiratorio.dsl.restAssured
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.assertion.HolidayAssert.Companion.assertThat
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
+import br.com.jiratorio.testlibrary.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
-import br.com.jiratorio.factory.domain.entity.BoardFactory
-import br.com.jiratorio.factory.domain.request.HolidayRequestFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.BoardFactory
+import br.com.jiratorio.testlibrary.factory.domain.request.HolidayRequestFactory
 import br.com.jiratorio.repository.HolidayRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus
@@ -14,7 +14,7 @@ import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 
 @IntegrationTest
-internal class CreateHolidayIntegrationTest(
+class CreateHolidayIntegrationTest(
     private val holidayRequestFactory: HolidayRequestFactory,
     private val boardFactory: BoardFactory,
     private val holidayRepository: HolidayRepository,
@@ -44,10 +44,9 @@ internal class CreateHolidayIntegrationTest(
         val holiday = holidayRepository.findByIdOrNull(1L)
             ?: throw ResourceNotFound()
 
-        holiday.assertThat {
-            hasDescription(request.description)
-            hasDate(request.date)
-        }
+        assertThat(holiday)
+            .hasDescription(request.description)
+            .hasDate(request.date)
     }
 
     @Test

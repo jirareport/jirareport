@@ -1,18 +1,17 @@
 package br.com.jiratorio.repository
 
-import br.com.jiratorio.domain.entity.LeadTimeConfig
+import br.com.jiratorio.domain.entity.LeadTimeConfigEntity
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface LeadTimeConfigRepository : CrudRepository<LeadTimeConfig, Long> {
+interface LeadTimeConfigRepository : CrudRepository<LeadTimeConfigEntity, Long> {
 
-    fun findByBoardId(boardId: Long): List<LeadTimeConfig>
+    fun findByBoardId(boardId: Long): List<LeadTimeConfigEntity>
 
-    fun findByIdAndBoardId(id: Long, boardId: Long): LeadTimeConfig?
+    fun findByIdAndBoardId(id: Long, boardId: Long): LeadTimeConfigEntity?
 
-    @JvmDefault
-    fun findByIdOrNull(id: Long): LeadTimeConfig? =
+    fun findByIdOrNull(id: Long): LeadTimeConfigEntity? =
         findById(id).orElse(null)
 
 }

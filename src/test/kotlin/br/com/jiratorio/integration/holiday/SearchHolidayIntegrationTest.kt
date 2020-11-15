@@ -1,13 +1,13 @@
 package br.com.jiratorio.integration.holiday
 
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.Holiday
-import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.domain.entity.BoardFactory
-import br.com.jiratorio.factory.domain.entity.HolidayFactory
-import br.com.jiratorio.matcher.IdMatcher
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.restassured.specification.notFound
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
+import br.com.jiratorio.domain.entity.HolidayEntity
+import br.com.jiratorio.testlibrary.dsl.restAssured
+import br.com.jiratorio.testlibrary.factory.domain.entity.BoardFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.HolidayFactory
+import br.com.jiratorio.testlibrary.matcher.IdMatcher
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 import java.time.format.DateTimeFormatter
 
 @IntegrationTest
-internal class SearchHolidayIntegrationTest(
+class SearchHolidayIntegrationTest(
     private val holidayFactory: HolidayFactory,
     private val boardFactory: BoardFactory,
     private val authenticator: Authenticator
@@ -29,7 +29,7 @@ internal class SearchHolidayIntegrationTest(
             holidayFactory.create(
                 quantity = 10,
                 modifyingFields = mapOf(
-                    Holiday::board to boardExample
+                    HolidayEntity::board to boardExample
                 )
             )
 

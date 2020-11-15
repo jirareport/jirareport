@@ -1,9 +1,7 @@
 package br.com.jiratorio.controller
 
-import br.com.jiratorio.domain.jira.JiraProject
-import br.com.jiratorio.domain.jira.JiraProjectDetails
-import br.com.jiratorio.usecase.project.FindAllJiraProjects
-import br.com.jiratorio.usecase.project.FindJiraProjectDetails
+import br.com.jiratorio.domain.external.ExternalBoard
+import br.com.jiratorio.service.ExternalBoardService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -12,16 +10,15 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/projects")
 class ProjectController(
-    private val findAllJiraProjects: FindAllJiraProjects,
-    private val findJiraProjectDetails: FindJiraProjectDetails
+    private val boardDataProvider: ExternalBoardService,
 ) {
 
     @GetMapping
-    fun findAll(): List<JiraProject> =
-        findAllJiraProjects.execute()
+    fun findAll(): List<ExternalBoard> =
+        boardDataProvider.findAll()
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): JiraProjectDetails =
-        findJiraProjectDetails.execute(id)
+    fun findById(@PathVariable id: Long): ExternalBoard =
+        boardDataProvider.findById(id)
 
 }

@@ -1,17 +1,17 @@
 package br.com.jiratorio.integration.board
 
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
-import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.domain.entity.BoardFactory
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.restassured.specification.notFound
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
+import br.com.jiratorio.testlibrary.dsl.restAssured
+import br.com.jiratorio.testlibrary.factory.domain.entity.BoardFactory
 import br.com.jiratorio.repository.BoardRepository
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 @IntegrationTest
-internal class DeleteBoardIntegrationTest(
+class DeleteBoardIntegrationTest(
     private val boardFactory: BoardFactory,
     private val boardRepository: BoardRepository,
     private val authenticator: Authenticator

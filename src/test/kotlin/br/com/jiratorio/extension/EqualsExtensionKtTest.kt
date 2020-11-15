@@ -1,12 +1,12 @@
 package br.com.jiratorio.extension
 
-import br.com.jiratorio.config.junit.testtype.UnitTest
+import br.com.jiratorio.testlibrary.junit.testtype.UnitTest
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import java.util.Objects
 
 @UnitTest
-internal class EqualsExtensionKtTest {
+class EqualsExtensionKtTest {
 
     @Test
     fun `test complex equals, results true`() {
@@ -62,7 +62,7 @@ internal class EqualsExtensionKtTest {
         Assertions.assertThat(firstPerson === secondPerson).isFalse()
     }
 
-    internal inner class Person(
+    inner class Person(
         val name: String,
         val age: Int,
         val phones: List<Phone>
@@ -74,7 +74,7 @@ internal class EqualsExtensionKtTest {
             Objects.hash(name, phones)
     }
 
-    internal inner class Phone(
+    inner class Phone(
         val id: Long,
         val number: String
     ) {

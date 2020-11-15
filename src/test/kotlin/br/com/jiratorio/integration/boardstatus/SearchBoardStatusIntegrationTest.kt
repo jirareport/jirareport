@@ -1,18 +1,18 @@
 package br.com.jiratorio.integration.boardstatus
 
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.annotation.LoadStubs
-import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.domain.entity.BoardFactory
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.annotation.LoadStubs
+import br.com.jiratorio.testlibrary.restassured.specification.notFound
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.testlibrary.dsl.restAssured
+import br.com.jiratorio.testlibrary.factory.domain.entity.BoardFactory
 import org.apache.http.HttpStatus.SC_OK
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.junit.jupiter.api.Test
 
 @IntegrationTest
-internal class SearchBoardStatusIntegrationTest(
+class SearchBoardStatusIntegrationTest(
     private val boardFactory: BoardFactory,
     private val authenticator: Authenticator
 ) {
@@ -22,7 +22,7 @@ internal class SearchBoardStatusIntegrationTest(
     fun `test find by board id`() {
         boardFactory.create(
             modifyingFields = mapOf(
-                Board::externalId to 10552
+                BoardEntity::externalId to 10552
             )
         )
 

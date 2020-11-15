@@ -1,7 +1,7 @@
 package br.com.jiratorio.extension.time
 
-import br.com.jiratorio.config.junit.testtype.UnitTest
 import br.com.jiratorio.extension.toLocalDate
+import br.com.jiratorio.testlibrary.junit.testtype.UnitTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.CsvSource
 import java.time.LocalDate
 
 @UnitTest
-internal class LocalDateExtensionKtTest {
+class LocalDateExtensionKtTest {
 
     @ParameterizedTest
     @CsvSource(

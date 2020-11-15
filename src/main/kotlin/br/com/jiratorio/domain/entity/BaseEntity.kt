@@ -30,10 +30,6 @@ import javax.persistence.MappedSuperclass
 )
 open class BaseEntity : Serializable {
 
-    companion object {
-        private const val serialVersionUID = -818259944975210693L
-    }
-
     @CreatedBy
     var owner: String = ""
 
@@ -45,5 +41,9 @@ open class BaseEntity : Serializable {
 
     @LastModifiedDate
     var updatedAt: LocalDateTime = LocalDateTime.now()
+
+    companion object {
+        private const val serialVersionUID = -818259944975210693L
+    }
 
 }

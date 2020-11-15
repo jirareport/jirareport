@@ -1,7 +1,7 @@
 package br.com.jiratorio.repository
 
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.Holiday
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.domain.entity.HolidayEntity
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -10,20 +10,17 @@ import org.springframework.stereotype.Repository
 import java.time.LocalDate
 
 @Repository
-interface HolidayRepository : CrudRepository<Holiday, Long> {
+interface HolidayRepository : CrudRepository<HolidayEntity, Long> {
 
-    fun findAllByBoardId(id: Long): List<Holiday>
+    fun findAllByBoardId(id: Long): List<HolidayEntity>
 
-    fun findAllByBoardId(id: Long, pageable: Pageable): Page<Holiday>
+    fun findAllByBoardId(id: Long, pageable: Pageable): Page<HolidayEntity>
 
-    fun findAllByBoard(board: Board): List<Holiday>
+    fun findByDateAndBoardId(date: LocalDate, boardId: Long): HolidayEntity?
 
-    fun findByDateAndBoardId(date: LocalDate, boardId: Long): Holiday?
+    fun findByBoardAndId(board: BoardEntity, id: Long): HolidayEntity?
 
-    fun findByIdAndBoard(holidayId: Long, board: Board): Holiday?
-
-    @JvmDefault
-    fun findByIdOrNull(id: Long): Holiday? =
+    fun findByIdOrNull(id: Long): HolidayEntity? =
         findById(id).orElse(null)
 
 }

@@ -1,12 +1,12 @@
 package br.com.jiratorio.integration.board
 
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.domain.entity.BoardFactory
-import br.com.jiratorio.matcher.IdMatcher
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.restassured.specification.notFound
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
+import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.testlibrary.dsl.restAssured
+import br.com.jiratorio.testlibrary.factory.domain.entity.BoardFactory
+import br.com.jiratorio.testlibrary.matcher.IdMatcher
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.emptyOrNullString
@@ -16,7 +16,7 @@ import org.hamcrest.Matchers.not
 import org.junit.jupiter.api.Test
 
 @IntegrationTest
-internal class SearchBoardIntegrationTest(
+class SearchBoardIntegrationTest(
     private val boardFactory: BoardFactory,
     private val authenticator: Authenticator
 ) {
@@ -71,7 +71,7 @@ internal class SearchBoardIntegrationTest(
             boardFactory.create(
                 quantity = 5,
                 modifyingFields = mapOf(
-                    Board::name to "Uniq Start Name"
+                    BoardEntity::name to "Uniq Start Name"
                 )
             )
 

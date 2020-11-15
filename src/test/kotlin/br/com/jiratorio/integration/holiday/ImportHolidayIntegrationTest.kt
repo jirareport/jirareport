@@ -1,13 +1,13 @@
 package br.com.jiratorio.integration.holiday
 
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.annotation.LoadStubs
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.Holiday
-import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.domain.entity.BoardFactory
-import br.com.jiratorio.factory.domain.entity.HolidayFactory
-import br.com.jiratorio.factory.domain.entity.UserConfigFactory
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.annotation.LoadStubs
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
+import br.com.jiratorio.domain.entity.HolidayEntity
+import br.com.jiratorio.testlibrary.dsl.restAssured
+import br.com.jiratorio.testlibrary.factory.domain.entity.BoardFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.HolidayFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.UserConfigFactory
 import br.com.jiratorio.repository.HolidayRepository
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor
@@ -21,7 +21,7 @@ import java.time.LocalDate
 
 @IntegrationTest
 @LoadStubs(["holidays"])
-internal class ImportHolidayIntegrationTest(
+class ImportHolidayIntegrationTest(
     private val boardFactory: BoardFactory,
     private val holidayRepository: HolidayRepository,
     private val holidayFactory: HolidayFactory,
@@ -94,14 +94,14 @@ internal class ImportHolidayIntegrationTest(
     }
 
     @Test
-    fun `already been imported`() {
+    fun `should not import when already been imported`() {
         authenticator.withDefaultUser {
             val defaultBoard = boardFactory.create()
             for (i in 1..5) {
                 holidayFactory.create(
                     modifyingFields = mapOf(
-                        Holiday::date to LocalDate.of(2019, i, 1),
-                        Holiday::board to defaultBoard
+                        HolidayEntity::date to LocalDate.of(2019, i, 1),
+                        HolidayEntity::board to defaultBoard
                     )
                 )
             }

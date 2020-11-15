@@ -1,0 +1,11 @@
+package br.com.jiratorio.domain
+
+enum class IssuePeriodNameFormat {
+    INITIAL_AND_FINAL_DATE,
+    MONTH,
+    MONTH_AND_YEAR,
+    MONTH_AND_ABBREVIATED_YEAR,
+    ABBREVIATED_MONTH,
+    ABBREVIATED_MONTH_AND_YEAR,
+    ABBREVIATED_MONTH_AND_ABBREVIATED_YEAR;
+}

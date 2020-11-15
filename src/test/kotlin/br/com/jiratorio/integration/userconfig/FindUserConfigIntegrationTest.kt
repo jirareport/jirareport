@@ -1,17 +1,17 @@
 package br.com.jiratorio.integration.userconfig
 
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.chart.ChartType
-import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.domain.entity.UserConfigFactory
+import br.com.jiratorio.testlibrary.dsl.restAssured
+import br.com.jiratorio.testlibrary.factory.domain.entity.UserConfigFactory
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.Test
 
 @IntegrationTest
-internal class FindUserConfigIntegrationTest(
+class FindUserConfigIntegrationTest(
     private val authenticator: Authenticator,
     private val userConfigFactory: UserConfigFactory
 ) {

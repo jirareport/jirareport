@@ -1,24 +1,24 @@
 package br.com.jiratorio.integration.issue
 
-import br.com.jiratorio.assert.response.assertThat
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.DynamicFieldConfig
-import br.com.jiratorio.domain.entity.ImpedimentHistory
-import br.com.jiratorio.domain.entity.Issue
-import br.com.jiratorio.domain.entity.LeadTime
-import br.com.jiratorio.domain.entity.LeadTimeConfig
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.assertion.response.IssueDetailResponseAssert.Companion.assertThat
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
+import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity
+import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
+import br.com.jiratorio.domain.entity.IssueEntity
+import br.com.jiratorio.domain.entity.LeadTimeEntity
+import br.com.jiratorio.domain.entity.LeadTimeConfigEntity
 import br.com.jiratorio.domain.response.issue.IssueDetailResponse
-import br.com.jiratorio.dsl.extractAs
-import br.com.jiratorio.dsl.restAssured
+import br.com.jiratorio.testlibrary.dsl.extractAs
+import br.com.jiratorio.testlibrary.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
-import br.com.jiratorio.factory.domain.entity.BoardFactory
-import br.com.jiratorio.factory.domain.entity.DynamicFieldConfigFactory
-import br.com.jiratorio.factory.domain.entity.ImpedimentHistoryFactory
-import br.com.jiratorio.factory.domain.entity.IssueFactory
-import br.com.jiratorio.factory.domain.entity.LeadTimeConfigFactory
-import br.com.jiratorio.factory.domain.entity.LeadTimeFactory
-import br.com.jiratorio.factory.domain.request.DueDateHistoryFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.BoardFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.DynamicFieldConfigFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.ImpedimentHistoryFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.IssueFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.LeadTimeConfigFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.LeadTimeFactory
+import br.com.jiratorio.testlibrary.factory.domain.request.DueDateHistoryFactory
 import br.com.jiratorio.repository.IssueRepository
 import org.junit.jupiter.api.Test
 import javax.servlet.http.HttpServletResponse.SC_OK
@@ -43,35 +43,35 @@ class SearchIssueByIdIntegrationTest(
 
             dynamicFieldConfigFactory.create(
                 modifyingFields = mapOf(
-                    DynamicFieldConfig::board to board,
-                    DynamicFieldConfig::name to "field1"
+                    DynamicFieldConfigEntity::board to board,
+                    DynamicFieldConfigEntity::name to "field1"
                 )
             )
 
             dynamicFieldConfigFactory.create(
                 modifyingFields = mapOf(
-                    DynamicFieldConfig::board to board,
-                    DynamicFieldConfig::name to "field2"
+                    DynamicFieldConfigEntity::board to board,
+                    DynamicFieldConfigEntity::name to "field2"
                 )
             )
 
             val issue = issueFactory.create(
                 modifyingFields = mapOf(
-                    Issue::board to board,
-                    Issue::dynamicFields to mutableMapOf(
+                    IssueEntity::board to board,
+                    IssueEntity::dynamicFields to mutableMapOf(
                         "field1" to "value1",
                         "field2" to "value1"
                     ),
-                    Issue::dueDateHistory to dueDateHistoryFactory.create(5)
+                    IssueEntity::dueDateHistory to dueDateHistoryFactory.create(5)
                 )
             )
 
             leadTimeFactory.create(
                 modifyingFields = mapOf(
-                    LeadTime::issue to issue,
-                    LeadTime::leadTimeConfig to leadTimeConfigFactory.create(
+                    LeadTimeEntity::issue to issue,
+                    LeadTimeEntity::leadTimeConfig to leadTimeConfigFactory.create(
                         modifyingFields = mapOf(
-                            LeadTimeConfig::board to board
+                            LeadTimeConfigEntity::board to board
                         )
                     )
                 )
@@ -79,10 +79,10 @@ class SearchIssueByIdIntegrationTest(
 
             leadTimeFactory.create(
                 modifyingFields = mapOf(
-                    LeadTime::issue to issue,
-                    LeadTime::leadTimeConfig to leadTimeConfigFactory.create(
+                    LeadTimeEntity::issue to issue,
+                    LeadTimeEntity::leadTimeConfig to leadTimeConfigFactory.create(
                         modifyingFields = mapOf(
-                            LeadTimeConfig::board to board
+                            LeadTimeConfigEntity::board to board
                         )
                     )
                 )
@@ -91,7 +91,7 @@ class SearchIssueByIdIntegrationTest(
             impedimentHistoryFactory.create(
                 quantity = 5,
                 modifyingFields = mapOf(
-                    ImpedimentHistory::issueId to issue.id
+                    ImpedimentHistoryEntity::issueId to issue.id
                 )
             )
         }
@@ -111,19 +111,16 @@ class SearchIssueByIdIntegrationTest(
         val issue = issueRepository.findByIdOrNull(1L)
             ?: throw ResourceNotFound()
 
-        issueDetailResponse.assertThat {
-            hasId(issue.id)
-            hasKey(issue.key)
-
-            hasChangelogSize(issue.columnChangelog)
-            hasDueDateHistorySize(issue.dueDateHistory)
-            hasImpedimentHistorySize(issue.impedimentHistory)
-            hasLeadTimesSize(issue.leadTimes)
-
-            hasTouchTime(issue.touchTime / 60.0)
-            hasWaitTime(issue.waitTime / 60.0)
-            hasPctEfficiency(issue.pctEfficiency)
-        }
+        assertThat(issueDetailResponse)
+            .hasId(issue.id)
+            .hasKey(issue.key)
+            .hasChangelogSize(issue.columnChangelog)
+            .hasDueDateHistorySize(issue.dueDateHistory)
+            .hasImpedimentHistorySize(issue.impedimentHistory)
+            .hasLeadTimesSize(issue.leadTimes)
+            .hasTouchTime(issue.touchTime / 60.0)
+            .hasWaitTime(issue.waitTime / 60.0)
+            .hasPctEfficiency(issue.pctEfficiency)
     }
 
 }

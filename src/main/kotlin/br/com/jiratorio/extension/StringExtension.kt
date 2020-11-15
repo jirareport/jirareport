@@ -21,10 +21,7 @@ fun String.stripAccents(): String =
 fun String?.isPresent() =
     !isNullOrBlank()
 
-fun String.toLocalDate(formatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE): LocalDate =
-    LocalDate.parse(this, formatter)
-
-fun String.toLocalDate(pattern: String): LocalDate =
+fun String.toLocalDate(pattern: String = "dd/MM/yyyy"): LocalDate =
     LocalDate.parse(this, DateTimeFormatter.ofPattern(pattern))
 
 fun String.toLocalDateTime(formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")): LocalDateTime =

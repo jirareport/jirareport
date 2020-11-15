@@ -1,6 +1,6 @@
 package br.com.jiratorio.mapper
 
-import br.com.jiratorio.domain.entity.Board
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.request.CreateBoardRequest
 import br.com.jiratorio.domain.request.UpdateBoardRequest
 import br.com.jiratorio.domain.response.board.BoardDetailsResponse
@@ -9,7 +9,7 @@ import br.com.jiratorio.domain.response.board.BoardResponse
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 
-fun Board.toBoardDetailsResponse(): BoardDetailsResponse =
+fun BoardEntity.toBoardDetailsResponse(): BoardDetailsResponse =
     BoardDetailsResponse(
         id = id,
         externalId = externalId,
@@ -34,27 +34,27 @@ fun Board.toBoardDetailsResponse(): BoardDetailsResponse =
         issuePeriodNameFormat = issuePeriodNameFormat
     )
 
-fun CreateBoardRequest.toBoard(): Board =
-    Board(
+fun CreateBoardRequest.toBoard(): BoardEntity =
+    BoardEntity(
         name = name,
         externalId = externalId
     )
 
-fun Board.toBoardResponse(): BoardResponse =
+fun BoardEntity.toBoardResponse(): BoardResponse =
     BoardResponse(
         id = id,
         name = name,
         owner = owner
     )
 
-fun Page<Board>.toBoardResponse(): Page<BoardResponse> =
+fun Page<BoardEntity>.toBoardResponse(): Page<BoardResponse> =
     PageImpl(
         content.map { it.toBoardResponse() },
         pageable,
         totalElements
     )
 
-fun Board.updateFromUpdateBoardRequest(updateBoardRequest: UpdateBoardRequest) {
+fun BoardEntity.updateFromUpdateBoardRequest(updateBoardRequest: UpdateBoardRequest) {
     name = updateBoardRequest.name
     startColumn = updateBoardRequest.startColumn?.toUpperCase()
     endColumn = updateBoardRequest.endColumn?.toUpperCase()

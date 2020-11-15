@@ -1,21 +1,22 @@
 package br.com.jiratorio.integration.issueperiod
 
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.annotation.LoadStubs
-import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.IssuePeriod
-import br.com.jiratorio.dsl.restAssured
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.annotation.LoadStubs
+import br.com.jiratorio.testlibrary.restassured.specification.notFound
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
+import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import br.com.jiratorio.extension.toLocalDate
-import br.com.jiratorio.factory.domain.entity.BoardFactory
-import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
+import br.com.jiratorio.testlibrary.dsl.restAssured
+import br.com.jiratorio.testlibrary.extension.toLocalDate
+import br.com.jiratorio.testlibrary.factory.domain.entity.BoardFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.IssuePeriodFactory
 import br.com.jiratorio.repository.IssuePeriodRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import javax.servlet.http.HttpServletResponse.SC_NO_CONTENT
 
 @IntegrationTest
-internal class UpdateIssuePeriodIntegrationTest(
+class UpdateIssuePeriodIntegrationTest(
     private val authenticator: Authenticator,
     private val boardFactory: BoardFactory,
     private val issuePeriodFactory: IssuePeriodFactory,
@@ -29,9 +30,9 @@ internal class UpdateIssuePeriodIntegrationTest(
             val board = boardFactory.create(boardFactory::withBasicConfigurationBuilder)
             issuePeriodFactory.create(
                 modifyingFields = mapOf(
-                    IssuePeriod::startDate to "01/01/2019".toLocalDate(),
-                    IssuePeriod::endDate to "31/01/2019".toLocalDate(),
-                    IssuePeriod::board to board
+                    IssuePeriodEntity::startDate to "01/01/2019".toLocalDate(),
+                    IssuePeriodEntity::endDate to "31/01/2019".toLocalDate(),
+                    IssuePeriodEntity::board to board
                 )
             )
         }

@@ -1,7 +1,7 @@
 package br.com.jiratorio.domain.response.board
 
-import br.com.jiratorio.domain.impediment.ImpedimentType
-import br.com.jiratorio.domain.issueperiodnameformat.IssuePeriodNameFormat
+import br.com.jiratorio.domain.ImpedimentType
+import br.com.jiratorio.domain.IssuePeriodNameFormat
 
 data class BoardDetailsResponse(
 

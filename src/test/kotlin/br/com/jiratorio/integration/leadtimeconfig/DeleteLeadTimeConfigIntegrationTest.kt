@@ -1,17 +1,17 @@
 package br.com.jiratorio.integration.leadtimeconfig
 
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
-import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.domain.entity.LeadTimeConfigFactory
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.restassured.specification.notFound
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
+import br.com.jiratorio.testlibrary.dsl.restAssured
+import br.com.jiratorio.testlibrary.factory.domain.entity.LeadTimeConfigFactory
 import br.com.jiratorio.repository.LeadTimeConfigRepository
 import org.apache.http.HttpStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 @IntegrationTest
-internal class DeleteLeadTimeConfigIntegrationTest(
+class DeleteLeadTimeConfigIntegrationTest(
     private val leadTimeConfigFactory: LeadTimeConfigFactory,
     private val leadTimeConfigRepository: LeadTimeConfigRepository,
     private val authenticator: Authenticator

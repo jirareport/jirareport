@@ -1,24 +1,19 @@
 package br.com.jiratorio.domain
 
-import br.com.jiratorio.domain.entity.Board
-import br.com.jiratorio.domain.entity.ColumnChangelog
+import br.com.jiratorio.domain.changelog.ColumnChangelog
+import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.exception.MissingBoardConfigurationException
 import br.com.jiratorio.extension.containsUpperCase
 import java.time.LocalDateTime
 
 data class FluxColumn(
-
     val startLeadTimeColumn: String,
-
     val endLeadTimeColumn: String,
-
     val orderedColumns: List<String>?,
-
-    val useLastOccurrenceWhenCalculateLeadTime: Boolean = false
-
+    val useLastOccurrenceWhenCalculateLeadTime: Boolean = false,
 ) {
 
-    constructor(board: Board) : this(
+    constructor(board: BoardEntity) : this(
         startLeadTimeColumn = board.startColumn ?: throw MissingBoardConfigurationException("startColumn"),
         endLeadTimeColumn = board.endColumn ?: throw MissingBoardConfigurationException("endColumn"),
         orderedColumns = board.fluxColumn,
@@ -32,9 +27,10 @@ data class FluxColumn(
             orderedColumns.takeLastWhile { it != endLeadTimeColumn }.toSet() + endLeadTimeColumn
 
     val startColumns: Set<String>
-        get() = orderedColumns?.run {
-            takeWhile { it != endLeadTimeColumn } - takeWhile { it != startLeadTimeColumn } + endLeadTimeColumn
-        }?.toSet() ?: setOf(startLeadTimeColumn)
+        get() = orderedColumns
+            ?.run { takeWhile { it != endLeadTimeColumn } - takeWhile { it != startLeadTimeColumn } + endLeadTimeColumn }
+            ?.toSet()
+            ?: setOf(startLeadTimeColumn)
 
     val wipColumns: Set<String>
         get() = startColumns - endLeadTimeColumn
@@ -69,12 +65,12 @@ data class FluxColumn(
     private fun lastOccurrenceIfNeeds(
         to: String?,
         columnChangelog: Set<ColumnChangelog>,
-        created: LocalDateTime
+        created: LocalDateTime,
     ): LocalDateTime =
         if (useLastOccurrenceWhenCalculateLeadTime)
-            columnChangelog.last {
-                it.to.equals(to, ignoreCase = true)
-            }.startDate
+            columnChangelog
+                .last { it.to.equals(to, ignoreCase = true) }
+                .startDate
         else
             created
 

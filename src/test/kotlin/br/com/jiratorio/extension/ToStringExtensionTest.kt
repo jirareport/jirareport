@@ -1,12 +1,12 @@
 package br.com.jiratorio.extension
 
-import br.com.jiratorio.config.junit.testtype.UnitTest
+import br.com.jiratorio.testlibrary.junit.testtype.UnitTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 
 @UnitTest
-internal class ToStringExtensionTest {
+class ToStringExtensionTest {
 
     private val log = LoggerFactory.getLogger(javaClass)
 

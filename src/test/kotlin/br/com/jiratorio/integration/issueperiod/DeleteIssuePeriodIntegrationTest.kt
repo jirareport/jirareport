@@ -1,17 +1,17 @@
 package br.com.jiratorio.integration.issueperiod
 
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
-import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.domain.entity.IssuePeriodFactory
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.restassured.specification.notFound
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
+import br.com.jiratorio.testlibrary.dsl.restAssured
+import br.com.jiratorio.testlibrary.factory.domain.entity.IssuePeriodFactory
 import br.com.jiratorio.repository.IssuePeriodRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import javax.servlet.http.HttpServletResponse.SC_NO_CONTENT
 
 @IntegrationTest
-internal class DeleteIssuePeriodIntegrationTest(
+class DeleteIssuePeriodIntegrationTest(
     private val authenticator: Authenticator,
     private val issuePeriodFactory: IssuePeriodFactory,
     private val issuePeriodRepository: IssuePeriodRepository

@@ -1,12 +1,12 @@
 package br.com.jiratorio.integration.dynamicfieldconfig
 
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
-import br.com.jiratorio.domain.entity.DynamicFieldConfig
-import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.domain.entity.BoardFactory
-import br.com.jiratorio.factory.domain.entity.DynamicFieldConfigFactory
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.restassured.specification.notFound
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
+import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity
+import br.com.jiratorio.testlibrary.dsl.restAssured
+import br.com.jiratorio.testlibrary.factory.domain.entity.BoardFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.DynamicFieldConfigFactory
 import org.apache.http.HttpStatus.SC_OK
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
@@ -25,7 +25,7 @@ class SearchDynamicFieldConfigIntegrationTest(
             dynamicFieldConfigFactory.create(
                 quantity = 10,
                 modifyingFields = mapOf(
-                    DynamicFieldConfig::board to board
+                    DynamicFieldConfigEntity::board to board
                 )
             )
         }
@@ -55,7 +55,7 @@ class SearchDynamicFieldConfigIntegrationTest(
             dynamicFieldConfigFactory.create(
                 quantity = 10,
                 modifyingFields = mapOf(
-                    DynamicFieldConfig::board to board
+                    DynamicFieldConfigEntity::board to board
                 )
             )
 

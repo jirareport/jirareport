@@ -1,13 +1,13 @@
 package br.com.jiratorio.integration.dynamicfieldconfig
 
-import br.com.jiratorio.assert.assertThat
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
-import br.com.jiratorio.dsl.restAssured
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.assertion.DynamicFieldConfigAssert.Companion.assertThat
+import br.com.jiratorio.testlibrary.restassured.specification.notFound
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
+import br.com.jiratorio.testlibrary.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
-import br.com.jiratorio.factory.domain.entity.BoardFactory
-import br.com.jiratorio.factory.domain.request.DynamicFieldConfigRequestFactory
+import br.com.jiratorio.testlibrary.factory.domain.entity.BoardFactory
+import br.com.jiratorio.testlibrary.factory.domain.request.DynamicFieldConfigRequestFactory
 import br.com.jiratorio.repository.DynamicFieldConfigRepository
 import io.restassured.http.ContentType
 import org.apache.http.HttpStatus.SC_BAD_REQUEST
@@ -20,7 +20,7 @@ class CreateDynamicFieldConfigIntegrationTest(
     private val boardFactory: BoardFactory,
     private val dynamicFieldConfigRequestFactory: DynamicFieldConfigRequestFactory,
     private val dynamicFieldConfigRepository: DynamicFieldConfigRepository,
-    private val authenticator: Authenticator
+    private val authenticator: Authenticator,
 ) {
 
     @Test
@@ -48,11 +48,10 @@ class CreateDynamicFieldConfigIntegrationTest(
 
         val dynamicFieldConfig = dynamicFieldConfigRepository.findByIdOrNull(1L) ?: throw ResourceNotFound()
 
-        dynamicFieldConfig.assertThat {
-            hasName(request.name)
-            hasField(request.field)
-            hasBoard(board)
-        }
+        assertThat(dynamicFieldConfig)
+            .hasName(request.name)
+            .hasField(request.field)
+            .hasBoard(board)
     }
 
     @Test

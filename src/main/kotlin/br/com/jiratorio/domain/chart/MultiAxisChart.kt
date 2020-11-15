@@ -2,9 +2,9 @@ package br.com.jiratorio.domain.chart
 
 import java.util.LinkedHashMap
 
-data class MultiAxisChart<T>(
-    val labels: MutableList<String> = ArrayList(),
-    val datasources: MutableMap<String, MutableList<T>> = LinkedHashMap()
+class MultiAxisChart<T>(
+    val labels: MutableList<String> = mutableListOf(),
+    val datasources: MutableMap<String, MutableList<T>> = LinkedHashMap(),
 ) {
 
     operator fun set(key: String, values: Map<String, T>) {

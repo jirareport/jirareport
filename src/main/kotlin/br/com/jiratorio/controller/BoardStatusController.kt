@@ -1,6 +1,6 @@
 package br.com.jiratorio.controller
 
-import br.com.jiratorio.usecase.project.FindJiraProjectStatuses
+import br.com.jiratorio.service.ExternalBoardService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/boards/{boardId}/statuses")
 class BoardStatusController(
-    private val findJiraProjectStatuses: FindJiraProjectStatuses
+    private val externalBoardService: ExternalBoardService
 ) {
 
     @GetMapping
     fun findByBoardId(@PathVariable boardId: Long): Set<String> =
-        findJiraProjectStatuses.execute(boardId)
+        externalBoardService.findAllPossibleColumns(boardId)
 
 }

@@ -1,8 +1,8 @@
 package br.com.jiratorio.domain.request
 
-import br.com.jiratorio.domain.duedate.DueDateType
-import br.com.jiratorio.domain.impediment.ImpedimentType
-import br.com.jiratorio.domain.issueperiodnameformat.IssuePeriodNameFormat
+import br.com.jiratorio.domain.DueDateType
+import br.com.jiratorio.domain.ImpedimentType
+import br.com.jiratorio.domain.IssuePeriodNameFormat
 import javax.validation.constraints.NotBlank
 
 data class UpdateBoardRequest(

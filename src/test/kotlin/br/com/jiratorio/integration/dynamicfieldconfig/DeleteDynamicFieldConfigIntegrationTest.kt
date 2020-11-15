@@ -1,10 +1,10 @@
 package br.com.jiratorio.integration.dynamicfieldconfig
 
-import br.com.jiratorio.base.Authenticator
-import br.com.jiratorio.base.specification.notFound
-import br.com.jiratorio.config.junit.testtype.IntegrationTest
-import br.com.jiratorio.dsl.restAssured
-import br.com.jiratorio.factory.domain.entity.DynamicFieldConfigFactory
+import br.com.jiratorio.testlibrary.Authenticator
+import br.com.jiratorio.testlibrary.restassured.specification.notFound
+import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
+import br.com.jiratorio.testlibrary.dsl.restAssured
+import br.com.jiratorio.testlibrary.factory.domain.entity.DynamicFieldConfigFactory
 import br.com.jiratorio.repository.DynamicFieldConfigRepository
 import org.apache.http.HttpStatus.SC_NO_CONTENT
 import org.assertj.core.api.Assertions.assertThat
@@ -36,7 +36,7 @@ class DeleteDynamicFieldConfigIntegrationTest(
         }
 
         assertThat(dynamicFieldConfigRepository.count())
-            .isZero()
+            .isZero
     }
 
     @Test
@@ -58,7 +58,7 @@ class DeleteDynamicFieldConfigIntegrationTest(
         }
 
         assertThat(dynamicFieldConfigRepository.count())
-            .isOne()
+            .isOne
     }
 
     @Test
@@ -80,7 +80,7 @@ class DeleteDynamicFieldConfigIntegrationTest(
         }
 
         assertThat(dynamicFieldConfigRepository.count())
-            .isOne()
+            .isOne
     }
 
 }
