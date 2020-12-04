@@ -1,6 +1,7 @@
 package br.com.jiratorio.jira.service
 
 import br.com.jiratorio.domain.entity.BoardEntity
+import br.com.jiratorio.extension.sanitizeJql
 import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.testlibrary.extension.toLocalDate
 import br.com.jiratorio.testlibrary.junit.testtype.UnitTest
@@ -45,7 +46,7 @@ class JiraQueryLanguageServiceTest {
                | AND issueType NOT IN ('IT_1')
                | AND status WAS IN ('TODO','WIP','DONE')
                | AND status IN ('DONE')
-                """.trimMargin().replace("\n", "")
+                """.sanitizeJql()
             )
         }
 
@@ -72,7 +73,7 @@ class JiraQueryLanguageServiceTest {
                | ${""}
                | AND status WAS IN ('TODO','WIP','DONE')
                | AND status IN ('DONE')
-                """.trimMargin().replace("\n", "")
+                """.sanitizeJql()
             )
         }
 
@@ -86,6 +87,35 @@ class JiraQueryLanguageServiceTest {
             Assertions.assertThat(jql)
                 .contains("'WAITING UI\\\\UX'")
                 .contains("'UI\\\\UX DONE'")
+        }
+
+        @Test
+        fun `finalized issues with additionalFilter filter`() {
+            val board = createBoard(mutableListOf("IT_1"), additionalFilter = "team = \"jirareport-team\" AND test = 1")
+
+            val jql = jiraQueryLanguageService.buildFinalizedIssueQuery(board, startDate, endDate)
+
+            Assertions.assertThat(jql).isEqualTo(
+                """
+               | project = '123123'
+               | AND (
+               |      STATUS CHANGED TO 'DONE' DURING('2019-01-01', '2019-01-31 23:59')
+               |      OR (
+               |          STATUS CHANGED TO 'DONE' DURING ('2019-01-01', '2019-01-31 23:59')
+               |          AND NOT STATUS CHANGED TO 'DONE'
+               |      )
+               |      OR (
+               |          resolutiondate >= '2019-01-01' AND resolutiondate <= '2019-01-31 23:59'
+               |          AND NOT STATUS CHANGED TO 'DONE'
+               |          AND NOT STATUS CHANGED TO 'DONE'
+               |      )
+               | )
+               | AND issueType NOT IN ('IT_1')
+               | AND status WAS IN ('TODO','WIP','DONE')
+               | AND status IN ('DONE')
+               | AND (team = "jirareport-team" AND test = 1) 
+                """.sanitizeJql()
+            )
         }
 
     }
@@ -127,11 +157,24 @@ class JiraQueryLanguageServiceTest {
                 .contains("'UI\\\\UX DONE'")
         }
 
+        @Test
+        fun `opened issues with additionalFilter filter`() {
+            val board = createBoard(mutableListOf("IT_1"), additionalFilter = "team = \"jirareport-team\" AND test = 1")
+
+            val jql = jiraQueryLanguageService.buildOpenedIssueQuery(board)
+
+            Assertions.assertThat(jql)
+                .contains("project = '123123'")
+                .contains("AND issueType NOT IN ('IT_1')")
+                .contains("AND status IN ('TODO','WIP')")
+                .contains("AND (team = \"jirareport-team\" AND test = 1)")
+        }
     }
 
     fun createBoard(
         ignoreIssueType: MutableList<String>? = null,
         fluxColumn: MutableList<String> = mutableListOf("TODO", "WIP", "DONE"),
+        additionalFilter: String? = null
     ) =
         BoardEntity(
             name = "test board",
@@ -139,6 +182,7 @@ class JiraQueryLanguageServiceTest {
             startColumn = "TODO",
             endColumn = "DONE",
             fluxColumn = fluxColumn,
-            ignoreIssueType = ignoreIssueType
+            ignoreIssueType = ignoreIssueType,
+            additionalFilter = additionalFilter
         )
 }

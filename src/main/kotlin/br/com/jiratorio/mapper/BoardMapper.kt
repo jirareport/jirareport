@@ -31,7 +31,8 @@ fun BoardEntity.toBoardDetailsResponse(): BoardDetailsResponse =
         waitingColumns = waitingColumns,
         feature = BoardFeatureResponse(this),
         useLastOccurrenceWhenCalculateLeadTime = useLastOccurrenceWhenCalculateLeadTime,
-        issuePeriodNameFormat = issuePeriodNameFormat
+        issuePeriodNameFormat = issuePeriodNameFormat,
+        additionalFilter = additionalFilter
     )
 
 fun CreateBoardRequest.toBoard(): BoardEntity =
@@ -73,4 +74,5 @@ fun BoardEntity.updateFromUpdateBoardRequest(updateBoardRequest: UpdateBoardRequ
     dueDateType = updateBoardRequest.dueDateType
     useLastOccurrenceWhenCalculateLeadTime = updateBoardRequest.useLastOccurrenceWhenCalculateLeadTime
     issuePeriodNameFormat = updateBoardRequest.issuePeriodNameFormat
+    additionalFilter = updateBoardRequest.additionalFilter
 }

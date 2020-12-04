@@ -2,7 +2,8 @@ package br.com.jiratorio.jira.service
 
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.entity.BoardEntity
-import org.slf4j.LoggerFactory
+import br.com.jiratorio.extension.EMPTY
+import br.com.jiratorio.extension.sanitizeJql
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -10,29 +11,20 @@ import java.time.format.DateTimeFormatter
 @Service
 class JiraQueryLanguageService {
 
-    private val log = LoggerFactory.getLogger(javaClass)
-
     fun buildFinalizedIssueQuery(board: BoardEntity, start: LocalDate, end: LocalDate): String {
-        log.info("Action=createFinalizedIssueJql, board={}, startDate={}, endDate={}", board, start, end)
-
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val startDate = start.format(formatter)
-        val endDate = end.format(formatter) + " 23:59"
+        val startDate = start.format(DATE_TIME_FORMATTER)
+        val endDate = "${end.format(DATE_TIME_FORMATTER)} 23:59"
         val endColumn = board.endColumn
         val project = board.externalId
 
         val fluxColumn = FluxColumn(board)
         val lastColumn = fluxColumn.lastColumn
-        val startColumns = fluxColumn.startColumns.joinToString(",") { "'$it'" }
-        val endColumns = fluxColumn.endColumns.joinToString(",") { "'$it'" }
+        val startColumns = fluxColumn.startColumns.commaSeparated()
+        val endColumns = fluxColumn.endColumns.commaSeparated()
 
-        val ignoredIssueTypes = board.ignoreIssueType.let {
-            if (it.isNullOrEmpty()) {
-                ""
-            } else {
-                it.joinToString(",", "AND issueType NOT IN (", ")") { "'$it'" }
-            }
-        }
+        val ignoredIssueTypes = buildIgnoredIssueTypes(board)
+
+        val additionalFilter: String = buildAdditionalFilter(board)
 
         return """
               | project = '$project'
@@ -51,34 +43,44 @@ class JiraQueryLanguageService {
               | $ignoredIssueTypes
               | AND status WAS IN ($startColumns)
               | AND status IN ($endColumns)
+              | $additionalFilter
         """
-            .trimMargin()
-            .replace("\n", "")
-            .replace("\\", "\\\\")
+            .sanitizeJql()
     }
 
     fun buildOpenedIssueQuery(board: BoardEntity): String {
-        log.info("Action=createOpenedIssueJql, board={}", board)
+        val fluxColumn = FluxColumn(board)
+        val wipColumns = fluxColumn.wipColumns.commaSeparated()
 
-        val wipColumns = FluxColumn(board).wipColumns.joinToString(",") { "'$it'" }
         val project = board.externalId
 
-        val ignoredIssueTypes = board.ignoreIssueType.let {
-            if (it.isNullOrEmpty()) {
-                ""
-            } else {
-                it.joinToString(",", "AND issueType NOT IN (", ")") { "'$it'" }
-            }
-        }
+        val ignoredIssueTypes = buildIgnoredIssueTypes(board)
+
+        val additionalFilter: String = buildAdditionalFilter(board)
 
         return """
-            project = '$project'
-            AND status IN ($wipColumns)
-            $ignoredIssueTypes
-        """
-            .trimMargin()
-            .replace("\n", "")
-            .replace("\\", "\\\\")
+            | project = '$project'
+            | AND status IN ($wipColumns)
+            | $ignoredIssueTypes
+            | $additionalFilter
+        """.sanitizeJql()
+    }
+
+    private fun Collection<*>.commaSeparated(): String =
+        joinToString(",") { "'$it'" }
+
+    private fun buildIgnoredIssueTypes(board: BoardEntity) =
+        board.ignoreIssueType
+            ?.let { str -> str.joinToString(",", "AND issueType NOT IN (", ")") { "'$it'" } }
+            ?: String.EMPTY
+
+    private fun buildAdditionalFilter(board: BoardEntity) =
+        board.additionalFilter
+            ?.let { "AND ($it)" }
+            ?: String.EMPTY
+
+    companion object {
+        private val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     }
 
 }

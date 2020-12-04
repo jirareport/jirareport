@@ -42,6 +42,8 @@ data class UpdateBoardRequest(
 
     val useLastOccurrenceWhenCalculateLeadTime: Boolean = false,
 
-    val issuePeriodNameFormat: IssuePeriodNameFormat = IssuePeriodNameFormat.INITIAL_AND_FINAL_DATE
+    val issuePeriodNameFormat: IssuePeriodNameFormat = IssuePeriodNameFormat.INITIAL_AND_FINAL_DATE,
+
+    val additionalFilter: String? = null
 
 )
