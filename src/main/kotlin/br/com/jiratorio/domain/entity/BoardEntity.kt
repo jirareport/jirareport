@@ -89,7 +89,9 @@ data class BoardEntity(
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    var issuePeriodNameFormat: IssuePeriodNameFormat = IssuePeriodNameFormat.INITIAL_AND_FINAL_DATE
+    var issuePeriodNameFormat: IssuePeriodNameFormat = IssuePeriodNameFormat.INITIAL_AND_FINAL_DATE,
+
+    var additionalFilter: String? = null
 
 ) : BaseEntity() {
 
