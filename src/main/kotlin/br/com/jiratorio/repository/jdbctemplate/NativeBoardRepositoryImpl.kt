@@ -33,8 +33,8 @@ class NativeBoardRepositoryImpl(
             """
             SELECT id,
                    issue_period_name_format,
-                   estimatecf is not null                                     AS has_estimate_feature_enabled,
-                   exists(select 1 from lead_time_config where board_id = id) AS has_multiple_lead_time_feature_enabled
+                   estimatecf is not null                                           AS has_estimate_feature_enabled,
+                   exists(select 1 from lead_time_config where board_id = board.id) AS has_multiple_lead_time_feature_enabled
             FROM board
             where id = :id
             """

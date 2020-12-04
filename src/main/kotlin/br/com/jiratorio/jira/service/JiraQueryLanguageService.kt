@@ -75,9 +75,10 @@ class JiraQueryLanguageService {
             ?: String.EMPTY
 
     private fun buildAdditionalFilter(board: BoardEntity) =
-        board.additionalFilter
-            ?.let { "AND ($it)" }
-            ?: String.EMPTY
+        if (board.additionalFilter.isNullOrBlank())
+            String.EMPTY
+        else
+            "AND (${board.additionalFilter})"
 
     companion object {
         private val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
