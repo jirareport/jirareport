@@ -5,7 +5,7 @@ plugins {
     kotlin("plugin.spring") version "1.6.21"
     kotlin("plugin.jpa") version "1.6.21"
 
-    id("org.springframework.boot") version "2.6.15"
+    id("org.springframework.boot") version "2.7.18"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
 
     id("io.gitlab.arturbosch.detekt") version "1.14.2"
