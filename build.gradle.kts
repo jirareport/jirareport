@@ -5,8 +5,8 @@ plugins {
     kotlin("plugin.spring") version "1.6.21"
     kotlin("plugin.jpa") version "1.6.21"
 
-    id("org.springframework.boot") version "2.3.5.RELEASE"
-    id("io.spring.dependency-management") version "1.0.10.RELEASE"
+    id("org.springframework.boot") version "2.4.13"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
 
     id("io.gitlab.arturbosch.detekt") version "1.14.2"
 }
@@ -58,7 +58,7 @@ dependencies {
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:Hoxton.SR8")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2020.0.6")
     }
 }
 
