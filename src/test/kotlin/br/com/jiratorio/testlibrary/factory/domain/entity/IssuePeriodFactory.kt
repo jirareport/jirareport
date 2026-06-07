@@ -7,7 +7,7 @@ import br.com.jiratorio.testlibrary.extension.faker.jira
 import br.com.jiratorio.testlibrary.extension.toLocalDate
 import br.com.jiratorio.testlibrary.factory.KBacon
 import br.com.jiratorio.repository.IssuePeriodRepository
-import com.github.javafaker.Faker
+import net.datafaker.Faker
 import org.springframework.stereotype.Component
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit

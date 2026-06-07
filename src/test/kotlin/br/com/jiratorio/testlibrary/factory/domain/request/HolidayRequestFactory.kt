@@ -2,7 +2,7 @@ package br.com.jiratorio.testlibrary.factory.domain.request
 
 import br.com.jiratorio.domain.request.HolidayRequest
 import br.com.jiratorio.testlibrary.factory.KBacon
-import com.github.javafaker.Faker
+import net.datafaker.Faker
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 

@@ -66,6 +66,11 @@ esac
 
 CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
+# Fall back to cli-assistant JDK if JAVA_HOME is unset.
+if [ -z "$JAVA_HOME" ] && [ -d "$HOME/.cli-assistant/jdks/11/Contents/Home" ]; then
+    JAVA_HOME="$HOME/.cli-assistant/jdks/11/Contents/Home"
+fi
+
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_HOME" ] ; then
     if [ -x "$JAVA_HOME/jre/sh/java" ] ; then

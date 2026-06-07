@@ -44,7 +44,7 @@ dependencies {
 
     testImplementation("org.testcontainers:postgresql:1.14.3")
 
-    testImplementation("com.github.javafaker:javafaker:1.0.1")
+    testImplementation("net.datafaker:datafaker:1.9.0")
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("com.github.tomakehurst:wiremock:2.27.1")
 

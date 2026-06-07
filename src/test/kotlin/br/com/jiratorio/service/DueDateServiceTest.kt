@@ -6,7 +6,7 @@ import br.com.jiratorio.extension.toLocalDate
 import br.com.jiratorio.testlibrary.assertion.DueDateHistoryAssert
 import br.com.jiratorio.testlibrary.factory.domain.FieldChangelogFactory
 import br.com.jiratorio.testlibrary.junit.testtype.UnitTest
-import com.github.javafaker.Faker
+import net.datafaker.Faker
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime

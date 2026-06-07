@@ -3,7 +3,7 @@ package br.com.jiratorio.testlibrary.factory.domain.request
 import br.com.jiratorio.domain.chart.ChartType
 import br.com.jiratorio.domain.request.UpdateUserConfigRequest
 import br.com.jiratorio.testlibrary.factory.KBacon
-import com.github.javafaker.Faker
+import net.datafaker.Faker
 import org.springframework.stereotype.Component
 
 @Component
@@ -15,7 +15,7 @@ class UpdateUserConfigFactory(
         return UpdateUserConfigRequest(
             state = faker.address().state(),
             city = faker.address().city(),
-            holidayToken = faker.crypto().md5(),
+            holidayToken = faker.regexify("[a-f0-9]{32}"),
             leadTimeChartType = faker.options().option(ChartType::class.java),
             throughputChartType = faker.options().option(ChartType::class.java)
         )

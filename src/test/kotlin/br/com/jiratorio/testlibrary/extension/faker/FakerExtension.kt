@@ -1,5 +1,5 @@
 package br.com.jiratorio.testlibrary.extension.faker
 
-import com.github.javafaker.Faker
+import net.datafaker.Faker
 
 fun Faker.jira() = Jira(this)
