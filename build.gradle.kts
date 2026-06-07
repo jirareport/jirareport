@@ -1,14 +1,14 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.22"
-    kotlin("plugin.spring") version "1.8.22"
-    kotlin("plugin.jpa") version "1.8.22"
+    kotlin("jvm") version "1.9.23"
+    kotlin("plugin.spring") version "1.9.23"
+    kotlin("plugin.jpa") version "1.9.23"
 
     id("org.springframework.boot") version "2.7.18"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
 
-    id("io.gitlab.arturbosch.detekt") version "1.14.2"
+    id("io.gitlab.arturbosch.detekt") version "1.23.6"
 }
 
 apply {
@@ -32,8 +32,8 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.22")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23")
 
     implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
 
@@ -53,7 +53,7 @@ dependencies {
     testImplementation("io.mockk:mockk:1.10.0")
     testImplementation("com.tngtech.archunit:archunit:0.12.0")
     
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.14.2")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
 }
 
 dependencyManagement {
@@ -67,9 +67,6 @@ configurations.all {
     resolutionStrategy.force("net.java.dev.jna:jna:5.14.0", "net.java.dev.jna:jna-platform:5.14.0")
 }
 
-configurations.matching { it.name == "detekt" }.configureEach {
-    resolutionStrategy.force("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
-}
 
 tasks.register<Test>("unitTest") {
     useJUnitPlatform {
@@ -79,11 +76,8 @@ tasks.register<Test>("unitTest") {
 }
 
 detekt {
-    input = files(
-        "src/main/kotlin",
-        "src/test/kotlin"
-    )
-    config = files("$projectDir/detekt-config.yml")
+    source.setFrom(files("src/main/kotlin", "src/test/kotlin"))
+    config.setFrom(files("$projectDir/detekt-config.yml"))
 }
 
 tasks.withType<Test> {

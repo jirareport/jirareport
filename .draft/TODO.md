@@ -14,10 +14,10 @@ Rules:
 - [x] C3  `03-kotlin-1.6.md`                   (JDK 11) — Kotlin 1.5→1.6 — fe58a9a
 - [x] C4  `04-spring-2.4.md`                   (JDK 11) — SB 2.3→2.4, Cloud Hoxton→2020.0 — d7a10f0
 - [x] C5  `05-spring-2.5-gradle7-jdk17.md`     (JDK 17) — SB 2.4→2.5, Gradle→7.6, JDK→17, jvmTarget→17 — b04421e
-- [ ] C6  `06-spring-2.6.md`                   (JDK 17) — SB 2.5→2.6, Cloud 2020.0→2021.0
-- [ ] C7  `07-spring-2.7.md`                   (JDK 17) — SB 2.6→2.7
-- [ ] C8  `08-kotlin-1.7.md`                   (JDK 17) — Kotlin 1.6→1.7
-- [ ] C9  `09-kotlin-1.8.md`                   (JDK 17) — Kotlin 1.7→1.8
+- [x] C6  `06-spring-2.6.md`                   (JDK 17) — SB 2.5→2.6, Cloud 2020.0→2021.0 — ae9e154
+- [x] C7  `07-spring-2.7.md`                   (JDK 17) — SB 2.6→2.7 — df7ea6e
+- [x] C8  `08-kotlin-1.7.md`                   (JDK 17) — Kotlin 1.6→1.7 — d8d39d1
+- [x] C9  `09-kotlin-1.8.md`                   (JDK 17) — Kotlin 1.7→1.8 — 2fd53ed
 - [ ] C10 `10-kotlin-1.9-gradle8.md`           (JDK 17) — Kotlin 1.8→1.9, Gradle 7.6→8.x
 - [ ] C11 `11-spring-3.0-jakarta.md`           (JDK 17) — SB 2.7→3.0, javax→jakarta, drop sleuth, Cloud→2022.0
 - [ ] C12 `12-hibernate6-security6.md`         (JDK 17) — hypersistence-utils, Spring Security 6 rewrite

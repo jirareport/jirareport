@@ -57,17 +57,27 @@ java -version                          # confirm
 ```
 Installed: 11, 17, 25, 26. Installable LTS: 11, 17, 21, 25. Each task states its JDK.
 
-**CRITICAL — how `use` actually works (verified):** `cli-assistant` is a profile shell
-*function* that reads the binary's output and `eval`s `export JAVA_HOME=... / PATH=...` into the
-**current shell**. Consequences:
-- Run `use` and the gradle command **in the same shell call**, e.g.
-  `cli-assistant env java use 11; ./gradlew clean build`. State does NOT persist to a later,
-  separate shell — re-run `use` at the top of each command that builds.
-- **Never pipe or redirect the `use` line** (`cli-assistant env java use 11 | tail`,
-  `... > log`) — that runs the function in a subshell and the export is lost, so `java` falls
-  back to the broken `/usr/bin/java` stub ("Unable to locate a Java Runtime").
-- Helper: `./.draft/run-build.sh <jdk> [gradle-args]` does this correctly.
-- Do NOT export `JAVA_HOME` to a hardcoded `~/.cli-assistant/jdks/<v>/...` path; use `use`.
+**CRITICAL — the ONE allowed way to build on a chosen JDK.** `cli-assistant` is a profile shell
+*function* that `eval`s `export JAVA_HOME/PATH` into the **current shell**. The permission
+allow-list grants `Bash(cli-assistant:*)` and `Bash(./gradlew:*)` as separate matchers. Use
+exactly this compound, in one shell call, for every build:
+```
+cli-assistant env java use <JDK>; ./gradlew clean build --console=plain 2>&1 | tail -n 40
+```
+- `use` and `./gradlew` are separate `;`-parts; each matches an allow rule → approved.
+- State does NOT persist to a later, separate shell — re-run `use` at the top of EVERY gradle
+  command (build, detekt, wrapper, bootRun).
+
+**FORBIDDEN (these get auto-denied or break the JDK and STALL the loop):**
+- ❌ `JAVA_HOME=/path/... ./gradlew ...` — the env-assignment prefix means the command no longer
+  starts with `./gradlew`, so it does NOT match `Bash(./gradlew:*)` and is BLOCKED. This is the
+  #1 cause of stalls. Never prefix gradle with `JAVA_HOME=`.
+- ❌ `export JAVA_HOME=/Users/.../.cli-assistant/jdks/<v>/...` to a hardcoded path. Use `use`.
+- ❌ Creating helper shell scripts (e.g. `build-jdk17.sh`) that hardcode JAVA_HOME. Do not.
+- ❌ Piping/redirecting the `use` line itself (`cli-assistant env java use 17 | tail`) — runs the
+  function in a subshell so the export is lost and `java` falls back to the broken
+  `/usr/bin/java` stub ("Unable to locate a Java Runtime"). Only pipe/redirect the `./gradlew`
+  part, as shown above.
 
 Note: a JDK's bytecode (`jvmTarget`) must be ≤ the JDK actually running the tests, or test
 classes won't load. That's why C0 lowers `jvmTarget` to 11 while on JDK 11.
