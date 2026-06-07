@@ -17,7 +17,6 @@ apply {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
@@ -65,6 +64,11 @@ dependencyManagement {
 
 configurations.all {
     exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+    resolutionStrategy.force("net.java.dev.jna:jna:5.14.0", "net.java.dev.jna:jna-platform:5.14.0")
+}
+
+configurations.matching { it.name == "detekt" }.configureEach {
+    resolutionStrategy.force("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 }
 
 tasks.register<Test>("unitTest") {
@@ -89,6 +93,6 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
-        jvmTarget = "13"
+        jvmTarget = "11"
     }
 }
