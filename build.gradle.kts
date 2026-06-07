@@ -5,8 +5,8 @@ plugins {
     kotlin("plugin.spring") version "1.6.21"
     kotlin("plugin.jpa") version "1.6.21"
 
-    id("org.springframework.boot") version "2.4.13"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("org.springframework.boot") version "2.5.15"
+    id("io.spring.dependency-management") version "1.0.15.RELEASE"
 
     id("io.gitlab.arturbosch.detekt") version "1.14.2"
 }
@@ -93,6 +93,6 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
