@@ -13,7 +13,7 @@ Rules:
 - [x] C2  `02-kotlin-1.5.md`                   (JDK 11) — Kotlin 1.4→1.5 — db63722
 - [x] C3  `03-kotlin-1.6.md`                   (JDK 11) — Kotlin 1.5→1.6 — fe58a9a
 - [x] C4  `04-spring-2.4.md`                   (JDK 11) — SB 2.3→2.4, Cloud Hoxton→2020.0 — d7a10f0
-- [ ] C5  `05-spring-2.5-gradle7-jdk17.md`     (JDK 17) — SB 2.4→2.5, Gradle→7.6, JDK→17, jvmTarget→17
+- [x] C5  `05-spring-2.5-gradle7-jdk17.md`     (JDK 17) — SB 2.4→2.5, Gradle→7.6, JDK→17, jvmTarget→17 — b04421e
 - [ ] C6  `06-spring-2.6.md`                   (JDK 17) — SB 2.5→2.6, Cloud 2020.0→2021.0
 - [ ] C7  `07-spring-2.7.md`                   (JDK 17) — SB 2.6→2.7
 - [ ] C8  `08-kotlin-1.7.md`                   (JDK 17) — Kotlin 1.6→1.7

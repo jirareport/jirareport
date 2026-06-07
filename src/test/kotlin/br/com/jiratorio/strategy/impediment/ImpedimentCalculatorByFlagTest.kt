@@ -53,6 +53,7 @@ class ImpedimentCalculatorByFlagTest {
             .isEqualTo(15)
         assertThat(impedimentHistory)
             .hasSize(2)
+        assertThat(impedimentHistory)
             .containsExactly(
                 InternalImpedimentHistory(
                     startDate = "01/01/2019 12:00".toLocalDateTime(),
@@ -115,6 +116,7 @@ class ImpedimentCalculatorByFlagTest {
 
         assertThat(impedimentHistory)
             .hasSize(2)
+        assertThat(impedimentHistory)
             .containsExactly(
                 InternalImpedimentHistory(
                     startDate = "05/01/2019 12:00".toLocalDateTime(),
