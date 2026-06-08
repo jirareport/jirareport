@@ -59,14 +59,28 @@ Installed: 11, 17, 25, 26. Installable LTS: 11, 17, 21, 25. Each task states its
 
 **CRITICAL — the ONE allowed way to build on a chosen JDK.** `cli-assistant` is a profile shell
 *function* that `eval`s `export JAVA_HOME/PATH` into the **current shell**. The permission
-allow-list grants `Bash(cli-assistant:*)` and `Bash(./gradlew:*)` as separate matchers. Use
-exactly this compound, in one shell call, for every build:
+allow-list grants `Bash(cli-assistant:*)` and `Bash(./gradlew:*)` as separate matchers. Build
+with this exact compound (one shell call) — **redirect the full log to a file and only print
+GREEN/FAILED**, so the build output does NOT flood your context (token saver):
 ```
-cli-assistant env java use <JDK>; ./gradlew clean build --console=plain 2>&1 | tail -n 40
+cli-assistant env java use <JDK>; ./gradlew build --console=plain > .draft/last-build.log 2>&1; if grep -q "BUILD SUCCESSFUL" .draft/last-build.log; then echo "✅ GREEN"; else echo "❌ FAILED"; tail -n 120 .draft/last-build.log; fi
 ```
+- On ✅ GREEN: do NOT read the log — proceed straight to commit. Reading the full build log on
+  success is the #1 token waste; don't.
+- On ❌ FAILED: the `tail` shows the error; read more of `.draft/last-build.log` only if you need
+  more context to fix it.
 - `use` and `./gradlew` are separate `;`-parts; each matches an allow rule → approved.
 - State does NOT persist to a later, separate shell — re-run `use` at the top of EVERY gradle
   command (build, detekt, wrapper, bootRun).
+
+**`clean` only at MILESTONES.** A full `clean build` recompiles everything and re-pulls test
+containers — slow and token-heavy. Use plain `build` (incremental) for the normal tasks. Use
+`clean build` ONLY when the task changes the **JDK or the Gradle version**, or is the **final
+task** — i.e. C20 (JDK 21 / Gradle 9), C22 (JDK 25 / Gradle 9.5.1), C23 (final). For those three,
+replace `./gradlew build` with `./gradlew clean build` in the command above. All other tasks: plain `build`.
+
+**Test counts for your report:** read them from `build/test-results/test/*.xml` (aggregate the
+`tests`/`failures`/`errors`/`skipped` attributes) — do NOT scrape the build log.
 
 **FORBIDDEN (these get auto-denied or break the JDK and STALL the loop):**
 - ❌ `JAVA_HOME=/path/... ./gradlew ...` — the env-assignment prefix means the command no longer

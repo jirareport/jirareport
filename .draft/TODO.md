@@ -19,12 +19,12 @@ Rules:
 - [x] C8  `08-kotlin-1.7.md`                   (JDK 17) — Kotlin 1.6→1.7 — d8d39d1
 - [x] C9  `09-kotlin-1.8.md`                   (JDK 17) — Kotlin 1.7→1.8 — 2fd53ed
 - [x] C10 `10-kotlin-1.9-gradle8.md`           (JDK 17) — Kotlin 1.8→1.9, Gradle 7.6→8.x — 0f85bc8 (Kotlin 1.9.23, detekt 1.23.6)
-- [ ] C11 `11-spring-3.0-jakarta.md`           (JDK 17) — SB 2.7→3.0, javax→jakarta, drop sleuth, Cloud→2022.0
-- [ ] C12 `12-hibernate6-security6.md`         (JDK 17) — hypersistence-utils, Spring Security 6 rewrite
-- [ ] C13 `13-feign-hc5-testlibs.md`           (JDK 17) — feign-hc5, wiremock 3.x, test libs
-- [ ] C14 `14-spring-3.1.md`                   (JDK 17) — SB 3.0→3.1
-- [ ] C15 `15-spring-3.2.md`                   (JDK 17) — SB 3.1→3.2, Cloud 2022.0→2023.0
-- [ ] C16 `16-kotlin-2.0-k2.md`                (JDK 17) — Kotlin 1.9→2.0 (K2), jvm-default flag, detekt
+- [x] C11 `11-spring-3.0-jakarta.md`           (JDK 17) — SB 2.7→3.0, javax→jakarta, drop sleuth, Cloud→2022.0 — 71a0344 (pulled forward from C12: hypersistence-utils-hibernate-60, Security 6 rewrite, feign decode404)
+- [x] C12 `12-hibernate6-security6.md`         (JDK 17) — hypersistence-utils, Spring Security 6 rewrite — 71a0344 (done in C11)
+- [x] C13 `13-feign-hc5-testlibs.md`           (JDK 17) — feign-hc5, wiremock 3.x, test libs — 45f7fd4
+- [x] C14 `14-spring-3.1.md`                   (JDK 17) — SB 3.0→3.1 — d661374
+- [x] C15 `15-spring-3.2.md`                   (JDK 17) — SB 3.1→3.2, Cloud 2022.0→2023.0 — a738895
+- [x] C16 `16-kotlin-2.0-k2.md`                (JDK 17) — Kotlin 1.9→2.0 (K2), jvm-default flag, detekt — 4db1860 (detekt 1.23.8, -Xjvm-default=all retained)
 - [ ] C17 `17-spring-3.3.md`                   (JDK 17) — SB 3.2→3.3
 - [ ] C18 `18-spring-3.4.md`                   (JDK 17) — SB 3.3→3.4, Cloud 2023.0→2024.0
 - [ ] C19 `19-kotlin-2.1.md`                   (JDK 17) — Kotlin 2.0→2.1

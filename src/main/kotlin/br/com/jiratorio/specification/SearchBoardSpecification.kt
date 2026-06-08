@@ -15,7 +15,7 @@ class SearchBoardSpecification(
 
     override fun toPredicate(
         from: Root<BoardEntity>,
-        query: CriteriaQuery<*>,
+        query: CriteriaQuery<*>?,
         builder: CriteriaBuilder
     ): Predicate {
         val predicates = mutableListOf<Predicate>()
