@@ -57,8 +57,8 @@ fun Page<BoardEntity>.toBoardResponse(): Page<BoardResponse> =
 
 fun BoardEntity.updateFromUpdateBoardRequest(updateBoardRequest: UpdateBoardRequest) {
     name = updateBoardRequest.name
-    startColumn = updateBoardRequest.startColumn?.toUpperCase()
-    endColumn = updateBoardRequest.endColumn?.toUpperCase()
+    startColumn = updateBoardRequest.startColumn?.uppercase()
+    endColumn = updateBoardRequest.endColumn?.uppercase()
     fluxColumn = updateBoardRequest.fluxColumn?.toUpperCase()?.toMutableList()
     ignoreIssueType = updateBoardRequest.ignoreIssueType
     epicCF = updateBoardRequest.epicCF

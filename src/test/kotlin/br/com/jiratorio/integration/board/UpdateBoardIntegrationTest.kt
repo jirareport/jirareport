@@ -49,7 +49,7 @@ class UpdateBoardIntegrationTest(
             .hasName(request.name)
             .hasStartColumn(request.startColumn)
             .hasEndColumn(request.endColumn)
-            .hasFluxColumn(request.fluxColumn?.map { it.toUpperCase() })
+            .hasFluxColumn(request.fluxColumn?.map { it.uppercase() })
             .hasTouchingColumns(request.touchingColumns)
             .hasWaitingColumns(request.waitingColumns)
             .hasIgnoreIssueType(request.ignoreIssueType)
@@ -58,7 +58,7 @@ class UpdateBoardIntegrationTest(
             .hasSystemCF(request.systemCF)
             .hasProjectCF(request.projectCF)
             .hasIgnoreWeekend(request.ignoreWeekend)
-            .hasImpedimentColumns(request.impedimentColumns?.map { it.toUpperCase() })
+            .hasImpedimentColumns(request.impedimentColumns?.map { it.uppercase() })
     }
 
     @Test

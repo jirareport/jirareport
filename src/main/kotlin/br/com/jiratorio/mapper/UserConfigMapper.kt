@@ -22,7 +22,7 @@ fun UserConfigEntity.updateFromUpdateUserConfigRequest(updateUserConfigRequest: 
     city = updateUserConfigRequest.city
         ?.stripAccents()
         ?.replace(" ", "_")
-        ?.toUpperCase()
+        ?.uppercase()
 
     val leadTimeChartType = updateUserConfigRequest.leadTimeChartType
     if (leadTimeChartType != null) {

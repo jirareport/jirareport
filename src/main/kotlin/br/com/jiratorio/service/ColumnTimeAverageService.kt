@@ -31,7 +31,7 @@ class ColumnTimeAverageService(
                     averageTime = averageTime
                 )
             }
-            .sortedBy { fluxColumn.indexOf(it.columnName.toUpperCase()) }
+            .sortedBy { fluxColumn.indexOf(it.columnName.uppercase()) }
             .forEach(columnTimeAverageRepository::save)
     }
 
@@ -39,7 +39,7 @@ class ColumnTimeAverageService(
         val fluxColumn = board.fluxColumn ?: emptyList()
 
         return columnTimeAverageRepository.findColumnTimeAverage(issues.map { it.id })
-            .sortedBy { (to, _) -> fluxColumn.indexOf(to.toUpperCase()) }
+            .sortedBy { (to, _) -> fluxColumn.indexOf(to.uppercase()) }
     }
 
 }

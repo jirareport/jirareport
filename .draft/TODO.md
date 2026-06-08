@@ -25,8 +25,8 @@ Rules:
 - [x] C14 `14-spring-3.1.md`                   (JDK 17) — SB 3.0→3.1 — d661374
 - [x] C15 `15-spring-3.2.md`                   (JDK 17) — SB 3.1→3.2, Cloud 2022.0→2023.0 — a738895
 - [x] C16 `16-kotlin-2.0-k2.md`                (JDK 17) — Kotlin 1.9→2.0 (K2), jvm-default flag, detekt — 4db1860 (detekt 1.23.8, -Xjvm-default=all retained)
-- [ ] C17 `17-spring-3.3.md`                   (JDK 17) — SB 3.2→3.3
-- [ ] C18 `18-spring-3.4.md`                   (JDK 17) — SB 3.3→3.4, Cloud 2023.0→2024.0
+- [x] C17 `17-spring-3.3.md`                   (JDK 17) — SB 3.2→3.3 — 119d6b4
+- [x] C18 `18-spring-3.4.md`                   (JDK 17) — SB 3.3→3.4, Cloud 2023.0→2024.0 — d18bf70
 - [ ] C19 `19-kotlin-2.1.md`                   (JDK 17) — Kotlin 2.0→2.1
 - [ ] C20 `20-spring-3.5-gradle9-jdk21.md`     (JDK 21) — SB 3.4→3.5, Cloud→2025.0, Gradle→9.x, JDK→21
 - [ ] C21 `21-kotlin-2.2.md`                   (JDK 21) — Kotlin 2.1→2.2

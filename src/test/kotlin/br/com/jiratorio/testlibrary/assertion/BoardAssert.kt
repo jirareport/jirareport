@@ -40,24 +40,24 @@ class BoardAssert(
     }
 
     fun hasStartColumn(startColumn: String?): BoardAssert {
-        if (actual.startColumn != actual.startColumn?.toUpperCase()) {
+        if (actual.startColumn != actual.startColumn?.uppercase()) {
             failWithMessage(shouldBeUpperCase(actual.startColumn).create())
         }
 
-        if (actual.startColumn != startColumn?.toUpperCase()) {
-            failWithMessage(shouldBeEquals(actual.startColumn, startColumn?.toUpperCase()).create())
+        if (actual.startColumn != startColumn?.uppercase()) {
+            failWithMessage(shouldBeEquals(actual.startColumn, startColumn?.uppercase()).create())
         }
 
         return this
     }
 
     fun hasEndColumn(endColumn: String?): BoardAssert {
-        if (actual.endColumn != actual.endColumn?.toUpperCase()) {
+        if (actual.endColumn != actual.endColumn?.uppercase()) {
             failWithMessage(shouldBeUpperCase(actual.endColumn).create())
         }
 
-        if (actual.endColumn != endColumn?.toUpperCase()) {
-            failWithMessage(shouldBeEquals(actual.endColumn, endColumn?.toUpperCase()).create())
+        if (actual.endColumn != endColumn?.uppercase()) {
+            failWithMessage(shouldBeEquals(actual.endColumn, endColumn?.uppercase()).create())
         }
 
         return this
@@ -174,7 +174,7 @@ class BoardAssert(
     }
 
     private fun containsUppercase(actual: List<String>, touchingColumns: List<String>) =
-        touchingColumns.map { it.toUpperCase() }.filter { !actual.contains(it) }
+        touchingColumns.map { it.uppercase() }.filter { !actual.contains(it) }
 
     companion object {
 
