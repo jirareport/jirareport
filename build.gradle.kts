@@ -5,7 +5,7 @@ plugins {
     kotlin("plugin.spring") version "2.0.21"
     kotlin("plugin.jpa") version "2.0.21"
 
-    id("org.springframework.boot") version "3.3.13"
+    id("org.springframework.boot") version "3.4.7"
     id("io.spring.dependency-management") version "1.1.7"
 
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
@@ -57,7 +57,7 @@ dependencies {
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2023.0.6")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2024.0.3")
     }
 }
 
