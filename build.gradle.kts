@@ -5,7 +5,7 @@ plugins {
     kotlin("plugin.spring") version "2.1.21"
     kotlin("plugin.jpa") version "2.1.21"
 
-    id("org.springframework.boot") version "3.4.7"
+    id("org.springframework.boot") version "3.5.0"
     id("io.spring.dependency-management") version "1.1.7"
 
     // detekt 1.23.8 does not support Kotlin 2.1; deferred to C22 (2.0.0-alpha)
@@ -58,7 +58,7 @@ dependencies {
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2024.0.3")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.0.0")
     }
 }
 
@@ -88,6 +88,6 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
 }
