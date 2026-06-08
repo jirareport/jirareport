@@ -12,7 +12,7 @@ fun <CONJUNCTION> ClassesThat<CONJUNCTION>.areNotInnerClass(): CONJUNCTION =
 
 private object AreInnerClass : DescribedPredicate<JavaClass>("inner class") {
 
-    override fun apply(input: JavaClass): Boolean =
+    override fun test(input: JavaClass): Boolean =
         input.isInnerClass || input.name.contains("$")
 
 }

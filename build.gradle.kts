@@ -35,12 +35,12 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23")
 
-    implementation("io.github.openfeign:feign-httpclient")
+    implementation("io.github.openfeign:feign-hc5")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    testImplementation("org.testcontainers:postgresql:1.14.3")
+    testImplementation("org.testcontainers:postgresql:1.20.6")
 
     testImplementation("net.datafaker:datafaker:1.9.0")
     testImplementation("io.rest-assured:rest-assured")
@@ -48,8 +48,8 @@ dependencies {
 
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.mockk:mockk:1.10.0")
-    testImplementation("com.tngtech.archunit:archunit:0.12.0")
+    testImplementation("io.mockk:mockk:1.13.10")
+    testImplementation("com.tngtech.archunit:archunit:1.3.0")
     
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
 }
@@ -82,6 +82,8 @@ detekt {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    environment("DOCKER_HOST", "unix:///var/run/docker.sock")
+    jvmArgs("-Dapi.version=1.45")
 }
 
 tasks.withType<KotlinCompile> {
