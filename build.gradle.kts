@@ -1,9 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    kotlin("jvm") version "2.1.21"
-    kotlin("plugin.spring") version "2.1.21"
-    kotlin("plugin.jpa") version "2.1.21"
+    kotlin("jvm") version "2.2.21"
+    kotlin("plugin.spring") version "2.2.21"
+    kotlin("plugin.jpa") version "2.2.21"
 
     id("org.springframework.boot") version "3.5.0"
     id("io.spring.dependency-management") version "1.1.7"
@@ -34,8 +35,8 @@ dependencies {
     implementation("org.flywaydb:flyway-database-postgresql")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:2.1.21")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.21")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.21")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21")
 
     implementation("io.github.openfeign:feign-hc5")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
@@ -86,8 +87,8 @@ tasks.withType<Test> {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
-        jvmTarget = "21"
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xjsr305=strict", "-Xjvm-default=all")
+        jvmTarget.set(JvmTarget.JVM_21)
     }
 }
