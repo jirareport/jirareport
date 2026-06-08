@@ -5,7 +5,7 @@ plugins {
     kotlin("plugin.spring") version "1.9.23"
     kotlin("plugin.jpa") version "1.9.23"
 
-    id("org.springframework.boot") version "3.1.9"
+    id("org.springframework.boot") version "3.2.12"
     id("io.spring.dependency-management") version "1.1.7"
 
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
@@ -44,7 +44,7 @@ dependencies {
 
     testImplementation("net.datafaker:datafaker:1.9.0")
     testImplementation("io.rest-assured:rest-assured")
-    testImplementation("org.wiremock:wiremock:3.9.0")
+    testImplementation("org.wiremock:wiremock-standalone:3.9.0")
 
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -56,7 +56,7 @@ dependencies {
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.5")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2023.0.3")
     }
 }
 
