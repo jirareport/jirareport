@@ -13,7 +13,7 @@ class HolidayRequestFactory(
 
     override fun builder(): HolidayRequest {
         return HolidayRequest(
-            date = LocalDate.now().plusDays(faker.number().randomNumber()),
+            date = LocalDate.now().plusDays(faker.number().numberBetween(1L, 365L * 5)),
             description = faker.lorem().word()
         )
     }
