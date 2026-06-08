@@ -21,7 +21,7 @@ class ErrorHandler(
     @ExceptionHandler(MissingKotlinParameterException::class)
     fun handleMissingKotlinParameterException(e: MissingKotlinParameterException): ResponseEntity<Map<String, List<String>>> =
         ResponseEntity(
-            mapOf(e.parameter.name!! to listOf(messageResolver.resolve("javax.validation.constraints.NotNull.message"))),
+            mapOf(e.parameter.name!! to listOf(messageResolver.resolve("jakarta.validation.constraints.NotNull.message"))),
             HttpStatus.BAD_REQUEST
         )
 

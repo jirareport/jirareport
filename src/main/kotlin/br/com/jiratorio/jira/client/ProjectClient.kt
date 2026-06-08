@@ -13,8 +13,7 @@ import java.util.Optional
     url = "\${jira.url}",
     configuration = [
         JiraClientConfiguration::class
-    ],
-    decode404 = true
+    ]
 )
 interface ProjectClient {
 

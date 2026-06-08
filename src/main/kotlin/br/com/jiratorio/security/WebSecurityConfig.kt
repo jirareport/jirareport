@@ -1,16 +1,17 @@
 package br.com.jiratorio.security
 
+import jakarta.servlet.http.HttpServletResponse
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
-import javax.servlet.http.HttpServletResponse
 
 @Configuration
 @EnableWebSecurity
@@ -18,13 +19,18 @@ class WebSecurityConfig(
     private val jiraAuthenticationProvider: JiraAuthenticationProvider,
     private val tokenAuthenticationProvider: TokenAuthenticationProvider,
     private val corsConfiguration: CorsConfiguration
-) : WebSecurityConfigurerAdapter() {
+) {
 
-    override fun configure(http: HttpSecurity) {
+    @Bean
+    fun authenticationManager(): AuthenticationManager =
+        ProviderManager(listOf(jiraAuthenticationProvider, tokenAuthenticationProvider))
+
+    @Bean
+    fun securityFilterChain(http: HttpSecurity, authenticationManager: AuthenticationManager): SecurityFilterChain {
         with(http) {
-            authorizeRequests {
-                it.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
-                it.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            authorizeHttpRequests {
+                it.requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+                it.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 it.anyRequest().authenticated()
             }
 
@@ -66,19 +72,9 @@ class WebSecurityConfig(
                 it.configurationSource { corsConfiguration }
             }
 
-            addFilterBefore(AuthenticationFilter(authenticationManager()), BasicAuthenticationFilter::class.java)
+            addFilterBefore(AuthenticationFilter(authenticationManager), BasicAuthenticationFilter::class.java)
         }
-    }
 
-    override fun configure(web: WebSecurity) {
-        web.ignoring()
-            .antMatchers(HttpMethod.GET, "/actuator/**")
-            .antMatchers(HttpMethod.OPTIONS, "/**")
+        return http.build()
     }
-
-    override fun configure(auth: AuthenticationManagerBuilder) {
-        auth.authenticationProvider(jiraAuthenticationProvider)
-            .authenticationProvider(tokenAuthenticationProvider)
-    }
-
 }

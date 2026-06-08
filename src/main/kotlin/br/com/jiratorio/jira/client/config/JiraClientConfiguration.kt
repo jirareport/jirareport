@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import feign.RequestInterceptor
 import feign.codec.ErrorDecoder
 import org.slf4j.LoggerFactory
+import org.springframework.cloud.openfeign.FeignBuilderCustomizer
 import org.springframework.context.annotation.Bean
 
 class JiraClientConfiguration(
@@ -18,6 +19,9 @@ class JiraClientConfiguration(
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
+
+    @Bean
+    fun decode404Customizer() = FeignBuilderCustomizer { it.decode404() }
 
     @Bean
     fun requestInterceptor() = RequestInterceptor { template ->

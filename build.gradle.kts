@@ -5,8 +5,8 @@ plugins {
     kotlin("plugin.spring") version "1.9.23"
     kotlin("plugin.jpa") version "1.9.23"
 
-    id("org.springframework.boot") version "2.7.18"
-    id("io.spring.dependency-management") version "1.0.15.RELEASE"
+    id("org.springframework.boot") version "3.0.13"
+    id("io.spring.dependency-management") version "1.1.7"
 
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
 }
@@ -28,14 +28,12 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.postgresql:postgresql")
-    implementation("com.vladmihalcea:hibernate-types-52:2.8.0")
+    implementation("io.hypersistence:hypersistence-utils-hibernate-60:3.9.0")
     implementation("org.flywaydb:flyway-core")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23")
-
-    implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
 
     implementation("io.github.openfeign:feign-httpclient")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
@@ -46,7 +44,7 @@ dependencies {
 
     testImplementation("net.datafaker:datafaker:1.9.0")
     testImplementation("io.rest-assured:rest-assured")
-    testImplementation("com.github.tomakehurst:wiremock:2.27.1")
+    testImplementation("org.wiremock:wiremock:3.9.0")
 
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -58,9 +56,11 @@ dependencies {
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2021.0.9")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.5")
     }
 }
+
+extra["jackson-bom.version"] = "2.15.4"
 
 configurations.all {
     exclude(group = "org.junit.vintage", module = "junit-vintage-engine")

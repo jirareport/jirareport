@@ -18,7 +18,7 @@ Rules:
 - [x] C7  `07-spring-2.7.md`                   (JDK 17) — SB 2.6→2.7 — df7ea6e
 - [x] C8  `08-kotlin-1.7.md`                   (JDK 17) — Kotlin 1.6→1.7 — d8d39d1
 - [x] C9  `09-kotlin-1.8.md`                   (JDK 17) — Kotlin 1.7→1.8 — 2fd53ed
-- [ ] C10 `10-kotlin-1.9-gradle8.md`           (JDK 17) — Kotlin 1.8→1.9, Gradle 7.6→8.x
+- [x] C10 `10-kotlin-1.9-gradle8.md`           (JDK 17) — Kotlin 1.8→1.9, Gradle 7.6→8.x — 0f85bc8 (Kotlin 1.9.23, detekt 1.23.6)
 - [ ] C11 `11-spring-3.0-jakarta.md`           (JDK 17) — SB 2.7→3.0, javax→jakarta, drop sleuth, Cloud→2022.0
 - [ ] C12 `12-hibernate6-security6.md`         (JDK 17) — hypersistence-utils, Spring Security 6 rewrite
 - [ ] C13 `13-feign-hc5-testlibs.md`           (JDK 17) — feign-hc5, wiremock 3.x, test libs

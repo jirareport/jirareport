@@ -8,7 +8,7 @@ import br.com.jiratorio.testlibrary.factory.domain.entity.IssuePeriodFactory
 import br.com.jiratorio.repository.IssuePeriodRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import javax.servlet.http.HttpServletResponse.SC_NO_CONTENT
+import jakarta.servlet.http.HttpServletResponse.SC_NO_CONTENT
 
 @IntegrationTest
 class DeleteIssuePeriodIntegrationTest(

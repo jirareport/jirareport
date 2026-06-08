@@ -4,20 +4,21 @@ import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.domain.issue.Issue
 import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.toStringBuilder
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
 import org.hibernate.annotations.Type
 import java.time.LocalDateTime
 import java.util.Objects
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
-import javax.persistence.OrderBy
-import javax.persistence.Table
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
+import jakarta.persistence.OrderBy
+import jakarta.persistence.Table
 
 @Entity
 @Table(name = "issue")
@@ -75,7 +76,7 @@ data class IssueEntity(
 
     override var deviationOfEstimate: Long? = null,
 
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(columnDefinition = "jsonb")
     var dueDateHistory: List<DueDateHistory>? = null,
 
@@ -87,7 +88,7 @@ data class IssueEntity(
     @JoinColumn(name = "issue_id", updatable = false)
     var impedimentHistory: MutableSet<ImpedimentHistoryEntity> = mutableSetOf(),
 
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType::class)
     @Column(columnDefinition = "jsonb")
     override var dynamicFields: Map<String, String?> = emptyMap(),
 

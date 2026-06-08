@@ -24,7 +24,7 @@ import br.com.jiratorio.repository.IssueRepository
 import io.restassured.http.ContentType
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpServletResponse
 
 @IntegrationTest
 class CreateIssuePeriodWithDynamicFieldsIntegrationTest(

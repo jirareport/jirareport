@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component
 import org.springframework.web.servlet.DispatcherServlet
 import org.springframework.web.servlet.LocaleResolver
 import java.util.Locale
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 
 @Component(DispatcherServlet.LOCALE_RESOLVER_BEAN_NAME)
 class HeaderLocaleResolver : LocaleResolver {

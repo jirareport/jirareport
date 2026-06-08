@@ -1,6 +1,6 @@
 package br.com.jiratorio.domain.request
 
-import javax.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotBlank
 
 data class DynamicFieldConfigRequest(
 

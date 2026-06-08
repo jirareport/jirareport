@@ -16,7 +16,7 @@ spring:
   jpa:
     show-sql: true
     open-in-view: false
-    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
         format_sql: true

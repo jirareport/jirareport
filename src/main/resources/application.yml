@@ -20,7 +20,7 @@ spring:
   jpa:
     show-sql: true
     open-in-view: false
-    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
         format_sql: true
@@ -28,14 +28,16 @@ spring:
     enabled: true
     out-of-order: true
     ignore-missing-migrations: true
-
-feign:
-  client:
-    config:
-      default:
-        logger-level: FULL
-  httpclient:
-    disable-ssl-validation: true
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            logger-level: FULL
+          project-client:
+            decode404: true
+      httpclient:
+        disable-ssl-validation: true
 
 server:
   error:
