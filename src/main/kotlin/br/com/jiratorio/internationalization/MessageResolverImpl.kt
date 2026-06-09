@@ -20,6 +20,6 @@ class MessageResolverImpl(
     override val locale: Locale = localeResolver.resolveLocale(request)
 
     override fun resolve(key: String, vararg args: Any?): String =
-        messageSource.getMessage(key, args, locale)
+        messageSource.getMessage(key, args as Array<out Any>?, locale)
 
 }

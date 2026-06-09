@@ -3,7 +3,7 @@ package br.com.jiratorio.jira.parser
 import br.com.jiratorio.domain.changelog.Changelog
 import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.jira.domain.JiraChangelog
-import com.fasterxml.jackson.databind.JsonNode
+import tools.jackson.databind.JsonNode
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -29,6 +29,7 @@ class ChangelogParser(
             .path("histories")
             .flatMap { history ->
                 history.path("items")
+                    .asIterable()
                     .map { item ->
                         JiraChangelog(
                             field = item.path("field").extractValue(),

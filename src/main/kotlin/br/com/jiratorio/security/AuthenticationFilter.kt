@@ -23,7 +23,7 @@ class AuthenticationFilter(
 
         val authToken: String? = request.getHeader("X-Auth-Token")
         if (authToken.isPresent()) {
-            val authentication = PreAuthenticatedAuthenticationToken(authToken, null)
+            val authentication = PreAuthenticatedAuthenticationToken(authToken!!, null)
             val authenticateResult: Authentication = try {
                 authenticationManager.authenticate(authentication)
             } catch (e: PreAuthenticatedCredentialsNotFoundException) {

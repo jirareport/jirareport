@@ -32,6 +32,9 @@ spring:
     ignore-missing-migrations: true
   profiles:
     active: test
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.client.discovery.simple.SimpleDiscoveryClientAutoConfiguration
 
 server:
   error:

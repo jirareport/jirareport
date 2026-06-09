@@ -27,9 +27,9 @@ Rules:
 - [x] C16 `16-kotlin-2.0-k2.md`                (JDK 17) — Kotlin 1.9→2.0 (K2), jvm-default flag, detekt — 4db1860 (detekt 1.23.8, -Xjvm-default=all retained)
 - [x] C17 `17-spring-3.3.md`                   (JDK 17) — SB 3.2→3.3 — 119d6b4
 - [x] C18 `18-spring-3.4.md`                   (JDK 17) — SB 3.3→3.4, Cloud 2023.0→2024.0 — d18bf70
-- [ ] C19 `19-kotlin-2.1.md`                   (JDK 17) — Kotlin 2.0→2.1
-- [ ] C20 `20-spring-3.5-gradle9-jdk21.md`     (JDK 21) — SB 3.4→3.5, Cloud→2025.0, Gradle→9.x, JDK→21
-- [ ] C21 `21-kotlin-2.2.md`                   (JDK 21) — Kotlin 2.1→2.2
+- [x] C19 `19-kotlin-2.1.md`                   (JDK 17) — Kotlin 2.0→2.1 — 94f6a4a (Kotlin 2.1.21; detekt deferred—1.23.8 incompatible with K2.1, no published 2.0.0-alpha found; will re-enable C22)
+- [x] C20 `20-spring-3.5-gradle9-jdk21.md`     (JDK 21) — SB 3.4→3.5, Cloud→2025.0, Gradle→9.x, JDK→21 — c90ab8d
+- [x] C21 `21-kotlin-2.2.md`                   (JDK 21) — Kotlin 2.1→2.2 — 9fa82d2
 - [ ] C22 `22-spring-4.0-jdk25.md`             (JDK 25) — SB 3.5→4.0.6, Cloud→2026.0, Gradle→9.5.1, JDK→25, Dockerfile, detekt 2.0-alpha
 - [ ] C23 `23-kotlin-2.3.md`                   (JDK 25) — Kotlin 2.2→2.3.20
 

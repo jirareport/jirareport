@@ -1,6 +1,6 @@
 package br.com.jiratorio.extension
 
-import com.fasterxml.jackson.databind.JsonNode
+import tools.jackson.databind.JsonNode
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 

@@ -6,11 +6,10 @@ plugins {
     kotlin("plugin.spring") version "2.2.21"
     kotlin("plugin.jpa") version "2.2.21"
 
-    id("org.springframework.boot") version "3.5.0"
+    id("org.springframework.boot") version "4.0.6"
     id("io.spring.dependency-management") version "1.1.7"
 
-    // detekt 1.23.8 does not support Kotlin 2.1; deferred to C22 (2.0.0-alpha)
-    // id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    // id("io.gitlab.arturbosch.detekt") version "2.0.0-alpha"  // not yet published; deferred to C23
 }
 
 apply {
@@ -22,6 +21,8 @@ repositories {
 }
 
 dependencies {
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:4.0.6"))
+
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -30,11 +31,15 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.postgresql:postgresql")
-    implementation("io.hypersistence:hypersistence-utils-hibernate-60:3.9.0")
-    implementation("org.flywaydb:flyway-core")
+    implementation("io.hypersistence:hypersistence-utils-hibernate-71:3.15.3")
+    implementation("org.springframework.boot:spring-boot-starter-flyway")
     implementation("org.flywaydb:flyway-database-postgresql")
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("tools.jackson.module:jackson-module-kotlin:3.1.2")
+    // hypersistence-utils + rest-assured still use Jackson 2 (databind 2.21.x). Provide its
+    // JavaTime + Kotlin modules so JSON columns (java.time, Kotlin data classes) (de)serialize.
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.21.2")
     implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.21")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21")
 
@@ -43,7 +48,7 @@ dependencies {
     testImplementation("org.testcontainers:postgresql:1.20.6")
 
     testImplementation("net.datafaker:datafaker:1.9.0")
-    testImplementation("io.rest-assured:rest-assured")
+    testImplementation("io.rest-assured:rest-assured:5.5.0")
     testImplementation("org.wiremock:wiremock-standalone:3.9.0")
 
     testImplementation("org.springframework.security:spring-security-test")
@@ -51,14 +56,20 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.10")
     testImplementation("com.tngtech.archunit:archunit:1.3.0")
 
-    // detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
+    // detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:2.0.0-alpha")  // deferred to C23
 }
-
-extra["jackson-bom.version"] = "2.15.4"
 
 configurations.all {
     exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     resolutionStrategy.force("net.java.dev.jna:jna:5.14.0", "net.java.dev.jna:jna-platform:5.14.0")
+    // Spring Boot 4 ships Groovy 5.0.x, which rest-assured does not support yet
+    // (NPE in Groovy ClosureMetaClass). Pin Groovy back to 4.0.x for the test classpath.
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.apache.groovy") {
+            useVersion("4.0.28")
+            because("rest-assured is incompatible with Groovy 5 (Spring Boot 4 default)")
+        }
+    }
 }
 
 
@@ -69,7 +80,7 @@ tasks.register<Test>("unitTest") {
     }
 }
 
-// detekt { ... }  // deferred to C22
+// detekt { ... }  // re-enable once detekt 2.0.0-alpha is published (C23)
 
 tasks.withType<Test> {
     useJUnitPlatform()
@@ -77,9 +88,14 @@ tasks.withType<Test> {
     jvmArgs("-Dapi.version=1.45")
 }
 
+tasks.withType<JavaCompile> {
+    sourceCompatibility = "24"
+    targetCompatibility = "24"
+}
+
 tasks.withType<KotlinCompile> {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict", "-Xjvm-default=all")
-        jvmTarget.set(JvmTarget.JVM_21)
+        jvmTarget.set(JvmTarget.JVM_24)
     }
 }

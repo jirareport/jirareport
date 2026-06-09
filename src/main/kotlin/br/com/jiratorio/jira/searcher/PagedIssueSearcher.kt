@@ -5,7 +5,7 @@ import br.com.jiratorio.domain.issue.JiraIssue
 import br.com.jiratorio.domain.request.SearchJiraIssueRequest
 import br.com.jiratorio.jira.client.IssueClient
 import br.com.jiratorio.jira.parser.JiraIssueParser
-import com.fasterxml.jackson.databind.JsonNode
+import tools.jackson.databind.JsonNode
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 

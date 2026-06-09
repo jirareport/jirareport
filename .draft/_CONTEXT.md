@@ -38,6 +38,13 @@ the Gradle CLI, which is an allowed `Bash(./gradlew:*)` action and regenerates t
 Run it with the CURRENTLY-active gradle/JDK; it rewrites the properties (and wrapper jar/scripts).
 The next `./gradlew` invocation downloads the new version. Verify with `./gradlew --version`.
 
+## Do NOT look up versions online
+WebSearch / WebFetch / curl to mvnrepository/maven-central/github are **denied** in this
+headless setup and only waste turns (and tokens). Do not use them to find "the latest patch."
+Use the exact version pinned in the task file. If a task says a version line (e.g. "3.4.x") and
+you don't know the patch, pick a recent known patch and proceed — if it doesn't resolve, gradle
+will tell you and you adjust by ONE patch. Never spend turns hunting version numbers on the web.
+
 ## The golden rules
 1. **One step only.** Do exactly what your task file says. Do NOT bump anything the task does
    not name, even if a newer version exists.
