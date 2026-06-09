@@ -28,17 +28,6 @@ spring:
     enabled: true
     out-of-order: true
     ignore-missing-migrations: true
-  cloud:
-    openfeign:
-      client:
-        config:
-          default:
-            logger-level: FULL
-          project-client:
-            decode404: true
-      httpclient:
-        disable-ssl-validation: true
-
 server:
   error:
     include-message: always

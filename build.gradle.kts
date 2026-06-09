@@ -38,9 +38,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.21")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21")
 
-    implementation("io.github.openfeign:feign-hc5")
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
-
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     testImplementation("org.testcontainers:postgresql:1.20.6")
@@ -55,12 +52,6 @@ dependencies {
     testImplementation("com.tngtech.archunit:archunit:1.3.0")
 
     // detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
-}
-
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.0.0")
-    }
 }
 
 extra["jackson-bom.version"] = "2.15.4"

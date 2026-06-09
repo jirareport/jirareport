@@ -3,49 +3,99 @@ package br.com.jiratorio.jira.client.config
 import br.com.jiratorio.domain.CurrentUser
 import br.com.jiratorio.exception.UnauthorizedException
 import br.com.jiratorio.internationalization.MessageResolver
+import br.com.jiratorio.jira.client.FieldClient
+import br.com.jiratorio.jira.client.IssueClient
+import br.com.jiratorio.jira.client.ProjectClient
 import br.com.jiratorio.jira.domain.JiraError
 import br.com.jiratorio.jira.domain.exception.JiraException
+import br.com.jiratorio.jira.domain.exception.JiraNotFoundException
 import com.fasterxml.jackson.databind.ObjectMapper
-import feign.RequestInterceptor
-import feign.codec.ErrorDecoder
 import org.slf4j.LoggerFactory
-import org.springframework.cloud.openfeign.FeignBuilderCustomizer
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpRequest
+import org.springframework.http.HttpStatusCode
+import org.springframework.http.client.ClientHttpRequestExecution
+import org.springframework.http.client.ClientHttpRequestInterceptor
+import org.springframework.web.client.RestClient
+import org.springframework.web.client.support.RestClientAdapter
+import org.springframework.web.service.invoker.HttpServiceProxyFactory
 
+@Configuration
 class JiraClientConfiguration(
     private val objectMapper: ObjectMapper,
     private val currentUser: CurrentUser,
-    private val messageResolver: MessageResolver
+    private val messageResolver: MessageResolver,
+    @Value("\${jira.url}") private val jiraUrl: String,
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    @Bean
-    fun decode404Customizer() = FeignBuilderCustomizer { it.decode404() }
+    private fun buildJiraRestClient(suppressNotFound: Boolean = false): RestClient {
+        val builder = RestClient.builder()
+            .baseUrl(jiraUrl)
+            .requestInterceptor(jiraAuthInterceptor())
+            .defaultStatusHandler(HttpStatusCode::is4xxClientError) { request, response ->
+                val status = response.statusCode.value()
+                if (status == 404 && suppressNotFound) {
+                    throw JiraNotFoundException()
+                }
+                if (status == 401) {
+                    throw UnauthorizedException()
+                }
+                throw JiraException(
+                    try {
+                        objectMapper.readValue(response.body, JiraError::class.java)
+                    } catch (e: Exception) {
+                        log.error("Method=errorDecoder, status={}", status, e)
+                        JiraError(messageResolver.resolve("errors.session-timeout"), status.toLong())
+                    }
+                )
+            }
+            .defaultStatusHandler(HttpStatusCode::is5xxServerError) { _, response ->
+                val status = response.statusCode.value()
+                throw JiraException(
+                    try {
+                        objectMapper.readValue(response.body, JiraError::class.java)
+                    } catch (e: Exception) {
+                        log.error("Method=errorDecoder, status={}", status, e)
+                        JiraError(messageResolver.resolve("errors.session-timeout"), status.toLong())
+                    }
+                )
+            }
+        return builder.build()
+    }
 
-    @Bean
-    fun requestInterceptor() = RequestInterceptor { template ->
-        template.header("Authorization", currentUser.jiraToken)
-        template.header("Accept-Language", "en")
-        template.header("X-Force-Accept-Language", "true")
+    private fun jiraAuthInterceptor() = ClientHttpRequestInterceptor { request: HttpRequest, body: ByteArray, execution: ClientHttpRequestExecution ->
+        request.headers.set("Authorization", currentUser.jiraToken)
+        request.headers.set("Accept-Language", "en")
+        request.headers.set("X-Force-Accept-Language", "true")
+        execution.execute(request, body)
     }
 
     @Bean
-    fun errorDecoder() = ErrorDecoder { methodKey, response ->
-        log.info("Method=errorDecoder, methodKey={}, response={}", methodKey, response)
+    fun fieldClient(): FieldClient {
+        val factory = HttpServiceProxyFactory.builderFor(
+            RestClientAdapter.create(buildJiraRestClient())
+        ).build()
+        return factory.createClient(FieldClient::class.java)
+    }
 
-        if (response.status() == 401) {
-            UnauthorizedException()
-        } else {
-            JiraException(
-                try {
-                    objectMapper.readValue(response.body().asInputStream(), JiraError::class.java)
-                } catch (e: Exception) {
-                    log.error("Method=errorDecoder, methodKey={}, response={}", methodKey, response, e)
-                    JiraError(messageResolver.resolve("errors.session-timeout"), response.status().toLong())
-                }
-            )
-        }
+    @Bean
+    fun issueClient(): IssueClient {
+        val factory = HttpServiceProxyFactory.builderFor(
+            RestClientAdapter.create(buildJiraRestClient())
+        ).build()
+        return factory.createClient(IssueClient::class.java)
+    }
+
+    @Bean
+    fun projectClient(): ProjectClient {
+        val factory = HttpServiceProxyFactory.builderFor(
+            RestClientAdapter.create(buildJiraRestClient(suppressNotFound = true))
+        ).build()
+        return factory.createClient(ProjectClient::class.java)
     }
 
 }
