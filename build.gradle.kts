@@ -2,9 +2,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    kotlin("jvm") version "2.2.21"
-    kotlin("plugin.spring") version "2.2.21"
-    kotlin("plugin.jpa") version "2.2.21"
+    kotlin("jvm") version "2.3.20"
+    kotlin("plugin.spring") version "2.3.20"
+    kotlin("plugin.jpa") version "2.3.20"
 
     id("org.springframework.boot") version "4.0.6"
     id("io.spring.dependency-management") version "1.1.7"
@@ -40,8 +40,8 @@ dependencies {
     // JavaTime + Kotlin modules so JSON columns (java.time, Kotlin data classes) (de)serialize.
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.21.2")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.21")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.3.20")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.3.20")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
