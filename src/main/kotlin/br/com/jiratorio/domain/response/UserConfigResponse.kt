@@ -10,8 +10,6 @@ data class UserConfigResponse(
 
     val city: String? = null,
 
-    val holidayToken: String? = null,
-
     val leadTimeChartType: String = ChartType.BAR.name,
 
     val throughputChartType: String = ChartType.DOUGHNUT.name

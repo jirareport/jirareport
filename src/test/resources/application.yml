@@ -3,7 +3,6 @@ jira:
 
 holiday:
   url: http://localhost:8888
-  token: super-secret-token
   default-state: SP
   default-city: ARARAQUARA
   decode-key: "AFDsa%1!!2341R%#!$$"

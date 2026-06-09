@@ -5,7 +5,6 @@ holiday:
   url: https://calendario.com.br
   default-state: SP
   default-city: ARARAQUARA
-  token: seuToken
   decode-key: "AFDsa%1!!2341R%#!$$"
   included-type-codes: 1,2,3
 

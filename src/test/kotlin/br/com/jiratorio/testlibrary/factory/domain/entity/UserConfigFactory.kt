@@ -20,7 +20,6 @@ class UserConfigFactory(
             username = SecurityContextHolder.getContext().account!!.username,
             state = faker.address().state(),
             city = faker.address().city(),
-            holidayToken = faker.regexify("[a-f0-9]{32}"),
             leadTimeChartType = faker.options().option(ChartType::class.java),
             throughputChartType = faker.options().option(ChartType::class.java)
         )

@@ -8,8 +8,6 @@ data class UpdateUserConfigRequest(
 
     val city: String? = null,
 
-    val holidayToken: String? = null,
-
     val leadTimeChartType: ChartType? = null,
 
     val throughputChartType: ChartType? = null

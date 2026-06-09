@@ -28,8 +28,6 @@ data class UserConfigEntity(
 
     var city: String? = null,
 
-    var holidayToken: String? = null,
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var leadTimeChartType: ChartType = ChartType.BAR,
@@ -46,7 +44,6 @@ data class UserConfigEntity(
             UserConfigEntity::username,
             UserConfigEntity::state,
             UserConfigEntity::city,
-            UserConfigEntity::holidayToken,
             UserConfigEntity::leadTimeChartType,
             UserConfigEntity::throughputChartType
         )

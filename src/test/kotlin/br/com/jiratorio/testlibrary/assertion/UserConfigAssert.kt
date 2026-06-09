@@ -12,14 +12,6 @@ class UserConfigAssert(
     UserConfigAssert::class.java
 ) {
 
-    fun hasHolidayToken(holidayToken: String?): UserConfigAssert {
-        if (actual.holidayToken != holidayToken) {
-            failWithMessage(shouldBeEquals(actual.holidayToken, holidayToken).create())
-        }
-
-        return this
-    }
-
     fun hasState(state: String?): UserConfigAssert {
         if (actual.state != state) {
             failWithMessage(shouldBeEquals(actual.state, state).create())

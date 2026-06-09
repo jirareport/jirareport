@@ -12,7 +12,7 @@ class ApiHolidayProvider(
     private val holidayResponseParser: HolidayResponseParser,
 ) : HolidayProvider {
 
-    override fun findAllHolidays(year: Int, state: String, city: String, token: String): List<Holiday> {
+    override fun findAllHolidays(year: Int, state: String, city: String): List<Holiday> {
         val normalizedCity = normalizeCity(city)
         val body = holidayClient.findAllHolidaysInCity(year, state, normalizedCity)
         return holidayResponseParser.parse(body)

@@ -96,7 +96,7 @@ class ApiHolidayProviderTest {
             val citySlot = slot<String>()
             every { holidayClient.findAllHolidaysInCity(any(), any(), capture(citySlot)) } returns ""
 
-            provider.findAllHolidays(2026, "SP", "São Paulo", "token")
+            provider.findAllHolidays(2026, "SP", "São Paulo")
 
             assertThat(citySlot.captured).isEqualTo("SAO PAULO")
         }
@@ -106,7 +106,7 @@ class ApiHolidayProviderTest {
             val citySlot = slot<String>()
             every { holidayClient.findAllHolidaysInCity(any(), any(), capture(citySlot)) } returns ""
 
-            provider.findAllHolidays(2026, "SP", "D’Oeste", "token")
+            provider.findAllHolidays(2026, "SP", "D’Oeste")
 
             assertThat(citySlot.captured).isEqualTo("DOESTE")
         }

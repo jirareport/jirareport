@@ -31,7 +31,6 @@ class UserConfigService(
             ?: HolidayUserConfig(
                 state = holidayProperties.defaultState,
                 city = holidayProperties.defaultCity,
-                holidayToken = holidayProperties.token
             )
 
     @Transactional

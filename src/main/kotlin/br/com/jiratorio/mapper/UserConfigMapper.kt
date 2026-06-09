@@ -11,13 +11,11 @@ fun UserConfigEntity.toUserConfigResponse(): UserConfigResponse =
         username = username,
         state = state,
         city = city,
-        holidayToken = holidayToken,
         leadTimeChartType = leadTimeChartType.name,
         throughputChartType = throughputChartType.name
     )
 
 fun UserConfigEntity.updateFromUpdateUserConfigRequest(updateUserConfigRequest: UpdateUserConfigRequest) {
-    holidayToken = updateUserConfigRequest.holidayToken
     state = updateUserConfigRequest.state
     city = updateUserConfigRequest.city
         ?.stripAccents()
@@ -39,5 +37,4 @@ fun UserConfigEntity.toImportHolidayInfo(): HolidayUserConfig =
     HolidayUserConfig(
         state = state!!,
         city = city!!,
-        holidayToken = holidayToken!!
     )
