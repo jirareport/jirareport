@@ -3,7 +3,7 @@ package br.com.jiratorio.testlibrary.factory.domain
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.testlibrary.extension.toLocalDateTime
 import br.com.jiratorio.testlibrary.factory.KBacon
-import com.github.javafaker.Faker
+import net.datafaker.Faker
 import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
 

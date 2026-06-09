@@ -1,9 +1,7 @@
 package br.com.jiratorio.property
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.ConstructorBinding
 
-@ConstructorBinding
 @ConfigurationProperties(prefix = "holiday")
 data class HolidayProperties(
 
@@ -13,6 +11,8 @@ data class HolidayProperties(
 
     val defaultCity: String,
 
-    val token: String
+    val decodeKey: String,
+
+    val includedTypeCodes: Set<Int>
 
 )

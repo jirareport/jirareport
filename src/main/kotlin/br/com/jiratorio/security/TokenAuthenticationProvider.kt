@@ -17,7 +17,7 @@ class TokenAuthenticationProvider(
             val account = decodeToken.decode(authentication.principal as String)
             return PreAuthenticatedAuthenticationToken(account, account.password, account.authorities)
         } catch (e: Exception) {
-            throw PreAuthenticatedCredentialsNotFoundException(e.message, e)
+            throw PreAuthenticatedCredentialsNotFoundException(e.message ?: e.toString(), e)
         }
     }
 

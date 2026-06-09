@@ -2,7 +2,7 @@ package br.com.jiratorio.domain.request
 
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
-import javax.validation.constraints.AssertTrue
+import jakarta.validation.constraints.AssertTrue
 
 data class SearchIssueRequest(
 

@@ -31,7 +31,6 @@ class FindUserConfigIntegrationTest(
                 statusCode(HttpStatus.SC_OK)
                 body("state", equalTo(userConfig.state))
                 body("city", equalTo(userConfig.city))
-                body("holidayToken", equalTo(userConfig.holidayToken))
                 body("leadTimeChartType", equalTo(userConfig.leadTimeChartType.name))
                 body("throughputChartType", equalTo(userConfig.throughputChartType.name))
             }
@@ -51,7 +50,6 @@ class FindUserConfigIntegrationTest(
                 statusCode(HttpStatus.SC_OK)
                 body("state", nullValue())
                 body("city", nullValue())
-                body("holidayToken", nullValue())
                 body("leadTimeChartType", equalTo(ChartType.BAR.name))
                 body("throughputChartType", equalTo(ChartType.DOUGHNUT.name))
             }

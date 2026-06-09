@@ -9,7 +9,7 @@ import br.com.jiratorio.extension.time.atEndOfDay
 import br.com.jiratorio.repository.NativeIssueRepository
 import br.com.jiratorio.repository.jdbctemplate.rowmapper.DynamicFieldsValuesRowMapper
 import br.com.jiratorio.repository.jdbctemplate.rowmapper.MinimalIssueRowMapper
-import com.fasterxml.jackson.databind.ObjectMapper
+import tools.jackson.databind.ObjectMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.jdbc.core.JdbcTemplate

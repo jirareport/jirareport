@@ -45,7 +45,6 @@ class UpdateUserConfigIntegrationTest(
             ?: throw ResourceNotFound()
 
         UserConfigAssert.assertThat(userConfig)
-            .hasHolidayToken(request.holidayToken)
             .hasState(request.state)
             .hasCity("SAO_PAULO")
             .hasLeadTimeChartType(request.leadTimeChartType)

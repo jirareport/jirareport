@@ -63,6 +63,7 @@ class ImpedimentCalculatorByColumnTest {
             .isEqualTo(12)
         assertThat(impedimentHistory)
             .hasSize(3)
+        assertThat(impedimentHistory)
             .containsExactly(
                 InternalImpedimentHistory(
                     startDate = columnChangelog[1].startDate,

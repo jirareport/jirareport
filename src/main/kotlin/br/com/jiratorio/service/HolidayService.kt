@@ -140,7 +140,7 @@ class HolidayService(
 
         val info = userConfigService.findHolidayConfig(currentUser)
 
-        return holidayProvider.findAllHolidays(year = LocalDate.now().year, state = info.state, city = info.city, token = info.holidayToken)
+        return holidayProvider.findAllHolidays(year = LocalDate.now().year, state = info.state, city = info.city)
             .toHoliday(board)
     }
 

@@ -4,14 +4,14 @@ import br.com.jiratorio.domain.chart.ChartType
 import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.toStringBuilder
 import java.util.Objects
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.Table
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 
 @Entity
 @Table(name = "user_config")
@@ -27,8 +27,6 @@ data class UserConfigEntity(
     var state: String? = null,
 
     var city: String? = null,
-
-    var holidayToken: String? = null,
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -46,7 +44,6 @@ data class UserConfigEntity(
             UserConfigEntity::username,
             UserConfigEntity::state,
             UserConfigEntity::city,
-            UserConfigEntity::holidayToken,
             UserConfigEntity::leadTimeChartType,
             UserConfigEntity::throughputChartType
         )

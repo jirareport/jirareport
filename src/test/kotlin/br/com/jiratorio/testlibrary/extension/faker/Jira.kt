@@ -1,6 +1,6 @@
 package br.com.jiratorio.testlibrary.extension.faker
 
-import com.github.javafaker.Faker
+import net.datafaker.Faker
 
 class Jira(
     private val faker: Faker

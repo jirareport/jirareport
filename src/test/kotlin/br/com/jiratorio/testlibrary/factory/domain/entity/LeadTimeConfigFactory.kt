@@ -3,7 +3,7 @@ package br.com.jiratorio.testlibrary.factory.domain.entity
 import br.com.jiratorio.domain.entity.LeadTimeConfigEntity
 import br.com.jiratorio.testlibrary.factory.KBacon
 import br.com.jiratorio.repository.LeadTimeConfigRepository
-import com.github.javafaker.Faker
+import net.datafaker.Faker
 import org.springframework.stereotype.Component
 
 @Component

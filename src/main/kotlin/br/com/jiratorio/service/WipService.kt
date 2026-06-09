@@ -26,6 +26,6 @@ class WipService {
     }
 
     private fun IssueEntity.wasOnAnyWipColumnAtThisTime(wipColumns: Set<String>, time: LocalDate): Boolean =
-        columnChangelog.any { time in it.dateRange && it.to.toUpperCase() in wipColumns }
+        columnChangelog.any { time in it.dateRange && it.to.uppercase() in wipColumns }
 
 }

@@ -21,12 +21,12 @@ fun LeadTimeConfigRequest.toLeadTimeConfig(board: BoardEntity): LeadTimeConfigEn
     LeadTimeConfigEntity(
         board = board,
         name = name,
-        startColumn = startColumn.toUpperCase(),
-        endColumn = endColumn.toUpperCase()
+        startColumn = startColumn.uppercase(),
+        endColumn = endColumn.uppercase()
     )
 
 fun LeadTimeConfigEntity.updateFromLeadTimeConfigRequest(request: LeadTimeConfigRequest) {
     name = request.name
-    startColumn = request.startColumn.toUpperCase()
-    endColumn = request.endColumn.toUpperCase()
+    startColumn = request.startColumn.uppercase()
+    endColumn = request.endColumn.uppercase()
 }

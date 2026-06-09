@@ -18,7 +18,7 @@ import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
 import br.com.jiratorio.repository.IssueRepository
 import org.junit.jupiter.api.Test
 import java.time.format.DateTimeFormatter
-import javax.servlet.http.HttpServletResponse.SC_OK
+import jakarta.servlet.http.HttpServletResponse.SC_OK
 
 @IntegrationTest
 class FindIssuePeriodIntegrationTest(

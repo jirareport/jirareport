@@ -21,7 +21,7 @@ import br.com.jiratorio.testlibrary.factory.domain.entity.LeadTimeFactory
 import br.com.jiratorio.testlibrary.factory.domain.request.DueDateHistoryFactory
 import br.com.jiratorio.repository.IssueRepository
 import org.junit.jupiter.api.Test
-import javax.servlet.http.HttpServletResponse.SC_OK
+import jakarta.servlet.http.HttpServletResponse.SC_OK
 
 @IntegrationTest
 class SearchIssueByIdIntegrationTest(

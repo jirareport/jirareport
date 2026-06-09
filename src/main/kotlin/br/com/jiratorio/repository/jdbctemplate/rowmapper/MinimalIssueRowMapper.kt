@@ -2,8 +2,8 @@ package br.com.jiratorio.repository.jdbctemplate.rowmapper
 
 import br.com.jiratorio.domain.issue.MinimalIssue
 import br.com.jiratorio.extension.jdbctemplate.getLocalDateTime
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.module.kotlin.readValue
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 

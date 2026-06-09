@@ -1,4 +1,4 @@
-FROM openjdk:13 as builder
+FROM eclipse-temurin:25-jdk as builder
 
 COPY . /jirareport-api
 WORKDIR /jirareport-api
@@ -7,7 +7,7 @@ RUN ./gradlew clean build -x test
 
 ###
 
-FROM openjdk:13-alpine
+FROM eclipse-temurin:25-jre
 EXPOSE 80 443
 
 COPY --from=builder /jirareport-api/build/libs/jirareport.jar /usr/src/

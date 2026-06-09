@@ -25,7 +25,7 @@ import io.restassured.http.ContentType
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 import org.springframework.transaction.support.TransactionTemplate
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpServletResponse
 
 @IntegrationTest
 class CreateCompleteIssuePeriodIntegrationTest(

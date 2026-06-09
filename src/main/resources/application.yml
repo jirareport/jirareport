@@ -2,10 +2,11 @@ jira:
   url: https://jira.url/jira
 
 holiday:
-  url: https://api.calendario.com.br
+  url: https://calendario.com.br
   default-state: SP
   default-city: ARARAQUARA
-  token: seuToken
+  decode-key: "AFDsa%1!!2341R%#!$$"
+  included-type-codes: 1,2,3
 
 security:
   key: super-secret-key
@@ -20,7 +21,7 @@ spring:
   jpa:
     show-sql: true
     open-in-view: false
-    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
         format_sql: true
@@ -28,15 +29,6 @@ spring:
     enabled: true
     out-of-order: true
     ignore-missing-migrations: true
-
-feign:
-  client:
-    config:
-      default:
-        logger-level: FULL
-  httpclient:
-    disable-ssl-validation: true
-
 server:
   error:
     include-message: always

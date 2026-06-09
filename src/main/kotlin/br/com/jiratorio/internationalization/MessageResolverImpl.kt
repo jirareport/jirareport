@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.servlet.LocaleResolver
 import java.util.Locale
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequest
 
 @Component
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -20,6 +20,6 @@ class MessageResolverImpl(
     override val locale: Locale = localeResolver.resolveLocale(request)
 
     override fun resolve(key: String, vararg args: Any?): String =
-        messageSource.getMessage(key, args, locale)
+        messageSource.getMessage(key, args as Array<out Any>?, locale)
 
 }

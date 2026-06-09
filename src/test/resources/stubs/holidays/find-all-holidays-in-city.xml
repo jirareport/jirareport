@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<events>
+  <location><city>ARARAQUARA</city><state>SP</state><country>Brasil</country></location>
+  <event><date>01/01/2019</date><name>Ano Novo</name><description>Ano Novo</description><type>Feriado Nacional</type><type_code>1</type_code><link/></event>
+  <event><date>01/02/2019</date><name>Estadual</name><description>Estadual</description><type>Feriado Estadual</type><type_code>2</type_code><link/></event>
+  <event><date>01/03/2019</date><name>Municipal</name><description>Municipal</description><type>Feriado Municipal</type><type_code>3</type_code><link/></event>
+  <event><date>01/04/2019</date><name>Nacional 2</name><description>Nacional 2</description><type>Feriado Nacional</type><type_code>1</type_code><link/></event>
+  <event><date>01/05/2019</date><name>Nacional 3</name><description>Nacional 3</description><type>Feriado Nacional</type><type_code>1</type_code><link/></event>
+  <event><date>01/06/2019</date><name>Facultativo</name><description>Facultativo</description><type>Facultativo</type><type_code>4</type_code><link/></event>
+  <event><date>01/07/2019</date><name>Convencional</name><description>Convencional</description><type>Dia Convencional</type><type_code>9</type_code><link/></event>
+</events>

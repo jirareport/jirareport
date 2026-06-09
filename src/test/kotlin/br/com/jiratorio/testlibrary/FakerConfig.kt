@@ -1,6 +1,6 @@
 package br.com.jiratorio.testlibrary
 
-import com.github.javafaker.Faker
+import net.datafaker.Faker
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

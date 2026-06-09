@@ -3,7 +3,7 @@ package br.com.jiratorio.configuration
 import br.com.jiratorio.exception.MissingBoardConfigurationException
 import br.com.jiratorio.exception.UniquenessFieldException
 import br.com.jiratorio.internationalization.MessageResolver
-import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
+import tools.jackson.module.kotlin.KotlinInvalidNullException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindException
@@ -18,10 +18,10 @@ class ErrorHandler(
     private val messageResolver: MessageResolver,
 ) {
 
-    @ExceptionHandler(MissingKotlinParameterException::class)
-    fun handleMissingKotlinParameterException(e: MissingKotlinParameterException): ResponseEntity<Map<String, List<String>>> =
+    @ExceptionHandler(KotlinInvalidNullException::class)
+    fun handleKotlinInvalidNullException(e: KotlinInvalidNullException): ResponseEntity<Map<String, List<String>>> =
         ResponseEntity(
-            mapOf(e.parameter.name!! to listOf(messageResolver.resolve("javax.validation.constraints.NotNull.message"))),
+            mapOf((e.kotlinPropertyName ?: "field") to listOf(messageResolver.resolve("jakarta.validation.constraints.NotNull.message"))),
             HttpStatus.BAD_REQUEST
         )
 

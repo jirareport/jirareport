@@ -2,10 +2,11 @@ jira:
   url: http://localhost:8888/jira
 
 holiday:
-  url: http://localhost:8888/holiday-api
-  token: super-secret-token
+  url: http://localhost:8888
   default-state: SP
   default-city: ARARAQUARA
+  decode-key: "AFDsa%1!!2341R%#!$$"
+  included-type-codes: 1,2,3
 
 security:
   key: test-security-key
@@ -16,7 +17,7 @@ spring:
   jpa:
     show-sql: true
     open-in-view: false
-    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
         format_sql: true
@@ -32,6 +33,9 @@ spring:
     ignore-missing-migrations: true
   profiles:
     active: test
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.client.discovery.simple.SimpleDiscoveryClientAutoConfiguration
 
 server:
   error:

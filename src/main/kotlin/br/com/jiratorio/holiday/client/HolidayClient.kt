@@ -1,26 +1,17 @@
 package br.com.jiratorio.holiday.client
 
-import br.com.jiratorio.holiday.client.config.HolidayClientConfig
-import br.com.jiratorio.holiday.domain.HolidayApiResponse
-import org.springframework.cloud.openfeign.FeignClient
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.service.annotation.GetExchange
+import org.springframework.web.service.annotation.HttpExchange
 
-@FeignClient(
-    name = "holiday-client",
-    url = "\${holiday.url}",
-    configuration = [
-        HolidayClientConfig::class
-    ]
-)
+@HttpExchange
 interface HolidayClient {
 
-    @GetMapping
+    @GetExchange("/api/data.php")
     fun findAllHolidaysInCity(
         @RequestParam("ano") year: Int,
         @RequestParam("estado") state: String,
         @RequestParam("cidade") city: String,
-        @RequestParam("token") token: String,
-    ): List<HolidayApiResponse>
+    ): String
 
 }

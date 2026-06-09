@@ -3,9 +3,9 @@ package br.com.jiratorio.domain.request
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-import javax.validation.constraints.AssertFalse
-import javax.validation.constraints.AssertTrue
-import javax.validation.constraints.NotNull
+import jakarta.validation.constraints.AssertFalse
+import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.NotNull
 
 data class CreateIssuePeriodRequest(
 

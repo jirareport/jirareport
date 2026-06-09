@@ -1,21 +1,15 @@
 package br.com.jiratorio.jira.client
 
 import br.com.jiratorio.domain.request.SearchJiraIssueRequest
-import br.com.jiratorio.jira.client.config.JiraClientConfiguration
-import com.fasterxml.jackson.databind.JsonNode
-import org.springframework.cloud.openfeign.FeignClient
-import org.springframework.web.bind.annotation.PostMapping
+import tools.jackson.databind.JsonNode
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.service.annotation.HttpExchange
+import org.springframework.web.service.annotation.PostExchange
 
-@FeignClient(
-    name = "issue-client",
-    url = "\${jira.url}",
-    configuration = [
-        JiraClientConfiguration::class
-    ]
-)
+@HttpExchange
 interface IssueClient {
 
-    @PostMapping("/rest/api/2/search")
-    fun findByJql(filter: SearchJiraIssueRequest): JsonNode
+    @PostExchange("/rest/api/3/search/jql")
+    fun findByJql(@RequestBody filter: SearchJiraIssueRequest): JsonNode
 
 }

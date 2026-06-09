@@ -4,8 +4,8 @@ import br.com.jiratorio.domain.Account
 import br.com.jiratorio.domain.request.LoginRequest
 import br.com.jiratorio.property.SecurityProperties
 import br.com.jiratorio.provider.AuthProvider
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.module.kotlin.readValue
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.Base64

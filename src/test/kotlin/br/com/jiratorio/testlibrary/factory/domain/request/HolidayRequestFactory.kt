@@ -2,7 +2,7 @@ package br.com.jiratorio.testlibrary.factory.domain.request
 
 import br.com.jiratorio.domain.request.HolidayRequest
 import br.com.jiratorio.testlibrary.factory.KBacon
-import com.github.javafaker.Faker
+import net.datafaker.Faker
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 
@@ -13,7 +13,7 @@ class HolidayRequestFactory(
 
     override fun builder(): HolidayRequest {
         return HolidayRequest(
-            date = LocalDate.now().plusDays(faker.number().randomNumber()),
+            date = LocalDate.now().plusDays(faker.number().numberBetween(1L, 365L * 5)),
             description = faker.lorem().word()
         )
     }

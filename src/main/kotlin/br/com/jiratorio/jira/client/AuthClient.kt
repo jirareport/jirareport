@@ -1,21 +1,14 @@
 package br.com.jiratorio.jira.client
 
-import br.com.jiratorio.jira.client.config.AuthClientConfiguration
 import br.com.jiratorio.jira.domain.JiraUser
-import org.springframework.cloud.openfeign.FeignClient
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.service.annotation.GetExchange
+import org.springframework.web.service.annotation.HttpExchange
 
-@FeignClient(
-    name = "auth-client",
-    url = "\${jira.url}",
-    configuration = [
-        AuthClientConfiguration::class
-    ]
-)
+@HttpExchange
 interface AuthClient {
 
-    @GetMapping("/rest/api/2/myself")
+    @GetExchange("/rest/api/2/myself")
     fun login(@RequestHeader("Authorization") token: String): JiraUser
 
 }

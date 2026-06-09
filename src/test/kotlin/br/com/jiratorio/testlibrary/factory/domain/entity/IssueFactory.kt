@@ -8,7 +8,7 @@ import br.com.jiratorio.testlibrary.factory.domain.ColumnChangelogFactory
 import br.com.jiratorio.repository.ColumnChangelogRepository
 import br.com.jiratorio.repository.ImpedimentHistoryRepository
 import br.com.jiratorio.repository.IssueRepository
-import com.github.javafaker.Faker
+import net.datafaker.Faker
 import org.springframework.stereotype.Component
 import org.springframework.transaction.support.TransactionTemplate
 import java.util.concurrent.TimeUnit

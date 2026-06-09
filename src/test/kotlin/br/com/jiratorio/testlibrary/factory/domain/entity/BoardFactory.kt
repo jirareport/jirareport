@@ -6,7 +6,7 @@ import br.com.jiratorio.domain.ImpedimentType
 import br.com.jiratorio.testlibrary.extension.faker.jira
 import br.com.jiratorio.testlibrary.factory.KBacon
 import br.com.jiratorio.repository.BoardRepository
-import com.github.javafaker.Faker
+import net.datafaker.Faker
 import org.springframework.stereotype.Component
 
 @Component
