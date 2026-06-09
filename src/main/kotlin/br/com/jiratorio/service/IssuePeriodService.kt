@@ -129,7 +129,7 @@ class IssuePeriodService(
             FluxColumn(board).wipColumns
         )
 
-        columnTimeAverageService.create(issuePeriod, board.fluxColumn ?: emptyList())
+        columnTimeAverageService.create(issuePeriod, board.fluxColumn)
 
         createCharts(issuePeriod, board)
 

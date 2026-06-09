@@ -172,7 +172,7 @@ class JiraQueryLanguageServiceTest {
     }
 
     fun createBoard(
-        ignoreIssueType: MutableList<String>? = null,
+        ignoreIssueType: MutableList<String> = mutableListOf(),
         fluxColumn: MutableList<String> = mutableListOf("TODO", "WIP", "DONE"),
         additionalFilter: String? = null
     ) =

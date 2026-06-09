@@ -36,7 +36,7 @@ class ColumnTimeAverageService(
     }
 
     fun retrieveColumnTimeAverages(board: BoardEntity, issues: List<Issue>): List<ColumnTimeAverageResponse> {
-        val fluxColumn = board.fluxColumn ?: emptyList()
+        val fluxColumn = board.fluxColumn
 
         return columnTimeAverageRepository.findColumnTimeAverage(issues.map { it.id })
             .sortedBy { (to, _) -> fluxColumn.indexOf(to.uppercase()) }
