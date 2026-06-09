@@ -5,12 +5,16 @@ import br.com.jiratorio.testlibrary.annotation.LoadStubs
 import br.com.jiratorio.testlibrary.assertion.HistogramAssert
 import br.com.jiratorio.testlibrary.assertion.IssueAssert
 import br.com.jiratorio.testlibrary.assertion.IssuePeriodAssert
+import br.com.jiratorio.testlibrary.assertion.response.IssuePeriodDetailResponseAssert
 import br.com.jiratorio.domain.chart.DynamicChart
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
 import br.com.jiratorio.domain.entity.DynamicFieldConfigEntity
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodDetailResponse
+import br.com.jiratorio.testlibrary.dsl.extractAs
 import br.com.jiratorio.testlibrary.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
@@ -84,6 +88,34 @@ class CreateIssuePeriodWithDynamicFieldsIntegrationTest(
             .hasStartDate(request.startDate.toLocalDate())
             .hasEndDate(request.endDate.toLocalDate())
             .hasLeadTime(15.1)
+            .hasThroughput(10)
+            .hasWipAvg(1.56)
+            .hasAvgPctEfficiency(62.19)
+            .containsColumnTimeAvg(
+                ColumnTimeAverageEntity(columnName = "BACKLOG", averageTime = 3.0),
+                ColumnTimeAverageEntity(columnName = "ANALYSIS", averageTime = 3.2),
+                ColumnTimeAverageEntity(columnName = "DEV WIP", averageTime = 2.4),
+                ColumnTimeAverageEntity(columnName = "DEV DONE", averageTime = 2.6),
+                ColumnTimeAverageEntity(columnName = "TEST WIP", averageTime = 2.5),
+                ColumnTimeAverageEntity(columnName = "TEST DONE", averageTime = 2.8),
+                ColumnTimeAverageEntity(columnName = "REVIEW", averageTime = 3.0),
+                ColumnTimeAverageEntity(columnName = "ACCOMPANIMENT", averageTime = 2.5),
+                ColumnTimeAverageEntity(columnName = "DONE", averageTime = 0.0)
+            )
+
+        val (detail: IssuePeriodDetailResponse) = restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                get("/boards/{id}/issue-periods/1", board.id)
+            }
+            then {
+                statusCode(HttpServletResponse.SC_OK)
+            }
+        } extractAs IssuePeriodByIdResponse::class
+
+        IssuePeriodDetailResponseAssert.assertThat(detail)
             .hasLeadTimeByEstimate("P" to 16.25, "M" to 14.0, "G" to 15.0)
             .hasThroughputByEstimate("P" to 4, "M" to 4, "G" to 2)
             .hasLeadTimeBySystem("JiraReport" to 15.4, "JiraWeb" to 14.8)
@@ -94,9 +126,6 @@ class CreateIssuePeriodWithDynamicFieldsIntegrationTest(
             .hasThroughputByProject("Metric" to 7, "Estimate" to 3)
             .hasLeadTimeByPriority("Major" to 17.0, "Medium" to 14.75, "Expedite" to 13.666666666666666)
             .hasThroughputByPriority("Major" to 3, "Medium" to 4, "Expedite" to 3)
-            .hasThroughput(10)
-            .hasWipAvg(1.56)
-            .hasAvgPctEfficiency(62.19)
             .hasDynamicCharts(
                 listOf(
                     DynamicChart(
@@ -135,20 +164,9 @@ class CreateIssuePeriodWithDynamicFieldsIntegrationTest(
                     )
                 )
             )
-            .containsColumnTimeAvg(
-                ColumnTimeAverageEntity(columnName = "BACKLOG", averageTime = 3.0),
-                ColumnTimeAverageEntity(columnName = "ANALYSIS", averageTime = 3.2),
-                ColumnTimeAverageEntity(columnName = "DEV WIP", averageTime = 2.4),
-                ColumnTimeAverageEntity(columnName = "DEV DONE", averageTime = 2.6),
-                ColumnTimeAverageEntity(columnName = "TEST WIP", averageTime = 2.5),
-                ColumnTimeAverageEntity(columnName = "TEST DONE", averageTime = 2.8),
-                ColumnTimeAverageEntity(columnName = "REVIEW", averageTime = 3.0),
-                ColumnTimeAverageEntity(columnName = "ACCOMPANIMENT", averageTime = 2.5),
-                ColumnTimeAverageEntity(columnName = "DONE", averageTime = 0.0)
-            )
             .hasEmptyLeadTimeCompareChart()
 
-        HistogramAssert.assertThat(issuePeriod.histogram)
+        HistogramAssert.assertThat(detail.histogram)
             .hasMedian(14)
             .hasPercentile75(15)
             .hasPercentile90(18)

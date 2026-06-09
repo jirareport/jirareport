@@ -6,6 +6,7 @@ import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
 import br.com.jiratorio.domain.entity.embedded.Chart
 import br.com.jiratorio.domain.response.issueperiod.IssuePeriodDetailResponse
 import org.assertj.core.api.AbstractAssert
+import org.assertj.core.error.ShouldBeEmpty.shouldBeEmpty
 import org.assertj.core.error.ShouldContain.shouldContain
 
 class IssuePeriodDetailResponseAssert private constructor(
@@ -47,9 +48,25 @@ class IssuePeriodDetailResponseAssert private constructor(
         return this
     }
 
+    fun hasLeadTimeByEstimate(vararg entries: Pair<String, Double>): IssuePeriodDetailResponseAssert {
+        if (actual.leadTimeByEstimate?.data != mapOf(*entries)) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.leadTimeByEstimate?.data, mapOf(*entries)).create())
+        }
+
+        return this
+    }
+
     fun hasThroughputByEstimate(throughputByEstimate: Chart<String, Int>?): IssuePeriodDetailResponseAssert {
         if (actual.throughputByEstimate != throughputByEstimate) {
             failWithMessage(ShouldBeEquals.shouldBeEquals(actual.throughputByEstimate, throughputByEstimate).create())
+        }
+
+        return this
+    }
+
+    fun hasThroughputByEstimate(vararg entries: Pair<String, Int>): IssuePeriodDetailResponseAssert {
+        if (actual.throughputByEstimate?.data != mapOf(*entries)) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.throughputByEstimate?.data, mapOf(*entries)).create())
         }
 
         return this
@@ -63,9 +80,25 @@ class IssuePeriodDetailResponseAssert private constructor(
         return this
     }
 
+    fun hasLeadTimeBySystem(vararg entries: Pair<String, Double>): IssuePeriodDetailResponseAssert {
+        if (actual.leadTimeBySystem?.data != mapOf(*entries)) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.leadTimeBySystem?.data, mapOf(*entries)).create())
+        }
+
+        return this
+    }
+
     fun hasThroughputBySystem(throughputBySystem: Chart<String, Int>?): IssuePeriodDetailResponseAssert {
         if (actual.throughputBySystem != throughputBySystem) {
             failWithMessage(ShouldBeEquals.shouldBeEquals(actual.throughputBySystem, throughputBySystem).create())
+        }
+
+        return this
+    }
+
+    fun hasThroughputBySystem(vararg entries: Pair<String, Int>): IssuePeriodDetailResponseAssert {
+        if (actual.throughputBySystem?.data != mapOf(*entries)) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.throughputBySystem?.data, mapOf(*entries)).create())
         }
 
         return this
@@ -79,9 +112,25 @@ class IssuePeriodDetailResponseAssert private constructor(
         return this
     }
 
+    fun hasLeadTimeByType(vararg entries: Pair<String, Double>): IssuePeriodDetailResponseAssert {
+        if (actual.leadTimeByType?.data != mapOf(*entries)) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.leadTimeByType?.data, mapOf(*entries)).create())
+        }
+
+        return this
+    }
+
     fun hasThroughputByType(throughputByType: Chart<String, Int>?): IssuePeriodDetailResponseAssert {
         if (actual.throughputByType != throughputByType) {
             failWithMessage(ShouldBeEquals.shouldBeEquals(actual.throughputByType, throughputByType).create())
+        }
+
+        return this
+    }
+
+    fun hasThroughputByType(vararg entries: Pair<String, Int>): IssuePeriodDetailResponseAssert {
+        if (actual.throughputByType?.data != mapOf(*entries)) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.throughputByType?.data, mapOf(*entries)).create())
         }
 
         return this
@@ -95,9 +144,25 @@ class IssuePeriodDetailResponseAssert private constructor(
         return this
     }
 
+    fun hasLeadTimeByProject(vararg entries: Pair<String, Double>): IssuePeriodDetailResponseAssert {
+        if (actual.leadTimeByProject?.data != mapOf(*entries)) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.leadTimeByProject?.data, mapOf(*entries)).create())
+        }
+
+        return this
+    }
+
     fun hasThroughputByProject(throughputByProject: Chart<String, Int>?): IssuePeriodDetailResponseAssert {
         if (actual.throughputByProject != throughputByProject) {
             failWithMessage(ShouldBeEquals.shouldBeEquals(actual.throughputByProject, throughputByProject).create())
+        }
+
+        return this
+    }
+
+    fun hasThroughputByProject(vararg entries: Pair<String, Int>): IssuePeriodDetailResponseAssert {
+        if (actual.throughputByProject?.data != mapOf(*entries)) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.throughputByProject?.data, mapOf(*entries)).create())
         }
 
         return this
@@ -111,9 +176,25 @@ class IssuePeriodDetailResponseAssert private constructor(
         return this
     }
 
+    fun hasLeadTimeByPriority(vararg entries: Pair<String, Double>): IssuePeriodDetailResponseAssert {
+        if (actual.leadTimeByPriority?.data != mapOf(*entries)) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.leadTimeByPriority?.data, mapOf(*entries)).create())
+        }
+
+        return this
+    }
+
     fun hasThroughputByPriority(throughputByPriority: Chart<String, Int>?): IssuePeriodDetailResponseAssert {
         if (actual.throughputByPriority != throughputByPriority) {
             failWithMessage(ShouldBeEquals.shouldBeEquals(actual.throughputByPriority, throughputByPriority).create())
+        }
+
+        return this
+    }
+
+    fun hasThroughputByPriority(vararg entries: Pair<String, Int>): IssuePeriodDetailResponseAssert {
+        if (actual.throughputByPriority?.data != mapOf(*entries)) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.throughputByPriority?.data, mapOf(*entries)).create())
         }
 
         return this
@@ -141,9 +222,34 @@ class IssuePeriodDetailResponseAssert private constructor(
         return this
     }
 
-    fun hasDynamicCharts(dynamicCharts: MutableList<DynamicChart>?): IssuePeriodDetailResponseAssert {
-        if (actual.dynamicCharts != dynamicCharts) {
-            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.dynamicCharts, dynamicCharts).create())
+    fun hasLeadTimeCompareChart(vararg entries: Pair<String, Double>): IssuePeriodDetailResponseAssert {
+        if (actual.leadTimeCompareChart?.data != mapOf(*entries)) {
+            failWithMessage(ShouldBeEquals.shouldBeEquals(actual.leadTimeCompareChart?.data, mapOf(*entries)).create())
+        }
+
+        return this
+    }
+
+    fun hasEmptyLeadTimeCompareChart(): IssuePeriodDetailResponseAssert {
+        if (!actual.leadTimeCompareChart?.data.isNullOrEmpty()) {
+            failWithMessage(shouldBeEmpty(actual.leadTimeCompareChart?.data).create())
+        }
+
+        return this
+    }
+
+    fun hasDynamicCharts(dynamicCharts: List<DynamicChart>?): IssuePeriodDetailResponseAssert {
+        val notFound = dynamicCharts?.filter { actual.dynamicCharts?.contains(it) != true } ?: emptyList()
+        if (notFound.isNotEmpty()) {
+            failWithMessage(shouldContain(actual.dynamicCharts, dynamicCharts, notFound).create())
+        }
+
+        return this
+    }
+
+    fun hasEmptyDynamicCharts(): IssuePeriodDetailResponseAssert {
+        if (!actual.dynamicCharts.isNullOrEmpty()) {
+            failWithMessage(shouldBeEmpty(actual.dynamicCharts).create())
         }
 
         return this
