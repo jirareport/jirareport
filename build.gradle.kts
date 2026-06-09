@@ -36,6 +36,7 @@ dependencies {
     implementation("org.flywaydb:flyway-database-postgresql")
 
     implementation("tools.jackson.module:jackson-module-kotlin:3.1.2")
+    implementation("tools.jackson.dataformat:jackson-dataformat-xml:3.1.2")
     // hypersistence-utils + rest-assured still use Jackson 2 (databind 2.21.x). Provide its
     // JavaTime + Kotlin modules so JSON columns (java.time, Kotlin data classes) (de)serialize.
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.2")

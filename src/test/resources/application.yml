@@ -2,10 +2,12 @@ jira:
   url: http://localhost:8888/jira
 
 holiday:
-  url: http://localhost:8888/holiday-api
+  url: http://localhost:8888
   token: super-secret-token
   default-state: SP
   default-city: ARARAQUARA
+  decode-key: "AFDsa%1!!2341R%#!$$"
+  included-type-codes: 1,2,3
 
 security:
   key: test-security-key

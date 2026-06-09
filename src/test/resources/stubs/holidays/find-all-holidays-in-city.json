@@ -1,13 +1,7 @@
 {
   "request": {
-    "urlPath": "/holiday-api",
+    "urlPath": "/api/data.php",
     "queryParameters": {
-      "json": {
-        "equalTo": "true"
-      },
-      "token": {
-        "matches": "(.*)"
-      },
       "ano": {
         "matches": "(.*)"
       },
@@ -21,50 +15,9 @@
   },
   "response": {
     "status": 200,
-    "jsonBody": [
-      {
-        "date": "01/01/2019",
-        "name": "Feriado 1",
-        "link": "http://localhost:8888/feriados-nacionais/ano-novo.php",
-        "type": "Feriado Nacional",
-        "description": "Primeiro Feriado",
-        "type_code": "1"
-      },
-      {
-        "date": "01/02/2019",
-        "name": "Feriado 2",
-        "link": "http://localhost:8888/feriados-nacionais/ano-novo.php",
-        "type": "Feriado Nacional",
-        "description": "Segundo Feriado",
-        "type_code": "1"
-      },
-      {
-        "date": "01/03/2019",
-        "name": "Feriado 3",
-        "link": "http://localhost:8888/feriados-nacionais/ano-novo.php",
-        "type": "Feriado Nacional",
-        "description": "Terceiro Feriado",
-        "type_code": "1"
-      },
-      {
-        "date": "01/04/2019",
-        "name": "Feriado 4",
-        "link": "http://localhost:8888/feriados-nacionais/ano-novo.php",
-        "type": "Feriado Nacional",
-        "description": "Quarto Feriado",
-        "type_code": "1"
-      },
-      {
-        "date": "01/05/2019",
-        "name": "Feriado 5",
-        "link": "http://localhost:8888/feriados-nacionais/ano-novo.php",
-        "type": "Feriado Nacional",
-        "description": "Quinto Feriado",
-        "type_code": "1"
-      }
-    ],
+    "body": "fXk8Hg0FR0RTQVpbX28HEg8UBmEjKhAOQVhPRg8RYWUUCBsDGxpLeiEFBEtFUh84ExQNPkpAQFBNLih6TwJMRVgfc2F1YxN0dmB2ZX1pJxoVXA8dUkZSQFRsdnMdC1c1JzAWXxlSTlRcR0ZIbGdRQFdNLXprEA5QX1VTSw0IHj5KQEBQTS4oenlBBQ1EV1ddQA9uQUJVQRpxd2tDUAoDERALDxtVM1FGHxhKICshTSBLXgFvXUVbDX1LQkxBGn0iIQACV1hRVVtcWg8TS0wBaks3KXhcBUBCQlNbQ0BYPUsdHVBdMSN6NQRXWEBFXRN6UDFMTE9FSH1pMAoRQA8dVUtDUW4xSkdEGhV9aTAKEUBuQk5WVgoNPkxNSgsafWkhBQRLRR8rEhMIVCRATVUaGCUnMBZfFQAOEQAcBgFjHB8OQEU1I3pPD0RcRB93QEBQNlBCTRgLLycpFl8ZVURSUUFdQSZMTE8aYTIyJRcURF0dDlZWR1IgTFNVTUsveHgHGFVUH2dXQV1QNkoDZFdQICIxEg0ZHlVYQlYKDSZcU0R7Ry4iIU1TGR5VWEJWa1I9QUYfGEgoKC9cXxkeRFdXXUAPWAUDHUFSJCgwTV1BUFVEDAMFHmIWDBMUFXh6axcAUVQfHVxSWVRsaFZPTUcoNiUfXQpfQExXDQhVN1ZAU01UNS8rHV9oRE9IUVpEUD4ZDEVBVyI0LQMVTF5PHw5HTUE3G2VEVk0gIitTLFBfSEJbQ1VdbgpXWFRBf3owChFAbkJOVlYKAm4KV1hUQR4lKxcEGw1NSFxYGw9uCkZXQUo1eE5TQRlUV0RcRwoNNkRXRBoUcGl0R04XARAYDhxQUCZAHR1KRSwjej0ARlhOT1NfFANuCk1ASUF/eiAWEkZDSFFGWltfbGtCQk1LLycoU1MZHkVEQVBGWCJRSk5KGn0yPQMEG3dEU1tSUF5ya0JCTUsvJyhPTlFIUUQMD0BIIkB8QktAJHh1T05RSFFEbVBbVTcbH01NSippek9OQEdET0YNPhFyGUZXQUo1eHgXAFFUHxEDHAQEfRcTEB0YbiIlBwQbDU9AX1YKfzNGSk5KRS1md09OS1BMRAwPUFQhRlFIVFAoKSpNL0RSSE5cUlgRYRkMRUFXIjQtAxVMXk8fDkdNQTcbZURWTSAiK1MvRFJITlxSWA19UVpRQRp9Mj0DBHpSTkVXDQUNfVFaUUF7IikgFl8ZXUhPWRwKDX1AVURKUH9MZFNdQEdET0YNCFUzUUYfFBVudnJcUxUAGB0dV1VFNxsfT0VJJHgCEgJQXVVARlpCXm4KTUBJQX96IBYSRkNIUUZaW19sY0JCUUg1JzAaF0oNDkVXQFdDO1VXSEtKf3owChFAD2dAUUZYRTNRSldLGG4yPQMEGw1VWEJWa1I9QUYfEBhuMj0DBHpSTkVXDQhdO0tIDhoYbiMyFg9RDysBEg9RRzdLVx8YQCAyIU1RFB4RFh0BBABrGQxFRVAkeHgdAEhUH2JdXUJUPEZKTkpFLXprHQBIVB8dVlZHUiBMU1VNSy94BxwPU1RPQltcWlA+GQxFQVciNC0DFUxeTx8OR01BNxtnSEUEAikqBQRLUkhOXFJYDX1RWlFBGn0yPQMEelJORVcNDQ19UVpRQXsiKSAWXxldSE9ZHAoNfUBVREpQf0x4XARTVE9VQQ0+",
     "headers": {
-      "Content-Type": "application/json"
+      "Content-Type": "text/xml; charset=UTF-8"
     }
   }
 }

@@ -11,6 +11,10 @@ data class HolidayProperties(
 
     val defaultCity: String,
 
-    val token: String
+    val token: String,
+
+    val decodeKey: String,
+
+    val includedTypeCodes: Set<Int>
 
 )

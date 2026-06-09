@@ -11,6 +11,7 @@ import br.com.jiratorio.testlibrary.factory.domain.entity.UserConfigFactory
 import br.com.jiratorio.repository.HolidayRepository
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor
+import com.github.tomakehurst.wiremock.client.WireMock.matching
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.client.WireMock.verify
 import org.apache.http.HttpStatus
@@ -51,12 +52,12 @@ class ImportHolidayIntegrationTest(
 
         verify(
             1,
-            getRequestedFor(urlPathEqualTo("/holiday-api"))
-                .withQueryParam("json", equalTo("true"))
+            getRequestedFor(urlPathEqualTo("/api/data.php"))
                 .withQueryParam("ano", equalTo(LocalDate.now().year.toString()))
                 .withQueryParam("estado", equalTo("SP"))
                 .withQueryParam("cidade", equalTo("ARARAQUARA"))
-                .withQueryParam("token", equalTo("super-secret-token"))
+                .withoutQueryParam("token")
+                .withoutQueryParam("json")
         )
     }
 
@@ -84,12 +85,12 @@ class ImportHolidayIntegrationTest(
 
         verify(
             1,
-            getRequestedFor(urlPathEqualTo("/holiday-api"))
-                .withQueryParam("json", equalTo("true"))
+            getRequestedFor(urlPathEqualTo("/api/data.php"))
                 .withQueryParam("ano", equalTo(LocalDate.now().year.toString()))
                 .withQueryParam("estado", equalTo(userConfig.state))
-                .withQueryParam("cidade", equalTo(userConfig.city))
-                .withQueryParam("token", equalTo(userConfig.holidayToken))
+                .withQueryParam("cidade", matching("(.*)"))
+                .withoutQueryParam("token")
+                .withoutQueryParam("json")
         )
     }
 
@@ -125,12 +126,12 @@ class ImportHolidayIntegrationTest(
 
         verify(
             1,
-            getRequestedFor(urlPathEqualTo("/holiday-api"))
-                .withQueryParam("json", equalTo("true"))
+            getRequestedFor(urlPathEqualTo("/api/data.php"))
                 .withQueryParam("ano", equalTo(LocalDate.now().year.toString()))
                 .withQueryParam("estado", equalTo("SP"))
                 .withQueryParam("cidade", equalTo("ARARAQUARA"))
-                .withQueryParam("token", equalTo("super-secret-token"))
+                .withoutQueryParam("token")
+                .withoutQueryParam("json")
         )
     }
 

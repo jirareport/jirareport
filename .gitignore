@@ -20,3 +20,6 @@
 out/
 
 src/main/resources/application-*.yml
+
+### drafts ###
+.draft/

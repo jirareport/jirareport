@@ -4,13 +4,10 @@ import br.com.jiratorio.holiday.client.HolidayClient
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpRequest
-import org.springframework.http.client.ClientHttpRequestExecution
-import org.springframework.http.client.ClientHttpRequestInterceptor
+import org.springframework.http.HttpHeaders
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.support.RestClientAdapter
 import org.springframework.web.service.invoker.HttpServiceProxyFactory
-import org.springframework.web.util.UriComponentsBuilder
 
 @Configuration
 class HolidayClientConfig(
@@ -21,24 +18,13 @@ class HolidayClientConfig(
     fun holidayClient(): HolidayClient {
         val restClient = RestClient.builder()
             .baseUrl(holidayUrl)
-            .requestInterceptor(jsonQueryInterceptor())
+            .defaultHeader(HttpHeaders.USER_AGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
             .build()
 
         val factory = HttpServiceProxyFactory.builderFor(
             RestClientAdapter.create(restClient)
         ).build()
         return factory.createClient(HolidayClient::class.java)
-    }
-
-    private fun jsonQueryInterceptor() = ClientHttpRequestInterceptor { request: HttpRequest, body: ByteArray, execution: ClientHttpRequestExecution ->
-        val uri = UriComponentsBuilder.fromUri(request.uri)
-            .queryParam("json", "true")
-            .build(true)
-            .toUri()
-        val wrapper = object : HttpRequest by request {
-            override fun getURI() = uri
-        }
-        execution.execute(wrapper, body)
     }
 
 }
