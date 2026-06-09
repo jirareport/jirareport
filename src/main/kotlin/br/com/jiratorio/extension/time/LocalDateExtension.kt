@@ -38,7 +38,7 @@ fun LocalDate.displayFormat(
     this.format(datePattern)
 
 fun LocalDate.isBetween(startDate: LocalDate, endDate: LocalDate): Boolean =
-    this == startDate || this == endDate || isAfter(startDate) && isBefore(endDate)
+    this == startDate || this == endDate || (isAfter(startDate) && isBefore(endDate))
 
 fun LocalDate?.daysBetween(
     endDate: LocalDate?,

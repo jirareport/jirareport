@@ -7,8 +7,11 @@ inline fun <reified T : Any> T.equalsComparing(
     vararg properties: KProperty1<T, Any?>
 ) = when {
     this === other -> true
+
     this.javaClass != other?.javaClass -> false
+
     other !is T -> false
+
     else -> properties.all {
         it.get(other) == it.get(this)
     }

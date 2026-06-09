@@ -58,11 +58,11 @@ class AuthService(
     }
 
     private fun createCipher(mode: Mode): Cipher =
-        Cipher.getInstance(algorithm)
+        Cipher.getInstance(ALGORITHM)
             .apply {
                 init(
                     mode.intValue,
-                    SecretKeySpec(securityProperties.key.toByteArray(Charsets.UTF_8), algorithm)
+                    SecretKeySpec(securityProperties.key.toByteArray(Charsets.UTF_8), ALGORITHM)
                 )
             }
 
@@ -72,7 +72,7 @@ class AuthService(
     }
 
     companion object {
-        private const val algorithm = "Blowfish"
+        private const val ALGORITHM = "Blowfish"
     }
 
 }

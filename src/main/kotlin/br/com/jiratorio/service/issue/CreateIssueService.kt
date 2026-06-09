@@ -104,8 +104,9 @@ class CreateIssueService(
                 .calcDeviationOfEstimate(dueDateHistory, jiraIssue.endDate, board.ignoreWeekend, holidays)
 
             Pair(deviationOfEstimate, dueDateHistory)
-        } else
+        } else {
             Pair(0, emptyList())
+        }
     }
 
     fun persistIssue(issue: IssueEntity): IssueEntity =
