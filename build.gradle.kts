@@ -84,8 +84,16 @@ tasks.register<Test>("unitTest") {
 
 tasks.withType<Test> {
     useJUnitPlatform()
-    environment("DOCKER_HOST", "unix:///var/run/docker.sock")
-    jvmArgs("-Dapi.version=1.45")
+
+    // Testcontainers / docker-java compatibility, all overridable by the environment so CI and
+    // non-Colima setups are unaffected — these are local fallbacks only:
+    // docker-java defaults to Docker API 1.32, which newer engines (Docker 29+/Colima) reject.
+    systemProperty("api.version", System.getenv("DOCKER_API_VERSION") ?: "1.45")
+    // Only pin the local Docker socket when the environment hasn't already set DOCKER_HOST
+    // (e.g. CI / remote Docker) and the default socket actually exists on this machine.
+    if (System.getenv("DOCKER_HOST") == null && file("/var/run/docker.sock").exists()) {
+        environment("DOCKER_HOST", "unix:///var/run/docker.sock")
+    }
 }
 
 tasks.withType<JavaCompile> {

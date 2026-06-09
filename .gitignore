@@ -20,5 +20,3 @@
 out/
 
 src/main/resources/application-*.yml
-
-.draft
