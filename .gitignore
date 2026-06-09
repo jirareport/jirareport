@@ -23,3 +23,6 @@ src/main/resources/application-*.yml
 
 ### drafts ###
 .draft/
+
+### local secrets ###
+scripts/.env

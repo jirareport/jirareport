@@ -1,14 +1,12 @@
 {
   "request": {
     "method": "POST",
-    "urlPath": "/jira/rest/api/2/search",
+    "urlPath": "/jira/rest/api/3/search/jql",
     "bodyPatterns": [
       {
         "matchesJsonPath": {
           "expression": "$.expand",
-          "equalToJson": [
-            "changelog"
-          ]
+          "equalTo": "changelog"
         }
       },
       {
@@ -30,10 +28,6 @@
   "response": {
     "status": 200,
     "jsonBody": {
-      "expand": "schema,names,changelog",
-      "startAt": 0,
-      "maxResults": 100,
-      "total": 10,
       "issues": [
         {
           "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
@@ -4819,7 +4813,8 @@
             ]
           }
         }
-      ]
+      ],
+      "isLast": true
     },
     "headers": {
       "Content-Type": "application/json"

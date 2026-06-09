@@ -17,6 +17,10 @@ class NativeColumnTimeAverageRepositoryImpl(
     private val jdbcTemplate: NamedParameterJdbcTemplate = NamedParameterJdbcTemplate(jdbcTemplate)
 
     override fun findColumnTimeAverage(issues: List<Long>): List<ColumnTimeAverageResponse> {
+        if (issues.isEmpty()) {
+            return emptyList()
+        }
+
         val query =
             """
             SELECT 

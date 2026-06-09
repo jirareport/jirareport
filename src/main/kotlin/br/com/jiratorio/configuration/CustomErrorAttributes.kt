@@ -13,8 +13,6 @@ class CustomErrorAttributes : DefaultErrorAttributes() {
     private val log = LoggerFactory.getLogger(javaClass)
 
     override fun getErrorAttributes(webRequest: WebRequest, options: ErrorAttributeOptions): MutableMap<String, Any?> {
-        // Spring Boot 4 no longer honours `server.error.include-message: always` here; force the
-        // message (e.g. @ResponseStatus reason) to always be present in the error body.
         val errorAttributes: MutableMap<String, Any?> =
             super.getErrorAttributes(webRequest, options.including(ErrorAttributeOptions.Include.MESSAGE))
 

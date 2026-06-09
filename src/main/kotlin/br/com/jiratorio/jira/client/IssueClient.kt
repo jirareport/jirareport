@@ -9,7 +9,7 @@ import org.springframework.web.service.annotation.PostExchange
 @HttpExchange
 interface IssueClient {
 
-    @PostExchange("/rest/api/2/search")
+    @PostExchange("/rest/api/3/search/jql")
     fun findByJql(@RequestBody filter: SearchJiraIssueRequest): JsonNode
 
 }

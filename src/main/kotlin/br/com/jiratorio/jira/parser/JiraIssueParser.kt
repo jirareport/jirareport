@@ -6,14 +6,12 @@ import br.com.jiratorio.domain.issue.JiraIssue
 import br.com.jiratorio.extension.extractValue
 import br.com.jiratorio.extension.extractValueNotNull
 import br.com.jiratorio.extension.fromJiraToLocalDateTime
-import br.com.jiratorio.extension.parallelStream
 import br.com.jiratorio.extension.time.daysDiff
 import tools.jackson.databind.JsonNode
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.LocalDateTime
-import kotlin.streams.toList
 
 @Component
 class JiraIssueParser(
@@ -26,11 +24,9 @@ class JiraIssueParser(
         log.info("Action=parseIssue, root={}, board={}", root, board)
 
         val fluxColumn = FluxColumn(board)
+
         return root.path("issues")
-            .parallelStream()
-            .map { jsonNodeToIssue(it, board, holidays, fluxColumn, parseUnfinishedIssue) }
-            .toList()
-            .filterNotNull()
+            .mapNotNull { jsonNodeToIssue(it, board, holidays, fluxColumn, parseUnfinishedIssue) }
     }
 
     private fun jsonNodeToIssue(
