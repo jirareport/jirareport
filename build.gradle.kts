@@ -8,12 +8,11 @@ plugins {
 
     id("org.springframework.boot") version "4.0.6"
     id("io.spring.dependency-management") version "1.1.7"
-
-    // id("io.gitlab.arturbosch.detekt") version "2.0.0-alpha"  // not yet published; deferred to C23
 }
 
 apply {
     from("gradle/tasks/CreateMigration.gradle.kts")
+    from("gradle/tasks/Ktlint.gradle.kts")
 }
 
 repositories {
@@ -57,7 +56,6 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.10")
     testImplementation("com.tngtech.archunit:archunit:1.3.0")
 
-    // detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:2.0.0-alpha")  // deferred to C23
 }
 
 configurations.all {
@@ -80,8 +78,6 @@ tasks.register<Test>("unitTest") {
         excludeTags = setOf("integration")
     }
 }
-
-// detekt { ... }  // re-enable once detekt 2.0.0-alpha is published (C23)
 
 tasks.withType<Test> {
     useJUnitPlatform()
