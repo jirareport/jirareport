@@ -84,7 +84,7 @@ class CreateIssueService(
             columnChangelog = changelog.columnChangelog.toColumnChangelogEntity(),
             board = board,
             deviationOfEstimate = deviationOfEstimate,
-            dueDateHistory = dueDateHistory,
+            dueDateHistory = dueDateHistory.toMutableList(),
             impedimentTime = impedimentTime,
             impedimentHistory = impedimentHistory.toImpedimentHistoryEntity(),
             waitTime = efficiency.waitTime,

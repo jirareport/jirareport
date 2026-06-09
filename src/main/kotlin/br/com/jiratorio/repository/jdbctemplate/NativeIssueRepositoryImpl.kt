@@ -57,7 +57,7 @@ class NativeIssueRepositoryImpl(
                    issue.priority, 
                    issue.created, 
                    issue.deviation_of_estimate, 
-                   coalesce(jsonb_array_length(issue.due_date_history), 0) as change_estimate_count,
+                   coalesce((SELECT COUNT(*) FROM issue_due_date_history h WHERE h.issue_id = issue.id), 0) as change_estimate_count,
                    issue.impediment_time,
                    issue.dynamic_fields 
             FROM issue
