@@ -72,7 +72,7 @@ class BoardAssert(
     }
 
     fun hasTouchingColumns(touchingColumns: List<String>?): BoardAssert {
-        val notFound = containsUppercase(actual.touchingColumns ?: emptyList(), touchingColumns ?: emptyList())
+        val notFound = containsUppercase(actual.touchingColumns, touchingColumns ?: emptyList())
 
         if (notFound.isNotEmpty()) {
             failWithMessage(shouldContain(actual.touchingColumns, touchingColumns, notFound).create())
@@ -82,7 +82,7 @@ class BoardAssert(
     }
 
     fun hasWaitingColumns(waitingColumns: List<String>?): BoardAssert {
-        val notFound = containsUppercase(actual.waitingColumns ?: emptyList(), waitingColumns ?: emptyList())
+        val notFound = containsUppercase(actual.waitingColumns, waitingColumns ?: emptyList())
 
         if (notFound.isNotEmpty()) {
             failWithMessage(shouldContain(actual.waitingColumns, waitingColumns, notFound).create())

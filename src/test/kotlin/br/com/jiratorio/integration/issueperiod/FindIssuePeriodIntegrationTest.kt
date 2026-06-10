@@ -91,7 +91,7 @@ class FindIssuePeriodIntegrationTest(
             .hasEndDate(issue.endDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")))
             .hasCreated(issue.created.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")))
             .hasDeviationOfEstimate(issue.deviationOfEstimate)
-            .hasChangeEstimateCount(issue.dueDateHistory?.size ?: 0)
+            .hasChangeEstimateCount(issue.dueDateHistory.size)
             .hasImpedimentTime(issue.impedimentTime)
             .hasDynamicFields(issue.dynamicFields)
     }
