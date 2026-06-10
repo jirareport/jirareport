@@ -9,10 +9,10 @@ import jakarta.servlet.http.HttpServletResponse
 
 @Component(DispatcherServlet.LOCALE_RESOLVER_BEAN_NAME)
 class HeaderLocaleResolver : LocaleResolver {
-    private val defaultLocale = Locale("pt", "BR")
+    private val defaultLocale = Locale.of("pt", "BR")
 
     private val supportedLocales = mapOf(
-        "en" to Locale("en"),
+        "en" to Locale.of("en"),
         "pt-BR" to defaultLocale
     )
 

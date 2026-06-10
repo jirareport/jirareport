@@ -26,7 +26,7 @@ fun JsonNode?.extractValue(): String? {
         }
     }
 
-    return this.asText(null)
+    return this.asString()
 }
 
 fun JsonNode.parallelStream(): Stream<JsonNode> =

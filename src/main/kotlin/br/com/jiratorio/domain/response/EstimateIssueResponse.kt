@@ -11,16 +11,16 @@ data class EstimateIssueResponse(
 
     val startDate: String,
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @field:JsonFormat(pattern = "dd/MM/yyyy")
     val estimateDateAvg: LocalDate,
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @field:JsonFormat(pattern = "dd/MM/yyyy")
     val estimateDatePercentile50: LocalDate,
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @field:JsonFormat(pattern = "dd/MM/yyyy")
     val estimateDatePercentile75: LocalDate,
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @field:JsonFormat(pattern = "dd/MM/yyyy")
     val estimateDatePercentile90: LocalDate,
 
     val leadTime: Long,

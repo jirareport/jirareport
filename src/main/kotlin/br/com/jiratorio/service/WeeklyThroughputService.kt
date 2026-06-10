@@ -21,7 +21,7 @@ class WeeklyThroughputService {
 
         val chart: Chart<String, Int> = Chart()
 
-        val temporalField: TemporalField = WeekFields.of(Locale("pt-BR")).dayOfWeek()
+        val temporalField: TemporalField = WeekFields.of(Locale.forLanguageTag("pt-BR")).dayOfWeek()
         var currentDate: LocalDate = startDate.with(temporalField, 1)
         val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 

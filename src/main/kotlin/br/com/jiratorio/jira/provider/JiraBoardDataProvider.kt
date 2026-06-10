@@ -17,7 +17,7 @@ class JiraBoardDataProvider(
 
     override fun findDetails(externalId: Long): ExternalBoard =
         try {
-            projectClient.findById(externalId) ?: throw ResourceNotFound()
+            projectClient.findById(externalId)
         } catch (e: JiraNotFoundException) {
             throw ResourceNotFound()
         }

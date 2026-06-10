@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull
 data class HolidayRequest(
 
     @field:NotNull
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @field:JsonFormat(pattern = "dd/MM/yyyy")
     val date: LocalDate,
 
     @field:NotBlank

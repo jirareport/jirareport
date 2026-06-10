@@ -55,7 +55,7 @@ private open class PatternBasedFormatter(
 
     override fun format(startDate: LocalDate, endDate: LocalDate, locale: Locale): String =
         if (startDate.month == endDate.month && startDate.isFirstDayOfMonth && endDate.isLastDayOfMonth)
-            locale.formatter.format(startDate).replace(".", "").capitalize()
+            locale.formatter.format(startDate).replace(".", "").replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
         else
             InitialAndFinal.format(startDate, endDate, locale)
 

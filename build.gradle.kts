@@ -98,7 +98,7 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<KotlinCompile> {
     compilerOptions {
-        freeCompilerArgs.addAll("-Xjsr305=strict", "-Xjvm-default=all")
+        freeCompilerArgs.addAll("-Xjsr305=strict", "-jvm-default=enable")
         jvmTarget.set(JvmTarget.JVM_24)
     }
 }
