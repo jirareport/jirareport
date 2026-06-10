@@ -4,7 +4,6 @@ import br.com.jiratorio.domain.BoardPreferences
 import br.com.jiratorio.domain.FindAllIssuePeriodsFilter
 import br.com.jiratorio.domain.FluxColumn
 import br.com.jiratorio.domain.chart.IssuePeriodChartResponse
-import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.entity.IssueEntity
 import br.com.jiratorio.domain.entity.IssuePeriodEntity
 import br.com.jiratorio.domain.entity.embedded.Chart
@@ -79,8 +78,10 @@ class IssuePeriodService(
         val issuePeriod = issuePeriodRepository.findByIdAndBoardId(id, boardId)
             ?: throw ResourceNotFound()
 
+        val charts = chartService.createCharts(issuePeriod.issues.toList(), issuePeriod.board)
+
         return IssuePeriodByIdResponse(
-            detail = issuePeriod.toIssuePeriodDetailResponse(),
+            detail = issuePeriod.toIssuePeriodDetailResponse(charts),
             issues = issuePeriod.issues.map { it.toIssueResponse(jiraProperties.url) }
         )
     }
@@ -129,34 +130,11 @@ class IssuePeriodService(
             FluxColumn(board).wipColumns
         )
 
-        columnTimeAverageService.create(issuePeriod, board.fluxColumn ?: emptyList())
-
-        createCharts(issuePeriod, board)
+        columnTimeAverageService.create(issuePeriod, board.fluxColumn)
 
         issuePeriodRepository.save(issuePeriod)
 
         return issuePeriod.id
-    }
-
-    private fun createCharts(issuePeriod: IssuePeriodEntity, board: BoardEntity) {
-        val chartAggregator = chartService.createCharts(issuePeriod.issues.toList(), board)
-
-        issuePeriod.apply {
-            histogram = chartAggregator.histogram
-            leadTimeByEstimate = chartAggregator.leadTimeByEstimate
-            throughputByEstimate = chartAggregator.throughputByEstimate
-            leadTimeBySystem = chartAggregator.leadTimeBySystem
-            throughputBySystem = chartAggregator.throughputBySystem
-            leadTimeByType = chartAggregator.leadTimeByType
-            throughputByType = chartAggregator.throughputByType
-            leadTimeByProject = chartAggregator.leadTimeByProject
-            throughputByProject = chartAggregator.throughputByProject
-            leadTimeCompareChart = chartAggregator.leadTimeCompareChart
-            leadTimeByPriority = chartAggregator.leadTimeByPriority
-            throughputByPriority = chartAggregator.throughputByPriority
-            dynamicCharts = chartAggregator.dynamicCharts.toMutableList()
-            issueProgression = chartAggregator.issueProgression
-        }
     }
 
     @Transactional

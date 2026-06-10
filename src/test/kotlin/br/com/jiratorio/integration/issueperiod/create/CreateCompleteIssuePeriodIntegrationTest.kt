@@ -5,6 +5,7 @@ import br.com.jiratorio.testlibrary.annotation.LoadStubs
 import br.com.jiratorio.testlibrary.assertion.HistogramAssert
 import br.com.jiratorio.testlibrary.assertion.IssueAssert
 import br.com.jiratorio.testlibrary.assertion.IssuePeriodAssert
+import br.com.jiratorio.testlibrary.assertion.response.IssuePeriodDetailResponseAssert
 import br.com.jiratorio.testlibrary.junit.testtype.IntegrationTest
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
@@ -12,6 +13,9 @@ import br.com.jiratorio.domain.entity.ImpedimentHistoryEntity
 import br.com.jiratorio.domain.entity.LeadTimeEntity
 import br.com.jiratorio.domain.entity.LeadTimeConfigEntity
 import br.com.jiratorio.domain.entity.embedded.DueDateHistory
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodDetailResponse
+import br.com.jiratorio.testlibrary.dsl.extractAs
 import br.com.jiratorio.testlibrary.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
@@ -91,20 +95,9 @@ class CreateCompleteIssuePeriodIntegrationTest(
             .hasStartDate(request.startDate.toLocalDate())
             .hasEndDate(request.endDate.toLocalDate())
             .hasLeadTime(15.9)
-            .hasLeadTimeByEstimate("P" to 19.5, "M" to 12.75, "G" to 15.0)
-            .hasThroughputByEstimate("P" to 4, "M" to 4, "G" to 2)
-            .hasLeadTimeBySystem("JiraReport" to 16.2, "JiraWeb" to 15.6)
-            .hasThroughputBySystem("JiraReport" to 5, "JiraWeb" to 5)
-            .hasLeadTimeByType("Task" to 16.2, "Story" to 17.0, "Attendance" to 14.666666666666666)
-            .hasThroughputByType("Task" to 5, "Story" to 2, "Attendance" to 3)
-            .hasLeadTimeByProject("Metric" to 15.714285714285714, "Estimate" to 16.333333333333332)
-            .hasThroughputByProject("Metric" to 7, "Estimate" to 3)
-            .hasLeadTimeByPriority("Major" to 19.333333333333332, "Medium" to 16.0, "Expedite" to 12.333333333333334)
-            .hasThroughputByPriority("Major" to 3, "Medium" to 4, "Expedite" to 3)
             .hasThroughput(10)
             .hasWipAvg(1.75)
             .hasAvgPctEfficiency(70.3)
-            .hasEmptyDynamicCharts()
             .containsColumnTimeAvg(
                 ColumnTimeAverageEntity(columnName = "BACKLOG", averageTime = 2.1),
                 ColumnTimeAverageEntity(columnName = "ANALYSIS", averageTime = 3.0),
@@ -116,14 +109,37 @@ class CreateCompleteIssuePeriodIntegrationTest(
                 ColumnTimeAverageEntity(columnName = "ACCOMPANIMENT", averageTime = 3.3),
                 ColumnTimeAverageEntity(columnName = "DONE", averageTime = 0.0)
             )
+
+        val (detail: IssuePeriodDetailResponse) = restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                get("/boards/{id}/issue-periods/1", board.id)
+            }
+            then {
+                statusCode(HttpServletResponse.SC_OK)
+            }
+        } extractAs IssuePeriodByIdResponse::class
+
+        IssuePeriodDetailResponseAssert.assertThat(detail)
+            .hasLeadTimeByEstimate("P" to 19.5, "M" to 12.75, "G" to 15.0)
+            .hasThroughputByEstimate("P" to 4, "M" to 4, "G" to 2)
+            .hasLeadTimeBySystem("JiraReport" to 16.2, "JiraWeb" to 15.6)
+            .hasThroughputBySystem("JiraReport" to 5, "JiraWeb" to 5)
+            .hasLeadTimeByType("Task" to 16.2, "Story" to 17.0, "Attendance" to 14.666666666666666)
+            .hasThroughputByType("Task" to 5, "Story" to 2, "Attendance" to 3)
+            .hasLeadTimeByProject("Metric" to 15.714285714285714, "Estimate" to 16.333333333333332)
+            .hasThroughputByProject("Metric" to 7, "Estimate" to 3)
+            .hasLeadTimeByPriority("Major" to 19.333333333333332, "Medium" to 16.0, "Expedite" to 12.333333333333334)
+            .hasThroughputByPriority("Major" to 3, "Medium" to 4, "Expedite" to 3)
+            .hasEmptyDynamicCharts()
             .hasLeadTimeCompareChart(
-                mapOf(
-                    "Dev Lead Time" to 3.7,
-                    "Test Lead Time" to 2.8
-                )
+                "Dev Lead Time" to 3.7,
+                "Test Lead Time" to 2.8
             )
 
-        HistogramAssert.assertThat(issuePeriod.histogram)
+        HistogramAssert.assertThat(detail.histogram)
             .hasMedian(15)
             .hasPercentile75(19)
             .hasPercentile90(20)

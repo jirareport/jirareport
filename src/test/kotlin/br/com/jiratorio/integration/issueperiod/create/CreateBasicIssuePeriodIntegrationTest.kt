@@ -2,11 +2,15 @@ package br.com.jiratorio.integration.issueperiod.create
 
 import br.com.jiratorio.testlibrary.Authenticator
 import br.com.jiratorio.testlibrary.annotation.LoadStubs
-import br.com.jiratorio.testlibrary.assertion.HistogramAssert.Companion.assertThat
-import br.com.jiratorio.testlibrary.assertion.IssueAssert.Companion.assertThat
-import br.com.jiratorio.testlibrary.assertion.IssuePeriodAssert.Companion.assertThat
+import br.com.jiratorio.testlibrary.assertion.HistogramAssert
+import br.com.jiratorio.testlibrary.assertion.IssueAssert
+import br.com.jiratorio.testlibrary.assertion.IssuePeriodAssert
+import br.com.jiratorio.testlibrary.assertion.response.IssuePeriodDetailResponseAssert
 import br.com.jiratorio.domain.entity.ColumnChangelogEntity
 import br.com.jiratorio.domain.entity.ColumnTimeAverageEntity
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodByIdResponse
+import br.com.jiratorio.domain.response.issueperiod.IssuePeriodDetailResponse
+import br.com.jiratorio.testlibrary.dsl.extractAs
 import br.com.jiratorio.testlibrary.dsl.restAssured
 import br.com.jiratorio.exception.ResourceNotFound
 import br.com.jiratorio.extension.toLocalDate
@@ -59,10 +63,34 @@ class CreateBasicIssuePeriodIntegrationTest(
         val issuePeriod = issuePeriodRepository.findByIdOrNull(1L)
             ?: throw ResourceNotFound()
 
-        assertThat(issuePeriod)
+        IssuePeriodAssert.assertThat(issuePeriod)
             .hasStartDate(request.startDate.toLocalDate())
             .hasEndDate(request.endDate.toLocalDate())
             .hasLeadTime(14.5)
+            .hasThroughput(2)
+            .hasWipAvg(1.26)
+            .hasAvgPctEfficiency(0.0)
+            .containsColumnTimeAvg(
+                ColumnTimeAverageEntity(columnName = "BACKLOG", averageTime = 4.0),
+                ColumnTimeAverageEntity(columnName = "TODO", averageTime = 2.0),
+                ColumnTimeAverageEntity(columnName = "WIP", averageTime = 10.0),
+                ColumnTimeAverageEntity(columnName = "ACCOMPANIMENT", averageTime = 4.0),
+                ColumnTimeAverageEntity(columnName = "DONE", averageTime = 0.0)
+            )
+
+        val (detail: IssuePeriodDetailResponse) = restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                get("/boards/{id}/issue-periods/1", board.id)
+            }
+            then {
+                statusCode(HttpServletResponse.SC_OK)
+            }
+        } extractAs IssuePeriodByIdResponse::class
+
+        IssuePeriodDetailResponseAssert.assertThat(detail)
             .hasLeadTimeByEstimate("Uninformed" to 14.5)
             .hasThroughputByEstimate("Uninformed" to 2)
             .hasLeadTimeBySystem("Uninformed" to 14.5)
@@ -73,20 +101,10 @@ class CreateBasicIssuePeriodIntegrationTest(
             .hasThroughputByProject("Uninformed" to 2)
             .hasLeadTimeByPriority("Major" to 14.5)
             .hasThroughputByPriority("Major" to 2)
-            .hasThroughput(2)
-            .hasWipAvg(1.26)
-            .hasAvgPctEfficiency(0.0)
             .hasEmptyDynamicCharts()
-            .containsColumnTimeAvg(
-                ColumnTimeAverageEntity(columnName = "BACKLOG", averageTime = 4.0),
-                ColumnTimeAverageEntity(columnName = "TODO", averageTime = 2.0),
-                ColumnTimeAverageEntity(columnName = "WIP", averageTime = 10.0),
-                ColumnTimeAverageEntity(columnName = "ACCOMPANIMENT", averageTime = 4.0),
-                ColumnTimeAverageEntity(columnName = "DONE", averageTime = 0.0)
-            )
             .hasEmptyLeadTimeCompareChart()
 
-        assertThat(issuePeriod.histogram)
+        HistogramAssert.assertThat(detail.histogram)
             .isNotNull
             .hasMedian(11)
             .hasPercentile75(18)
@@ -99,7 +117,7 @@ class CreateBasicIssuePeriodIntegrationTest(
         val issue = issueRepository.findByIdOrNull(1L)
             ?: throw ResourceNotFound()
 
-        assertThat(issue)
+        IssueAssert.assertThat(issue)
             .hasKey("JIRAT-1")
             .hasIssueType("Task")
             .hasCreator("Leonardo Ferreira")

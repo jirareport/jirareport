@@ -20,5 +20,5 @@ data class MinimalIssue(
     override val deviationOfEstimate: Long?,
     override val changeEstimateCount: Int,
     override val impedimentTime: Long,
-    override val dynamicFields: Map<String, String?>,
+    override val dynamicFields: Map<String, String>,
 ) : Issue

@@ -9,10 +9,10 @@ import java.util.Optional
 @Repository
 interface IssueRepository : CrudRepository<IssueEntity, Long>, NativeIssueRepository {
 
-    @EntityGraph(attributePaths = ["leadTimes", "impedimentHistory", "columnChangelog"])
+    @EntityGraph(attributePaths = ["leadTimes", "impedimentHistory", "columnChangelog", "dueDateHistory", "dynamicFields"])
     fun findByBoardIdAndId(boardId: Long, id: Long): IssueEntity?
 
-    @EntityGraph(attributePaths = ["leadTimes", "impedimentHistory", "columnChangelog"])
+    @EntityGraph(attributePaths = ["leadTimes", "impedimentHistory", "columnChangelog", "dueDateHistory", "dynamicFields"])
     override fun findById(id: Long): Optional<IssueEntity>
 
     fun findByIdOrNull(id: Long): IssueEntity? =

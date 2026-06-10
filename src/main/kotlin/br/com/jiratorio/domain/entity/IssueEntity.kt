@@ -4,20 +4,22 @@ import br.com.jiratorio.domain.entity.embedded.DueDateHistory
 import br.com.jiratorio.domain.issue.Issue
 import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.toStringBuilder
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
-import org.hibernate.annotations.Type
 import java.time.LocalDateTime
 import java.util.Objects
 import jakarta.persistence.CascadeType
+import jakarta.persistence.CollectionTable
 import jakarta.persistence.Column
+import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
+import jakarta.persistence.MapKeyColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OrderBy
+import jakarta.persistence.OrderColumn
 import jakarta.persistence.Table
 
 @Entity
@@ -76,9 +78,10 @@ data class IssueEntity(
 
     override var deviationOfEstimate: Long? = null,
 
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var dueDateHistory: List<DueDateHistory>? = null,
+    @ElementCollection
+    @CollectionTable(name = "issue_due_date_history", joinColumns = [JoinColumn(name = "issue_id")])
+    @OrderColumn(name = "idx")
+    var dueDateHistory: MutableList<DueDateHistory> = mutableListOf(),
 
     @Column(nullable = false)
     override var impedimentTime: Long = 0,
@@ -88,9 +91,11 @@ data class IssueEntity(
     @JoinColumn(name = "issue_id", updatable = false)
     var impedimentHistory: MutableSet<ImpedimentHistoryEntity> = mutableSetOf(),
 
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    override var dynamicFields: Map<String, String?> = emptyMap(),
+    @ElementCollection
+    @CollectionTable(name = "issue_dynamic_field", joinColumns = [JoinColumn(name = "issue_id")])
+    @MapKeyColumn(name = "field_name")
+    @Column(name = "field_value", nullable = false)
+    override var dynamicFields: Map<String, String> = emptyMap(),
 
     @Column(nullable = false)
     var waitTime: Long = 0L,
@@ -104,7 +109,7 @@ data class IssueEntity(
 ) : BaseEntity(), Issue {
 
     override val changeEstimateCount: Int
-        get() = dueDateHistory?.size ?: 0
+        get() = dueDateHistory.size
 
     override fun toString() =
         toStringBuilder(

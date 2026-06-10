@@ -2,14 +2,10 @@ package br.com.jiratorio.repository.jdbctemplate.rowmapper
 
 import br.com.jiratorio.domain.issue.MinimalIssue
 import br.com.jiratorio.extension.jdbctemplate.getLocalDateTime
-import tools.jackson.databind.ObjectMapper
-import tools.jackson.module.kotlin.readValue
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 
-class MinimalIssueRowMapper(
-    private val objectMapper: ObjectMapper,
-) : RowMapper<MinimalIssue> {
+class MinimalIssueRowMapper : RowMapper<MinimalIssue> {
 
     override fun mapRow(rs: ResultSet, rowNum: Int): MinimalIssue =
         MinimalIssue(
@@ -30,7 +26,7 @@ class MinimalIssueRowMapper(
             deviationOfEstimate = rs.getLong("deviation_of_estimate"),
             changeEstimateCount = rs.getInt("change_estimate_count"),
             impedimentTime = rs.getLong("impediment_time"),
-            dynamicFields = objectMapper.readValue(rs.getString("dynamic_fields")),
+            dynamicFields = emptyMap(),
         )
 
 }

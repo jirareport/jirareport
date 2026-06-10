@@ -40,7 +40,7 @@ class EstimateIssueService(
 
         val board = boardService.findById(boardId)
 
-        if (board.fluxColumn.isNullOrEmpty()) {
+        if (board.fluxColumn.isEmpty()) {
             throw MissingBoardConfigurationException("fluxColumn")
         }
 

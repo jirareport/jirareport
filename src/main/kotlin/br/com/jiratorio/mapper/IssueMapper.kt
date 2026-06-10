@@ -25,7 +25,7 @@ fun Issue.toIssueResponse(jiraUrl: String): IssueResponse =
         deviationOfEstimate = deviationOfEstimate,
         changeEstimateCount = changeEstimateCount,
         impedimentTime = impedimentTime,
-        dynamicFields = dynamicFields,
+        dynamicFields = dynamicFields.toMap(),
         detailsUrl = "$jiraUrl/browse/$key"
     )
 
@@ -37,7 +37,7 @@ fun IssueEntity.toIssueDetailResponse(): IssueDetailResponse =
         id = id,
         key = key,
         changelog = columnChangelog.toChangelogResponse(),
-        dueDateHistory = dueDateHistory?.toDueDateHistoryResponse(),
+        dueDateHistory = dueDateHistory.toDueDateHistoryResponse(),
         impedimentHistory = impedimentHistory.toImpedimentHistoryResponse(),
         waitTime = waitTime / 60.0,
         touchTime = touchTime / 60.0,

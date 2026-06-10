@@ -21,7 +21,17 @@ class CloneBoardService(
     fun clone(boardId: Long): Long {
         val boardToClone = boardRepository.findByIdOrNull(boardId) ?: throw ResourceNotFound()
 
-        return boardToClone.copy(id = 0, leadTimeConfigs = mutableSetOf(), holidays = mutableListOf(), dynamicFields = mutableSetOf())
+        return boardToClone.copy(
+            id = 0,
+            leadTimeConfigs = mutableSetOf(),
+            holidays = mutableListOf(),
+            dynamicFields = mutableSetOf(),
+            fluxColumn = boardToClone.fluxColumn.toMutableList(),
+            ignoreIssueType = boardToClone.ignoreIssueType.toMutableList(),
+            impedimentColumns = boardToClone.impedimentColumns.toMutableList(),
+            touchingColumns = boardToClone.touchingColumns.toMutableList(),
+            waitingColumns = boardToClone.waitingColumns.toMutableList()
+        )
             .also(boardRepository::save)
             .also { board -> boardToClone.leadTimeConfigs?.let { leadTimeConfigs -> leadTimeConfigService.clone(leadTimeConfigs, board) } }
             .also { board -> boardToClone.holidays?.let { holidays -> holidayService.clone(holidays, board) } }

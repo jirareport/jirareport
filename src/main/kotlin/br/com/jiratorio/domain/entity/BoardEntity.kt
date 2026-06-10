@@ -5,11 +5,11 @@ import br.com.jiratorio.domain.ImpedimentType
 import br.com.jiratorio.domain.IssuePeriodNameFormat
 import br.com.jiratorio.extension.equalsComparing
 import br.com.jiratorio.extension.toStringBuilder
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
-import org.hibernate.annotations.Type
 import java.util.Objects
 import jakarta.persistence.CascadeType
+import jakarta.persistence.CollectionTable
 import jakarta.persistence.Column
+import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -17,7 +17,9 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
+import jakarta.persistence.OrderColumn
 import jakarta.persistence.Table
 
 @Entity
@@ -38,13 +40,17 @@ data class BoardEntity(
 
     var endColumn: String? = null,
 
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var fluxColumn: MutableList<String>? = null,
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "board_flux_column", joinColumns = [JoinColumn(name = "board_id")])
+    @OrderColumn(name = "idx")
+    @Column(name = "value", nullable = false)
+    var fluxColumn: MutableList<String> = mutableListOf(),
 
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var ignoreIssueType: MutableList<String>? = null,
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "board_ignore_issue_type", joinColumns = [JoinColumn(name = "board_id")])
+    @OrderColumn(name = "idx")
+    @Column(name = "value", nullable = false)
+    var ignoreIssueType: MutableList<String> = mutableListOf(),
 
     var epicCF: String? = null,
 
@@ -68,20 +74,26 @@ data class BoardEntity(
     @Enumerated(EnumType.STRING)
     var impedimentType: ImpedimentType? = null,
 
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var impedimentColumns: MutableList<String>? = null,
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "board_impediment_columns", joinColumns = [JoinColumn(name = "board_id")])
+    @OrderColumn(name = "idx")
+    @Column(name = "value", nullable = false)
+    var impedimentColumns: MutableList<String> = mutableListOf(),
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     var dynamicFields: MutableSet<DynamicFieldConfigEntity>? = null,
 
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var touchingColumns: MutableList<String>? = null,
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "board_touching_columns", joinColumns = [JoinColumn(name = "board_id")])
+    @OrderColumn(name = "idx")
+    @Column(name = "value", nullable = false)
+    var touchingColumns: MutableList<String> = mutableListOf(),
 
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var waitingColumns: MutableList<String>? = null,
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "board_waiting_columns", joinColumns = [JoinColumn(name = "board_id")])
+    @OrderColumn(name = "idx")
+    @Column(name = "value", nullable = false)
+    var waitingColumns: MutableList<String> = mutableListOf(),
 
     @Enumerated(EnumType.STRING)
     var dueDateType: DueDateType? = null,

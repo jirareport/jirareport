@@ -1,12 +1,6 @@
 package br.com.jiratorio.domain.entity
 
-import br.com.jiratorio.domain.chart.DynamicChart
-import br.com.jiratorio.domain.entity.embedded.Chart
-import br.com.jiratorio.domain.entity.embedded.Histogram
-import br.com.jiratorio.domain.entity.embedded.IssueProgression
 import br.com.jiratorio.extension.toStringBuilder
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType
-import org.hibernate.annotations.Type
 import java.time.LocalDate
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -48,58 +42,10 @@ data class IssuePeriodEntity(
     @Column(nullable = false)
     var leadTime: Double = 0.0,
 
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var histogram: Histogram? = null,
-
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var leadTimeByEstimate: Chart<String, Double>? = null,
-
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var throughputByEstimate: Chart<String, Int>? = null,
-
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var leadTimeBySystem: Chart<String, Double>? = null,
-
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var throughputBySystem: Chart<String, Int>? = null,
-
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var leadTimeByType: Chart<String, Double>? = null,
-
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var throughputByType: Chart<String, Int>? = null,
-
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var leadTimeByProject: Chart<String, Double>? = null,
-
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var throughputByProject: Chart<String, Int>? = null,
-
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var leadTimeByPriority: Chart<String, Double>? = null,
-
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var throughputByPriority: Chart<String, Int>? = null,
-
     @OneToMany
     @OrderBy("id")
     @JoinColumn(name = "issue_period_id", updatable = false)
     var columnTimeAverages: Set<ColumnTimeAverageEntity> = mutableSetOf(),
-
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var leadTimeCompareChart: Chart<String, Double>? = null,
 
     @Column(nullable = false)
     var throughput: Int = 0,
@@ -112,14 +58,6 @@ data class IssuePeriodEntity(
 
     @Column(nullable = false)
     var avgPctEfficiency: Double = 0.0,
-
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var dynamicCharts: MutableList<DynamicChart>? = null,
-
-    @Type(JsonBinaryType::class)
-    @Column(columnDefinition = "jsonb")
-    var issueProgression: IssueProgression? = null
 
 ) : BaseEntity() {
 

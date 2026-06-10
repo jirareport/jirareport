@@ -1,0 +1,15 @@
+ALTER TABLE issue_period
+    DROP COLUMN histogram,
+    DROP COLUMN lead_time_by_estimate,
+    DROP COLUMN throughput_by_estimate,
+    DROP COLUMN lead_time_by_system,
+    DROP COLUMN throughput_by_system,
+    DROP COLUMN lead_time_by_type,
+    DROP COLUMN throughput_by_type,
+    DROP COLUMN lead_time_by_project,
+    DROP COLUMN throughput_by_project,
+    DROP COLUMN lead_time_by_priority,
+    DROP COLUMN throughput_by_priority,
+    DROP COLUMN lead_time_compare_chart,
+    DROP COLUMN dynamic_charts,
+    DROP COLUMN issue_progression;

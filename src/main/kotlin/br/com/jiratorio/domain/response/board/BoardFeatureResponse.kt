@@ -30,7 +30,7 @@ data class BoardFeatureResponse(
         estimate = !board.estimateCF.isNullOrEmpty(),
         system = !board.systemCF.isNullOrEmpty(),
         project = !board.projectCF.isNullOrEmpty(),
-        efficiency = !board.waitingColumns.isNullOrEmpty() && !board.touchingColumns.isNullOrEmpty(),
+        efficiency = board.waitingColumns.isNotEmpty() && board.touchingColumns.isNotEmpty(),
         leadTimes = !board.leadTimeConfigs.isNullOrEmpty(),
         impediment = board.impedimentType != null,
         dynamicField = !board.dynamicFields.isNullOrEmpty()

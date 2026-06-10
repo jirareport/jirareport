@@ -70,19 +70,7 @@ class FindIssuePeriodIntegrationTest(
             .hasName(issuePeriod.name)
             .hasLeadTime(issuePeriod.leadTime)
             .hasThroughput(issuePeriod.throughput)
-            .hasLeadTimeByEstimate(issuePeriod.leadTimeByEstimate)
-            .hasThroughputByEstimate(issuePeriod.throughputByEstimate)
-            .hasLeadTimeBySystem(issuePeriod.leadTimeBySystem)
-            .hasThroughputBySystem(issuePeriod.throughputBySystem)
-            .hasLeadTimeByType(issuePeriod.leadTimeByType)
-            .hasThroughputByType(issuePeriod.throughputByType)
-            .hasLeadTimeByProject(issuePeriod.leadTimeByProject)
-            .hasThroughputByProject(issuePeriod.throughputByProject)
-            .hasLeadTimeByPriority(issuePeriod.leadTimeByPriority)
-            .hasThroughputByPriority(issuePeriod.throughputByPriority)
             .hasColumnTimeAverages(issuePeriod.columnTimeAverages)
-            .hasLeadTimeCompareChart(issuePeriod.leadTimeCompareChart)
-            .hasDynamicCharts(issuePeriod.dynamicCharts)
 
         val issueResponse = issues.first()
         val issue = issueRepository.findByIdOrNull(issueResponse.id) ?: throw ResourceNotFound()
@@ -103,9 +91,37 @@ class FindIssuePeriodIntegrationTest(
             .hasEndDate(issue.endDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")))
             .hasCreated(issue.created.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")))
             .hasDeviationOfEstimate(issue.deviationOfEstimate)
-            .hasChangeEstimateCount(issue.dueDateHistory?.size ?: 0)
+            .hasChangeEstimateCount(issue.dueDateHistory.size)
             .hasImpedimentTime(issue.impedimentTime)
             .hasDynamicFields(issue.dynamicFields)
+    }
+
+    @Test
+    fun `find period with no issues returns empty charts`() {
+        authenticator.withDefaultUser {
+            val defaultBoard = boardFactory.create()
+            issuePeriodFactory.create(
+                modifyingFields = mapOf(
+                    IssuePeriodEntity::board to defaultBoard
+                )
+            )
+        }
+
+        val (detail: IssuePeriodDetailResponse) = restAssured {
+            given {
+                header(authenticator.defaultUserHeader())
+            }
+            on {
+                get("/boards/1/issue-periods/1")
+            }
+            then {
+                statusCode(SC_OK)
+            }
+        } extractAs IssuePeriodByIdResponse::class
+
+        IssuePeriodDetailResponseAssert.assertThat(detail)
+            .hasEmptyDynamicCharts()
+            .hasEmptyLeadTimeCompareChart()
     }
 
 }

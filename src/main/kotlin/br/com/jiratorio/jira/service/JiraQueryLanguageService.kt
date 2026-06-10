@@ -71,6 +71,7 @@ class JiraQueryLanguageService {
 
     private fun buildIgnoredIssueTypes(board: BoardEntity) =
         board.ignoreIssueType
+            .takeIf { it.isNotEmpty() }
             ?.let { str -> str.joinToString(",", "AND issueType NOT IN (", ")") { "'$it'" } }
             ?: String.EMPTY
 
