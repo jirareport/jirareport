@@ -6,4 +6,4 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.jdbc.core.namedparam.SqlParameterSource
 
 inline fun <reified T : Any> NamedParameterJdbcOperations.queryForSet(sql: String, sqlParameterSource: SqlParameterSource = MapSqlParameterSource()): Set<T> =
-    query(sql, sqlParameterSource, SetRowMapperResultSetExtractor(SingleColumnRowMapper(T::class.java)))?.filterNotNull()?.toSet() ?: emptySet()
+    query(sql, sqlParameterSource, SetRowMapperResultSetExtractor(SingleColumnRowMapper(T::class.java))).filterNotNull().toSet()

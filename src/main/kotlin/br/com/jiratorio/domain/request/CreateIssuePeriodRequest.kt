@@ -9,11 +9,11 @@ import jakarta.validation.constraints.NotNull
 
 data class CreateIssuePeriodRequest(
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @field:JsonFormat(pattern = "dd/MM/yyyy")
     @field:NotNull(message = "{validations.required-start-date}")
     val startDate: LocalDate,
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @field:JsonFormat(pattern = "dd/MM/yyyy")
     @field:NotNull(message = "{validations.required-end-date}")
     val endDate: LocalDate
 

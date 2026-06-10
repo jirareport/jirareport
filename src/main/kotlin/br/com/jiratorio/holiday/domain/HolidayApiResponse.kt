@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 data class HolidayApiResponse(
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @field:JsonFormat(pattern = "dd/MM/yyyy")
     val date: LocalDate,
 
     val name: String,

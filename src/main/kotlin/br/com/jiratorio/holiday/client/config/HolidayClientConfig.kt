@@ -11,7 +11,7 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory
 
 @Configuration
 class HolidayClientConfig(
-    @Value("\${holiday.url}") private val holidayUrl: String,
+    @param:Value("\${holiday.url}") private val holidayUrl: String,
 ) {
 
     @Bean

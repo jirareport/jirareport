@@ -15,7 +15,7 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory
 @Configuration
 class AuthClientConfiguration(
     private val messageResolver: MessageResolver,
-    @Value("\${jira.url}") private val jiraUrl: String,
+    @param:Value("\${jira.url}") private val jiraUrl: String,
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)

@@ -4,4 +4,4 @@ import org.springframework.jdbc.core.JdbcOperations
 import org.springframework.jdbc.core.SingleColumnRowMapper
 
 inline fun <reified T : Any> JdbcOperations.queryForSet(sql: String, args: Array<out Any>): Set<T> =
-    query(sql, args, SetRowMapperResultSetExtractor(SingleColumnRowMapper(T::class.java)))?.filterNotNull()?.toSet() ?: emptySet()
+    query(sql, SetRowMapperResultSetExtractor(SingleColumnRowMapper(T::class.java)), *args).filterNotNull().toSet()

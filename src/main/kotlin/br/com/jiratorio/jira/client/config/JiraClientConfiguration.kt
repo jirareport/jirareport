@@ -27,7 +27,7 @@ class JiraClientConfiguration(
     private val objectMapper: ObjectMapper,
     private val currentUser: CurrentUser,
     private val messageResolver: MessageResolver,
-    @Value("\${jira.url}") private val jiraUrl: String,
+    @param:Value("\${jira.url}") private val jiraUrl: String,
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)

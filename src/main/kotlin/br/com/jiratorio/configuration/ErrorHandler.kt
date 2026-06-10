@@ -21,7 +21,7 @@ class ErrorHandler(
     @ExceptionHandler(KotlinInvalidNullException::class)
     fun handleKotlinInvalidNullException(e: KotlinInvalidNullException): ResponseEntity<Map<String, List<String>>> =
         ResponseEntity(
-            mapOf((e.kotlinPropertyName ?: "field") to listOf(messageResolver.resolve("jakarta.validation.constraints.NotNull.message"))),
+            mapOf(e.kotlinPropertyName to listOf(messageResolver.resolve("jakarta.validation.constraints.NotNull.message"))),
             HttpStatus.BAD_REQUEST
         )
 

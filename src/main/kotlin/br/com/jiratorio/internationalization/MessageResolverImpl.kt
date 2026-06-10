@@ -19,7 +19,8 @@ class MessageResolverImpl(
 
     override val locale: Locale = localeResolver.resolveLocale(request)
 
+    @Suppress("UNCHECKED_CAST")
     override fun resolve(key: String, vararg args: Any?): String =
-        messageSource.getMessage(key, args as Array<out Any>?, locale)
+        messageSource.getMessage(key, args as Array<Any>?, locale)
 
 }

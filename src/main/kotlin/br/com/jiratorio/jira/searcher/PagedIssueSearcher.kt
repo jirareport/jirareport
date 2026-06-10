@@ -32,7 +32,7 @@ class PagedIssueSearcher(
                 )
             )
             nodes.add(node)
-            nextPageToken = node.path("nextPageToken").asText(null)
+            nextPageToken = node.path("nextPageToken").stringValue()
         } while (nextPageToken != null)
 
         return nodes.flatMap { issueParser.parse(it, board, holidays, parseUnfinishedIssue) }
