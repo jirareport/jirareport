@@ -25,7 +25,7 @@ fun Issue.toIssueResponse(jiraUrl: String): IssueResponse =
         deviationOfEstimate = deviationOfEstimate,
         changeEstimateCount = changeEstimateCount,
         impedimentTime = impedimentTime,
-        dynamicFields = dynamicFields,
+        dynamicFields = dynamicFields.toMap(),
         detailsUrl = "$jiraUrl/browse/$key"
     )
 

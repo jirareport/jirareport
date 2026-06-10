@@ -3,13 +3,12 @@ package br.com.jiratorio.repository.jdbctemplate
 import br.com.jiratorio.domain.DynamicFieldsValues
 import br.com.jiratorio.domain.entity.BoardEntity
 import br.com.jiratorio.domain.issue.Issue
+import br.com.jiratorio.domain.issue.MinimalIssue
 import br.com.jiratorio.domain.request.SearchIssueRequest
 import br.com.jiratorio.extension.jdbctemplate.queryForSet
 import br.com.jiratorio.extension.time.atEndOfDay
 import br.com.jiratorio.repository.NativeIssueRepository
-import br.com.jiratorio.repository.jdbctemplate.rowmapper.DynamicFieldsValuesRowMapper
 import br.com.jiratorio.repository.jdbctemplate.rowmapper.MinimalIssueRowMapper
-import tools.jackson.databind.ObjectMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.jdbc.core.JdbcTemplate
@@ -22,7 +21,6 @@ import java.time.LocalDateTime
 
 @Repository
 class NativeIssueRepositoryImpl(
-    private val objectMapper: ObjectMapper,
     jdbcTemplate: JdbcTemplate,
 ) : NativeIssueRepository {
 
@@ -43,28 +41,27 @@ class NativeIssueRepositoryImpl(
         val query = StringBuilder(
             """
             SELECT issue.id,
-                   issue.key, 
+                   issue.key,
                    issue.lead_time,
-                   issue.start_date, 
-                   issue.end_date, 
-                   issue.creator, 
-                   issue.summary, 
-                   issue.issue_type, 
-                   issue.estimate, 
-                   issue.project, 
-                   issue.epic, 
-                   issue.system, 
-                   issue.priority, 
-                   issue.created, 
-                   issue.deviation_of_estimate, 
+                   issue.start_date,
+                   issue.end_date,
+                   issue.creator,
+                   issue.summary,
+                   issue.issue_type,
+                   issue.estimate,
+                   issue.project,
+                   issue.epic,
+                   issue.system,
+                   issue.priority,
+                   issue.created,
+                   issue.deviation_of_estimate,
                    coalesce((SELECT COUNT(*) FROM issue_due_date_history h WHERE h.issue_id = issue.id), 0) as change_estimate_count,
-                   issue.impediment_time,
-                   issue.dynamic_fields 
+                   issue.impediment_time
             FROM issue
                      LEFT JOIN lead_time ON issue.id = lead_time.issue_id
                      LEFT JOIN lead_time_config ON lead_time.lead_time_config_id = lead_time_config.id
             WHERE issue.board_id = :boardId
-              AND issue.end_date BETWEEN :startDate AND :endDate 
+              AND issue.end_date BETWEEN :startDate AND :endDate
             """
         )
 
@@ -103,11 +100,15 @@ class NativeIssueRepositoryImpl(
             params["priorities"] = searchIssueRequest.priorities
         }
 
-        board.dynamicFields?.forEach {
-            val values = dynamicFilters[it.name]
+        board.dynamicFields?.forEachIndexed { i, cfg ->
+            val values = dynamicFilters[cfg.name]
             if (!values.isNullOrEmpty()) {
-                query.append(" AND issue.dynamic_fields->>'${it.name}' in (:${it.field}) ")
-                params[it.field] = values.toList()
+                query.append(
+                    " AND EXISTS (SELECT 1 FROM issue_dynamic_field df$i " +
+                        "WHERE df$i.issue_id = issue.id AND df$i.field_name = :dfName$i AND df$i.field_value IN (:dfVals$i)) "
+                )
+                params["dfName$i"] = cfg.name
+                params["dfVals$i"] = values.toList()
             }
         }
 
@@ -117,32 +118,51 @@ class NativeIssueRepositoryImpl(
 
         query.append(" ORDER BY issue.key ")
 
-        return jdbcTemplate.query(query.toString(), params, MinimalIssueRowMapper(objectMapper))
+        val rawIssues: List<MinimalIssue> = jdbcTemplate.query(query.toString(), params, MinimalIssueRowMapper())
+
+        if (rawIssues.isEmpty()) return rawIssues
+
+        val ids = rawIssues.map { it.id }
+        val hydrateQuery =
+            """
+            SELECT issue_id, ARRAY_AGG(field_name) AS names, ARRAY_AGG(field_value) AS vals
+            FROM issue_dynamic_field
+            WHERE issue_id IN (:ids)
+            GROUP BY issue_id
+            """
+        val hydrateParams = MapSqlParameterSource()
+        hydrateParams["ids"] = ids
+
+        val dynamicMap: Map<Long, Map<String, String>> = jdbcTemplate.query(hydrateQuery, hydrateParams) { rs, _ ->
+            val issueId = rs.getLong("issue_id")
+            val names = (rs.getArray("names").array as Array<*>).map { it as String }
+            val vals = (rs.getArray("vals").array as Array<*>).map { it as String }
+            issueId to names.zip(vals).toMap()
+        }.toMap()
+
+        return rawIssues.map { it.copy(dynamicFields = dynamicMap[it.id] ?: emptyMap()) }
     }
 
     @Transactional(readOnly = true)
     override fun findAllDynamicFieldValues(boardId: Long): List<DynamicFieldsValues> {
         log.info("Method=findAllDynamicFieldValues, boardId={}", boardId)
 
-        val dynamicFields = findAllDynamicFieldsByBoardId(boardId)
-        if (dynamicFields.isEmpty()) {
-            return emptyList()
-        }
-
         val query =
             """
-            SELECT
-            ${dynamicFields.joinToString { """ ARRAY_TO_JSON(ARRAY_REMOVE(ARRAY_AGG(DISTINCT fields."$it"), null)) as "$it" """ }}
-            FROM issue, JSONB_TO_RECORD(dynamic_fields) AS
-            ${dynamicFields.joinToString(prefix = "fields(", postfix = ")") { """ "$it" TEXT """ }}
-            WHERE board_id = :boardId
+            SELECT df.field_name, ARRAY_AGG(DISTINCT df.field_value) AS values
+            FROM issue_dynamic_field df JOIN issue i ON i.id = df.issue_id
+            WHERE i.board_id = :boardId
+            GROUP BY df.field_name
             """
 
         val params = MapSqlParameterSource()
         params["boardId"] = boardId
 
-        return jdbcTemplate.queryForObject(query, params, DynamicFieldsValuesRowMapper(objectMapper))
-            ?: emptyList()
+        return jdbcTemplate.query(query, params) { rs, _ ->
+            val fieldName = rs.getString("field_name")
+            val values = (rs.getArray("values").array as Array<*>).map { it as String }
+            DynamicFieldsValues(fieldName, values)
+        }
     }
 
     override fun findAllEstimatesByBoardId(boardId: Long): Set<String> {
@@ -255,22 +275,6 @@ class NativeIssueRepositoryImpl(
         params["boardId"] = boardId
         params["startDate"] = startDate
         params["endDate"] = endDate
-
-        return jdbcTemplate.queryForSet(query, params)
-    }
-
-    private fun findAllDynamicFieldsByBoardId(boardId: Long): Set<String> {
-        log.info("Method=findAllDynamicFieldsByBoardId, boardId={}", boardId)
-
-        val query =
-            """ 
-            SELECT DISTINCT JSONB_OBJECT_KEYS(DYNAMIC_FIELDS) 
-            FROM ISSUE 
-            WHERE BOARD_ID = :boardId
-            """
-
-        val params = MapSqlParameterSource()
-        params["boardId"] = boardId
 
         return jdbcTemplate.queryForSet(query, params)
     }

@@ -92,7 +92,7 @@ class BoardAssert(
     }
 
     fun hasIgnoreIssueType(ignoreIssueType: List<String>?): BoardAssert {
-        val notFound = ignoreIssueType?.filter { actual.ignoreIssueType?.contains(it) != true }
+        val notFound = ignoreIssueType?.filter { !actual.ignoreIssueType.contains(it) }
 
         if (!notFound.isNullOrEmpty()) {
             failWithMessage(shouldContain(actual.ignoreIssueType, ignoreIssueType, notFound).create())

@@ -80,7 +80,7 @@ class CreateIssueService(
             project = jiraIssue.project,
             summary = jiraIssue.summary,
             priority = jiraIssue.priority,
-            dynamicFields = jiraIssue.dynamicFields,
+            dynamicFields = jiraIssue.dynamicFields.filterValues { it != null }.mapValues { it.value!! },
             columnChangelog = changelog.columnChangelog.toColumnChangelogEntity(),
             board = board,
             deviationOfEstimate = deviationOfEstimate,
